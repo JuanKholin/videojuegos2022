@@ -1,3 +1,4 @@
+#Python v3.10.2  pygame v2.1.2
 from email.mime import image
 from pygame.locals import *
 import pygame, sys, random
