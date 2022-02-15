@@ -1,3 +1,4 @@
+#Python v3.10.2  pygame v2.1.2
 import pygame
 from pygame.locals import *
 import sys
