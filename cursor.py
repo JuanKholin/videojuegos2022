@@ -1,4 +1,5 @@
 from email.mime import image
+from turtle import pu
 from pygame.locals import *
 import pygame, sys, math, time
 
@@ -172,8 +173,27 @@ class imagen(pygame.sprite.Sprite):
             self.moveY = self.speed*sY
             print(self.moveX, self.moveY)
 
-        
-        
+
+def printRectangulo(screen, initialX, initialY, finalX, finalY):
+    if finalX>=initialX and finalY>=initialY:
+        pygame.draw.rect(screen, GREEN, [initialX, initialY, finalX-initialX, finalY-initialY], 1)
+    elif finalX>=initialX and finalY<initialY:
+        pygame.draw.rect(screen, GREEN, [initialX, finalY, finalX-initialX, initialY-finalY], 1)
+    elif finalX<initialX and finalY>=initialY:
+        pygame.draw.rect(screen, GREEN, [finalX, initialY, initialX-finalX, finalY-initialY], 1)
+    else: #finalX<initialX and finalY<initialY
+        pygame.draw.rect(screen, GREEN, [finalX, finalY, initialX-finalX, initialY-finalY], 1)
+
+def createRect(initialX, initialY, finalX, finalY):
+    if finalX>=initialX and finalY>=initialY:
+        area = pygame.Rect(initialX, initialY, finalX-initialX, finalY-initialY)
+    elif finalX>=initialX and finalY<initialY:
+        area = pygame.Rect(initialX, finalY, finalX-initialX, initialY-finalY)
+    elif finalX<initialX and finalY>=initialY:
+        area = pygame.Rect(finalX, initialY, initialX-finalX, finalY-initialY)
+    else: #finalX<initialX and finalY<initialY
+        area = pygame.Rect(finalX, finalY, initialX-finalX, initialY-finalY)
+    return area
         
 
 def main():
@@ -186,6 +206,11 @@ def main():
     p = point(sprite_ruta)
     clock = pygame.time.Clock()
     pygame.mouse.set_visible(False)
+
+    initialX = 0
+    initialY = 0
+    pulsado = False
+
     while True:
         ###---LOGICA
         #Actualizar objetos
@@ -205,11 +230,13 @@ def main():
         dvd.update()
         p.update()
         mouse.update()
-            
+             
         screen.blit(kurisu.image, (kurisu.rect.x, kurisu.rect.y))
         screen.blit(dvd.image, (dvd.rect.x, dvd.rect.y))
         if p.getClicked():
             screen.blit(p.image, (p.rect.x, p.rect.y))
+        if pulsado:
+            printRectangulo(screen, initialX, initialY, pos[0], pos[1])
         screen.blit(mouse.image, (mouse.rect.x, mouse.rect.y))
             
         ###--- ZONA DE DIBUJO
@@ -234,29 +261,42 @@ def main():
                 type = pygame.mouse.get_pressed()
                 pos = pygame.mouse.get_pos()
                 if type[0]: 
-                    mouseRect = pygame.Rect(pos[0], pos[1], 1, 1)
-                    if collide(kurisu.rect, mouseRect):
-                        print("kurisu clicked")
-                        kurisu.clicked = True
-                        dvd.clicked = False
-                    elif collide(mouseRect, dvd.rect):
-                        print("dvd clicked")
-                        dvd.clicked = True
-                        kurisu.clicked = False
-                    else:
-                        dvd.clicked = False
-                        kurisu.clicked = False
+                   
+                    if not pulsado:
+                        pulsado = True
+                        initialX = pos[0]
+                        initialY = pos[1]
+                        
+                    
                 if type[2]:
-                    p.click(pos[0], pos[1])
-                    kurisu.setNewDestination(pos[0]-(kurisu.rect.width/2), pos[1]-(kurisu.rect.height/2))
-                    y, x = moveXY(kurisu.rect, pygame.Rect(pos[0]-(kurisu.rect.width/2), pos[1]-(kurisu.rect.height/2), 1, 1))
-                    kurisu.setSpeed(x, y)
-                    dvd.setNewDestination(pos[0]-(dvd.rect.width/2), pos[1]-(dvd.rect.height/2))
-                    y, x = moveXY(dvd.rect, pygame.Rect(pos[0]-(dvd.rect.width/2), pos[1]-(dvd.rect.height/2), 1, 1))
-                    dvd.setSpeed(x, y)             
+                    if not pulsado:
+                        p.click(pos[0], pos[1])
+                        kurisu.setNewDestination(pos[0]-(kurisu.rect.width/2), pos[1]-(kurisu.rect.height/2))
+                        y, x = moveXY(kurisu.rect, pygame.Rect(pos[0]-(kurisu.rect.width/2), pos[1]-(kurisu.rect.height/2), 1, 1))
+                        kurisu.setSpeed(x, y)
+                        dvd.setNewDestination(pos[0]-(dvd.rect.width/2), pos[1]-(dvd.rect.height/2))
+                        y, x = moveXY(dvd.rect, pygame.Rect(pos[0]-(dvd.rect.width/2), pos[1]-(dvd.rect.height/2), 1, 1))
+                        dvd.setSpeed(x, y)             
             if event.type == pygame.MOUSEBUTTONUP:
-                print('click liberado', pos[0], pos[1], event.type)
-                
+                type = pygame.mouse.get_pressed()
+                print('click liberado', type)
+                if not type[0]:   
+                    if pulsado: 
+                        print('click izq liberado', pos[0], pos[1], event.type)
+                        pulsado = False
+                        mouseRect = createRect(initialX, initialY, pos[0], pos[1])
+                        if collide(kurisu.rect, mouseRect):
+                            print("kurisu clicked")
+                            kurisu.clicked = True
+                        else:
+                            kurisu.clicked = False
+                        if collide(mouseRect, dvd.rect):
+                            print("dvd clicked")
+                            dvd.clicked = True
+                        else:
+                            dvd.clicked = False         
+                if type[2]:
+                    print('click der liberado', pos[0], pos[1], event.type)
                       
 
 
