@@ -550,8 +550,44 @@ window.onload = function init() {
 	view = lookAt(eye,target,up);
 	gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view); // copy view to uniform value in shader
 
+	//
+	// eye = vec3(0,0,0);
+	//
+	// view = lookAt(eye, target, up);
+	// gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
 
-	//window.addEventListener("keydown", arrowPressed());
+	window.addEventListener("keydown", function(event){
+		if (event.defaultPrevented){
+			return; // No se hace nada si se ha hecho ya
+		}
+		switch(event.code){
+		case "ArrowDown":
+			eye = eye + 0.5*vec3(1.0,1.0,1.0)*(target - eye);
+			target = target + 0.5*vec3(1.0,1.0,1.0)* (target - eye);
+			view = lookAt(eye, target, up);
+			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+			break;
+		case "ArrowUp":
+			eye[1] = eye[1] + 1;
+			target[1] = target[1] + 1;
+			view = lookAt(eye, target, up);
+			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+			break;
+		case "ArrowLeft":
+			eye[1] = eye[1] + 1;
+			target[1] = target[1] + 1;
+			view = lookAt(eye, target, up);
+			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+			break;
+		case "ArrowRight":
+			eye[1] = eye[1] + 1;
+			target[1] = target[1] + 1;
+			view = lookAt(eye, target, up);
+			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+			break;
+		}
+		event.preventDefault();
+	}, true);
 
 	requestAnimFrame(render);
 
@@ -707,12 +743,4 @@ function setBuffersAndAttributes(pInfo, ptsArray, colArray) {
 	gl.bufferData( gl.ARRAY_BUFFER,  flatten(colArray), gl.STATIC_DRAW );
 	gl.vertexAttribPointer( pInfo.attribLocations.vColor, 4, gl.FLOAT, gl.FALSE, 0, 0 );
 	gl.enableVertexAttribArray( pInfo.attribLocations.vColor );
-}
-
-function keyPressedHandler(){
-	// if (KeyBoardEvent.code == KeyDown){
-	// 	eye[0] = 20;
-	// 	view = lookAt(eye, target, up);
-	// 	gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
-	// }
 }
