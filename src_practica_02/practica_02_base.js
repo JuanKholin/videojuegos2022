@@ -503,12 +503,12 @@ var objectsToDraw = [
 // Initialization function
 //----------------------------------------------------------------------------
 
-window.onload = function init() {
+window.onload = function init(){
 
 	// Set up a WebGL Rendering Context in an HTML5 Canvas
 	var canvas = document.getElementById("gl-canvas");
 	gl = WebGLUtils.setupWebGL(canvas);
-	if (!gl) {
+	if (!gl){
 		alert("WebGL isn't available");
 	}
 
@@ -560,31 +560,54 @@ window.onload = function init() {
 		if (event.defaultPrevented){
 			return; // No se hace nada si se ha hecho ya
 		}
+		let aux;
 		switch(event.code){
 		case "ArrowDown":
-			eye = eye + 0.5*vec3(1.0,1.0,1.0)*(target - eye);
-			target = target + 0.5*vec3(1.0,1.0,1.0)* (target - eye);
+			aux = target[0] - eye[0];
+			eye[0] = eye[0] - 0.5 * aux;
+			target[0] = target[0] - 0.5 * aux;
+			aux = target[1] - eye[1];
+			eye[1] = eye[1] - 0.5 * aux;
+			target[1] = target[1] - 0.5 * aux;
+			aux = target[2] - eye[2];
+			eye[2] = eye[2] - 0.5 * aux;
+			target[2] = target[2] - 0.5 * aux;
 			view = lookAt(eye, target, up);
 			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
 			break;
 		case "ArrowUp":
-			eye[1] = eye[1] + 1;
-			target[1] = target[1] + 1;
+			aux = target[0] - eye[0];
+			eye[0] = eye[0] + 0.5 * aux;
+			target[0] = target[0] + 0.5 * aux;
+			aux = target[1] - eye[1];
+			eye[1] = eye[1] + 0.5 * aux;
+			target[1] = target[1] + 0.5 * aux;
+			aux = target[2] - eye[2];
+			eye[2] = eye[2] + 0.5 * aux;
+			target[2] = target[2] + 0.5 * aux;
 			view = lookAt(eye, target, up);
 			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
 			break;
 		case "ArrowLeft":
-			eye[1] = eye[1] + 1;
-			target[1] = target[1] + 1;
-			view = lookAt(eye, target, up);
-			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
-			break;
+			// aux = target[0] - eye[0];
+			// eye[0] = eye[0] + 0.5 * aux;
+			// target[0] = target[0] + 0.5 * aux;
+			// aux = target[2] - eye[2];
+			// eye[2] = eye[2] + 0.5 * aux;
+			// target[2] = target[2] + 0.5 * aux;
+			// view = lookAt(eye, target, up);
+			// gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+			// break;
 		case "ArrowRight":
-			eye[1] = eye[1] + 1;
-			target[1] = target[1] + 1;
-			view = lookAt(eye, target, up);
-			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
-			break;
+			// aux = target[0] - eye[0];
+			// eye[0] = eye[0] - 0.5 * aux;
+			// target[0] = target[0] - 0.5 * aux;
+			// aux = target[2] - eye[2];
+			// eye[2] = eye[2] - 0.5 * aux;
+			// target[2] = target[2] - 0.5 * aux;
+			// view = lookAt(eye, target, up);
+			// gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+			// break;
 		}
 		event.preventDefault();
 	}, true);
