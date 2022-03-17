@@ -131,8 +131,6 @@ var eye, target, up;			// for view matrix
 
 var rotAngle = 0.0;
 var rotChange = 1;
-var rotAngleFast = 0.0;
-var rotChangeFast = 1.8;
 
 var program;
 var uLocations = {};
@@ -165,336 +163,265 @@ var objectsToDraw = [
 		  },
 		  primType: "line_strip",
 		},
-		{ // Cube 1
+		{
 		  programInfo: programInfo,
 		  pointsArray: pointsCube,
 		  colorsArray: colorsCube,
 		  uniforms: {
-			u_colorMult: [1, 1, 0.5, 1.0],
+			u_colorMult: [1.0, 1.0, 1.0, 1.0],
 			u_model: new mat4(),
 		  },
 		  primType: "triangles",
+		  x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
 		},
-		{ // Cube 2
+		{
 		  programInfo: programInfo,
 		  pointsArray: pointsCube,
 		  colorsArray: colorsCube,
 		  uniforms: {
-			u_colorMult: [0.95, 0.95, 0.45, 1.0],
+			u_colorMult: [0.5, 0.5, 0.5, 1.0],
 			u_model: new mat4(),
 		  },
 		  primType: "triangles",
+		  x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
 		},
-		{ // Cube 3
+		{
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.9, 0.9, 0.4, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 4
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
+		  },
+		  {
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.85, 0.85, 0.35, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 5
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
+		  },
+		  {
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.80, 0.80, 0.30, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 6
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
+		  },
+		  {
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.75, 0.75, 0.25, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 7
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
+		  },
+		  {
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.7, 0.7, 0.20, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 8
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
+		  },
+		  {
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.65, 0.65, 0.15, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 9
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
+		  },
+		  {
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.60, 0.60, 0.10, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 10
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
+		  },
+		  {
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.80, 0.80, 0.80, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 11
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
+		  },
+		  {
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.75, 0.75, 0.75, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 12
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
+		  },
+		  {
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.70, 0.70, 0.70, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 13
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
+		  },
+		  {
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.65, 0.65, 0.65, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 14
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
+		  },
+		  {
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.6, 0.6, 0.6, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 15
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
+		  },
+		  {
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.55, 0.55, 0.55, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 16
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
+		  },
+		  {
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.50, 0.50, 0.50, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 17
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
+		  },
+		  {
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.45, 0.45, 0.45, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 18
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
+		  },
+		  {
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.40, 0.40, 0.40, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 19
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
+		  },
+		  {
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.35, 0.35, 0.35, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 20
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+
+		  },
+		  {
 			programInfo: programInfo,
 			pointsArray: pointsCube,
 			colorsArray: colorsCube,
 			uniforms: {
-			u_colorMult: [0.30, 0.30, 0.30, 1.0],
-			u_model: new mat4(),
+			  u_colorMult: [0.5, 0.5, 0.5, 1.0],
+			  u_model: new mat4(),
 			},
 			primType: "triangles",
-		},
-		{ // Cube 21
-			programInfo: programInfo,
-			pointsArray: pointsCube,
-			colorsArray: colorsCube,
-			uniforms: {
-			u_colorMult: [0.25, 0.25, 0.25, 1.0],
-			u_model: new mat4(),
-			},
-			primType: "triangles",
-		},
-		{ // Cube 22
-			programInfo: programInfo,
-			pointsArray: pointsCube,
-			colorsArray: colorsCube,
-			uniforms: {
-			u_colorMult: [0.20, 0.20, 0.20, 1.0],
-			u_model: new mat4(),
-			},
-			primType: "triangles",
-		},
-		{ // Cube 23
-			programInfo: programInfo,
-			pointsArray: pointsCube,
-			colorsArray: colorsCube,
-			uniforms: {
-			u_colorMult: [0.15, 0.15, 0.15, 1.0],
-			u_model: new mat4(),
-			},
-			primType: "triangles",
-		},
-		{ // Cube 24
-			programInfo: programInfo,
-			pointsArray: pointsCube,
-			colorsArray: colorsCube,
-			uniforms: {
-			u_colorMult: [0.10, 0.10, 0.10, 1.0],
-			u_model: new mat4(),
-			},
-			primType: "triangles",
-		},
-		{ // Cube 25
-			programInfo: programInfo,
-			pointsArray: pointsCube,
-			colorsArray: colorsCube,
-			uniforms: {
-			u_colorMult: [0.05, 0.05, 0.05, 1.0],
-			u_model: new mat4(),
-			},
-			primType: "triangles",
-		},
-		{ // Cube 26
-			programInfo: programInfo,
-			pointsArray: pointsCube,
-			colorsArray: colorsCube,
-			uniforms: {
-			u_colorMult: [0.8, 0.8, 0.1, 1.0],
-			u_model: new mat4(),
-			},
-			primType: "triangles",
-		},
-		{ // Cube 27
-			programInfo: programInfo,
-			pointsArray: pointsCube,
-			colorsArray: colorsCube,
-			uniforms: {
-			u_colorMult: [0.1, 0.8, 0.1, 1.0],
-			u_model: new mat4(),
-			},
-			primType: "triangles",
-		},
-		{ // Cube 28
-			programInfo: programInfo,
-			pointsArray: pointsCube,
-			colorsArray: colorsCube,
-			uniforms: {
-			u_colorMult: [0.8, 0.1, 0.1, 1.0],
-			u_model: new mat4(),
-			},
-			primType: "triangles",
-		},
-		{ // Cube 29
-			programInfo: programInfo,
-			pointsArray: pointsCube,
-			colorsArray: colorsCube,
-			uniforms: {
-			u_colorMult: [0.1, 0.1, 0.8, 1.0],
-			u_model: new mat4(),
-			},
-			primType: "triangles",
-		},
-		{ // Cube 30
-			programInfo: programInfo,
-			pointsArray: pointsCube,
-			colorsArray: colorsCube,
-			uniforms: {
-			u_colorMult: [0.7, 0.7, 0, 1.0],
-			u_model: new mat4(),
-			},
-			primType: "triangles",
-		},
-		{ // Cube 31
-			programInfo: programInfo,
-			pointsArray: pointsCube,
-			colorsArray: colorsCube,
-			uniforms: {
-			u_colorMult: [0, 0.7, 0, 1.0],
-			u_model: new mat4(),
-			},
-			primType: "triangles",
-		},
-		{ // Cube 32
-			programInfo: programInfo,
-			pointsArray: pointsCube,
-			colorsArray: colorsCube,
-			uniforms: {
-			u_colorMult: [0.7, 0, 0, 1.0],
-			u_model: new mat4(),
-			},
-			primType: "triangles",
-		},
-		{ // Cube 33
-			programInfo: programInfo,
-			pointsArray: pointsCube,
-			colorsArray: colorsCube,
-			uniforms: {
-			u_colorMult: [0, 0, 0.7, 1.0],
-			u_model: new mat4(),
-			},
-			primType: "triangles",
-		},
+			x: 0, y: 0, z: 0, rotChange: 0.5, rotAngle: 0.0,
+			eje: new vec3(0.0, 1.0, 0.0),
+		  },
 
 
 ];
@@ -504,6 +431,29 @@ var objectsToDraw = [
 //----------------------------------------------------------------------------
 
 window.onload = function init(){
+
+	for(let i = 2; i < objectsToDraw.length; i++){
+		let aux = Math.random()
+		if(aux <= 0.33){
+			objectsToDraw[i].z = Math.random() * (5 - 1) + 1;
+			objectsToDraw[i].eje = vec3(Math.random() * 5, Math.random() * 5, 0.0)
+
+		}
+		else if(aux <= 0.66){
+			objectsToDraw[i].x = Math.random() * (5 - 1) + 1;
+			objectsToDraw[i].eje = vec3(0, Math.random()*5, Math.random()*5)
+		}
+		else {
+			objectsToDraw[i].y = Math.random() * (5 - 1) + 1;
+			objectsToDraw[i].eje = vec3(Math.random()*5, 0, Math.random()*5)
+		}
+
+		objectsToDraw[i].rotChange = Math.random() * (1 - 0.2) + 0.2;
+		objectsToDraw[i].rotAngle = Math.random() * (3 - 0) + 0;
+		objectsToDraw[i].uniforms.u_colorMult[0] = Math.random();
+		objectsToDraw[i].uniforms.u_colorMult[1] = Math.random();
+		objectsToDraw[i].uniforms.u_colorMult[2] = Math.random();
+	}
 
 	// Set up a WebGL Rendering Context in an HTML5 Canvas
 	var canvas = document.getElementById("gl-canvas");
@@ -550,77 +500,6 @@ window.onload = function init(){
 	view = lookAt(eye,target,up);
 	gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view); // copy view to uniform value in shader
 
-	// Para ajustar la velocidad de la cámara, ojalá tan fácil en la realidad
-	let camSpeed = 1;
-
-	// Define los eventos de pulsar tecla
-	window.addEventListener("keydown", function(event){
-		if (event.defaultPrevented){
-			return; // No se hace nada si se ha hecho ya
-		}
-		// Vector dirección desde donde se mira hacia donde se mira (eye->target)
-		let aux = vec3(0, 0, 0);
-		aux[0] = target[0] - eye[0];
-		aux[1] = target[1] - eye[1];
-		aux[2] = target[2] - eye[2];
-		// Lo unitarizamos, sé que suena mal pero no se me ocurre otro término
-		let mod = math.sqrt(aux[0] * aux[0] + aux[1] * aux[1] + aux[2] * aux[2]);
-		aux[0] = aux[0] / mod;
-		aux[1] = aux[1] / mod;
-		aux[2] = aux[2] / mod;
-		let vectY = vec3(0, 1, 0);
-		let perp = vec3(0, 0, 0);
-		switch(event.code){
-		case "ArrowDown":
-			eye[0] = eye[0] - camSpeed * aux[0];
-			target[0] = target[0] - camSpeed * aux[0];
-			eye[1] = eye[1] - camSpeed * aux[1];
-			target[1] = target[1] - camSpeed * aux[1];
-			eye[2] = eye[2] - camSpeed * aux[2];
-			target[2] = target[2] - camSpeed * aux[2];
-			view = lookAt(eye, target, up);
-			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
-			break;
-		case "ArrowUp":
-			eye[0] = eye[0] + camSpeed * aux[0];
-			target[0] = target[0] + camSpeed * aux[0];
-			eye[1] = eye[1] + camSpeed * aux[1];
-			target[1] = target[1] + camSpeed * aux[1];
-			eye[2] = eye[2] + camSpeed * aux[2];
-			target[2] = target[2] + camSpeed * aux[2];
-			view = lookAt(eye, target, up);
-			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
-			break;
-		case "ArrowLeft":
-			perp[0] = vectY[1] * aux[2] - vectY[2] * aux[1];
-			perp[1] = vectY[0] * aux[2] - vectY[2] * aux[0];
-			perp[2] = vectY[0] * aux[1] - vectY[1] * aux[0];
-			eye[0] = eye[0] + camSpeed * perp[0];
-			eye[1] = eye[1] + camSpeed * perp[1];
-			eye[2] = eye[2] + camSpeed * perp[2];
-			target[0] = target[0] + camSpeed * perp[0];
-			target[1] = target[1] + camSpeed * perp[1];
-			target[2] = target[2] + camSpeed * perp[2];
-			view = lookAt(eye, target, up);
-			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
-			break;
-		case "ArrowRight":
-			perp[0] = vectY[1] * aux[2] - vectY[2] * aux[1];
-			perp[1] = vectY[0] * aux[2] - vectY[2] * aux[0];
-			perp[2] = vectY[0] * aux[1] - vectY[1] * aux[0];
-			eye[0] = eye[0] - camSpeed * perp[0];
-			eye[1] = eye[1] - camSpeed * perp[1];
-			eye[2] = eye[2] - camSpeed * perp[2];
-			target[0] = target[0] - camSpeed * perp[0];
-			target[1] = target[1] - camSpeed * perp[1];
-			target[2] = target[2] - camSpeed * perp[2];
-			view = lookAt(eye, target, up);
-			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
-			break;
-		}
-		event.preventDefault();
-	}, true);
-
 	requestAnimFrame(render);
 
 };
@@ -639,72 +518,19 @@ function render() {
 
 	let ejeY = vec3(0.0, 1.0, 0.0);
 	let ejeX = vec3(1.0, 0.0, 0.0);
-	let ejeZ = vec3(0.0, 0.0, 1.0);
-	let ejeZi = vec3(0,0,-1);
+
+	for(let i = 2; i < objectsToDraw.length; i++){
+		let Ry = rotate(objectsToDraw[i].rotAngle, objectsToDraw[i].eje);
+		let Rx = rotate(objectsToDraw[i].rotAngle, ejeX);
+		objectsToDraw[i].uniforms.u_model = translate(objectsToDraw[i].x, objectsToDraw[i].y, objectsToDraw[i].z);
+		objectsToDraw[i].uniforms.u_model = mult(Ry, objectsToDraw[i].uniforms.u_model);
+		//objectsToDraw[i].uniforms.u_model = mult(Rx, objectsToDraw[i].uniforms.u_model);
+		objectsToDraw[i].uniforms.u_model = mult(objectsToDraw[i].uniforms.u_model, Ry);
+		//objectsToDraw[i].uniforms.u_model = mult(objectsToDraw[i].uniforms.u_model, Rx);
+
+	}
+
 	let R = rotate(rotAngle, ejeY);
-	let R2 = rotate(rotAngle, ejeX);
-	let R3 = rotate(rotAngleFast, ejeZ);
-	let R3i = rotate(rotAngleFast, ejeZi);
-
-	objectsToDraw[2].uniforms.u_model = translate(0, 4.0, 5.0);
-	objectsToDraw[3].uniforms.u_model = translate(0, 4.0, 11.0);
-
-	objectsToDraw[4].uniforms.u_model = translate(0, 3.0, 5.0);
-	objectsToDraw[5].uniforms.u_model = translate(0, 3.0, 6.0);
-	objectsToDraw[6].uniforms.u_model = translate(0, 3.0, 7.0);
-	objectsToDraw[7].uniforms.u_model = translate(0, 3.0, 8.0);
-	objectsToDraw[8].uniforms.u_model = translate(0, 3.0, 9.0);
-	objectsToDraw[9].uniforms.u_model = translate(0, 3.0, 10.0);
-	objectsToDraw[10].uniforms.u_model = translate(0, 3.0, 11.0);
-
-	objectsToDraw[11].uniforms.u_model = translate(0, 2.0, 5.0);
-	objectsToDraw[12].uniforms.u_model = translate(0, 2.0, 8.0);
-	objectsToDraw[13].uniforms.u_model = translate(0, 2.0, 11.0);
-
-	objectsToDraw[14].uniforms.u_model = translate(0, 1.0, 5.0);
-	objectsToDraw[15].uniforms.u_model = translate(0, 1.0, 6.0);
-	objectsToDraw[16].uniforms.u_model = translate(0, 1.0, 7.0);
-	objectsToDraw[17].uniforms.u_model = translate(0, 1.0, 8.0);
-	objectsToDraw[18].uniforms.u_model = translate(0, 1.0, 9.0);
-	objectsToDraw[19].uniforms.u_model = translate(0, 1.0, 10.0);
-	objectsToDraw[20].uniforms.u_model = translate(0, 1.0, 11.0);
-
-	objectsToDraw[21].uniforms.u_model = translate(0, 0.0, 6.0);
-	objectsToDraw[22].uniforms.u_model = translate(0, 0.0, 8.0);
-	objectsToDraw[23].uniforms.u_model = translate(0, 0.0, 10.0);
-
-	objectsToDraw[24].uniforms.u_model = translate(0, -1.0, 6.0);
-	objectsToDraw[25].uniforms.u_model = translate(0, -1.0, 8.0);
-	objectsToDraw[26].uniforms.u_model = translate(0, -1.0, 10.0);
-
-	for (let i=2; i <= 26; i++){
-		objectsToDraw[i].uniforms.u_model = mult(R, objectsToDraw[i].uniforms.u_model);
-		objectsToDraw[i].uniforms.u_model = mult(objectsToDraw[i].uniforms.u_model, R);
-
-	}
-
-	objectsToDraw[27].uniforms.u_model = translate(0, 2, 2);
-	objectsToDraw[28].uniforms.u_model = translate(0, 2, -2);
-	objectsToDraw[29].uniforms.u_model = translate(0, -2, -2);
-	objectsToDraw[30].uniforms.u_model = translate(0, -2, 2);
-	objectsToDraw[31].uniforms.u_model = translate(0, 3, 3);
-	objectsToDraw[32].uniforms.u_model = translate(0, 3, -3);
-	objectsToDraw[33].uniforms.u_model = translate(0, -3, -3);
-	objectsToDraw[34].uniforms.u_model = translate(0, -3, 3);
-
-	for (let i = 27; i <= 30; i++){
-		objectsToDraw[i].uniforms.u_model = mult(R3, objectsToDraw[i].uniforms.u_model);
-		objectsToDraw[i].uniforms.u_model = mult(objectsToDraw[i].uniforms.u_model, R2);
-		objectsToDraw[i].uniforms.u_model = mult(objectsToDraw[i].uniforms.u_model, R3);
-		objectsToDraw[i].uniforms.u_model = mult(R2, objectsToDraw[i].uniforms.u_model);
-	}
-
-	for (let i = 31; i <= 34; i++){
-		objectsToDraw[i].uniforms.u_model = mult(R3i, objectsToDraw[i].uniforms.u_model);
-		objectsToDraw[i].uniforms.u_model = mult(objectsToDraw[i].uniforms.u_model, R2);
-		objectsToDraw[i].uniforms.u_model = mult(objectsToDraw[i].uniforms.u_model, R3i);
-		objectsToDraw[i].uniforms.u_model = mult(R2, objectsToDraw[i].uniforms.u_model);
-	}
 
 	//----------------------------------------------------------------------------
 	// DRAW
@@ -724,8 +550,11 @@ function render() {
 		gl.drawArrays(object.primitive, 0, object.pointsArray.length);
     });
 
+	for(let i = 2; i < objectsToDraw.length; i++){
+		objectsToDraw[i].rotAngle += objectsToDraw[i].rotChange;
+	}
+
 	rotAngle += rotChange;
-	rotAngleFast += rotChangeFast;
 
 	requestAnimationFrame(render);
 
