@@ -494,11 +494,130 @@ window.onload = function init(){
 	projection = perspective( 45.0, canvas.width/canvas.height, 0.1, 100.0 );
 	gl.uniformMatrix4fv( programInfo.uniformLocations.projection, gl.FALSE, projection ); // copy projection to uniform value in shader
     // View matrix (static cam)
-	eye = vec3(-5.0, 5.0, 10.0);
+	eye = vec3(-5.0, 0.0, 0.0);
 	target =  vec3(0.0, 0.0, 0.0);
 	up =  vec3(0.0, 1.0, 0.0);
 	view = lookAt(eye,target,up);
 	gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view); // copy view to uniform value in shader
+
+	// Para ajustar la velocidad de la cámara, ojalá tan fácil en la realidad
+	let camSpeed = 0.1;
+
+	// Define los eventos de pulsar tecla
+	window.addEventListener("keydown", function(event){
+		if (event.defaultPrevented){
+			return; // No se hace nada si se ha hecho ya
+		}
+		// Vector dirección desde donde se mira hacia donde se mira (eye->target)
+		let aux = vec3(0, 0, 0);
+		aux[0] = target[0] - eye[0];
+		aux[1] = target[1] - eye[1];
+		aux[2] = target[2] - eye[2];
+		// Lo unitarizamos, sé que suena mal pero no se me ocurre otro término
+		let mod = math.sqrt(aux[0] * aux[0] + aux[1] * aux[1] + aux[2] * aux[2]);
+		aux[0] = aux[0] / mod;
+		aux[1] = aux[1] / mod;
+		aux[2] = aux[2] / mod;
+		let vectY = vec3(0, 1, 0);
+		let perp = vec3(0, 0, 0);
+		switch(event.code){
+		case "ArrowDown":
+			eye[0] = eye[0] - camSpeed * aux[0];
+			target[0] = target[0] - camSpeed * aux[0];
+			eye[1] = eye[1] - camSpeed * aux[1];
+			target[1] = target[1] - camSpeed * aux[1];
+			eye[2] = eye[2] - camSpeed * aux[2];
+			target[2] = target[2] - camSpeed * aux[2];
+			view = lookAt(eye, target, up);
+			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+			break;
+		case "ArrowUp":
+			eye[0] = eye[0] + camSpeed * aux[0];
+			target[0] = target[0] + camSpeed * aux[0];
+			eye[1] = eye[1] + camSpeed * aux[1];
+			target[1] = target[1] + camSpeed * aux[1];
+			eye[2] = eye[2] + camSpeed * aux[2];
+			target[2] = target[2] + camSpeed * aux[2];
+			view = lookAt(eye, target, up);
+			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+			break;
+		case "ArrowLeft":
+			perp[0] = vectY[1] * aux[2] - vectY[2] * aux[1];
+			perp[1] = vectY[0] * aux[2] - vectY[2] * aux[0];
+			perp[2] = vectY[0] * aux[1] - vectY[1] * aux[0];
+			eye[0] = eye[0] + camSpeed * perp[0];
+			eye[1] = eye[1] + camSpeed * perp[1];
+			eye[2] = eye[2] + camSpeed * perp[2];
+			target[0] = target[0] + camSpeed * perp[0];
+			target[1] = target[1] + camSpeed * perp[1];
+			target[2] = target[2] + camSpeed * perp[2];
+			view = lookAt(eye, target, up);
+			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+			break;
+		case "ArrowRight":
+			perp[0] = vectY[1] * aux[2] - vectY[2] * aux[1];
+			perp[1] = vectY[0] * aux[2] - vectY[2] * aux[0];
+			perp[2] = vectY[0] * aux[1] - vectY[1] * aux[0];
+			eye[0] = eye[0] - camSpeed * perp[0];
+			eye[1] = eye[1] - camSpeed * perp[1];
+			eye[2] = eye[2] - camSpeed * perp[2];
+			target[0] = target[0] - camSpeed * perp[0];
+			target[1] = target[1] - camSpeed * perp[1];
+			target[2] = target[2] - camSpeed * perp[2];
+			view = lookAt(eye, target, up);
+			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+			break;
+		}
+		event.preventDefault();
+	}, true);
+
+	let isClicked = false;
+	let alfa = 0;
+	let beta = 0;
+	let x, y;
+	// Define los eventos de pulsar tecla
+	window.addEventListener("mousedown", e => {
+		isClicked = true;
+		x = e.clientX;
+		y = e.clientY;
+	});
+
+	window.addEventListener("mousemove", e=> {
+		let alfaOffset = 0;
+		let betaOffset = 0;
+		let betaAux = 0;
+		if (isClicked){
+			if (e.clientX != x){ // Rotar horizontalmente
+				alfa = (e.clientX - x) % 360;
+				x = e.clientX;
+			}
+			if (e.clientY != y){
+				betaOffset = e.clientY - y;
+				betaAux = (beta + betaOffset) % 360;
+				if ((beta < 90) && (betaAux > 90)){ // Limita mirar hacia arriba
+				 	beta = 90;
+				}else if ((beta > 270) && (betaAux < 270)){ // Limita mirar hacia abajo
+					beta = 0;
+				}else{
+					beta = betaAux;
+				}
+				y = e.clientY;
+			}
+			target[0] = modulo * math.cos(beta) * math.sen(alfa);
+			target[1] = modulo * math.cos(beta) * math.cos(alfa);
+			target[2] = modulo * math.sin(beta);
+			view = lookAt(eye, target, up);
+			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+		}
+	});
+
+	window.addEventListener("mouseup", e=> {
+		if (isClicked){
+			x = 0;
+			y = 0;
+			isClicked = false;
+		}
+	});
 
 	requestAnimFrame(render);
 
