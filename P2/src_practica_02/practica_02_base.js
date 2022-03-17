@@ -550,64 +550,73 @@ window.onload = function init(){
 	view = lookAt(eye,target,up);
 	gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view); // copy view to uniform value in shader
 
-	//
-	// eye = vec3(0,0,0);
-	//
-	// view = lookAt(eye, target, up);
-	// gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+	// Para ajustar la velocidad de la cámara, ojalá tan fácil en la realidad
+	let camSpeed = 1;
 
+	// Define los eventos de pulsar tecla
 	window.addEventListener("keydown", function(event){
 		if (event.defaultPrevented){
 			return; // No se hace nada si se ha hecho ya
 		}
-		let aux;
+		// Vector dirección desde donde se mira hacia donde se mira (eye->target)
+		let aux = vec3(0, 0, 0);
+		aux[0] = target[0] - eye[0];
+		aux[1] = target[1] - eye[1];
+		aux[2] = target[2] - eye[2];
+		// Lo unitarizamos, sé que suena mal pero no se me ocurre otro término
+		let mod = math.sqrt(aux[0] * aux[0] + aux[1] * aux[1] + aux[2] * aux[2]);
+		aux[0] = aux[0] / mod;
+		aux[1] = aux[1] / mod;
+		aux[2] = aux[2] / mod;
+		let vectY = vec3(0, 1, 0);
+		let perp = vec3(0, 0, 0);
 		switch(event.code){
 		case "ArrowDown":
-			aux = target[0] - eye[0];
-			eye[0] = eye[0] - 0.5 * aux;
-			target[0] = target[0] - 0.5 * aux;
-			aux = target[1] - eye[1];
-			eye[1] = eye[1] - 0.5 * aux;
-			target[1] = target[1] - 0.5 * aux;
-			aux = target[2] - eye[2];
-			eye[2] = eye[2] - 0.5 * aux;
-			target[2] = target[2] - 0.5 * aux;
+			eye[0] = eye[0] - camSpeed * aux[0];
+			target[0] = target[0] - camSpeed * aux[0];
+			eye[1] = eye[1] - camSpeed * aux[1];
+			target[1] = target[1] - camSpeed * aux[1];
+			eye[2] = eye[2] - camSpeed * aux[2];
+			target[2] = target[2] - camSpeed * aux[2];
 			view = lookAt(eye, target, up);
 			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
 			break;
 		case "ArrowUp":
-			aux = target[0] - eye[0];
-			eye[0] = eye[0] + 0.5 * aux;
-			target[0] = target[0] + 0.5 * aux;
-			aux = target[1] - eye[1];
-			eye[1] = eye[1] + 0.5 * aux;
-			target[1] = target[1] + 0.5 * aux;
-			aux = target[2] - eye[2];
-			eye[2] = eye[2] + 0.5 * aux;
-			target[2] = target[2] + 0.5 * aux;
+			eye[0] = eye[0] + camSpeed * aux[0];
+			target[0] = target[0] + camSpeed * aux[0];
+			eye[1] = eye[1] + camSpeed * aux[1];
+			target[1] = target[1] + camSpeed * aux[1];
+			eye[2] = eye[2] + camSpeed * aux[2];
+			target[2] = target[2] + camSpeed * aux[2];
 			view = lookAt(eye, target, up);
 			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
 			break;
 		case "ArrowLeft":
-			// aux = target[0] - eye[0];
-			// eye[0] = eye[0] + 0.5 * aux;
-			// target[0] = target[0] + 0.5 * aux;
-			// aux = target[2] - eye[2];
-			// eye[2] = eye[2] + 0.5 * aux;
-			// target[2] = target[2] + 0.5 * aux;
-			// view = lookAt(eye, target, up);
-			// gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
-			// break;
+			perp[0] = vectY[1] * aux[2] - vectY[2] * aux[1];
+			perp[1] = vectY[0] * aux[2] - vectY[2] * aux[0];
+			perp[2] = vectY[0] * aux[1] - vectY[1] * aux[0];
+			eye[0] = eye[0] + camSpeed * perp[0];
+			eye[1] = eye[1] + camSpeed * perp[1];
+			eye[2] = eye[2] + camSpeed * perp[2];
+			target[0] = target[0] + camSpeed * perp[0];
+			target[1] = target[1] + camSpeed * perp[1];
+			target[2] = target[2] + camSpeed * perp[2];
+			view = lookAt(eye, target, up);
+			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+			break;
 		case "ArrowRight":
-			// aux = target[0] - eye[0];
-			// eye[0] = eye[0] - 0.5 * aux;
-			// target[0] = target[0] - 0.5 * aux;
-			// aux = target[2] - eye[2];
-			// eye[2] = eye[2] - 0.5 * aux;
-			// target[2] = target[2] - 0.5 * aux;
-			// view = lookAt(eye, target, up);
-			// gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
-			// break;
+			perp[0] = vectY[1] * aux[2] - vectY[2] * aux[1];
+			perp[1] = vectY[0] * aux[2] - vectY[2] * aux[0];
+			perp[2] = vectY[0] * aux[1] - vectY[1] * aux[0];
+			eye[0] = eye[0] - camSpeed * perp[0];
+			eye[1] = eye[1] - camSpeed * perp[1];
+			eye[2] = eye[2] - camSpeed * perp[2];
+			target[0] = target[0] - camSpeed * perp[0];
+			target[1] = target[1] - camSpeed * perp[1];
+			target[2] = target[2] - camSpeed * perp[2];
+			view = lookAt(eye, target, up);
+			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+			break;
 		}
 		event.preventDefault();
 	}, true);
