@@ -494,8 +494,8 @@ window.onload = function init(){
 	projection = perspective( 45.0, canvas.width/canvas.height, 0.1, 100.0 );
 	gl.uniformMatrix4fv( programInfo.uniformLocations.projection, gl.FALSE, projection ); // copy projection to uniform value in shader
     // View matrix (static cam)
-	eye = vec3(-5.0, 0.0, 0.0);
-	target =  vec3(0.0, 0.0, 0.0);
+	eye = vec3(2, 0, 2);
+	target =  vec3(1.0, 0.0, 0.0);
 	up =  vec3(0.0, 1.0, 0.0);
 	view = lookAt(eye,target,up);
 	gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view); // copy view to uniform value in shader
@@ -571,53 +571,57 @@ window.onload = function init(){
 		event.preventDefault();
 	}, true);
 
+	// Parte ratón
 	let isClicked = false;
 	let alfa = 0;
 	let beta = 0;
 	let x, y;
-	// Define los eventos de pulsar tecla
-	window.addEventListener("mousedown", e => {
-		isClicked = true;
-		x = e.clientX;
-		y = e.clientY;
+
+	window.addEventListener("mousedown", e =>{
+		if (isClicked == false){
+			isClicked = true
+			x = e.clientX;
+			y = e.clientY;
+		}
 	});
 
-	window.addEventListener("mousemove", e=> {
+	window.addEventListener("mouseup", e=>{
+		if (isClicked){
+			isClicked = false;
+		}
+	});
+
+	window.addEventListener("mousemove", e=>{
 		let alfaOffset = 0;
 		let betaOffset = 0;
 		let betaAux = 0;
 		if (isClicked){
 			if (e.clientX != x){ // Rotar horizontalmente
-				alfa = (e.clientX - x) % 360;
+				alfa = (e.clientX - x);
 				x = e.clientX;
 			}
 			if (e.clientY != y){
 				betaOffset = e.clientY - y;
 				betaAux = (beta + betaOffset) % 360;
-				if ((beta < 90) && (betaAux > 90)){ // Limita mirar hacia arriba
-				 	beta = 90;
-				}else if ((beta > 270) && (betaAux < 270)){ // Limita mirar hacia abajo
-					beta = 0;
+				if ((beta > 0) && (beta < 90) && (betaAux > 90)){ // Limita mirar hacia arriba
+				 	beta = 89.9;
+				}else if ((beta < 0) && (beta > 270) && (betaAux < 270)){ // Limita mirar hacia abajo
+					beta = 270.1;
 				}else{
 					beta = betaAux;
 				}
 				y = e.clientY;
 			}
-			target[0] = modulo * math.cos(beta) * math.sen(alfa);
-			target[1] = modulo * math.cos(beta) * math.cos(alfa);
-			target[2] = modulo * math.sin(beta);
+			let alfaRad = alfa * Math.PI / 180;
+			let betaRad = beta * Math.PI / 180;
+			target[0] = Math.cos(betaRad) * Math.cos(alfaRad) + eye[0];
+			target[1] = Math.sin(betaRad) + eye[1];
+			target[2] = Math.cos(betaRad) * Math.sin(alfaRad) + eye[2];
 			view = lookAt(eye, target, up);
 			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
 		}
 	});
 
-	window.addEventListener("mouseup", e=> {
-		if (isClicked){
-			x = 0;
-			y = 0;
-			isClicked = false;
-		}
-	});
 
 	requestAnimFrame(render);
 
