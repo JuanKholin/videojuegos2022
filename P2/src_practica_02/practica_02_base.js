@@ -494,8 +494,8 @@ window.onload = function init(){
 	projection = perspective( 45.0, canvas.width/canvas.height, 0.1, 100.0 );
 	gl.uniformMatrix4fv( programInfo.uniformLocations.projection, gl.FALSE, projection ); // copy projection to uniform value in shader
     // View matrix (static cam)
-	eye = vec3(2, 0, 2);
-	target =  vec3(1.0, 0.0, 0.0);
+	eye = vec3(-5, 0, 0);
+	target =  vec3(3.0, 0.0, 0.0);
 	up =  vec3(0.0, 1.0, 0.0);
 	view = lookAt(eye,target,up);
 	gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view); // copy view to uniform value in shader
@@ -592,25 +592,24 @@ window.onload = function init(){
 	});
 
 	window.addEventListener("mousemove", e=>{
-		let alfaOffset = 0;
 		let betaOffset = 0;
 		let betaAux = 0;
 		if (isClicked){
 			if (e.clientX != x){ // Rotar horizontalmente
-				alfa = (e.clientX - x);
+				alfa = alfa + (e.clientX - x);
 				x = e.clientX;
+				alfa = (alfa + 360) % 360; // Para corregir desbordamientos
 			}
 			if (e.clientY != y){
-				betaOffset = e.clientY - y;
-				betaAux = (beta + betaOffset) % 360;
-				if ((beta > 0) && (beta < 90) && (betaAux > 90)){ // Limita mirar hacia arriba
-				 	beta = 89.9;
-				}else if ((beta < 0) && (beta > 270) && (betaAux < 270)){ // Limita mirar hacia abajo
-					beta = 270.1;
+				betaAux = beta - (e.clientY - y);
+				y = e.clientY;
+				if (betaAux > 90){
+					beta = 89.9;
+				}else if (betaAux < -90){
+					beta = -89.9;
 				}else{
 					beta = betaAux;
 				}
-				y = e.clientY;
 			}
 			let alfaRad = alfa * Math.PI / 180;
 			let betaRad = beta * Math.PI / 180;
