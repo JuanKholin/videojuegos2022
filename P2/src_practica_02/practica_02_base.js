@@ -502,7 +502,9 @@ window.onload = function init(){
 
 	// Para ajustar la velocidad de la cámara, ojalá tan fácil en la realidad
 	let camSpeed = 0.1;
-
+	let isOrtoPersp = false;
+	let scale = 4;
+	let fov = 45;
 	// Define los eventos de pulsar tecla
 	window.addEventListener("keydown", function(event){
 		if (event.defaultPrevented){
@@ -522,24 +524,44 @@ window.onload = function init(){
 		let perp = vec3(0, 0, 0);
 		switch(event.code){
 		case "ArrowDown":
-			eye[0] = eye[0] - camSpeed * aux[0];
-			target[0] = target[0] - camSpeed * aux[0];
-			eye[1] = eye[1] - camSpeed * aux[1];
-			target[1] = target[1] - camSpeed * aux[1];
-			eye[2] = eye[2] - camSpeed * aux[2];
-			target[2] = target[2] - camSpeed * aux[2];
-			view = lookAt(eye, target, up);
-			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+			if (isOrtoPersp == true){
+				scale = scale * 1.01;
+				if (scale > 30){
+					scale = 30;
+				}
+				projection = ortho(scale * -canvas.width / canvas.height,
+						scale * canvas.width / canvas.height, -scale, scale, 0.1, 100);
+				gl.uniformMatrix4fv( programInfo.uniformLocations.projection, gl.FALSE, projection );
+			}else{
+				eye[0] = eye[0] - camSpeed * aux[0];
+				target[0] = target[0] - camSpeed * aux[0];
+				eye[1] = eye[1] - camSpeed * aux[1];
+				target[1] = target[1] - camSpeed * aux[1];
+				eye[2] = eye[2] - camSpeed * aux[2];
+				target[2] = target[2] - camSpeed * aux[2];
+				view = lookAt(eye, target, up);
+				gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+			}
 			break;
 		case "ArrowUp":
-			eye[0] = eye[0] + camSpeed * aux[0];
-			target[0] = target[0] + camSpeed * aux[0];
-			eye[1] = eye[1] + camSpeed * aux[1];
-			target[1] = target[1] + camSpeed * aux[1];
-			eye[2] = eye[2] + camSpeed * aux[2];
-			target[2] = target[2] + camSpeed * aux[2];
-			view = lookAt(eye, target, up);
-			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+			if (isOrtoPersp == true){
+				scale = scale * 0.99;
+				if (scale < 1){
+					scale = 1;
+				}
+				projection = ortho(scale * -canvas.width / canvas.height,
+						scale * canvas.width / canvas.height, -scale, scale, 0.1, 100);
+				gl.uniformMatrix4fv( programInfo.uniformLocations.projection, gl.FALSE, projection );
+			}else{
+				eye[0] = eye[0] + camSpeed * aux[0];
+				target[0] = target[0] + camSpeed * aux[0];
+				eye[1] = eye[1] + camSpeed * aux[1];
+				target[1] = target[1] + camSpeed * aux[1];
+				eye[2] = eye[2] + camSpeed * aux[2];
+				target[2] = target[2] + camSpeed * aux[2];
+				view = lookAt(eye, target, up);
+				gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+			}
 			break;
 		case "ArrowLeft":
 			perp[0] = vectY[1] * aux[2] - vectY[2] * aux[1];
@@ -566,6 +588,40 @@ window.onload = function init(){
 			target[2] = target[2] - camSpeed * perp[2];
 			view = lookAt(eye, target, up);
 			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
+			break;
+		case "KeyP":
+			isOrtoPersp = false;
+			projection = perspective( fov, canvas.width / canvas.height, 0.1, 100.0 );
+			gl.uniformMatrix4fv( programInfo.uniformLocations.projection, gl.FALSE, projection );
+			break;
+		case "KeyO":
+			isOrtoPersp = true;
+			scale = 4;
+			projection = ortho(scale * -canvas.width / canvas.height,
+					scale * canvas.width / canvas.height, -scale, scale, 0.1, 100);
+			gl.uniformMatrix4fv( programInfo.uniformLocations.projection, gl.FALSE, projection );
+			break;
+		case "BracketRight":
+		case "NumpadAdd":
+			if (isOrtoPersp == false){
+				fov += 1;
+				if (fov > 170){
+					fov = 170;
+				}
+				projection = perspective( fov, canvas.width / canvas.height, 0.1, 100.0 );
+				gl.uniformMatrix4fv( programInfo.uniformLocations.projection, gl.FALSE, projection );
+			}
+			break;
+		case "Slash":
+		case "NumpadSubtract":
+			if (isOrtoPersp == false){
+				fov -= 1;
+				if (fov < 1){
+					fov = 1;
+				}
+				projection = perspective( fov, canvas.width / canvas.height, 0.1, 100.0 );
+				gl.uniformMatrix4fv( programInfo.uniformLocations.projection, gl.FALSE, projection );
+			}
 			break;
 		}
 		event.preventDefault();
