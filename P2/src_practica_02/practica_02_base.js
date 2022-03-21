@@ -5,6 +5,7 @@
 *
 * Parte adaptada de: Alex Clarke, 2016, y Ed Angel, 2015.
 *
+* V2: Grupo 3 de videojuegos (Starcraft team)
 */
 
 // Variable to store the WebGL rendering context
@@ -101,6 +102,8 @@ const colorsWireCube = [
 	white, white, white, white, white,
 ];
 
+// EDITADO: se pasan los colores a blanco para utilizar los factores de los
+// colores para generar de todo tipo (ya que blanco es el máximo (255))
 // const colorsCube = [
 // 	lightblue, lightblue, lightblue, lightblue, lightblue, lightblue,
 // 	lightgreen, lightgreen, lightgreen, lightgreen, lightgreen, lightgreen,
@@ -163,7 +166,7 @@ var objectsToDraw = [
 		  },
 		  primType: "line_strip",
 		},
-		{
+		{ // EDITADO: Se añaden cubos para la práctica
 		  programInfo: programInfo,
 		  pointsArray: pointsCube,
 		  colorsArray: colorsCube,
@@ -431,7 +434,8 @@ var objectsToDraw = [
 //----------------------------------------------------------------------------
 
 window.onload = function init(){
-
+	// EDITADO: se modifican los cubos para que tomen rotaciones y colores
+	// pseudo-aleatorios
 	for(let i = 2; i < objectsToDraw.length; i++){
 		let aux = Math.random()
 		if(aux <= 0.33){
@@ -494,18 +498,25 @@ window.onload = function init(){
 	projection = perspective( 45.0, canvas.width/canvas.height, 0.1, 100.0 );
 	gl.uniformMatrix4fv( programInfo.uniformLocations.projection, gl.FALSE, projection ); // copy projection to uniform value in shader
     // View matrix (static cam)
+
+	// EDITADO: Preparamos la cámara algo más centrada
 	eye = vec3(-5, 0, 0);
 	target =  vec3(3.0, 0.0, 0.0);
 	up =  vec3(0.0, 1.0, 0.0);
 	view = lookAt(eye,target,up);
 	gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view); // copy view to uniform value in shader
 
+	// EDITADO: añadimos rutinas para eventos de teclado y ratón
+	// Previamente definimos variables para hacer el diseño más simple:
 	// Para ajustar la velocidad de la cámara, ojalá tan fácil en la realidad
 	let camSpeed = 0.1;
+	// Indica el tipo de proyección actual
 	let isOrtoPersp = false;
+	// Ajusta la escala en la proyección ortogonal
 	let scale = 4;
+	// Field of view en la proyección perspectiva
 	let fov = 45;
-	// Define los eventos de pulsar tecla
+	// Define los tratamientos para eventos de teclado
 	window.addEventListener("keydown", function(event){
 		if (event.defaultPrevented){
 			return; // No se hace nada si se ha hecho ya
@@ -521,13 +532,16 @@ window.onload = function init(){
 		aux[0] = aux[0] / mod;
 		aux[1] = aux[1] / mod;
 		aux[2] = aux[2] / mod;
+		// Podría usarse up pero solo en caso de que cambie, como se pide que sea
+		// este eje el que no se toca en el enunciado, pues se define para su uso
 		let vectY = vec3(0, 1, 0);
+		// Auxiliar para el movimiento horizontal
 		let perp = vec3(0, 0, 0);
 		switch(event.code){
-		case "ArrowDown":
+		case "ArrowDown": // Flecha abajo
 			if (isOrtoPersp == true){
 				scale = scale * 1.01;
-				if (scale > 30){
+				if (scale > 30){ // Límite de diszoom de la perspectiva ortogonal
 					scale = 30;
 				}
 				projection = ortho(scale * -canvas.width / canvas.height,
@@ -544,10 +558,10 @@ window.onload = function init(){
 				gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
 			}
 			break;
-		case "ArrowUp":
+		case "ArrowUp": // Flecha arriba
 			if (isOrtoPersp == true){
 				scale = scale * 0.99;
-				if (scale < 1){
+				if (scale < 1){ // Límite de zoom en la perspectiva ortogonal
 					scale = 1;
 				}
 				projection = ortho(scale * -canvas.width / canvas.height,
@@ -564,7 +578,7 @@ window.onload = function init(){
 				gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
 			}
 			break;
-		case "ArrowLeft":
+		case "ArrowLeft": // Flecha izquierda
 			perp[0] = vectY[1] * aux[2] - vectY[2] * aux[1];
 			perp[1] = vectY[0] * aux[2] - vectY[2] * aux[0];
 			perp[2] = vectY[0] * aux[1] - vectY[1] * aux[0];
@@ -577,7 +591,7 @@ window.onload = function init(){
 			view = lookAt(eye, target, up);
 			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
 			break;
-		case "ArrowRight":
+		case "ArrowRight": // Flecha derecha
 			perp[0] = vectY[1] * aux[2] - vectY[2] * aux[1];
 			perp[1] = vectY[0] * aux[2] - vectY[2] * aux[0];
 			perp[2] = vectY[0] * aux[1] - vectY[1] * aux[0];
@@ -590,34 +604,34 @@ window.onload = function init(){
 			view = lookAt(eye, target, up);
 			gl.uniformMatrix4fv(programInfo.uniformLocations.view, gl.FALSE, view);
 			break;
-		case "KeyP":
+		case "KeyP": // Para cambiar a proyección ortogonal
 			isOrtoPersp = false;
 			projection = perspective( fov, canvas.width / canvas.height, 0.1, 100.0 );
 			gl.uniformMatrix4fv( programInfo.uniformLocations.projection, gl.FALSE, projection );
 			break;
-		case "KeyO":
+		case "KeyO": // Para cambiar a proyección perspectiva
 			isOrtoPersp = true;
 			scale = 4;
 			projection = ortho(scale * -canvas.width / canvas.height,
 					scale * canvas.width / canvas.height, -scale, scale, 0.1, 100);
 			gl.uniformMatrix4fv( programInfo.uniformLocations.projection, gl.FALSE, projection );
 			break;
-		case "BracketRight":
-		case "NumpadAdd":
+		case "BracketRight": // Tecla + del teclado
+		case "NumpadAdd": // Tecla + del numpad
 			if (isOrtoPersp == false){
 				fov += 1;
-				if (fov > 170){
+				if (fov > 170){ // Límite del field of view máximo
 					fov = 170;
 				}
 				projection = perspective( fov, canvas.width / canvas.height, 0.1, 100.0 );
 				gl.uniformMatrix4fv( programInfo.uniformLocations.projection, gl.FALSE, projection );
 			}
 			break;
-		case "Slash":
-		case "NumpadSubtract":
+		case "Slash": // Tecla - del teclado
+		case "NumpadSubtract": // Tecla - del numpad
 			if (isOrtoPersp == false){
 				fov -= 1;
-				if (fov < 1){
+				if (fov < 1){ // Límite del field of view mínimo
 					fov = 1;
 				}
 				projection = perspective( fov, canvas.width / canvas.height, 0.1, 100.0 );
@@ -625,15 +639,19 @@ window.onload = function init(){
 			}
 			break;
 		}
-		event.preventDefault();
+		event.preventDefault(); // Evita que se triggeree el evento dos veces
 	}, true);
 
 	// Parte ratón
+	// Indica si el ratón está pulsado
 	let isClicked = false;
+	// Primer ángulo (polar / zenith / colatitude) de la x a la z (antihorario)
 	let alfa = 0;
+	// Segundo ángulo (azimuthal / longitude) de la x a la y (antihorario)
 	let beta = 0;
+	// Variables que indican la posición previa del ratón
 	let x, y;
-
+	// Evento de pulsar el ratón
 	window.addEventListener("mousedown", e =>{
 		if (isClicked == false){
 			isClicked = true
@@ -642,12 +660,14 @@ window.onload = function init(){
 		}
 	});
 
+	// Evento de soltar el ratón
 	window.addEventListener("mouseup", e=>{
 		if (isClicked){
 			isClicked = false;
 		}
 	});
 
+	// Evento de movimiento del ratón
 	window.addEventListener("mousemove", e=>{
 		let betaOffset = 0;
 		let betaAux = 0;
@@ -660,16 +680,18 @@ window.onload = function init(){
 			if (e.clientY != y){
 				betaAux = beta - (e.clientY - y);
 				y = e.clientY;
-				if (betaAux > 90){
+				if (betaAux > 90){ // Límite vertical superior
 					beta = 89.9;
-				}else if (betaAux < -90){
+				}else if (betaAux < -90){ // Límite vertical inferior
 					beta = -89.9;
 				}else{
 					beta = betaAux;
 				}
 			}
+			// Pasar ángulos a radianes
 			let alfaRad = alfa * Math.PI / 180;
 			let betaRad = beta * Math.PI / 180;
+			// Trazar nuevo target (rotación de la cámara hacia un nuevo punto)
 			target[0] = Math.cos(betaRad) * Math.cos(alfaRad) + eye[0];
 			target[1] = Math.sin(betaRad) + eye[1];
 			target[2] = Math.cos(betaRad) * Math.sin(alfaRad) + eye[2];
@@ -678,9 +700,7 @@ window.onload = function init(){
 		}
 	});
 
-
 	requestAnimFrame(render);
-
 };
 
 //----------------------------------------------------------------------------
@@ -695,6 +715,8 @@ function render() {
 	// MOVE STUFF AROUND
 	//----------------------------------------------------------------------------
 
+	// EDITADO: coloca cada cubo en su eje generado aleatoriamente para que gire
+	// alrededor del centro
 	let ejeY = vec3(0.0, 1.0, 0.0);
 	let ejeX = vec3(1.0, 0.0, 0.0);
 
@@ -706,9 +728,7 @@ function render() {
 		//objectsToDraw[i].uniforms.u_model = mult(Rx, objectsToDraw[i].uniforms.u_model);
 		objectsToDraw[i].uniforms.u_model = mult(objectsToDraw[i].uniforms.u_model, Ry);
 		//objectsToDraw[i].uniforms.u_model = mult(objectsToDraw[i].uniforms.u_model, Rx);
-
 	}
-
 	let R = rotate(rotAngle, ejeY);
 
 	//----------------------------------------------------------------------------
