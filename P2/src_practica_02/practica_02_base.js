@@ -517,6 +517,7 @@ window.onload = function init(){
 		aux[2] = target[2] - eye[2];
 		// Lo unitarizamos, sé que suena mal pero no se me ocurre otro término
 		let mod = math.sqrt(aux[0] * aux[0] + aux[1] * aux[1] + aux[2] * aux[2]);
+		//let mod = math.sqrt(aux[0] * aux[0] + aux[2] * aux[2]);
 		aux[0] = aux[0] / mod;
 		aux[1] = aux[1] / mod;
 		aux[2] = aux[2] / mod;
@@ -535,8 +536,8 @@ window.onload = function init(){
 			}else{
 				eye[0] = eye[0] - camSpeed * aux[0];
 				target[0] = target[0] - camSpeed * aux[0];
-				eye[1] = eye[1] - camSpeed * aux[1];
-				target[1] = target[1] - camSpeed * aux[1];
+				//eye[1] = eye[1] - camSpeed * aux[1];
+				//target[1] = target[1] - camSpeed * aux[1];
 				eye[2] = eye[2] - camSpeed * aux[2];
 				target[2] = target[2] - camSpeed * aux[2];
 				view = lookAt(eye, target, up);
@@ -555,8 +556,8 @@ window.onload = function init(){
 			}else{
 				eye[0] = eye[0] + camSpeed * aux[0];
 				target[0] = target[0] + camSpeed * aux[0];
-				eye[1] = eye[1] + camSpeed * aux[1];
-				target[1] = target[1] + camSpeed * aux[1];
+				//eye[1] = eye[1] + camSpeed * aux[1];
+				//target[1] = target[1] + camSpeed * aux[1];
 				eye[2] = eye[2] + camSpeed * aux[2];
 				target[2] = target[2] + camSpeed * aux[2];
 				view = lookAt(eye, target, up);
