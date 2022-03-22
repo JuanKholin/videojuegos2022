@@ -46,8 +46,8 @@ BUGS
   A veces crashea el navegador si se minimiza o si permanece mucho tiempo activo
 
 CONTRIBUTING
-  Alexandre Zheng:    3 horas
-  Alonso del Rincón:  z horas
-  Antonio Gallén:     11.5 horas
-  Juan Plo:           w horas
-  Total:              11.5 + X horas
+  Alexandre Zheng:    6 horas
+  Alonso del Rincón:  8 horas
+  Antonio Gallén:     11 horas
+  Juan Plo:           7 horas
+  Total:              32 horas
