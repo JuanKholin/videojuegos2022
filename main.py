@@ -1,4 +1,6 @@
 import pygame, sys
+import math
+from src import Terran, Map, Raton, Escena
 
 pygame.init()
 
@@ -10,65 +12,46 @@ GREEN   = (0,255,0)
 RED     = (255,0,0)
 BLUE    = (0,0,255)
 
-SCREEN_WIDTH = 720
-SCREEN_HEIGHT = 480
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 400
 
 size =(SCREEN_WIDTH,SCREEN_HEIGHT)
-
-
 
 screen =  pygame.display.set_mode(size, pygame.RESIZABLE)
 #Controlar frames por segundo
 clock = pygame.time.Clock()
 
-#Coordenadas figura
-cord_x = 400
-cord_y = 200
+units = []
+unitsClicked = []
 
-#Velocidad figura
-speed_x = 3
-speed_y = 3
+map = Map.Map(10,20)
 
-bckg = pygame.image.load("assets/background.jpg").convert()
-kurisu = pygame.image.load("assets/kurisu.png").convert()
-kurisu.set_colorkey(BLACK)
+escena = Escena.Escena()
 
-
-while True:
+def procesarInput():
     for event in pygame.event.get(): #Identificar lo sucedido en la ventana
         #print(event)
         if event.type == pygame.QUIT:
+            pygame.quit()
             sys.exit()
-        if event.type == pygame.VIDEORESIZE:
+        elif event.type == pygame.VIDEORESIZE:
             SCREEN_HEIGHT = event.h
             SCREEN_WIDTH = event.w
             screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
-            bckg = pygame.transform.scale(bckg,(SCREEN_WIDTH, SCREEN_HEIGHT))
+        else:
+            escena.procesarEvent(event)
+        
+while True:
 
+    #Procesar inputs
+    procesarInput()
 
-    ###---LOGICA
-    #Movimiento de cuadrado
+    #Actualizar entidades del juego
+    escena.update()
 
-    
-    if cord_x > (SCREEN_WIDTH - kurisu.get_width()) or cord_x < 0:
-        speed_x = -speed_x
-    if cord_y > (SCREEN_HEIGHT - kurisu.get_height()) or cord_y < 0:
-        speed_y = -speed_y
-
-    cord_x += speed_x
-    cord_y += speed_y
-
-    ###---LOGICA
-
-    #Poner color de fondo
+    #Dibujar
     screen.fill(WHITE)
-    
-    ###--- ZONA DE DIBUJO
-    screen.blit(bckg, [0,0])
-    screen.blit(kurisu, [cord_x,cord_y])
-
-    ###--- ZONA DE DIBUJO
-
-    #ACtualizar pantalla
+    escena.draw(screen)
     pygame.display.flip()
+
     clock.tick(60)
