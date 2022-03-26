@@ -17,7 +17,8 @@ class Escena():
         #if map.check(command) and p1.check(command):
             #map.procesarCommand(command)
             #p1.procesarCommand(command)
-        command = self.p1.processEvent(event)
+        command = self.raton.processEvent(event)
+        self.raton.processEvent(event)
         mouse_pos = pygame.mouse.get_pos()
         pathsForPlayer = []
         if command.id == Command.CommandId.MOVER: # 1 es moverse

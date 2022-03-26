@@ -27,7 +27,7 @@ p1Units = []
 p1Units.append(terran1)
 player1 = Player.Player(p1Units,[],5,[])
 sprite_ruta = "./SPRITE/raton/"
-raton = Raton.raton(sprite_ruta)
+raton = Raton.raton(sprite_ruta, player1)
 mapa = Map.Map(10, 20)
 camera = Camera.Camera(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT)
 escena = Escena.Escena(player1,[],[],mapa, camera, raton)

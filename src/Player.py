@@ -44,46 +44,7 @@ class Player():
         self.initialX = 0
         self.initialY = 0
     def processEvent(self,event):
-        command = Command.Command(0) # 0 es nada
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            click_type = pygame.mouse.get_pressed()
-            mouse_pos = pygame.mouse.get_pos()
-            
-            if click_type[0]:     
-                if not self.pulsado:
-                    self.pulsado = True
-                    self.initialX = mouse_pos[0]
-                    self.initialY = mouse_pos[1]
-            if click_type[2]:
-                if not self.pulsado:
-                    command.setId(1)
-                    #print("CALCULANDO PUNTOS")
-                    for unit in self.unitsSelected:
-                        rect = unit.getRect()
-                        pos = (rect.x,rect.y)
-                        command.addParameter(pos)
-        elif event.type == pygame.MOUSEBUTTONUP:
-            type = pygame.mouse.get_pressed()
-            mouse_pos = pygame.mouse.get_pos()  
-            #print('click liberado', type)
-            if not type[0]:   
-                if self.pulsado: 
-                    self.pulsado = False
-                    #print('click izq liberado', mouse_pos[0], mouse_pos[1], event.type)
-                    mouseRect = createRect(self.initialX, self.initialY, mouse_pos[0], mouse_pos[1])
-                    for unit in self.units:
-                        if collides(unit.getRect(), mouseRect):
-                            unit.setClicked(True)
-                            self.unitsSelected.append(unit)
-                            
-                            #print("CLICKADO" + str(terran.id))
-                        else:
-                            unit.setClicked(False)
-                            #unitsClicked.remove(terran)
-                            #print("DESCLICKADO" + str(terran.id)) 
-            if type[2]:
-                print('click der liberado', mouse_pos[0], mouse_pos[1], event.type)
-        return command
+        pass
         
     def update(self):
         for unit in self.units:
