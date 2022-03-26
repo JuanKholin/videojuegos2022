@@ -1,11 +1,13 @@
 
 class Camera():
-    def __init__(self, x, y, z):
+    def __init__(self, x, y, h, w):
         self.x = x
         self.y = y
-        self.z = z
+        self.h = h
+        self.w = w
     
-    def move(self, x, y, z):
+    def move(self, x, y, h, w):
         self.x = x
         self.y = y
-        self.z = z
+        self.h = h
+        self.w = w

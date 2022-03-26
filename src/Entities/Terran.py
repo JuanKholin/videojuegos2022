@@ -15,7 +15,7 @@ SCREEN_HEIGHT = 400
 
 class Terran(Unit.Unit):
     def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, faces, frames):
-        super().__init__(hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, faces, frames)
+        Unit.Unit.__init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, faces, frames)
     def atacar():
         pass
     def construir():

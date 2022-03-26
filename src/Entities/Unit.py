@@ -19,7 +19,7 @@ class path():
 
 class Unit(Entity.Entity):
     def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, faces, frames):
-        super.__init__(hp, mineral_cost, generation_time)
+        Entity.Entity.__init__(self, hp, mineral_cost, generation_time)
         self.paths = []
         self.clicked = False
         self.angle = 0

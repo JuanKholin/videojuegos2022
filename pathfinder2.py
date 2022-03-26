@@ -237,7 +237,7 @@ while True:
     pygame.display.flip()
     clock.tick(60)
 
-    #YO movimiento de unidad y colision con otra
-    # UNIDAD ZERG BASICA
-    # ESTRUCTURA QUE PERMITA CREAR TERRAN
+    # YO movimiento de unidad y colision con otra
+    # UNIDAD ZERG BASICA ANTONIO
+    # ESTRUCTURA QUE PERMITA CREAR TERRAN Y RATON ALEX
     # CAMARA ALONSO

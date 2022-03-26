@@ -21,6 +21,8 @@ class raton(pygame.sprite.Sprite):
         self.clickSprite = pygame.image.load(ruta+"click.png").convert_alpha()
         self.image = self.sprite[0]
         self.rect = self.image.get_rect() #Para posicionar el sprite
+        pygame.mouse.set_visible(False)
+        self.point = point(ruta)
         
     def update(self):
         pos = pygame.mouse.get_pos()
@@ -49,6 +51,9 @@ class raton(pygame.sprite.Sprite):
 
     def setCollide(self, detected):
         self.collide = detected
+    def draw(self, screen):
+        self.point.draw(screen)
+        screen.blit(self.image, (self.rect.x, self.rect.y))
 
 class point(pygame.sprite.Sprite):
     #Constructor
@@ -89,3 +94,6 @@ class point(pygame.sprite.Sprite):
 
     def getClicked(self):
         return self.clicked
+
+    def draw(self, screen):
+        screen.blit(self.image, (self.rect.x, self.rect.y))
