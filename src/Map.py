@@ -60,7 +60,7 @@ class Map():
             xaux = len(self.map[0])-1
         if int(y/self.th) >= len(self.map):   
             yaux = len(self.map) -1
-        print(xaux, yaux)    
+        #print(xaux, yaux)    
         return self.map[yaux][xaux]
 
 

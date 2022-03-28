@@ -47,6 +47,8 @@ class Player():
         pass
         
     def update(self):
+        for structure in self.structures:
+            structure.update()
         for unit in self.units:
             unit.update()
     def addUnits(self,unit):
@@ -58,6 +60,10 @@ class Player():
             for i in range(param.__len__()):
                 self.unitsSelected[i].paths = param[i]
     def draw(self, screen):
+        for structure in self.structures:
+            r = structure.getRect()
+            pygame.draw.rect(screen, BLACK, pygame.Rect(r.x, r.y, r.w, r.h),1)
+            screen.blit(structure.image, [r.x, r.y])
         for unit in self.units:
             r = unit.getRect()
             pygame.draw.rect(screen, BLACK, pygame.Rect(r.x, r.y, r.w, r.h),1)
