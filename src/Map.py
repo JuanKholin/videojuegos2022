@@ -53,15 +53,15 @@ class Map():
     
     #Devuelve la Tile que se encuentra en las coordenadas x,y
     def getTile(self, x, y):
-        xaux = x
-        yaux = y
-        print(x, y)
-        if x >= SCREEN_WIDTH:
-            xaux = SCREEN_WIDTH-1
-        if y >= SCREEN_HEIGHT:   
-            yaux = SCREEN_HEIGHT-1
-            
-        return self.map[int(yaux/self.th)][int(xaux/self.tw)]
+        xaux = int(x/self.tw)
+        yaux = int(y/self.th)
+        
+        if int(x/self.tw) >= len(self.map[0]):
+            xaux = len(self.map[0])-1
+        if int(y/self.th) >= len(self.map):   
+            yaux = len(self.map) -1
+        print(xaux, yaux)    
+        return self.map[yaux][xaux]
 
 
     #Devuelve la funcion heuristica de una tile(Distancia al objetivo)
