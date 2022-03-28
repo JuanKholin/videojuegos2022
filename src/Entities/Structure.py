@@ -1,8 +1,11 @@
 from . import Entity
 
 class Structure(Entity.Entity):
-    def __init__(hp, mineralCost, generationTime):
-        super.__init__(hp, mineralCost, generationTime)
+    
+
+    def __init__(self, hp, mineralCost):
+        super.__init__(hp, mineralCost)
+        
 
     def update():
         pass
