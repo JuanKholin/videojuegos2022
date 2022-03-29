@@ -108,6 +108,8 @@ class Unit(Entity.Entity):
         pass
     def construir():
         pass
+    def getGenerationTime(self):
+        return self.generationTime
 
     #def add_path(): ???
     #   pass
