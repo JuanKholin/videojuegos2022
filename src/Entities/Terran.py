@@ -20,3 +20,9 @@ class Terran(Unit.Unit):
         pass
     def construir():
         pass
+
+    def draw(self, screen):
+        rect = self.getRect()
+        #print(image.x,image.y)
+        pygame.draw.rect(screen, BLACK, pygame.Rect(rect.x, rect.y, rect.w, rect.h),1)
+        screen.blit(self.image, [rect.x, rect.y])

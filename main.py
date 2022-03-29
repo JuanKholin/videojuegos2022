@@ -23,6 +23,7 @@ screen =  pygame.display.set_mode(size, pygame.RESIZABLE)
 clock = pygame.time.Clock()
 
 mapa = Map.Map(10, 20)
+mapa.addObstacle(400, 100, 2, 2)
 player1 = Player.Player([],[],5,[])
 terran1 = Terran.Terran(40, 20, 20, 20, 200, 2, 5, "terranSprites", 0, 0)
 structure1 = terranBuilder.terranBuilder(200, 40, 600, 200, 300, player1, mapa, "SPRITE/builder")

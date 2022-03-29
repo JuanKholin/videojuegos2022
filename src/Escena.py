@@ -19,6 +19,7 @@ class Escena():
             #p1.procesarCommand(command)
         command = self.raton.processEvent(event)
         self.raton.processEvent(event)
+        self.p1.processEvent(event)
         mouse_pos = pygame.mouse.get_pos()
         pathsForPlayer = []
         if command.id == Command.CommandId.MOVER: # 1 es moverse

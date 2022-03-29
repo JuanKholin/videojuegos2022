@@ -44,6 +44,7 @@ class Player():
         self.initialX = 0
         self.initialY = 0
     def processEvent(self,event):
+
         pass
         
     def update(self):
@@ -61,10 +62,6 @@ class Player():
                 self.unitsSelected[i].paths = param[i]
     def draw(self, screen):
         for structure in self.structures:
-            r = structure.getRect()
-            pygame.draw.rect(screen, BLACK, pygame.Rect(r.x, r.y, r.w, r.h),1)
-            screen.blit(structure.image, [r.x, r.y])
+            structure.draw(screen)
         for unit in self.units:
-            r = unit.getRect()
-            pygame.draw.rect(screen, BLACK, pygame.Rect(r.x, r.y, r.w, r.h),1)
-            screen.blit(unit.image, [r.x, r.y])
+            unit.draw(screen)

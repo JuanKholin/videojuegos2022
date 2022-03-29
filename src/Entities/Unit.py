@@ -24,7 +24,7 @@ class Unit(Entity.Entity):
         self.clicked = False
         self.angle = 0
         self.speed = speed
-        self.rectOffY = 8 # Para el padding de la y
+        self.rectOffY = 0 # Para el padding de la y
         self.face = 8
         self.frame = 6
         self.framesToRefresh = framesToRefresh
