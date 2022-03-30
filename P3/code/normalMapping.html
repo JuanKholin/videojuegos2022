@@ -89,8 +89,8 @@ void main(){
   vUv = uv;
   vNormal = (modelViewMatrix * vec4(normal, 0.)).xyz;
   vPosition = modelViewMatrix * vec4(position, 1.0);
-  vTangent = projectionMatrix * modelViewMatrix * vec4(tangent, 0);
-  vBitangent = projectionMatrix * modelViewMatrix * vec4(tangent2, 0);
+  vTangent = modelViewMatrix * vec4(tangent, 0);
+  vBitangent = modelViewMatrix * vec4(tangent2, 0);
 
     // El vertex shader debe proporcionar gl_Position (en espacio homogeneo o de pantalla)
     // Transformar posiciones a espacio homogeneo
@@ -146,9 +146,9 @@ void main() {
   nTangent[1] = nTangent[1] * bumpiness;
   nTangent[0] = nTangent[0] * bumpiness;
 
-  mat3 Mtc = mat3(vTangent[0], vBitangent[0], nTangent[0],
-                  vTangent[1], vBitangent[1], nTangent[1],
-                  vTangent[2], vBitangent[2], nTangent[2]);
+  mat3 Mtc = mat3(vTangent[0], vBitangent[0], vNormal[0], //normal geometrica
+                  vTangent[1], vBitangent[1], vNormal[1],
+                  vTangent[2], vBitangent[2], vNormal[2]);
 
   // Calculos necesarios para la iluminacion aqui
   // Grosso modo:
@@ -158,8 +158,8 @@ void main() {
   cDiff = from_sRGB(texture2D(diffuseTexture, vUv).rgb);
   cSpec = vec3(1.0, 1.0, 1.0);
   m = pow(roughness, -1.0);
-  n = normalize(vNormal * Mtc);
-  v = normalize(-vPosition.xyz * Mtc);
+  n = normalize(Mtc * nTangent);
+  v = normalize(-vPosition.xyz);
   lightResult = vec3(0.0, 0.0, 0.0);
   // Para cada una de las luces, si es que hay más de una, que ni eso se sabe:
   for (int i = 0; i < NUM_LIGHTS; i++){
