@@ -14,8 +14,8 @@ class terranBuilder(Structure.Structure):
     x = 0
     y = 0
 
-    def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, sprites):
-        Structure.Structure.__init__(self, hp, mineralCost, generationTime)
+    def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, sprites,id):
+        Structure.Structure.__init__(self, hp, mineralCost, generationTime,id)
         self.player = player
         for i in range(5): #0-3 construccion, 4 estado normal y 5 generando tropas
             self.sprites.insert(i,pygame.image.load(sprites + "/tile00" + str(i) + ".png"))
@@ -27,6 +27,7 @@ class terranBuilder(Structure.Structure):
         self.image.set_colorkey(WHITE)
         self.rectn = pygame.Rect(xini, yini, self.sprites[4].get_width(), self.sprites[4].get_height() - self.rectOffY)
         self.count = 0
+        self.paths = []
     def update(self):
         if self.building:
             self.count += 1

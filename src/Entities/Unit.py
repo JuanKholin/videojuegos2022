@@ -9,8 +9,7 @@ from .. import Utils
 
 class Unit(Entity.Entity):
     def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, faces, frames,id):
-        Entity.Entity.__init__(self, hp, mineral_cost, generation_time)
-        self.id = id
+        Entity.Entity.__init__(self, hp, mineral_cost, generation_time,id)
         self.paths = []
         self.clicked = False
         self.angle = 0

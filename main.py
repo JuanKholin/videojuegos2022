@@ -24,8 +24,8 @@ clock = pygame.time.Clock()
 
 mapa = Map.Map(10, 20)
 player1 = Player.Player([],[],5,[])
-terran1 = Terran.Terran(40, 20, 20, 20, 200, 2, 5, "terranSprites", 0, 0)
-structure1 = terranBuilder.terranBuilder(200, 40, 600, 200, 300, player1, mapa, "SPRITE/builder")
+terran1 = Terran.Terran(40, 20, 20, 20, 200, 2, 5, "terranSprites", 0, 0,1)
+structure1 = terranBuilder.terranBuilder(200, 40, 600, 200, 300, player1, mapa, "SPRITE/builder",2)
 
 player1.addStructures(structure1)
 player1.addUnits(terran1)

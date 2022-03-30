@@ -182,6 +182,40 @@ class Escena():
             else:
                 if tileActual.type != 1:
                     self.mapa.setVecina(tileActual, unit.id)
+            for unit in self.p1.structures:
+                unitPos = unit.getPosition()
+                tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
+                if unit.paths.__len__() > 0:
+                    path = unit.paths[0]
+                    pathObj = unit.paths[unit.paths.__len__() - 1]
+                    tilePath = self.mapa.getTile(path.posFin[0],path.posFin[1])
+                    #print("Tilepath es: ", tilePath.centerx, tilePath.centery)
+                    tileObj = self.mapa.getTile(pathObj.posFin[0],pathObj.posFin[1])
+                    if tilePath.type != 2 or (tilePath.id == unit.id and tilePath.type == 2):
+                        dirX = math.cos(path.angle)
+                        dirY = math.sin(path.angle)               
+                        tileSiguiente = self.mapa.getTile(unitPos[0] + dirX*unit.speed, unitPos[1] + dirY*unit.speed)
+                        if tileActual != tileSiguiente :
+                            if tileActual.type != 1:
+                                self.mapa.setLibre(tileActual)
+                                if tileSiguiente.type != 1:
+                                    self.mapa.setVecina(tileSiguiente, unit.id)
+                        else:
+                            if tileActual.type != 1:
+                                self.mapa.setVecina(tileActual, unit.id)
+                else:
+                    if tileActual.type != 1:
+                        rect = unit.getRect()
+                        x = rect.x
+                        finx = x + rect.w
+                        y = rect.y + 1
+                        finy = y + rect.h
+                        while x <= finx:
+                            while y <= finy:
+                                self.mapa.setVecina(self.mapa.getTile(x,y), unit.id)
+                                y = y + self.mapa.th
+                            y = rect.y + 1
+                            x = x + self.mapa.tw
         self.p1.update()
         self.raton.update()
     

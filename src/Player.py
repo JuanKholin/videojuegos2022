@@ -60,7 +60,7 @@ class Player():
     def draw(self, screen):
         for structure in self.structures:
             r = structure.getRect()
-            pygame.draw.rect(screen, BLACK, pygame.Rect(r.x, r.y, r.w, r.h),1)
+            pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x, r.y, r.w, r.h),1)
             screen.blit(structure.image, [r.x, r.y])
         for unit in self.units:
             r = unit.getRect()
