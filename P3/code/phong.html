@@ -79,8 +79,9 @@ void main() {
 
 	// Calculos para dar valor a las varying aqui
   vUv = uv;
-  vNormal = normal;
-  vPosition = vec4(position, 1.0);
+  vNormal = (modelViewMatrix * vec4(normal, 0.)).xyz;
+  vPosition = modelViewMatrix * vec4(position, 1.0);
+
     // El vertex shader debe proporcionar gl_Position (en espacio homogeneo o de pantalla)
     // Transformar posiciones a espacio homogeneo
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
@@ -129,7 +130,7 @@ void main() {
     cSpec = vec3(1.0, 1.0, 1.0);
     m = pow(roughness, -1.0);
     n = normalize(vNormal);
-    v = normalize(cameraPosition - vPosition.xyz);
+    v = normalize(-vPosition.xyz);
     lightResult = vec3(0.0, 0.0, 0.0);
     // Para cada una de las luces, si es que hay más de una, que ni eso se sabe:
     for (int i = 0; i < NUM_LIGHTS; i++){
@@ -137,9 +138,9 @@ void main() {
       h = normalize(v + l); // Si v y l son mismo módulo, v + l es bisectriz
       r2 = pow(distance(lightPositions[i], v), 2.0);
       // Primero lado izquierdo de la ecuación:
-      leftSide = (1.0 / r2) * (cDiff + cSpec * pow(abs(dot(n, h)), m));
+      leftSide = (1.0 / r2) * (cDiff + cSpec * pow(max(dot(n, h), 0.0), m));
       // Después lado derecho de la ecuación:
-      rightSide = lightColors[i] * (abs(dot(n, l)));
+      rightSide = lightColors[i] * (max(dot(n, l), 0.0));
       // Juntar todo:
       thisLightResult = leftSide * rightSide;
       lightResult = lightResult + thisLightResult;
