@@ -80,13 +80,17 @@ attribute vec3 tangent2;
 varying vec2 vUv; // coordenadas de textura
 varying vec3 vNormal; // normal del vertice en espacio de la camara
 varying vec4 vPosition; // posicion del vertice en espacio de la camara
+varying vec4 vTangent;
+varying vec4 vBitangent;
 
-void main() {
+void main(){
 
 	// Calculos para dar valor a las varying aqui
   vUv = uv;
-  vNormal = normal;
-  vPosition = vec4(position, 1.0);
+  vNormal = (modelViewMatrix * vec4(normal, 0.)).xyz;
+  vPosition = modelViewMatrix * vec4(position, 1.0);
+  vTangent = projectionMatrix * modelViewMatrix * vec4(tangent, 0);
+  vBitangent = projectionMatrix * modelViewMatrix * vec4(tangent2, 0);
 
     // El vertex shader debe proporcionar gl_Position (en espacio homogeneo o de pantalla)
     // Transformar posiciones a espacio homogeneo
@@ -125,24 +129,37 @@ uniform sampler2D normalMap;
 varying vec2 vUv; // coordenadas de la textura
 varying vec3 vNormal; // normal del fragment en espacio de la camara
 varying vec4 vPosition; // posicion del fragment en espacio de la camara
+varying vec4 vTangent;
+varying vec4 vBitangent;
 
 vec3 to_sRGB(vec3 c) { return pow(c, vec3(1.0/2.2)); }
 vec3 from_sRGB(vec3 c) { return pow(c, vec3(2.2)); }
 
 void main() {
 
-	vec3 finalColor = vec3(0.0, 0.0, 0.0);
+  vec3 finalColor = vec3(0.0, 0.0, 0.0);
+
+  // Matrix Tangent - Camera
+  vec3 nTangent = texture2D(normalMap, vUv).rgb - 0.5;
+  nTangent[1] = -nTangent[1]; // DirectX tiene negativa la y
+  // Aplica bumpiness
+  nTangent[1] = nTangent[1] * bumpiness;
+  nTangent[0] = nTangent[0] * bumpiness;
+
+  mat3 Mtc = mat3(vTangent[0], vBitangent[0], nTangent[0],
+                  vTangent[1], vBitangent[1], nTangent[1],
+                  vTangent[2], vBitangent[2], nTangent[2]);
 
   // Calculos necesarios para la iluminacion aqui
-  // A grosso modo:
+  // Grosso modo:
   vec3 v, l, n, h, lightResult, thisLightResult, cDiff, cSpec, leftSide,
       rightSide;
   float r2, m;
   cDiff = from_sRGB(texture2D(diffuseTexture, vUv).rgb);
   cSpec = vec3(1.0, 1.0, 1.0);
   m = pow(roughness, -1.0);
-  n = normalize(vNormal);
-  v = normalize(vPosition.xyz);
+  n = normalize(vNormal * Mtc);
+  v = normalize(-vPosition.xyz * Mtc);
   lightResult = vec3(0.0, 0.0, 0.0);
   // Para cada una de las luces, si es que hay más de una, que ni eso se sabe:
   for (int i = 0; i < NUM_LIGHTS; i++){
@@ -150,9 +167,9 @@ void main() {
     h = normalize(v + l); // Si v y l son mismo módulo, v + l es bisectriz
     r2 = pow(distance(lightPositions[i], v), 2.0);
     // Primero lado izquierdo de la ecuación:
-    leftSide = (1.0 / r2) * (cDiff + cSpec * pow(abs(dot(n, h)), m));
+    leftSide = (1.0 / r2) * (cDiff + cSpec * pow(max(dot(n, h), 0.0), m));
     // Después lado derecho de la ecuación:
-    rightSide = lightColors[i] * (abs(dot(n, l)));
+    rightSide = lightColors[i] * (max(dot(n, l), 0.0));
     // Juntar todo:
     thisLightResult = leftSide * rightSide;
     lightResult = lightResult + thisLightResult;
@@ -161,13 +178,12 @@ void main() {
   // finalColor debe acabar conteniendo la intensidad/color resultante en el fragment
   finalColor = lightResult;
 
-    // Solo se sombrea si esta "de cara", si no se le da un color fijo
-    if (gl_FrontFacing){
-        gl_FragColor = vec4(to_sRGB(finalColor * exposure), 1.0);
-    }else{
-        gl_FragColor = vec4(170.0/255.0, 160.0/255.0, 0.0, 1.0);
-    }
-
+  // Solo se sombrea si esta "de cara", si no se le da un color fijo
+  if (gl_FrontFacing){
+    gl_FragColor = vec4(to_sRGB(finalColor * exposure), 1.0);
+  }else{
+    gl_FragColor = vec4(170.0/255.0, 160.0/255.0, 0.0, 1.0);
+  }
 }
         </script>
 <!-----------------------------------------------------------------------------
