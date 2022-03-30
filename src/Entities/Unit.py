@@ -1,25 +1,16 @@
 from . import Entity
 import pygame, math
+from .. import Utils
 
-WHITE   = (255,255,255)
 
-class rect():
-    def __init__(self):
-        pass
-    def setDim(self,x,y,w,h):
-        self.x = x
-        self.y = y
-        self.w = w
-        self.h = h
 
-class path():
-    def __init__(self, angle, dist):
-        self.angle = angle
-        self.dist = dist
+
+
 
 class Unit(Entity.Entity):
-    def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, faces, frames):
+    def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, faces, frames,id):
         Entity.Entity.__init__(self, hp, mineral_cost, generation_time)
+        self.id = id
         self.paths = []
         self.clicked = False
         self.angle = 0
@@ -46,12 +37,14 @@ class Unit(Entity.Entity):
             self.sprites[i%9].insert(int(i/9),pygame.image.load(sprites + "/tile0" + str(nPath) + ".png"))
     
         self.image = self.sprites[self.face][self.frame]
-        self.image.set_colorkey(WHITE)
+        self.image.set_colorkey(Utils.WHITE)
 
-        self.rectn = pygame.Rect(xini, yini, self.image.get_width(), self.image.get_height() - self.rectOffY)
+        #self.rectn = pygame.Rect(xini, yini, self.image.get_width(), self.image.get_height() - self.rectOffY)
+        #Necesito mi propio rect porque el rect de pygame usa enteros para x e y y asi el movimiento no funciona
+        self.rectn = Utils.rect(xini, yini, self.image.get_width(), self.image.get_height() - self.rectOffY)
     def update(self):
         self.image = self.sprites[self.face][self.frame]
-        self.image.set_colorkey(WHITE)
+        self.image.set_colorkey(Utils.WHITE)
         self.resize()
         if self.paths.__len__() > 0:
             actualPath = self.paths[0]
@@ -64,11 +57,8 @@ class Unit(Entity.Entity):
                 self.dirY = math.sin(actualPath.angle)
                 distrec = math.hypot((self.rectn.x + self.dirX*self.speed) - self.rectn.x, (self.rectn.y + self.dirY*self.speed) - self.rectn.y)
                 actualPath.dist -= distrec
-                
-                
                 self.rectn.x += self.dirX*self.speed
                 self.rectn.y += self.dirY*self.speed
-                #print(self.rectn.x, self.rectn.y)
 
                 self.face = int(4 - (self.angle*8/math.pi))%16
                 self.count += 1
@@ -76,9 +66,12 @@ class Unit(Entity.Entity):
                     self.frame = (self.frame + 1)%8
                     self.count = 0
             else:
-                #print("SE ACABO EL CAMINO", self.angle, actualPath.angle)
+                #print("SE ACABO EL CAMINO", actualPath.posFin, actualPath.angle)
                 #print(self.rectn.x, self.rectn.y)
                 self.paths.remove(actualPath)
+                if self.paths.__len__() > 0:
+                    pass
+                    #print("Mi siguiente camino tiene este objetivo", self.paths[0].posFin)
                 if self.paths.__len__() == 0:
                     self.frame = 6
                     self.face = 8
@@ -90,20 +83,19 @@ class Unit(Entity.Entity):
     def setClicked(self, click):
         self.clicked = click
     def resize(self):
-        self.rectn.x -= self.rectn.w
-        self.rectn.y -= self.rectn.h
         self.image = pygame.transform.scale2x(self.image)
         self.rectn.w = self.image.get_width()
         self.rectn.h = self.image.get_height() - self.rectOffY
-        self.rectn.x += self.rectn.w
-        self.rectn.y += self.rectn.h
     def cancel(self):
         self.paths = []
         self.frame = 6
         self.face = 8
     def getRect(self):
+        #print(self.rectn.w, self.rectn.y)
         rectAux = pygame.Rect(self.rectn.x - self.rectn.w/2, self.rectn.y - self.rectn.h, self.rectn.w, self.rectn.h)
         return rectAux
+    def getPosition(self):
+        return (self.rectn.x, self.rectn.y)
     def atacar():
         pass
     def construir():

@@ -13,8 +13,8 @@ GREEN   = (0, 255, 0)
 RED     = (255, 0, 0)
 BLUE    = (0, 0, 255)
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 400
+SCREEN_WIDTH = 20*40
+SCREEN_HEIGHT = 10*40
 
 size =(SCREEN_WIDTH, SCREEN_HEIGHT)
 
@@ -53,13 +53,14 @@ def procesarInput():
             escena.procesarEvent(event)
         
 while True:
-
+    #now = datetime.now()
     #Procesar inputs
     procesarInput()
 
     #Actualizar entidades del juego
     escena.update()
-
+    #print((datetime.now() - now).microseconds)
+    
     #Dibujar
     screen.fill(WHITE)
     escena.draw(screen)
