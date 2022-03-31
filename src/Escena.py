@@ -218,7 +218,6 @@ class Escena():
                             x = x + self.mapa.tw
         self.p1.update()
         self.raton.update()
-        self.aI.make_commands()
     
     def draw(self, screen):
         self.mapa.drawMap(screen)

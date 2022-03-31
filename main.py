@@ -1,6 +1,6 @@
 import pygame, sys
 import math
-from src import Map, Raton, Escena, Player, Camera
+from src import Map, Raton, Escena, Player, Camera, AI
 from src.Entities import Terran, terranBuilder
 
 pygame.init()
@@ -37,11 +37,11 @@ player1.addUnits(terran1)
 player2 = Player.Player([], [], 5, [])
 aI = AI.AI(player2)
 
-# Ratón
+# Raton
 sprite_ruta = "./SPRITE/raton/"
 raton = Raton.raton(sprite_ruta, player1)
 
-# Cámara
+# Camara
 camera = Camera.Camera(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT)
 
 # Escena

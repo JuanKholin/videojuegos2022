@@ -3,3 +3,5 @@
 .vs/ProjectSettings.json
 .vs/slnx.sqlite
 .vs/videojuegos2022/v17/.suo
+src/__pycache__/*
+src/Entities/__pycache__/*
