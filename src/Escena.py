@@ -3,10 +3,10 @@ from . import Player, Command, Utils
 from datetime import datetime
 
 class Escena():
-    def __init__(self, p1, p2, ia, mapa, camera, raton):
+    def __init__(self, p1, p2, aI, mapa, camera, raton):
         self.p1 = p1
         self.p2 = p2
-        self.ia = ia
+        self.aI = aI
         self.mapa = mapa 
         self.camera = camera
         self.raton = raton
@@ -218,6 +218,7 @@ class Escena():
                             x = x + self.mapa.tw
         self.p1.update()
         self.raton.update()
+        self.aI.make_commands()
     
     def draw(self, screen):
         self.mapa.drawMap(screen)
