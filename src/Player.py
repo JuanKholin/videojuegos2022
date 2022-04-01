@@ -67,3 +67,7 @@ class Player():
             #print(r)
             #pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x, r.y, r.w, r.h),1)
             screen.blit(unit.image, [r.x, r.y])
+
+    # Para que la AI pueda acceder a la informacion
+    def get_info(self):
+        return self.units, self.structures, self.resources

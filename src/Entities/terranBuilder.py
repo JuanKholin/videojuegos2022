@@ -4,7 +4,7 @@ from .. import Player, Map
 
 WHITE   = (255,255,255)
 
-class terranBuilder(Structure.Structure):
+class TerranBuilder(Structure.Structure):
     sprites = []
     training = []
     rectOffY = 20

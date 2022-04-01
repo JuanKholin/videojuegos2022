@@ -1,7 +1,7 @@
 import pygame, sys
 import math
 from src import Map, Raton, Escena, Player, Camera, AI
-from src.Entities import Terran, terranBuilder
+from src.Entities import Terran, TerranBuilder, Zerg
 
 pygame.init()
 
@@ -28,14 +28,16 @@ mapa = Map.Map(10, 20)
 # Jugador
 player1 = Player.Player([],[],5,[])
 terran1 = Terran.Terran(40, 20, 20, 20, 200, 2, 5, "terranSprites", 0, 0,1)
-structure1 = terranBuilder.terranBuilder(200, 40, 600, 200, 300, player1, mapa, "SPRITE/builder",2)
+structure1 = TerranBuilder.TerranBuilder(200, 40, 600, 200, 300, player1, mapa, "SPRITE/builder",2)
 
 player1.addStructures(structure1)
 player1.addUnits(terran1)
 
 # IA
 player2 = Player.Player([], [], 5, [])
+zerg1 = Zerg.Zerg(40, 80, 80, 20, 200, 2, 5, "terranSprites", 0, 0, 1)
 aI = AI.AI(player2)
+player2.addUnits(zerg1)
 
 # Raton
 sprite_ruta = "./SPRITE/raton/"
@@ -46,8 +48,6 @@ camera = Camera.Camera(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEI
 
 # Escena
 escena = Escena.Escena(player1, player2, aI, mapa, camera, raton)
-
-
 
 
 def procesarInput():

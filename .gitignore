@@ -5,3 +5,7 @@
 .vs/videojuegos2022/v17/.suo
 src/__pycache__/*
 src/Entities/__pycache__/*
+.vs/*
+src/__pycache__/Escena.cpython-310.pyc
+src/__pycache__/Player.cpython-310.pyc
+src/Entities/__pycache__/terranBuilder.cpython-310.pyc
