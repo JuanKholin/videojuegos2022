@@ -12,7 +12,6 @@ class Escena():
         self.raton = raton
 
 
-
     def procesarEvent(self, event):
         #command = pi.procesarEvent(event)
         #if map.check(command) and p1.check(command):
@@ -71,7 +70,7 @@ class Escena():
         pass
 
     def update(self):
-        units = self.p1.units
+        units = self.p1.units + self.p2.units
         for unit in units:
             unitPos = unit.getPosition()
             tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
@@ -217,10 +216,12 @@ class Escena():
                             y = rect.y + 1
                             x = x + self.mapa.tw
         self.p1.update()
+        self.p2.update()
         self.raton.update()
         self.aI.make_commands()
     
     def draw(self, screen):
         self.mapa.drawMap(screen)
         self.p1.draw(screen)
+        self.p2.draw(screen)
         self.raton.draw(screen)

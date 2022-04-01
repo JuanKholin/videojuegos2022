@@ -35,7 +35,8 @@ player1.addUnits(terran1)
 
 # IA
 player2 = Player.Player([], [], 5, [])
-zerg1 = Zerg.Zerg(40, 80, 80, 20, 200, 2, 5, "terranSprites", 0, 0, 1)
+# Hasta que encuentre los Zergs, los Zergs son Terranos
+zerg1 = Zerg.Zerg(40, 100, 100, 20, 200, 2, 5, "terranSprites", 0, 0, 1)
 aI = AI.AI(player2)
 player2.addUnits(zerg1)
 
