@@ -1,3 +1,4 @@
+from tokenize import Double
 import pygame
 import math
 
@@ -9,19 +10,34 @@ GREEN   = (0,255,0)
 RED     = (255,0,0)
 BLUE    = (0,0,255)
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 400
+SCREEN_WIDTH = 20*40
+SCREEN_HEIGHT = 10*40
+def mismoId(list, tileB):
+    tileReturn = Tile(-1,0,0,0,0,0)
+    #print("AAAAAAAAAAAAAAAAAAAAAAA")
+    for tile in list:
+        #print("COmparo", tile.tileid, tileB.tileid)
+        if tile.tileid == tileB.tileid:
+            tileReturn = tile
+    return tileReturn
 
 class Tile():
-    def __init__(self, x, y, h, w, type):
+    def __init__(self,tileid, x, y, h, w, type, g = 0, padre = None):
         self.centerx = int(x + w/2)
         self.centery = int(y + h/2)
         self.h = h
         self.w = w
         self.type = type 
+        self.id = 0
+        self.g = g
+        self.tileid = tileid
+        self.padre = padre
     
     def getRect(self):
         return (int(self.centerx - self.w/2) ,int(self.centery - self.h/2), self.w, self.h)
+    def heur(self,  tfin):
+    #print(math.sqrt(int((tfin.centerx - self.centerx))/40*int((tfin.centerx - self.centerx)/40) + int((tfin.centery - self.centery))/40*int((tfin.centery - self.centery)/40)))
+        return math.sqrt(int(((tfin.centerx - self.centerx)/40))**2 + int((tfin.centery - self.centery)/40)**2)
 
 class Map():
     def __init__(self, h, w):
@@ -31,7 +47,7 @@ class Map():
         for i in range(h):
             self.map.insert(i,[])#Es una matriz que representa el mapa(0 es suelo, 1 es obstaculo, 2 vecino)
             for j in range(w):
-                tile = Tile(self.tw * j, self.th * i, self.tw, self.th, 0)
+                tile = Tile(i*w + j, self.tw * j, self.th * i, self.tw, self.th, 0)
                 self.map[i].insert(j,tile)
     #Dibuja el mapa
     def drawMap(self, screen):
@@ -69,35 +85,40 @@ class Map():
         return int(math.hypot(tfin.centerx - tini.centerx, tfin.centery - tini.centery))
 
     #Pone la tile como vecina
-    def setVecina(self, tile):
+    def setVecina(self, tile, id):
         self.map[int(tile.centery/self.th)][int(tile.centerx/self.tw)].type = 2
+        self.map[int(tile.centery/self.th)][int(tile.centerx/self.tw)].id = id
+    
+    #Pone la tile como libre
+    def setLibre(self, tile):
+        self.map[int(tile.centery/self.th)][int(tile.centerx/self.tw)].type = 0
 
     #Devuelve una lista de tiles vecinas a la dada
     def getTileVecinas(self, tile):
         tilesVecinas = []
         aux = self.getTile(tile.centerx + self.tw,tile.centery)#tile derecha
-        if aux.type != 1:
+        if aux.type == 0:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx + self.tw,tile.centery + self.th) #tile esquina superior derecha
-        if aux.type != 1:
+        if aux.type == 0:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx + self.tw,tile.centery - self.th) #tile esquina inferior derecha
-        if aux.type != 1:
+        if aux.type == 0:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx,tile.centery - self.th) #tile inferior 
-        if aux.type != 1:
+        if aux.type == 0:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx,tile.centery + self.th) #tile superior 
-        if aux.type != 1:
+        if aux.type == 0:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx - self.tw,tile.centery) #tile izquierda 
-        if aux.type != 1:
+        if aux.type == 0:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx - self.tw,tile.centery + self.th) #tile esquina superior izquierda
-        if aux.type != 1:
+        if aux.type == 0:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx - self.tw,tile.centery - self.th) #tile esquina inferior izquierda
-        if aux.type != 1:
+        if aux.type == 0:
             tilesVecinas.append(aux)
 
         return tilesVecinas
@@ -106,7 +127,7 @@ class Map():
         destino = self.getTile(xfin, yfin)
         xaux = xfin
         yaux = yfin
-        while destino.type == 1:
+        while destino.type != 0:
             xaux = xaux-((xfin-xini)/10)
             yaux = yaux-((yfin-yini)/10)
             destino = self.getTile(xaux, yaux)
@@ -123,6 +144,8 @@ class Map():
             tileCandidata = tilePosibles[0]
             tileSIG = tactual
             tileAnt = tactual
+            if self.heur(tileCandidata, tfin) == 0:
+                path.append(tileCandidata)
             while self.heur(tileCandidata, tfin) != 0:
                 tilePosibles = self.getTileVecinas(tileSIG)
                 tileCandidata = tilePosibles[0]
@@ -139,3 +162,102 @@ class Map():
                 tileSIG = tileCandidata
                 #print("Candidata elegida", tileCandidata.centerx, tileCandidata.centery)
         return path
+    def reCalcPath(self, tactual,tfin,tSaltar):
+        path = [] # Lista de TILES
+        visitados = []
+        #print("Distancia a la tile final",tactual.centerx, tactual.centery, tfin.centerx, tfin.centery)
+        if self.heur(tactual, tfin) != 0:
+            tilePosibles = self.getTileVecinas(tactual)
+            tileCandidata = tilePosibles[0]
+            tileSIG = tactual
+            tileAnt = tactual
+            if self.heur(tileCandidata, tfin) == 0:
+                path.append(tileCandidata)
+            while self.heur(tileCandidata, tfin) != 0:
+                tilePosibles = self.getTileVecinas(tileSIG)
+                tileCandidata = tilePosibles[0]
+                for tile in tilePosibles:
+                    if tile not in visitados:
+                        #print(tile.centerx, tile.centery, tileAnt.centerx, tileAnt.centery)
+                        if  tile != tileAnt and tile != tSaltar:
+                            #print(self.heur(tile,tfin), self.heur(tileCandidata,tfin))
+                            if self.heur(tile,tfin) < self.heur(tileCandidata,tfin):
+                                tileCandidata = tile
+                path.append(tileCandidata)
+                visitados.append(tileCandidata)
+                tileAnt = tileSIG
+                tileSIG = tileCandidata
+                #print("Candidata elegida", tileCandidata.centerx, tileCandidata.centery)
+        return path
+    def setTileG(self, tile, g):
+        self.map[int(tile.centery/self.th)][int(tile.centerx/self.tw)].g = g
+    def setTilePadre(self, tile, padre):
+        self.map[int(tile.centery/self.th)][int(tile.centerx/self.tw)].padre = padre
+    def Astar(self, tileIni, tileObj):
+        nodosAbiertos = []
+        nodosCerrados = []
+        nodosAbiertos.append(tileIni)
+        nodosAbiertos[0].padre = nodosAbiertos[0]
+        while nodosAbiertos.__len__() != 0:
+            
+            currentTile = Tile(nodosAbiertos[0].tileid,nodosAbiertos[0].centerx,nodosAbiertos[0].centery,0,0,1,nodosAbiertos[0].g,nodosAbiertos[0].padre)
+            currentF = currentTile.g + currentTile.heur(tileObj)
+            currentId = 0
+            for id, tile in enumerate(nodosAbiertos):
+                tileF = tile.g + tile.heur(tileObj)
+                #print(currentTile.tileid + 1,":", currentTile.g,currentTile.heur(tileObj) ,tile.tileid + 1,":", tile.g,tile.heur(tileObj))
+                if float(currentF) > float(tileF):
+                    currentTile = Tile(tile.tileid,tile.centerx,tile.centery,0,0,1,tile.g,tile.padre)
+                    currentF = tileF
+                    currentId = id
+            #Tenemos la tile con menos f
+            #print("estamos en", currentTile.tileid + 1, currentTile.padre.tileid + 1)
+            #input()
+            nodosCerrados.append(currentTile)
+            nodosAbiertos.pop(currentId)
+            if currentTile.tileid == tileObj.tileid:
+                #print("EH VOS")
+
+                break
+            for tile in self.getTileVecinas(currentTile):
+                #print("miro tile: ", tile.tileid + 1)
+                #input()
+                if mismoId(nodosCerrados,tile).tileid == -1:# No esta
+                    #print("No esta en cerrados, miro en abiertos")
+                    tileEnAbiertos = mismoId(nodosAbiertos,tile)
+                    if  tileEnAbiertos.tileid == -1: #No esta
+                        #print("no esta en abiertos")
+                        #print(tile.g)
+                        tile.g = currentTile.g + currentTile.heur(tile)
+                        nodosAbiertos.append(tile)
+                        self.setTilePadre(tile, currentTile)
+                        tile.padre = currentTile
+                    else:
+                        #print("esta en abiertos", tileEnAbiertos.g,"y he encontrado",currentTile.g + currentTile.heur(tile) )
+                        if tileEnAbiertos.g > (currentTile.g + currentTile.heur(tile)):
+                            #print("CHANGE")
+                            nodosAbiertos.remove(tileEnAbiertos)
+                            nodosAbiertos.append(tile)
+                            tile.padre = currentTile
+                            tile.g = currentTile.g + currentTile.heur(tile)
+                            self.setTilePadre(tile, currentTile)
+        path = []
+        pathReturn = []
+        for tile in nodosAbiertos:
+            tile.g = 0
+        if nodosAbiertos.__len__() == 0:
+            print("camino no encontrado")
+        else:           
+            currentTile = self.getTile(tileObj.centerx,tileObj.centery)
+            while currentTile != tileIni:
+                #print(currentTile.tileid)
+                path.append(currentTile)
+                currentTile = currentTile.padre
+            #print(currentTile.tileid)
+            i = path.__len__() - 1
+            #print("AAAAAAAAAAAA")
+            while i >= 0:
+                pathReturn.append(path[i])
+                i = i - 1
+        return pathReturn
+            

@@ -113,8 +113,7 @@ class raton(pygame.sprite.Sprite):
                     command.setId(1)
                     #print("CALCULANDO PUNTOS")
                     for unit in self.player.unitsSelected:
-                        rect = unit.getRect()
-                        pos = (rect.x,rect.y)
+                        pos = unit.getPosition()
                         command.addParameter(pos)
                     self.point.click(mouse_pos[0], mouse_pos[1])
         elif event.type == pygame.MOUSEBUTTONUP:
@@ -134,6 +133,8 @@ class raton(pygame.sprite.Sprite):
                             #print("CLICKADO" + str(terran.id))
                         else:
                             unit.setClicked(False)
+                            if unit in self.player.unitsSelected:
+                                self.player.unitsSelected.remove(unit)
                             #unitsClicked.remove(terran)
                             #print("DESCLICKADO" + str(terran.id)) 
                     for structure in self.player.structures:

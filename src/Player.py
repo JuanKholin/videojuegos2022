@@ -1,12 +1,8 @@
 import pygame,math
-from . import Command
+from . import Command, Utils
 
-BLACK   = (0,0,0)
 
-class path():
-    def __init__(self, angle, dist):
-        self.angle = angle
-        self.dist = dist
+
 
 def createRect(initialX, initialY, finalX, finalY):
     if finalX>=initialX and finalY>=initialY:
@@ -60,8 +56,25 @@ class Player():
         if id == Command.CommandId.MOVER: #Mover unidades
             for i in range(param.__len__()):
                 self.unitsSelected[i].paths = param[i]
+                for path in param[i]:
+                    print("Posicion final: ",path.posFin, path.angle)
     def draw(self, screen):
         for structure in self.structures:
+<<<<<<< HEAD
             structure.draw(screen)
         for unit in self.units:
             unit.draw(screen)
+=======
+            r = structure.getRect()
+            pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x, r.y, r.w, r.h),1)
+            screen.blit(structure.image, [r.x, r.y])
+        for unit in self.units:
+            r = unit.getRect()
+            #print(r)
+            #pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x, r.y, r.w, r.h),1)
+            screen.blit(unit.image, [r.x, r.y])
+
+    # Para que la AI pueda acceder a la informacion
+    def get_info(self):
+        return self.units, self.structures, self.resources
+>>>>>>> 42ea107527b6fd001d10b0c6d1a2f9d17a4af3b6
