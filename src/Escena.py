@@ -181,7 +181,7 @@ class Escena():
             else:
                 if tileActual.type != 1:
                     self.mapa.setVecina(tileActual, unit.id)
-            for unit in self.p1.structures:
+            for unit in self.p1.structures + self.p2.structures:
                 unitPos = unit.getPosition()
                 tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
                 if unit.paths.__len__() > 0:

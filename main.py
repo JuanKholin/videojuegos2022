@@ -1,7 +1,7 @@
 import pygame, sys
 import math
 from src import Map, Raton, Escena, Player, Camera, AI
-from src.Entities import Terran, TerranBuilder, Zerg
+from src.Entities import Terran, TerranBuilder, Zergling
 
 pygame.init()
 
@@ -13,12 +13,15 @@ GREEN   = (0, 255, 0)
 RED     = (255, 0, 0)
 BLUE    = (0, 0, 255)
 
-SCREEN_WIDTH = 20*40
-SCREEN_HEIGHT = 10*40
+X_TILES = 20
+Y_TILES = 10
 
-size =(SCREEN_WIDTH, SCREEN_HEIGHT)
+SCREEN_WIDTH = X_TILES * 40
+SCREEN_HEIGHT = Y_TILES * 40
 
+size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen =  pygame.display.set_mode(size, pygame.RESIZABLE)
+
 #Controlar frames por segundo
 clock = pygame.time.Clock()
 
@@ -27,7 +30,7 @@ mapa = Map.Map(10, 20)
 
 # Jugador
 player1 = Player.Player([],[],5,[])
-terran1 = Terran.Terran(40, 20, 20, 20, 200, 2, 5, "terranSprites", 0, 0,1)
+terran1 = Terran.Terran(40, 20, 20, 20, 200, 2, 5, "terranSprites", 8, 6, 1)
 structure1 = TerranBuilder.TerranBuilder(200, 40, 600, 200, 300, player1, mapa, "SPRITE/builder",2)
 
 player1.addStructures(structure1)
@@ -35,10 +38,9 @@ player1.addUnits(terran1)
 
 # IA
 player2 = Player.Player([], [], 5, [])
-# Hasta que encuentre los Zergs, los Zergs son Terranos
-zerg1 = Zerg.Zerg(40, 100, 100, 20, 200, 2, 5, "terranSprites", 0, 0, 1)
+zergling1 = Zergling.Zergling(8, 6)
 aI = AI.AI(player2)
-player2.addUnits(zerg1)
+player2.addUnits(zergling1)
 
 # Raton
 sprite_ruta = "./SPRITE/raton/"
