@@ -1,17 +1,11 @@
 import pygame, sys
 import math
-from src import Map, Raton, Escena, Player, Camera, AI
+from src import Map, Raton, Escena, Player, Camera, AI, Utils
 from src.Entities import Terran, TerranBuilder, Zergling
 
 pygame.init()
 
 # Definir colores
-
-BLACK   = (0, 0, 0)
-WHITE   = (255, 255, 255)
-GREEN   = (0, 255, 0)
-RED     = (255, 0, 0)
-BLUE    = (0, 0, 255)
 
 X_TILES = 20
 Y_TILES = 10
@@ -38,7 +32,7 @@ player1.addUnits(terran1)
 
 # IA
 player2 = Player.Player([], [], 5, [])
-zergling1 = Zergling.Zergling(8, 6)
+zergling1 = Zergling.Zergling(9, 8)
 aI = AI.AI(player2)
 player2.addUnits(zergling1)
 
@@ -76,7 +70,7 @@ while True:
     #print((datetime.now() - now).microseconds)
     
     #Dibujar
-    screen.fill(WHITE)
+    screen.fill(Utils.WHITE)
     escena.draw(screen)
     pygame.display.flip()
 

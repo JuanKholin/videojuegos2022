@@ -14,7 +14,7 @@ SCREEN_HEIGHT = 400
 
 class Terran(Unit.Unit):
     def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, faces, frames, id):
-        Unit.Unit.__init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, faces, frames, id)
+        Unit.Unit.__init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, faces, frames, 8, id)
         #INICIALIZACION DE LOS MISMOS
         for i in range(16):
             self.sprites.insert(i,[])

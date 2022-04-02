@@ -16,7 +16,6 @@ class Entity():
     def update():
         pass
 
-
     # Pre: Altura del spritesheet % rows == 0
     # Post: Devuelve el spritesheet dividido en una lista de sprites
     @staticmethod
@@ -25,5 +24,5 @@ class Entity():
         maxCol = spritesheet.get_width()
         sprites = []
         for i in range(int(totalRows / rows)):
-            sprites.append(pg.Surface.subsurface(spritesheet, (0, rows * i, maxCol, rows)))
+            sprites.append(pg.Surface.subsurface(spritesheet, (0, rows * i, maxCol, rows))) 
         return sprites

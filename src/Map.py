@@ -1,17 +1,8 @@
-from tokenize import Double
 import pygame
 import math
+from tokenize import Double
+from . import Utils
 
-# Definir colores
-
-BLACK   = (0,0,0)
-WHITE   = (255,255,255)
-GREEN   = (0,255,0)
-RED     = (255,0,0)
-BLUE    = (0,0,255)
-
-SCREEN_WIDTH = 20*40
-SCREEN_HEIGHT = 10*40
 def mismoId(list, tileB):
     tileReturn = Tile(-1,0,0,0,0,0)
     #print("AAAAAAAAAAAAAAAAAAAAAAA")
@@ -55,11 +46,11 @@ class Map():
             for j in range(len(self.map[i])): #j es el valor de la columna
                 tile = self.map[i][j]
                 if tile.type == 1:
-                    pygame.draw.rect(screen, RED, pygame.Rect(tile.getRect()), 1)
+                    pygame.draw.rect(screen, Utils.RED, pygame.Rect(tile.getRect()), 1)
                 elif tile.type == 0:
-                    pygame.draw.rect(screen, GREEN, pygame.Rect(tile.getRect()),1)
+                    pygame.draw.rect(screen, Utils.GREEN, pygame.Rect(tile.getRect()),1)
                 else:
-                    pygame.draw.rect(screen, BLUE, pygame.Rect(tile.getRect()),1)
+                    pygame.draw.rect(screen, Utils.BLUE, pygame.Rect(tile.getRect()),1)
     
     #Pone a true las Tiles del rectangulo que forman x,y,w,h
     def addObstacle(self, x,y,w,h):
