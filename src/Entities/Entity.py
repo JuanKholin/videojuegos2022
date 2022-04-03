@@ -1,3 +1,4 @@
+import pygame as pg
 
 BLACK   = (0,0,0)
 WHITE   = (255,255,255)
@@ -14,3 +15,15 @@ class Entity():
 
     def update():
         pass
+
+    # Pre: Altura del spritesheet % rows == 0
+    # Post: Devuelve el spritesheet dividido en una lista de sprites
+    @staticmethod
+    def divideSpritesheetByRows(spritesheet, rows):
+        totalRows = spritesheet.get_height()
+        maxCol = spritesheet.get_width()
+        sprites = []
+        for i in range(int(totalRows / rows)):
+            aux = pg.Surface.subsurface(spritesheet, (0, rows * i, maxCol, rows))
+            sprites.append(pg.transform.scale2x(aux))
+        return sprites
