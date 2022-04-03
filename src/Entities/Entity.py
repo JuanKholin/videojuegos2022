@@ -24,5 +24,6 @@ class Entity():
         maxCol = spritesheet.get_width()
         sprites = []
         for i in range(int(totalRows / rows)):
-            sprites.append(pg.Surface.subsurface(spritesheet, (0, rows * i, maxCol, rows))) 
+            aux = pg.Surface.subsurface(spritesheet, (0, rows * i, maxCol, rows))
+            sprites.append(pg.transform.scale2x(aux))
         return sprites
