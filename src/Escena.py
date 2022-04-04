@@ -238,5 +238,5 @@ class Escena():
     def draw(self, screen):
         self.mapa.drawMap(screen, self.camera)
         self.p1.draw(screen, self.camera)
-        self.p2.draw(screen)
+        self.p2.draw(screen, self.camera)
         self.raton.draw(screen)

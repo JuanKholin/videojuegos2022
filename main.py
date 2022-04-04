@@ -1,7 +1,7 @@
 import pygame, sys
 import math
-from src import Map, Raton, Escena, Player, Camera, AI, Utils
-from src.Entities import Terran, TerranBuilder, Zergling
+from src import Map, Raton, Escena, Player, Camera, AI, Command, Utils
+from src.Entities import Terran, terranBuilder, Zergling
 
 pygame.init()
 
@@ -37,14 +37,14 @@ player1 = Player.Player([],[],5,
 
 terran1 = Terran.Terran(40, 20, 20, 20, 200, 2, 5, "terranSprites", 8, 6,1)
 terran2 = Terran.Terran(40, 20, 80, 20, 200, 2, 5, "terranSprites", 8, 6,1)
-structure1 = terranBuilder.terranBuilder(200, 40, 600, 200, 300, player1, mapa, "SPRITE/builder",2)
+structure1 = terranBuilder.TerranBuilder(200, 40, 600, 200, 300, player1, mapa, "SPRITE/builder",2)
 
 player1.addStructures(structure1)
 player1.addUnits(terran1)
 player1.addUnits(terran2)
 
 # IA
-player2 = Player.Player([], [], 5, [])
+player2 = Player.Player([], [], 5, [], [])
 zergling1 = Zergling.Zergling(9, 8)
 aI = AI.AI(player2)
 player2.addUnits(zergling1)

@@ -68,6 +68,8 @@ class Player():
             if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
             r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
                 pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
+                #aqui llamabais a el draw de structures, me lo he cargado para integrar lo que había hecho con la camara
+                #luego lo vuelvo a poner
                 screen.blit(structure.image, [r.x - camera.x, r.y - camera.y])
         for unit in self.units:
             r = unit.getRect()

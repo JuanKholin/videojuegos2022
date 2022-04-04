@@ -18,15 +18,15 @@ class Tile():
         self.centery = int(y + h/2)
         self.h = h
         self.w = w
-        self.type = type
+        self.type = type 
         self.id = 0
         self.g = g
         self.tileid = tileid
         self.padre = padre
-
+    
     def getRect(self):
         return (int(self.centerx - self.w/2) ,int(self.centery - self.h/2), self.w, self.h)
-
+        
     def heur(self,  tfin):
     #print(math.sqrt(int((tfin.centerx - self.centerx))/40*int((tfin.centerx - self.centerx)/40) + int((tfin.centery - self.centery))/40*int((tfin.centery - self.centery)/40)))
         return math.sqrt(int(((tfin.centerx - self.centerx)/40))**2 + int((tfin.centery - self.centery)/40)**2)
@@ -64,39 +64,39 @@ class Map():
                 globalRectCoords = tile.getRect()
                 cameraRectCoords = (globalRectCoords[0] - camera.x, globalRectCoords[1] - camera.y, globalRectCoords[2], globalRectCoords[3])
                 if tile.type == 1:
-                    pygame.draw.rect(screen, Utils.RED, pygame.Rect(tile.getRect()), 1)
+                   pygame.draw.rect(screen, Utils.RED, pygame.Rect(cameraRectCoords), 1)
                 elif tile.type == 0:
-                    pygame.draw.rect(screen, Utils.GREEN, pygame.Rect(tile.getRect()),1)
+                    pygame.draw.rect(screen, Utils.GREEN, pygame.Rect(cameraRectCoords),1)
                 else:
-                    pygame.draw.rect(screen, Utils.BLUE, pygame.Rect(tile.getRect()),1)
-
+                    pygame.draw.rect(screen, Utils.BLUE, pygame.Rect(cameraRectCoords),1)
+    
     #Pone a true las Tiles del rectangulo que forman x,y,w,h
     def addObstacle(self, x,y,w,h):
         for i in range(h): #Recorro el mapa  por las filas
             for j  in range(w): #En la fila i recorro las columnas
                 self.map[i+int(y/self.th)][j+int(x/self.tw)].type = 1
-
+    
     #Devuelve la Tile que se encuentra en las coordenadas x,y
     def getTile(self, x, y):
         xaux = int(x/self.tw)
         yaux = int(y/self.th)
-
+        
         if int(x/self.tw) >= len(self.map[0]):
             xaux = len(self.map[0])-1
-        if int(y/self.th) >= len(self.map):
+        if int(y/self.th) >= len(self.map):   
             yaux = len(self.map) -1
-        #print(xaux, yaux)
+        #print(xaux, yaux)    
         return self.map[yaux][xaux]
 
     def getTileIndex(self, x, y):
         xaux = int(x/self.tw)
         yaux = int(y/self.th)
-
+        
         if int(x/self.tw) >= len(self.map[0]):
             xaux = len(self.map[0])-1
-        if int(y/self.th) >= len(self.map):
+        if int(y/self.th) >= len(self.map):   
             yaux = len(self.map) -1
-        #print(xaux, yaux)
+        #print(xaux, yaux)    
         return yaux, xaux
 
     #Devuelve la funcion heuristica de una tile(Distancia al objetivo)
@@ -107,7 +107,7 @@ class Map():
     def setVecina(self, tile, id):
         self.map[int(tile.centery/self.th)][int(tile.centerx/self.tw)].type = 2
         self.map[int(tile.centery/self.th)][int(tile.centerx/self.tw)].id = id
-
+    
     #Pone la tile como libre
     def setLibre(self, tile):
         self.map[int(tile.centery/self.th)][int(tile.centerx/self.tw)].type = 0
@@ -124,13 +124,13 @@ class Map():
         aux = self.getTile(tile.centerx + self.tw,tile.centery - self.th) #tile esquina inferior derecha
         if aux.type == 0:
             tilesVecinas.append(aux)
-        aux = self.getTile(tile.centerx,tile.centery - self.th) #tile inferior
+        aux = self.getTile(tile.centerx,tile.centery - self.th) #tile inferior 
         if aux.type == 0:
             tilesVecinas.append(aux)
-        aux = self.getTile(tile.centerx,tile.centery + self.th) #tile superior
+        aux = self.getTile(tile.centerx,tile.centery + self.th) #tile superior 
         if aux.type == 0:
             tilesVecinas.append(aux)
-        aux = self.getTile(tile.centerx - self.tw,tile.centery) #tile izquierda
+        aux = self.getTile(tile.centerx - self.tw,tile.centery) #tile izquierda 
         if aux.type == 0:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx - self.tw,tile.centery + self.th) #tile esquina superior izquierda
@@ -218,7 +218,7 @@ class Map():
         nodosAbiertos.append(tileIni)
         nodosAbiertos[0].padre = nodosAbiertos[0]
         while nodosAbiertos.__len__() != 0:
-
+            
             currentTile = Tile(nodosAbiertos[0].tileid,nodosAbiertos[0].centerx,nodosAbiertos[0].centery,0,0,1,nodosAbiertos[0].g,nodosAbiertos[0].padre)
             currentF = currentTile.g + currentTile.heur(tileObj)
             currentId = 0
@@ -266,7 +266,7 @@ class Map():
             tile.g = 0
         if nodosAbiertos.__len__() == 0:
             print("camino no encontrado")
-        else:
+        else:           
             currentTile = self.getTile(tileObj.centerx,tileObj.centery)
             while currentTile != tileIni:
                 #print(currentTile.tileid)
@@ -279,3 +279,4 @@ class Map():
                 pathReturn.append(path[i])
                 i = i - 1
         return pathReturn
+            
