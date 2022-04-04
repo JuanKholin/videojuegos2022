@@ -71,9 +71,32 @@ class Terran(Unit.Unit):
         pass
     def construir():
         pass
+    def addPath(self,path):
+        self.paths.append(path)
+    def isClicked(self):
+        return self.clicked
+    def setClicked(self, click):
+        self.clicked = click
+    def resize(self):
+        self.image = pygame.transform.scale2x(self.image)
+        self.rectn.w = self.image.get_width()
+        self.rectn.h = self.image.get_height() - self.rectOffY
+    def cancel(self):
+        self.paths = []
+        self.frame = 6
+        self.face = 8
+    def getRect(self):
+        #print(self.rectn.w, self.rectn.y)
+        rectAux = pygame.Rect(self.rectn.x - self.rectn.w/2, self.rectn.y - self.rectn.h, self.rectn.w, self.rectn.h)
+        return rectAux
+    def getPosition(self):
+        return (self.rectn.x, self.rectn.y)
+    def atacar():
+        pass
+    def construir():
+        pass
+    def getGenerationTime(self):
+        return self.generationTime
 
-    def draw(self, screen):
-        rect = self.getRect()
-        #print(image.x,image.y)
-        pygame.draw.rect(screen, BLACK, pygame.Rect(rect.x, rect.y, rect.w, rect.h),1)
-        screen.blit(self.image, [rect.x, rect.y])
+    #def add_path(): ???
+    #   pass

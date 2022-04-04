@@ -18,7 +18,7 @@ class Escena():
             #map.procesarCommand(command)
             #p1.procesarCommand(command)
         command = self.raton.processEvent(event)
-        self.raton.processEvent(event)
+        #self.raton.processEvent(event)
         self.p1.processEvent(event)
         mouse_pos = pygame.mouse.get_pos()
         pathsForPlayer = []

@@ -40,8 +40,8 @@ class Player():
         self.initialX = 0
         self.initialY = 0
     def processEvent(self,event):
-
-        pass
+        for structure in self.structures:
+            structure.processEvent(event)
         
     def update(self):
         for structure in self.structures:
@@ -61,5 +61,13 @@ class Player():
     def draw(self, screen):
         for structure in self.structures:
             structure.draw(screen)
+            
         for unit in self.units:
-            unit.draw(screen)
+            r = unit.getRect()
+            #print(r)
+            #pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x, r.y, r.w, r.h),1)
+            screen.blit(unit.image, [r.x, r.y])
+
+    # Para que la AI pueda acceder a la informacion
+    def get_info(self):
+        return self.units, self.structures, self.resources

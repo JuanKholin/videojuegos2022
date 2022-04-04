@@ -9,9 +9,9 @@ class Unit(Entity.Entity):
         self.clicked = False
         self.angle = 0
         self.speed = speed
-        self.rectOffY = 0 # Para el padding de la y
-        self.face = 8
-        self.frame = 6
+        self.rectOffY = padding
+        self.face = face
+        self.frame = frame
         self.framesToRefresh = framesToRefresh
         self.count = 0
         self.spritesName = sprites

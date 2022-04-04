@@ -53,6 +53,7 @@ class raton(pygame.sprite.Sprite):
         mouse_collide = False
         for unit in self.player.units:
             ###---LOGICA
+            r = unit.getRect()
             #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
             if Player.collides(unit.getRect(), mouseRect):
                 mouse_collide = True
@@ -138,13 +139,15 @@ class raton(pygame.sprite.Sprite):
                             #unitsClicked.remove(terran)
                             #print("DESCLICKADO" + str(terran.id)) 
                     for structure in self.player.structures:
-                        if Player.collides(structure.getImage(), mouseRect):
-                            #structure.setClicked(True)
-                            #self.player.unitsSelected.append(unit)
+                        if Player.collides(structure.getRect(), mouseRect):
                             structure.setClicked(True)
+                            #self.player.unitsSelected.append(unit)
+                            
                             #print("CLICKADO" + str(terran.id))
                         else:
                             structure.setClicked(False)
+                            #if unit in self.player.unitsSelected:
+                            #    self.player.unitsSelected.remove(unit)
                             #unitsClicked.remove(terran)
                             #print("DESCLICKADO" + str(terran.id)) 
             if type[2]:
