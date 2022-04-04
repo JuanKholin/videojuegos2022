@@ -3,14 +3,13 @@ from . import Player, Command, Utils
 from datetime import datetime
 
 class Escena():
-    def __init__(self, p1, p2, ia, mapa, camera, raton):
+    def __init__(self, p1, p2, aI, mapa, camera, raton):
         self.p1 = p1
         self.p2 = p2
-        self.ia = ia
-        self.mapa = mapa 
+        self.aI = aI
+        self.mapa = mapa
         self.camera = camera
         self.raton = raton
-
 
 
     def procesarEvent(self, event):
@@ -18,20 +17,20 @@ class Escena():
         #if map.check(command) and p1.check(command):
             #map.procesarCommand(command)
             #p1.procesarCommand(command)
-        
+
         command = self.raton.processEvent(event, self.camera.x, self.camera.y)
-        self.raton.processEvent(event, self.camera.x, self.camera.y)
+        self.p1.processEvent(event)
         relative_mouse_pos = pygame.mouse.get_pos()
         real_mouse_pos = (relative_mouse_pos[0] + self.camera.x, relative_mouse_pos[1] + self.camera.y)
         pathsForPlayer = []
         if command.id == Command.CommandId.MOVER: # 1 es moverse
-            for param in command.params:  
+            for param in command.params:
                 tileObj = self.mapa.getTile(real_mouse_pos[0], real_mouse_pos[1])
                 posFinal = (tileObj.centerx, tileObj.centery)
                 print(tileObj.centery, tileObj.tileid)
-                print("pos final tile centro x e y: ", tileObj.centerx, tileObj.centery)    
-                tileIni = self.mapa.getTile(param[0], param[1]) 
-                print("pos ini tile centro x e y: ", tileIni.centerx, tileIni.centery)    
+                print("pos final tile centro x e y: ", tileObj.centerx, tileObj.centery)
+                tileIni = self.mapa.getTile(param[0], param[1])
+                print("pos ini tile centro x e y: ", tileIni.centerx, tileIni.centery)
                 while tileObj.type == 2: #Esta ocupada
                     print("QUE COJONES")
                     posibles = self.mapa.getTileVecinas(tileObj)
@@ -40,10 +39,10 @@ class Escena():
                         if mejor.heur(tileIni) > tile.heur(tileIni):
                             mejor = tile
                     tileObj = mejor
-                    print(tileObj.centery, tileObj.tileid)     
+                    print(tileObj.centery, tileObj.tileid)
                 now = datetime.now()
                 pathA = self.mapa.Astar(tileIni,tileObj)
-                print((datetime.now() - now))         
+                print((datetime.now() - now))
                 posIni = (tileIni.centerx, tileIni.centery)
                 print(posIni)
                 path = []
@@ -72,7 +71,7 @@ class Escena():
                         path.append(Utils.path(math.atan2(real_mouse_pos[1] - posIni[1], real_mouse_pos[0] - posIni[0]), int(math.hypot(real_mouse_pos[0] - posIni[0], real_mouse_pos[1] - posIni[1])),real_mouse_pos))
                 pathsForPlayer.append(path)
             self.p1.execute(Command.CommandId.MOVER, pathsForPlayer)
-            
+
         pass
     def checkPressedButtons(self):
         key = pygame.key.get_pressed()
@@ -84,9 +83,9 @@ class Escena():
             self.camera.moverIzquierda()
         if key[self.p1.commandMap[Command.CommandId.MOVER_CAMARA_DERECHA]]:
             self.camera.moverDerecha(self.mapa.w)
-        
+
     def update(self):
-        units = self.p1.units
+        units = self.p1.units + self.p2.units
         for unit in units:
             unitPos = unit.getPosition()
             tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
@@ -98,7 +97,7 @@ class Escena():
                 tileObj = self.mapa.getTile(pathObj.posFin[0],pathObj.posFin[1])
                 if tilePath.type != 2 or (tilePath.id == unit.id and tilePath.type == 2):
                     dirX = math.cos(path.angle)
-                    dirY = math.sin(path.angle)               
+                    dirY = math.sin(path.angle)
                     tileSiguiente = self.mapa.getTile(unitPos[0] + dirX*unit.speed, unitPos[1] + dirY*unit.speed)
                     if tileActual != tileSiguiente :
                         if tileActual.type != 1:
@@ -109,7 +108,7 @@ class Escena():
                         if tileActual.type != 1:
                             self.mapa.setVecina(tileActual, unit.id)
                 else:
-                    
+
                     print("Que me la han ocupao",tilePath.tileid ,"y yo estando en",tileActual.tileid,unit.id )
                     #input()
                     #if tilePath == tileObj:
@@ -156,13 +155,13 @@ class Escena():
                                             newTilePath = tile
                                             break
                                         if (newTilePath.heur(tileActual) > tile.heur(tileActual) and tile.tileid != tileActual.tileid) or (newTilePath.heur(tileActual) <= tile.heur(tileActual) and tile.tileid != tileActual.tileid):
-                                            newTilePath = tile  
-                                    print("Salgo", newTilePath.tileid, tileActual.tileid)   
+                                            newTilePath = tile
+                                    print("Salgo", newTilePath.tileid, tileActual.tileid)
                                     for path in unit.paths:
                                         print(path.posFin)
                                     print("aaaaaaaaaaaaaaaaaaaaaaa")
                                     unit.paths.pop(0)
-                
+
                                     # Nos colocamos en la central
                                     posIni = unitPos
                                     posFin = (tileActual.centerx,tileActual.centery)
@@ -197,7 +196,7 @@ class Escena():
             else:
                 if tileActual.type != 1:
                     self.mapa.setVecina(tileActual, unit.id)
-            for unit in self.p1.structures:
+            for unit in self.p1.structures + self.p2.structures:
                 unitPos = unit.getPosition()
                 tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
                 if unit.paths.__len__() > 0:
@@ -208,7 +207,7 @@ class Escena():
                     tileObj = self.mapa.getTile(pathObj.posFin[0],pathObj.posFin[1])
                     if tilePath.type != 2 or (tilePath.id == unit.id and tilePath.type == 2):
                         dirX = math.cos(path.angle)
-                        dirY = math.sin(path.angle)               
+                        dirY = math.sin(path.angle)
                         tileSiguiente = self.mapa.getTile(unitPos[0] + dirX*unit.speed, unitPos[1] + dirY*unit.speed)
                         if tileActual != tileSiguiente :
                             if tileActual.type != 1:
@@ -232,9 +231,12 @@ class Escena():
                             y = rect.y + 1
                             x = x + self.mapa.tw
         self.p1.update()
+        self.p2.update()
         self.raton.update(self.camera.x, self.camera.y)
-    
+        self.aI.make_commands()
+
     def draw(self, screen):
         self.mapa.drawMap(screen, self.camera)
         self.p1.draw(screen, self.camera)
+        self.p2.draw(screen)
         self.raton.draw(screen)

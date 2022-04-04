@@ -39,10 +39,13 @@ class Player():
         self.initialX = 0
         self.initialY = 0
     def processEvent(self,event):
+
+        for structure in self.structures:
+            structure.processEvent(event)
         if event.type == pygame.KEYDOWN:
             return Command.Command(self.keyMap[event.key])
         return Command.Command(0)
-        
+
     def update(self):
         for structure in self.structures:
             structure.update()
@@ -62,7 +65,7 @@ class Player():
         for structure in self.structures:
             r = structure.getRect()
             #si cae en los limites de la camara dibujar.
-            if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and 
+            if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
             r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
                 pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
                 screen.blit(structure.image, [r.x - camera.x, r.y - camera.y])
@@ -70,6 +73,10 @@ class Player():
             r = unit.getRect()
             #print(r)
             #pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x, r.y, r.w, r.h),1)
-            if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and 
+            if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
             r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
                 screen.blit(unit.image, [r.x - camera.x, r.y - camera.y])
+
+    # Para que la AI pueda acceder a la informacion
+    def get_info(self):
+        return self.units, self.structures, self.resources
