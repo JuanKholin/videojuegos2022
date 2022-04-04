@@ -2,6 +2,10 @@ from enum import IntEnum
 
 class CommandId(IntEnum):
     MOVER = 1
+    MOVER_CAMARA_ARRIBA = 2
+    MOVER_CAMARA_ABAJO = 3
+    MOVER_CAMARA_DERECHA = 4
+    MOVER_CAMARA_IZQUIERDA = 5
 
 
 class Command:

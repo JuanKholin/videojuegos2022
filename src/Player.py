@@ -2,8 +2,6 @@ import pygame,math
 from . import Command, Utils
 
 
-
-
 def createRect(initialX, initialY, finalX, finalY):
     if finalX>=initialX and finalY>=initialY:
         area = pygame.Rect(initialX, initialY, finalX-initialX, finalY-initialY)
@@ -29,18 +27,21 @@ def collides(rect1, rect2):
     return collideX and collideY
 
 class Player():
-    def __init__(self, units, structures, resources, keyMap):
+    def __init__(self, units, structures, resources, keyMap, commandMap):
         #Atributos
         self.units = units
         self.unitsSelected = []
         self.structures = structures
         self.resources = resources
         self.keyMap = keyMap
+        self.commandMap = commandMap #keyMap pero las claves son los valores y los valores las claves (solo necesario para las teclas de la camara)
         self.pulsado = False
         self.initialX = 0
         self.initialY = 0
     def processEvent(self,event):
-        pass
+        if event.type == pygame.KEYDOWN:
+            return Command.Command(self.keyMap[event.key])
+        return Command.Command(0)
         
     def update(self):
         for structure in self.structures:
@@ -57,13 +58,18 @@ class Player():
                 self.unitsSelected[i].paths = param[i]
                 for path in param[i]:
                     print("Posicion final: ",path.posFin, path.angle)
-    def draw(self, screen):
+    def draw(self, screen, camera):
         for structure in self.structures:
             r = structure.getRect()
-            pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x, r.y, r.w, r.h),1)
-            screen.blit(structure.image, [r.x, r.y])
+            #si cae en los limites de la camara dibujar.
+            if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and 
+            r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
+                pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
+                screen.blit(structure.image, [r.x - camera.x, r.y - camera.y])
         for unit in self.units:
             r = unit.getRect()
             #print(r)
             #pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x, r.y, r.w, r.h),1)
-            screen.blit(unit.image, [r.x, r.y])
+            if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and 
+            r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
+                screen.blit(unit.image, [r.x - camera.x, r.y - camera.y])

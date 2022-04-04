@@ -1,6 +1,6 @@
 import pygame, sys
 import math
-from src import Map, Raton, Escena, Player, Camera
+from src import Map, Raton, Escena, Player, Camera, Command
 from src.Entities import Terran, terranBuilder
 
 pygame.init()
@@ -13,6 +13,8 @@ GREEN   = (0, 255, 0)
 RED     = (255, 0, 0)
 BLUE    = (0, 0, 255)
 
+TILE_SIZE = 40
+
 SCREEN_WIDTH = 20*40
 SCREEN_HEIGHT = 10*40
 
@@ -22,18 +24,35 @@ screen =  pygame.display.set_mode(size, pygame.RESIZABLE)
 #Controlar frames por segundo
 clock = pygame.time.Clock()
 
-mapa = Map.Map(10, 20)
-player1 = Player.Player([],[],5,[])
+mapa = Map.Map(20, 40)
+player1 = Player.Player([],[],5,
+{
+  pygame.K_UP: Command.CommandId.MOVER_CAMARA_ARRIBA,
+  pygame.K_DOWN: Command.CommandId.MOVER_CAMARA_ABAJO,
+  pygame.K_RIGHT: Command.CommandId.MOVER_CAMARA_DERECHA,
+  pygame.K_LEFT: Command.CommandId.MOVER_CAMARA_IZQUIERDA,
+},
+{
+    Command.CommandId.MOVER_CAMARA_ARRIBA: pygame.K_UP,
+  Command.CommandId.MOVER_CAMARA_ABAJO: pygame.K_DOWN,
+  Command.CommandId.MOVER_CAMARA_DERECHA: pygame.K_RIGHT,
+  Command.CommandId.MOVER_CAMARA_IZQUIERDA: pygame.K_LEFT,
+}
+)
+
 terran1 = Terran.Terran(40, 20, 20, 20, 200, 2, 5, "terranSprites", 0, 0,1)
+terran2 = Terran.Terran(40, 20, 80, 20, 200, 2, 5, "terranSprites", 0, 0,1)
 structure1 = terranBuilder.terranBuilder(200, 40, 600, 200, 300, player1, mapa, "SPRITE/builder",2)
 
 player1.addStructures(structure1)
 player1.addUnits(terran1)
+player1.addUnits(terran2)
 
 sprite_ruta = "./SPRITE/raton/"
 raton = Raton.raton(sprite_ruta, player1)
 
-camera = Camera.Camera(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT)
+#pre: mapa tan grande como ventana
+camera = Camera.Camera(20, 20, SCREEN_HEIGHT, SCREEN_WIDTH)
 escena = Escena.Escena(player1,[],[],mapa, camera, raton)
 
 
@@ -48,9 +67,12 @@ def procesarInput():
         elif event.type == pygame.VIDEORESIZE:
             SCREEN_HEIGHT = event.h
             SCREEN_WIDTH = event.w
+            escena.camera.h = event.h
+            escena.camera.w = event.w
             screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
         else:
             escena.procesarEvent(event)
+    escena.checkPressedButtons()
         
 while True:
     #now = datetime.now()

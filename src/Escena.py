@@ -18,16 +18,20 @@ class Escena():
         #if map.check(command) and p1.check(command):
             #map.procesarCommand(command)
             #p1.procesarCommand(command)
-        command = self.raton.processEvent(event)
-        self.raton.processEvent(event)
-        mouse_pos = pygame.mouse.get_pos()
+        
+        command = self.raton.processEvent(event, self.camera.x, self.camera.y)
+        self.raton.processEvent(event, self.camera.x, self.camera.y)
+        relative_mouse_pos = pygame.mouse.get_pos()
+        real_mouse_pos = (relative_mouse_pos[0] + self.camera.x, relative_mouse_pos[1] + self.camera.y)
         pathsForPlayer = []
         if command.id == Command.CommandId.MOVER: # 1 es moverse
             for param in command.params:  
-                tileObj = self.mapa.getTile(mouse_pos[0],mouse_pos[1])
+                tileObj = self.mapa.getTile(real_mouse_pos[0], real_mouse_pos[1])
                 posFinal = (tileObj.centerx, tileObj.centery)
-                print(tileObj.centery, tileObj.tileid)  
-                tileIni = self.mapa.getTile(param[0],param[1]) 
+                print(tileObj.centery, tileObj.tileid)
+                print("pos final tile centro x e y: ", tileObj.centerx, tileObj.centery)    
+                tileIni = self.mapa.getTile(param[0], param[1]) 
+                print("pos ini tile centro x e y: ", tileIni.centerx, tileIni.centery)    
                 while tileObj.type == 2: #Esta ocupada
                     print("QUE COJONES")
                     posibles = self.mapa.getTileVecinas(tileObj)
@@ -64,12 +68,23 @@ class Escena():
                     path.remove(path[path.__len__() - 1])
                     print(path.__len__())
                     if path.__len__() > 0:
-                        path.append(Utils.path(math.atan2(mouse_pos[1] - posIni[1], mouse_pos[0] - posIni[0]), int(math.hypot(mouse_pos[0] - posIni[0], mouse_pos[1] - posIni[1])),mouse_pos))
+
+                        path.append(Utils.path(math.atan2(real_mouse_pos[1] - posIni[1], real_mouse_pos[0] - posIni[0]), int(math.hypot(real_mouse_pos[0] - posIni[0], real_mouse_pos[1] - posIni[1])),real_mouse_pos))
                 pathsForPlayer.append(path)
             self.p1.execute(Command.CommandId.MOVER, pathsForPlayer)
             
         pass
-
+    def checkPressedButtons(self):
+        key = pygame.key.get_pressed()
+        if key[self.p1.commandMap[Command.CommandId.MOVER_CAMARA_ARRIBA]]:
+            self.camera.moverArriba()
+        if key[self.p1.commandMap[Command.CommandId.MOVER_CAMARA_ABAJO]]:
+            self.camera.moverAbajo(self.mapa.h)
+        if key[self.p1.commandMap[Command.CommandId.MOVER_CAMARA_IZQUIERDA]]:
+            self.camera.moverIzquierda()
+        if key[self.p1.commandMap[Command.CommandId.MOVER_CAMARA_DERECHA]]:
+            self.camera.moverDerecha(self.mapa.w)
+        
     def update(self):
         units = self.p1.units
         for unit in units:
@@ -217,9 +232,9 @@ class Escena():
                             y = rect.y + 1
                             x = x + self.mapa.tw
         self.p1.update()
-        self.raton.update()
+        self.raton.update(self.camera.x, self.camera.y)
     
     def draw(self, screen):
-        self.mapa.drawMap(screen)
-        self.p1.draw(screen)
+        self.mapa.drawMap(screen, self.camera)
+        self.p1.draw(screen, self.camera)
         self.raton.draw(screen)
