@@ -94,11 +94,11 @@ class raton(pygame.sprite.Sprite):
 
     def setCollide(self, detected):
         self.collide = detected
-    def draw(self, screen):
+    def draw(self, screen, camera):
         if self.point.getClicked() :
-            self.point.draw(screen)
+            self.point.draw(screen, camera)
         if self.pulsado:
-            printRectangulo(screen, self.initialX, self.initialY, self.rel_pos[0], self.rel_pos[1])
+            printRectangulo(screen, self.initialX - camera.x, self.initialY - camera.y, self.rel_pos[0], self.rel_pos[1])
         screen.blit(self.image, (self.rect.x, self.rect.y))
     def processEvent(self, event, cameraX, cameraY):
         command = Command.Command(0) # 0 es nada
@@ -199,5 +199,5 @@ class point(pygame.sprite.Sprite):
     def getClicked(self):
         return self.clicked
 
-    def draw(self, screen):
-        screen.blit(self.image, (self.rect.x, self.rect.y))
+    def draw(self, screen, camera):
+        screen.blit(self.image, (self.rect.x - camera.x, self.rect.y - camera.y))

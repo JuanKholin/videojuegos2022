@@ -239,4 +239,4 @@ class Escena():
         self.mapa.drawMap(screen, self.camera)
         self.p1.draw(screen, self.camera)
         self.p2.draw(screen, self.camera)
-        self.raton.draw(screen)
+        self.raton.draw(screen, self.camera)
