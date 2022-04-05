@@ -105,7 +105,7 @@ class Zergling(Zerg.Zerg):
 
     # Devuelve la posicion en coordenadas del propio mapa
     def getPosition(self):
-        return (self.x, self.y)
+        return (self.imageRect.x, self.imageRect.y)
 
     # Devuelve el rectangulo que conforma su imagen, creo, esto lo hizo otro
     def getRect(self):
@@ -127,6 +127,7 @@ class Zergling(Zerg.Zerg):
     def setClicked(self, click):
         self.clicked = click
         
+    # Es leer el valor del booleano de antes, se le suele llamar get
     def isClicked(self):
         return self.clicked
 

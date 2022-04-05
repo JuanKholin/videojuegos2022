@@ -86,3 +86,4 @@ class TerranBuilder(Structure.Structure):
                 if event.key == pygame.K_v:
                     terran = Terran.Terran(40, self.x, self.y+self.rectn.h, 20, 200, 2, 5, "terranSprites", 8, 6, 1)
                     self.generateUnit(terran)
+

@@ -43,8 +43,7 @@ class Player():
         for structure in self.structures:
             structure.processEvent(event)
         if event.type == pygame.KEYDOWN:
-            if event.key in self.keyMap:
-                return Command.Command(self.keyMap[event.key])
+            return Command.Command(self.keyMap[event.key])
         return Command.Command(0)
 
     def update(self):
@@ -71,10 +70,7 @@ class Player():
                 pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
                 #aqui llamabais a el draw de structures, me lo he cargado para integrar lo que había hecho con la camara
                 #luego lo vuelvo a poner
-                image = structure.getImage()
-                if structure.clicked:
-                    pygame.draw.ellipse(screen, Utils.GREEN, [structure.x-structure.rectn.w/2- camera.x, structure.y+structure.rectOffY-structure.rectn.h/2 - camera.y, structure.rectn.w, structure.rectn.h], 2)
-                screen.blit(structure.image, [image.x - camera.x, image.y - camera.y])
+                screen.blit(structure.image, [r.x - camera.x, r.y - camera.y])
         for unit in self.units:
             r = unit.getRect()
             #print(r)
