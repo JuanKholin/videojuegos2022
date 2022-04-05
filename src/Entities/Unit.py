@@ -16,8 +16,6 @@ class Unit(Entity.Entity):
         self.count = 0
         self.spritesName = sprites
         self.sprites = []
-        self.dirX = 0
-        self.dirY = 0
         self.distanceToPoint = 0
         self.x = xIni
         self.y = yIni

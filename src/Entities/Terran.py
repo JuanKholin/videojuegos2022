@@ -41,15 +41,15 @@ class Terran(Unit.Unit):
             actualPath = self.paths[0]
             if actualPath.dist > 0:
                 if actualPath.angle < 0:
-                        self.angle = -actualPath.angle
+                    self.angle = -actualPath.angle
                 else:
                     self.angle = 2*math.pi - actualPath.angle
-                self.dirX = math.cos(actualPath.angle)
-                self.dirY = math.sin(actualPath.angle)
-                distrec = math.hypot((self.rectn.x + self.dirX*self.speed) - self.rectn.x, (self.rectn.y + self.dirY*self.speed) - self.rectn.y)
+                self.x = math.cos(actualPath.angle)
+                self.y = math.sin(actualPath.angle)
+                distrec = math.hypot((self.rectn.x + self.x*self.speed) - self.rectn.x, (self.rectn.y + self.y*self.speed) - self.rectn.y)
                 actualPath.dist -= distrec
-                self.rectn.x += self.dirX*self.speed
-                self.rectn.y += self.dirY*self.speed
+                self.rectn.x += self.x*self.speed
+                self.rectn.y += self.y*self.speed
 
                 self.face = int(4 - (self.angle*8/math.pi))%16
                 self.count += 1
