@@ -90,7 +90,7 @@ class Terran(Unit.Unit):
         rectAux = pygame.Rect(self.rectn.x - self.rectn.w/2, self.rectn.y - self.rectn.h, self.rectn.w, self.rectn.h)
         return rectAux
     def getPosition(self):
-        return (self.rectn.x, self.rectn.y)
+        return (self.rectn.x- self.rectn.w/2, self.rectn.y - self.rectn.h/2)
     def atacar():
         pass
     def construir():

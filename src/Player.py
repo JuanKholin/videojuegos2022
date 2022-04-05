@@ -81,6 +81,10 @@ class Player():
             #pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x, r.y, r.w, r.h),1)
             if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
             r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
+                pies = unit.getPosition()
+                if unit.clicked:
+                    print("unidad draw")
+                    pygame.draw.ellipse(screen, Utils.GREEN, [pies[0] - camera.x, pies[1] + unit.rectOffY - camera.y, 40, 30], 2)
                 screen.blit(unit.image, [r.x - camera.x, r.y - camera.y])
 
     # Para que la AI pueda acceder a la informacion
