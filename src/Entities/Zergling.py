@@ -8,7 +8,7 @@ from .. import Utils
 HP = 40
 MINERAL_COST = 20
 GENERATION_TIME = 200
-SPEED = 2 
+SPEED = 1
 FRAMES_TO_REFRESH = 5
 SPRITES = "zergling.bmp"
 SPRITE_PIXEL_ROWS = 128
@@ -31,7 +31,7 @@ DIE_OFFSET = [0, 1, 2, 3, 4, 5, 6]
 
 INVERSIBLE_FRAMES = len(FRAMES) - 1 # los die frames no se invierten
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
-# horario y empezando desde el norte, el mapeo dir-frame es:
+# horario y empezando desde el norte, el mapeo dir-flist(range(289, 296))rame es:
 DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
 PADDING = 110
 ID = 3
@@ -131,7 +131,7 @@ class Zergling(Zerg.Zerg):
         
     # Introduce un nuevo camino a la lista de caminos
     def addPath(self, path):
-        self.paths.apend(path)
+        self.paths.append(path)
 
     # Genera los sprites que son inversos, es todo un artista
     def mirrorTheChosen(self):
