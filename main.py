@@ -92,4 +92,4 @@ while True:
     escena.draw(screen)
     pygame.display.flip()
 
-    clock.tick(60)
+    clock.tick(Utils.CLOCK_PER_SEC)
