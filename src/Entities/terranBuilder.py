@@ -1,9 +1,6 @@
 import pygame
 from . import Structure, Terran
 from .. import Player, Map, Utils
-from .. import Escena
-
-CLOCK_PER_SEC = 60
 
 WHITE   = (255,255,255)
 
@@ -49,7 +46,7 @@ class TerranBuilder(Structure.Structure):
                 else:
                     self.index = 5
             self.generationCount += 1
-            if self.generationCount == CLOCK_PER_SEC*self.training[0].getGenerationTime():
+            if self.generationCount == Utils.CLOCK_PER_SEC*self.training[0].getGenerationTime():
                 terran = self.training[0]
                 self.player.addUnits(terran)
                 self.generationCount = 0
