@@ -1,4 +1,3 @@
-
 *.pyc
 .vs/ProjectSettings.json
 .vs/slnx.sqlite
