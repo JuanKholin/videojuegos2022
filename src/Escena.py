@@ -95,7 +95,7 @@ class Escena():
                 tilePath = self.mapa.getTile(path.posFin[0],path.posFin[1])
                 #print("Tilepath es: ", tilePath.centerx, tilePath.centery)
                 tileObj = self.mapa.getTile(pathObj.posFin[0],pathObj.posFin[1])
-                if tilePath.type != 2 or (tilePath.id == unit.id and tilePath.type == 2):
+                if tilePath.type != 2 or ((tilePath.id == unit.id) and (tilePath.type == 2)):
                     dirX = math.cos(path.angle)
                     dirY = math.sin(path.angle)
                     tileSiguiente = self.mapa.getTile(unitPos[0] + dirX*unit.speed, unitPos[1] + dirY*unit.speed)
