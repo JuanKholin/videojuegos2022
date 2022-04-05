@@ -81,9 +81,7 @@ class TerranBuilder(Structure.Structure):
         screen.blit(self.image, [image.x, image.y])
 
     def processEvent(self, event):
-        if self.clicked:
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_v:
-                    print("key detected")
-                    terran = Terran.Terran(40, self.x, self.y+self.rectn.h, 20, 200, 2, 5, "terranSprites", 8, 6, 1)
-                    self.generateUnit(terran)
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_v:
+                terran = Terran.Terran(40, self.x, self.y+self.rectn.h, 20, 200, 2, 5, "terranSprites", 8, 6, 1)
+                self.generateUnit(terran)
