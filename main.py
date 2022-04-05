@@ -7,6 +7,8 @@ pygame.init()
 
 # Definir colores
 
+CLOCK_PER_SEC = 60
+
 X_TILES = 20
 Y_TILES = 10
 
@@ -92,4 +94,4 @@ while True:
     escena.draw(screen)
     pygame.display.flip()
 
-    clock.tick(60)
+    clock.tick(CLOCK_PER_SEC)
