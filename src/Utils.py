@@ -16,6 +16,7 @@ class State(Enum):
     DEAD = auto()
     ORE_TRANSPORTING = auto()
     BARREL_TRANSPORTING = auto()
+    MINING = auto()
 
 class path():
     def __init__(self, angle, dist, posFin):

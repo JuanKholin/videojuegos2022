@@ -13,18 +13,9 @@ def createRect(initialX, initialY, finalX, finalY):
         area = pygame.Rect(finalX, finalY, initialX-finalX, initialY-finalY)
     return area
 
-def collides(rect1, rect2):
-    collideX = False
-    collideY = False
-    if (rect1.x >= rect2.x) and (rect1.x <= (rect2.x+rect2.width)):
-        collideX = True
-    elif (rect2.x >= rect1.x) and (rect2.x <= (rect1.x+rect1.width)):
-        collideX = True
-    if (rect1.y >= rect2.y) and (rect1.y <= (rect2.y+rect2.height)):
-        collideY = True
-    elif (rect2.y >= rect1.y) and (rect2.y <= (rect1.y+rect1.height)):
-        collideY = True
-    return collideX and collideY
+def collides(x,y, rect2):
+    return (x >= rect2.x and x <= rect2.x + rect2.w and y >= rect2.y and y <= rect2.y + rect2.h )
+    
 
 class Player():
     def __init__(self, units, structures, resources, keyMap, commandMap):
@@ -78,14 +69,14 @@ class Player():
         for unit in self.units:
             r = unit.getRect()
             #print(r)
-            #pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x, r.y, r.w, r.h),1)
+            pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h),1)
             if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
             r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
-                pies = unit.getPosition()
+                drawPos = unit.getDrawPosition()
                 if unit.clicked:
-                    print("unidad draw")
-                    pygame.draw.ellipse(screen, Utils.GREEN, [pies[0] - camera.x, pies[1] + unit.rectOffY - camera.y, 40, 30], 2)
-                screen.blit(unit.image, [r.x - camera.x, r.y - camera.y])
+                    pygame.draw.ellipse(screen, Utils.GREEN, [r.x - camera.x, r.y + (0.7*r.h)- camera.y,r.w , 0.3*r.h], 2)
+                #screen.blit(unit.image, [r.x - camera.x, r.y - camera.y])
+                screen.blit(unit.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
 
     # Para que la AI pueda acceder a la informacion
     def get_info(self):

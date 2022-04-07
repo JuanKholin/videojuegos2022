@@ -44,8 +44,7 @@ class Zergling(Zerg.Zerg):
         Zerg.Zerg.__init__(self, HP, xIni * 40 + 20, yIni * 40 + 20, MINERAL_COST, 
                 GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, 
                 PADDING, ID)
-        spritesheet = pg.image.load("./sprites/" + self.spritesName)
-        print(spritesheet.get_height())
+        spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey(Utils.BLACK)
         self.sprites = Entity.Entity.divideSpritesheetByRows(spritesheet, 
                 SPRITE_PIXEL_ROWS)

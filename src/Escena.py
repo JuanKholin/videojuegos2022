@@ -17,7 +17,6 @@ class Escena():
         #if map.check(command) and p1.check(command):
             #map.procesarCommand(command)
             #p1.procesarCommand(command)
-
         command = self.raton.processEvent(event, self.camera.x, self.camera.y)
         self.p1.processEvent(event)
         #for structure in p1.structures:

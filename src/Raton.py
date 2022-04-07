@@ -57,12 +57,12 @@ class raton(pygame.sprite.Sprite):
             ###---LOGICA
             r = unit.getRect()
             #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-            if Player.collides(unit.getRect(), mouseRect):
+            if Player.collides(self.real_pos[0], self.real_pos[1],unit.getRect()):
                 mouse_collide = True
         for structure in self.player.structures:
             ###---LOGICA
             #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-            if Player.collides(structure.getRect(), mouseRect):
+            if Player.collides(self.real_pos[0], self.real_pos[1],structure.getRect()):
                 mouse_collide = True
 
         if mouse_collide:
@@ -107,6 +107,7 @@ class raton(pygame.sprite.Sprite):
             #la posicion del cursor es relativa a la camara
             relative_mouse_pos = pygame.mouse.get_pos()
             real_mouse_pos = (relative_mouse_pos[0] + cameraX, relative_mouse_pos[1] + cameraY)
+            #print(relative_mouse_pos)
             
             if click_type[0]:     
                 if not self.pulsado:
@@ -133,7 +134,8 @@ class raton(pygame.sprite.Sprite):
                     #print('click izq liberado', mouse_pos[0], mouse_pos[1], event.type)
                     mouseRect = Player.createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
                     for unit in self.player.units:
-                        if Player.collides(unit.getRect(), mouseRect):
+                        #print(unit.getRect())
+                        if Player.collides(self.real_pos[0], self.real_pos[1],unit.getRect()):
                             unit.setClicked(True)
                             self.player.unitsSelected.append(unit)
                             
@@ -145,7 +147,7 @@ class raton(pygame.sprite.Sprite):
                             #unitsClicked.remove(terran)
                             #print("DESCLICKADO" + str(terran.id)) 
                     for structure in self.player.structures:
-                        if Player.collides(structure.getRect(), mouseRect):
+                        if Player.collides(self.real_pos[0], self.real_pos[1],structure.getRect()):
                             structure.setClicked(True)
                             #self.player.unitsSelected.append(unit)
                             

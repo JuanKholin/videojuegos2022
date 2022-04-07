@@ -9,8 +9,8 @@ HP = 40
 MINERAL_COST = 20
 GENERATION_TIME = 200
 SPEED = 1
-FRAMES_TO_REFRESH = 20
-SPRITES = "scvRED.png"
+FRAMES_TO_REFRESH = 10
+SPRITES = "scvJusto.bmp"
 SPRITE_PIXEL_ROWS = 72
 FACES = 8
 FRAME = 0
@@ -19,16 +19,16 @@ TOTAL_FRAMES = 296  # [0:15] MOVERSE Y STILL
                     # [32:47] MOVER BARRIL
                     # [48:217] ATACAR Y MINAR
                     # [289:295] MORICION
-FRAMES = [list(range(0, 17)), list(range(17, 33)), list(range(33, 49)), 
-          list(range(49, 65)), list(range(65,81)), list(range(81, 97)), 
-          list(range(97, 113)), list(range(113, 129)), list(range(129, 145)), 
-          list(range(145, 171)), list(range(171, 187)), list(range(187, 203)),
-          list(range(203, 219)), list(range(289, 296))]
+FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)), 
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)), 
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)), 
+          list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
+          list(range(205, 221)), list(range(289, 296))]
 STILL_FRAMES = 0
 ORE_TRANSPORTING_FRAMES = 3
 BARREL_TRANSPORTING_FRAMES = 4
 ATTACK_FRAMES = [1, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-MOVE_FRAMES = 0
+MOVE_FRAMES = [0]
 DIE_FRAMES = 13
 DIE_OFFSET = [0, 1, 2, 3, 4, 5, 6]
 
@@ -36,6 +36,10 @@ INVERSIBLE_FRAMES = len(FRAMES) - 1 # los die frames no se invierten
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
 # horario y empezando desde el norte, el mapeo dir-flist(range(289, 296))rame es:
 DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
+WEIGHT_PADDING =    [64,64,60,64,64,64,64,64,64,74,64,64,80,64, 64, 64]
+HEIGHT_PADDING =    [80,80,80,80,75,75,70,70,60,60,65,67,75,80, 80, 80]
+X_PADDING =         [43,30,30,30,30,30,30,40,40,45,48,50,40,48, 50, 50]
+Y_PADDING =         [47,47,50,47,45,40,40,37,47,45,43,45,40,40, 45, 45]
 PADDING = 110
 
 class TerranWorker(Worker.Worker):
@@ -43,17 +47,30 @@ class TerranWorker(Worker.Worker):
         Worker.Worker.__init__(self, HP, xIni * 40 + 20, yIni * 40 + 20, MINERAL_COST, 
                 GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, 
                 PADDING, id)
-        spritesheet = pg.image.load("./sprites/" + self.spritesName)
-        spritesheet.set_colorkey(Utils.BLACK)
+        spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
+        spritesheet.set_colorkey((Utils.BLACK))
         self.sprites = Entity.Entity.divideSpritesheetByRows(spritesheet, 
                 SPRITE_PIXEL_ROWS)
         self.mirrorTheChosen()
-        self.dir = 0
-        self.changeToStill()
-        self.imageRect = Utils.rect(self.x, self.y, self.image.get_width(), 
-                self.image.get_height() - self.rectOffY)
+        self.dir = 12
+        self.changeToMining()
+        print(self.x, self.y,self.image.get_width(),self.image.get_height() )
+        #self.imageRect = Utils.rect(self.x, self.y, self.image.get_width() - WEIGHT_PADDING, 
+                #self.image.get_height() - HEIGHT_PADDING)
+        #self.imageRect = Utils.rect(self.x - self.image.get_width()/2, self.y -self.image.get_height() , self.image.get_width(), self.image.get_height())
+        #self.imageRect = Utils.rect(self.x, self.y, self.image.get_width(), self.image.get_height())
 
-       # Aplica un frame mas a la unidad
+    
+    def getPosition(self):
+        r = self.getRect()
+        return(r.x + r.w/2, r.y + r.h)
+    def getDrawPosition(self):
+        return(self.x - self.image.get_width()/2,  self.y - self.image.get_height()/2)
+    # Devuelve el rectangulo que conforma su imagen, creo, esto lo hizo otro
+    def getRect(self):
+        rectAux = pg.Rect(self.x - X_PADDING[self.dir], 
+                self.y - Y_PADDING[self.dir], self.image.get_width() - WEIGHT_PADDING[self.dir], self.image.get_height()  - HEIGHT_PADDING[self.dir])
+        return rectAux
     def update(self):
         if self.state == Utils.State.STILL: # Esta quieto
             self.updateStill()
@@ -69,20 +86,22 @@ class TerranWorker(Worker.Worker):
             pass
         elif self.state == Utils.State.BARREL_TRANSPORTING: # Esta muerto
             pass
-
-    # Aplica un frame a la unidad quieta
+        elif self.state == Utils.State.MINING: # Esta minando
+              self.updateMinig()  
+    # Aplica un frame a la unidad quieta(LO DE COUNT LO TENGO DE DEBUG)
     def updateStill(self):
-        self.count += 1
-        if self.count >= self.framesToRefresh:
-            self.dir = (self.dir + 1)%16
-            self.count = 0
-            self.rotate()
-        
         if len(self.paths) > 0:
             self.state = Utils.State.MOVING
         #aqui vendria un elif de si te atacan pasas a atacando
-    def rotate(self):
-        self.image = self.sprites[FRAMES[STILL_FRAMES][DIR_OFFSET[self.dir]]]
+    
+    def updateMinig(self):
+        self.count += 1
+        if self.count >= self.framesToRefresh:
+            print(self.frame)
+            self.count = 0
+            self.updateMiningImage()
+        if len(self.paths) > 0:
+            self.state = Utils.State.MOVING
 
     # Aplica un frame de la unidad en movimiento
     def updateMoving(self):
@@ -94,15 +113,15 @@ class TerranWorker(Worker.Worker):
                 self.angle = 2 * math.pi - actualPath.angle            
             
             self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
-            self.x = math.cos(actualPath.angle)
-            self.y = math.sin(actualPath.angle)
-
-            distrec = math.hypot((self.imageRect.x + self.x * self.speed) - 
-                    self.imageRect.x, (self.imageRect.y + self.y * self.speed) 
-                    - self.imageRect.y)
+            self.dirx = math.cos(actualPath.angle)
+            self.diry = math.sin(actualPath.angle)
+            pos = self.getPosition()
+            distrec = math.hypot((pos[0] + self.dirx * self.speed) - 
+                    pos[0], (pos[1] + self.diry * self.speed) 
+                    - pos[1])
             actualPath.dist -= distrec
-            self.imageRect.x += self.x * self.speed
-            self.imageRect.y += self.y * self.speed
+            self.x += self.dirx * self.speed
+            self.y += self.diry * self.speed
 
             self.count += 1
             if self.count >= self.framesToRefresh:
@@ -111,7 +130,8 @@ class TerranWorker(Worker.Worker):
         else: # Se acaba este camino
             self.paths.pop(0)
             if len(self.paths) == 0:
-                self.changeToDying()
+                self.dir = 8
+                self.changeToStill()
 
     # Aplica un frame a la unidad atacando
     #def updateAttacking(self):
@@ -126,15 +146,8 @@ class TerranWorker(Worker.Worker):
             else:
                 self.changeToDead()
 
-    # Devuelve la posicion en coordenadas del propio mapa
-    def getPosition(self):
-        return (self.imageRect.x, self.imageRect.y)
 
-    # Devuelve el rectangulo que conforma su imagen, creo, esto lo hizo otro
-    def getRect(self):
-        rectAux = pg.Rect(self.imageRect.x - self.imageRect.w / 2, 
-                self.imageRect.y - self.imageRect.h, self.imageRect.w, self.imageRect.h)
-        return rectAux
+    
 
     # No es por meter mierda, pero a mi Zergling no lo cancela nadie, desgraciados
     def cancel(self):
@@ -148,9 +161,7 @@ class TerranWorker(Worker.Worker):
     def mirrorTheChosen(self):
         print(INVERSIBLE_FRAMES)
         for i in range(INVERSIBLE_FRAMES):
-            print("--------------", i)
             for j in range(9, 16):
-                print(FRAMES[i][DIR_OFFSET[j]])
                 self.sprites[FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(
                         self.sprites[FRAMES[i][DIR_OFFSET[j]]], True, False)
 
@@ -162,6 +173,9 @@ class TerranWorker(Worker.Worker):
     def isClicked(self):
         return self.clicked
 
+    def changeToMining(self):
+        self.state = Utils.State.MINING
+        self.image = self.sprites[FRAMES[ATTACK_FRAMES[self.frame]][DIR_OFFSET[self.dir]]]
     # Pasa a estado quieto
     def changeToStill(self):
         self.state = Utils.State.STILL
@@ -203,6 +217,11 @@ class TerranWorker(Worker.Worker):
     
     # Pasa de frame en una animacion de ataque
     def updateAttackingImage(self):
+        self.frame = (self.frame + 1) % len(ATTACK_FRAMES)
+        self.image = self.sprites[FRAMES[ATTACK_FRAMES[self.frame]][DIR_OFFSET[self.dir]]]
+
+    # Pasa de frame en una animacion de minado
+    def updateMiningImage(self):
         self.frame = (self.frame + 1) % len(ATTACK_FRAMES)
         self.image = self.sprites[FRAMES[ATTACK_FRAMES[self.frame]][DIR_OFFSET[self.dir]]]
 
