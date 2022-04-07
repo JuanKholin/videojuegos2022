@@ -34,7 +34,7 @@ INVERSIBLE_FRAMES = len(FRAMES) - 1 # los die frames no se invierten
 # horario y empezando desde el norte, el mapeo dir-flist(range(289, 296))rame es:
 DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
 PADDING = 110
-ID = 3
+ID = 4
 
 class Zergling(Zerg.Zerg):
     # Pre: xIni e yIni marcan posiciones del mapa, (ej: (3, 2) se refiere a la posicion de 
@@ -45,6 +45,7 @@ class Zergling(Zerg.Zerg):
                 GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, 
                 PADDING, ID)
         spritesheet = pg.image.load("./sprites/" + self.spritesName)
+        print(spritesheet.get_height())
         spritesheet.set_colorkey(Utils.BLACK)
         self.sprites = Entity.Entity.divideSpritesheetByRows(spritesheet, 
                 SPRITE_PIXEL_ROWS)

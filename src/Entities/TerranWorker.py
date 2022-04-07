@@ -9,24 +9,27 @@ HP = 40
 MINERAL_COST = 20
 GENERATION_TIME = 200
 SPEED = 1
-FRAMES_TO_REFRESH = 5
-SPRITES = "terranWorker.bmp"
-SPRITE_PIXEL_ROWS = 128
+FRAMES_TO_REFRESH = 20
+SPRITES = "scvRED.png"
+SPRITE_PIXEL_ROWS = 72
 FACES = 8
 FRAME = 0
-TOTAL_FRAMES = 296  # [0:203] MOVICION (13 ciclos de 17 frames con solo 16 utiles)
-                    # ciclo 0 estar quieto, ciclos 1 2 y 3 atacacion, el resto moverse
-                    # [204:288] ENTERRACION
+TOTAL_FRAMES = 296  # [0:15] MOVERSE Y STILL
+                    # [16:31] MOVER ORE
+                    # [32:47] MOVER BARRIL
+                    # [48:217] ATACAR Y MINAR
                     # [289:295] MORICION
-FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)), 
-          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)), 
-          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)), 
-          list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
-          list(range(289, 296))]
+FRAMES = [list(range(0, 17)), list(range(17, 33)), list(range(33, 49)), 
+          list(range(49, 65)), list(range(65,81)), list(range(81, 97)), 
+          list(range(97, 113)), list(range(113, 129)), list(range(129, 145)), 
+          list(range(145, 171)), list(range(171, 187)), list(range(187, 203)),
+          list(range(203, 219)), list(range(289, 296))]
 STILL_FRAMES = 0
-ATTACK_FRAMES = [1, 2, 3]
-MOVE_FRAMES = [4, 5, 6, 7, 8, 9, 10, 11]
-DIE_FRAMES = 12
+ORE_TRANSPORTING_FRAMES = 3
+BARREL_TRANSPORTING_FRAMES = 4
+ATTACK_FRAMES = [1, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+MOVE_FRAMES = 0
+DIE_FRAMES = 13
 DIE_OFFSET = [0, 1, 2, 3, 4, 5, 6]
 
 INVERSIBLE_FRAMES = len(FRAMES) - 1 # los die frames no se invierten
@@ -45,12 +48,12 @@ class TerranWorker(Worker.Worker):
         self.sprites = Entity.Entity.divideSpritesheetByRows(spritesheet, 
                 SPRITE_PIXEL_ROWS)
         self.mirrorTheChosen()
-        self.dir = 8
+        self.dir = 0
         self.changeToStill()
         self.imageRect = Utils.rect(self.x, self.y, self.image.get_width(), 
                 self.image.get_height() - self.rectOffY)
 
-    # Aplica un frame mas a la unidad
+       # Aplica un frame mas a la unidad
     def update(self):
         if self.state == Utils.State.STILL: # Esta quieto
             self.updateStill()
@@ -62,14 +65,26 @@ class TerranWorker(Worker.Worker):
             self.updateDying()
         elif self.state == Utils.State.DEAD: # Esta muerto
             pass
-    
-     # Aplica un frame a la unidad quieta
+        elif self.state == Utils.State.ORE_TRANSPORTING: # Esta muerto
+            pass
+        elif self.state == Utils.State.BARREL_TRANSPORTING: # Esta muerto
+            pass
+
+    # Aplica un frame a la unidad quieta
     def updateStill(self):
+        self.count += 1
+        if self.count >= self.framesToRefresh:
+            self.dir = (self.dir + 1)%16
+            self.count = 0
+            self.rotate()
+        
         if len(self.paths) > 0:
             self.state = Utils.State.MOVING
         #aqui vendria un elif de si te atacan pasas a atacando
-    
-     # Aplica un frame de la unidad en movimiento
+    def rotate(self):
+        self.image = self.sprites[FRAMES[STILL_FRAMES][DIR_OFFSET[self.dir]]]
+
+    # Aplica un frame de la unidad en movimiento
     def updateMoving(self):
         actualPath = self.paths[0]
         if actualPath.dist > 0: # Aun queda trecho
@@ -97,7 +112,7 @@ class TerranWorker(Worker.Worker):
             self.paths.pop(0)
             if len(self.paths) == 0:
                 self.changeToDying()
-        
+
     # Aplica un frame a la unidad atacando
     #def updateAttacking(self):
 
@@ -110,7 +125,91 @@ class TerranWorker(Worker.Worker):
                 self.updateDyingImage()
             else:
                 self.changeToDead()
-    
+
     # Devuelve la posicion en coordenadas del propio mapa
     def getPosition(self):
         return (self.imageRect.x, self.imageRect.y)
+
+    # Devuelve el rectangulo que conforma su imagen, creo, esto lo hizo otro
+    def getRect(self):
+        rectAux = pg.Rect(self.imageRect.x - self.imageRect.w / 2, 
+                self.imageRect.y - self.imageRect.h, self.imageRect.w, self.imageRect.h)
+        return rectAux
+
+    # No es por meter mierda, pero a mi Zergling no lo cancela nadie, desgraciados
+    def cancel(self):
+        self.paths = []
+        
+    # Introduce un nuevo camino a la lista de caminos
+    def addPath(self, path):
+        self.paths.append(path)
+
+    # Genera los sprites que son inversos, es todo un artista
+    def mirrorTheChosen(self):
+        print(INVERSIBLE_FRAMES)
+        for i in range(INVERSIBLE_FRAMES):
+            print("--------------", i)
+            for j in range(9, 16):
+                print(FRAMES[i][DIR_OFFSET[j]])
+                self.sprites[FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(
+                        self.sprites[FRAMES[i][DIR_OFFSET[j]]], True, False)
+
+    # Es darle un valor a un booleano, nada mas y nada menos
+    def setClicked(self, click):
+        self.clicked = click
+        
+    # Es leer el valor del booleano de antes, se le suele llamar get
+    def isClicked(self):
+        return self.clicked
+
+    # Pasa a estado quieto
+    def changeToStill(self):
+        self.state = Utils.State.STILL
+        self.image = self.sprites[FRAMES[STILL_FRAMES][DIR_OFFSET[self.dir]]]
+
+    # Pasa a estado moverse
+    def changeToMove(self):
+        self.state = Utils.State.MOVING
+        self.frame = 0
+        self.image = self.sprites[FRAMES[MOVE_FRAMES[self.frame]][DIR_OFFSET[self.dir]]]
+        
+    # Pasa al ataque HYAAAA!! >:c
+    def changeToAttack(self):
+        self.state = Utils.State.ATTACKING
+        self.frame = 0
+        self.image = self.sprites[FRAMES[ATTACK_FRAMES[self.frame]][DIR_OFFSET[self.dir]]]
+
+    # Pasa a morirse (chof)
+    def changeToDying(self):
+        self.state = Utils.State.DYING
+        self.frame = 0
+        self.image = self.sprites[FRAMES[DIE_FRAMES][DIE_OFFSET[self.frame]]]
+
+    # Pasa a muerto (chof del todo)
+    def changeToDead(self):
+        self.state = Utils.State.DEAD
+        self.frame += 1
+        self.image = self.sprites[FRAMES[DIE_FRAMES][DIE_OFFSET[self.frame]]]
+
+    # Pasa de frame en los frames quietos, no cambia nada puesto que esta quieto
+    def updateStillImage(self):
+        self.frame = (self.frame + 1) % len(STILL_FRAMES)
+        self.image = self.sprites[FRAMES[STILL_FRAMES][DIR_OFFSET[self.dir]]]
+        
+    # Pasa de frame en animaciones de movimiento
+    def updateMovingImage(self):
+        self.frame = (self.frame + 1) % len(MOVE_FRAMES)
+        self.image = self.sprites[FRAMES[MOVE_FRAMES[self.frame]][DIR_OFFSET[self.dir]]]
+    
+    # Pasa de frame en una animacion de ataque
+    def updateAttackingImage(self):
+        self.frame = (self.frame + 1) % len(ATTACK_FRAMES)
+        self.image = self.sprites[FRAMES[ATTACK_FRAMES[self.frame]][DIR_OFFSET[self.dir]]]
+
+    # Pasa de frame en una animacion mortal
+    def updateDyingImage(self):
+        if self.frame == len(DIE_OFFSET): # el ultimo frame es de muerte definitiva
+            print("ERROR: Zergling muerto, como que matarlo mas?")
+            exit(1)
+        self.frame = self.frame + 1
+        self.image = self.sprites[FRAMES[DIE_FRAMES][DIR_OFFSET[self.dir]]]

@@ -14,6 +14,8 @@ class State(Enum):
     ATTACKING = auto()
     DYING = auto()
     DEAD = auto()
+    ORE_TRANSPORTING = auto()
+    BARREL_TRANSPORTING = auto()
 
 class path():
     def __init__(self, angle, dist, posFin):
