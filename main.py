@@ -26,6 +26,7 @@ player1 = Player.Player([],[],5,
   pygame.K_DOWN: Command.CommandId.MOVER_CAMARA_ABAJO,
   pygame.K_RIGHT: Command.CommandId.MOVER_CAMARA_DERECHA,
   pygame.K_LEFT: Command.CommandId.MOVER_CAMARA_IZQUIERDA,
+  pygame.K_v: Command.CommandId.GENERAR_UNIDAD,
 },
 {
     Command.CommandId.MOVER_CAMARA_ARRIBA: pygame.K_UP,
