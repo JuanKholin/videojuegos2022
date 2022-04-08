@@ -6,6 +6,7 @@ class CommandId(IntEnum):
     MOVER_CAMARA_ABAJO = 3
     MOVER_CAMARA_DERECHA = 4
     MOVER_CAMARA_IZQUIERDA = 5
+    GENERAR_UNIDAD = 6
 
 
 class Command:

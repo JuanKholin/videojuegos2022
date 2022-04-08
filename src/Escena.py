@@ -20,6 +20,8 @@ class Escena():
 
         command = self.raton.processEvent(event, self.camera.x, self.camera.y)
         self.p1.processEvent(event)
+        #for structure in p1.structures:
+        #   structure.processEvent(event)
         relative_mouse_pos = pygame.mouse.get_pos()
         real_mouse_pos = (relative_mouse_pos[0] + self.camera.x, relative_mouse_pos[1] + self.camera.y)
         pathsForPlayer = []

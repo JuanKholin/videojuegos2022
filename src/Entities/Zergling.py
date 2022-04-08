@@ -8,7 +8,7 @@ from .. import Utils
 HP = 40
 MINERAL_COST = 20
 GENERATION_TIME = 200
-SPEED = 2 
+SPEED = 1
 FRAMES_TO_REFRESH = 5
 SPRITES = "zergling.bmp"
 SPRITE_PIXEL_ROWS = 128
@@ -31,7 +31,7 @@ DIE_OFFSET = [0, 1, 2, 3, 4, 5, 6]
 
 INVERSIBLE_FRAMES = len(FRAMES) - 1 # los die frames no se invierten
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
-# horario y empezando desde el norte, el mapeo dir-frame es:
+# horario y empezando desde el norte, el mapeo dir-flist(range(289, 296))rame es:
 DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
 PADDING = 110
 ID = 3
@@ -51,8 +51,8 @@ class Zergling(Zerg.Zerg):
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
-        self.imageRect = Utils.rect(self.x, self.y, self.image.get_width(), self.image.get_height() - self.rectOffY)
-
+        self.imageRect = Utils.rect(self.x, self.y, self.image.get_width(), 
+                self.image.get_height() - self.rectOffY)
 
     # Aplica un frame mas a la unidad
     def update(self):
@@ -67,14 +67,13 @@ class Zergling(Zerg.Zerg):
         elif self.state == Utils.State.DEAD: # Esta muerto
             pass
 
+    # Aplica un frame a la unidad quieta
     def updateStill(self):
         if len(self.paths) > 0:
             self.state = Utils.State.MOVING
         #aqui vendria un elif de si te atacan pasas a atacando
 
-    def addPath(self, path):
-        self.paths.apend(path)
-
+    # Aplica un frame de la unidad en movimiento
     def updateMoving(self):
         actualPath = self.paths[0]
         if actualPath.dist > 0: # Aun queda trecho
@@ -101,7 +100,20 @@ class Zergling(Zerg.Zerg):
         else: # Se acaba este camino
             self.paths.pop(0)
             if len(self.paths) == 0:
-                self.changeToStill()
+                self.changeToDying()
+
+    # Aplica un frame a la unidad atacando
+    #def updateAttacking(self):
+
+    # Aplica un frame a la unidad muriendo
+    def updateDying(self):
+        self.count += 1
+        if self.count >= self.framesToRefresh:
+            self.count = 0
+            if self.frame < (len(DIE_OFFSET) - 2):
+                self.updateDyingImage()
+            else:
+                self.changeToDead()
 
     # Devuelve la posicion en coordenadas del propio mapa
     def getPosition(self):
@@ -113,8 +125,13 @@ class Zergling(Zerg.Zerg):
                 self.imageRect.y - self.imageRect.h, self.imageRect.w, self.imageRect.h)
         return rectAux
 
+    # No es por meter mierda, pero a mi Zergling no lo cancela nadie, desgraciados
     def cancel(self):
         self.paths = []
+        
+    # Introduce un nuevo camino a la lista de caminos
+    def addPath(self, path):
+        self.paths.append(path)
 
     # Genera los sprites que son inversos, es todo un artista
     def mirrorTheChosen(self):
@@ -131,44 +148,53 @@ class Zergling(Zerg.Zerg):
     def isClicked(self):
         return self.clicked
 
+    # Pasa a estado quieto
     def changeToStill(self):
         self.state = Utils.State.STILL
         self.image = self.sprites[FRAMES[STILL_FRAMES][DIR_OFFSET[self.dir]]]
 
+    # Pasa a estado moverse
     def changeToMove(self):
         self.state = Utils.State.MOVING
         self.frame = 0
         self.image = self.sprites[FRAMES[MOVE_FRAMES[self.frame]][DIR_OFFSET[self.dir]]]
         
+    # Pasa al ataque HYAAAA!! >:c
     def changeToAttack(self):
         self.state = Utils.State.ATTACKING
         self.frame = 0
         self.image = self.sprites[FRAMES[ATTACK_FRAMES[self.frame]][DIR_OFFSET[self.dir]]]
 
+    # Pasa a morirse (chof)
     def changeToDying(self):
         self.state = Utils.State.DYING
         self.frame = 0
         self.image = self.sprites[FRAMES[DIE_FRAMES][DIE_OFFSET[self.frame]]]
 
-    def die(self):
+    # Pasa a muerto (chof del todo)
+    def changeToDead(self):
         self.state = Utils.State.DEAD
-        self.frame = len(DIE_OFFSET)
+        self.frame += 1
         self.image = self.sprites[FRAMES[DIE_FRAMES][DIE_OFFSET[self.frame]]]
 
+    # Pasa de frame en los frames quietos, no cambia nada puesto que esta quieto
     def updateStillImage(self):
         self.frame = (self.frame + 1) % len(STILL_FRAMES)
         self.image = self.sprites[FRAMES[STILL_FRAMES][DIR_OFFSET[self.dir]]]
         
+    # Pasa de frame en animaciones de movimiento
     def updateMovingImage(self):
         self.frame = (self.frame + 1) % len(MOVE_FRAMES)
         self.image = self.sprites[FRAMES[MOVE_FRAMES[self.frame]][DIR_OFFSET[self.dir]]]
     
+    # Pasa de frame en una animacion de ataque
     def updateAttackingImage(self):
         self.frame = (self.frame + 1) % len(ATTACK_FRAMES)
         self.image = self.sprites[FRAMES[ATTACK_FRAMES[self.frame]][DIR_OFFSET[self.dir]]]
 
+    # Pasa de frame en una animacion mortal
     def updateDyingImage(self):
-        if self.frame == len(DIE_FRAMES):
+        if self.frame == len(DIE_OFFSET): # el ultimo frame es de muerte definitiva
             print("ERROR: Zergling muerto, como que matarlo mas?")
             exit(1)
         self.frame = self.frame + 1
