@@ -26,12 +26,14 @@ player1 = Player.Player([],[],5,
   pygame.K_DOWN: Command.CommandId.MOVER_CAMARA_ABAJO,
   pygame.K_RIGHT: Command.CommandId.MOVER_CAMARA_DERECHA,
   pygame.K_LEFT: Command.CommandId.MOVER_CAMARA_IZQUIERDA,
+  pygame.K_r: Command.CommandId.ROTAR,
 },
 {
     Command.CommandId.MOVER_CAMARA_ARRIBA: pygame.K_UP,
   Command.CommandId.MOVER_CAMARA_ABAJO: pygame.K_DOWN,
   Command.CommandId.MOVER_CAMARA_DERECHA: pygame.K_RIGHT,
   Command.CommandId.MOVER_CAMARA_IZQUIERDA: pygame.K_LEFT,
+  Command.CommandId.ROTAR: pygame.K_r,
 }
 )
 
@@ -76,6 +78,9 @@ def procesarInput():
             escena.camera.h = event.h
             escena.camera.w = event.w
             screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
+        elif event.type == pygame.KEYUP:
+            print("·")
+            escena.checkUnHoldButton(event.key)
         else:
             escena.procesarEvent(event)
     escena.checkPressedButtons()

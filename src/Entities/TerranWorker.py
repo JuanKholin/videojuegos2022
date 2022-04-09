@@ -36,10 +36,10 @@ INVERSIBLE_FRAMES = len(FRAMES) - 1 # los die frames no se invierten
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
 # horario y empezando desde el norte, el mapeo dir-flist(range(289, 296))rame es:
 DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
-WEIGHT_PADDING =    [64,64,60,64,64,64,64,64,64,74,64,64,80,64, 64, 64]
-HEIGHT_PADDING =    [80,80,80,80,75,75,70,70,60,60,65,67,75,80, 80, 80]
-X_PADDING =         [43,30,30,30,30,30,30,40,40,45,48,50,40,48, 50, 50]
-Y_PADDING =         [47,47,50,47,45,40,40,37,47,45,43,45,40,40, 45, 45]
+WEIGHT_PADDING =    64
+HEIGHT_PADDING =    60
+X_PADDING =         40
+Y_PADDING =         47
 PADDING = 110
 
 class TerranWorker(Worker.Worker):
@@ -52,9 +52,10 @@ class TerranWorker(Worker.Worker):
         self.sprites = Entity.Entity.divideSpritesheetByRows(spritesheet, 
                 SPRITE_PIXEL_ROWS)
         self.mirrorTheChosen()
-        self.dir = 12
+        self.dir = 0
         self.changeToMining()
         print(self.x, self.y,self.image.get_width(),self.image.get_height() )
+        print(self.getRect().x - self.getRect().w,self.getRect().y - self.getRect().h)
         #self.imageRect = Utils.rect(self.x, self.y, self.image.get_width() - WEIGHT_PADDING, 
                 #self.image.get_height() - HEIGHT_PADDING)
         #self.imageRect = Utils.rect(self.x - self.image.get_width()/2, self.y -self.image.get_height() , self.image.get_width(), self.image.get_height())
@@ -68,8 +69,8 @@ class TerranWorker(Worker.Worker):
         return(self.x - self.image.get_width()/2,  self.y - self.image.get_height()/2)
     # Devuelve el rectangulo que conforma su imagen, creo, esto lo hizo otro
     def getRect(self):
-        rectAux = pg.Rect(self.x - X_PADDING[self.dir], 
-                self.y - Y_PADDING[self.dir], self.image.get_width() - WEIGHT_PADDING[self.dir], self.image.get_height()  - HEIGHT_PADDING[self.dir])
+        rectAux = pg.Rect(self.x - X_PADDING, 
+                self.y - Y_PADDING, self.image.get_width() - WEIGHT_PADDING, self.image.get_height()  - HEIGHT_PADDING)
         return rectAux
     def update(self):
         if self.state == Utils.State.STILL: # Esta quieto
@@ -97,7 +98,6 @@ class TerranWorker(Worker.Worker):
     def updateMinig(self):
         self.count += 1
         if self.count >= self.framesToRefresh:
-            print(self.frame)
             self.count = 0
             self.updateMiningImage()
         if len(self.paths) > 0:

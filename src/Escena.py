@@ -85,6 +85,13 @@ class Escena():
         if key[self.p1.commandMap[Command.CommandId.MOVER_CAMARA_DERECHA]]:
             self.camera.moverDerecha(self.mapa.w)
 
+    def checkUnHoldButton(self, key):
+        if self.p1.commandMap[Command.CommandId.ROTAR] == key:
+            for unit in self.p1.unitsSelected:
+                print(unit.getRect().x - unit.getRect().w,unit.getRect().y - unit.getRect().h)
+                unit.dir = (unit.dir + 1)%16
+
+
     def update(self):
         units = self.p1.units + self.p2.units
         for unit in units:
@@ -94,16 +101,18 @@ class Escena():
                 path = unit.paths[0]
                 pathObj = unit.paths[unit.paths.__len__() - 1]
                 tilePath = self.mapa.getTile(path.posFin[0],path.posFin[1])
-                #print("Tilepath es: ", tilePath.centerx, tilePath.centery)
+                print("Tilepath es: ", tilePath.tileid, tilePath.type, tilePath.id, "==",unit.id)
                 tileObj = self.mapa.getTile(pathObj.posFin[0],pathObj.posFin[1])
                 if tilePath.type != 2 or ((tilePath.id == unit.id) and (tilePath.type == 2)):
                     dirX = math.cos(path.angle)
                     dirY = math.sin(path.angle)
                     tileSiguiente = self.mapa.getTile(unitPos[0] + dirX*unit.speed, unitPos[1] + dirY*unit.speed)
+                    print(tileSiguiente.tileid)
                     if tileActual != tileSiguiente :
                         if tileActual.type != 1:
                             self.mapa.setLibre(tileActual)
                             if tileSiguiente.type != 1:
+                                input()
                                 self.mapa.setVecina(tileSiguiente, unit.id)
                     else:
                         if tileActual.type != 1:
