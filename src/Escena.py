@@ -24,6 +24,7 @@ class Escena():
         relative_mouse_pos = pygame.mouse.get_pos()
         real_mouse_pos = (relative_mouse_pos[0] + self.camera.x, relative_mouse_pos[1] + self.camera.y)
         pathsForPlayer = []
+        orderForPlayer = []
         if command.id == Command.CommandId.MOVER: # 1 es moverse
             for param in command.params:
                 tileObj = self.mapa.getTile(real_mouse_pos[0], real_mouse_pos[1])
@@ -32,7 +33,7 @@ class Escena():
                 print("pos final tile centro x e y: ", tileObj.centerx, tileObj.centery)
                 tileIni = self.mapa.getTile(param[0], param[1])
                 print("pos ini tile centro x e y: ", tileIni.centerx, tileIni.centery)
-                while tileObj.type == 2: #Esta ocupada
+                while tileObj.type != 0: #Esta ocupada
                     print("QUE COJONES")
                     posibles = self.mapa.getTileVecinas(tileObj)
                     mejor = posibles[0]
@@ -70,9 +71,20 @@ class Escena():
                     if path.__len__() > 0:
 
                         path.append(Utils.path(math.atan2(real_mouse_pos[1] - posIni[1], real_mouse_pos[0] - posIni[0]), int(math.hypot(real_mouse_pos[0] - posIni[0], real_mouse_pos[1] - posIni[1])),real_mouse_pos))
+                
+                #COMPROBAR QUE LA TILE CLICKADA CORRESPONDE A DISTINTAS ENTIDADES
+                # COMPROBAR SI HA CLICKADO UN ORE
+                tileCLikced = self.mapa.getTile(posFinal[0], posFinal[1])
+                order = {'order': Command.CommandId.MOVER, 'angle': 0}
+                if tileCLikced.type == 3:
+                    order = {'order': Command.CommandId.MINAR, 'angle': math.atan2(posFinal[1] - posIni[1], posFinal[0] - posIni[0]) }
+                    orderForPlayer.append(order)
+                else:
+                    orderForPlayer.append(order)
                 pathsForPlayer.append(path)
             self.p1.execute(Command.CommandId.MOVER, pathsForPlayer)
-
+            self.p1.execute(Command.CommandId.ORDENAR, orderForPlayer)
+                
         pass
     def checkPressedButtons(self):
         key = pygame.key.get_pressed()
@@ -101,21 +113,19 @@ class Escena():
                 path = unit.paths[0]
                 pathObj = unit.paths[unit.paths.__len__() - 1]
                 tilePath = self.mapa.getTile(path.posFin[0],path.posFin[1])
-                print("Tilepath es: ", tilePath.tileid, tilePath.type, tilePath.id, "==",unit.id)
                 tileObj = self.mapa.getTile(pathObj.posFin[0],pathObj.posFin[1])
                 if tilePath.type != 2 or ((tilePath.id == unit.id) and (tilePath.type == 2)):
                     dirX = math.cos(path.angle)
                     dirY = math.sin(path.angle)
-                    tileSiguiente = self.mapa.getTile(unitPos[0] + dirX*unit.speed, unitPos[1] + dirY*unit.speed)
-                    print(tileSiguiente.tileid)
+                    tileSiguiente = self.mapa.getTile(int(unitPos[0] + dirX*unit.speed + 0.5), int(unitPos[1] + dirY*unit.speed + 0.5))
                     if tileActual != tileSiguiente :
-                        if tileActual.type != 1:
+                        print("es de este tipo, ", tileActual.type)
+                        if tileActual.type != 1 and tileActual.type != 3:
                             self.mapa.setLibre(tileActual)
-                            if tileSiguiente.type != 1:
-                                input()
+                            if tileSiguiente.type != 1 and tileSiguiente.type != 3:
                                 self.mapa.setVecina(tileSiguiente, unit.id)
                     else:
-                        if tileActual.type != 1:
+                        if tileActual.type != 1 and tileActual.type != 3:
                             self.mapa.setVecina(tileActual, unit.id)
                 else:
 

@@ -8,6 +8,8 @@ class CommandId(IntEnum):
     MOVER_CAMARA_IZQUIERDA = 5
     GENERAR_UNIDAD = 6
     ROTAR = 7
+    ORDENAR = 8
+    MINAR = 9
 
 
 class Command:

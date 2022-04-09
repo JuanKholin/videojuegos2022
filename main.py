@@ -39,7 +39,7 @@ player1 = Player.Player([],[],5,
 
 terran1 = Terran.Terran(40, 80, 80, 20, 200, 1, 5, "terranSprites", 8, 6,1)
 terran2 = Terran.Terran(40, 200, 200, 20, 200, 1, 5, "terranSprites", 8, 6,2)
-scv = TerranWorker.TerranWorker(13, 5, 3)
+scv = TerranWorker.TerranWorker(2, 5, 3)
 zergling2 = Zergling.Zergling(10, 10)
 structure1 = TerranBuilder.TerranBuilder(200, 40, 600, 200, 300, player1, mapa, "SPRITE/builder",2)
 
@@ -64,6 +64,7 @@ camera = Camera.Camera(20, 20, SCREEN_HEIGHT, SCREEN_WIDTH)
 
 # Escena
 escena = Escena.Escena(player1, player2, aI, mapa, camera, raton)
+escena.mapa.addOre(100,100)
 
 
 def procesarInput():

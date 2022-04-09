@@ -67,14 +67,19 @@ class Map():
                    pygame.draw.rect(screen, Utils.RED, pygame.Rect(cameraRectCoords), 1)
                 elif tile.type == 0:
                     pygame.draw.rect(screen, Utils.GREEN, pygame.Rect(cameraRectCoords),1)
-                else:
+                elif tile.type == 3:
                     pygame.draw.rect(screen, Utils.BLUE, pygame.Rect(cameraRectCoords),1)
+                else:
+                    pygame.draw.rect(screen, Utils.PURPLE, pygame.Rect(cameraRectCoords),1)
     
     #Pone a true las Tiles del rectangulo que forman x,y,w,h
     def addObstacle(self, x,y,w,h):
         for i in range(h): #Recorro el mapa  por las filas
             for j  in range(w): #En la fila i recorro las columnas
                 self.map[i+int(y/self.th)][j+int(x/self.tw)].type = 1
+    
+    def addOre(self, x,y):
+        self.map[int(y/self.th)][int(x/self.tw)].type = 3
     
     #Devuelve la Tile que se encuentra en las coordenadas x,y
     def getTile(self, x, y):

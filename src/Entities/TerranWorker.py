@@ -1,6 +1,8 @@
 import pygame as pg
 import math
 
+from .. import Command
+
 from . import Worker, Entity
 from .. import Utils
 
@@ -53,14 +55,15 @@ class TerranWorker(Worker.Worker):
                 SPRITE_PIXEL_ROWS)
         self.mirrorTheChosen()
         self.dir = 0
-        self.changeToMining()
+        self.changeToStill()
         print(self.x, self.y,self.image.get_width(),self.image.get_height() )
         print(self.getRect().x - self.getRect().w,self.getRect().y - self.getRect().h)
         #self.imageRect = Utils.rect(self.x, self.y, self.image.get_width() - WEIGHT_PADDING, 
                 #self.image.get_height() - HEIGHT_PADDING)
         #self.imageRect = Utils.rect(self.x - self.image.get_width()/2, self.y -self.image.get_height() , self.image.get_width(), self.image.get_height())
         #self.imageRect = Utils.rect(self.x, self.y, self.image.get_width(), self.image.get_height())
-
+    def setOrder(self, order):
+        self.order = order
     
     def getPosition(self):
         r = self.getRect()
@@ -128,11 +131,22 @@ class TerranWorker(Worker.Worker):
                 self.count = 0
                 self.updateMovingImage()
         else: # Se acaba este camino
+            print(self.getRect())
             self.paths.pop(0)
             if len(self.paths) == 0:
-                self.dir = 8
-                self.changeToStill()
-
+                print(self.order)
+                if self.order['order'] == Command.CommandId.MOVER:
+                    self.dir = 8
+                    self.changeToStill()
+                elif self.order['order'] == Command.CommandId.MINAR:
+                    angle = self.order['angle']
+                    if angle < 0:
+                        self.angle = -angle
+                    else:
+                        self.angle = 2 * math.pi - angle
+                    self.dir = int(4 - (self.angle * 8 / math.pi)) % 16          
+            
+                    self.changeToMining()
     # Aplica un frame a la unidad atacando
     #def updateAttacking(self):
 

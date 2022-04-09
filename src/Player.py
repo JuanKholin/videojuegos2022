@@ -53,6 +53,10 @@ class Player():
                 self.unitsSelected[i].paths = param[i]
                 for path in param[i]:
                     print("Posicion final: ",path.posFin, path.angle)
+        elif id == Command.CommandId.ORDENAR:
+            for i in range(param.__len__()):
+                print("ME han mandado:" ,param[i])
+                self.unitsSelected[i].setOrder(param[i])
     def draw(self, screen, camera):
         for structure in self.structures:
             r = structure.getRect()
