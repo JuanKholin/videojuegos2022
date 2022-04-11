@@ -1,5 +1,5 @@
 import pygame
-from . import Structure, Terran
+from . import Structure, TerranWorker
 from .. import Player, Map, Utils
 
 WHITE   = (255,255,255)
@@ -8,20 +8,14 @@ class TerranBuilder(Structure.Structure):
     sprites = []
     training = []
     rectOffY = 10
-    index = 0
     generationTime = 0
     generationCount = 0
-    x = 0
-    y = 0
-    clicked = False
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, sprites,id):
-        Structure.Structure.__init__(self, hp, mineralCost, generationTime,id)
+        Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, id)
         self.player = player
         for i in range(6): #0-3 construccion, 4 estado normal y 5 generando tropas
             self.sprites.insert(i,pygame.image.load(sprites + "/tile00" + str(i) + ".png"))
-        self.x = xini
-        self.y = yini
         self.map = map
         self.building = True 
         self.image = self.sprites[self.index]
@@ -32,7 +26,7 @@ class TerranBuilder(Structure.Structure):
     def update(self):
         if self.building:
             self.count += 1
-            if self.count == 120:
+            if self.count == self.generationTime/3:
                 self.index += 1
                 self.count = 0
                 if self.index == 4:
@@ -46,7 +40,7 @@ class TerranBuilder(Structure.Structure):
                 else:
                     self.index = 5
             self.generationCount += 1
-            if self.generationCount == Utils.CLOCK_PER_SEC*self.training[0].getGenerationTime():
+            if self.generationCount == Utils.CLOCK_PER_SEC*self.training[0].generationTime:
                 terran = self.training[0]
                 self.player.addUnits(terran)
                 self.generationCount = 0
@@ -84,6 +78,6 @@ class TerranBuilder(Structure.Structure):
         if self.clicked:
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_v:
-                    terran = Terran.Terran(40, self.x, self.y+self.rectn.h, 20, 10, 2, 5, "terranSprites", 8, 6, 3)
-                    self.generateUnit(terran)
+                    terranWorker = TerranWorker.TerranWorker(self.x/40, (self.y+self.rectn.h)/40, 1)
+                    self.generateUnit(terranWorker)
 

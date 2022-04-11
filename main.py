@@ -1,7 +1,7 @@
 import pygame, sys
 import math
 from src import Map, Raton, Escena, Player, Camera, AI, Command, Utils
-from src.Entities import Terran, TerranBuilder, Zergling, TerranWorker
+from src.Entities import Terran, TerranBuilder, Zergling, TerranBarracks,  TerranWorker
 
 pygame.init()
 
@@ -42,12 +42,15 @@ terran2 = Terran.Terran(40, 200, 200, 20, 200, 1, 5, "terranSprites", 8, 6,2)
 scv = TerranWorker.TerranWorker(2, 5, 3)
 zergling2 = Zergling.Zergling(10, 10)
 structure1 = TerranBuilder.TerranBuilder(200, 40, 600, 200, 300, player1, mapa, "SPRITE/builder",2)
+structure2 = TerranBarracks.TerranBarracks(200, 40, 600, 500, 300, player1, mapa, "SPRITE/barracks",3)
 
-#player1.addStructures(structure1)
+
+player1.addStructures(structure1)
+player1.addStructures(structure2)
 #player1.addUnits(terran1)
 #player1.addUnits(terran2)
 #player1.addUnits(zergling2)
-player1.addUnits(scv)
+#player1.addUnits(scv)
 
 # IA
 player2 = Player.Player([], [], 5, [], [])
@@ -81,7 +84,8 @@ def procesarInput():
             screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
         elif event.type == pygame.KEYUP:
             print("·")
-            escena.checkUnHoldButton(event.key)
+            escena.procesarEvent(event)
+            #escena.checkUnHoldButton(event.key)
         else:
             escena.procesarEvent(event)
     escena.checkPressedButtons()
