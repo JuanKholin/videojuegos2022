@@ -75,12 +75,13 @@ varying vec2 vUv; // coordenadas de textura
 varying vec3 vNormal; // normal del vertice en espacio de la camara
 varying vec4 vPosition; // posicion del vertice en espacio de la camara
 
-void main() {
+void main(){
 
 	// Calculos para dar valor a las varying aqui
-  vUv = uv;
-  vNormal = (modelViewMatrix * vec4(normal, 0.)).xyz;
-  vPosition = modelViewMatrix * vec4(position, 1.0);
+  vUv = uv; // No hay que afectarlas puesto que ya están en espacio de textura
+  // Hay que transformar las coordenadas a espacio de la camara
+  vNormal = (modelViewMatrix * vec4(normal, 0.)).xyz; // Añade un 0 puesto que es una distancia
+  vPosition = modelViewMatrix * vec4(position, 1.0); // Añade un 1 puesto que es un punto
 
     // El vertex shader debe proporcionar gl_Position (en espacio homogeneo o de pantalla)
     // Transformar posiciones a espacio homogeneo
@@ -119,21 +120,28 @@ vec3 from_sRGB(vec3 c) { return pow(c, vec3(2.2)); }
 
 void main() {
 
+    // Este será el resultado calculado
     vec3 finalColor = vec3(0.0, 0.0, 0.0);
 
     // Calculos necesarios para la iluminacion aqui
-    // A grosso modo:
+    // Grosso modo:
     vec3 v, l, n, h, lightResult, thisLightResult, cDiff, cSpec, leftSide,
         rightSide;
     float r2, m;
+    // Componente difusa extraída directamente de la textura
     cDiff = from_sRGB(texture2D(diffuseTexture, vUv).rgb);
+    // Componente especular asumimos por el enunciado que vale 1
     cSpec = vec3(1.0, 1.0, 1.0);
+    // Ya que viene la roughness invertida, se reinvierte aquí para tratarla correctamente
     m = pow(roughness, -1.0);
+    // Normaliza las direcciones n y v ya que interesan como vectores unitarios
     n = normalize(vNormal);
     v = normalize(-vPosition.xyz);
+    // Aquí se va a acumular el resultado de todas las luces
     lightResult = vec3(0.0, 0.0, 0.0);
     // Para cada una de las luces, si es que hay más de una, que ni eso se sabe:
     for (int i = 0; i < NUM_LIGHTS; i++){
+      // l es el vector de la luz al punto en coordenadas de la camara
       l = normalize(lightPositions[i] - vPosition.xyz);
       h = normalize(v + l); // Si v y l son mismo módulo, v + l es bisectriz
       r2 = pow(distance(lightPositions[i], v), 2.0);
@@ -141,7 +149,7 @@ void main() {
       leftSide = (1.0 / r2) * (cDiff + cSpec * pow(max(dot(n, h), 0.0), m));
       // Después lado derecho de la ecuación:
       rightSide = lightColors[i] * (max(dot(n, l), 0.0));
-      // Juntar todo:
+      // Juntar todo: acumular resultado de las luces
       thisLightResult = leftSide * rightSide;
       lightResult = lightResult + thisLightResult;
     }

@@ -87,6 +87,9 @@ void main(){
 
 	// Calculos para dar valor a las varying aqui
   vUv = uv;
+  //pasa la normal geometrica, la posición del vértice, la tengente
+  //perpendicular a la normal y la segunda tangente perpendicular a estas
+  //dos al espacio de la cámara de la cámara
   vNormal = (modelViewMatrix * vec4(normal, 0.)).xyz;
   vPosition = modelViewMatrix * vec4(position, 1.0);
   vTangent = modelViewMatrix * vec4(tangent, 0);
@@ -137,32 +140,41 @@ vec3 from_sRGB(vec3 c) { return pow(c, vec3(2.2)); }
 
 void main() {
 
+  // Este será el resultado calculado
   vec3 finalColor = vec3(0.0, 0.0, 0.0);
 
-  // Matrix Tangent - Camera
-  vec3 nTangent = texture2D(normalMap, vUv).rgb - 0.5;
+  //pasamos las normales al rango [0,1]
+  vec3 nTangent = texture2D(normalMap, vUv).rgb - 0.5; //vector normal en espacio tangente
   nTangent[1] = -nTangent[1]; // DirectX tiene negativa la y
   // Aplica bumpiness
   nTangent[1] = nTangent[1] * bumpiness;
   nTangent[0] = nTangent[0] * bumpiness;
 
-  mat3 Mtc = mat3(vTangent[0], vBitangent[0], vNormal[0], //normal geometrica
+  // Tangent Matrix (from tangent space to camera spaace)
+  mat3 Mtc = mat3(vTangent[0], vBitangent[0], vNormal[0],
                   vTangent[1], vBitangent[1], vNormal[1],
                   vTangent[2], vBitangent[2], vNormal[2]);
 
   // Calculos necesarios para la iluminacion aqui
-  // Grosso modo:
   vec3 v, l, n, h, lightResult, thisLightResult, cDiff, cSpec, leftSide,
       rightSide;
   float r2, m;
+  // Componente difusa extraída directamente de la textura
   cDiff = from_sRGB(texture2D(diffuseTexture, vUv).rgb);
+  // Componente especular asumimos por el enunciado que vale 1
   cSpec = vec3(1.0, 1.0, 1.0);
+  // Ya que viene la roughness invertida, se reinvierte aquí para tratarla correctamente
   m = pow(roughness, -1.0);
+  // Normaliza las direcciones n y v ya que interesan como vectores unitarios
+  //las tangentes en el mapa de tangentes están en espacio tangente. Las pasamos
+  //a espacio de la cámara
   n = normalize(Mtc * nTangent);
   v = normalize(-vPosition.xyz);
+  // Aquí se va a acumular el resultado de todas las luces
   lightResult = vec3(0.0, 0.0, 0.0);
   // Para cada una de las luces, si es que hay más de una, que ni eso se sabe:
   for (int i = 0; i < NUM_LIGHTS; i++){
+    // l es el vector de la luz al punto en coordenadas de la camara
     l = normalize(lightPositions[i] - vPosition.xyz);
     h = normalize(v + l); // Si v y l son mismo módulo, v + l es bisectriz
     r2 = pow(distance(lightPositions[i], v), 2.0);
@@ -170,7 +182,7 @@ void main() {
     leftSide = (1.0 / r2) * (cDiff + cSpec * pow(max(dot(n, h), 0.0), m));
     // Después lado derecho de la ecuación:
     rightSide = lightColors[i] * (max(dot(n, l), 0.0));
-    // Juntar todo:
+    // Juntar todo: acumular resultado de las luces
     thisLightResult = leftSide * rightSide;
     lightResult = lightResult + thisLightResult;
   }

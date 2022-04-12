@@ -72,8 +72,9 @@ varying vec4 vPosition; // posicion del vertice en espacio de la camara
 void main() {
 
 	// Calculos para dar valor a las varying aqui
-  vNormal = (modelViewMatrix * vec4(normal, 0.)).xyz;
-  vPosition = modelViewMatrix * vec4(position, 1.0);
+  // Hay que transformar las coordenadas a espacio de la camara
+  vNormal = (modelViewMatrix * vec4(normal, 0.)).xyz; // Añade un 0 puesto que es una distancia
+  vPosition = modelViewMatrix * vec4(position, 1.0); // Añade un 1 puesto que es un punto
     // El vertex shader debe proporcionar gl_Position (en espacio homogeneo o de pantalla)
     // Transformar posiciones a espacio homogeneo
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
@@ -100,11 +101,11 @@ void main(){
 
     // Calculos necesarios para la reflexion y el acceso al mapa de entorno aqui
     vec3 r, colorRef;
-    // r = reflect(vPosition.xyz, vNormal);
+    // r calcula la reflexion para el punto según su normal
     r = reflect(vPosition.xyz, vNormal);
+    // Según la reflexión calculada apunta a un punto de la textura de entorno
     colorRef = textureCube(environmentMap, r).rgb;
     // colorRef debe acabar conteniendo la intensidad/color resultante en el fragment (el valor obtenido del mapa de entorno)
-    // gl_FragColor
     gl_FragColor = vec4(colorRef, 1.0); // placeholder - luego sera: gl_FragColor = colorRef;
 
 }
