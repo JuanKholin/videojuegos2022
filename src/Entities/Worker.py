@@ -6,3 +6,6 @@ class Worker(Unit.Unit):
 
     def update():
         pass
+
+    def work():
+        pass

@@ -1,20 +1,18 @@
 import pygame, math
 
 from . import Command
+from . import Utils
 from . import Player
-
-
-GREEN   = (0,255,0)
 
 def printRectangulo(screen, initialX, initialY, finalX, finalY):
     if finalX>=initialX and finalY>=initialY:
-        pygame.draw.rect(screen, GREEN, [initialX, initialY, finalX-initialX, finalY-initialY], 1)
+        pygame.draw.rect(screen, Utils.GREEN, [initialX, initialY, finalX-initialX, finalY-initialY], 1)
     elif finalX>=initialX and finalY<initialY:
-        pygame.draw.rect(screen, GREEN, [initialX, finalY, finalX-initialX, initialY-finalY], 1)
+        pygame.draw.rect(screen, Utils.GREEN, [initialX, finalY, finalX-initialX, initialY-finalY], 1)
     elif finalX<initialX and finalY>=initialY:
-        pygame.draw.rect(screen, GREEN, [finalX, initialY, initialX-finalX, finalY-initialY], 1)
+        pygame.draw.rect(screen, Utils.GREEN, [finalX, initialY, initialX-finalX, finalY-initialY], 1)
     else: #finalX<initialX and finalY<initialY
-        pygame.draw.rect(screen, GREEN, [finalX, finalY, initialX-finalX, initialY-finalY], 1)
+        pygame.draw.rect(screen, Utils.GREEN, [finalX, finalY, initialX-finalX, initialY-finalY], 1)
 
 
 #FUNCIONES DEL RATON

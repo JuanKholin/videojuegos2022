@@ -4,7 +4,7 @@ import math
 from . import Zerg, Entity
 from .. import Utils
 
-# Constantes
+# Constantes del Zergling
 HP = 40
 MINERAL_COST = 20
 GENERATION_TIME = 200
@@ -31,10 +31,9 @@ DIE_OFFSET = [0, 1, 2, 3, 4, 5, 6]
 
 INVERSIBLE_FRAMES = len(FRAMES) - 1 # los die frames no se invierten
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
-# horario y empezando desde el norte, el mapeo dir-flist(range(289, 296))rame es:
+# horario y empezando desde el norte, el mapeo dir-frame es:
 DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
 PADDING = 110
-ID = 4
 
 class Zergling(Zerg.Zerg):
     # Pre: xIni e yIni marcan posiciones del mapa, (ej: (3, 2) se refiere a la posicion de 
@@ -43,7 +42,7 @@ class Zergling(Zerg.Zerg):
     def __init__(self, xIni, yIni):
         Zerg.Zerg.__init__(self, HP, xIni * 40 + 20, yIni * 40 + 20, MINERAL_COST, 
                 GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, 
-                PADDING, ID)
+                PADDING, Utils.takeID())
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey(Utils.BLACK)
         self.sprites = Entity.Entity.divideSpritesheetByRows(spritesheet, 

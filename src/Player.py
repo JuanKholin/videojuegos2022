@@ -15,7 +15,7 @@ def createRect(initialX, initialY, finalX, finalY):
 
 def collides(x,y, rect2):
     return (x >= rect2.x and x <= rect2.x + rect2.w and y >= rect2.y and y <= rect2.y + rect2.h )
-    
+
 
 class Player():
     def __init__(self, units, structures, resources, keyMap, commandMap):
@@ -29,8 +29,8 @@ class Player():
         self.pulsado = False
         self.initialX = 0
         self.initialY = 0
-    def processEvent(self,event):
 
+    def processEvent(self,event):
         for structure in self.structures:
             structure.processEvent(event)
         if event.type == pygame.KEYDOWN:
@@ -43,10 +43,13 @@ class Player():
             structure.update()
         for unit in self.units:
             unit.update()
+
     def addUnits(self,unit):
         self.units.append(unit)
+
     def addStructures(self,structures):
         self.structures.append(structures)
+
     def execute(self,id, param):
         if id == Command.CommandId.MOVER: #Mover unidades
             for i in range(param.__len__()):

@@ -11,7 +11,6 @@ class Escena():
         self.camera = camera
         self.raton = raton
 
-
     def procesarEvent(self, event):
         #command = pi.procesarEvent(event)
         #if map.check(command) and p1.check(command):
@@ -102,7 +101,6 @@ class Escena():
             for unit in self.p1.unitsSelected:
                 print(unit.getRect().x - unit.getRect().w,unit.getRect().y - unit.getRect().h)
                 unit.dir = (unit.dir + 1)%16
-
 
     def update(self):
         units = self.p1.units + self.p2.units

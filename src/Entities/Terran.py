@@ -3,18 +3,9 @@ import math
 from . import Unit
 from .. import Utils
 
-BLACK   = (0,0,0)
-WHITE   = (255,255,255)
-GREEN   = (0,255,0)
-RED     = (255,0,0)
-BLUE    = (0,0,255)
-
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 400
-
 class Terran(Unit.Unit):
-    def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, faces, frames, id):
-        Unit.Unit.__init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, faces, frames, 8, id)
+    def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, faces, frames):
+        Unit.Unit.__init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, faces, frames, 8, Utils.takeID())
         #INICIALIZACION DE LOS MISMOS
         for i in range(16):
             self.sprites.insert(i,[])
@@ -43,10 +34,10 @@ class Terran(Unit.Unit):
                 if actualPath.angle < 0:
                     self.angle = -actualPath.angle
                 else:
-                    self.angle = 2*math.pi - actualPath.angle
+                    self.angle = 2 * math.pi - actualPath.angle
                 self.x = math.cos(actualPath.angle)
                 self.y = math.sin(actualPath.angle)
-                distrec = math.hypot((self.rectn.x + self.x*self.speed) - self.rectn.x, (self.rectn.y + self.y*self.speed) - self.rectn.y)
+                distrec = math.hypot((self.rectn.x + self.x * self.speed) - self.rectn.x, (self.rectn.y + self.y*self.speed) - self.rectn.y)
                 actualPath.dist -= distrec
                 self.rectn.x += self.x*self.speed
                 self.rectn.y += self.y*self.speed
@@ -67,34 +58,33 @@ class Terran(Unit.Unit):
                     self.frame = 6
                     self.face = 8
 
-    def atacar():
-        pass
-    def construir():
-        pass
     def addPath(self,path):
         self.paths.append(path)
+
     def isClicked(self):
         return self.clicked
+
     def setClicked(self, click):
         self.clicked = click
+
     def resize(self):
         self.image = pygame.transform.scale2x(self.image)
         self.rectn.w = self.image.get_width()
         self.rectn.h = self.image.get_height() - self.rectOffY
+
     def cancel(self):
         self.paths = []
         self.frame = 6
         self.face = 8
+
     def getRect(self):
         #print(self.rectn.w, self.rectn.y)
         rectAux = pygame.Rect(self.rectn.x - self.rectn.w/2, self.rectn.y - self.rectn.h, self.rectn.w, self.rectn.h)
         return rectAux
+
     def getPosition(self):
         return (self.rectn.x- self.rectn.w/2, self.rectn.y - self.rectn.h/2)
-    def atacar():
-        pass
-    def construir():
-        pass
+
     def getGenerationTime(self):
         return self.generationTime
 

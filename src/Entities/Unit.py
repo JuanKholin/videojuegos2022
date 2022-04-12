@@ -22,5 +22,3 @@ class Unit(Entity.Entity):
 
     def update(self):
         pass
-
- 
