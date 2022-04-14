@@ -3,13 +3,14 @@ from . import Player, Command, Utils
 from datetime import datetime
 
 class Escena():
-    def __init__(self, p1, p2, aI, mapa, camera, raton):
+    def __init__(self, p1, p2, aI, mapa, camera, raton, interfaz):
         self.p1 = p1
         self.p2 = p2
         self.aI = aI
         self.mapa = mapa
         self.camera = camera
         self.raton = raton
+        self.interfaz = interfaz
 
     def procesarEvent(self, event):
         #command = pi.procesarEvent(event)
@@ -258,3 +259,4 @@ class Escena():
         self.p1.draw(screen, self.camera)
         self.p2.draw(screen, self.camera)
         self.raton.draw(screen, self.camera)
+        self.interfaz.draw(screen)

@@ -1,6 +1,6 @@
 import pygame, sys
 import math
-from src import Map, Raton, Escena, Player, Camera, AI, Command, Utils
+from src import Map, Raton, Escena, Player, Camera, AI, Command, Utils, Interface
 from src.Entities import Terran, TerranBuilder, Zergling, TerranBarracks, TerranWorker
 
 # Auxiliar del bucle principal
@@ -27,13 +27,8 @@ def procesarInput():
 # Programa principal
 pygame.init()
 
-X_TILES = 20
-Y_TILES = 10
 
-SCREEN_WIDTH = X_TILES * 40
-SCREEN_HEIGHT = Y_TILES * 40
-
-size = (SCREEN_WIDTH, SCREEN_HEIGHT)
+size = (Utils.SCREEN_WIDTH, Utils.SCREEN_HEIGHT)
 screen =  pygame.display.set_mode(size, pygame.RESIZABLE)
 
 #Controlar frames por segundo
@@ -57,6 +52,7 @@ commandMap ={
   Command.CommandId.ROTAR: pygame.K_r,
 }
 player1 = Player.Player([],[],100, keyMap, commandMap)
+p1Interface = Interface.Interface(player1)
 terran1 = Terran.Terran(40, 80, 80, 20, 200, 1, 5, "terranSprites", 8, 6)
 terran2 = Terran.Terran(40, 200, 200, 20, 200, 1, 5, "terranSprites", 8, 6)
 #scv = TerranWorker.TerranWorker(2, 5, 3)
@@ -82,10 +78,10 @@ raton = Raton.raton(sprite_ruta, player1)
 
 # Camara 
 # pre: mapa tan grande como ventana
-camera = Camera.Camera(20, 20, SCREEN_HEIGHT, SCREEN_WIDTH)
+camera = Camera.Camera(20, 20, Utils.SCREEN_HEIGHT, Utils.SCREEN_WIDTH)
 
 # Escena
-escena = Escena.Escena(player1, player2, aI, mapa, camera, raton)
+escena = Escena.Escena(player1, player2, aI, mapa, camera, raton, p1Interface)
 escena.mapa.addOre(100,100)
 
 # Bucle principal

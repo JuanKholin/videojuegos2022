@@ -1,5 +1,7 @@
 from enum import Enum, auto, IntEnum
 
+ENTITY_ID = 0
+
 # Constantes para los colores
 WHITE   = (255,255,255)
 BLACK   = (0,0,0)
@@ -7,6 +9,12 @@ GREEN   = (0, 255, 0)
 RED     = (255, 0, 0)
 BLUE    = (0, 0, 255)
 PURPLE    = (255, 0, 255)
+
+X_TILES = 20
+Y_TILES = 10
+
+SCREEN_WIDTH = X_TILES * 40
+SCREEN_HEIGHT = Y_TILES * 40
 
 CLOCK_PER_SEC = 60
 
