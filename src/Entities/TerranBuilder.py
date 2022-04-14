@@ -1,6 +1,6 @@
 import pygame
 from . import Structure, TerranWorker
-from .. import Player, Map, Utils
+from .. import Player, Map, Utils, Tile
 
 WHITE   = (255,255,255)
 
@@ -42,6 +42,11 @@ class TerranBuilder(Structure.Structure):
             self.generationCount += 1
             if self.generationCount == Utils.CLOCK_PER_SEC*self.training[0].generationTime:
                 terran = self.training[0]
+                terranPos = terran.getPosition()
+                terranTile = self.map.getTile(terranPos[0], terranPos[1])
+                if terranTile.type != 0:
+                    vecinas = self.map.getTileVecinas(terranTile)
+                    terran.setTilePosition(vecinas[0]) 
                 self.player.addUnits(terran)
                 self.generationCount = 0
                 del self.training[0]

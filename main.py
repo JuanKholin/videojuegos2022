@@ -19,7 +19,7 @@ def procesarInput():
         elif event.type == pygame.KEYUP:
             print("·")
             escena.procesarEvent(event)
-            #escena.checkUnHoldButton(event.key)
+            escena.checkUnHoldButton(event.key)
         else:
             escena.procesarEvent(event)
     escena.checkPressedButtons()
@@ -56,7 +56,7 @@ commandMap ={
   Command.CommandId.MOVER_CAMARA_IZQUIERDA: pygame.K_LEFT,
   Command.CommandId.ROTAR: pygame.K_r,
 }
-player1 = Player.Player([],[],5, keyMap, commandMap)
+player1 = Player.Player([],[],100, keyMap, commandMap)
 terran1 = Terran.Terran(40, 80, 80, 20, 200, 1, 5, "terranSprites", 8, 6)
 terran2 = Terran.Terran(40, 200, 200, 20, 200, 1, 5, "terranSprites", 8, 6)
 #scv = TerranWorker.TerranWorker(2, 5, 3)

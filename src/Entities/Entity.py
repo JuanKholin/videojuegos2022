@@ -1,11 +1,13 @@
 import pygame as pg
 
 class Entity():
-    def __init__(self, hp, mineralCost, generationTime, id):
+    def __init__(self, hp, xIni, yIni, mineralCost, generationTime, id):
         self.hp = hp
         self.mineralCost = mineralCost
         self.generationTime = generationTime
         self.id = id
+        self.x = xIni
+        self.y = yIni
 
     def update():
         pass
@@ -23,3 +25,11 @@ class Entity():
             
             sprites.append(aux)
         return sprites
+    
+    def setPosition(self, x, y):
+        self.x = x
+        self.y = y
+        
+    def setTilePosition(self, tile):
+        self.x = tile.centerx
+        self.y = tile.centery

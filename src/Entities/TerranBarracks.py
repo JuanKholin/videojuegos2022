@@ -41,6 +41,15 @@ class TerranBarracks(Structure.Structure):
             self.generationCount += 1
             if self.generationCount == Utils.CLOCK_PER_SEC * self.training[0].generationTime:
                 terran = self.training[0]
+                terranPos = terran.getPosition()
+                terranTile = self.map.getTile(terranPos[0], terranPos[1])
+                if terranTile.type != 0:
+                    vecinas = self.map.getTileVecinas(terranTile)
+                    terran.setTilePosition(vecinas[0]) 
+                    terranPos = terran.getPosition()
+                    print("tp", terranPos)
+                    self.map.addOre(terranPos[0], terranPos[1])
+                    print("vecina ", vecinas[0].centerx, vecinas[0].centery, vecinas[0].type)
                 self.player.addUnits(terran)
                 self.generationCount = 0
                 del self.training[0]
@@ -55,7 +64,7 @@ class TerranBarracks(Structure.Structure):
     def processEvent(self, event):
         if self.clicked:
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_v:
+                if event.key == pygame.K_v and self.player.resources >= Utils.TERRAN_WORKER_MINERAL_COST:
                     terranWorker = TerranWorker.TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, 1)
                     self.generateUnit(terranWorker)
 

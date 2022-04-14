@@ -9,9 +9,7 @@ class Structure(Entity.Entity):
     index = 0
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, id):
-        Entity.Entity.__init__(self, hp, mineralCost, generationTime, id)
-        self.x = xini
-        self.y = yini
+        Entity.Entity.__init__(self, hp, xini, yini, mineralCost, generationTime, id)
     
     def getPosition(self):
         return (self.rectn.x, self.rectn.y)

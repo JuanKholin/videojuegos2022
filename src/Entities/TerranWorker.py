@@ -9,7 +9,7 @@ from .. import Utils
 # Constantes
 HP = 40
 MINERAL_COST = 20
-GENERATION_TIME = 200
+GENERATION_TIME = 2
 SPEED = 1
 FRAMES_TO_REFRESH = 10
 SPRITES = "scvJusto.bmp"
