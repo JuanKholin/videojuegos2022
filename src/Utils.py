@@ -1,6 +1,6 @@
 from enum import Enum, auto, IntEnum
 
-ENTITY_ID = 0
+import pygame
 
 # Constantes para los colores
 WHITE   = (255,255,255)
@@ -9,6 +9,11 @@ GREEN   = (0, 255, 0)
 RED     = (255, 0, 0)
 BLUE    = (0, 0, 255)
 PURPLE    = (255, 0, 255)
+
+HP = pygame.image.load("SPRITE/vida.png")
+HP.set_colorkey(WHITE)
+
+ENTITY_ID = 0
 
 X_TILES = 20
 Y_TILES = 10

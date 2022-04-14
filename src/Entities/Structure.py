@@ -23,8 +23,10 @@ class Structure(Entity.Entity):
         image = self.getImage()
         if self.clicked:
             pygame.draw.ellipse(screen, Utils.GREEN, [self.x-self.rectn.w/2, self.y+self.rectOffY-self.rectn.h/2, self.rectn.w, self.rectn.h], 2)
-            screen.blit(self.image, [image.x, image.y])
         screen.blit(self.image, [image.x, image.y])
+        hp = Utils.HP
+        hp = pygame.transform.scale(hp, (200, 100))
+        screen.blit(hp, [image.x, image.y])
     
     def getRect(self):
         rectAux = pygame.Rect(self.x - self.rectn.w/2, self.y - self.rectn.h/2, self.rectn.w, self.rectn.h)

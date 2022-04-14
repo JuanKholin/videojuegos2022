@@ -73,6 +73,10 @@ class Player():
                 if structure.clicked:
                     pygame.draw.ellipse(screen, Utils.GREEN, [structure.x-structure.rectn.w/2 - camera.x, structure.y+structure.rectOffY-structure.rectn.h/2 - camera.y, structure.rectn.w, structure.rectn.h], 2)
                 screen.blit(structure.image, [image.x - camera.x, image.y - camera.y])
+                hp = Utils.HP
+                hp = pygame.transform.scale(hp, (50, 8))
+                hp = pygame.transform.chop(hp, ((structure.hp/structure.maxHp) * 50, 0, 50, 0))
+                screen.blit(hp, [structure.x - camera.x - 25, structure.y+structure.rectOffY+structure.rectn.h/2 - 10 - camera.y])
         for unit in self.units:
             r = unit.getRect()
             #print(r)
