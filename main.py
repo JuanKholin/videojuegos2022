@@ -34,7 +34,7 @@ screen =  pygame.display.set_mode(size)
 #Controlar frames por segundo
 clock = pygame.time.Clock()
 
-mapa = Map.Map(20, 40)
+mapa = Map.Map(40, 20)
 
 # Player 1
 keyMap ={
@@ -74,7 +74,7 @@ camera = Camera.Camera(0, 0, Utils.SCREEN_HEIGHT, Utils.SCREEN_WIDTH)
 
 # Escena
 escena = Escena.Escena(player1, player2, aI, mapa, camera, raton, p1Interface)
-escena.mapa.addOre(100,100)
+#escena.mapa.addOre(100,100)
 
 def setEntity(player):
     terran1 = Terran.Terran(40, 80, 80, 20, 200, 1, 5, "terranSprites", 8, 6)
@@ -97,6 +97,7 @@ def update():
         p1Interface.update()
     elif Utils.STATE == Utils.System_State.MAP1:
         #cargar mapa
+        escena.mapa.load(Utils.MAPA1)
         setEntity(player1)
         Utils.STATE = Utils.System_State.ONGAME
     elif Utils.STATE == Utils.System_State.ONGAME:

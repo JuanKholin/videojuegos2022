@@ -5,20 +5,36 @@ from . import Utils
 from . import Tile
 
 class Map():
-    def __init__(self, h, w):
+    def __init__(self, w, h, mapa=None):
         self.tw = 40
         self.th = 40
         self.map = []
         self.h = h * self.th
         self.w = w * self.tw
-        for i in range(h):
-            self.map.insert(i,[])#Es una matriz que representa el mapa(0 es suelo, 1 es obstaculo, 2 vecino)
-            for j in range(w):
-                tile = Tile.Tile(i*w + j, self.tw * j, self.th * i, self.tw, self.th, 0)
-                self.map[i].insert(j,tile)
+        self.tiles = [[], []]
+        self.tiles.insert(0, Utils.cargarSprites(Utils.TERRENO_PATH, 8, False))
+        self.tiles.insert(1, Utils.cargarSprites(Utils.ELEVACION_PATH, 40, True))
+        if mapa != None:
+            self.load(mapa)
 
     #Dibuja el mapa
     def drawMap(self, screen, camera):
+        #for i in range(len(self.map)): #i es el valor de la fila
+        #    for j in range(len(self.map[i])): #j es el valor de la columna
+        #        tile = self.map[i][j]
+        #        if tile.type == 1:
+        #           pygame.draw.rect(screen, RED, pygame.Rect(tile.getRect()), 1)
+        #        elif tile.type == 0:
+        #            pygame.draw.rect(screen, GREEN, pygame.Rect(tile.getRect()),1)
+        #        else:
+        #            pygame.draw.rect(screen, BLUE, pygame.Rect(tile.getRect()),1)
+        firstTileY, firstTileX = self.getTileIndex(camera.x, camera.y)
+        lastTileY, lastTileX = self.getTileIndex(camera.x + camera.w, camera.y + camera.h)
+        for i in range(firstTileY, lastTileY + 1):
+            for j in range(firstTileX, lastTileX + 1):
+                self.map[i][j].draw(screen, camera)
+    
+    def drawMap2(self, screen, camera):
         #for i in range(len(self.map)): #i es el valor de la fila
         #    for j in range(len(self.map[i])): #j es el valor de la columna
         #        tile = self.map[i][j]
@@ -264,4 +280,21 @@ class Map():
                 pathReturn.append(path[i])
                 i = i - 1
         return pathReturn
+    
+    def load(self, mapa):
+        self.w = len(mapa[0]) * self.tw
+        self.h = len(mapa) * self.th
+        for i in range(len(mapa)):
+            self.map.insert(i,[])#Es una matriz que representa el mapa(0 es suelo, 1 es obstaculo, 2 vecino)
+            for j in range(len(mapa[0])):
+                tile, type = self.loadTile(str(mapa[i][j]))
+                tile = Tile.Tile(i*len(mapa) + j, self.tw * j, self.th * i, self.tw, self.th, tile, type)
+                self.map[i].insert(j,tile)
             
+    def loadTile(self, code):
+        if code[0] == '1': #terreno
+            index = int(code[1:])
+            return self.tiles[0][index], 0
+        elif code[0] == '2': #elevacion
+            index = int(code[1:])
+            return self.tiles[1][index], 1
