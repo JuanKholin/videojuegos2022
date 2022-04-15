@@ -2,21 +2,6 @@ import pygame,math
 from . import Command, Utils
 
 
-def createRect(initialX, initialY, finalX, finalY):
-    if finalX>=initialX and finalY>=initialY:
-        area = pygame.Rect(initialX, initialY, finalX-initialX, finalY-initialY)
-    elif finalX>=initialX and finalY<initialY:
-        area = pygame.Rect(initialX, finalY, finalX-initialX, initialY-finalY)
-    elif finalX<initialX and finalY>=initialY:
-        area = pygame.Rect(finalX, initialY, initialX-finalX, finalY-initialY)
-    else: #finalX<initialX and finalY<initialY
-        area = pygame.Rect(finalX, finalY, initialX-finalX, initialY-finalY)
-    return area
-
-def collides(x,y, rect2):
-    return (x >= rect2.x and x <= rect2.x + rect2.w and y >= rect2.y and y <= rect2.y + rect2.h )
-
-
 class Player():
     def __init__(self, units, structures, resources, keyMap, commandMap):
         #Atributos

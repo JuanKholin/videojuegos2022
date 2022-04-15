@@ -7,6 +7,12 @@ class Camera():
         self.h = h
         self.w = w
         
+    def setCamera(self, x, y, h, w):
+        self.x = x
+        self.y = y
+        self.h = h
+        self.w = w
+        
     def moverArriba(self):
         if self.y > 0:
             self.y = self.y - 4

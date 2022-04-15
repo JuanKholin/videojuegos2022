@@ -8,7 +8,7 @@ class Entity():
         self.id = id
         self.x = xIni
         self.y = yIni
-        self.hp = hp
+        self.hp = 200
 
     def update():
         pass

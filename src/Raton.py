@@ -4,6 +4,20 @@ from . import Command
 from . import Utils
 from . import Player
 
+def collides(x, y, rect2):
+    return (x >= rect2.x and x <= rect2.x + rect2.w and y >= rect2.y and y <= rect2.y + rect2.h )
+
+def createRect(initialX, initialY, finalX, finalY):
+    if finalX>=initialX and finalY>=initialY:
+        area = pygame.Rect(initialX, initialY, finalX-initialX, finalY-initialY)
+    elif finalX>=initialX and finalY<initialY:
+        area = pygame.Rect(initialX, finalY, finalX-initialX, initialY-finalY)
+    elif finalX<initialX and finalY>=initialY:
+        area = pygame.Rect(finalX, initialY, initialX-finalX, finalY-initialY)
+    else: #finalX<initialX and finalY<initialY
+        area = pygame.Rect(finalX, finalY, initialX-finalX, initialY-finalY)
+    return area
+
 def printRectangulo(screen, initialX, initialY, finalX, finalY):
     if finalX>=initialX and finalY>=initialY:
         pygame.draw.rect(screen, Utils.GREEN, [initialX, initialY, finalX-initialX, finalY-initialY], 1)
@@ -23,6 +37,8 @@ class raton(pygame.sprite.Sprite):
     index = 0
     index2 = 0
     frame = 0
+    initialX = 0
+    initialY = 0
     clicked = False
     collide = False
     pulsado = False
@@ -41,10 +57,10 @@ class raton(pygame.sprite.Sprite):
         self.point = point(ruta)
         self.player = player
         
-    def update(self, cameraX, cameraY):
+    def update(self, camera):
         self.point.update()
         self.rel_pos = pygame.mouse.get_pos()
-        self.real_pos = (self.rel_pos[0] + cameraX, self.rel_pos[1] + cameraY)
+        self.real_pos = (self.rel_pos[0] + camera.x, self.rel_pos[1] + camera.y)
         self.rect.x = self.rel_pos[0] - self.rect.width/2
         self.rect.y = self.rel_pos[1] - self.rect.height/2
 
@@ -55,12 +71,12 @@ class raton(pygame.sprite.Sprite):
             ###---LOGICA
             r = unit.getRect()
             #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-            if Player.collides(self.real_pos[0], self.real_pos[1],unit.getRect()):
+            if collides(self.real_pos[0], self.real_pos[1],unit.getRect()):
                 mouse_collide = True
         for structure in self.player.structures:
             ###---LOGICA
             #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-            if Player.collides(self.real_pos[0], self.real_pos[1],structure.getRect()):
+            if collides(self.real_pos[0], self.real_pos[1],structure.getRect()):
                 mouse_collide = True
 
         if mouse_collide:
@@ -87,19 +103,34 @@ class raton(pygame.sprite.Sprite):
                 self.image = self.sprite[self.index]
                 self.frame = 0
     
-    def click(self):
-        self.clicked = not self.clicked
-
+    def getPosition(self):
+        return self.real_pos
+    
+    def getClick(self):
+        return self.clicked
+    
+    def getPressed(self):
+        return self.pulsado, (self.initialX, self.initialY)
+    
     def setCollide(self, detected):
         self.collide = detected
+    
+    def isCollide(self, rect):
+        return collides(self.real_pos[0], self.real_pos[1], rect)
+    
+    def click(self):
+        self.clicked = not self.clicked 
+        
     def draw(self, screen, camera):
         if self.point.getClicked() :
             self.point.draw(screen, camera)
         if self.pulsado:
             printRectangulo(screen, self.initialX - camera.x, self.initialY - camera.y, self.rel_pos[0], self.rel_pos[1])
         screen.blit(self.image, (self.rect.x, self.rect.y))
+        
     def processEvent(self, event, cameraX, cameraY):
         command = Command.Command(0) # 0 es nada
+        self.clicked = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             click_type = pygame.mouse.get_pressed()
             #la posicion del cursor es relativa a la camara
@@ -124,16 +155,16 @@ class raton(pygame.sprite.Sprite):
             type = pygame.mouse.get_pressed()
             relative_mouse_pos = pygame.mouse.get_pos()
             real_mouse_pos = (relative_mouse_pos[0] + cameraX, relative_mouse_pos[1] + cameraY)
-            
             #print('click liberado', type)
             if not type[0]:   
                 if self.pulsado: 
                     self.pulsado = False
+                    self.clicked = True
                     #print('click izq liberado', mouse_pos[0], mouse_pos[1], event.type)
-                    mouseRect = Player.createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
+                    mouseRect = createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
                     for unit in self.player.units:
                         #print(unit.getRect())
-                        if Player.collides(self.real_pos[0], self.real_pos[1],unit.getRect()):
+                        if collides(self.real_pos[0], self.real_pos[1],unit.getRect()):
                             unit.setClicked(True)
                             self.player.unitsSelected.append(unit)
                             
@@ -145,7 +176,7 @@ class raton(pygame.sprite.Sprite):
                             #unitsClicked.remove(terran)
                             #print("DESCLICKADO" + str(terran.id)) 
                     for structure in self.player.structures:
-                        if Player.collides(self.real_pos[0], self.real_pos[1],structure.getRect()):
+                        if collides(self.real_pos[0], self.real_pos[1],structure.getRect()):
                             structure.setClicked(True)
                             #self.player.unitsSelected.append(unit)
                             
@@ -159,6 +190,7 @@ class raton(pygame.sprite.Sprite):
             if type[2]:
                 print('click der liberado', real_mouse_pos[0], real_mouse_pos[1], event.type)
         return command
+    
 class point(pygame.sprite.Sprite):
     #Constructor
     sprite = []
