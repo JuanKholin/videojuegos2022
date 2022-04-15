@@ -21,7 +21,9 @@ BLACK   = (0,0,0)
 GREEN   = (0, 255, 0)
 RED     = (255, 0, 0)
 BLUE    = (0, 0, 255)
-PURPLE    = (255, 0, 255)
+PURPLE  = (255, 0, 255)
+GREEN2  = (210, 255, 125)
+GREEN3  = (110, 255, 90)
 
 HP = pygame.image.load("SPRITE/vida2.png")
 HP.set_colorkey(WHITE)
@@ -29,10 +31,10 @@ HP.set_colorkey(WHITE)
 ENTITY_ID = 0
 
 X_TILES = 20
-Y_TILES = 10
+Y_TILES = 15
 
-SCREEN_WIDTH = X_TILES * 40
-SCREEN_HEIGHT = Y_TILES * 40
+SCREEN_WIDTH = 1025 
+SCREEN_HEIGHT = 770 
 
 # Para los estados de las entidades
 class State(Enum):
@@ -74,22 +76,29 @@ def takeID():
 
 
 MAIN_MENU = "SPRITE/mainMenu/fondo"
+MAIN_MENU_TEXT_SIZE = 30
 
+SINGLE_TEXT_POS = [340, 235]
+EXIT_TEXT_POS = [720, 600]
+
+SINGLE_SIZE = (360, 180)
 SINGLE_PLAYER = "SPRITE/mainMenu/SinglePlayer/single"
 SINGLE_PLAYER_N = 35
 SINGLE_PLAYER_POS = [20, 40]
 
 SINGLE_PLAYER_FB = "SPRITE/mainMenu/SinglePlayer/Spanish/singleones"
 SINGLE_PLAYER_FB_N = 60
-SINGLE_PLAYER_FB_POS = [50, 120]
+SINGLE_PLAYER_FB_POS = [50, 160]
 
+EXIT_SIZE = (300, 200)
 EXIT = "SPRITE/mainMenu/Exit/exit"
 EXIT_N = 50
-EXIT_POS = [520, 200]
+EXIT_POS = [650, 420]
 
 EXIT_FB = "SPRITE/mainMenu/Exit/Spanish/exitones"
 EXIT_FB_N = 30
-EXIT_FB_POS = [540, 200]
+EXIT_FB_POS = [690, 420]
+
 
 #----------------------------------------------------------------
 # TROPAS
@@ -102,17 +111,23 @@ TERRAN_WORKER_MINERAL_COST = 20
 #carga n sprites con nombre path + 0 hasta path + (n-1)
 #color para eliminar color del fondo, puede ser None
 #numDigit inidca el numero de digitos para localizar el sprite 
-def cargarSprites(path, n, twoDig, color):
+def cargarSprites(path, n, twoDig, color, size):
     sprites = []
     for i in range(n): 
         if twoDig and i < 10:
             nPath = "0" + str(i)
         else:
             nPath = str(i)
-        sprites.insert(i, pygame.image.load(path + nPath + ".png"))
+        if size == None:
+            sprites.insert(i, pygame.image.load(path + nPath + ".png"))
+        elif size == "x2":
+            sprites.insert(i, pygame.transform.scale2x(pygame.image.load(path + nPath + ".png")))
+        else:
+            sprites.insert(i, pygame.transform.scale(pygame.image.load(path + nPath + ".png"), size))
         if color != None:
             sprites[i].set_colorkey(color)
             pass
+        
     return sprites
 
 def clock_update():
@@ -124,3 +139,18 @@ def frame(n):
         return 1
     else:
         return 0
+    
+consolas = pygame.font.match_font('consolas')
+times = pygame.font.match_font('times')
+arial = pygame.font.match_font('arial')
+courier = pygame.font.match_font('courier')
+
+def muestra_texto(pantalla,fuente,texto,color, dimensiones, pos):
+    tipo_letra = pygame.font.Font(pygame.font.match_font(fuente), dimensiones)
+    superficie = tipo_letra.render(texto,True, color)
+    rectangulo = superficie.get_rect()
+    rectangulo.center = pos
+    pantalla.blit(superficie,rectangulo)
+    
+def aux(screen):
+    muestra_texto(screen, str('monotypecorsiva'), "single player", (210, 255, 124), 25, [270, 150])

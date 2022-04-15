@@ -27,9 +27,9 @@ def procesarInput():
 # Programa principal
 pygame.init()
 
-
+flags = pygame.FULLSCREEN | pygame.DOUBLEBUF
 size = (Utils.SCREEN_WIDTH, Utils.SCREEN_HEIGHT)
-screen =  pygame.display.set_mode(size, pygame.RESIZABLE)
+screen =  pygame.display.set_mode(size)
 
 #Controlar frames por segundo
 clock = pygame.time.Clock()
@@ -114,7 +114,10 @@ def draw():
     elif Utils.STATE == Utils.System_State.ONGAME:
         escena.draw(screen)
     raton.draw(screen, camera)
+    #Utils.aux(screen)
     pygame.display.flip()
+    
+
     
 # Bucle principal
 while True:

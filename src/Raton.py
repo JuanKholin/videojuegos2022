@@ -122,11 +122,14 @@ class raton(pygame.sprite.Sprite):
         self.clicked = not self.clicked 
         
     def draw(self, screen, camera):
-        if self.point.getClicked() :
-            self.point.draw(screen, camera)
-        if self.pulsado:
-            printRectangulo(screen, self.initialX - camera.x, self.initialY - camera.y, self.rel_pos[0], self.rel_pos[1])
-        screen.blit(self.image, (self.rect.x, self.rect.y))
+        if Utils.STATE == Utils.System_State.ONGAME:
+            if self.point.getClicked():
+                self.point.draw(screen, camera)
+            if self.pulsado:
+                printRectangulo(screen, self.initialX - camera.x, self.initialY - camera.y, self.rel_pos[0], self.rel_pos[1])
+            screen.blit(self.image, (self.rect.x, self.rect.y))
+        else:
+            screen.blit(self.sprite[self.index], (self.rect.x, self.rect.y))
         
     def processEvent(self, event, cameraX, cameraY):
         command = Command.Command(0) # 0 es nada
@@ -161,7 +164,8 @@ class raton(pygame.sprite.Sprite):
                     self.pulsado = False
                     self.clicked = True
                     #print('click izq liberado', mouse_pos[0], mouse_pos[1], event.type)
-                    mouseRect = createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
+                    
+                    #mouseRect = createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
                     for unit in self.player.units:
                         #print(unit.getRect())
                         if collides(self.real_pos[0], self.real_pos[1],unit.getRect()):
