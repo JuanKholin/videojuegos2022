@@ -3,7 +3,7 @@ from . import Player, Command, Utils
 from datetime import datetime
 
 class Escena():
-    def __init__(self, p1, p2, aI, mapa, camera, raton, interfaz):
+    def __init__(self, p1, p2, aI, mapa, camera, raton, interfaz, resources):
         self.p1 = p1
         self.p2 = p2
         self.aI = aI
@@ -11,6 +11,7 @@ class Escena():
         self.camera = camera
         self.raton = raton
         self.interfaz = interfaz
+        self.resources = resources
 
     def procesarEvent(self, event):
         #command = pi.procesarEvent(event)
@@ -36,6 +37,10 @@ class Escena():
                 while tileObj.type != 0: #Esta ocupada
                     print("QUE COJONES")
                     posibles = self.mapa.getTileVecinas(tileObj)
+                    mov = 40
+                    while posibles.__len__() == 0:
+                        posibles = self.mapa.getTileVecinas(self.mapa.getTile(tileObj.centerx + mov,tileObj.centery))
+                        mov += 40
                     mejor = posibles[0]
                     for tile in posibles:
                         if mejor.heur(tileIni) > tile.heur(tileIni):
@@ -215,40 +220,52 @@ class Escena():
             else:
                 if tileActual.type != 1:
                     self.mapa.setVecina(tileActual, unit.id)
-            for unit in self.p1.structures + self.p2.structures:
-                unitPos = unit.getPosition()
-                tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
-                if unit.paths.__len__() > 0:
-                    path = unit.paths[0]
-                    pathObj = unit.paths[unit.paths.__len__() - 1]
-                    tilePath = self.mapa.getTile(path.posFin[0],path.posFin[1])
-                    #print("Tilepath es: ", tilePath.centerx, tilePath.centery)
-                    tileObj = self.mapa.getTile(pathObj.posFin[0],pathObj.posFin[1])
-                    if tilePath.type != 2 or (tilePath.id == unit.id and tilePath.type == 2):
-                        dirX = math.cos(path.angle)
-                        dirY = math.sin(path.angle)
-                        tileSiguiente = self.mapa.getTile(unitPos[0] + dirX*unit.speed, unitPos[1] + dirY*unit.speed)
-                        if tileActual != tileSiguiente :
-                            if tileActual.type != 1:
-                                self.mapa.setLibre(tileActual)
-                                if tileSiguiente.type != 1:
-                                    self.mapa.setVecina(tileSiguiente, unit.id)
-                        else:
-                            if tileActual.type != 1:
-                                self.mapa.setVecina(tileActual, unit.id)
-                else:
-                    if tileActual.type != 1:
-                        rect = unit.getRect()
-                        x = rect.x
-                        finx = x + rect.w
+        for unit in self.p1.structures + self.p2.structures:
+            unitPos = unit.getPosition()
+            tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
+            if unit.paths.__len__() > 0:
+                path = unit.paths[0]
+                pathObj = unit.paths[unit.paths.__len__() - 1]
+                tilePath = self.mapa.getTile(path.posFin[0],path.posFin[1])
+                #print("Tilepath es: ", tilePath.centerx, tilePath.centery)
+                tileObj = self.mapa.getTile(pathObj.posFin[0],pathObj.posFin[1])
+                if tilePath.type != 2 or (tilePath.id == unit.id and tilePath.type == 2):
+                    dirX = math.cos(path.angle)
+                    dirY = math.sin(path.angle)
+                    tileSiguiente = self.mapa.getTile(unitPos[0] + dirX*unit.speed, unitPos[1] + dirY*unit.speed)
+                    if tileActual != tileSiguiente :
+                        if tileActual.type != 1:
+                            self.mapa.setLibre(tileActual)
+                            if tileSiguiente.type != 1:
+                                self.mapa.setVecina(tileSiguiente, unit.id)
+                    else:
+                        if tileActual.type != 1:
+                            self.mapa.setVecina(tileActual, unit.id)
+            else:
+                if tileActual.type != 1:
+                    rect = unit.getRect()
+                    x = rect.x
+                    finx = x + rect.w
+                    y = rect.y + 1
+                    finy = y + rect.h
+                    while x <= finx:
+                        while y <= finy:
+                            self.mapa.setVecina(self.mapa.getTile(x,y), unit.id)
+                            y = y + self.mapa.th
                         y = rect.y + 1
-                        finy = y + rect.h
-                        while x <= finx:
-                            while y <= finy:
-                                self.mapa.setVecina(self.mapa.getTile(x,y), unit.id)
-                                y = y + self.mapa.th
-                            y = rect.y + 1
-                            x = x + self.mapa.tw
+                        x = x + self.mapa.tw
+        for res in self.resources:
+            rect = res.getRect()
+            x = rect.x
+            finx = x + rect.w
+            y = rect.y + 1
+            finy = y + rect.h
+            while x <= finx:
+                while y <= finy:
+                    self.mapa.setRecurso(self.mapa.getTile(x,y))
+                    y = y + self.mapa.th
+                y = rect.y + 1
+                x = x + self.mapa.tw
         self.p1.update()
         self.p2.update()
         self.raton.update(self.camera)
@@ -260,3 +277,13 @@ class Escena():
         self.p2.draw(screen, self.camera)
         self.raton.draw(screen, self.camera)
         self.interfaz.draw(screen)
+        for res in self.resources:
+            r = res.getRect()
+            pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - self.camera.x, r.y  - self.camera.y, r.w, r.h),1)
+            if (r.x + r.w >= self.camera.x and r.x <= self.camera.x + self.camera.w and
+            r.y + r.h >= self.camera.y and r.y <= self.camera.y + self.camera.h):
+                drawPos = res.getDrawPosition()
+                if res.clicked:
+                    pygame.draw.ellipse(screen, Utils.GREEN, [r.x - self.camera.x, r.y + (0.7*r.h)- self.camera.y,r.w , 0.3*r.h], 2)
+                #screen.blit(unit.image, [r.x - self.camera.x, r.y - self.camera.y])
+                screen.blit(res.image, [drawPos[0] - self.camera.x, drawPos[1] - self.camera.y])

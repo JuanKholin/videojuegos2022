@@ -103,6 +103,10 @@ class Map():
     def setVecina(self, tile, id):
         self.map[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = 2
         self.map[int(tile.centery / self.th)][int(tile.centerx / self.tw)].id = id
+
+    #Pone la tile como recurso
+    def setRecurso(self, tile):
+        self.map[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = 3
     
     #Pone la tile como libre
     def setLibre(self, tile):

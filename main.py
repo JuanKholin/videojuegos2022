@@ -1,5 +1,6 @@
 import pygame, sys
 import math
+from src.Entities.Cristal import Cristal
 from src import Map, Raton, Escena, Player, Camera, AI, Command, Utils, Interface
 from src.Entities import Terran, TerranBuilder, Zergling, TerranBarracks, TerranWorker
 
@@ -73,7 +74,12 @@ aI = AI.AI(player2)
 camera = Camera.Camera(0, 0, Utils.SCREEN_HEIGHT, Utils.SCREEN_WIDTH)
 
 # Escena
-escena = Escena.Escena(player1, player2, aI, mapa, camera, raton, p1Interface)
+
+#Recursos del mapa
+cristal = Cristal(500,1,80,500)
+resources = []
+resources.append(cristal)
+escena = Escena.Escena(player1, player2, aI, mapa, camera, raton, p1Interface, resources)
 #escena.mapa.addOre(100,100)
 
 def setEntity(player):
