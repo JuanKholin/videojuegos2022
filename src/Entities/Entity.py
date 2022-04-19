@@ -1,7 +1,7 @@
 import pygame as pg
 
 class Entity():
-    def __init__(self, hp, xIni, yIni, mineralCost, generationTime, id):
+    def __init__(self, hp, xIni, yIni, mineralCost, generationTime, id, player):
         self.maxHp = hp
         self.mineralCost = mineralCost
         self.generationTime = generationTime
@@ -9,6 +9,7 @@ class Entity():
         self.x = xIni
         self.y = yIni
         self.hp = 200
+        self.player = player
 
     def update():
         pass

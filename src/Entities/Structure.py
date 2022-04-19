@@ -8,8 +8,8 @@ class Structure(Entity.Entity):
     clicked = False
     index = 0
 
-    def __init__(self, hp, mineralCost, generationTime, xini, yini, id):
-        Entity.Entity.__init__(self, hp, xini, yini, mineralCost, generationTime, id)
+    def __init__(self, hp, mineralCost, generationTime, xini, yini, id,player):
+        Entity.Entity.__init__(self, hp, xini, yini, mineralCost, generationTime, id,player)
     
     def getPosition(self):
         return (self.rectn.x, self.rectn.y)

@@ -9,6 +9,7 @@ from .. import Utils
 # Constantes
 HP = 40
 MINERAL_COST = 20
+TIME_TO_MINE = 180
 GENERATION_TIME = 2
 SPEED = 1
 FRAMES_TO_REFRESH = 10
@@ -45,10 +46,10 @@ Y_PADDING =         47
 PADDING = 110
 
 class TerranWorker(Worker.Worker):
-    def __init__(self, xIni, yIni, id):
+    def __init__(self, xIni, yIni, id, player):
         Worker.Worker.__init__(self, HP, xIni * 40 + 20, yIni * 40 + 20, MINERAL_COST, 
                 GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, 
-                PADDING, id)
+                PADDING, id, player)
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey((Utils.BLACK))
         self.sprites = Entity.Entity.divideSpritesheetByRows(spritesheet, 
@@ -56,6 +57,7 @@ class TerranWorker(Worker.Worker):
         self.mirrorTheChosen()
         self.dir = 0
         self.changeToStill()
+        self.minePower = 8
         print(self.x, self.y,self.image.get_width(),self.image.get_height() )
         print(self.getRect().x - self.getRect().w,self.getRect().y - self.getRect().h)
         #self.imageRect = Utils.rect(self.x, self.y, self.image.get_width() - WEIGHT_PADDING, 
@@ -64,6 +66,10 @@ class TerranWorker(Worker.Worker):
         #self.imageRect = Utils.rect(self.x, self.y, self.image.get_width(), self.image.get_height())
     def setOrder(self, order):
         self.order = order
+    def setCristal(self, cristal):
+        self.cristal = cristal
+    def setCaminoABase(self, path):
+        self.basePath = path
     
     def getPosition(self):
         r = self.getRect()
@@ -100,6 +106,11 @@ class TerranWorker(Worker.Worker):
     
     def updateMinig(self):
         self.count += 1
+        if Utils.frame(TIME_TO_MINE): #Termina de minar
+            self.order = {'order':Command.CommandId.TRANSPORTAR_ORE}
+            self.cristal.getMined(self.minePower)
+            self.paths = self.basePath
+            self.state = Utils.State.MOVING
         if self.count >= self.framesToRefresh:
             self.count = 0
             self.updateMiningImage()
@@ -113,7 +124,7 @@ class TerranWorker(Worker.Worker):
             if actualPath.angle < 0:
                 self.angle = -actualPath.angle
             else:
-                self.angle = 2 * math.pi - actualPath.angle            
+                self.angle = 2 * math.pi - actualPath.angle          
             
             self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
             self.dirx = math.cos(actualPath.angle)
@@ -131,22 +142,33 @@ class TerranWorker(Worker.Worker):
                 self.count = 0
                 self.updateMovingImage()
         else: # Se acaba este camino
-            print(self.getRect())
             self.paths.pop(0)
             if len(self.paths) == 0:
                 print(self.order)
-                if self.order['order'] == Command.CommandId.MOVER:
-                    self.dir = 8
+                if self.order != 0:
+                    if self.order['order'] == Command.CommandId.MOVER:
+                        self.dir = 8
+                        self.changeToStill()
+                    elif self.order['order'] == Command.CommandId.MINAR:
+                        angle = self.order['angle']
+                        self.basePath = self.order['basePath']
+                        self.cristal = self.order['cristal']
+                        for path in self.basePath:
+                            print("Posicion final a casa: ",path.posFin, path.angle)
+                        if angle < 0:
+                            self.angle = -angle
+                        else:
+                            self.angle = 2 * math.pi - angle
+                        self.dir = int(4 - (self.angle * 8 / math.pi)) % 16          
+                
+                        self.changeToMining()
+                    elif self.order['order'] == Command.CommandId.TRANSPORTAR_ORE:
+                        #sumar minerales al jugador
+                        self.order = 0
+                        self.player.resources += self.minePower
+                        self.changeToStill()
+                else:
                     self.changeToStill()
-                elif self.order['order'] == Command.CommandId.MINAR:
-                    angle = self.order['angle']
-                    if angle < 0:
-                        self.angle = -angle
-                    else:
-                        self.angle = 2 * math.pi - angle
-                    self.dir = int(4 - (self.angle * 8 / math.pi)) % 16          
-            
-                    self.changeToMining()
     # Aplica un frame a la unidad atacando
     #def updateAttacking(self):
 

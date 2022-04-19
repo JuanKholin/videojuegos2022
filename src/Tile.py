@@ -28,6 +28,9 @@ class Tile():
         self.tileid = tileid
         self.padre = padre
         self.image = image
+
+    def setOcupante(self, ocupante):
+        self.ocupante = ocupante
         
     
     def getRect(self):

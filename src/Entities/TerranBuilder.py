@@ -11,9 +11,8 @@ class TerranBuilder(Structure.Structure):
     generationTime = 0
     generationCount = 0
 
-    def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, sprites,id):
-        Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, id)
-        self.player = player
+    def __init__(self, hp, mineralCost, generationTime, xini, yini, map, sprites,id, player):
+        Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, id, player)
         for i in range(6): #0-3 construccion, 4 estado normal y 5 generando tropas
             self.sprites.insert(i,pygame.image.load(sprites + "/tile00" + str(i) + ".png"))
         self.map = map

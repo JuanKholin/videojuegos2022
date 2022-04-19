@@ -34,6 +34,7 @@ class Cristal():
 
     def getMined(self, cantidad):
         self.capacidad -= cantidad
+        print("Me han minado: ", self.capacidad)
         self.image = self.sprites[4 - int(float(self.capacidad)/float(self.interval) + 0.5)]
 
     def getPosition(self):

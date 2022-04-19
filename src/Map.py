@@ -225,8 +225,8 @@ class Map():
         while nodosAbiertos.__len__() != 0:
             currentTile = Tile.Tile(nodosAbiertos[0].tileid, nodosAbiertos[0].centerx, nodosAbiertos[0].centery, 
                     0, 0, 1, 0, nodosAbiertos[0].g, nodosAbiertos[0].padre)
-            print("g: ",currentTile.g)
-            print("heur: ",currentTile.heur(tileObj))
+            #print("g: ",currentTile.g)
+            #print("heur: ",currentTile.heur(tileObj))
             currentF = currentTile.g + currentTile.heur(tileObj)
             currentId = 0
             for id, tile in enumerate(nodosAbiertos):
@@ -239,6 +239,7 @@ class Map():
             #Tenemos la tile con menos f
             #print("estamos en", currentTile.tileid + 1, currentTile.padre.tileid + 1)
             #input()
+
             nodosCerrados.append(currentTile)
             nodosAbiertos.pop(currentId)
             if currentTile.tileid == tileObj.tileid:
@@ -246,7 +247,7 @@ class Map():
 
                 break
             for tile in self.getTileVecinas(currentTile):
-                #print("miro tile: ", tile.tileid + 1)
+                print("miro tile: ", tile.tileid + 1, tile.g)
                 #input()
                 if Tile.mismoId(nodosCerrados, tile).tileid == -1:# No esta
                     #print("No esta en cerrados, miro en abiertos")
@@ -254,8 +255,11 @@ class Map():
                     if  tileEnAbiertos.tileid == -1: #No esta
                         #print("no esta en abiertos")
                         #print(tile.g)
-                        tile.g = currentTile.g + currentTile.heur(tile)
-                        nodosAbiertos.append(tile)
+                        tileMapa = self.getTile(tile.centerx, tile.centery)
+                        tileMapa.padre = currentTile
+                        tileAppend = Tile.Tile(tile.tileid, tile.centerx, tile.centery, 
+                             0, 0, 1, 0, currentTile.g + currentTile.heur(tile), tileMapa.padre)
+                        nodosAbiertos.append(tileAppend)
                         self.setTilePadre(tile, currentTile)
                         tile.padre = currentTile
                     else:
@@ -263,10 +267,13 @@ class Map():
                         if tileEnAbiertos.g > (currentTile.g + currentTile.heur(tile)):
                             #print("CHANGE")
                             nodosAbiertos.remove(tileEnAbiertos)
-                            nodosAbiertos.append(tile)
-                            tile.padre = currentTile
-                            tile.g = currentTile.g + currentTile.heur(tile)
                             self.setTilePadre(tile, currentTile)
+                            tileMapa = self.getTile(tile.centerx, tile.centery)
+                            tileMapa.padre = currentTile
+                            tileAppend = Tile.Tile(tile.tileid, tile.centerx, tile.centery, 
+                             0, 0, 1, 0, currentTile.g + currentTile.heur(tile), tileMapa.padre)
+                            nodosAbiertos.append(tileAppend)
+                            
         path = []
         pathReturn = []
         for tile in nodosAbiertos:
