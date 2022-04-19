@@ -6,7 +6,7 @@ import pygame
 
 
 def mismoId(list, tileB):
-    tileReturn = Tile.Tile(-1,0,0,0,0,0)
+    tileReturn = Tile(-1,0,0,0,0,0,0)
     #print("AAAAAAAAAAAAAAAAAAAAAAA")
     for tile in list:
         #print("COmparo", tile.tileid, tileB.tileid)

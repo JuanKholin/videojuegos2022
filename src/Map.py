@@ -215,19 +215,21 @@ class Map():
     def Astar(self, tileIni, tileObj):
         nodosAbiertos = []
         nodosCerrados = []
+        
         nodosAbiertos.append(tileIni)
         nodosAbiertos[0].padre = nodosAbiertos[0]
         while nodosAbiertos.__len__() != 0:
-            
-            currentTile = Tile(nodosAbiertos[0].tileid, nodosAbiertos[0].centerx, nodosAbiertos[0].centery, 
-                    0, 0, 1, nodosAbiertos[0].g, nodosAbiertos[0].padre)
+            currentTile = Tile.Tile(nodosAbiertos[0].tileid, nodosAbiertos[0].centerx, nodosAbiertos[0].centery, 
+                    0, 0, 1, 0, nodosAbiertos[0].g, nodosAbiertos[0].padre)
+            print("g: ",currentTile.g)
+            print("heur: ",currentTile.heur(tileObj))
             currentF = currentTile.g + currentTile.heur(tileObj)
             currentId = 0
             for id, tile in enumerate(nodosAbiertos):
                 tileF = tile.g + tile.heur(tileObj)
                 #print(currentTile.tileid + 1,":", currentTile.g,currentTile.heur(tileObj) ,tile.tileid + 1,":", tile.g,tile.heur(tileObj))
                 if float(currentF) > float(tileF):
-                    currentTile = Tile.Tile(tile.tileid, tile.centerx, tile.centery, 0, 0, 1, tile.g, tile.padre)
+                    currentTile = Tile.Tile(tile.tileid, tile.centerx, tile.centery, 0, 0, 1, 0, tile.g, tile.padre)
                     currentF = tileF
                     currentId = id
             #Tenemos la tile con menos f
