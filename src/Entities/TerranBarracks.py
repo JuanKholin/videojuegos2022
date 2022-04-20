@@ -9,12 +9,12 @@ class TerranBarracks(Structure.Structure):
     generationTime = 0
     generationCount = 0
 
-    def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, sprites, id):
+    def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building, id):
         Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, id, player)
         self.player = player
         self.sprites = Utils.cargarSprites(Utils.TERRAN_BARRACK_PATH, 6, False, Utils.WHITE, 1.2)
         self.map = map
-        self.building = True 
+        self.building = building
         self.image = self.sprites[self.index]
         self.image.set_colorkey(Utils.WHITE)
         self.rectn = pygame.Rect(xini, yini, self.sprites[4].get_width(), self.sprites[4].get_height() - self.rectOffY)
@@ -65,7 +65,7 @@ class TerranBarracks(Structure.Structure):
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_v and self.player.resources >= Utils.TERRAN_WORKER_MINERAL_COST:
                     self.player.resources -= Utils.TERRAN_WORKER_MINERAL_COST
-                    terranWorker = TerranWorker.TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, 1)
+                    terranWorker = TerranWorker.TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, 1, self.player)
                     self.generateUnit(terranWorker)
                     
     def draw(self, screen, camera):

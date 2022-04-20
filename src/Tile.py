@@ -7,7 +7,6 @@ import pygame
 
 def mismoId(list, tileB):
     tileReturn = Tile(-1,0,0,0,0,0,0)
-    #print("AAAAAAAAAAAAAAAAAAAAAAA")
     for tile in list:
         #print("COmparo", tile.tileid, tileB.tileid)
         if tile.tileid == tileB.tileid:
@@ -41,4 +40,16 @@ class Tile():
         return math.sqrt(int(((tfin.centerx - self.centerx)/40))**2 + int((tfin.centery - self.centery)/40)**2)
     
     def draw(self, screen, camera):
-        screen.blit(self.image, [self.x - camera.x, self.y - camera.y])
+        if not Utils.DEBBUG:
+            screen.blit(self.image, [self.x - camera.x, self.y - camera.y])
+        else:
+            globalRectCoords = self.getRect()
+            cameraRectCoords = (globalRectCoords[0] - camera.x, globalRectCoords[1] - camera.y, globalRectCoords[2], globalRectCoords[3])
+            if self.type == 1:
+                pygame.draw.rect(screen, Utils.RED, pygame.Rect(cameraRectCoords), 1)
+            elif self.type == 0:
+                pygame.draw.rect(screen, Utils.GREEN, pygame.Rect(cameraRectCoords), 1)
+            elif self.type == 3:
+                pygame.draw.rect(screen, Utils.BLUE, pygame.Rect(cameraRectCoords), 1)
+            else:
+                pygame.draw.rect(screen, Utils.PURPLE, pygame.Rect(cameraRectCoords), 1)

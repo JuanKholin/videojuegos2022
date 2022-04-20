@@ -87,9 +87,9 @@ def setEntity(player):
     #terran2 = Terran.Terran(40, 200, 200, 20, 200, 1, 5, "terranSprites", 8, 6)
     scv = TerranWorker.TerranWorker(2, 5, 3, player1)
     #zergling2 = Zergling.Zergling(10, 10)
-    structure1 = TerranBuilder.TerranBuilder(200, 40, 600, 200, 300,  mapa, "SPRITE/builder", 2,player1)
+    structure1 = TerranBuilder.TerranBuilder(200, 40, 600, 200, 300, player1, mapa, False, 2)
     escena.setBasePlayer1(structure1)
-    structure2 = TerranBarracks.TerranBarracks(200, 40, 600, 500, 300, mapa, "SPRITE/barracks", 3,player1)
+    structure2 = TerranBarracks.TerranBarracks(200, 40, 600, 500, 300, player1, mapa, False, 3)
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addUnits(scv)
@@ -100,7 +100,7 @@ def setEntity(player):
     zergBuilder = ZergBuilder.ZergBuilder(200, 50, 10, 800, 400, player2, mapa, False, 8)
     zergling2 = Zergling.Zergling(10, 10, player2)
     player2.addUnits(zergling2)
-    player1.addStructures(zergBuilder)
+    player2.addStructures(zergBuilder)
     
 
 def update():

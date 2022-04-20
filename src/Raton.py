@@ -7,6 +7,19 @@ from . import Player
 def collides(x, y, rect2):
     return (x >= rect2.x and x <= rect2.x + rect2.w and y >= rect2.y and y <= rect2.y + rect2.h )
 
+def collideRect(rect1, rect2):
+    collideX = False
+    collideY = False
+    if (rect1.x >= rect2.x) and (rect1.x <= (rect2.x+rect2.width)):
+        collideX = True
+    elif (rect2.x >= rect1.x) and (rect2.x <= (rect1.x+rect1.width)):
+        collideX = True
+    if (rect1.y >= rect2.y) and (rect1.y <= (rect2.y+rect2.height)):
+        collideY = True
+    elif (rect2.y >= rect1.y) and (rect2.y <= (rect1.y+rect1.height)):
+        collideY = True
+    return collideX and collideY
+
 def createRect(initialX, initialY, finalX, finalY):
     if finalX>=initialX and finalY>=initialY:
         area = pygame.Rect(initialX, initialY, finalX-initialX, finalY-initialY)
@@ -65,19 +78,21 @@ class raton(pygame.sprite.Sprite):
         self.rect.y = self.rel_pos[1] - self.rect.height/2
 
         #la posicion del cursor es relativa a la camara (por que tiene dos rectangulos? (self.rect y mouseRect))
-        mouseRect = pygame.Rect(self.real_pos[0], self.real_pos[1], 1, 1)
+        #mouseRect = pygame.Rect(self.real_pos[0], self.real_pos[1], 1, 1)
         mouse_collide = False
         for unit in self.player.units:
             ###---LOGICA
-            r = unit.getRect()
             #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-            if collides(self.real_pos[0], self.real_pos[1],unit.getRect()):
+            if collides(self.real_pos[0], self.real_pos[1], unit.getRect()):
                 mouse_collide = True
-        for structure in self.player.structures:
-            ###---LOGICA
-            #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-            if collides(self.real_pos[0], self.real_pos[1],structure.getRect()):
-                mouse_collide = True
+                break
+        if not mouse_collide:
+            for structure in self.player.structures:
+                ###---LOGICA
+                #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
+                if collides(self.real_pos[0], self.real_pos[1],structure.getRect()):
+                    mouse_collide = True
+                    break
 
         if mouse_collide:
             self.collide = True
@@ -163,15 +178,18 @@ class raton(pygame.sprite.Sprite):
                 if self.pulsado: 
                     self.pulsado = False
                     self.clicked = True
-                    #print('click izq liberado', mouse_pos[0], mouse_pos[1], event.type)
+                    print('click izq liberado', real_mouse_pos, event.type)
                     
-                    #mouseRect = createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
+                    mouseRect = createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
+                    unitSel = False
                     for unit in self.player.units:
                         #print(unit.getRect())
-                        if collides(self.real_pos[0], self.real_pos[1],unit.getRect()):
+                        if collideRect(mouseRect, unit.getRect()):
                             unit.setClicked(True)
                             self.player.unitsSelected.append(unit)
-                            
+                            unitSel = True
+                            if len(self.player.unitsSelected) > Utils.MAX_SELECTED_UNIT:
+                                break
                             #print("CLICKADO" + str(terran.id))
                         else:
                             unit.setClicked(False)
@@ -179,19 +197,20 @@ class raton(pygame.sprite.Sprite):
                                 self.player.unitsSelected.remove(unit)
                             #unitsClicked.remove(terran)
                             #print("DESCLICKADO" + str(terran.id)) 
-                    for structure in self.player.structures:
-                        if collides(self.real_pos[0], self.real_pos[1],structure.getRect()):
-                            structure.setClicked(True)
-                            #self.player.unitsSelected.append(unit)
-                            
-                            #print("CLICKADO" + str(terran.id))
-                        else:
-                            structure.setClicked(False)
-                            #if unit in self.player.unitsSelected:
-                            #    self.player.unitsSelected.remove(unit)
-                            #unitsClicked.remove(terran)
-                            #print("DESCLICKADO" + str(terran.id)) 
-            if type[2]:
+                    if not unitSel:
+                        for structure in self.player.structures:
+                            if collideRect(mouseRect, structure.getRect()):
+                                structure.setClicked(True)
+                                #self.player.unitsSelected.append(unit)
+                                break;
+                                #print("CLICKADO" + str(terran.id))
+                            else:
+                                structure.setClicked(False)
+                                #if unit in self.player.unitsSelected:
+                                #    self.player.unitsSelected.remove(unit)
+                                #unitsClicked.remove(terran)
+                                #print("DESCLICKADO" + str(terran.id)) 
+            if not type[2]:
                 print('click der liberado', real_mouse_pos[0], real_mouse_pos[1], event.type)
         return command
     

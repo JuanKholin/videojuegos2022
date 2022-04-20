@@ -88,6 +88,6 @@ class TerranBuilder(Structure.Structure):
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_v and self.player.resources >= Utils.TERRAN_WORKER_MINERAL_COST:
                     self.player.resources -= Utils.TERRAN_WORKER_MINERAL_COST
-                    terranWorker = TerranWorker.TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, 1)
+                    terranWorker = TerranWorker.TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, 1, self.player)
                     self.generateUnit(terranWorker)
 

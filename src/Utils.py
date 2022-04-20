@@ -2,6 +2,8 @@ from enum import Enum, auto, IntEnum
 
 import pygame
 
+DEBBUG = True
+
 class System_State(Enum):
     MAINMENU = auto()
     MAP1 = auto()
@@ -27,6 +29,8 @@ GREEN3  = (110, 255, 90)
 
 HP = pygame.image.load("SPRITE/vida3.png")
 HP.set_colorkey(BLACK)
+
+MAX_SELECTED_UNIT = 5
 
 ENTITY_ID = 0
 
