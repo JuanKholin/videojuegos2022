@@ -1,6 +1,7 @@
 import pygame
 from . import Structure, TerranWorker
 from .. import Player, Map, Utils, Tile
+from src.Utils import *
 
 WHITE   = (255,255,255)
 
@@ -11,12 +12,20 @@ class TerranBuilder(Structure.Structure):
     generationTime = 0
     generationCount = 0
 
+<<<<<<< Updated upstream
     def __init__(self, hp, mineralCost, generationTime, xini, yini, map, sprites,id, player):
         Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, id, player)
         for i in range(6): #0-3 construccion, 4 estado normal y 5 generando tropas
             self.sprites.insert(i,pygame.image.load(sprites + "/tile00" + str(i) + ".png"))
+=======
+    def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building,id):
+        Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, id)
+        self.player = player
+        
+        self.sprites = cargarSprites(TERRAN_BUILDER_PATH, 6, False, WHITE, 1.5)
+>>>>>>> Stashed changes
         self.map = map
-        self.building = True 
+        self.building = building 
         self.image = self.sprites[self.index]
         self.image.set_colorkey(WHITE)
         self.rectn = pygame.Rect(xini, yini, self.sprites[4].get_width(), self.sprites[4].get_height()-self.rectOffY)
@@ -69,14 +78,17 @@ class TerranBuilder(Structure.Structure):
     def setClicked(self, click):
         self.clicked = click
 
-    def draw(self, screen):
+    def draw(self, screen, camera):
         r = self.getRect()
         pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x, r.y+self.rectOffY, r.w, r.h),1)
         image = self.getImage()
         if self.clicked:
             pygame.draw.ellipse(screen, Utils.GREEN, [self.x-self.rectn.w/2, self.y+self.rectOffY-self.rectn.h/2, self.rectn.w, self.rectn.h], 2)
-            screen.blit(self.image, [image.x, image.y])
         screen.blit(self.image, [image.x, image.y])
+        hp = Utils.HP
+        hp = pygame.transform.scale(hp, (50, 8))
+        hp = pygame.transform.chop(hp, ((self.hp/self.maxHp) * 50, 0, 50, 0))
+        screen.blit(hp, [self.x - camera.x - 25, self.y+self.rectOffY+self.rectn.h/2 - 10 - camera.y])
 
     def processEvent(self, event):
         if self.clicked:

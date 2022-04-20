@@ -51,17 +51,9 @@ class Player():
             #si cae en los limites de la camara dibujar.
             if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
             r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
-                pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
                 #aqui llamabais a el draw de structures, me lo he cargado para integrar lo que había hecho con la camara
                 #luego lo vuelvo a poner
-                image = structure.getImage()
-                if structure.clicked:
-                    pygame.draw.ellipse(screen, Utils.GREEN, [structure.x-structure.rectn.w/2 - camera.x, structure.y+structure.rectOffY-structure.rectn.h/2 - camera.y, structure.rectn.w, structure.rectn.h], 2)
-                screen.blit(structure.image, [image.x - camera.x, image.y - camera.y])
-                hp = Utils.HP
-                hp = pygame.transform.scale(hp, (50, 8))
-                hp = pygame.transform.chop(hp, ((structure.hp/structure.maxHp) * 50, 0, 50, 0))
-                screen.blit(hp, [structure.x - camera.x - 25, structure.y+structure.rectOffY+structure.rectn.h/2 - 10 - camera.y])
+                structure.draw(screen, camera)
         for unit in self.units:
             r = unit.getRect()
             #print(r)

@@ -2,7 +2,7 @@ import pygame, sys
 import math
 from src.Entities.Cristal import Cristal
 from src import Map, Raton, Escena, Player, Camera, AI, Command, Utils, Interface
-from src.Entities import Terran, TerranBuilder, Zergling, TerranBarracks, TerranWorker
+from src.Entities import Terran, TerranBuilder, Zergling, ZergBuilder, TerranBarracks, TerranWorker
 
 # Auxiliar del bucle principal
 def procesarInput():
@@ -83,6 +83,7 @@ escena = Escena.Escena(player1, player2, aI, mapa, camera, raton, p1Interface, r
 #escena.mapa.addOre(100,100)
 
 def setEntity(player):
+<<<<<<< Updated upstream
     #terran1 = Terran.Terran(40, 80, 80, 20, 200, 1, 5, "terranSprites", 8, 6)
     #terran2 = Terran.Terran(40, 200, 200, 20, 200, 1, 5, "terranSprites", 8, 6)
     scv = TerranWorker.TerranWorker(2, 5, 3, player1)
@@ -90,12 +91,26 @@ def setEntity(player):
     structure1 = TerranBuilder.TerranBuilder(200, 40, 600, 200, 300,  mapa, "SPRITE/builder", 2,player1)
     escena.setBasePlayer1(structure1)
     structure2 = TerranBarracks.TerranBarracks(200, 40, 600, 500, 300, mapa, "SPRITE/barracks", 3,player1)
+=======
+    terran1 = Terran.Terran(40, 80, 80, 20, 200, 1, 5, "terranSprites", 8, 6)
+    terran2 = Terran.Terran(40, 200, 200, 20, 200, 1, 5, "terranSprites", 8, 6)
+    scv = TerranWorker.TerranWorker(2, 5, 3)
+    
+    structure1 = TerranBuilder.TerranBuilder(200, 40, 600, 200, 300, player1, mapa, "SPRITE/builder", 2)
+    structure2 = TerranBarracks.TerranBarracks(200, 40, 600, 500, 300, player1, mapa, "SPRITE/barracks", 3)
+>>>>>>> Stashed changes
     player.addStructures(structure1)
     player.addStructures(structure2)
-    player1.addUnits(scv)
-    #player1.addUnits(terran2)
-    #player1.addUnits(zergling2)
+    player.addUnits(scv)
+    #player.addUnits(terran2)
+    #player.addUnits(zergling2)
     #player1.addUnits(scv)
+    
+    zergBuilder = ZergBuilder.ZergBuilder(200, 50, 10, 800, 400, player2, mapa, False, 8)
+    zergling2 = Zergling.Zergling(10, 10)
+    player2.addUnits(zergling2)
+    player1.addStructures(zergBuilder)
+    
 
 def update():
     Utils.clock_update()

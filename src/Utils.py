@@ -78,10 +78,10 @@ def takeID():
 MAIN_MENU = "SPRITE/mainMenu/fondo"
 MAIN_MENU_TEXT_SIZE = 30
 
-SINGLE_TEXT_POS = [340, 235]
+SINGLE_TEXT_POS = [340, 215]
 EXIT_TEXT_POS = [720, 600]
 
-SINGLE_SIZE = (360, 180)
+SINGLE_SIZE = 1.5 #(360, 180)
 SINGLE_PLAYER = "SPRITE/mainMenu/SinglePlayer/single"
 SINGLE_PLAYER_N = 35
 SINGLE_PLAYER_POS = [20, 40]
@@ -90,14 +90,14 @@ SINGLE_PLAYER_FB = "SPRITE/mainMenu/SinglePlayer/Spanish/singleones"
 SINGLE_PLAYER_FB_N = 60
 SINGLE_PLAYER_FB_POS = [50, 160]
 
-EXIT_SIZE = (300, 200)
+EXIT_SIZE = 1.5 #(300, 200)
 EXIT = "SPRITE/mainMenu/Exit/exit"
 EXIT_N = 50
 EXIT_POS = [650, 420]
 
 EXIT_FB = "SPRITE/mainMenu/Exit/Spanish/exitones"
 EXIT_FB_N = 30
-EXIT_FB_POS = [690, 420]
+EXIT_FB_POS = [680, 420]
 
 
 #----------------------------------------------------------------
@@ -106,6 +106,22 @@ EXIT_FB_POS = [690, 420]
 
 ##---------TERRAN_WORKER------------------
 TERRAN_WORKER_MINERAL_COST = 20
+
+##---------ZERGLING-----------------------
+ZERGLING_MINERAL_COST = 20
+
+#----------------------------------------------------------------
+# ESTRUCTURAS
+#----------------------------------------------------------------
+
+##---------TERRAN_BUILDER------------------
+TERRAN_BUILDER_PATH = "SPRITE/builder/tile00"
+
+##---------TERRAN_BARRACK------------------
+TERRAN_BARRACK_PATH = "SPRITE/barracks/tile00"
+
+##---------ZERG_BUILDER------------------
+ZERG_BUILDER_PATH = "SPRITE/ZergBuilder/tile00"
 
 
 #carga n sprites con nombre path + 0 hasta path + (n-1)
@@ -120,10 +136,11 @@ def cargarSprites(path, n, twoDig, color = None, size = None):
             nPath = str(i)
         if size == None:
             sprites.insert(i, pygame.image.load(path + nPath + ".png"))
-        elif size == "x2":
+        elif size == 2:
             sprites.insert(i, pygame.transform.scale2x(pygame.image.load(path + nPath + ".png")))
         else:
-            sprites.insert(i, pygame.transform.scale(pygame.image.load(path + nPath + ".png"), size))
+            image = pygame.image.load(path + nPath + ".png")
+            sprites.insert(i, pygame.transform.scale(image, [image.get_rect().w * size, image.get_rect().h * size]))
         if color != None:
             sprites[i].set_colorkey(color)
             pass
@@ -132,7 +149,7 @@ def cargarSprites(path, n, twoDig, color = None, size = None):
 
 def clock_update():
     global SYSTEM_CLOCK
-    SYSTEM_CLOCK = (SYSTEM_CLOCK + 1) % 1000
+    SYSTEM_CLOCK = (SYSTEM_CLOCK + 1) % 100000
 
 def frame(n):
     if SYSTEM_CLOCK % n == 0:

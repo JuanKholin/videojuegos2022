@@ -131,6 +131,9 @@ class Zergling(Zerg.Zerg):
     # Introduce un nuevo camino a la lista de caminos
     def addPath(self, path):
         self.paths.append(path)
+        
+    def getDrawPosition(self):
+        return(self.x - self.image.get_width()/2,  self.y - self.image.get_height()/2)
 
     # Genera los sprites que son inversos, es todo un artista
     def mirrorTheChosen(self):
