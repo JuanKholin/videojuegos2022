@@ -13,7 +13,7 @@ class ZergBuilder(Structure.Structure):
     generationCount = 0
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building, id):
-        Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, id)
+        Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, id, player)
         self.player = player
         
         self.sprites = cargarSprites(ZERG_BUILDER_PATH, 4, False, BLUE, 2)

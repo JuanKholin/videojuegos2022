@@ -39,10 +39,10 @@ class Zergling(Zerg.Zerg):
     # Pre: xIni e yIni marcan posiciones del mapa, (ej: (3, 2) se refiere a la posicion de 
     # la cuarta columna y tercera fila del mapa)
     # Post: Crea un bichito mono que no hace practicamente nada pero tu dale tiempo
-    def __init__(self, xIni, yIni):
+    def __init__(self, xIni, yIni, player):
         Zerg.Zerg.__init__(self, HP, xIni * 40 + 20, yIni * 40 + 20, MINERAL_COST, 
                 GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, 
-                PADDING, Utils.takeID())
+                PADDING, Utils.takeID(), player)
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey(Utils.BLACK)
         self.sprites = Entity.Entity.divideSpritesheetByRows(spritesheet, 

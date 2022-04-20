@@ -9,17 +9,10 @@ class TerranBarracks(Structure.Structure):
     generationTime = 0
     generationCount = 0
 
-<<<<<<< Updated upstream
-    def __init__(self, hp, mineralCost, generationTime, xini, yini, map, sprites, id,player):
-        Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, id,player)
-        for i in range(6): #0-3 construccion, 4 estado normal y 5 generando tropas
-            self.sprites.insert(i, pygame.image.load(sprites + "/tile00" + str(i) + ".png"))
-=======
     def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, sprites, id):
-        Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, id)
+        Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, id, player)
         self.player = player
         self.sprites = Utils.cargarSprites(Utils.TERRAN_BARRACK_PATH, 6, False, Utils.WHITE, 1.2)
->>>>>>> Stashed changes
         self.map = map
         self.building = True 
         self.image = self.sprites[self.index]

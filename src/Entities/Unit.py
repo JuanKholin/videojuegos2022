@@ -3,8 +3,8 @@ from . import Entity
 
 class Unit(Entity.Entity):
     def __init__(self, hp, xIni, yIni, mineral_cost, generation_time, speed, framesToRefresh, 
-                sprites, face, frame, padding, id,player):
-        Entity.Entity.__init__(self, hp, xIni, yIni, mineral_cost, generation_time, id,player)
+                sprites, face, frame, padding, id, player):
+        Entity.Entity.__init__(self, hp, xIni, yIni, mineral_cost, generation_time, id, player)
         self.paths = []
         self.clicked = False
         self.angle = 0
