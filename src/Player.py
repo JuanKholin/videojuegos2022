@@ -7,6 +7,7 @@ class Player():
         #Atributos
         self.units = units
         self.unitsSelected = []
+        self.structuresSelected = []
         self.structures = structures
         self.resources = resources
         self.keyMap = keyMap

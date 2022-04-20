@@ -100,7 +100,7 @@ def setEntity(player):
     zergBuilder = ZergBuilder.ZergBuilder(200, 50, 10, 800, 400, player2, mapa, False, 8)
     zergling2 = Zergling.Zergling(10, 10, player2)
     player2.addUnits(zergling2)
-    player2.addStructures(zergBuilder)
+    player1.addStructures(zergBuilder)
     
 
 def update():

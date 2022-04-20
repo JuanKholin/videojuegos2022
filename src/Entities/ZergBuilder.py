@@ -59,15 +59,15 @@ class ZergBuilder(Structure.Structure):
 
     def draw(self, screen, camera):
         r = self.getRect()
-        pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x, r.y+self.rectOffY, r.w, r.h),1)
+        pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y+self.rectOffY - camera.y, r.w, r.h),1)
         image = self.getImage()
         if self.clicked:
-            pygame.draw.ellipse(screen, Utils.GREEN, [self.x-r.w/2, self.y+self.rectOffY-r.h/2+ 10, r.w, r.h], 2)
-        screen.blit(self.image, [image.x, image.y])
+            pygame.draw.ellipse(screen, Utils.GREEN, [self.x- r.w/2 - camera.x + 15, self.y+self.rectOffY-r.h/2+10 - camera.y + 30, r.w - 25, r.h - 30], 2)
+        screen.blit(self.image, [image.x - camera.x, image.y - camera.y])
         hp = Utils.HP
         hp = pygame.transform.scale(hp, (50, 8))
         hp = pygame.transform.chop(hp, ((self.hp/self.maxHp) * 50, 0, 50, 0))
-        screen.blit(hp, [self.x - camera.x - 25, self.y+self.rectOffY+self.rectn.h/2 - 10 - camera.y])
+        screen.blit(hp, [self.x - camera.x - 25, self.y+self.rectOffY+self.rectn.h/2 - 30 - camera.y])
 
     def processEvent(self, event):
         if self.clicked:

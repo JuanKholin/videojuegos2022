@@ -2,7 +2,7 @@ from enum import Enum, auto, IntEnum
 
 import pygame
 
-DEBBUG = True
+DEBBUG = False
 
 class System_State(Enum):
     MAINMENU = auto()

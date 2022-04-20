@@ -70,11 +70,11 @@ class TerranBarracks(Structure.Structure):
                     
     def draw(self, screen, camera):
         r = self.getRect()
-        pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x, r.y+self.rectOffY, r.w, r.h),1)
+        pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y+self.rectOffY - camera.y, r.w, r.h),1)
         image = self.getImage()
         if self.clicked:
             pygame.draw.ellipse(screen, Utils.GREEN, [self.x-self.rectn.w/2, self.y+self.rectOffY-self.rectn.h/2, self.rectn.w, self.rectn.h], 2)
-        screen.blit(self.image, [image.x, image.y])
+        screen.blit(self.image, [image.x  - camera.x, image.y - camera.y])
         hp = Utils.HP
         hp = pygame.transform.scale(hp, (50, 8))
         hp = pygame.transform.chop(hp, ((self.hp/self.maxHp) * 50, 0, 50, 0))

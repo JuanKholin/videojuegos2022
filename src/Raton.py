@@ -180,36 +180,37 @@ class raton(pygame.sprite.Sprite):
                     self.clicked = True
                     print('click izq liberado', real_mouse_pos, event.type)
                     
-                    mouseRect = createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
                     unitSel = False
+                    selectedUnit = self.player.unitsSelected
+                    selectedStructures = self.player.structuresSelected
+                    self.player.unitsSelected = []
+                    self.player.structuresSelected = []
+                    mouseRect = createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
                     for unit in self.player.units:
                         #print(unit.getRect())
-                        if collideRect(mouseRect, unit.getRect()):
+                        if len(self.player.unitsSelected) < Utils.MAX_SELECTED_UNIT and collideRect(mouseRect, unit.getRect()):
                             unit.setClicked(True)
                             self.player.unitsSelected.append(unit)
                             unitSel = True
-                            if len(self.player.unitsSelected) > Utils.MAX_SELECTED_UNIT:
-                                break
                             #print("CLICKADO" + str(terran.id))
-                        else:
-                            unit.setClicked(False)
-                            if unit in self.player.unitsSelected:
-                                self.player.unitsSelected.remove(unit)
-                            #unitsClicked.remove(terran)
-                            #print("DESCLICKADO" + str(terran.id)) 
                     if not unitSel:
                         for structure in self.player.structures:
                             if collideRect(mouseRect, structure.getRect()):
                                 structure.setClicked(True)
-                                #self.player.unitsSelected.append(unit)
-                                break;
-                                #print("CLICKADO" + str(terran.id))
-                            else:
-                                structure.setClicked(False)
-                                #if unit in self.player.unitsSelected:
-                                #    self.player.unitsSelected.remove(unit)
-                                #unitsClicked.remove(terran)
-                                #print("DESCLICKADO" + str(terran.id)) 
+                                unitSel = True
+                                self.player.structuresSelected.append(structure)
+                                #print("CLICKADO ")
+                                break
+                            
+                    if unitSel: 
+                        for unit in self.player.units + self.player.structures:
+                            if unit not in self.player.unitsSelected + self.player.structuresSelected:
+                                #print(unit)
+                                unit.setClicked(False)
+                    else:
+                        self.player.unitsSelected = selectedUnit
+                        self.player.structuresSelected = selectedStructures
+                                
             if not type[2]:
                 print('click der liberado', real_mouse_pos[0], real_mouse_pos[1], event.type)
         return command
