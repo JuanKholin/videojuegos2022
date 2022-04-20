@@ -185,7 +185,10 @@ class raton(pygame.sprite.Sprite):
                     selectedStructures = self.player.structuresSelected
                     self.player.unitsSelected = []
                     self.player.structuresSelected = []
+                    isClick = False
+                    
                     mouseRect = createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
+                    
                     for unit in self.player.units:
                         #print(unit.getRect())
                         if len(self.player.unitsSelected) < Utils.MAX_SELECTED_UNIT and collideRect(mouseRect, unit.getRect()):
