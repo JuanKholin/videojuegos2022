@@ -279,17 +279,20 @@ class Escena():
             else:
                 if tileActual.type != 1:
                     rect = unit.getRect()
-                    x = rect.x
-                    finx = x + rect.w
-                    y = rect.y + 1
-                    finy = y + rect.h
+                    x = self.mapa.getTile(rect.x, rect.y).centerx
+                    y = self.mapa.getTile(rect.x, rect.y).centery
+                    finx = self.mapa.getTile(x + rect.w, y + rect.h).centerx
+                    finy = self.mapa.getTile(x + rect.w, y + rect.h).centery
+                    
                     while x <= finx:
                         while y <= finy:
+                            #print(int(x/40), int(y/40))
+                            tile = self.mapa.getTile(x,y)
                             self.mapa.setVecina(self.mapa.getTile(x,y), unit.id)
                             self.mapa.getTile(x,y).setOcupante(unit)
-                            y = y + self.mapa.th
-                        y = rect.y + 1
-                        x = x + self.mapa.tw
+                            y = y + 20
+                        y = self.mapa.getTile(rect.x, rect.y).centery
+                        x = x + 20
         for res in self.resources:
             rect = res.getRect()
             x = rect.x
@@ -309,7 +312,7 @@ class Escena():
         self.aI.make_commands()
 
     def draw(self, screen):
-        self.mapa.drawMap(screen, self.camera)
+        self.mapa.drawMap2(screen, self.camera)
         self.p1.draw(screen, self.camera)
         self.p2.draw(screen, self.camera)
         self.raton.draw(screen, self.camera)

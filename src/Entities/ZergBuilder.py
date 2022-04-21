@@ -8,7 +8,8 @@ WHITE   = (255,255,255)
 class ZergBuilder(Structure.Structure):
     sprites = []
     training = []
-    rectOffY = 30
+    rectOffY = 50
+    heightPad = 50
     generationTime = 0
     generationCount = 0
 
@@ -46,7 +47,8 @@ class ZergBuilder(Structure.Structure):
         self.training.append(unit)
 
     def getRect(self):
-        rectAux = pygame.Rect(self.x - self.rectn.w/2, self.y - self.rectn.h/2 + self.rectOffY, self.rectn.w, self.rectn.h - self.rectOffY)
+        print("me llaman")
+        rectAux = pygame.Rect(self.x - self.rectn.w/2, self.y - self.rectn.h/2 + self.rectOffY, self.rectn.w, self.rectn.h - self.heightPad)
         return rectAux
 
     def getImage(self):
@@ -59,7 +61,7 @@ class ZergBuilder(Structure.Structure):
 
     def draw(self, screen, camera):
         r = self.getRect()
-        pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y+self.rectOffY - camera.y, r.w, r.h),1)
+        pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
         image = self.getImage()
         if self.clicked:
             pygame.draw.ellipse(screen, Utils.GREEN, [self.x- r.w/2 - camera.x + 15, self.y+self.rectOffY-r.h/2+10 - camera.y + 30, r.w - 25, r.h - 30], 2)

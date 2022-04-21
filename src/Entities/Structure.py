@@ -7,6 +7,7 @@ class Structure(Entity.Entity):
     y = 0
     clicked = False
     index = 0
+    rectOffY = 0
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, id,player):
         Entity.Entity.__init__(self, hp, xini, yini, mineralCost, generationTime, id,player)
@@ -29,7 +30,7 @@ class Structure(Entity.Entity):
         screen.blit(hp, [image.x, image.y])
     
     def getRect(self):
-        rectAux = pygame.Rect(self.x - self.rectn.w/2, self.y - self.rectn.h/2, self.rectn.w, self.rectn.h)
+        rectAux = pygame.Rect(self.x - self.rectn.w/2, self.y - self.rectn.h/2 + self.rectOffY, self.rectn.w, self.rectn.h)
         return rectAux
         
     def getImage(self):

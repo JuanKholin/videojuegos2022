@@ -11,7 +11,7 @@ HP = 40
 MINERAL_COST = 20
 TIME_TO_MINE = 180
 GENERATION_TIME = 2
-SPEED = 4
+SPEED = 1
 FRAMES_TO_REFRESH = 10
 SPRITES = "scvJusto.bmp"
 SPRITE_PIXEL_ROWS = 72
@@ -119,56 +119,59 @@ class TerranWorker(Worker.Worker):
 
     # Aplica un frame de la unidad en movimiento
     def updateMoving(self):
-        actualPath = self.paths[0]
-        if actualPath.dist > 0: # Aun queda trecho
-            if actualPath.angle < 0:
-                self.angle = -actualPath.angle
-            else:
-                self.angle = 2 * math.pi - actualPath.angle          
-            
-            self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
-            self.dirx = math.cos(actualPath.angle)
-            self.diry = math.sin(actualPath.angle)
-            pos = self.getPosition()
-            distrec = math.hypot((pos[0] + self.dirx * self.speed) - 
-                    pos[0], (pos[1] + self.diry * self.speed) 
-                    - pos[1])
-            actualPath.dist -= distrec
-            self.x += self.dirx * self.speed
-            self.y += self.diry * self.speed
-
-            self.count += 1
-            if self.count >= self.framesToRefresh:
-                self.count = 0
-                self.updateMovingImage()
-        else: # Se acaba este camino
-            self.paths.pop(0)
-            if len(self.paths) == 0:
-                print(self.order)
-                if self.order != 0:
-                    if self.order['order'] == Command.CommandId.MOVER:
-                        self.dir = 8
-                        self.changeToStill()
-                    elif self.order['order'] == Command.CommandId.MINAR:
-                        angle = self.order['angle']
-                        self.basePath = self.order['basePath']
-                        self.cristal = self.order['cristal']
-                        for path in self.basePath:
-                            print("Posicion final a casa: ",path.posFin, path.angle)
-                        if angle < 0:
-                            self.angle = -angle
-                        else:
-                            self.angle = 2 * math.pi - angle
-                        self.dir = int(4 - (self.angle * 8 / math.pi)) % 16          
-                
-                        self.changeToMining()
-                    elif self.order['order'] == Command.CommandId.TRANSPORTAR_ORE:
-                        #sumar minerales al jugador
-                        self.order = 0
-                        self.player.resources += self.minePower
-                        self.changeToStill()
+        if self.paths.__len__() != 0:
+            actualPath = self.paths[0]
+            if actualPath.dist > 0: # Aun queda trecho
+                if actualPath.angle < 0:
+                    self.angle = -actualPath.angle
                 else:
-                    self.changeToStill()
+                    self.angle = 2 * math.pi - actualPath.angle          
+                
+                self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
+                self.dirx = math.cos(actualPath.angle)
+                self.diry = math.sin(actualPath.angle)
+                pos = self.getPosition()
+                distrec = math.hypot((pos[0] + self.dirx * self.speed) - 
+                        pos[0], (pos[1] + self.diry * self.speed) 
+                        - pos[1])
+                actualPath.dist -= distrec
+                self.x += self.dirx * self.speed
+                self.y += self.diry * self.speed
+
+                self.count += 1
+                if self.count >= self.framesToRefresh:
+                    self.count = 0
+                    self.updateMovingImage()
+            else: # Se acaba este camino
+                self.paths.pop(0)
+                if len(self.paths) == 0:
+                    print(self.order)
+                    if self.order != 0:
+                        if self.order['order'] == Command.CommandId.MOVER:
+                            self.dir = 8
+                            self.changeToStill()
+                        elif self.order['order'] == Command.CommandId.MINAR:
+                            angle = self.order['angle']
+                            self.basePath = self.order['basePath']
+                            self.cristal = self.order['cristal']
+                            for path in self.basePath:
+                                print("Posicion final a casa: ",path.posFin, path.angle)
+                            if angle < 0:
+                                self.angle = -angle
+                            else:
+                                self.angle = 2 * math.pi - angle
+                            self.dir = int(4 - (self.angle * 8 / math.pi)) % 16          
+                    
+                            self.changeToMining()
+                        elif self.order['order'] == Command.CommandId.TRANSPORTAR_ORE:
+                            #sumar minerales al jugador
+                            self.order = 0
+                            self.player.resources += self.minePower
+                            self.changeToStill()
+                    else:
+                        self.changeToStill()
+        else:
+            self.changeToStill()
     # Aplica un frame a la unidad atacando
     #def updateAttacking(self):
 

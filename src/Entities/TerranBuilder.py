@@ -8,7 +8,7 @@ WHITE   = (255,255,255)
 class TerranBuilder(Structure.Structure):
     sprites = []
     training = []
-    rectOffY = 10
+    rectOffY = 0
     generationTime = 0
     generationCount = 0
 
@@ -59,9 +59,6 @@ class TerranBuilder(Structure.Structure):
     def generateUnit(self, unit):
         self.training.append(unit)
 
-    def getRect(self):
-        rectAux = pygame.Rect(self.x - self.rectn.w/2, self.y - self.rectn.h/2, self.rectn.w, self.rectn.h)
-        return rectAux
 
     def getImage(self):
         rect = self.image.get_rect()
@@ -73,6 +70,7 @@ class TerranBuilder(Structure.Structure):
 
     def draw(self, screen, camera):
         r = self.getRect()
+        #print("Rect draw: ",r.x - camera.x, r.y+self.rectOffY - camera.y)
         pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y+self.rectOffY - camera.y, r.w, r.h),1)
         image = self.getImage()
         if self.clicked:

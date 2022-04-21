@@ -85,7 +85,7 @@ escena = Escena.Escena(player1, player2, aI, mapa, camera, raton, p1Interface, r
 def setEntity(player):
     #terran1 = Terran.Terran(40, 80, 80, 20, 200, 1, 5, "terranSprites", 8, 6)
     #terran2 = Terran.Terran(40, 200, 200, 20, 200, 1, 5, "terranSprites", 8, 6)
-    scv = TerranWorker.TerranWorker(2, 5, 3, player1)
+    scv = TerranWorker.TerranWorker(0, 3, 3, player1)
     #zergling2 = Zergling.Zergling(10, 10)
     structure1 = TerranBuilder.TerranBuilder(200, 40, 600, 200, 300, player1, mapa, False, 2)
     escena.setBasePlayer1(structure1)
