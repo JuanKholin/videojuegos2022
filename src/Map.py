@@ -123,6 +123,28 @@ class Map():
 
         return tilesVecinas
 
+    #Devuelve una lista de tiles vecinas a la dada
+    def getAllTileVecinas(self, tile):
+        tilesVecinas = []
+        aux = self.getTile(tile.centerx + self.tw,tile.centery)#tile derecha
+        tilesVecinas.append(aux)
+        aux = self.getTile(tile.centerx + self.tw,tile.centery + self.th) #tile esquina superior derecha
+        tilesVecinas.append(aux)
+        aux = self.getTile(tile.centerx + self.tw,tile.centery - self.th) #tile esquina inferior derecha
+        tilesVecinas.append(aux)
+        aux = self.getTile(tile.centerx,tile.centery - self.th) #tile inferior 
+        tilesVecinas.append(aux)
+        aux = self.getTile(tile.centerx,tile.centery + self.th) #tile superior 
+        tilesVecinas.append(aux)
+        aux = self.getTile(tile.centerx - self.tw,tile.centery) #tile izquierda 
+        tilesVecinas.append(aux)
+        aux = self.getTile(tile.centerx - self.tw,tile.centery + self.th) #tile esquina superior izquierda
+        tilesVecinas.append(aux)
+        aux = self.getTile(tile.centerx - self.tw,tile.centery - self.th) #tile esquina inferior izquierda
+        tilesVecinas.append(aux)
+
+        return tilesVecinas
+
     def calcDest(self, xini, yini, xfin, yfin):
         destino = self.getTile(xfin, yfin)
         xaux = xfin

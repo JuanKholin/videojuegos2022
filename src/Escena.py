@@ -160,17 +160,17 @@ class Escena():
                     if tileActual != tileSiguiente :
                         #print("es de este tipo, ", tileActual.type)
                         if tileActual.type != 1 and tileActual.type != 3:
-                            tiles = self.mapa.getTileVecinas(tileActual)
                             self.mapa.setLibre(tileActual)
                             if tileSiguiente.type != 1 and tileSiguiente.type != 3:
                                 self.mapa.setVecina(tileSiguiente, unit.id)
                                 tileSiguiente.setOcupante(unit)
-                            for tile in tiles:
-                                self.mapa.setLibre(tile)
                     else:
                         if tileActual.type != 1 and tileActual.type != 3:
                             self.mapa.setVecina(tileActual, unit.id)
                             tileActual.setOcupante(unit)
+                    tiles = self.mapa.getAllTileVecinas(tileActual)
+                    for tile in tiles:
+                            self.mapa.setLibre(tile)
                 else:
 
                     #print("Que me la han ocupao",tilePath.tileid ,"y yo estando en",tileActual.tileid,unit.id )
