@@ -47,7 +47,6 @@ class ZergBuilder(Structure.Structure):
         self.training.append(unit)
 
     def getRect(self):
-        print("me llaman")
         rectAux = pygame.Rect(self.x - self.rectn.w/2, self.y - self.rectn.h/2 + self.rectOffY, self.rectn.w, self.rectn.h - self.heightPad)
         return rectAux
 
