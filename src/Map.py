@@ -198,6 +198,7 @@ class Map():
         self.map[int(tile.centery / self.th)][int(tile.centerx / self.tw)].padre = padre
 
     def Astar(self, tileIni, tileObj):
+        print("VOY DE ", tileIni.centerx,tileIni.centery, "A ",  tileObj.centerx,tileObj.centery)
         nodosAbiertos = []
         nodosCerrados = []
         nodosAbiertos.append(tileIni)

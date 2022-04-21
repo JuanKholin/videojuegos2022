@@ -9,7 +9,7 @@ from .. import Utils
 # Constantes
 HP = 40
 MINERAL_COST = 20
-TIME_TO_MINE = 180
+TIME_TO_MINE = 1000
 GENERATION_TIME = 2
 SPEED = 4
 FRAMES_TO_REFRESH = 10
@@ -105,14 +105,14 @@ class TerranWorker(Worker.Worker):
         #aqui vendria un elif de si te atacan pasas a atacando
     
     def updateMinig(self):
-        self.count += 1
-        if Utils.frame(TIME_TO_MINE): #Termina de minar
+        self.count += pg.time.Clock().tick(Utils.CLOCK_PER_SEC)
+        if self.count > TIME_TO_MINE: #Termina de minar
             self.order = {'order':Command.CommandId.TRANSPORTAR_ORE}
             self.cristal.getMined(self.minePower)
+            print(self.basePath.__len__())
             self.paths = self.basePath
             self.state = Utils.State.MOVING
-        if self.count >= self.framesToRefresh:
-            self.count = 0
+        if Utils.frame(FRAMES_TO_REFRESH):
             self.updateMiningImage()
         if len(self.paths) > 0:
             self.state = Utils.State.MOVING
@@ -161,7 +161,7 @@ class TerranWorker(Worker.Worker):
                             else:
                                 self.angle = 2 * math.pi - angle
                             self.dir = int(4 - (self.angle * 8 / math.pi)) % 16          
-                    
+                            self.count = 0
                             self.changeToMining()
                         elif self.order['order'] == Command.CommandId.TRANSPORTAR_ORE:
                             #sumar minerales al jugador
