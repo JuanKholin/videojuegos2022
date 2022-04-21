@@ -200,7 +200,6 @@ class Map():
     def Astar(self, tileIni, tileObj):
         nodosAbiertos = []
         nodosCerrados = []
-        
         nodosAbiertos.append(tileIni)
         nodosAbiertos[0].padre = nodosAbiertos[0]
         while nodosAbiertos.__len__() != 0:
@@ -228,7 +227,7 @@ class Map():
 
                 break
             for tile in self.getTileVecinas(currentTile):
-                print("miro tile: ", tile.tileid + 1, tile.g)
+                #print("miro tile: ", tile.tileid + 1, tile.g)
                 #input()
                 if Tile.mismoId(nodosCerrados, tile).tileid == -1:# No esta
                     #print("No esta en cerrados, miro en abiertos")
@@ -264,7 +263,7 @@ class Map():
         else:           
             currentTile = self.getTile(tileObj.centerx, tileObj.centery)
             while currentTile != tileIni:
-                #print(currentTile.tileid)
+                print(currentTile.tileid, currentTile.g)
                 path.append(currentTile)
                 currentTile = currentTile.padre
             #print(currentTile.tileid)
