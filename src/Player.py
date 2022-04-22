@@ -69,6 +69,9 @@ class Player():
                     pygame.draw.ellipse(screen, Utils.GREEN, [r.x - camera.x, r.y + (0.7*r.h)- camera.y,r.w , 0.3*r.h], 2)
                 #screen.blit(unit.image, [r.x - camera.x, r.y - camera.y])
                 screen.blit(unit.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
+                if unit.clicked:
+                    hp = pygame.transform.chop(pygame.transform.scale(Utils.HP, (50, 8)), ((unit.hp/unit.maxHp) * 50, 0, 50, 0))
+                    screen.blit(hp, [unit.x - camera.x - hp.get_rect().w/2, unit.y + r.h/2 - camera.y])
 
     # Para que la AI pueda acceder a la informacion
     def get_info(self):

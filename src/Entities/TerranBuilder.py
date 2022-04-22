@@ -11,9 +11,13 @@ class TerranBuilder(Structure.Structure):
     rectOffY = 0
     generationTime = 0
     generationCount = 0
+    rectOffY = 20
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building,id):
-        Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, id, player)
+        (x, y) = map.getTileCenter(xini, yini)
+        x -= 18
+        y -= 16
+        Structure.Structure.__init__(self, hp, mineralCost, generationTime, x, y, id, player)
         self.player = player
 
         self.sprites = cargarSprites(TERRAN_BUILDER_PATH, 6, False, WHITE, 1.5)
@@ -21,7 +25,7 @@ class TerranBuilder(Structure.Structure):
         self.building = building
         self.image = self.sprites[self.index]
         self.image.set_colorkey(WHITE)
-        self.rectn = pygame.Rect(xini, yini, self.sprites[4].get_width(), self.sprites[4].get_height()-self.rectOffY)
+        self.rectn = pygame.Rect(x, y, self.sprites[4].get_width(), (self.sprites[4].get_height()-self.rectOffY))
         self.count = 0
         self.paths = []
     def update(self):
@@ -58,32 +62,10 @@ class TerranBuilder(Structure.Structure):
 
     def generateUnit(self, unit):
         self.training.append(unit)
-
-
-    def getImage(self):
-        rect = self.image.get_rect()
-        rectAux = pygame.Rect(self.x - (rect.w/2), self.y - (rect.h/2), rect.w, rect.h)
-        return rectAux
-
-    def setClicked(self, click):
-        self.clicked = click
-
-    def draw(self, screen, camera):
-        r = self.getRect()
-        #print("Rect draw: ",r.x - camera.x, r.y+self.rectOffY - camera.y)
-        pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y+self.rectOffY - camera.y, r.w, r.h),1)
-        image = self.getImage()
-        if self.clicked:
-            pygame.draw.ellipse(screen, Utils.GREEN, [self.x-self.rectn.w/2 - camera.x, self.y+self.rectOffY-self.rectn.h/2 - camera.y, self.rectn.w, self.rectn.h], 2)
-        screen.blit(self.image, [image.x - camera.x, image.y - camera.y])
-        hp = Utils.HP
-        hp = pygame.transform.scale(hp, (50, 8))
-        hp = pygame.transform.chop(hp, ((self.hp/self.maxHp) * 50, 0, 50, 0))
-        screen.blit(hp, [self.x - camera.x - 25, self.y+self.rectOffY+self.rectn.h/2 - 10 - camera.y])
-
+        
     def execute(self, command_id):
         if self.clicked:
             if command_id == Command.CommandId.GENERAR_UNIDAD and self.player.resources >= Utils.TERRAN_WORKER_MINERAL_COST:
                 self.player.resources -= Utils.TERRAN_WORKER_MINERAL_COST
-                terranWorker = TerranWorker.TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, 1, self.player)
+                terranWorker = TerranWorker.TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
                 self.generateUnit(terranWorker)

@@ -187,6 +187,7 @@ class Escena():
                             tileActual.setOcupante(unit)
                     tiles = self.mapa.getAllTileVecinas(tileActual)
                     for tile in tiles:
+                        if tile.type != 1:
                             self.mapa.setLibre(tile)
                 else:
 
@@ -301,20 +302,15 @@ class Escena():
             else:
                 if tileActual.type != 1:
                     rect = unit.getRect()
-                    x = self.mapa.getTile(rect.x, rect.y).centerx
-                    y = self.mapa.getTile(rect.x, rect.y).centery
-                    finx = self.mapa.getTile(x + rect.w, y + rect.h).centerx
-                    finy = self.mapa.getTile(x + rect.w, y + rect.h).centery
-
-                    while x <= finx:
-                        while y <= finy:
-                            #print(int(x/40), int(y/40))
-                            tile = self.mapa.getTile(x,y)
-                            self.mapa.setVecina(self.mapa.getTile(x,y), unit.id)
-                            self.mapa.getTile(x,y).setOcupante(unit)
-                            y = y + 20
-                        y = self.mapa.getTile(rect.x, rect.y).centery
-                        x = x + 20
+                    x, y = self.mapa.getTileIndex(rect.x, rect.y)
+                    while y*self.mapa.th <= rect.y+rect.h:
+                        x, _ = self.mapa.getTileIndex(rect.x, rect.y)
+                        while x*self.mapa.tw <= rect.x+rect.w:
+                            tile = self.mapa.map[y][x]
+                            self.mapa.setVecina(tile, unit.id)
+                            tile.setOcupante(unit)
+                            x += 1
+                        y += 1
         for res in self.resources:
             rect = res.getRect()
             x = rect.x

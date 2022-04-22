@@ -19,29 +19,11 @@ class Map():
 
     #Dibuja el mapa
     def drawMap(self, screen, camera):
-        firstTileY, firstTileX = self.getTileIndex(camera.x, camera.y)
-        lastTileY, lastTileX = self.getTileIndex(camera.x + camera.w, camera.y + camera.h)
+        firstTileX, firstTileY = self.getTileIndex(camera.x, camera.y)
+        lastTileX, lastTileY = self.getTileIndex(camera.x + camera.w, camera.y + camera.h)
         for i in range(firstTileY, lastTileY + 1):
             for j in range(firstTileX, lastTileX + 1):
                 self.map[i][j].draw(screen, camera)
-
-    def drawMap2(self, screen, camera):
-        firstTileY, firstTileX = self.getTileIndex(camera.x, camera.y)
-        lastTileY, lastTileX = self.getTileIndex(camera.x + camera.w, camera.y + camera.h)
-        for i in range(firstTileY, lastTileY + 1):
-            for j in range(firstTileX, lastTileX + 1):
-                tile = self.map[i][j]
-                #pasar las coords del rectangulo de coordenadas globales a coordenadas de la camara
-                globalRectCoords = tile.getRect()
-                cameraRectCoords = (globalRectCoords[0] - camera.x, globalRectCoords[1] - camera.y, globalRectCoords[2], globalRectCoords[3])
-                if tile.type == 1:
-                   pygame.draw.rect(screen, Utils.RED, pygame.Rect(cameraRectCoords), 1)
-                elif tile.type == 0:
-                    pygame.draw.rect(screen, Utils.GREEN, pygame.Rect(cameraRectCoords), 1)
-                elif tile.type == 3:
-                    pygame.draw.rect(screen, Utils.BLUE, pygame.Rect(cameraRectCoords), 1)
-                else:
-                    pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(cameraRectCoords), 1)
     
     #Pone a true las Tiles del rectangulo que forman x,y,w,h
     def addObstacle(self, x, y, w, h):
@@ -64,6 +46,9 @@ class Map():
             yaux = len(self.map) - 1
         #print(xaux, yaux)    
         return self.map[yaux][xaux]
+    
+    def getTileCenter(self, x, y):
+        return ((x*self.tw - self.tw/2), (y*self.th - self.th/2))
 
     def getTileIndex(self, x, y):
         xaux = int(x / self.tw)
@@ -74,7 +59,7 @@ class Map():
         if int(y / self.th) >= len(self.map):   
             yaux = len(self.map) - 1
         #print(xaux, yaux)    
-        return yaux, xaux
+        return xaux, yaux
 
     #Devuelve la funcion heuristica de una tile(Distancia al objetivo)
     def heur(self, tini, tfin):
@@ -225,7 +210,7 @@ class Map():
             return Tile.Tile(-1,0,0,0,0,0,0)
         bestTile = tiles[0]
         for tile in tiles:
-            if tile.heur(tileIni) < bestTile.huer(tileIni):
+            if tile.heur(tileIni) < bestTile.heur(tileIni):
                 bestTile = tile
         return bestTile
 

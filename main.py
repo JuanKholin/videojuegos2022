@@ -1,5 +1,8 @@
+import time
 import pygame, sys
 import math
+from src.Lib import *
+from src.Music import *
 from src.Entities.Cristal import Cristal
 from src import Map, Raton, Escena, Player, Camera, AI, Command, Utils, Interface
 from src.Entities import Terran, TerranBuilder, Zergling, ZergBuilder, TerranBarracks, TerranWorker
@@ -26,6 +29,7 @@ def procesarInput():
     escena.checkPressedButtons()
 
 # Programa principal
+
 pygame.init()
 
 flags = pygame.FULLSCREEN | pygame.DOUBLEBUF
@@ -88,9 +92,9 @@ def setEntity(player):
     #terran2 = Terran.Terran(40, 200, 200, 20, 200, 1, 5, "terranSprites", 8, 6)
     scv = TerranWorker.TerranWorker(4, 10, player1)
     #zergling2 = Zergling.Zergling(10, 10)
-    structure1 = TerranBuilder.TerranBuilder(200, 40, 600, 200, 300, player1, mapa, False, 2)
+    structure1 = TerranBuilder.TerranBuilder(200, 40, 600, 5, 6, player1, mapa, False, 2)
     escena.setBasePlayer1(structure1)
-    structure2 = TerranBarracks.TerranBarracks(200, 40, 600, 500, 300, player1, mapa, False, 3)
+    structure2 = TerranBarracks.TerranBarracks(200, 40, 600, 15, 9, player1, mapa, False, 3)
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addUnits(scv)
@@ -98,7 +102,7 @@ def setEntity(player):
     #player.addUnits(zergling2)
     #player1.addUnits(scv)
 
-    zergBuilder = ZergBuilder.ZergBuilder(200, 50, 10, 800, 400, player2, mapa, False, 8)
+    zergBuilder = ZergBuilder.ZergBuilder(200, 50, 10, 15, 15, player2, mapa, False, 8)
     zergling2 = Zergling.Zergling(10, 10, player1)
     player1.addUnits(zergling2)
     player1.addStructures(zergBuilder)
@@ -107,9 +111,13 @@ def setEntity(player):
 def update():
     Utils.clock_update()
     raton.update(camera)
+    
     if Utils.STATE == Utils.System_State.MAINMENU:
+        playMusic(mainMenuBGM, pos = 5)
+        #playSound(mainMenuBGM)
         p1Interface.update()
     elif Utils.STATE == Utils.System_State.MAP1:
+        playMusic(map1BGM)
         #cargar mapa
         escena.mapa.load(Utils.MAPA1)
         setEntity(player1)

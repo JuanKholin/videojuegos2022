@@ -5,19 +5,22 @@ from .. import Player, Map, Utils, Command
 class TerranBarracks(Structure.Structure):
     sprites = []
     training = []
-    rectOffY = 10
     generationTime = 0
     generationCount = 0
+    rectOffY = 15
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building, id):
-        Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, id, player)
+        (x, y) = map.getTileCenter(xini, yini)
+        x -= 16
+        y -= 19
+        Structure.Structure.__init__(self, hp, mineralCost, generationTime, x, y, id, player)
         self.player = player
         self.sprites = Utils.cargarSprites(Utils.TERRAN_BARRACK_PATH, 6, False, Utils.WHITE, 1.2)
         self.map = map
         self.building = building
         self.image = self.sprites[self.index]
         self.image.set_colorkey(Utils.WHITE)
-        self.rectn = pygame.Rect(xini, yini, self.sprites[4].get_width(), self.sprites[4].get_height() - self.rectOffY)
+        self.rectn = pygame.Rect(x, y, self.sprites[4].get_width(), (self.sprites[4].get_height()-self.rectOffY))
         self.count = 0
         self.paths = []
 
@@ -64,17 +67,6 @@ class TerranBarracks(Structure.Structure):
         if self.clicked:
             if command_id == Command.CommandId.GENERAR_UNIDAD  and self.player.resources >= Utils.TERRAN_WORKER_MINERAL_COST:
                 self.player.resources -= Utils.TERRAN_WORKER_MINERAL_COST
-                terranWorker = TerranWorker.TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, 1, self.player)
+                terranWorker = TerranWorker.TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
                 self.generateUnit(terranWorker)
 
-    def draw(self, screen, camera):
-        r = self.getRect()
-        pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y+self.rectOffY - camera.y, r.w, r.h),1)
-        image = self.getImage()
-        if self.clicked:
-            pygame.draw.ellipse(screen, Utils.GREEN, [self.x-self.rectn.w/2, self.y+self.rectOffY-self.rectn.h/2, self.rectn.w, self.rectn.h], 2)
-        screen.blit(self.image, [image.x  - camera.x, image.y - camera.y])
-        hp = Utils.HP
-        hp = pygame.transform.scale(hp, (50, 8))
-        hp = pygame.transform.chop(hp, ((self.hp/self.maxHp) * 50, 0, 50, 0))
-        screen.blit(hp, [self.x - camera.x - 25, self.y+self.rectOffY+self.rectn.h/2 - 10 - camera.y])

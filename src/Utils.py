@@ -28,7 +28,12 @@ GREEN2  = (210, 255, 125)
 GREEN3  = (110, 255, 90)
 
 HP = pygame.image.load("SPRITE/vida3.png")
-HP.set_colorkey(BLACK)
+HP.set_colorkey(WHITE)
+
+
+BGM_VOLUME = 0.2
+SOUND_VOLUME = 0.5
+haveBGM = False
 
 MAX_SELECTED_UNIT = 5
 
