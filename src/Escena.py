@@ -346,7 +346,7 @@ class Escena():
         self.aI.make_commands()
 
     def draw(self, screen):
-        self.mapa.drawMap2(screen, self.camera)
+        self.mapa.drawMap(screen, self.camera)
         self.p1.draw(screen, self.camera)
         self.p2.draw(screen, self.camera)
         self.raton.draw(screen, self.camera)

@@ -1,6 +1,5 @@
 import pygame as pg
 import math
-
 from . import Entity
 from .. import Utils, Command
 
@@ -61,7 +60,7 @@ class Unit(Entity.Entity):
         elif self.state == Utils.State.BARREL_TRANSPORTING: # Esta transportando barril
             pass
         elif self.state == Utils.State.MINING: # Esta minando
-            self.updateMinig()  
+            self.updateMining()  
 
     #COMUN A TODAS LAS UNIDADES
     def updateStill(self):
@@ -96,7 +95,7 @@ class Unit(Entity.Entity):
             else: # Se acaba este camino
                 self.paths.pop(0)
                 if len(self.paths) == 0:
-                    print(self.order)
+                    print(self.order['order'])
                     if self.order != 0:
                         if self.order['order'] == Command.CommandId.MOVER:
                             self.dir = 8
@@ -178,6 +177,7 @@ class Unit(Entity.Entity):
     
     def changeToMining(self):
         self.state = Utils.State.MINING
+        self.frame = 0
         self.image = self.sprites[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
     # Pasa a estado quieto
     def changeToStill(self):

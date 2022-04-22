@@ -47,10 +47,10 @@ Y_PADDING =         47
 PADDING = 110
 
 class TerranWorker(Worker.Worker):
-    def __init__(self, xIni, yIni, id, player):
+    def __init__(self, xIni, yIni, player):
         Worker.Worker.__init__(self, HP, xIni * 40 + 20, yIni * 40 + 20, MINERAL_COST, 
                                 GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, 
-                                    PADDING, id, player, MINE_POWER, TIME_TO_MINE, DIE_OFFSET, INVERSIBLE_FRAMES, 
+                                    PADDING,  Utils.takeID(), player, MINE_POWER, TIME_TO_MINE, DIE_OFFSET, INVERSIBLE_FRAMES, 
                                         FRAMES, DIR_OFFSET, ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, X_PADDING,
                                             Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING)
 
@@ -62,8 +62,6 @@ class TerranWorker(Worker.Worker):
         self.mirrorTheChosen()
         self.dir = 0
         self.changeToStill()
-        print(self.x, self.y,self.image.get_width(),self.image.get_height() )
-        print(self.getRect().x - self.getRect().w,self.getRect().y - self.getRect().h)
         #self.imageRect = Utils.rect(self.x, self.y, self.image.get_width() - WEIGHT_PADDING, 
                 #self.image.get_height() - HEIGHT_PADDING)
         #self.imageRect = Utils.rect(self.x - self.image.get_width()/2, self.y -self.image.get_height() , self.image.get_width(), self.image.get_height())

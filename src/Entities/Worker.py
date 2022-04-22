@@ -12,8 +12,9 @@ class Worker(Unit.Unit):
                                     dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, xPadding, yPadding, wPadding, hPadding)
 
     #Especifico para worker
-    def updateMinig(self):
+    def updateMining(self):
         self.count += pg.time.Clock().tick(Utils.CLOCK_PER_SEC)
+        print(self.count)
         if self.count > self.timeToMine: #Termina de minar
             self.order = {'order':Command.CommandId.TRANSPORTAR_ORE}
             self.cristal.getMined(self.minePower)
