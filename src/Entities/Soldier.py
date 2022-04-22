@@ -6,3 +6,6 @@ class Soldier(Unit.Unit):
 
     def update():
         pass
+
+    def attack():
+        pass

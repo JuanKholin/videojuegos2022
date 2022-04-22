@@ -1,20 +1,45 @@
 import pygame, math
 
 from . import Command
+from . import Utils
 from . import Player
 
+def collides(x, y, rect2):
+    return (x >= rect2.x and x <= rect2.x + rect2.w and y >= rect2.y and y <= rect2.y + rect2.h )
 
-GREEN   = (0,255,0)
+def collideRect(rect1, rect2):
+    collideX = False
+    collideY = False
+    if (rect1.x >= rect2.x) and (rect1.x <= (rect2.x+rect2.width)):
+        collideX = True
+    elif (rect2.x >= rect1.x) and (rect2.x <= (rect1.x+rect1.width)):
+        collideX = True
+    if (rect1.y >= rect2.y) and (rect1.y <= (rect2.y+rect2.height)):
+        collideY = True
+    elif (rect2.y >= rect1.y) and (rect2.y <= (rect1.y+rect1.height)):
+        collideY = True
+    return collideX and collideY
+
+def createRect(initialX, initialY, finalX, finalY):
+    if finalX>=initialX and finalY>=initialY:
+        area = pygame.Rect(initialX, initialY, finalX-initialX, finalY-initialY)
+    elif finalX>=initialX and finalY<initialY:
+        area = pygame.Rect(initialX, finalY, finalX-initialX, initialY-finalY)
+    elif finalX<initialX and finalY>=initialY:
+        area = pygame.Rect(finalX, initialY, initialX-finalX, finalY-initialY)
+    else: #finalX<initialX and finalY<initialY
+        area = pygame.Rect(finalX, finalY, initialX-finalX, initialY-finalY)
+    return area
 
 def printRectangulo(screen, initialX, initialY, finalX, finalY):
     if finalX>=initialX and finalY>=initialY:
-        pygame.draw.rect(screen, GREEN, [initialX, initialY, finalX-initialX, finalY-initialY], 1)
+        pygame.draw.rect(screen, Utils.GREEN, [initialX, initialY, finalX-initialX, finalY-initialY], 1)
     elif finalX>=initialX and finalY<initialY:
-        pygame.draw.rect(screen, GREEN, [initialX, finalY, finalX-initialX, initialY-finalY], 1)
+        pygame.draw.rect(screen, Utils.GREEN, [initialX, finalY, finalX-initialX, initialY-finalY], 1)
     elif finalX<initialX and finalY>=initialY:
-        pygame.draw.rect(screen, GREEN, [finalX, initialY, initialX-finalX, finalY-initialY], 1)
+        pygame.draw.rect(screen, Utils.GREEN, [finalX, initialY, initialX-finalX, finalY-initialY], 1)
     else: #finalX<initialX and finalY<initialY
-        pygame.draw.rect(screen, GREEN, [finalX, finalY, initialX-finalX, initialY-finalY], 1)
+        pygame.draw.rect(screen, Utils.GREEN, [finalX, finalY, initialX-finalX, initialY-finalY], 1)
 
 
 #FUNCIONES DEL RATON
@@ -25,6 +50,8 @@ class raton(pygame.sprite.Sprite):
     index = 0
     index2 = 0
     frame = 0
+    initialX = 0
+    initialY = 0
     clicked = False
     collide = False
     pulsado = False
@@ -43,27 +70,29 @@ class raton(pygame.sprite.Sprite):
         self.point = point(ruta)
         self.player = player
         
-    def update(self, cameraX, cameraY):
+    def update(self, camera):
         self.point.update()
         self.rel_pos = pygame.mouse.get_pos()
-        self.real_pos = (self.rel_pos[0] + cameraX, self.rel_pos[1] + cameraY)
+        self.real_pos = (self.rel_pos[0] + camera.x, self.rel_pos[1] + camera.y)
         self.rect.x = self.rel_pos[0] - self.rect.width/2
         self.rect.y = self.rel_pos[1] - self.rect.height/2
 
         #la posicion del cursor es relativa a la camara (por que tiene dos rectangulos? (self.rect y mouseRect))
-        mouseRect = pygame.Rect(self.real_pos[0], self.real_pos[1], 1, 1)
+        #mouseRect = pygame.Rect(self.real_pos[0], self.real_pos[1], 1, 1)
         mouse_collide = False
         for unit in self.player.units:
             ###---LOGICA
-            r = unit.getRect()
             #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-            if Player.collides(unit.getRect(), mouseRect):
+            if collides(self.real_pos[0], self.real_pos[1], unit.getRect()):
                 mouse_collide = True
-        for structure in self.player.structures:
-            ###---LOGICA
-            #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-            if Player.collides(structure.getRect(), mouseRect):
-                mouse_collide = True
+                break
+        if not mouse_collide:
+            for structure in self.player.structures:
+                ###---LOGICA
+                #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
+                if collides(self.real_pos[0], self.real_pos[1],structure.getRect()):
+                    mouse_collide = True
+                    break
 
         if mouse_collide:
             self.collide = True
@@ -89,24 +118,43 @@ class raton(pygame.sprite.Sprite):
                 self.image = self.sprite[self.index]
                 self.frame = 0
     
-    def click(self):
-        self.clicked = not self.clicked
-
+    def getPosition(self):
+        return self.real_pos
+    
+    def getClick(self):
+        return self.clicked
+    
+    def getPressed(self):
+        return self.pulsado, (self.initialX, self.initialY)
+    
     def setCollide(self, detected):
         self.collide = detected
+    
+    def isCollide(self, rect):
+        return collides(self.real_pos[0], self.real_pos[1], rect)
+    
+    def click(self):
+        self.clicked = not self.clicked 
+        
     def draw(self, screen, camera):
-        if self.point.getClicked() :
-            self.point.draw(screen, camera)
-        if self.pulsado:
-            printRectangulo(screen, self.initialX - camera.x, self.initialY - camera.y, self.rel_pos[0], self.rel_pos[1])
-        screen.blit(self.image, (self.rect.x, self.rect.y))
+        if Utils.STATE == Utils.System_State.ONGAME:
+            if self.point.getClicked():
+                self.point.draw(screen, camera)
+            if self.pulsado:
+                printRectangulo(screen, self.initialX - camera.x, self.initialY - camera.y, self.rel_pos[0], self.rel_pos[1])
+            screen.blit(self.image, (self.rect.x, self.rect.y))
+        else:
+            screen.blit(self.sprite[self.index], (self.rect.x, self.rect.y))
+        
     def processEvent(self, event, cameraX, cameraY):
         command = Command.Command(0) # 0 es nada
+        self.clicked = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             click_type = pygame.mouse.get_pressed()
             #la posicion del cursor es relativa a la camara
             relative_mouse_pos = pygame.mouse.get_pos()
             real_mouse_pos = (relative_mouse_pos[0] + cameraX, relative_mouse_pos[1] + cameraY)
+            #print(relative_mouse_pos)
             
             if click_type[0]:     
                 if not self.pulsado:
@@ -125,40 +173,51 @@ class raton(pygame.sprite.Sprite):
             type = pygame.mouse.get_pressed()
             relative_mouse_pos = pygame.mouse.get_pos()
             real_mouse_pos = (relative_mouse_pos[0] + cameraX, relative_mouse_pos[1] + cameraY)
-            
             #print('click liberado', type)
             if not type[0]:   
                 if self.pulsado: 
                     self.pulsado = False
-                    #print('click izq liberado', mouse_pos[0], mouse_pos[1], event.type)
-                    mouseRect = Player.createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
+                    self.clicked = True
+                    print('click izq liberado', real_mouse_pos, event.type)
+                    
+                    unitSel = False
+                    selectedUnit = self.player.unitsSelected
+                    selectedStructures = self.player.structuresSelected
+                    self.player.unitsSelected = []
+                    self.player.structuresSelected = []
+                    isClick = False
+                    
+                    mouseRect = createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
+                    
                     for unit in self.player.units:
-                        if Player.collides(unit.getRect(), mouseRect):
+                        #print(unit.getRect())
+                        if len(self.player.unitsSelected) < Utils.MAX_SELECTED_UNIT and collideRect(mouseRect, unit.getRect()):
                             unit.setClicked(True)
                             self.player.unitsSelected.append(unit)
-                            
+                            unitSel = True
                             #print("CLICKADO" + str(terran.id))
-                        else:
-                            unit.setClicked(False)
-                            if unit in self.player.unitsSelected:
-                                self.player.unitsSelected.remove(unit)
-                            #unitsClicked.remove(terran)
-                            #print("DESCLICKADO" + str(terran.id)) 
-                    for structure in self.player.structures:
-                        if Player.collides(structure.getRect(), mouseRect):
-                            structure.setClicked(True)
-                            #self.player.unitsSelected.append(unit)
+                    if not unitSel:
+                        for structure in self.player.structures:
+                            if collideRect(mouseRect, structure.getRect()):
+                                structure.setClicked(True)
+                                unitSel = True
+                                self.player.structuresSelected.append(structure)
+                                #print("CLICKADO ")
+                                break
                             
-                            #print("CLICKADO" + str(terran.id))
-                        else:
-                            structure.setClicked(False)
-                            #if unit in self.player.unitsSelected:
-                            #    self.player.unitsSelected.remove(unit)
-                            #unitsClicked.remove(terran)
-                            #print("DESCLICKADO" + str(terran.id)) 
-            if type[2]:
+                    if unitSel: 
+                        for unit in self.player.units + self.player.structures:
+                            if unit not in self.player.unitsSelected + self.player.structuresSelected:
+                                #print(unit)
+                                unit.setClicked(False)
+                    else:
+                        self.player.unitsSelected = selectedUnit
+                        self.player.structuresSelected = selectedStructures
+                                
+            if not type[2]:
                 print('click der liberado', real_mouse_pos[0], real_mouse_pos[1], event.type)
         return command
+    
 class point(pygame.sprite.Sprite):
     #Constructor
     sprite = []

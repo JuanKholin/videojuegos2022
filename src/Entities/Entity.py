@@ -1,17 +1,15 @@
 import pygame as pg
 
-BLACK   = (0,0,0)
-WHITE   = (255,255,255)
-GREEN   = (0,255,0)
-RED     = (255,0,0)
-BLUE    = (0,0,255)
-
 class Entity():
-    def __init__(self, hp, mineralCost, generationTime, id):
-        self.hp = hp
+    def __init__(self, hp, xIni, yIni, mineralCost, generationTime, id, player):
+        self.maxHp = hp
         self.mineralCost = mineralCost
         self.generationTime = generationTime
         self.id = id
+        self.x = xIni
+        self.y = yIni
+        self.hp = 200
+        self.player = player
 
     def update():
         pass
@@ -25,5 +23,15 @@ class Entity():
         sprites = []
         for i in range(int(totalRows / rows)):
             aux = pg.Surface.subsurface(spritesheet, (0, rows * i, maxCol, rows))
-            sprites.append(pg.transform.scale2x(aux))
+            aux = pg.transform.scale2x(aux)
+            
+            sprites.append(aux)
         return sprites
+    
+    def setPosition(self, x, y):
+        self.x = x
+        self.y = y
+        
+    def setTilePosition(self, tile):
+        self.x = tile.centerx
+        self.y = tile.centery
