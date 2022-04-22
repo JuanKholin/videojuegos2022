@@ -218,9 +218,36 @@ class Map():
 
     def setTilePadre(self, tile, padre):
         self.map[int(tile.centery / self.th)][int(tile.centerx / self.tw)].padre = padre
+    
+    def getTileVecinaCercana(self, tileIni, tileObj):
+        tiles = self.getTileVecinas(tileObj)
+        if tiles.__len__() == 0:
+            return Tile.Tile(-1,0,0,0,0,0,0)
+        bestTile = tiles[0]
+        for tile in tiles:
+            if tile.heur(tileIni) < bestTile.huer(tileIni):
+                bestTile = tile
+        return bestTile
+
+    def getTileOcupadaCercana(self, tileIni, tileObj):
+        tiles = self.getAllTileVecinas(tileObj)
+        bestTile = tiles[0]
+        for tile in tiles:
+            if tile.heur(tileIni) < bestTile.heur(tileIni):
+                bestTile = tile
+        return bestTile
+
+    def getTileCercana(self, tileIni, tileObj):
+        tileCercana = self.getTileOcupadaCercana(tileIni, tileObj)
+        while tileCercana.type != 0:
+            tileCercana = self.getTileOcupadaCercana(tileIni, tileCercana)
+        return tileCercana
+            
 
     def Astar(self, tileIni, tileObj):
         print("VOY DE ", tileIni.centerx,tileIni.centery, "A ",  tileObj.centerx,tileObj.centery)
+        if(tileObj.type != 0):
+            tileObj = self.getTileVecinaCercana(tileIni, tileObj)
         nodosAbiertos = []
         nodosCerrados = []
         nodosAbiertos.append(tileIni)
@@ -228,7 +255,6 @@ class Map():
         while nodosAbiertos.__len__() != 0:
             currentTile = Tile.Tile(nodosAbiertos[0].tileid, nodosAbiertos[0].centerx, nodosAbiertos[0].centery, 
                     0, 0, 1, 0, nodosAbiertos[0].g, nodosAbiertos[0].padre)
-            #print("g: ",currentTile.g)
             #print("heur: ",currentTile.heur(tileObj))
             currentF = currentTile.g + currentTile.heur(tileObj)
             currentId = 0
@@ -286,7 +312,7 @@ class Map():
         else:           
             currentTile = self.getTile(tileObj.centerx, tileObj.centery)
             while currentTile != tileIni:
-                print(currentTile.tileid, currentTile.g)
+                #print(currentTile.tileid, currentTile.g)
                 path.append(currentTile)
                 currentTile = currentTile.padre
             #print(currentTile.tileid)

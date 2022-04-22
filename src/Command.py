@@ -10,7 +10,8 @@ class CommandId(IntEnum):
     ROTAR = 7
     ORDENAR = 8
     MINAR = 9
-    TRANSPORTAR_ORE = 10
+    MINAR_BUCLE = 10
+    TRANSPORTAR_ORE = 11
 class Command:
     def __init__(self, id):
         self.id = id

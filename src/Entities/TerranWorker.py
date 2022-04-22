@@ -110,9 +110,11 @@ class TerranWorker(Worker.Worker):
             self.order = {'order':Command.CommandId.TRANSPORTAR_ORE}
             self.cristal.getMined(self.minePower)
             print(self.basePath.__len__())
-            self.paths = self.basePath
+            self.paths = []
+            for path in self.basePath:
+                self.paths.append(path.copy())
             self.state = Utils.State.MOVING
-        if Utils.frame(FRAMES_TO_REFRESH):
+        elif Utils.frame(FRAMES_TO_REFRESH):
             self.updateMiningImage()
         if len(self.paths) > 0:
             self.state = Utils.State.MOVING
@@ -151,23 +153,38 @@ class TerranWorker(Worker.Worker):
                             self.dir = 8
                             self.changeToStill()
                         elif self.order['order'] == Command.CommandId.MINAR:
-                            angle = self.order['angle']
+                            self.miningAngle = self.order['angle']
                             self.basePath = self.order['basePath']
+                            self.cristalPath = self.order['cristalPath']
                             self.cristal = self.order['cristal']
-                            for path in self.basePath:
-                                print("Posicion final a casa: ",path.posFin, path.angle)
-                            if angle < 0:
-                                self.angle = -angle
+                            #for path in self.basePath:
+                                #print("Posicion final a casa: ",path.posFin, path.angle)
+                            if self.miningAngle < 0:
+                                self.angle = -self.miningAngle
                             else:
-                                self.angle = 2 * math.pi - angle
+                                self.angle = 2 * math.pi - self.miningAngle
+                            self.miningAngle = self.angle
                             self.dir = int(4 - (self.angle * 8 / math.pi)) % 16          
                             self.count = 0
                             self.changeToMining()
                         elif self.order['order'] == Command.CommandId.TRANSPORTAR_ORE:
                             #sumar minerales al jugador
-                            self.order = 0
-                            self.player.resources += self.minePower
-                            self.changeToStill()
+                            if self.cristal.capacidad < 0:
+                                self.player.resources += self.minePower + self.cristal.capacidad
+                                self.changeToStill()
+                                del self.cristal
+                            else:
+                                self.order = {'order': Command.CommandId.MINAR_BUCLE}
+                                self.player.resources += self.minePower
+                                self.paths = []
+                                for path in self.cristalPath:
+                                    self.paths.append(path.copy())
+                                self.changeToMove()
+                        elif self.order['order'] == Command.CommandId.MINAR_BUCLE:
+                            #sumar minerales al jugador
+                            self.dir = int(4 - (self.miningAngle * 8 / math.pi)) % 16          
+                            self.count = 0
+                            self.changeToMining()
                     else:
                         self.changeToStill()
         else:

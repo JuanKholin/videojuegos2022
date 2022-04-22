@@ -40,18 +40,8 @@ class Escena():
                 #print("pos final tile centro x e y: ", tileObj.centerx, tileObj.centery)
                 tileIni = self.mapa.getTile(param[0], param[1])
                 #print("pos ini tile centro x e y: ", tileIni.centerx, tileIni.centery)
-                while tileObj.type != 0: #Esta ocupada
-                    #print("QUE COJONES")
-                    posibles = self.mapa.getTileVecinas(tileObj)
-                    mov = 40
-                    while posibles.__len__() == 0:
-                        posibles = self.mapa.getTileVecinas(self.mapa.getTile(tileObj.centerx + mov,tileObj.centery))
-                        mov += 40
-                    mejor = posibles[0]
-                    for tile in posibles:
-                        if mejor.heur(tileIni) > tile.heur(tileIni):
-                            mejor = tile
-                    tileObj = mejor
+                if tileObj.type != 0: #Esta ocupada
+                    tileObj = self.mapa.getTileCercana(tileIni, tileObj)
                     #print(tileObj.centery, tileObj.tileid)
                 now = datetime.now()
                 pathA = self.mapa.Astar(tileIni,tileObj)
@@ -90,14 +80,18 @@ class Escena():
                 if tileCLikced.type == 3:
                     Cristal = tileCLikced.ocupante
                     #calcular el camino a casa 
-                    print("Me quedo en:",posIni)
+                    #print("Me quedo en:",posIni)
+                    poStay = posIni 
                     tileIni = self.mapa.getTile(posIni[0], posIni[1])
                     baseRect = self.basePlayer1.getRect()
-                    tileObj = self.mapa.getTile(baseRect.x + baseRect.w/2 + 40, baseRect.y + baseRect.h + 40)
-                    print("La base esta en: ",tileObj.centerx, tileObj.centery)
+                    tileObj = self.mapa.getTile(baseRect.x + baseRect.w/2, baseRect.y + baseRect.h / 2)
+                    #print("Centro de la base: ", tileObj.centerx, tileObj.centery)
+                    tileObj = self.mapa.getTileCercana(tileIni, tileObj)
+                    #print("La base esta en: ",tileObj.centerx, tileObj.centery)
+                    self.mapa.setLibre(tileObj)
                     pathA = self.mapa.Astar(tileIni,tileObj)
                     posIni = (tileIni.centerx, tileIni.centery)
-                    print(posIni)
+                    #print(posIni)
                     pathB = []
                     #print(pathA.__len__())
                     #Movernos al centro de la tile
@@ -112,9 +106,31 @@ class Escena():
                         pathB.append(path1)
                         posAux = posIni
                         posIni = posFin
-                    #print("Queria ir a", posFin, "y me han calculado", posIni)
-                    order = {'order': Command.CommandId.MINAR, 'angle': math.atan2(posFinal[1] - posIni[1], posFinal[0] - posIni[0]),'basePath': pathB, 'cristal': Cristal }
+
+                    angle = math.atan2(posFinal[1] - poStay[1], posFinal[0] - poStay[0])
+                    #Y de casa a la mina tileObj casa y poStay la de minar
+                    tileFin = self.mapa.getTile(poStay[0],poStay[1])
+                    pathA = self.mapa.Astar(tileObj,tileFin)
+                    posIni = (tileObj.centerx, tileObj.centery)
+                    #print(posIni)
+                    pathC = []
+                    #print(pathA.__len__())
+                    #Movernos al centro de la tile
+                    posFin = poStay
+                    posAux = ()
+                    for tile in pathA:
+                        posFin = (tile.centerx, tile.centery)
+                        #print("desde: ",posIni,"hacia", posFin)
+                        path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
+                        #print("angulo del camino:", path1.angle)
+                        pathC.append(path1)
+                        posAux = posIni
+                        posIni = posFin
+
+                    order = {'order': Command.CommandId.MINAR, 'angle': angle,'basePath': pathB, 'cristal': Cristal,'cristalPath': pathC }
                     orderForPlayer.append(order)
+
+
                 else:
                     orderForPlayer.append(order)
                 pathsForPlayer.append(path)
@@ -304,13 +320,25 @@ class Escena():
             finx = x + rect.w
             y = rect.y + 1
             finy = y + rect.h
-            while x <= finx:
-                while y <= finy:
-                    self.mapa.setRecurso(self.mapa.getTile(x,y))
-                    self.mapa.getTile(x,y).setOcupante(res)
-                    y = y + self.mapa.th
-                y = rect.y + 1
-                x = x + self.mapa.tw
+            if(res.capacidad < 0):
+                while x <= finx:
+                    while y <= finy:
+                        self.mapa.setLibre(self.mapa.getTile(x,y))
+                        y = y + self.mapa.th
+                    y = rect.y + 1
+                    x = x + self.mapa.tw
+                self.resources.remove(res)
+                del res
+            else:
+                while x <= finx:
+                        while y <= finy:
+                            self.mapa.setRecurso(self.mapa.getTile(x,y))
+                            self.mapa.getTile(x,y).setOcupante(res)
+                            y = y + self.mapa.th
+                        y = rect.y + 1
+                        x = x + self.mapa.tw
+
+
         self.p1.update()
         self.p2.update()
         self.raton.update(self.camera)
