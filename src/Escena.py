@@ -12,27 +12,28 @@ class Escena():
         self.raton = raton
         self.interfaz = interfaz
         self.resources = resources
-    
+
     def setBasePlayer1(self, base1):
         self.basePlayer1 = base1
-    
+
     def setBasePlayer2(self, base2):
         self.basePlayer2 = base2
 
     def procesarEvent(self, event):
-        #command = pi.procesarEvent(event)
-        #if map.check(command) and p1.check(command):
-            #map.procesarCommand(command)
-            #p1.procesarCommand(command)
-        command = self.raton.processEvent(event, self.camera.x, self.camera.y)
-        self.p1.processEvent(event)
-        #for structure in p1.structures:
-        #   structure.processEvent(event)
-        relative_mouse_pos = pygame.mouse.get_pos()
-        real_mouse_pos = (relative_mouse_pos[0] + self.camera.x, relative_mouse_pos[1] + self.camera.y)
-        pathsForPlayer = []
-        orderForPlayer = []
-        if command.id == Command.CommandId.MOVER: # 1 es moverse
+        #Conseguir el comando
+        if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
+            command = self.raton.processEvent(event, self.camera.x, self.camera.y)
+        else:
+            command = self.p1.processEvent(event)
+
+        #ejecutar el comando
+        if command.id == Command.CommandId.GENERAR_UNIDAD:
+            self.p1.execute(command.id, [])
+        elif command.id == Command.CommandId.MOVER: # 1 es moverse
+            relative_mouse_pos = pygame.mouse.get_pos()
+            real_mouse_pos = (relative_mouse_pos[0] + self.camera.x, relative_mouse_pos[1] + self.camera.y)
+            pathsForPlayer = []
+            orderForPlayer = []
             for param in command.params:
                 tileObj = self.mapa.getTile(real_mouse_pos[0], real_mouse_pos[1])
                 posFinal = (tileObj.centerx, tileObj.centery)
@@ -82,14 +83,14 @@ class Escena():
                     if path.__len__() > 0:
 
                         path.append(Utils.path(math.atan2(real_mouse_pos[1] - posIni[1], real_mouse_pos[0] - posIni[0]), int(math.hypot(real_mouse_pos[0] - posIni[0], real_mouse_pos[1] - posIni[1])),real_mouse_pos))
-                
+
                 #COMPROBAR QUE LA TILE CLICKADA CORRESPONDE A DISTINTAS ENTIDADES
                 # COMPROBAR SI HA CLICKADO UN ORE
                 tileCLikced = self.mapa.getTile(posFinal[0], posFinal[1])
                 order = {'order': Command.CommandId.MOVER, 'angle': 0}
                 if tileCLikced.type == 3:
                     Cristal = tileCLikced.ocupante
-                    #calcular el camino a casa 
+                    #calcular el camino a casa
                     print("Me quedo en:",posIni)
                     tileIni = self.mapa.getTile(posIni[0], posIni[1])
                     baseRect = self.basePlayer1.getRect()
@@ -120,7 +121,7 @@ class Escena():
                 pathsForPlayer.append(path)
             self.p1.execute(Command.CommandId.MOVER, pathsForPlayer)
             self.p1.execute(Command.CommandId.ORDENAR, orderForPlayer)
-                
+
         pass
     def checkPressedButtons(self):
         key = pygame.key.get_pressed()
@@ -288,7 +289,7 @@ class Escena():
                     y = self.mapa.getTile(rect.x, rect.y).centery
                     finx = self.mapa.getTile(x + rect.w, y + rect.h).centerx
                     finy = self.mapa.getTile(x + rect.w, y + rect.h).centery
-                    
+
                     while x <= finx:
                         while y <= finy:
                             #print(int(x/40), int(y/40))

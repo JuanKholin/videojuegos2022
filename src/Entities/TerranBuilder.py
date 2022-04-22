@@ -1,6 +1,6 @@
 import pygame
 from . import Structure, TerranWorker
-from .. import Player, Map, Utils, Tile
+from .. import Player, Map, Utils, Tile, Command
 from src.Utils import *
 
 WHITE   = (255,255,255)
@@ -15,10 +15,10 @@ class TerranBuilder(Structure.Structure):
     def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building,id):
         Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, id, player)
         self.player = player
-        
+
         self.sprites = cargarSprites(TERRAN_BUILDER_PATH, 6, False, WHITE, 1.5)
         self.map = map
-        self.building = building 
+        self.building = building
         self.image = self.sprites[self.index]
         self.image.set_colorkey(WHITE)
         self.rectn = pygame.Rect(xini, yini, self.sprites[4].get_width(), self.sprites[4].get_height()-self.rectOffY)
@@ -47,7 +47,7 @@ class TerranBuilder(Structure.Structure):
                 terranTile = self.map.getTile(terranPos[0], terranPos[1])
                 if terranTile.type != 0:
                     vecinas = self.map.getTileVecinas(terranTile)
-                    terran.setTilePosition(vecinas[0]) 
+                    terran.setTilePosition(vecinas[0])
                 self.player.addUnits(terran)
                 self.generationCount = 0
                 del self.training[0]
@@ -55,7 +55,7 @@ class TerranBuilder(Structure.Structure):
             self.index = 4
         self.image = self.sprites[self.index]
         self.image.set_colorkey(WHITE)
-        
+
     def generateUnit(self, unit):
         self.training.append(unit)
 
@@ -81,11 +81,9 @@ class TerranBuilder(Structure.Structure):
         hp = pygame.transform.chop(hp, ((self.hp/self.maxHp) * 50, 0, 50, 0))
         screen.blit(hp, [self.x - camera.x - 25, self.y+self.rectOffY+self.rectn.h/2 - 10 - camera.y])
 
-    def processEvent(self, event):
+    def execute(self, command_id):
         if self.clicked:
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_v and self.player.resources >= Utils.TERRAN_WORKER_MINERAL_COST:
-                    self.player.resources -= Utils.TERRAN_WORKER_MINERAL_COST
-                    terranWorker = TerranWorker.TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, 1, self.player)
-                    self.generateUnit(terranWorker)
-
+            if command_id == Command.CommandId.GENERAR_UNIDAD:
+                self.player.resources -= Utils.TERRAN_WORKER_MINERAL_COST
+                terranWorker = TerranWorker.TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, 1, self.player)
+                self.generateUnit(terranWorker)

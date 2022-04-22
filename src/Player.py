@@ -17,12 +17,11 @@ class Player():
         self.initialY = 0
 
     def processEvent(self,event):
-        for structure in self.structures:
-            structure.processEvent(event)
         if event.type == pygame.KEYDOWN:
             if event.key in self.keyMap:
                 return Command.Command(self.keyMap[event.key])
-        return Command.Command(0)
+        return Command.Command(Command.CommandId.NULO)
+
 
     def update(self):
         for structure in self.structures:
@@ -46,6 +45,10 @@ class Player():
             for i in range(param.__len__()):
                 print("ME han mandado:" ,param[i])
                 self.unitsSelected[i].setOrder(param[i])
+        elif id == Command.CommandId.GENERAR_UNIDAD:
+            for i in self.structuresSelected:
+                i.execute(id)
+
     def draw(self, screen, camera):
         for structure in self.structures:
             r = structure.getRect()

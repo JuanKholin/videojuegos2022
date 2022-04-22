@@ -44,6 +44,7 @@ keyMap ={
   pygame.K_RIGHT: Command.CommandId.MOVER_CAMARA_DERECHA,
   pygame.K_LEFT: Command.CommandId.MOVER_CAMARA_IZQUIERDA,
   pygame.K_r: Command.CommandId.ROTAR,
+  pygame.K_v: Command.CommandId.GENERAR_UNIDAD,
 }
 commandMap ={
   Command.CommandId.MOVER_CAMARA_ARRIBA: pygame.K_UP,
