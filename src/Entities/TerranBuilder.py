@@ -83,7 +83,7 @@ class TerranBuilder(Structure.Structure):
 
     def execute(self, command_id):
         if self.clicked:
-            if command_id == Command.CommandId.GENERAR_UNIDAD:
+            if command_id == Command.CommandId.GENERAR_UNIDAD and self.player.resources >= Utils.TERRAN_WORKER_MINERAL_COST:
                 self.player.resources -= Utils.TERRAN_WORKER_MINERAL_COST
                 terranWorker = TerranWorker.TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, 1, self.player)
                 self.generateUnit(terranWorker)

@@ -63,7 +63,7 @@ raton = Raton.raton(sprite_ruta, player1)
 p1Interface = Interface.Interface(player1, raton)
 
 # Player 2 AKA IA
-player2 = Player.Player([], [], 5, [], [])
+player2 = Player.Player([], [], 100, [], [])
 aI = AI.AI(player2)
 #zergling1 = Zergling.Zergling(9, 8)
 #player2.addUnits(zergling1)

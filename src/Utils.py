@@ -37,8 +37,8 @@ ENTITY_ID = 0
 X_TILES = 20
 Y_TILES = 15
 
-SCREEN_WIDTH = 1025 
-SCREEN_HEIGHT = 770 
+SCREEN_WIDTH = 1025
+SCREEN_HEIGHT = 770
 
 # Para los estados de las entidades
 class State(Enum):
@@ -50,7 +50,7 @@ class State(Enum):
     ORE_TRANSPORTING = auto()
     BARREL_TRANSPORTING = auto()
     MINING = auto()
-    
+
 
 
 class path():
@@ -134,10 +134,10 @@ ZERG_BUILDER_PATH = "SPRITE/ZergBuilder/tile00"
 
 #carga n sprites con nombre path + 0 hasta path + (n-1)
 #color para eliminar color del fondo, puede ser None
-#numDigit inidca el numero de digitos para localizar el sprite 
+#numDigit inidca el numero de digitos para localizar el sprite
 def cargarSprites(path, n, twoDig, color = None, size = None):
     sprites = []
-    for i in range(n): 
+    for i in range(n):
         if twoDig and i < 10:
             nPath = "0" + str(i)
         else:
@@ -152,7 +152,7 @@ def cargarSprites(path, n, twoDig, color = None, size = None):
         if color != None:
             sprites[i].set_colorkey(color)
             pass
-        
+
     return sprites
 
 def clock_update():
@@ -164,7 +164,7 @@ def frame(n):
         return 1
     else:
         return 0
-    
+
 consolas = pygame.font.match_font('consolas')
 times = pygame.font.match_font('times')
 arial = pygame.font.match_font('arial')
@@ -176,14 +176,14 @@ def muestra_texto(pantalla,fuente,texto,color, dimensiones, pos):
     rectangulo = superficie.get_rect()
     rectangulo.center = pos
     pantalla.blit(superficie,rectangulo)
-    
+
 def aux(screen):
     muestra_texto(screen, str('monotypecorsiva'), "single player", (210, 255, 124), 25, [270, 150])
-    
-   
+
+
 ELEVACION_PATH = "SPRITE/tile/elevacion/tile0"
 TERRENO_PATH = "SPRITE/tile/terreno/tile00"
-  
+
 MAPA1 = [[100, 101, 102, 103, 104, 105, 106, 107, 100, 101, 102, 103, 104, 105, 106, 107, 100, 101, 102, 103, 104, 105, 106, 107, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
          [100, 101, 102, 103, 104, 105, 106, 107, 100, 101, 102, 103, 104, 105, 106, 107, 100, 101, 102, 103, 104, 105, 106, 107, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
          [100, 101, 102, 103, 104, 105, 106, 107, 100, 101, 102, 103, 104, 105, 106, 107, 100, 101, 102, 103, 104, 105, 106, 107, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],

@@ -1,6 +1,6 @@
 import pygame
 from . import Structure, TerranWorker
-from .. import Player, Map, Utils
+from .. import Player, Map, Utils, Command
 
 class TerranBarracks(Structure.Structure):
     sprites = []
@@ -44,7 +44,7 @@ class TerranBarracks(Structure.Structure):
                 terranTile = self.map.getTile(terranPos[0], terranPos[1])
                 if terranTile.type != 0:
                     vecinas = self.map.getTileVecinas(terranTile)
-                    terran.setTilePosition(vecinas[0]) 
+                    terran.setTilePosition(vecinas[0])
                     terranPos = terran.getPosition()
                     print("tp", terranPos)
                     self.map.addOre(terranPos[0], terranPos[1])
@@ -56,18 +56,17 @@ class TerranBarracks(Structure.Structure):
             self.index = 4
         self.image = self.sprites[self.index]
         self.image.set_colorkey(Utils.WHITE)
-        
+
     def generateUnit(self, unit):
         self.training.append(unit)
 
-    def processEvent(self, event):
+    def execute(self, command_id):
         if self.clicked:
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_v and self.player.resources >= Utils.TERRAN_WORKER_MINERAL_COST:
-                    self.player.resources -= Utils.TERRAN_WORKER_MINERAL_COST
-                    terranWorker = TerranWorker.TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, 1, self.player)
-                    self.generateUnit(terranWorker)
-                    
+            if command_id == Command.CommandId.GENERAR_UNIDAD  and self.player.resources >= Utils.TERRAN_WORKER_MINERAL_COST:
+                self.player.resources -= Utils.TERRAN_WORKER_MINERAL_COST
+                terranWorker = TerranWorker.TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, 1, self.player)
+                self.generateUnit(terranWorker)
+
     def draw(self, screen, camera):
         r = self.getRect()
         pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y+self.rectOffY - camera.y, r.w, r.h),1)
@@ -79,4 +78,3 @@ class TerranBarracks(Structure.Structure):
         hp = pygame.transform.scale(hp, (50, 8))
         hp = pygame.transform.chop(hp, ((self.hp/self.maxHp) * 50, 0, 50, 0))
         screen.blit(hp, [self.x - camera.x - 25, self.y+self.rectOffY+self.rectn.h/2 - 10 - camera.y])
-
