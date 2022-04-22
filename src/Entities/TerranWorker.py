@@ -269,7 +269,11 @@ class TerranWorker(Worker.Worker):
     # Pasa de frame en animaciones de movimiento
     def updateMovingImage(self):
         self.frame = (self.frame + 1) % len(MOVE_FRAMES)
-        self.image = self.sprites[FRAMES[MOVE_FRAMES[self.frame]][DIR_OFFSET[self.dir]]]
+        if self.order == Command.CommandId.TRANSPORTAR_ORE:
+            print("aa")
+            self.image = self.sprites[FRAMES[ORE_TRANSPORTING_FRAMES[self.frame]][DIR_OFFSET[self.dir]]]
+        else:
+            self.image = self.sprites[FRAMES[MOVE_FRAMES[self.frame]][DIR_OFFSET[self.dir]]]
     
     # Pasa de frame en una animacion de ataque
     def updateAttackingImage(self):
