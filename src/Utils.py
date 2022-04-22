@@ -59,6 +59,10 @@ class path():
         self.dist = dist
         self.posFin = posFin
 
+    def copy(self):
+        pathReturn = path(self.angle,self.dist,self.posFin)
+        return pathReturn
+
 class rect():
     def __init__(self, x, y, w, h):
         self.x = x

@@ -31,11 +31,16 @@ class Cristal():
             
             sprites.append(aux)
         return sprites
+    def __del__(self):
+        print("destruction")
 
     def getMined(self, cantidad):
         self.capacidad -= cantidad
         print("Me han minado: ", self.capacidad)
-        self.image = self.sprites[4 - int(float(self.capacidad)/float(self.interval) + 0.5)]
+        if(self.capacidad < 0):
+            del self
+        else:
+            self.image = self.sprites[3 - int(float(self.capacidad)/float(self.interval))]
 
     def getPosition(self):
         r = self.getRect()
