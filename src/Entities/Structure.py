@@ -14,7 +14,7 @@ class Structure(Entity.Entity):
         Entity.Entity.__init__(self, hp, xini, yini, mineralCost, generationTime, id,player)
     
     def getPosition(self):
-        return (self.rectn.x, self.rectn.y)
+        return (self.x+self.rectn.w/2, self.y+self.rectn.h/2)
 
     def update():
         pass
@@ -36,7 +36,8 @@ class Structure(Entity.Entity):
         image = self.getImage()
         if self.clicked:
             pygame.draw.ellipse(screen, Utils.GREEN, [self.x, self.y, r.w, r.h], 2)
-        screen.blit(self.image, [image.x - camera.x, image.y - camera.y])
-        if self.clicked:
             hp = pygame.transform.chop(pygame.transform.scale(Utils.HP, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
             screen.blit(hp, [self.x + r.w/2 - camera.x - hp.get_rect().w/2, self.y + r.h - camera.y])
+        screen.blit(self.image, [image.x - camera.x, image.y - camera.y])
+            
+
