@@ -7,20 +7,22 @@ class TerranBarracks(Structure.Structure):
     training = []
     generationTime = 0
     generationCount = 0
-    rectOffY = 15
+    heightPad = 20
+    widthPad = 19
+    rectOffY = 8
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building, id):
         (x, y) = map.getTileCenter(xini, yini)
-        x -= 16
-        y -= 19
+        x -= 19
+        y -= 13
         Structure.Structure.__init__(self, hp, mineralCost, generationTime, x, y, id, player)
         self.player = player
-        self.sprites = Utils.cargarSprites(Utils.TERRAN_BARRACK_PATH, 6, False, Utils.WHITE, 1.2)
+        self.sprites = Utils.cargarSprites(Utils.TERRAN_BARRACK_PATH, 6, False, Utils.WHITE, 1.1)
         self.map = map
         self.building = building
         self.image = self.sprites[self.index]
         self.image.set_colorkey(Utils.WHITE)
-        self.rectn = pygame.Rect(x, y, self.sprites[4].get_width(), (self.sprites[4].get_height()-self.rectOffY))
+        self.rectn = pygame.Rect(x, y, self.sprites[4].get_width() + self.widthPad, self.sprites[4].get_height()-self.heightPad)
         self.count = 0
         self.paths = []
 

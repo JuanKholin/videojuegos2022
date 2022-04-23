@@ -8,10 +8,10 @@ WHITE   = (255,255,255)
 class TerranBuilder(Structure.Structure):
     sprites = []
     training = []
-    rectOffY = 0
+    rectOffY = 3
     generationTime = 0
     generationCount = 0
-    rectOffY = 20
+    heightPad = 25
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building,id):
         (x, y) = map.getTileCenter(xini, yini)
@@ -25,7 +25,7 @@ class TerranBuilder(Structure.Structure):
         self.building = building
         self.image = self.sprites[self.index]
         self.image.set_colorkey(WHITE)
-        self.rectn = pygame.Rect(x, y, self.sprites[4].get_width(), (self.sprites[4].get_height()-self.rectOffY))
+        self.rectn = pygame.Rect(x, y, self.sprites[4].get_width(), self.sprites[4].get_height() - self.heightPad)
         self.count = 0
         self.paths = []
     def update(self):

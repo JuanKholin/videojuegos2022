@@ -8,24 +8,24 @@ WHITE   = (255,255,255)
 class ZergBuilder(Structure.Structure):
     sprites = []
     training = []
-    rectOffY = 40
-    heightPad = 35
+    heightPad = 100
     generationTime = 0
     generationCount = 0
+    widthPad = -20
+    rectOffY = 5
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building, id):
         (x, y) = map.getTileCenter(xini, yini)
-        x -= 10
-        y -= 8
+        x -= 20
+        y -= 10
         Structure.Structure.__init__(self, hp, mineralCost, generationTime, x, y, id, player)
         self.player = player
         self.sprites = cargarSprites(ZERG_BUILDER_PATH, 4, False, BLUE, 1.8)
-        self.rectOffY *= 1.8
         self.map = map
         self.building = building
         self.image = self.sprites[self.index]
         self.image.set_colorkey(BLUE)
-        self.rectn = pygame.Rect(x, y, self.sprites[0].get_width(), (self.sprites[0].get_height()-self.rectOffY)*0.8)
+        self.rectn = pygame.Rect(x, y, self.sprites[0].get_width() + self.widthPad, self.sprites[0].get_height() - self.heightPad)
         self.count = 0
         self.paths = []
     def update(self):

@@ -9,6 +9,7 @@ class Structure(Entity.Entity):
     index = 0
     rectOffY = 0
     heightPad = 0
+    widthPad = 0
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, id,player):
         Entity.Entity.__init__(self, hp, xini, yini, mineralCost, generationTime, id,player)
@@ -23,8 +24,9 @@ class Structure(Entity.Entity):
         return self.rectn
         
     def getImage(self):
-        rect = self.image.get_rect()
-        rectAux = pygame.Rect(self.x, self.y - self.rectOffY - self.heightPad, rect.w, rect.h)
+        image = self.image.get_rect()
+        r = self.getRect()
+        rectAux = pygame.Rect(r.x + r.w/2 - image.w/2, self.y - self.heightPad - self.rectOffY, image.w, image.h)
         return rectAux
 
     def setClicked(self, click):
@@ -34,6 +36,7 @@ class Structure(Entity.Entity):
         r = self.getRect()
         pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
         image = self.getImage()
+        pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(image.x - camera.x, image.y - camera.y, image.w, image.h),1)
         if self.clicked:
             pygame.draw.ellipse(screen, Utils.GREEN, [self.x, self.y, r.w, r.h], 2)
             hp = pygame.transform.chop(pygame.transform.scale(Utils.HP, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
