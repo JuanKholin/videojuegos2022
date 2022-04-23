@@ -34,13 +34,14 @@ class Structure(Entity.Entity):
         
     def draw(self, screen, camera):
         r = self.getRect()
-        pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
         image = self.getImage()
-        pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(image.x - camera.x, image.y - camera.y, image.w, image.h),1)
         if self.clicked:
             pygame.draw.ellipse(screen, Utils.GREEN, [self.x, self.y, r.w, r.h], 2)
             hp = pygame.transform.chop(pygame.transform.scale(Utils.HP, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
             screen.blit(hp, [self.x + r.w/2 - camera.x - hp.get_rect().w/2, self.y + r.h - camera.y])
         screen.blit(self.image, [image.x - camera.x, image.y - camera.y])
+        if Utils.DEBBUG:
+            pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
+            pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(image.x - camera.x, image.y - camera.y, image.w, image.h),1)
             
 
