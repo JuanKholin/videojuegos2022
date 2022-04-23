@@ -12,24 +12,26 @@ TIME_TO_MINE = 1000
 GENERATION_TIME = 200
 SPEED = 4
 FRAMES_TO_REFRESH = 5
-SPRITES = "zergling.bmp"
+SPRITES = "drone.bmp"
 SPRITE_PIXEL_ROWS = 128
 FACES = 8
 FRAME = 0
-TOTAL_FRAMES = 296  # [0:203] MOVICION (13 ciclos de 17 frames con solo 16 utiles)
-                    # ciclo 0 estar quieto, ciclos 1 2 y 3 atacacion, el resto moverse
-                    # [204:288] ENTERRACION
-                    # [289:295] MORICION
+TOTAL_FRAMES = 391 # 23 ristas de 17 frames (solo son necesarios 16 de cada una)
 FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)), 
           list(range(52, 68)), list(range(69, 85)), list(range(86, 102)), 
           list(range(103, 119)), list(range(120, 136)), list(range(137, 153)), 
-          list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
-          list(range(289, 296))]
+          list(range(154, 170)), list(range(171, 306))]
+#         list(range(307, 323)), list(range(324, 340)), list(range(341, 357)), 
+#         list(range(358, 374)), list(range(375, 391))]
+#DONT_TOUCH_FRAMES = [18, 19, 20, 21, 22]
+
 STILL_FRAMES = 0
-ATTACK_FRAMES = [1, 2, 3]
-MOVE_FRAMES = [4, 5, 6, 7, 8, 9, 10, 11]
-DIE_FRAMES = 12
-DIE_OFFSET = [0, 1, 2, 3, 4, 5, 6]
+ATTACK_FRAMES = [6, 7, 8, 9]
+MOVE_FRAMES = [1, 2, 3, 4, 5]
+DIE_FRAMES = 10
+DIE_OFFSET = [0, 1, 2, 3, 4, 5, 6, 7]
+DIE_OFFSET = [element * 17 for element in DIE_OFFSET]
+
 
 INVERSIBLE_FRAMES = len(FRAMES) - 1 # los die frames no se invierten
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
@@ -58,3 +60,4 @@ class Drone(Worker):
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
+        print(DIE_OFFSET, "JASDJASKLDJIASLR")

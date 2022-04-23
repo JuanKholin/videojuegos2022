@@ -186,7 +186,6 @@ class Unit(Entity):
 
     # Pasa a estado quieto
     def changeToStill(self):
-        self.dir = 8
         self.state = State.STILL
         self.image = self.sprites[self.frames[self.stillFrames][self.dirOffset[self.dir]]]
 
@@ -240,7 +239,8 @@ class Unit(Entity):
             print("ERROR: Unidad muerta, como que matarla mas?")
             exit(1)
         self.frame = self.frame + 1
-        self.image = self.sprites[self.frames[self.dieFrames][self.dirOffset[self.dir]]]
+        print(self.frame, self.frames[self.dieFrames][self.dieOffset[self.frame]])
+        self.image = self.sprites[self.frames[self.dieFrames][self.dieOffset[self.frame]]]
     
     def setOrder(self, order):
         self.order = order
