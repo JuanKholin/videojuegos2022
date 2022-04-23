@@ -52,8 +52,7 @@ class Zergling(Soldier):
                 X_PADDING, Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING)
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey(BLACK)
-        self.sprites = Entity.divideSpritesheetByRows(spritesheet, 
-                SPRITE_PIXEL_ROWS)
+        self.sprites = Entity.divideSpritesheetByRows(spritesheet, SPRITE_PIXEL_ROWS)
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()

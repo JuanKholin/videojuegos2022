@@ -109,6 +109,17 @@ class Unit(Entity):
                 if self.order['order'] == CommandId.MOVER:
                     self.changeToStill()
                 elif self.order['order'] == CommandId.MINAR:
+                    self.miningAngle = self.order['angle']
+                    self.basePath = self.order['basePath']
+                    self.cristalPath = self.order['cristalPath']
+                    self.cristal = self.order['cristal']
+                    #for path in self.basePath:
+                        #print("Posicion final a casa: ",path.posFin, path.angle)
+                    if self.miningAngle < 0:
+                        self.angle = -self.miningAngle
+                    else:
+                        self.angle = 2 * math.pi - self.miningAngle
+                    self.miningAngle = self.angle
                     self.changeToMining()
                 elif self.order['order'] == CommandId.TRANSPORTAR_ORE:
                     #sumar minerales al jugador
@@ -124,9 +135,7 @@ class Unit(Entity):
                             self.paths.append(path.copy())
                         self.changeToMove()
                 elif self.order['order'] == CommandId.MINAR_BUCLE:
-                    #sumar minerales al jugador
-                    self.dir = int(4 - (self.miningAngle * 8 / math.pi)) % 16          
-                    self.count = 0
+                    #sumar minerales al jugador         
                     self.changeToMining()
             else:
                 self.changeToStill()
@@ -169,20 +178,9 @@ class Unit(Entity):
         return self.clicked
     
     def changeToMining(self):
-        self.miningAngle = self.order['angle']
-        self.basePath = self.order['basePath']
-        self.cristalPath = self.order['cristalPath']
-        self.cristal = self.order['cristal']
-        #for path in self.basePath:
-            #print("Posicion final a casa: ",path.posFin, path.angle)
-        if self.miningAngle < 0:
-            self.angle = -self.miningAngle
-        else:
-            self.angle = 2 * math.pi - self.miningAngle
-        self.miningAngle = self.angle
-        self.dir = int(4 - (self.angle * 8 / math.pi)) % 16          
-        self.count = 0
         self.state = State.MINING
+        self.dir = int(4 - (self.miningAngle * 8 / math.pi)) % 16
+        self.count = 0
         self.frame = 0
         self.image = self.sprites[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
 
@@ -228,6 +226,11 @@ class Unit(Entity):
     
     # Pasa de frame en una animacion de ataque
     def updateAttackingImage(self):
+        self.frame = (self.frame + 1) % len(self.attackFrames)
+        self.image = self.sprites[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
+
+    # Pasa de frame en una animacion de ataque
+    def updateMiningImage(self):
         self.frame = (self.frame + 1) % len(self.attackFrames)
         self.image = self.sprites[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
 
