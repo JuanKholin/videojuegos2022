@@ -1,10 +1,10 @@
 import pygame as pg
 
-from . import Entity, Worker
+from .Entity import *
 from ..Utils import *
-from .Soldier import *
+from .Worker import *
 
-# Constantes del Zergling
+# Constantes del Drone
 HP = 40
 MINE_POWER = 8
 MINERAL_COST = 20
@@ -30,6 +30,7 @@ ATTACK_FRAMES = [1, 2, 3]
 MOVE_FRAMES = [4, 5, 6, 7, 8, 9, 10, 11]
 DIE_FRAMES = 12
 DIE_OFFSET = [0, 1, 2, 3, 4, 5, 6]
+
 INVERSIBLE_FRAMES = len(FRAMES) - 1 # los die frames no se invierten
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
 # horario y empezando desde el norte, el mapeo dir-frame es:
@@ -40,16 +41,16 @@ HEIGHT_PADDING = 210
 X_PADDING = 25
 Y_PADDING = 15
 
-class Zergling(Soldier):
+class Drone(Worker):
     # Pre: xIni e yIni marcan posiciones del mapa, (ej: (3, 2) se refiere a la posicion de 
     # la cuarta columna y tercera fila del mapa)
     # Post: Crea un bichito mono que no hace practicamente nada pero tu dale tiempo
     def __init__(self, xIni, yIni, player):
-        Soldier.__init__(self, HP, xIni * 40 + 20, yIni * 40 + 20, MINERAL_COST, 
-                GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, PADDING, 
-                takeID(), player, MINE_POWER, TIME_TO_MINE, DIE_OFFSET, INVERSIBLE_FRAMES, 
-                FRAMES, DIR_OFFSET, ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, 
-                X_PADDING, Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING)
+        Worker.__init__(self, HP, xIni * 40 + 20, yIni * 40 + 20, MINERAL_COST, GENERATION_TIME, 
+                SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, PADDING, takeID(), player, 
+                MINE_POWER, TIME_TO_MINE, DIE_OFFSET, INVERSIBLE_FRAMES, FRAMES, DIR_OFFSET, 
+                ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, X_PADDING, Y_PADDING, 
+                WEIGHT_PADDING, HEIGHT_PADDING)
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey(BLACK)
         self.sprites = Entity.divideSpritesheetByRows(spritesheet, 

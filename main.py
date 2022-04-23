@@ -4,8 +4,11 @@ import math
 from src.Lib import *
 from src.Music import *
 from src.Entities.Cristal import Cristal
-from src import Map, Raton, Escena, Player, Camera, AI, Command, Utils, Interface
+from src import Map, Raton, Escena, Player, Camera, AI, Utils, Interface
 from src.Entities import Terran, TerranBuilder, Zergling, ZergBuilder, TerranBarracks, TerranWorker
+from src.Entities.Drone import *
+from src.Entities.Zergling import *
+from src.Command import *
 
 # Auxiliar del bucle principal
 def procesarInput():
@@ -43,19 +46,19 @@ mapa = Map.Map(40, 20)
 
 # Player 1
 keyMap ={
-  pygame.K_UP: Command.CommandId.MOVER_CAMARA_ARRIBA,
-  pygame.K_DOWN: Command.CommandId.MOVER_CAMARA_ABAJO,
-  pygame.K_RIGHT: Command.CommandId.MOVER_CAMARA_DERECHA,
-  pygame.K_LEFT: Command.CommandId.MOVER_CAMARA_IZQUIERDA,
-  pygame.K_r: Command.CommandId.ROTAR,
-  pygame.K_v: Command.CommandId.GENERAR_UNIDAD,
+  pygame.K_UP: CommandId.MOVER_CAMARA_ARRIBA,
+  pygame.K_DOWN: CommandId.MOVER_CAMARA_ABAJO,
+  pygame.K_RIGHT: CommandId.MOVER_CAMARA_DERECHA,
+  pygame.K_LEFT: CommandId.MOVER_CAMARA_IZQUIERDA,
+  pygame.K_r: CommandId.ROTAR,
+  pygame.K_v: CommandId.GENERAR_UNIDAD,
 }
 commandMap ={
-  Command.CommandId.MOVER_CAMARA_ARRIBA: pygame.K_UP,
-  Command.CommandId.MOVER_CAMARA_ABAJO: pygame.K_DOWN,
-  Command.CommandId.MOVER_CAMARA_DERECHA: pygame.K_RIGHT,
-  Command.CommandId.MOVER_CAMARA_IZQUIERDA: pygame.K_LEFT,
-  Command.CommandId.ROTAR: pygame.K_r,
+  CommandId.MOVER_CAMARA_ARRIBA: pygame.K_UP,
+  CommandId.MOVER_CAMARA_ABAJO: pygame.K_DOWN,
+  CommandId.MOVER_CAMARA_DERECHA: pygame.K_RIGHT,
+  CommandId.MOVER_CAMARA_IZQUIERDA: pygame.K_LEFT,
+  CommandId.ROTAR: pygame.K_r,
 }
 
 player1 = Player.Player([],[],100, keyMap, commandMap)
@@ -91,7 +94,6 @@ def setEntity(player):
     #terran1 = Terran.Terran(40, 80, 80, 20, 200, 1, 5, "terranSprites", 8, 6)
     #terran2 = Terran.Terran(40, 200, 200, 20, 200, 1, 5, "terranSprites", 8, 6)
     scv = TerranWorker.TerranWorker(4, 10, player1)
-    #zergling2 = Zergling.Zergling(10, 10)
     structure1 = TerranBuilder.TerranBuilder(200, 40, 600, 5, 6, player1, mapa, False, 2)
     escena.setBasePlayer1(structure1)
     structure2 = TerranBarracks.TerranBarracks(200, 40, 600, 15, 9, player1, mapa, False, 3)
@@ -99,13 +101,14 @@ def setEntity(player):
     player.addStructures(structure2)
     player.addUnits(scv)
     #player.addUnits(terran2)
-    #player.addUnits(zergling2)
     #player1.addUnits(scv)
 
     zergBuilder = ZergBuilder.ZergBuilder(200, 50, 10, 15, 15, player2, mapa, False, 8)
-    zergling2 = Zergling.Zergling(10, 10, player1)
-    player1.addUnits(zergling2)
+    drone = Drone(10, 10, player1)
+    player1.addUnits(drone)
     player1.addStructures(zergBuilder)
+    zergling = Zergling(3, 2, player1)
+    player1.addUnits(zergling)
 
 
 def update():

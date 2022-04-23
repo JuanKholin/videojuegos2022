@@ -1,6 +1,6 @@
-from . import ResourceStructure
+from .ResourceStructure import *
 
-class VespeneHeiser(ResourceStructure.ResourceStructure):
+class VespeneHeiser(ResourceStructure):
     def __init__(hp, mineralCost, generationTime):
         super.__init__(hp, mineralCost, generationTime)
 

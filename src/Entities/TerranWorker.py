@@ -1,10 +1,10 @@
 import pygame as pg
-import math
 
 from .. import Command
 
-from . import Worker, Entity
+from . import Entity
 from .. import Utils
+from .Worker import *
 
 # Constantes
 HP = 40
@@ -46,9 +46,9 @@ X_PADDING =         40
 Y_PADDING =         47
 PADDING = 110
 
-class TerranWorker(Worker.Worker):
+class TerranWorker(Worker):
     def __init__(self, xIni, yIni, player):
-        Worker.Worker.__init__(self, HP, xIni * 40 + 20, yIni * 40 + 20, MINERAL_COST, 
+        Worker.__init__(self, HP, xIni * 40 + 20, yIni * 40 + 20, MINERAL_COST, 
                                 GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, 
                                     PADDING,  Utils.takeID(), player, MINE_POWER, TIME_TO_MINE, DIE_OFFSET, INVERSIBLE_FRAMES, 
                                         FRAMES, DIR_OFFSET, ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, X_PADDING,

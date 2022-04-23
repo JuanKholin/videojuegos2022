@@ -13,6 +13,7 @@ class CommandId(IntEnum):
     MINAR = 9
     MINAR_BUCLE = 10
     TRANSPORTAR_ORE = 11
+
 class Command:
     def __init__(self, id):
         self.id = id
