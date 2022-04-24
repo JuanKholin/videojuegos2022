@@ -6,7 +6,7 @@ from ..Command import *
 
 class Unit(Entity):
     def __init__(self, hp, xIni, yIni, mineral_cost, generation_time, speed, framesToRefresh, 
-                    sprites, face, frame, padding, id, player, minePower, timeToMine, dieOffset, inversibleFrames,
+                    sprites, face, frame, padding, id, player, minePower, timeToMine, inversibleFrames,
                         frames, dirOffset, attackFrames, stillFrames, moveFrames, dieFrames,  xPadding, yPadding, wPadding, hPadding):
         Entity.__init__(self, hp, xIni, yIni, mineral_cost, generation_time, id, player)
         # Relativo al movimiento de la unidad
@@ -26,7 +26,6 @@ class Unit(Entity):
         self.order = {'order': 0}
         
         #Relativo a los frames
-        self.dieOffset = dieOffset
         self.inversibleFrames = inversibleFrames
         self.framesToRefresh = framesToRefresh
         self.spritesName = sprites
@@ -185,7 +184,7 @@ class Unit(Entity):
     # Pasa a estado quieto
     def changeToStill(self):
         self.state = State.STILL
-        self.image = self.sprites[self.frames[self.stillFrames][self.dirOffset[self.dir]]]
+        self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
 
     # Pasa a estado moverse
     def changeToMove(self):
@@ -203,13 +202,13 @@ class Unit(Entity):
     def changeToDying(self):
         self.state = State.DYING
         self.frame = 0
-        self.image = self.sprites[self.frames[self.dieFrames][self.dieOffset[self.frame]]]
+        self.image = self.sprites[self.frames[self.dieFrames[self.frame]][self.dirOffset[self.dir]]]
 
     # Pasa a muerto (chof del todo)
     def changeToDead(self):
         self.state = State.DEAD
         self.frame += 1
-        self.image = self.sprites[self.frames[self.dieFrames][self.dieOffset[self.frame]]]
+        self.image = self.sprites[self.frames[self.dieFrames[self.frame]]]
 
     def changeToOreTransporting(self):
         pass
@@ -263,5 +262,4 @@ class Unit(Entity):
         rectAux = pg.Rect(self.x - self.xPadding, 
                 self.y - self.yPadding, self.image.get_width() - self.wPadding, self.image.get_height()  - self.hPadding)
         return rectAux
-    
     

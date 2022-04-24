@@ -10,7 +10,7 @@ class System_State(Enum):
     ONGAME = auto()
     EXIT = auto()
 
-STATE = System_State.MAINMENU
+state = System_State.MAINMENU
 
 #contador del sistema
 SYSTEM_CLOCK = 0
@@ -29,7 +29,6 @@ GREEN3  = (110, 255, 90)
 
 HP = pygame.image.load("SPRITE/vida3.png")
 HP.set_colorkey(WHITE)
-
 
 BGM_VOLUME = 0.2
 SOUND_VOLUME = 0.5
@@ -55,7 +54,6 @@ class State(Enum):
     ORE_TRANSPORTING = auto()
     BARREL_TRANSPORTING = auto()
     MINING = auto()
-
 
 
 class path():

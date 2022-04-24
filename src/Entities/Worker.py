@@ -7,11 +7,11 @@ import pygame as pg
 
 class Worker(Unit.Unit):
     def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, 
-                    faces, frame, padding, id,player, minePower, timeToMine, dieOffset, inersibleFrames, frames,
+                    faces, frame, padding, id,player, minePower, timeToMine, inersibleFrames, frames,
                         dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, xPadding, yPadding, wPadding, hPadding,
                             oreTransportingFrames):
         Unit.Unit.__init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, 
-                                faces, frame, padding, id, player, minePower, timeToMine, dieOffset, inersibleFrames, frames,
+                                faces, frame, padding, id, player, minePower, timeToMine, inersibleFrames, frames,
                                     dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, xPadding, yPadding, wPadding, hPadding)
         
         self.oreTransportingFrames = oreTransportingFrames

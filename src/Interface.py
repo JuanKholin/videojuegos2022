@@ -1,25 +1,23 @@
 
-import pygame
+import pygame as pg
 from . import Player, Command, Utils, Raton
 from src.Music import *
 from src.Lib import *
 from src.Utils import *
 
-
-
 class Interface():
     def __init__(self, player, mouse):
         self.player = player
         self.mouse = mouse
-        self.mainMenu = pygame.image.load(MAIN_MENU + ".png")
-        self.mainMenu = pygame.transform.scale(self.mainMenu, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.mainMenu = pg.image.load(MAIN_MENU + ".png")
+        self.mainMenu = pg.transform.scale(self.mainMenu, (SCREEN_WIDTH, SCREEN_HEIGHT))
         self.single = cargarSprites(SINGLE_PLAYER, SINGLE_PLAYER_N, True, BLACK, SINGLE_SIZE) 
         self.exit = cargarSprites(EXIT, EXIT_N, True, BLACK, EXIT_SIZE) 
         self.singleSelected = cargarSprites(SINGLE_PLAYER_FB, SINGLE_PLAYER_FB_N, True, BLACK, SINGLE_SIZE) 
         self.exitSelected = cargarSprites(EXIT_FB, EXIT_FB_N, True, BLACK, EXIT_SIZE)
         
-        self.singleRect = pygame.Rect(SINGLE_PLAYER_POS[0], SINGLE_PLAYER_POS[1], self.single[0].get_width(), self.single[0].get_height())
-        self.exitRect = pygame.Rect(EXIT_POS[0], EXIT_POS[1], self.exit[0].get_width(), self.exit[0].get_height())
+        self.singleRect = pg.Rect(SINGLE_PLAYER_POS[0], SINGLE_PLAYER_POS[1], self.single[0].get_width(), self.single[0].get_height())
+        self.exitRect = pg.Rect(EXIT_POS[0], EXIT_POS[1], self.exit[0].get_width(), self.exit[0].get_height())
         self.singlePress = False
         self.exitPress = False
         
@@ -31,7 +29,7 @@ class Interface():
         self.soundPlayed = False
     
     def update(self):
-        if Utils.STATE == System_State.MAINMENU:
+        if Utils.state == System_State.MAINMENU:
             
             singleCollide = False
             
@@ -47,7 +45,7 @@ class Interface():
                     self.singlePress = True
                 elif self.mouse.getClick() and self.singlePress and Raton.collides(endPos[0], endPos[1], self.singleRect):
                     print("Seleccionado single player")
-                    Utils.STATE = System_State.MAP1
+                    Utils.state = System_State.MAP1
                     stopMusic()
                     self.singlePress = False
                 
@@ -60,7 +58,7 @@ class Interface():
                     self.exitPress = True
                 elif self.mouse.getClick() and self.exitPress and Raton.collides(endPos[0], endPos[1], self.exitRect):
                     print("Seleccionado exit")
-                    Utils.STATE = System_State.EXIT
+                    Utils.state = System_State.EXIT
                     stopMusic()
                     self.exitPress = False
             elif not singleCollide:
@@ -76,7 +74,7 @@ class Interface():
             self.idExitSelected = (self.idExitSelected + frame(5)) % EXIT_FB_N
         
     def draw(self, screen):
-        if Utils.STATE == System_State.MAINMENU:
+        if Utils.state == System_State.MAINMENU:
             screen.blit(self.mainMenu, [0, 0])
             
             #Boton single player
@@ -99,5 +97,5 @@ class Interface():
                     
             
             
-        if Utils.STATE == System_State.ONGAME:
+        if Utils.state == System_State.ONGAME:
             muestra_texto(screen, times, str(self.player.resources), BLACK, 30, (SCREEN_WIDTH - 40, 20))

@@ -24,12 +24,12 @@ FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
           list(range(52, 68)), list(range(69, 85)), list(range(86, 102)), 
           list(range(103, 119)), list(range(120, 136)), list(range(137, 153)), 
           list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
-          list(range(289, 296))]
+          [289] * 16, [290] * 16, [291] * 16, [292] * 16, [293] * 16, [294] * 16, 
+          [295] * 16]
 STILL_FRAMES = [0]
 ATTACK_FRAMES = [1, 2, 3]
 MOVE_FRAMES = [4, 5, 6, 7, 8, 9, 10, 11]
-DIE_FRAMES = [12]
-DIE_OFFSET = [0, 1, 2, 3, 4, 5, 6]
+DIE_FRAMES = [12, 13, 14, 15, 16, 17, 18]
 INVERSIBLE_FRAMES = len(FRAMES) - 1 # los die frames no se invierten
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
 # horario y empezando desde el norte, el mapeo dir-frame es:
@@ -47,7 +47,7 @@ class Zergling(Soldier):
     def __init__(self, xIni, yIni, player):
         Soldier.__init__(self, HP, xIni * 40 + 20, yIni * 40 + 20, MINERAL_COST, 
                 GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, PADDING, 
-                takeID(), player, MINE_POWER, TIME_TO_MINE, DIE_OFFSET, INVERSIBLE_FRAMES, 
+                takeID(), player, MINE_POWER, TIME_TO_MINE, INVERSIBLE_FRAMES, 
                 FRAMES, DIR_OFFSET, ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, 
                 X_PADDING, Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING)
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()

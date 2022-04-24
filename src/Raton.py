@@ -43,7 +43,7 @@ def printRectangulo(screen, initialX, initialY, finalX, finalY):
 
 
 #FUNCIONES DEL RATON
-class raton(pygame.sprite.Sprite):
+class Raton(pygame.sprite.Sprite):
     #Constructor
     sprite = []
     sprite2 = []
@@ -137,7 +137,7 @@ class raton(pygame.sprite.Sprite):
         self.clicked = not self.clicked
 
     def draw(self, screen, camera):
-        if Utils.STATE == Utils.System_State.ONGAME:
+        if Utils.state == Utils.System_State.ONGAME:
             if self.point.getClicked():
                 self.point.draw(screen, camera)
             if self.pulsado:
