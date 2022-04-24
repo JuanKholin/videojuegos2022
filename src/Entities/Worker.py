@@ -65,20 +65,7 @@ class Worker(Unit.Unit):
         if len(self.paths) == 0:
             print(self.order['order'])
             if self.order != 0:
-                if self.order['order'] == CommandId.MINAR:
-                    self.miningAngle = self.order['angle']
-                    self.basePath = self.order['basePath']
-                    self.cristalPath = self.order['cristalPath']
-                    self.cristal = self.order['cristal']
-                    #for path in self.basePath:
-                        #print("Posicion final a casa: ",path.posFin, path.angle)
-                    if self.miningAngle < 0:
-                        self.angle = -self.miningAngle
-                    else:
-                        self.angle = 2 * math.pi - self.miningAngle
-                    self.miningAngle = self.angle
-                    self.changeToMining()
-                elif self.order['order'] == CommandId.TRANSPORTAR_ORE:
+                if self.order['order'] == CommandId.TRANSPORTAR_ORE:
                     #sumar minerales al jugador
                     if self.cristal.capacidad < 0:
                         self.player.resources += self.minePower + self.cristal.capacidad
@@ -91,6 +78,16 @@ class Worker(Unit.Unit):
                         for path in self.cristalPath:
                             self.paths.append(path.copy())
                         self.changeToMove()
+                elif self.order['order'] == CommandId.TRANSPORTAR_ORE_STILL:
+                    #print("sumar minerales al jugador")
+                    if self.cristal.capacidad < 0:
+                        self.player.resources += self.minePower + self.cristal.capacidad
+                        self.changeToStill()
+                        del self.cristal
+                    else:
+                        self.player.resources += self.minePower
+                        self.changeToStill()
+                        del self.cristal
                 elif self.order['order'] == CommandId.MINAR_BUCLE:
                     #sumar minerales al jugador         
                     self.changeToMining()

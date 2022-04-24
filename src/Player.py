@@ -44,6 +44,7 @@ class Player():
         elif id == Command.CommandId.ORDENAR:
             for i in range(param.__len__()):
                 print("ME han mandado:" ,param[i])
+                self.unitsSelected[i].paths = param[i]['path']
                 self.unitsSelected[i].setOrder(param[i])
         elif id == Command.CommandId.GENERAR_UNIDAD:
             for i in self.structuresSelected:

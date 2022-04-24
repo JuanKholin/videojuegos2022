@@ -62,6 +62,9 @@ class TerranBuilder(Structure.Structure):
 
     def generateUnit(self, unit):
         self.training.append(unit)
+
+    def getOrder(self):
+        return Command.CommandId.TRANSPORTAR_ORE_STILL
         
     def execute(self, command_id):
         if self.clicked:

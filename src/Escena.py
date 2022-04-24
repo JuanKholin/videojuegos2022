@@ -1,5 +1,5 @@
 import pygame, math
-from . import Player, Command, Utils
+from . import Player, Command, Utils, Raton
 from datetime import datetime
 
 class Escena():
@@ -77,7 +77,7 @@ class Escena():
                 #COMPROBAR QUE LA TILE CLICKADA CORRESPONDE A DISTINTAS ENTIDADES
                 # COMPROBAR SI HA CLICKADO UN ORE
                 tileCLikced = self.mapa.getTile(posFinal[0], posFinal[1])
-                order = {'order': Command.CommandId.MOVER, 'angle': 0}
+                order = {'order': Command.CommandId.MOVER, 'angle': 0, 'path': path}
                 if tileCLikced.type == 3:
                     Cristal = tileCLikced.ocupante
                     #calcular el camino a casa
@@ -128,14 +128,18 @@ class Escena():
                         posAux = posIni
                         posIni = posFin
 
-                    order = {'order': Command.CommandId.MINAR, 'angle': angle,'basePath': pathB, 'cristal': Cristal,'cristalPath': pathC }
-                    orderForPlayer.append(order)
+                    order = {'order': Command.CommandId.MINAR, 'angle': angle,'basePath': pathB, 'cristal': Cristal,'cristalPath': pathC, 'path': path }
 
 
                 else:
-                    orderForPlayer.append(order)
+                    rectClicked = Raton.createRect(tileCLikced.centerx,tileCLikced.centery,tileCLikced.centerx + 1, tileCLikced.centery + 1)
+                    for struct in self.p1.structures:
+                        if Raton.collideRect(struct.getRect(), rectClicked):
+                            order = struct.getOrder()
+                            order = {'order': order,'path': path}
                 pathsForPlayer.append(path)
-            self.p1.execute(Command.CommandId.MOVER, pathsForPlayer)
+                orderForPlayer.append(order)
+            #self.p1.execute(Command.CommandId.MOVER, pathsForPlayer)
             self.p1.execute(Command.CommandId.ORDENAR, orderForPlayer)
 
         pass

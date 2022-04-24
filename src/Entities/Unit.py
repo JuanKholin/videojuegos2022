@@ -47,7 +47,7 @@ class Unit(Entity):
         self.timeToMine = timeToMine
 
     def update(self):
-        print(self.state)
+        #print(self.state)
         if self.state == State.STILL: # Esta quieto
             self.updateStill()
         elif self.state == State.MOVING: # Esta moviendose
@@ -105,7 +105,7 @@ class Unit(Entity):
     def finishPath(self):
         self.paths.pop(0)
         if len(self.paths) == 0:
-            print(self.order['order'])
+            print("ORDEN AL FINALIZAR CAMINO:" ,self.order['order'])
             if self.order != 0:
                 if self.order['order'] == CommandId.MOVER:
                     self.changeToStill()
