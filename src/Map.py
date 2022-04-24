@@ -231,6 +231,7 @@ class Map():
 
     def Astar(self, tileIni, tileObj):
         print("VOY DE ", tileIni.centerx,tileIni.centery, "A ",  tileObj.centerx,tileObj.centery)
+#input()
         if(tileObj.type != 0):
             tileObj = self.getTileVecinaCercana(tileIni, tileObj)
         nodosAbiertos = []
@@ -245,14 +246,14 @@ class Map():
             currentId = 0
             for id, tile in enumerate(nodosAbiertos):
                 tileF = tile.g + tile.heur(tileObj)
-                #print(currentTile.tileid + 1,":", currentTile.g,currentTile.heur(tileObj) ,tile.tileid + 1,":", tile.g,tile.heur(tileObj))
+                print(currentTile.tileid ,":", currentTile.g,currentTile.heur(tileObj) ,tile.tileid,":", tile.g,tile.heur(tileObj))
                 if float(currentF) > float(tileF):
                     currentTile = Tile.Tile(tile.tileid, tile.centerx, tile.centery, 0, 0, 1, 0, tile.g, tile.padre)
                     currentF = tileF
                     currentId = id
             #Tenemos la tile con menos f
-            #print("estamos en", currentTile.tileid + 1, currentTile.padre.tileid + 1)
-            #input()
+            print("estamos en", currentTile.tileid , currentTile.padre.tileid )
+#input()
 
             nodosCerrados.append(currentTile)
             nodosAbiertos.pop(currentId)
@@ -261,8 +262,8 @@ class Map():
 
                 break
             for tile in self.getTileVecinas(currentTile):
-                #print("miro tile: ", tile.tileid + 1, tile.g)
-                #input()
+                #print("miro tile: ", tile.tileid , tile.g)
+                ##input()
                 if Tile.mismoId(nodosCerrados, tile).tileid == -1:# No esta
                     #print("No esta en cerrados, miro en abiertos")
                     tileEnAbiertos = Tile.mismoId(nodosAbiertos, tile)
@@ -297,7 +298,7 @@ class Map():
         else:           
             currentTile = self.getTile(tileObj.centerx, tileObj.centery)
             while currentTile != tileIni:
-                #print(currentTile.tileid, currentTile.g)
+                print(currentTile.tileid)
                 path.append(currentTile)
                 currentTile = currentTile.padre
             #print(currentTile.tileid)
@@ -306,6 +307,7 @@ class Map():
             while i >= 0:
                 pathReturn.append(path[i])
                 i = i - 1
+            
         return pathReturn
     
     def load(self, mapa):

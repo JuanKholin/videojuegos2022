@@ -53,7 +53,6 @@ class Escena():
                 #print(pathA.__len__())
                 #Movernos al centro de la tile
                 posFin = (tileIni.centerx, tileIni.centery)
-                path.append(Utils.path(math.atan2(posFin[1] - param[1], posFin[0] - param[0]), int(math.hypot(posFin[0] - param[0], posFin[1] - param[1])), posFin))
                 posAux = ()
                 for tile in pathA:
                     posFin = (tile.centerx, tile.centery)
@@ -73,7 +72,6 @@ class Escena():
                     if path.__len__() > 0:
 
                         path.append(Utils.path(math.atan2(real_mouse_pos[1] - posIni[1], real_mouse_pos[0] - posIni[0]), int(math.hypot(real_mouse_pos[0] - posIni[0], real_mouse_pos[1] - posIni[1])),real_mouse_pos))
-
                 #COMPROBAR QUE LA TILE CLICKADA CORRESPONDE A DISTINTAS ENTIDADES
                 # COMPROBAR SI HA CLICKADO UN ORE
                 tileCLikced = self.mapa.getTile(posFinal[0], posFinal[1])
@@ -140,6 +138,8 @@ class Escena():
                 pathsForPlayer.append(path)
                 orderForPlayer.append(order)
             #self.p1.execute(Command.CommandId.MOVER, pathsForPlayer)
+            for pat in path:
+                print(self.mapa.getTile(pat.posFin[0],pat.posFin[1]).tileid)
             self.p1.execute(Command.CommandId.ORDENAR, orderForPlayer)
 
         pass
@@ -162,22 +162,31 @@ class Escena():
 
     def update(self):
         units = self.p1.units + self.p2.units
+        #Recorremos las unidades de los jugadores para detectar colisiones
         for unit in units:
+
+            #OBTENEMOS LA TILE EN LA QUE SE ENCUENTRAN
             unitPos = unit.getPosition()
             tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
+
+            #SI ESTA MOVIENDOSE HAY QUE CALCULAR COLISIONES Y CAMBIAR LAS TILES QUE OCUPAN
             if unit.paths.__len__() > 0:
+
+                #CON POSFIN DEL PATH ACTUAL Y EL PATH FINAL(OBJETIVO) CALCULO LAS TILES DE LA SIGUIENTE Y OBJETIVO
                 path = unit.paths[0]
                 pathObj = unit.paths[unit.paths.__len__() - 1]
                 tilePath = self.mapa.getTile(path.posFin[0],path.posFin[1])
                 tileObj = self.mapa.getTile(pathObj.posFin[0],pathObj.posFin[1])
+
+                #SI LA SIGUIENTE NO ESTA OCUPADA HAY QUE ACTUALIZAR LAS TILES
                 if tilePath.type != 2 or ((tilePath.id == unit.id) and (tilePath.type == 2)):
                     dirX = math.cos(path.angle)
                     dirY = math.sin(path.angle)
                     tileSiguiente = self.mapa.getTile(int(unitPos[0] + dirX*unit.speed + 0.5), int(unitPos[1] + dirY*unit.speed + 0.5))
                     #print(unitPos)
-                    #input()
+                    ###input()
                     #print("tileActual: ", tileActual.centerx, tileActual.centery, "tileSiguiente",int(unitPos[0] + dirX*unit.speed + 0.5),tileSiguiente.centerx,int(unitPos[1] + dirY*unit.speed + 0.5), tileSiguiente.centery)
-                    #input()
+                    ###input()
                     if tileActual != tileSiguiente :
                         #print("es de este tipo, ", tileActual.type)
                         if tileActual.type != 1 and tileActual.type != 3:
@@ -194,25 +203,26 @@ class Escena():
                         if tile.type != 1:
                             self.mapa.setLibre(tile)
                 else:
-
-                    print("Que me la han ocupao",tilePath.tileid ,"y yo estando en",tileActual.tileid,unit.id )
-                    #input()
+                    
+                    ###input()
                     #if tilePath == tileObj:
                      #   #print("Y ademas mi objetivo, me miro otro que no sea", tileObj.centerx, tileObj.centery)
                       #  tileObj = self.mapa.calcDest(tileActual.centerx,tileActual.centery,tileObj.centerx,tileObj.centery) #Obtengo una cercana al objetivo
                        # #print("Mi nuevo objetivo es", tileObj.centerx, tileObj.centery)
-                    if tilePath.tileid != tileObj.tileid: #No es mi objetivo pero esta ocupado
+
+                    #LA TILE SIGUIENTE ESTA OCUPADA
+                    print("Que me la han ocupao",tilePath.tileid ,"y yo estando en",tileActual.tileid, "Quiero ir a:", tileObj.tileid )
+                    #No es mi objetivo pero esta ocupado
+                    if tilePath.tileid != tileObj.tileid: 
                         for unitBlock in units:
                             if unitBlock.id == tilePath.id: #Estamos con la unidad bloqueante
                                 if unitBlock.paths.__len__() == 0: # ME bloquea y ademas no se mueve
-                                    #print("Me bloque y no se mueve el tio")
+                                    print("Me bloque y no se mueve el tio")
                                     pathA = self.mapa.Astar(tileActual,tileObj)
                                     param = unitBlock.getPosition()
                                     posFinalT = unit.paths[unit.paths.__len__() - 1].posFin
                                     path = []
-                                    posFin = (tileActual.centerx, tileActual.centery)
-                                    path.append(Utils.path(math.atan2(posFin[1] - param[1], posFin[0] - param[0]), int(math.hypot(posFin[0] - param[0], posFin[1] - param[1])), posFin))
-                                    posIni = posFin
+                                    posIni = (tileActual.centerx, tileActual.centery)
                                     for tile in pathA:
                                         posFin = (tile.centerx, tile.centery)
                                         #print("desde: ",posIni,"hacia", posFin)
@@ -232,50 +242,72 @@ class Escena():
                                         if path.__len__() > 0:
                                             path.append(Utils.path(math.atan2(posFinalT[1] - posIni[1], posFinalT[0] - posIni[0]), int(math.hypot(posFinalT[0] - posIni[0], posFinalT[1] - posIni[1])),posFinalT))
                                     unit.paths = path
+                                    for path in unit.paths:
+                                        print("CAMINO: ", self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
                                 else: #Es majo y se va a mover
-                                    posiblesAlt = self.mapa.getTileVecinas(tileActual)
-                                    newTilePath = posiblesAlt[0]
-                                    for tile in posiblesAlt:
-                                        #print(tilePath.tileid, tileObj.tileid, tile.tileid)
-                                        if tilePath.tileid == tileObj.tileid and tile.tileid != tileObj.tileid:
-                                            newTilePath = tile
-                                            break
-                                        if (newTilePath.heur(tileActual) > tile.heur(tileActual) and tile.tileid != tileActual.tileid) or (newTilePath.heur(tileActual) <= tile.heur(tileActual) and tile.tileid != tileActual.tileid):
-                                            newTilePath = tile
-                                    #print("Salgo", newTilePath.tileid, tileActual.tileid)
-                                    #for path in unit.paths:
-                                        #print(path.posFin)
-                                    #print("aaaaaaaaaaaaaaaaaaaaaaa")
-                                    unit.paths.pop(0)
+                                    print("Es majo y se va a mover")
+                                    #CALCULAR LA TILE MAS ADECUADA
+                                    bestTile = self.mapa.getTileVecinaCercana(tileObj,tileActual)
+                                    print("MEJOR TILE: ", bestTile.tileid)
+                                    #NO TIENE A DONDE IR
+                                    if bestTile.tileid == -1:
+                                        unit.paths = []
+                                    else:
+                                        if bestTile.heur(tileObj) > tileActual.heur(tileObj):
+                                            print("Me tengo que replegar por lo que mejor recalculo")
+                                            pathA = self.mapa.Astar(tileActual,tileObj)
+                                            param = unitBlock.getPosition()
+                                            posFinalT = unit.paths[unit.paths.__len__() - 1].posFin
+                                            path = []
+                                            posFin = (tileActual.centerx, tileActual.centery)
+                                            path.append(Utils.path(math.atan2(posFin[1] - param[1], posFin[0] - param[0]), int(math.hypot(posFin[0] - param[0], posFin[1] - param[1])), posFin))
+                                            posIni = posFin
+                                            for tile in pathA:
+                                                posFin = (tile.centerx, tile.centery)
+                                                #print("desde: ",posIni,"hacia", posFin)
+                                                path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
+                                                #print("angulo del camino:", path1.angle)
+                                                path.append(path1)
+                                                posAux = posIni
+                                                posIni = posFin
+                                            posFin = (tileObj.centerx, tileObj.centery)
+                                            #print("Queria ir a", posFin, "y me han calculado", posIni)
+                                            if posFin == posIni:
+                                                #print("Entro a raton")
+                                                posIni = posAux
+                                                #print(path.__len__())
+                                                path.remove(path[path.__len__() - 1])
+                                                #print(path.__len__())
+                                                if path.__len__() > 0:
+                                                    path.append(Utils.path(math.atan2(posFinalT[1] - posIni[1], posFinalT[0] - posIni[0]), int(math.hypot(posFinalT[0] - posIni[0], posFinalT[1] - posIni[1])),posFinalT))
+                                            unit.paths = path
+                                        else: #HACEMOS EL CAMBIO A LOS PATHS
+                                            for path in unit.paths:
+                                                print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
+                                            unit.paths.pop(0) #quitamos el path a la ocupada
+##input()
+                                            for path in unit.paths:
+                                                print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
+                                            #CAMINO A LA MEJOR TILE
+                                            posFin = (bestTile.centerx, bestTile.centery)
+                                            posIni = unit.getPosition()
+                                            path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
 
-                                    # Nos colocamos en la central
-                                    posIni = unitPos
-                                    posFin = (tileActual.centerx,tileActual.centery)
-                                    path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
-                                    unit.paths.insert(0,path1)
-                                    #for path in unit.paths:
-                                        #print(path.posFin)
-                                    #print("aaaaaaaaaaaaaaaaaaaaaaa")
+                                            unit.paths.insert(0, path1)
+##input()
+                                            for path in unit.paths:
+                                                print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
 
-                                    #Irnos a la nueva
-                                    posIni = posFin
-                                    posFin = (newTilePath.centerx, newTilePath.centery)
-                                    path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
-                                    unit.paths.insert(1,path1)
-                                    #for path in unit.paths:
-                                        #print(path.posFin)
-                                    #print("aaaaaaaaaaaaaaaaaaaaaaa")
-                                    #Conectarla con la ocupada
-                                    if unit.paths.__len__() > 2:
-                                        #print("ENTRO ACA")
-                                        #unit.paths.pop(2)
-                                        posIni = posFin
-                                        posFin = (tilePath.centerx, tilePath.centery)
-                                        path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
-                                        unit.paths.insert(2,path1)
-                                        #for path in unit.paths:
-                                            #print(path.posFin)
-                                    #print("aaaaaaaaaaaaaaaaaaaaaaa")
+                                            #CAMINO A LA TILE DESOCUPADA
+                                            posIni = posFin
+                                            posFin = (tilePath.centerx, tilePath.centery)
+                                            path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
+
+                                            unit.paths.insert(1, path1)
+##input()
+                                            for path in unit.paths:
+                                                print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid, path.angle)
+##input()
                     else: #La siguiente es mi objetivo
                         unit.paths = []
             else:
