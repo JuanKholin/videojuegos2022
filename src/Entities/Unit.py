@@ -23,7 +23,7 @@ class Unit(Entity):
         self.frame = frame
         self.count = 0
         self.rectOffY = padding
-        #self.order (se seteara cuando se de una orden)
+        self.order = {'order': 0}
         
         #Relativo a los frames
         self.dieOffset = dieOffset
@@ -47,6 +47,7 @@ class Unit(Entity):
         self.timeToMine = timeToMine
 
     def update(self):
+        print(self.state)
         if self.state == State.STILL: # Esta quieto
             self.updateStill()
         elif self.state == State.MOVING: # Esta moviendose
@@ -58,7 +59,7 @@ class Unit(Entity):
         elif self.state == State.DEAD: # Esta muerto
             pass
         elif self.state == State.ORE_TRANSPORTING: # Esta transportando mineral
-            pass
+            self.updateOreTransporting()
         elif self.state == State.BARREL_TRANSPORTING: # Esta transportando barril
             pass
         elif self.state == State.MINING: # Esta minando
@@ -177,12 +178,9 @@ class Unit(Entity):
     def isClicked(self):
         return self.clicked
     
+    #Solo los worker pasan a minar
     def changeToMining(self):
-        self.state = State.MINING
-        self.dir = int(4 - (self.miningAngle * 8 / math.pi)) % 16
-        self.count = 0
-        self.frame = 0
-        self.image = self.sprites[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
+        pass
 
     # Pasa a estado quieto
     def changeToStill(self):
@@ -212,6 +210,9 @@ class Unit(Entity):
         self.state = State.DEAD
         self.frame += 1
         self.image = self.sprites[self.frames[self.dieFrames][self.dieOffset[self.frame]]]
+
+    def changeToOreTransporting(self):
+        pass
     
     # Pasa de frame en los frames quietos, no cambia nada puesto que esta quieto
     def updateStillImage(self):

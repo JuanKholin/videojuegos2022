@@ -10,7 +10,7 @@ MINE_POWER = 8
 MINERAL_COST = 20
 TIME_TO_MINE = 1000
 GENERATION_TIME = 200
-SPEED = 4
+SPEED = 2
 FRAMES_TO_REFRESH = 5
 SPRITES = "drone.bmp"
 SPRITE_PIXEL_ROWS = 128
@@ -52,7 +52,7 @@ class Drone(Worker):
                 SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, PADDING, takeID(), player, 
                 MINE_POWER, TIME_TO_MINE, DIE_OFFSET, INVERSIBLE_FRAMES, FRAMES, DIR_OFFSET, 
                 ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, X_PADDING, Y_PADDING, 
-                WEIGHT_PADDING, HEIGHT_PADDING)
+                WEIGHT_PADDING, HEIGHT_PADDING, MOVE_FRAMES)
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey(BLACK)
         self.sprites = Entity.divideSpritesheetByRows(spritesheet, 

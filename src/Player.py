@@ -39,8 +39,8 @@ class Player():
         if id == Command.CommandId.MOVER: #Mover unidades
             for i in range(param.__len__()):
                 self.unitsSelected[i].paths = param[i]
-                for path in param[i]:
-                    print("Posicion final: ",path.posFin, path.angle)
+                #for path in param[i]:
+                    #print("Posicion final: ",path.posFin, path.angle)
         elif id == Command.CommandId.ORDENAR:
             for i in range(param.__len__()):
                 print("ME han mandado:" ,param[i])

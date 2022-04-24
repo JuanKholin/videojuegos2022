@@ -191,7 +191,7 @@ class Escena():
                             self.mapa.setLibre(tile)
                 else:
 
-                    #print("Que me la han ocupao",tilePath.tileid ,"y yo estando en",tileActual.tileid,unit.id )
+                    print("Que me la han ocupao",tilePath.tileid ,"y yo estando en",tileActual.tileid,unit.id )
                     #input()
                     #if tilePath == tileObj:
                      #   #print("Y ademas mi objetivo, me miro otro que no sea", tileObj.centerx, tileObj.centery)
@@ -273,7 +273,6 @@ class Escena():
                                             #print(path.posFin)
                                     #print("aaaaaaaaaaaaaaaaaaaaaaa")
                     else: #La siguiente es mi objetivo
-                        #print("La siguiente es mi objetivo")
                         unit.paths = []
             else:
                 if tileActual.type != 1:

@@ -25,10 +25,10 @@ FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
           list(range(103, 119)), list(range(120, 136)), list(range(137, 153)), 
           list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
           list(range(289, 296))]
-STILL_FRAMES = 0
+STILL_FRAMES = [0]
 ATTACK_FRAMES = [1, 2, 3]
 MOVE_FRAMES = [4, 5, 6, 7, 8, 9, 10, 11]
-DIE_FRAMES = 12
+DIE_FRAMES = [12]
 DIE_OFFSET = [0, 1, 2, 3, 4, 5, 6]
 INVERSIBLE_FRAMES = len(FRAMES) - 1 # los die frames no se invierten
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido

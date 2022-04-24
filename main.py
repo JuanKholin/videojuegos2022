@@ -104,11 +104,11 @@ def setEntity(player):
     #player1.addUnits(scv)
 
     zergBuilder = ZergBuilder.ZergBuilder(200, 50, 10, 15, 15, player2, mapa, False, 8)
-    drone = Drone(10, 10, player1)
-    player1.addUnits(drone)
+    #drone = Drone(10, 10, player1)
+    #player1.addUnits(drone)
     player1.addStructures(zergBuilder)
-    zergling = Zergling(3, 2, player1)
-    player1.addUnits(zergling)
+    #zergling = Zergling(3, 2, player1)
+    #player1.addUnits(zergling)
 
 
 def update():
@@ -116,11 +116,11 @@ def update():
     raton.update(camera)
     
     if Utils.STATE == Utils.System_State.MAINMENU:
-        playMusic(mainMenuBGM, pos = 5)
+        #playMusic(mainMenuBGM, pos = 5)
         #playSound(mainMenuBGM)
         p1Interface.update()
     elif Utils.STATE == Utils.System_State.MAP1:
-        playMusic(map1BGM)
+        #playMusic(map1BGM)
         #cargar mapa
         escena.mapa.load(Utils.MAPA1)
         setEntity(player1)

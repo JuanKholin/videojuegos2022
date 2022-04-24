@@ -12,7 +12,7 @@ MINE_POWER = 8
 MINERAL_COST = 20
 TIME_TO_MINE = 1000
 GENERATION_TIME = 2
-SPEED = 4
+SPEED = 2
 FRAMES_TO_REFRESH = 10
 SPRITES = "scvJusto.bmp"
 SPRITE_PIXEL_ROWS = 72
@@ -29,8 +29,8 @@ FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
           list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
           list(range(205, 221)), list(range(289, 296))]
 STILL_FRAMES = 0
-ORE_TRANSPORTING_FRAMES = 3
-BARREL_TRANSPORTING_FRAMES = 4
+ORE_TRANSPORTING_FRAMES = [3]
+BARREL_TRANSPORTING_FRAMES = [4]
 ATTACK_FRAMES = [1, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 MOVE_FRAMES = [0]
 DIE_FRAMES = 13
@@ -52,7 +52,7 @@ class TerranWorker(Worker):
                                 GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, 
                                     PADDING,  Utils.takeID(), player, MINE_POWER, TIME_TO_MINE, DIE_OFFSET, INVERSIBLE_FRAMES, 
                                         FRAMES, DIR_OFFSET, ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, X_PADDING,
-                                            Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING)
+                                            Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ORE_TRANSPORTING_FRAMES)
 
 
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
