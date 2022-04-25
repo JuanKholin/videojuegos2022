@@ -58,10 +58,10 @@ class Worker(Unit.Unit):
             if actualPath.dist > 0: # Aun queda trecho
                 self.updatePath(actualPath)
             else: # Se acaba este camino
-                self.finisOrehPath()
+                self.finishOrePath()
         self.updateOreTransportingImage()
     
-    def finisOrehPath(self):
+    def finishOrePath(self):
         self.paths.pop(0)
         if len(self.paths) == 0:
             print(self.order['order'])

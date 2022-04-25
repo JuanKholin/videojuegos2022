@@ -33,8 +33,6 @@ STILL_FRAMES = [0]
 ATTACK_FRAMES = [6, 7, 8, 9]
 MOVE_FRAMES = [1, 2, 3, 4, 5]
 DIE_FRAMES = [10]
-DIE_OFFSET = [0, 1, 2, 3, 4, 5, 6, 7]
-DIE_OFFSET = [element * 17 for element in DIE_OFFSET]
 
 
 INVERSIBLE_FRAMES = len(FRAMES) - 1 # los die frames no se invierten
@@ -64,4 +62,3 @@ class Drone(Worker):
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
-        print(DIE_OFFSET, "JASDJASKLDJIASLR")

@@ -143,6 +143,7 @@ class Escena():
             self.p1.execute(Command.CommandId.ORDENAR, orderForPlayer)
 
         pass
+
     def checkPressedButtons(self):
         key = pygame.key.get_pressed()
         if key[self.p1.commandMap[Command.CommandId.MOVER_CAMARA_ARRIBA]]:
@@ -164,217 +165,224 @@ class Escena():
         units = self.p1.units + self.p2.units
         #Recorremos las unidades de los jugadores para detectar colisiones
         for unit in units:
-
-            #OBTENEMOS LA TILE EN LA QUE SE ENCUENTRAN
-            unitPos = unit.getPosition()
-            tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
-
-            #SI ESTA MOVIENDOSE HAY QUE CALCULAR COLISIONES Y CAMBIAR LAS TILES QUE OCUPAN
-            if unit.paths.__len__() > 0:
-
-                #CON POSFIN DEL PATH ACTUAL Y EL PATH FINAL(OBJETIVO) CALCULO LAS TILES DE LA SIGUIENTE Y OBJETIVO
-                path = unit.paths[0]
-                pathObj = unit.paths[unit.paths.__len__() - 1]
-                tilePath = self.mapa.getTile(path.posFin[0],path.posFin[1])
-                tileObj = self.mapa.getTile(pathObj.posFin[0],pathObj.posFin[1])
-
-                #SI LA SIGUIENTE NO ESTA OCUPADA HAY QUE ACTUALIZAR LAS TILES
-                if tilePath.type != 2 or ((tilePath.id == unit.id) and (tilePath.type == 2)):
-                    dirX = math.cos(path.angle)
-                    dirY = math.sin(path.angle)
-                    tileSiguiente = self.mapa.getTile(int(unitPos[0] + dirX*unit.speed + 0.5), int(unitPos[1] + dirY*unit.speed + 0.5))
-                    #print(unitPos)
-                    ###input()
-                    #print("tileActual: ", tileActual.centerx, tileActual.centery, "tileSiguiente",int(unitPos[0] + dirX*unit.speed + 0.5),tileSiguiente.centerx,int(unitPos[1] + dirY*unit.speed + 0.5), tileSiguiente.centery)
-                    ###input()
-                    if tileActual != tileSiguiente :
-                        #print("es de este tipo, ", tileActual.type)
-                        if tileActual.type != 1 and tileActual.type != 3:
-                            self.mapa.setLibre(tileActual)
-                            if tileSiguiente.type != 1 and tileSiguiente.type != 3:
-                                self.mapa.setVecina(tileSiguiente, unit.id)
-                                tileSiguiente.setOcupante(unit)
-                    else:
-                        if tileActual.type != 1 and tileActual.type != 3:
-                            self.mapa.setVecina(tileActual, unit.id)
-                            tileActual.setOcupante(unit)
-                    tiles = self.mapa.getAllTileVecinas(tileActual)
-                    for tile in tiles:
-                        if tile.type != 1:
-                            self.mapa.setLibre(tile)
-                else:
-                    
-                    ###input()
-                    #if tilePath == tileObj:
-                     #   #print("Y ademas mi objetivo, me miro otro que no sea", tileObj.centerx, tileObj.centery)
-                      #  tileObj = self.mapa.calcDest(tileActual.centerx,tileActual.centery,tileObj.centerx,tileObj.centery) #Obtengo una cercana al objetivo
-                       # #print("Mi nuevo objetivo es", tileObj.centerx, tileObj.centery)
-
-                    #LA TILE SIGUIENTE ESTA OCUPADA
-                    print("Que me la han ocupao",tilePath.tileid ,"y yo estando en",tileActual.tileid, "Quiero ir a:", tileObj.tileid )
-                    #No es mi objetivo pero esta ocupado
-                    if tilePath.tileid != tileObj.tileid: 
-                        for unitBlock in units:
-                            if unitBlock.id == tilePath.id: #Estamos con la unidad bloqueante
-                                if unitBlock.paths.__len__() == 0: # ME bloquea y ademas no se mueve
-                                    print("Me bloque y no se mueve el tio")
-                                    pathA = self.mapa.Astar(tileActual,tileObj)
-                                    param = unitBlock.getPosition()
-                                    posFinalT = unit.paths[unit.paths.__len__() - 1].posFin
-                                    path = []
-                                    posIni = (tileActual.centerx, tileActual.centery)
-                                    for tile in pathA:
-                                        posFin = (tile.centerx, tile.centery)
-                                        #print("desde: ",posIni,"hacia", posFin)
-                                        path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
-                                        #print("angulo del camino:", path1.angle)
-                                        path.append(path1)
-                                        posAux = posIni
-                                        posIni = posFin
-                                    posFin = (tileObj.centerx, tileObj.centery)
-                                    #print("Queria ir a", posFin, "y me han calculado", posIni)
-                                    if posFin == posIni:
-                                        #print("Entro a raton")
-                                        posIni = posAux
-                                        #print(path.__len__())
-                                        path.remove(path[path.__len__() - 1])
-                                        #print(path.__len__())
-                                        if path.__len__() > 0:
-                                            path.append(Utils.path(math.atan2(posFinalT[1] - posIni[1], posFinalT[0] - posIni[0]), int(math.hypot(posFinalT[0] - posIni[0], posFinalT[1] - posIni[1])),posFinalT))
-                                    unit.paths = path
-                                    for path in unit.paths:
-                                        print("CAMINO: ", self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
-                                else: #Es majo y se va a mover
-                                    print("Es majo y se va a mover")
-                                    #CALCULAR LA TILE MAS ADECUADA
-                                    bestTile = self.mapa.getTileVecinaCercana(tileObj,tileActual)
-                                    print("MEJOR TILE: ", bestTile.tileid)
-                                    #NO TIENE A DONDE IR
-                                    if bestTile.tileid == -1:
-                                        unit.paths = []
-                                    else:
-                                        if bestTile.heur(tileObj) > tileActual.heur(tileObj):
-                                            print("Me tengo que replegar por lo que mejor recalculo")
-                                            pathA = self.mapa.Astar(tileActual,tileObj)
-                                            param = unitBlock.getPosition()
-                                            posFinalT = unit.paths[unit.paths.__len__() - 1].posFin
-                                            path = []
-                                            posFin = (tileActual.centerx, tileActual.centery)
-                                            path.append(Utils.path(math.atan2(posFin[1] - param[1], posFin[0] - param[0]), int(math.hypot(posFin[0] - param[0], posFin[1] - param[1])), posFin))
-                                            posIni = posFin
-                                            for tile in pathA:
-                                                posFin = (tile.centerx, tile.centery)
-                                                #print("desde: ",posIni,"hacia", posFin)
-                                                path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
-                                                #print("angulo del camino:", path1.angle)
-                                                path.append(path1)
-                                                posAux = posIni
-                                                posIni = posFin
-                                            posFin = (tileObj.centerx, tileObj.centery)
-                                            #print("Queria ir a", posFin, "y me han calculado", posIni)
-                                            if posFin == posIni:
-                                                #print("Entro a raton")
-                                                posIni = posAux
-                                                #print(path.__len__())
-                                                path.remove(path[path.__len__() - 1])
-                                                #print(path.__len__())
-                                                if path.__len__() > 0:
-                                                    path.append(Utils.path(math.atan2(posFinalT[1] - posIni[1], posFinalT[0] - posIni[0]), int(math.hypot(posFinalT[0] - posIni[0], posFinalT[1] - posIni[1])),posFinalT))
-                                            unit.paths = path
-                                        else: #HACEMOS EL CAMBIO A LOS PATHS
-                                            for path in unit.paths:
-                                                print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
-                                            unit.paths.pop(0) #quitamos el path a la ocupada
-##input()
-                                            for path in unit.paths:
-                                                print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
-                                            #CAMINO A LA MEJOR TILE
-                                            posFin = (bestTile.centerx, bestTile.centery)
-                                            posIni = unit.getPosition()
-                                            path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
-
-                                            unit.paths.insert(0, path1)
-##input()
-                                            for path in unit.paths:
-                                                print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
-
-                                            #CAMINO A LA TILE DESOCUPADA
-                                            posIni = posFin
-                                            posFin = (tilePath.centerx, tilePath.centery)
-                                            path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
-
-                                            unit.paths.insert(1, path1)
-##input()
-                                            for path in unit.paths:
-                                                print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid, path.angle)
-##input()
-                    else: #La siguiente es mi objetivo
-                        unit.paths = []
-            else:
-                if tileActual.type != 1:
-                    self.mapa.setVecina(tileActual, unit.id)
-        for unit in self.p1.structures + self.p2.structures:
-            unitPos = unit.getPosition()
-            tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
-            if unit.paths.__len__() > 0:
-                path = unit.paths[0]
-                pathObj = unit.paths[unit.paths.__len__() - 1]
-                tilePath = self.mapa.getTile(path.posFin[0],path.posFin[1])
-                ##print("Tilepath es: ", tilePath.centerx, tilePath.centery)
-                tileObj = self.mapa.getTile(pathObj.posFin[0],pathObj.posFin[1])
-                if tilePath.type != 2 or (tilePath.id == unit.id and tilePath.type == 2):
-                    dirX = math.cos(path.angle)
-                    dirY = math.sin(path.angle)
-                    tileSiguiente = self.mapa.getTile(unitPos[0] + dirX*unit.speed, unitPos[1] + dirY*unit.speed)
-                    if tileActual != tileSiguiente :
-                        if tileActual.type != 1:
-                            self.mapa.setLibre(tileActual)
-                            if tileSiguiente.type != 1:
-                                self.mapa.setVecina(tileSiguiente, unit.id)
-                    else:
-                        if tileActual.type != 1:
-                            self.mapa.setVecina(tileActual, unit.id)
-            else:
-                if tileActual.type != 1:
-                    rect = unit.getRect()
-                    x, y = self.mapa.getTileIndex(rect.x, rect.y)
-                    while y*self.mapa.th <= rect.y+rect.h:
-                        x, _ = self.mapa.getTileIndex(rect.x, rect.y)
-                        while x*self.mapa.tw <= rect.x+rect.w:
-                            tile = self.mapa.map[y][x]
-                            self.mapa.setVecina(tile, unit.id)
-                            tile.setOcupante(unit)
-                            x += 1
-                        y += 1
+            self.updateUnit(unit, units)
+        for structure in self.p1.structures + self.p2.structures:
+            self.updateStructure(structure)
         for res in self.resources:
-            rect = res.getRect()
-            x = rect.x
-            finx = x + rect.w
-            y = rect.y + 1
-            finy = y + rect.h
-            if(res.capacidad < 0):
-                while x <= finx:
-                    while y <= finy:
-                        self.mapa.setLibre(self.mapa.getTile(x,y))
-                        y = y + self.mapa.th
-                    y = rect.y + 1
-                    x = x + self.mapa.tw
-                self.resources.remove(res)
-                del res
-            else:
-                while x <= finx:
-                        while y <= finy:
-                            self.mapa.setRecurso(self.mapa.getTile(x,y))
-                            self.mapa.getTile(x,y).setOcupante(res)
-                            y = y + self.mapa.th
-                        y = rect.y + 1
-                        x = x + self.mapa.tw
-
+            self.updateResource(res)
 
         self.p1.update()
         self.p2.update()
         self.raton.update(self.camera)
         self.aI.make_commands()
+
+    def updateUnit(self, unit, units):
+        #OBTENEMOS LA TILE EN LA QUE SE ENCUENTRAN
+        unitPos = unit.getPosition()
+        tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
+
+        #SI ESTA MOVIENDOSE HAY QUE CALCULAR COLISIONES Y CAMBIAR LAS TILES QUE OCUPAN
+        if unit.paths.__len__() > 0:
+
+            #CON POSFIN DEL PATH ACTUAL Y EL PATH FINAL(OBJETIVO) CALCULO LAS TILES DE LA SIGUIENTE Y OBJETIVO
+            path = unit.paths[0]
+            pathObj = unit.paths[unit.paths.__len__() - 1]
+            tilePath = self.mapa.getTile(path.posFin[0],path.posFin[1])
+            tileObj = self.mapa.getTile(pathObj.posFin[0],pathObj.posFin[1])
+
+            #SI LA SIGUIENTE NO ESTA OCUPADA HAY QUE ACTUALIZAR LAS TILES
+            if tilePath.type != 2 or ((tilePath.id == unit.id) and (tilePath.type == 2)):
+                dirX = math.cos(path.angle)
+                dirY = math.sin(path.angle)
+                tileSiguiente = self.mapa.getTile(int(unitPos[0] + dirX*unit.speed + 0.5), int(unitPos[1] + dirY*unit.speed + 0.5))
+                #print(unitPos)
+                ###input()
+                #print("tileActual: ", tileActual.centerx, tileActual.centery, "tileSiguiente",int(unitPos[0] + dirX*unit.speed + 0.5),tileSiguiente.centerx,int(unitPos[1] + dirY*unit.speed + 0.5), tileSiguiente.centery)
+                ###input()
+                if tileActual != tileSiguiente :
+                    #print("es de este tipo, ", tileActual.type)
+                    if tileActual.type != 1 and tileActual.type != 3:
+                        self.mapa.setLibre(tileActual)
+                        if tileSiguiente.type != 1 and tileSiguiente.type != 3:
+                            self.mapa.setVecina(tileSiguiente, unit.id)
+                            tileSiguiente.setOcupante(unit)
+                else:
+                    if tileActual.type != 1 and tileActual.type != 3:
+                        self.mapa.setVecina(tileActual, unit.id)
+                        tileActual.setOcupante(unit)
+                tiles = self.mapa.getAllTileVecinas(tileActual)
+                for tile in tiles:
+                    if tile.type != 1:
+                        self.mapa.setLibre(tile)
+            else:
+                    
+                ###input()
+                #if tilePath == tileObj:
+                    #   #print("Y ademas mi objetivo, me miro otro que no sea", tileObj.centerx, tileObj.centery)
+                    #  tileObj = self.mapa.calcDest(tileActual.centerx,tileActual.centery,tileObj.centerx,tileObj.centery) #Obtengo una cercana al objetivo
+                    # #print("Mi nuevo objetivo es", tileObj.centerx, tileObj.centery)
+
+                #LA TILE SIGUIENTE ESTA OCUPADA
+                print("Que me la han ocupao",tilePath.tileid ,"y yo estando en",tileActual.tileid, "Quiero ir a:", tileObj.tileid )
+                #No es mi objetivo pero esta ocupado
+                if tilePath.tileid != tileObj.tileid: 
+                    for unitBlock in units:
+                        if unitBlock.id == tilePath.id: #Estamos con la unidad bloqueante
+                            if unitBlock.paths.__len__() == 0: # ME bloquea y ademas no se mueve
+                                print("Me bloque y no se mueve el tio")
+                                pathA = self.mapa.Astar(tileActual,tileObj)
+                                param = unitBlock.getPosition()
+                                posFinalT = unit.paths[unit.paths.__len__() - 1].posFin
+                                path = []
+                                posIni = (tileActual.centerx, tileActual.centery)
+                                for tile in pathA:
+                                    posFin = (tile.centerx, tile.centery)
+                                    #print("desde: ",posIni,"hacia", posFin)
+                                    path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
+                                    #print("angulo del camino:", path1.angle)
+                                    path.append(path1)
+                                    posAux = posIni
+                                    posIni = posFin
+                                posFin = (tileObj.centerx, tileObj.centery)
+                                #print("Queria ir a", posFin, "y me han calculado", posIni)
+                                if posFin == posIni:
+                                    #print("Entro a raton")
+                                    posIni = posAux
+                                    #print(path.__len__())
+                                    path.remove(path[path.__len__() - 1])
+                                    #print(path.__len__())
+                                    if path.__len__() > 0:
+                                        path.append(Utils.path(math.atan2(posFinalT[1] - posIni[1], posFinalT[0] - posIni[0]), int(math.hypot(posFinalT[0] - posIni[0], posFinalT[1] - posIni[1])),posFinalT))
+                                unit.paths = path
+                                for path in unit.paths:
+                                    print("CAMINO: ", self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
+                            else: #Es majo y se va a mover
+                                print("Es majo y se va a mover")
+                                #CALCULAR LA TILE MAS ADECUADA
+                                bestTile = self.mapa.getTileVecinaCercana(tileObj,tileActual)
+                                print("MEJOR TILE: ", bestTile.tileid)
+                                #NO TIENE A DONDE IR
+                                if bestTile.tileid == -1:
+                                    unit.paths = []
+                                else:
+                                    if bestTile.heur(tileObj) > tileActual.heur(tileObj):
+                                        print("Me tengo que replegar por lo que mejor recalculo")
+                                        pathA = self.mapa.Astar(tileActual,tileObj)
+                                        param = unitBlock.getPosition()
+                                        posFinalT = unit.paths[unit.paths.__len__() - 1].posFin
+                                        path = []
+                                        posFin = (tileActual.centerx, tileActual.centery)
+                                        path.append(Utils.path(math.atan2(posFin[1] - param[1], posFin[0] - param[0]), int(math.hypot(posFin[0] - param[0], posFin[1] - param[1])), posFin))
+                                        posIni = posFin
+                                        for tile in pathA:
+                                            posFin = (tile.centerx, tile.centery)
+                                            #print("desde: ",posIni,"hacia", posFin)
+                                            path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
+                                            #print("angulo del camino:", path1.angle)
+                                            path.append(path1)
+                                            posAux = posIni
+                                            posIni = posFin
+                                        posFin = (tileObj.centerx, tileObj.centery)
+                                        #print("Queria ir a", posFin, "y me han calculado", posIni)
+                                        if posFin == posIni:
+                                            #print("Entro a raton")
+                                            posIni = posAux
+                                            #print(path.__len__())
+                                            path.remove(path[path.__len__() - 1])
+                                            #print(path.__len__())
+                                            if path.__len__() > 0:
+                                                path.append(Utils.path(math.atan2(posFinalT[1] - posIni[1], posFinalT[0] - posIni[0]), int(math.hypot(posFinalT[0] - posIni[0], posFinalT[1] - posIni[1])),posFinalT))
+                                        unit.paths = path
+                                    else: #HACEMOS EL CAMBIO A LOS PATHS
+                                        for path in unit.paths:
+                                            print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
+                                        unit.paths.pop(0) #quitamos el path a la ocupada
+##input()
+                                        for path in unit.paths:
+                                            print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
+                                        #CAMINO A LA MEJOR TILE
+                                        posFin = (bestTile.centerx, bestTile.centery)
+                                        posIni = unit.getPosition()
+                                        path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
+
+                                        unit.paths.insert(0, path1)
+##input()
+                                        for path in unit.paths:
+                                            print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
+
+                                        #CAMINO A LA TILE DESOCUPADA
+                                        posIni = posFin
+                                        posFin = (tilePath.centerx, tilePath.centery)
+                                        path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
+
+                                        unit.paths.insert(1, path1)
+##input()
+                                        for path in unit.paths:
+                                            print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid, path.angle)
+##input()
+                else: #La siguiente es mi objetivo
+                    unit.paths = []
+        else:
+            if tileActual.type != 1:
+                self.mapa.setVecina(tileActual, unit.id)
+
+    def updateStructure(self, structure):
+        unitPos = structure.getPosition()
+        tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
+        if structure.paths.__len__() > 0:
+            path = structure.paths[0]
+            pathObj = structure.paths[structure.paths.__len__() - 1]
+            tilePath = self.mapa.getTile(path.posFin[0],path.posFin[1])
+            ##print("Tilepath es: ", tilePath.centerx, tilePath.centery)
+            tileObj = self.mapa.getTile(pathObj.posFin[0],pathObj.posFin[1])
+            if tilePath.type != 2 or (tilePath.id == structure.id and tilePath.type == 2):
+                dirX = math.cos(path.angle)
+                dirY = math.sin(path.angle)
+                tileSiguiente = self.mapa.getTile(unitPos[0] + dirX*structure.speed, unitPos[1] + dirY*structure.speed)
+                if tileActual != tileSiguiente :
+                    if tileActual.type != 1:
+                        self.mapa.setLibre(tileActual)
+                        if tileSiguiente.type != 1:
+                            self.mapa.setVecina(tileSiguiente, structure.id)
+                else:
+                    if tileActual.type != 1:
+                        self.mapa.setVecina(tileActual, structure.id)
+        else:
+            if tileActual.type != 1:
+                rect = structure.getRect()
+                x, y = self.mapa.getTileIndex(rect.x, rect.y)
+                while y*self.mapa.th <= rect.y+rect.h:
+                    x, _ = self.mapa.getTileIndex(rect.x, rect.y)
+                    while x*self.mapa.tw <= rect.x+rect.w:
+                        tile = self.mapa.map[y][x]
+                        self.mapa.setVecina(tile, structure.id)
+                        tile.setOcupante(structure)
+                        x += 1
+                    y += 1
+
+    def updateResource(self, res):
+        rect = res.getRect()
+        x = rect.x
+        finx = x + rect.w
+        y = rect.y + 1
+        finy = y + rect.h
+        if(res.capacidad < 0):
+            while x <= finx:
+                while y <= finy:
+                    self.mapa.setLibre(self.mapa.getTile(x,y))
+                    y = y + self.mapa.th
+                y = rect.y + 1
+                x = x + self.mapa.tw
+            self.resources.remove(res)
+            del res
+        else:
+            while x <= finx:
+                    while y <= finy:
+                        self.mapa.setRecurso(self.mapa.getTile(x,y))
+                        self.mapa.getTile(x,y).setOcupante(res)
+                        y = y + self.mapa.th
+                    y = rect.y + 1
+                    x = x + self.mapa.tw
 
     def draw(self, screen):
         self.mapa.drawMap(screen, self.camera)
