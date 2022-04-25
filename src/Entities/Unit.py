@@ -2,6 +2,7 @@ import pygame as pg
 import math
 from .Entity import *
 from ..Utils import *
+from .. import Utils
 from ..Command import *
 
 class Unit(Entity):
@@ -71,6 +72,8 @@ class Unit(Entity):
     def updateStill(self):
         if len(self.paths) > 0:
             self.state = State.MOVING
+        else:
+            self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
         #aqui vendria un elif de si te atacan pasas a atacando(ESTA PARTE QUIZA NO, SE ESPECIFICARTA EN CLASES MAS ESPECIFICAS(WORKER/SOLDIER))
     
     def updateMoving(self):
@@ -123,6 +126,7 @@ class Unit(Entity):
                     else:
                         self.angle = 2 * math.pi - self.miningAngle
                     self.miningAngle = self.angle
+                    self.startTimeMining = Utils.GLOBAL_TIME
                     self.changeToMining()
                 elif self.order['order'] == CommandId.TRANSPORTAR_ORE:
                     #sumar minerales al jugador
@@ -138,7 +142,8 @@ class Unit(Entity):
                             self.paths.append(path.copy())
                         self.changeToMove()
                 elif self.order['order'] == CommandId.MINAR_BUCLE:
-                    #sumar minerales al jugador         
+                    #sumar minerales al jugador 
+                    self.startTimeMining = Utils.GLOBAL_TIME        
                     self.changeToMining()
             else:
                 self.changeToStill()
@@ -203,7 +208,7 @@ class Unit(Entity):
     def changeToStill(self):
         self.state = State.STILL
         self.frame = 0
-        print(self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]])
+        print("Frame: ", self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]])
         self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
 
     # Pasa a estado moverse

@@ -1,4 +1,5 @@
 from enum import Enum, auto, IntEnum
+from pickle import GLOBAL
 
 import pygame
 
@@ -17,8 +18,12 @@ DAMAGE_IND = 0
 COOLDOWN_IND = 1
 RANGE_IND = 2
 
+clock = pygame.time.Clock()
+
 #contador del sistema
 SYSTEM_CLOCK = 0
+
+GLOBAL_TIME = 0
 
 CLOCK_PER_SEC = 60
 

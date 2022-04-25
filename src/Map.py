@@ -32,7 +32,7 @@ class Map():
                 self.map[i + int(y / self.th)][j + int(x / self.tw)].type = 1
     
     def addOre(self, x, y):
-        print(int(y / self.th), int(x / self.tw))
+        #print(int(y / self.th), int(x / self.tw))
         self.map[int(y / self.th)][int(x / self.tw)].type = 3
     
     #Devuelve la Tile que se encuentra en las coordenadas x,y
@@ -215,6 +215,7 @@ class Map():
         return bestTile
 
     def getTileOcupadaCercana(self, tileIni, tileObj):
+        #print("Estamos en", tileObj.tileid, tileIni.tileid)
         tiles = self.getAllTileVecinas(tileObj)
         bestTile = tiles[0]
         for tile in tiles:
@@ -225,13 +226,18 @@ class Map():
     def getTileCercana(self, tileIni, tileObj):
         tileCercana = self.getTileOcupadaCercana(tileIni, tileObj)
         while tileCercana.type != 0:
+            #print("TileCercana: ", tileCercana.tileid, tileCercana.type)
+            if tileCercana.tileid == tileIni.tileid:
+                return tileCercana
             tileCercana = self.getTileOcupadaCercana(tileIni, tileCercana)
         return tileCercana
             
 
     def Astar(self, tileIni, tileObj):
-        print("VOY DE ", tileIni.centerx,tileIni.centery, "A ",  tileObj.centerx,tileObj.centery)
+        #print("VOY DE ", tileIni.tileid, "A ",  tileObj.tileid)
 #input()
+        if tileIni.tileid == tileObj.tileid:
+            return [tileIni]
         if(tileObj.type != 0):
             tileObj = self.getTileVecinaCercana(tileIni, tileObj)
         nodosAbiertos = []
@@ -246,13 +252,13 @@ class Map():
             currentId = 0
             for id, tile in enumerate(nodosAbiertos):
                 tileF = tile.g + tile.heur(tileObj)
-                print(currentTile.tileid ,":", currentTile.g,currentTile.heur(tileObj) ,tile.tileid,":", tile.g,tile.heur(tileObj))
+                #print(currentTile.tileid ,":", currentTile.g,currentTile.heur(tileObj) ,tile.tileid,":", tile.g,tile.heur(tileObj))
                 if float(currentF) > float(tileF):
                     currentTile = Tile.Tile(tile.tileid, tile.centerx, tile.centery, 0, 0, 1, 0, tile.g, tile.padre)
                     currentF = tileF
                     currentId = id
             #Tenemos la tile con menos f
-            print("estamos en", currentTile.tileid , currentTile.padre.tileid )
+            #print("estamos en", currentTile.tileid , currentTile.padre.tileid )
 #input()
 
             nodosCerrados.append(currentTile)
@@ -298,7 +304,7 @@ class Map():
         else:           
             currentTile = self.getTile(tileObj.centerx, tileObj.centery)
             while currentTile != tileIni:
-                print(currentTile.tileid)
+                #print(currentTile.tileid)
                 path.append(currentTile)
                 currentTile = currentTile.padre
             #print(currentTile.tileid)
