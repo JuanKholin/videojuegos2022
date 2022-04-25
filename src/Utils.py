@@ -12,6 +12,11 @@ class System_State(Enum):
 
 state = System_State.MAINMENU
 
+# Para el struct de la info de combate
+DAMAGE_IND = 0
+COOLDOWN_IND = 1
+RANGE_IND = 2
+
 #contador del sistema
 SYSTEM_CLOCK = 0
 

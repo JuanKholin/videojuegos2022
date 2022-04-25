@@ -9,10 +9,11 @@ class Worker(Unit.Unit):
     def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, 
                     faces, frame, padding, id,player, minePower, timeToMine, inersibleFrames, frames,
                         dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, xPadding, yPadding, wPadding, hPadding,
-                            oreTransportingFrames):
+                            oreTransportingFrames, attackInfo):
         Unit.Unit.__init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, 
                                 faces, frame, padding, id, player, minePower, timeToMine, inersibleFrames, frames,
-                                    dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, xPadding, yPadding, wPadding, hPadding)
+                                    dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, xPadding, yPadding, wPadding, hPadding, 
+                                    attackInfo)
         
         self.oreTransportingFrames = oreTransportingFrames
 

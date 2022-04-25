@@ -6,6 +6,10 @@ from .Worker import *
 
 # Constantes del Drone
 HP = 40
+DAMAGE = 5
+COOLDOWN = 22
+RANGE = 1
+ATTACK_INFO = [DAMAGE, COOLDOWN, RANGE]
 MINE_POWER = 8
 MINERAL_COST = 20
 TIME_TO_MINE = 1000
@@ -25,10 +29,10 @@ FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
 #         list(range(358, 374)), list(range(375, 391))]
 #DONT_TOUCH_FRAMES = [18, 19, 20, 21, 22]
 
-STILL_FRAMES = 0
+STILL_FRAMES = [0]
 ATTACK_FRAMES = [6, 7, 8, 9]
 MOVE_FRAMES = [1, 2, 3, 4, 5]
-DIE_FRAMES = 10
+DIE_FRAMES = [10]
 DIE_OFFSET = [0, 1, 2, 3, 4, 5, 6, 7]
 DIE_OFFSET = [element * 17 for element in DIE_OFFSET]
 
@@ -50,9 +54,9 @@ class Drone(Worker):
     def __init__(self, xIni, yIni, player):
         Worker.__init__(self, HP, xIni * 40 + 20, yIni * 40 + 20, MINERAL_COST, GENERATION_TIME, 
                 SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, PADDING, takeID(), player, 
-                MINE_POWER, TIME_TO_MINE, DIE_OFFSET, INVERSIBLE_FRAMES, FRAMES, DIR_OFFSET, 
+                MINE_POWER, TIME_TO_MINE, INVERSIBLE_FRAMES, FRAMES, DIR_OFFSET, 
                 ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, X_PADDING, Y_PADDING, 
-                WEIGHT_PADDING, HEIGHT_PADDING, MOVE_FRAMES)
+                WEIGHT_PADDING, HEIGHT_PADDING, MOVE_FRAMES, ATTACK_INFO)
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey(BLACK)
         self.sprites = Entity.divideSpritesheetByRows(spritesheet, 

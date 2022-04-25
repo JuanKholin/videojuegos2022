@@ -8,6 +8,10 @@ from .Worker import *
 
 # Constantes
 HP = 40
+ATTACK_INFO = [0, 0, 0]
+ATTACK_INFO[DAMAGE_IND] = 1
+ATTACK_INFO[COOLDOWN_IND] = 1
+ATTACK_INFO[RANGE_IND] = 1
 MINE_POWER = 8
 MINERAL_COST = 20
 TIME_TO_MINE = 1000
@@ -53,7 +57,7 @@ class TerranWorker(Worker):
                                 GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, 
                                     PADDING,  takeID(), player, MINE_POWER, TIME_TO_MINE, INVERSIBLE_FRAMES, 
                                         FRAMES, DIR_OFFSET, ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, X_PADDING,
-                                            Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ORE_TRANSPORTING_FRAMES)
+                                            Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ORE_TRANSPORTING_FRAMES, ATTACK_INFO)
 
 
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()

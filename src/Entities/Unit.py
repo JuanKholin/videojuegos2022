@@ -7,7 +7,7 @@ from ..Command import *
 class Unit(Entity):
     def __init__(self, hp, xIni, yIni, mineral_cost, generation_time, speed, framesToRefresh, 
                     sprites, face, frame, padding, id, player, minePower, timeToMine, inversibleFrames,
-                        frames, dirOffset, attackFrames, stillFrames, moveFrames, dieFrames,  xPadding, yPadding, wPadding, hPadding):
+                        frames, dirOffset, attackFrames, stillFrames, moveFrames, dieFrames,  xPadding, yPadding, wPadding, hPadding, attackInfo):
         Entity.__init__(self, hp, xIni, yIni, mineral_cost, generation_time, id, player)
         # Relativo al movimiento de la unidad
         self.paths = []
@@ -44,6 +44,9 @@ class Unit(Entity):
 
         self.minePower = minePower
         self.timeToMine = timeToMine
+        self.damage = attackInfo[DAMAGE_IND]
+        self.cooldown = attackInfo[COOLDOWN_IND]
+        self.range = attackInfo[RANGE_IND]
 
     def update(self):
         #print(self.state)
@@ -158,6 +161,21 @@ class Unit(Entity):
     def updateAttacking(self):
         pass
 
+    # Para inflingir un ataque a una unidad
+    def attack(self, attacked):
+        attacked.beingAttacked(self.damage)
+        if attacked.getHp() < 0:
+            self.changeToStill()
+        pass
+
+    # Para reflejar sobre una unidad que recibe un ataque
+    def beingAttacked(self, damage):
+        if self.hp < damage:
+            self.hp = 0
+            self.changeToDying
+        else:
+            self.hp -= damage
+
     # No es por meter mierda, pero a mi Zergling no lo cancela nadie, desgraciados(PUES YO SI :P) D:
     def cancel(self):
         self.paths = []
@@ -184,6 +202,8 @@ class Unit(Entity):
     # Pasa a estado quieto
     def changeToStill(self):
         self.state = State.STILL
+        self.frame = 0
+        print(self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]])
         self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
 
     # Pasa a estado moverse
@@ -262,4 +282,8 @@ class Unit(Entity):
         rectAux = pg.Rect(self.x - self.xPadding, 
                 self.y - self.yPadding, self.image.get_width() - self.wPadding, self.image.get_height()  - self.hPadding)
         return rectAux
+
+    # Getter de la HP
+    def getHp(self):
+        return self.hp
     

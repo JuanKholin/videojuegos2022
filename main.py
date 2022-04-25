@@ -15,6 +15,8 @@ from src.Entities.TerranWorker import *
 from src.Entities.TerranBuilder import *
 from src.Entities.TerranBarracks import *
 from src.Entities.ZergBuilder import *
+from src.Entities.Drone import *
+from src.Entities.Zergling import *
 
 # Auxiliar del bucle principal
 def procesarInput():
@@ -103,6 +105,14 @@ def setEntity(player):
 
     zergBuilder = ZergBuilder(200, 50, 10, 15, 15, player2, mapa, False, 8)
     player1.addStructures(zergBuilder)
+
+    drone = Drone(10, 11, player1)
+    player1.addUnits(drone)
+
+    zergling = Zergling(8, 9, player1)
+    player1.addUnits(zergling)
+
+    
 
 def update():
     clock_update()
