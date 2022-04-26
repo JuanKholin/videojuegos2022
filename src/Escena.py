@@ -35,7 +35,7 @@ class Escena():
             pathsForPlayer = []
             orderForPlayer = []
             tileCLikced = self.mapa.getTile(real_mouse_pos[0], real_mouse_pos[1])
-            print("TILE CLICKED: ", tileCLikced.tileid)
+            #print("TILE CLICKED: ", tileCLikced.tileid)
             tilesObj = []
             tilesCasa = []
             if tileCLikced.type == 3:
@@ -47,7 +47,7 @@ class Escena():
                 while x <= finx:
                     tileUp = self.mapa.getTile(x,y - 40)
                     tileDown = self.mapa.getTile(x,finy + 40)
-                    print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
+                    #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
                     if tileUp.type == 0:
                         tilesObj.append(tileUp)
                     if tileDown.type == 0:
@@ -56,7 +56,7 @@ class Escena():
                 while y <= finy:
                     tileUp = self.mapa.getTile(x - 40,y)
                     tileDown = self.mapa.getTile(finx + 40,y)
-                    print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
+                    #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
                     if tileUp.type == 0:
                         tilesObj.append(tileUp)
                     if tileDown.type == 0:
@@ -70,7 +70,7 @@ class Escena():
                 while x <= finx:
                     tileUp = self.mapa.getTile(x,y - 40)
                     tileDown = self.mapa.getTile(x,finy + 40)
-                    print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
+                    #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
                     if tileUp.type == 0:
                         tilesCasa.append(tileUp)
                     if tileDown.type == 0:
@@ -79,7 +79,7 @@ class Escena():
                 while y <= finy:
                     tileUp = self.mapa.getTile(x - 40,y)
                     tileDown = self.mapa.getTile(finx + 40,y)
-                    print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
+                    #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
                     if tileUp.type == 0:
                         tilesCasa.append(tileUp)
                     if tileDown.type == 0:
@@ -89,10 +89,10 @@ class Escena():
                 tilesObj = [tileCLikced]
             for param in command.params:
                 tileIni = self.mapa.getTile(param[0], param[1])
+                print("Me encuentro en: ", tileIni.tileid)
                 tileObj = tilesObj[0]
                 if(tilesObj.__len__() > 1):
                     for tile in tilesObj:
-                        print("Tile a checkear: ", tile.tileid, "Tile a checkear: ", tile.tileid)
                         if tile.heur(tileIni) < tileObj.heur(tileIni):
                             tileObj = tile
                     tilesObj.remove(tileObj)
@@ -123,7 +123,7 @@ class Escena():
                     posAux = posIni
                     posIni = posFin
             
-                print("Queria ir a", posFin, "y me han calculado", posIni)
+                #print("Queria ir a", posFin, "y me han calculado", posIni)
                 #COMPROBAR QUE LA TILE CLICKADA CORRESPONDE A DISTINTAS ENTIDADES
                 # COMPROBAR SI HA CLICKADO UN ORE
                 order = {'order': Command.CommandId.MOVER, 'angle': 0, 'path': path}
@@ -131,7 +131,7 @@ class Escena():
                     Cristal = tileCLikced.ocupante
                     tileIni = tileObj
                     #calcular el camino a casa
-                    print("Me quedo en:",tileObj.tileid)
+                    #print("Me quedo en:",tileObj.tileid)
                     tileObj = tilesCasa[0]
                     if(tilesCasa.__len__() > 1):
                         for tile in tilesCasa:
@@ -159,7 +159,7 @@ class Escena():
                         posIni = posFin
 
                     angle = math.atan2(posFinal[1] - poStay[1], posFinal[0] - poStay[0])
-                    print("angulo de minado", angle)
+                    #print("angulo de minado", angle)
                     #Y de casa a la mina tileObj casa y poStay la de minar
                     tileFin = self.mapa.getTile(poStay[0],poStay[1])
                     self.mapa.setLibre(tileFin)
@@ -277,13 +277,13 @@ class Escena():
                     # #print("Mi nuevo objetivo es", tileObj.centerx, tileObj.centery)
 
                 #LA TILE SIGUIENTE ESTA OCUPADA
-                print("Que me la han ocupao",tilePath.tileid ,"y yo estando en",tileActual.tileid, "Quiero ir a:", tileObj.tileid )
+                #print("Que me la han ocupao",tilePath.tileid ,"y yo estando en",tileActual.tileid, "Quiero ir a:", tileObj.tileid )
                 #No es mi objetivo pero esta ocupado
                 if tilePath.tileid != tileObj.tileid: 
                     for unitBlock in units:
                         if unitBlock.id == tilePath.id: #Estamos con la unidad bloqueante
                             if unitBlock.paths.__len__() == 0: # ME bloquea y ademas no se mueve
-                                print("Me bloque y no se mueve el tio")
+                                #print("Me bloque y no se mueve el tio")
                                 pathA = self.mapa.Astar(tileActual,tileObj)
                                 param = unitBlock.getPosition()
                                 posFinalT = unit.paths[unit.paths.__len__() - 1].posFin
@@ -300,19 +300,19 @@ class Escena():
                                 posFin = (tileObj.centerx, tileObj.centery)
                                 #print("Queria ir a", posFin, "y me han calculado", posIni)
                                 unit.paths = path
-                                for path in unit.paths:
-                                    print("CAMINO: ", self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
+                                #for path in unit.paths:
+                                    #print("CAMINO: ", self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
                             else: #Es majo y se va a mover
-                                    print("Es majo y se va a mover")
+                                    #print("Es majo y se va a mover")
                                     #CALCULAR LA TILE MAS ADECUADA
                                     bestTile = self.mapa.getTileVecinaCercana(tileObj,tileActual)
-                                    print("MEJOR TILE: ", bestTile.tileid)
+                                    #print("MEJOR TILE: ", bestTile.tileid)
                                     #NO TIENE A DONDE IR
                                     if bestTile.tileid == -1:
                                         unit.paths = []
                                     else:
                                         if bestTile.heur(tileObj) > tileActual.heur(tileObj):
-                                            print("Me tengo que replegar por lo que mejor recalculo")
+                                            #print("Me tengo que replegar por lo que mejor recalculo")
                                             pathA = self.mapa.Astar(tileActual,tileObj)
                                             param = unitBlock.getPosition()
                                             posFinalT = unit.paths[unit.paths.__len__() - 1].posFin
@@ -332,12 +332,12 @@ class Escena():
                                             #print("Queria ir a", posFin, "y me han calculado", posIni)
                                             unit.paths = path
                                         else: #HACEMOS EL CAMBIO A LOS PATHS
-                                            for path in unit.paths:
-                                                print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
+                                            #for path in unit.paths:
+                                                #print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
                                             unit.paths.pop(0) #quitamos el path a la ocupada
 ##input()
-                                        for path in unit.paths:
-                                            print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
+                                        #for path in unit.paths:
+                                            #print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
                                         #CAMINO A LA MEJOR TILE
                                         posFin = (bestTile.centerx, bestTile.centery)
                                         posIni = unit.getPosition()
@@ -345,8 +345,8 @@ class Escena():
 
                                         unit.paths.insert(0, path1)
 ##input()
-                                        for path in unit.paths:
-                                            print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
+                                        #for path in unit.paths:
+                                            #print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid)
 
                                         #CAMINO A LA TILE DESOCUPADA
                                         posIni = posFin
@@ -355,8 +355,8 @@ class Escena():
 
                                         unit.paths.insert(1, path1)
 ##input()
-                                        for path in unit.paths:
-                                            print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid, path.angle)
+                                        #for path in unit.paths:
+                                            #print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid, path.angle)
                                 
 ##input()
                 else: #La siguiente es mi objetivo
