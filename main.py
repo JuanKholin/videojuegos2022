@@ -5,7 +5,8 @@ import math
 
 from src.Utils import *
 from src.Command import *
-from src import Player, Raton, Map
+from src import Raton, Map
+from src.Player import *
 from src.Interface import *
 from src.AI import *
 from src.Camera import *
@@ -15,7 +16,7 @@ from src.Entities.TerranWorker import *
 from src.Entities.TerranBuilder import *
 from src.Entities.TerranSoldier import *
 from src.Entities.TerranBarracks import *
-from src.Entities.ZergBuilder import *
+from src.Entities.Hatchery import *
 from src.Entities.Drone import *
 from src.Entities.Zergling import *
 
@@ -95,21 +96,20 @@ escena = Escena(player1, player2, aI, mapa, camera, raton, p1Interface, resource
 #escena.mapa.addOre(100,100)
 
 def setEntity(player):
-    scv = TerranWorker.TerranWorker(5, 12, player1)
-    scv2 = TerranWorker.TerranWorker(6, 12, player1)
-    soldier = TerranSoldier(8, 15,player1)
-    structure1 = TerranBuilder(200, 40, 600, 5, 6, player1, mapa, False, 2)
+    scv = TerranWorker(5, 12, player1)
+    scv2 = TerranWorker(6, 12, player1)
+    soldier = TerranSoldier(8, 15, player1)
+    structure1 = TerranBuilder(200, 40, 600, 5, 6, player1, mapa, False)
     escena.setBasePlayer1(structure1)
-    structure2 = TerranBarracks(200, 40, 600, 15, 9, player1, mapa, False, 3)
+    structure2 = TerranBarracks(200, 40, 600, 15, 9, player1, mapa, False)
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addUnits(scv)
     player.addUnits(soldier)
     player.addUnits(scv2)
 
-
-    zergBuilder = ZergBuilder(200, 50, 10, 15, 15, player2, mapa, False, 8)
-    player1.addStructures(zergBuilder)
+    hatchery = Hatchery(15, 15, player1, mapa)
+    player1.addStructures(hatchery)
 
     drone = Drone(10, 11, player1)
     player1.addUnits(drone)

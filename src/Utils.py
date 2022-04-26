@@ -135,6 +135,10 @@ TERRAN_WORKER_MINERAL_COST = 20
 ##---------ZERGLING-----------------------
 ZERGLING_MINERAL_COST = 20
 
+##---------DRONE--------------------------
+DRONE_MINERAL_COST = 20
+
+
 #----------------------------------------------------------------
 # ESTRUCTURAS
 #----------------------------------------------------------------
@@ -145,8 +149,8 @@ TERRAN_BUILDER_PATH = "SPRITE/builder/tile00"
 ##---------TERRAN_BARRACK------------------
 TERRAN_BARRACK_PATH = "SPRITE/barracks/tile00"
 
-##---------ZERG_BUILDER------------------
-ZERG_BUILDER_PATH = "SPRITE/ZergBuilder/tile00"
+##---------HATCHERY------------------
+HATCHERY_PATH = "SPRITE/Hatchery/tile00"
 
 
 #carga n sprites con nombre path + 0 hasta path + (n-1)

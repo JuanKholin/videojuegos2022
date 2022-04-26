@@ -1,8 +1,11 @@
 import pygame
-from . import Structure, TerranWorker
-from .. import Player, Map, Utils, Command
+from .TerranWorker import *
+from .Structure import *
+from .. import Player, Map
+from ..Command import *
+from ..Utils import *
 
-class TerranBarracks(Structure.Structure):
+class TerranBarracks(Structure):
     sprites = []
     training = []
     generationTime = 0
@@ -11,17 +14,17 @@ class TerranBarracks(Structure.Structure):
     widthPad = 19
     rectOffY = 8
 
-    def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building, id):
+    def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building):
         (x, y) = map.getTileCenter(xini, yini)
         x -= 19
         y -= 13
-        Structure.Structure.__init__(self, hp, mineralCost, generationTime, x, y, id, player)
+        Structure.__init__(self, hp, mineralCost, generationTime, x, y, takeID(), player)
         self.player = player
-        self.sprites = Utils.cargarSprites(Utils.TERRAN_BARRACK_PATH, 6, False, Utils.WHITE, 1.1)
+        self.sprites = cargarSprites(TERRAN_BARRACK_PATH, 6, False, WHITE, 1.1)
         self.map = map
         self.building = building
         self.image = self.sprites[self.index]
-        self.image.set_colorkey(Utils.WHITE)
+        self.image.set_colorkey(WHITE)
         self.rectn = pygame.Rect(x, y, self.sprites[4].get_width() + self.widthPad, self.sprites[4].get_height()-self.heightPad)
         self.count = 0
         self.paths = []
@@ -43,7 +46,7 @@ class TerranBarracks(Structure.Structure):
                 else:
                     self.index = 5
             self.generationCount += 1
-            if self.generationCount == Utils.CLOCK_PER_SEC * self.training[0].generationTime:
+            if self.generationCount == CLOCK_PER_SEC * self.training[0].generationTime:
                 terran = self.training[0]
                 terranPos = terran.getPosition()
                 terranTile = self.map.getTile(terranPos[0], terranPos[1])
@@ -60,15 +63,15 @@ class TerranBarracks(Structure.Structure):
         else:
             self.index = 4
         self.image = self.sprites[self.index]
-        self.image.set_colorkey(Utils.WHITE)
+        self.image.set_colorkey(WHITE)
 
     def generateUnit(self, unit):
         self.training.append(unit)
 
     def execute(self, command_id):
         if self.clicked:
-            if command_id == Command.CommandId.GENERAR_UNIDAD  and self.player.resources >= Utils.TERRAN_WORKER_MINERAL_COST:
-                self.player.resources -= Utils.TERRAN_WORKER_MINERAL_COST
-                terranWorker = TerranWorker.TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
+            if command_id == CommandId.GENERAR_UNIDAD  and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
+                self.player.resources -= TERRAN_WORKER_MINERAL_COST
+                terranWorker = TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
                 self.generateUnit(terranWorker)
 

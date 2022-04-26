@@ -1,11 +1,12 @@
 import pygame
-from . import Structure, TerranWorker
-from .. import Player, Map, Utils, Tile, Command
+from .Structure import *
+from .TerranWorker import *
+from .. import Player, Map, Tile
+from ..Command import *
 from src.Utils import *
 
-WHITE   = (255,255,255)
 
-class TerranBuilder(Structure.Structure):
+class TerranBuilder(Structure):
     sprites = []
     training = []
     rectOffY = 3
@@ -13,11 +14,11 @@ class TerranBuilder(Structure.Structure):
     generationCount = 0
     heightPad = 25
 
-    def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building,id):
+    def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building):
         (x, y) = map.getTileCenter(xini, yini)
         x -= 18
         y -= 16
-        Structure.Structure.__init__(self, hp, mineralCost, generationTime, x, y, id, player)
+        Structure.__init__(self, hp, mineralCost, generationTime, x, y, takeID, player)
         self.player = player
 
         self.sprites = cargarSprites(TERRAN_BUILDER_PATH, 6, False, WHITE, 1.5)
@@ -28,6 +29,7 @@ class TerranBuilder(Structure.Structure):
         self.rectn = pygame.Rect(x, y, self.sprites[4].get_width(), self.sprites[4].get_height() - self.heightPad)
         self.count = 0
         self.paths = []
+
     def update(self):
         if self.building:
             self.count += 1
@@ -45,7 +47,7 @@ class TerranBuilder(Structure.Structure):
                 else:
                     self.index = 5
             self.generationCount += 1
-            if self.generationCount == Utils.CLOCK_PER_SEC*self.training[0].generationTime:
+            if self.generationCount == CLOCK_PER_SEC * self.training[0].generationTime:
                 terran = self.training[0]
                 terranPos = terran.getPosition()
                 terranTile = self.map.getTile(terranPos[0], terranPos[1])
@@ -64,11 +66,11 @@ class TerranBuilder(Structure.Structure):
         self.training.append(unit)
 
     def getOrder(self):
-        return Command.CommandId.TRANSPORTAR_ORE_STILL
+        return CommandId.TRANSPORTAR_ORE_STILL
         
     def execute(self, command_id):
         if self.clicked:
-            if command_id == Command.CommandId.GENERAR_UNIDAD and self.player.resources >= Utils.TERRAN_WORKER_MINERAL_COST:
-                self.player.resources -= Utils.TERRAN_WORKER_MINERAL_COST
-                terranWorker = TerranWorker.TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
+            if command_id == CommandId.GENERAR_UNIDAD and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
+                self.player.resources -= TERRAN_WORKER_MINERAL_COST
+                terranWorker = TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
                 self.generateUnit(terranWorker)

@@ -30,7 +30,6 @@ class Worker(Unit):
     #Especifico para worker
     def updateMining(self):
         self.count += 1
-        print(getGlobalTime(), " ", self.startTimeMining)
         if getGlobalTime() - self.startTimeMining > self.timeToMine: #Termina de minar
             self.order = {'order':CommandId.TRANSPORTAR_ORE}
             self.cantidadMinada = self.cristal.getMined(self.minePower)

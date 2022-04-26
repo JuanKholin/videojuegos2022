@@ -298,6 +298,13 @@ class Unit(Entity):
         r = self.getRect()
         return(r.x + r.w/2, r.y + r.h)
 
+    def getX(self):
+        return self.x
+
+    def getY(self):
+        return self.y
+
+
     def getDrawPosition(self):
         return(self.x - self.image.get_width()/2,  self.y - self.image.get_height()/2)
 
