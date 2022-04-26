@@ -13,6 +13,7 @@ from src.Entities.Cristal import *
 from src.Escena import Escena
 from src.Entities.TerranWorker import *
 from src.Entities.TerranBuilder import *
+from src.Entities.TerranSoldier import *
 from src.Entities.TerranBarracks import *
 from src.Entities.ZergBuilder import *
 from src.Entities.Drone import *
@@ -96,12 +97,14 @@ escena = Escena(player1, player2, aI, mapa, camera, raton, p1Interface, resource
 def setEntity(player):
     scv = TerranWorker.TerranWorker(5, 12, player1)
     scv2 = TerranWorker.TerranWorker(6, 12, player1)
+    soldier = TerranSoldier(8, 15,player1)
     structure1 = TerranBuilder(200, 40, 600, 5, 6, player1, mapa, False, 2)
     escena.setBasePlayer1(structure1)
     structure2 = TerranBarracks(200, 40, 600, 15, 9, player1, mapa, False, 3)
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addUnits(scv)
+    player.addUnits(soldier)
     player.addUnits(scv2)
 
 
