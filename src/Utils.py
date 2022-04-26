@@ -18,7 +18,11 @@ DAMAGE_IND = 0
 COOLDOWN_IND = 1
 RANGE_IND = 2
 
-clock = pygame.time.Clock()
+OBSTACLE = 1
+UNIT = 2
+CRYSTAL = 3
+
+CLOCK = pygame.time.Clock()
 
 #contador del sistema
 SYSTEM_CLOCK = 0
@@ -66,17 +70,17 @@ class State(Enum):
     MINING = auto()
 
 
-class path():
+class Path():
     def __init__(self, angle, dist, posFin):
         self.angle = angle
         self.dist = dist
         self.posFin = posFin
 
     def copy(self):
-        pathReturn = path(self.angle,self.dist,self.posFin)
+        pathReturn = Path(self.angle, self.dist, self.posFin)
         return pathReturn
 
-class rect():
+class Rect():
     def __init__(self, x, y, w, h):
         self.x = x
         self.y = y
@@ -192,6 +196,15 @@ def muestra_texto(pantalla,fuente,texto,color, dimensiones, pos):
 
 def aux(screen):
     muestra_texto(screen, str('monotypecorsiva'), "single player", (210, 255, 124), 25, [270, 150])
+
+def getGlobalTime():
+    global GLOBAL_TIME
+    result = GLOBAL_TIME
+    return result
+
+def updateGlobalTime():
+    global GLOBAL_TIME
+    GLOBAL_TIME += CLOCK.tick(CLOCK_PER_SEC)
 
 
 ELEVACION_PATH = "SPRITE/tile/elevacion/tile0"

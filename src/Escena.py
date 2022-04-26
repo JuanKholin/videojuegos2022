@@ -1,5 +1,8 @@
-import pygame, math
-from . import Player, Command, Utils, Raton
+import pygame as pg
+import math
+from . import Player, Raton
+from .Utils import *
+from .Command import *
 from datetime import datetime
 
 class Escena():
@@ -21,196 +24,203 @@ class Escena():
 
     def procesarEvent(self, event):
         #Conseguir el comando
-        if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
+        if event.type == pg.MOUSEBUTTONDOWN or event.type == pg.MOUSEBUTTONUP:
             command = self.raton.processEvent(event, self.camera.x, self.camera.y)
         else:
             command = self.p1.processEvent(event)
 
         #ejecutar el comando
-        if command.id == Command.CommandId.GENERAR_UNIDAD:
+        if command.id == CommandId.GENERAR_UNIDAD:
             self.p1.execute(command.id, [])
-        elif command.id == Command.CommandId.MOVER: # 1 es moverse
-            relative_mouse_pos = pygame.mouse.get_pos()
+        elif command.id == CommandId.MOVER:
+            relative_mouse_pos = pg.mouse.get_pos()
             real_mouse_pos = (relative_mouse_pos[0] + self.camera.x, relative_mouse_pos[1] + self.camera.y)
-            pathsForPlayer = []
-            orderForPlayer = []
-            tileCLikced = self.mapa.getTile(real_mouse_pos[0], real_mouse_pos[1])
+            tileClicked = self.mapa.getTile(real_mouse_pos[0], real_mouse_pos[1])
             #print("TILE CLICKED: ", tileCLikced.tileid)
             tilesObj = []
             tilesCasa = []
-            if tileCLikced.type == 3:
-                rect = tileCLikced.ocupante.getRect()
-                x = self.mapa.getTile(rect.x, rect.y).centerx
-                finx = x + rect.w
-                y = self.mapa.getTile(rect.x, rect.y).centery
-                finy = y + rect.h
-                while x <= finx:
-                    tileUp = self.mapa.getTile(x,y - 40)
-                    tileDown = self.mapa.getTile(x,finy + 40)
-                    #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
-                    if tileUp.type == 0:
-                        tilesObj.append(tileUp)
-                    if tileDown.type == 0:
-                        tilesObj.append(tileDown)
-                    x += 40
-                while y <= finy:
-                    tileUp = self.mapa.getTile(x - 40,y)
-                    tileDown = self.mapa.getTile(finx + 40,y)
-                    #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
-                    if tileUp.type == 0:
-                        tilesObj.append(tileUp)
-                    if tileDown.type == 0:
-                        tilesObj.append(tileDown)
-                    y += 40
-                rect = self.basePlayer1.getRect()
-                x = self.mapa.getTile(rect.x, rect.y).centerx
-                finx = x + rect.w
-                y = self.mapa.getTile(rect.x, rect.y).centery
-                finy = y + rect.h
-                while x <= finx:
-                    tileUp = self.mapa.getTile(x,y - 40)
-                    tileDown = self.mapa.getTile(x,finy + 40)
-                    #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
-                    if tileUp.type == 0:
-                        tilesCasa.append(tileUp)
-                    if tileDown.type == 0:
-                        tilesCasa.append(tileDown)
-                    x += 40
-                while y <= finy:
-                    tileUp = self.mapa.getTile(x - 40,y)
-                    tileDown = self.mapa.getTile(finx + 40,y)
-                    #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
-                    if tileUp.type == 0:
-                        tilesCasa.append(tileUp)
-                    if tileDown.type == 0:
-                        tilesCasa.append(tileDown)
-                    y += 40
+            if tileClicked.type == CRYSTAL:
+                tilesObj, tilesCasa = self.pathsToCrystal(tileClicked, tilesObj, tilesCasa)
             else:
-                tilesObj = [tileCLikced]
-            for param in command.params:
-                tileIni = self.mapa.getTile(param[0], param[1])
-                print("Me encuentro en: ", tileIni.tileid)
-                tileObj = tilesObj[0]
-                if(tilesObj.__len__() > 1):
-                    for tile in tilesObj:
-                        if tile.heur(tileIni) < tileObj.heur(tileIni):
-                            tileObj = tile
-                    tilesObj.remove(tileObj)
-                posFinal = (tileCLikced.centerx, tileCLikced.centery)
-                #print(tileObj.centery, tileObj.tileid)
-                #print("pos final tile centro x e y: ", tileObj.centerx, tileObj.centery)
-                #print("pos ini tile centro x e y: ", tileIni.centerx, tileIni.centery)
-                if tileObj.type != 0: #Esta ocupada
-                    tileObj = self.mapa.getTileCercana(tileIni, tileObj)
-                    #print(tileObj.centery, tileObj.tileid)
-                now = datetime.now()
-                pathA = self.mapa.Astar(tileIni,tileObj)
-                #input()
-                #print((datetime.now() - now))
-                posIni = (tileIni.centerx, tileIni.centery)
-                #print(posIni)
-                path = []
-                #print(pathA.__len__())
-                #Movernos al centro de la tile
-                posFin = (tileIni.centerx, tileIni.centery)
-                posAux = ()
-                for tile in pathA:
-                    posFin = (tile.centerx, tile.centery)
-                    #print("desde: ",posIni,"hacia", posFin)
-                    path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
-                    #print("angulo del camino:", path1.angle)
-                    path.append(path1)
-                    posAux = posIni
-                    posIni = posFin
+                tilesObj = [tileClicked]
             
-                #print("Queria ir a", posFin, "y me han calculado", posIni)
-                #COMPROBAR QUE LA TILE CLICKADA CORRESPONDE A DISTINTAS ENTIDADES
-                # COMPROBAR SI HA CLICKADO UN ORE
-                order = {'order': Command.CommandId.MOVER, 'angle': 0, 'path': path}
-                if tileCLikced.type == 3:
-                    Cristal = tileCLikced.ocupante
-                    tileIni = tileObj
-                    #calcular el camino a casa
-                    #print("Me quedo en:",tileObj.tileid)
-                    tileObj = tilesCasa[0]
-                    if(tilesCasa.__len__() > 1):
-                        for tile in tilesCasa:
-                            if tile.heur(tileIni) < tileObj.heur(tileIni):
-                                tileObj = tile
-                        tilesCasa.remove(tileObj)
-                    poStay = posIni 
-                    self.mapa.setLibre(tileObj)
-                    pathA = self.mapa.Astar(tileIni,tileObj)
-                    posIni = (tileIni.centerx, tileIni.centery)
-                    #print(posIni)
-                    pathB = []
-                    #print(pathA.__len__())
-                    #Movernos al centro de la tile
-                    posFin = (tileIni.centerx, tileIni.centery)
-                    pathB.append(Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])), posFin))
-                    posAux = ()
-                    for tile in pathA:
-                        posFin = (tile.centerx, tile.centery)
-                        #print("desde: ",posIni,"hacia", posFin)
-                        path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
-                        #print("angulo del camino:", path1.angle)
-                        pathB.append(path1)
-                        posAux = posIni
-                        posIni = posFin
-
-                    angle = math.atan2(posFinal[1] - poStay[1], posFinal[0] - poStay[0])
-                    #print("angulo de minado", angle)
-                    #Y de casa a la mina tileObj casa y poStay la de minar
-                    tileFin = self.mapa.getTile(poStay[0],poStay[1])
-                    self.mapa.setLibre(tileFin)
-                    pathA = self.mapa.Astar(tileObj,tileFin)
-                    posIni = (tileObj.centerx, tileObj.centery)
-                    #print(posIni)
-                    pathC = []
-                    #print(pathA.__len__())
-                    #Movernos al centro de la tile
-                    posFin = poStay
-                    posAux = ()
-                    for tile in pathA:
-                        posFin = (tile.centerx, tile.centery)
-                        #print("desde: ",posIni,"hacia", posFin)
-                        path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
-                        #print("angulo del camino:", path1.angle, self.mapa.getTile(path1.posFin[0], path1.posFin[1]).tileid)
-                        pathC.append(path1)
-                        posAux = posIni
-                        posIni = posFin
-
-                    order = {'order': Command.CommandId.MINAR, 'angle': angle,'basePath': pathB, 'cristal': Cristal,'cristalPath': pathC, 'path': path }
-
-
-                else:
-                    rectClicked = Raton.createRect(tileCLikced.centerx,tileCLikced.centery,tileCLikced.centerx + 1, tileCLikced.centery + 1)
-                    for struct in self.p1.structures:
-                        if Raton.collideRect(struct.getRect(), rectClicked):
-                            order = struct.getOrder()
-                            order = {'order': order,'path': path}
-                pathsForPlayer.append(path)
-                orderForPlayer.append(order)
-            #self.p1.execute(Command.CommandId.MOVER, pathsForPlayer)
-            #for pat in path:
-                #print(self.mapa.getTile(pat.posFin[0],pat.posFin[1]).tileid)
-            self.p1.execute(Command.CommandId.ORDENAR, orderForPlayer)
-
+            pathsForPlayer = []
+            orderForPlayer = []
+            for param in command.params:
+                self.processParam(param, tilesObj, tilesCasa, tileClicked, pathsForPlayer, orderForPlayer)
+            self.p1.execute(CommandId.ORDENAR, orderForPlayer)
         pass
 
+    def pathsToCrystal(self, tileClicked, tilesObj, tilesCasa):
+        rect = tileClicked.ocupante.getRect()
+        x = self.mapa.getTile(rect.x, rect.y).centerx
+        finx = x + rect.w
+        y = self.mapa.getTile(rect.x, rect.y).centery
+        finy = y + rect.h
+        while x <= finx:
+            tileUp = self.mapa.getTile(x,y - 40)
+            tileDown = self.mapa.getTile(x,finy + 40)
+            #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
+            if tileUp.type == 0:
+                tilesObj.append(tileUp)
+            if tileDown.type == 0:
+                tilesObj.append(tileDown)
+            x += 40
+        while y <= finy:
+            tileUp = self.mapa.getTile(x - 40,y)
+            tileDown = self.mapa.getTile(finx + 40,y)
+            #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
+            if tileUp.type == 0:
+                tilesObj.append(tileUp)
+            if tileDown.type == 0:
+                tilesObj.append(tileDown)
+            y += 40
+        rect = self.basePlayer1.getRect()
+        x = self.mapa.getTile(rect.x, rect.y).centerx
+        finx = x + rect.w
+        y = self.mapa.getTile(rect.x, rect.y).centery
+        finy = y + rect.h
+        while x <= finx:
+            tileUp = self.mapa.getTile(x,y - 40)
+            tileDown = self.mapa.getTile(x,finy + 40)
+            #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
+            if tileUp.type == 0:
+                tilesCasa.append(tileUp)
+            if tileDown.type == 0:
+                tilesCasa.append(tileDown)
+            x += 40
+        while y <= finy:
+            tileUp = self.mapa.getTile(x - 40,y)
+            tileDown = self.mapa.getTile(finx + 40,y)
+            #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
+            if tileUp.type == 0:
+                tilesCasa.append(tileUp)
+            if tileDown.type == 0:
+                tilesCasa.append(tileDown)
+            y += 40
+        return tilesObj, tilesCasa
+
+    def processParam(self, param, tilesObj, tilesCasa, tileClicked, pathsForPlayer, orderForPlayer):
+        tileIni = self.mapa.getTile(param[0], param[1])
+        print("Me encuentro en: ", tileIni.tileid)
+        tileObj = tilesObj[0]
+        if(tilesObj.__len__() > 1):
+            for tile in tilesObj:
+                if tile.heur(tileIni) < tileObj.heur(tileIni):
+                    tileObj = tile
+            tilesObj.remove(tileObj)
+        posFinal = (tileClicked.centerx, tileClicked.centery)
+        #print(tileObj.centery, tileObj.tileid)
+        #print("pos final tile centro x e y: ", tileObj.centerx, tileObj.centery)
+        #print("pos ini tile centro x e y: ", tileIni.centerx, tileIni.centery)
+        if tileObj.type != 0: #Esta ocupada
+            tileObj = self.mapa.getTileCercana(tileIni, tileObj)
+            #print(tileObj.centery, tileObj.tileid)
+        now = datetime.now()
+        pathA = self.mapa.Astar(tileIni,tileObj)
+        #input()
+        #print((datetime.now() - now))
+        posIni = (tileIni.centerx, tileIni.centery)
+        #print(posIni)
+        path = []
+        #print(pathA.__len__())
+        #Movernos al centro de la tile
+        posFin = (tileIni.centerx, tileIni.centery)
+        posAux = ()
+        for tile in pathA:
+            posFin = (tile.centerx, tile.centery)
+            #print("desde: ",posIni,"hacia", posFin)
+            path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
+            #print("angulo del camino:", path1.angle)
+            path.append(path1)
+            posAux = posIni
+            posIni = posFin
+            
+        #print("Queria ir a", posFin, "y me han calculado", posIni)
+        #COMPROBAR QUE LA TILE CLICKADA CORRESPONDE A DISTINTAS ENTIDADES
+        # COMPROBAR SI HA CLICKADO UN ORE
+        order = {'order': CommandId.MOVER, 'angle': 0, 'path': path}
+        if tileClicked.type == CRYSTAL:
+            Cristal = tileClicked.ocupante
+            tileIni = tileObj
+            #calcular el camino a casa
+            #print("Me quedo en:",tileObj.tileid)
+            tileObj = tilesCasa[0]
+            if(tilesCasa.__len__() > 1):
+                for tile in tilesCasa:
+                    if tile.heur(tileIni) < tileObj.heur(tileIni):
+                        tileObj = tile
+                tilesCasa.remove(tileObj)
+            poStay = posIni 
+            self.mapa.setLibre(tileObj)
+            pathA = self.mapa.Astar(tileIni,tileObj)
+            posIni = (tileIni.centerx, tileIni.centery)
+            #print(posIni)
+            pathB = []
+            #print(pathA.__len__())
+            #Movernos al centro de la tile
+            posFin = (tileIni.centerx, tileIni.centery)
+            pathB.append(Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), 
+                    int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])), posFin))
+            posAux = ()
+            for tile in pathA:
+                posFin = (tile.centerx, tile.centery)
+                #print("desde: ",posIni,"hacia", posFin)
+                path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), 
+                        int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])), posFin)
+                #print("angulo del camino:", path1.angle)
+                pathB.append(path1)
+                posAux = posIni
+                posIni = posFin
+
+            angle = math.atan2(posFinal[1] - poStay[1], posFinal[0] - poStay[0])
+            #print("angulo de minado", angle)
+            #Y de casa a la mina tileObj casa y poStay la de minar
+            tileFin = self.mapa.getTile(poStay[0],poStay[1])
+            self.mapa.setLibre(tileFin)
+            pathA = self.mapa.Astar(tileObj,tileFin)
+            posIni = (tileObj.centerx, tileObj.centery)
+            #print(posIni)
+            pathC = []
+            #print(pathA.__len__())
+            #Movernos al centro de la tile
+            posFin = poStay
+            posAux = ()
+            for tile in pathA:
+                posFin = (tile.centerx, tile.centery)
+                #print("desde: ",posIni,"hacia", posFin)
+                path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), 
+                        int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])), posFin)
+                #print("angulo del camino:", path1.angle, self.mapa.getTile(path1.posFin[0], path1.posFin[1]).tileid)
+                pathC.append(path1)
+                posAux = posIni
+                posIni = posFin
+
+            order = {'order': CommandId.MINAR, 'angle': angle,'basePath': pathB, 'cristal': Cristal,'cristalPath': pathC, 'path': path }
+
+
+        else:
+            rectClicked = Raton.createRect(tileClicked.centerx,tileClicked.centery,tileClicked.centerx + 1, tileClicked.centery + 1)
+            for struct in self.p1.structures:
+                if Raton.collideRect(struct.getRect(), rectClicked):
+                    order = struct.getOrder()
+                    order = {'order': order,'path': path}
+        pathsForPlayer.append(path)
+        orderForPlayer.append(order)
+
     def checkPressedButtons(self):
-        key = pygame.key.get_pressed()
-        if key[self.p1.commandMap[Command.CommandId.MOVER_CAMARA_ARRIBA]]:
+        key = pg.key.get_pressed()
+        if key[self.p1.commandMap[CommandId.MOVER_CAMARA_ARRIBA]]:
             self.camera.moverArriba()
-        if key[self.p1.commandMap[Command.CommandId.MOVER_CAMARA_ABAJO]]:
+        if key[self.p1.commandMap[CommandId.MOVER_CAMARA_ABAJO]]:
             self.camera.moverAbajo(self.mapa.h)
-        if key[self.p1.commandMap[Command.CommandId.MOVER_CAMARA_IZQUIERDA]]:
+        if key[self.p1.commandMap[CommandId.MOVER_CAMARA_IZQUIERDA]]:
             self.camera.moverIzquierda()
-        if key[self.p1.commandMap[Command.CommandId.MOVER_CAMARA_DERECHA]]:
+        if key[self.p1.commandMap[CommandId.MOVER_CAMARA_DERECHA]]:
             self.camera.moverDerecha(self.mapa.w)
 
     def checkUnHoldButton(self, key):
-        if self.p1.commandMap[Command.CommandId.ROTAR] == key:
+        if self.p1.commandMap[CommandId.ROTAR] == key:
             for unit in self.p1.unitsSelected:
                 #print(unit.getRect().x - unit.getRect().w,unit.getRect().y - unit.getRect().h)
                 unit.dir = (unit.dir + 1)%16
@@ -245,7 +255,7 @@ class Escena():
             tileObj = self.mapa.getTile(pathObj.posFin[0],pathObj.posFin[1])
 
             #SI LA SIGUIENTE NO ESTA OCUPADA HAY QUE ACTUALIZAR LAS TILES
-            if tilePath.type != 2 or ((tilePath.id == unit.id) and (tilePath.type == 2)):
+            if tilePath.type != UNIT or ((tilePath.id == unit.id) and (tilePath.type == UNIT)):
                 dirX = math.cos(path.angle)
                 dirY = math.sin(path.angle)
                 tileSiguiente = self.mapa.getTile(int(unitPos[0] + dirX*unit.speed + 0.5), int(unitPos[1] + dirY*unit.speed + 0.5))
@@ -255,18 +265,18 @@ class Escena():
                 ###input()
                 if tileActual != tileSiguiente :
                     #print("es de este tipo, ", tileActual.type)
-                    if tileActual.type != 1 and tileActual.type != 3:
+                    if tileActual.type != OBSTACLE and tileActual.type != CRYSTAL:
                         self.mapa.setLibre(tileActual)
-                        if tileSiguiente.type != 1 and tileSiguiente.type != 3:
+                        if tileSiguiente.type != OBSTACLE and tileSiguiente.type != CRYSTAL:
                             self.mapa.setVecina(tileSiguiente, unit.id)
                             tileSiguiente.setOcupante(unit)
                 else:
-                    if tileActual.type != 1 and tileActual.type != 3:
+                    if tileActual.type != OBSTACLE and tileActual.type != CRYSTAL:
                         self.mapa.setVecina(tileActual, unit.id)
                         tileActual.setOcupante(unit)
                 tiles = self.mapa.getAllTileVecinas(tileActual)
                 for tile in tiles:
-                    if tile.type != 1:
+                    if tile.type != OBSTACLE:
                         self.mapa.setLibre(tile)
             else:
                     
@@ -292,7 +302,8 @@ class Escena():
                                 for tile in pathA:
                                     posFin = (tile.centerx, tile.centery)
                                     #print("desde: ",posIni,"hacia", posFin)
-                                    path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
+                                    path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), 
+                                            int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])), posFin)
                                     #print("angulo del camino:", path1.angle)
                                     path.append(path1)
                                     posAux = posIni
@@ -318,12 +329,14 @@ class Escena():
                                             posFinalT = unit.paths[unit.paths.__len__() - 1].posFin
                                             path = []
                                             posFin = (tileActual.centerx, tileActual.centery)
-                                            path.append(Utils.path(math.atan2(posFin[1] - param[1], posFin[0] - param[0]), int(math.hypot(posFin[0] - param[0], posFin[1] - param[1])), posFin))
+                                            path.append(Path(math.atan2(posFin[1] - param[1], posFin[0] - param[0]), 
+                                                    int(math.hypot(posFin[0] - param[0], posFin[1] - param[1])), posFin))
                                             posIni = posFin
                                             for tile in pathA:
                                                 posFin = (tile.centerx, tile.centery)
                                                 #print("desde: ",posIni,"hacia", posFin)
-                                                path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
+                                                path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), 
+                                                        int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])), posFin)
                                                 #print("angulo del camino:", path1.angle)
                                                 path.append(path1)
                                                 posAux = posIni
@@ -341,7 +354,8 @@ class Escena():
                                         #CAMINO A LA MEJOR TILE
                                         posFin = (bestTile.centerx, bestTile.centery)
                                         posIni = unit.getPosition()
-                                        path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
+                                        path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]),
+                                                int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
 
                                         unit.paths.insert(0, path1)
 ##input()
@@ -351,7 +365,7 @@ class Escena():
                                         #CAMINO A LA TILE DESOCUPADA
                                         posIni = posFin
                                         posFin = (tilePath.centerx, tilePath.centery)
-                                        path1 = Utils.path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
+                                        path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
 
                                         unit.paths.insert(1, path1)
 ##input()
@@ -374,12 +388,12 @@ class Escena():
             tilePath = self.mapa.getTile(path.posFin[0],path.posFin[1])
             ##print("Tilepath es: ", tilePath.centerx, tilePath.centery)
             tileObj = self.mapa.getTile(pathObj.posFin[0],pathObj.posFin[1])
-            if tilePath.type != 2 or (tilePath.id == structure.id and tilePath.type == 2):
+            if tilePath.type != UNIT or (tilePath.id == structure.id and tilePath.type == UNIT):
                 dirX = math.cos(path.angle)
                 dirY = math.sin(path.angle)
                 tileSiguiente = self.mapa.getTile(unitPos[0] + dirX*structure.speed, unitPos[1] + dirY*structure.speed)
                 if tileActual != tileSiguiente :
-                    if tileActual.type != 1:
+                    if tileActual.type != OBSTACLE:
                         self.mapa.setLibre(tileActual)
                         if tileSiguiente.type != 1:
                             self.mapa.setVecina(tileSiguiente, structure.id)
@@ -431,11 +445,11 @@ class Escena():
         self.interfaz.draw(screen)
         for res in self.resources:
             r = res.getRect()
-            pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - self.camera.x, r.y  - self.camera.y, r.w, r.h),1)
+            pg.draw.rect(screen, BLACK, pg.Rect(r.x - self.camera.x, r.y  - self.camera.y, r.w, r.h),1)
             if (r.x + r.w >= self.camera.x and r.x <= self.camera.x + self.camera.w and
             r.y + r.h >= self.camera.y and r.y <= self.camera.y + self.camera.h):
                 drawPos = res.getDrawPosition()
                 if res.clicked:
-                    pygame.draw.ellipse(screen, Utils.GREEN, [r.x - self.camera.x, r.y + (0.7*r.h)- self.camera.y,r.w , 0.3*r.h], 2)
+                    pg.draw.ellipse(screen, GREEN, [r.x - self.camera.x, r.y + (0.7*r.h)- self.camera.y,r.w , 0.3*r.h], 2)
                 #screen.blit(unit.image, [r.x - self.camera.x, r.y - self.camera.y])
                 screen.blit(res.image, [drawPos[0] - self.camera.x, drawPos[1] - self.camera.y])

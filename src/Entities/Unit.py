@@ -49,6 +49,7 @@ class Unit(Entity):
         self.damage = attackInfo[DAMAGE_IND]
         self.cooldown = attackInfo[COOLDOWN_IND]
         self.range = attackInfo[RANGE_IND]
+        self.attackedOne = None
 
     def update(self):
         #print(self.state)
@@ -72,9 +73,9 @@ class Unit(Entity):
     #COMUN A TODAS LAS UNIDADES
     def updateStill(self):
         if len(self.paths) > 0:
-            self.state = State.MOVING
+            self.changeToMove()
         else:
-            self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
+            self.updateStillImage()
         #aqui vendria un elif de si te atacan pasas a atacando(ESTA PARTE QUIZA NO, SE ESPECIFICARTA EN CLASES MAS ESPECIFICAS(WORKER/SOLDIER))
     
     def updateMoving(self):
@@ -84,6 +85,10 @@ class Unit(Entity):
                 self.updatePath(actualPath)
             else: # Se acaba este camino
                 self.finishPath()
+            self.count += 1
+            if self.count >= self.framesToRefresh:
+                self.count = 0
+                self.updateMovingImage()
         else:
             self.changeToStill()
 
@@ -102,11 +107,6 @@ class Unit(Entity):
         actualPath.dist -= distrec
         self.x += self.dirx * self.speed
         self.y += self.diry * self.speed
-
-        self.count += 1
-        if self.count >= self.framesToRefresh:
-            self.count = 0
-            self.updateMovingImage()
 
     def finishPath(self):
         self.paths.pop(0)
@@ -129,7 +129,7 @@ class Unit(Entity):
                     else:
                         self.angle = 2 * math.pi - self.miningAngle
                     self.miningAngle = self.angle
-                    self.startTimeMining = Utils.GLOBAL_TIME
+                    self.startTimeMining = getGlobalTime()
                     self.changeToMining()
                 elif self.order['order'] == CommandId.TRANSPORTAR_ORE:
                     #sumar minerales al jugador
@@ -146,7 +146,7 @@ class Unit(Entity):
                         self.changeToMove()
                 elif self.order['order'] == CommandId.MINAR_BUCLE:
                     #sumar minerales al jugador 
-                    self.startTimeMining = Utils.GLOBAL_TIME        
+                    self.startTimeMining = getGlobalTime()     
                     self.changeToMining()
             else:
                 self.changeToStill()
@@ -220,13 +220,14 @@ class Unit(Entity):
 
     # Pasa a estado quieto
     def changeToStill(self):
+        print("PASO AL ESTAR QUIETO")
         self.state = State.STILL
         self.frame = 0
-        print("Frame: ", self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]])
         self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
 
     # Pasa a estado moverse
     def changeToMove(self):
+        print("PASO AL MOVIMIENTO")
         self.state = State.MOVING
         self.frame = 0
         self.image = self.sprites[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
@@ -258,7 +259,7 @@ class Unit(Entity):
     # Pasa de frame en los frames quietos, no cambia nada puesto que esta quieto
     def updateStillImage(self):
         self.frame = (self.frame + 1) % len(self.stillFrames)
-        self.image = self.sprites[self.frames[self.stillFrames][self.dirOffset[self.dir]]]
+        self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
         
     # Pasa de frame en animaciones de movimiento
     def updateMovingImage(self):
