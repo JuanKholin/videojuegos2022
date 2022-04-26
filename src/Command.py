@@ -14,6 +14,9 @@ class CommandId(IntEnum):
     MINAR_BUCLE = 10
     TRANSPORTAR_ORE = 11
     TRANSPORTAR_ORE_STILL = 12
+    BUILD_BARRACKS = 13
+    BUILD_STRUCTURE = 14
+    BUILD_ZERG_BUILDER = 15
 
 class Command:
     def __init__(self, id):

@@ -10,22 +10,18 @@ class TerranBarracks(Structure):
     training = []
     generationTime = 0
     generationCount = 0
-    heightPad = 20
-    widthPad = 19
+    heightPad = 5
     rectOffY = 8
-
-    def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building):
-        (x, y) = map.getTileCenter(xini, yini)
-        x -= 19
-        y -= 13
-        Structure.__init__(self, hp, mineralCost, generationTime, x, y, takeID(), player)
-        self.player = player
-        self.sprites = cargarSprites(TERRAN_BARRACK_PATH, 6, False, WHITE, 1.1)
-        self.map = map
+    tileW = 4
+    tileH = 3
+    
+    def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building, id):
+        Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, map, id, player)
+        self.sprites = Utils.cargarSprites(Utils.TERRAN_BARRACK_PATH, 6, False, Utils.WHITE, 1.1)
         self.building = building
         self.image = self.sprites[self.index]
-        self.image.set_colorkey(WHITE)
-        self.rectn = pygame.Rect(x, y, self.sprites[4].get_width() + self.widthPad, self.sprites[4].get_height()-self.heightPad)
+        self.finalImage = self.sprites[4]
+        
         self.count = 0
         self.paths = []
 
@@ -50,7 +46,7 @@ class TerranBarracks(Structure):
                 terran = self.training[0]
                 terranPos = terran.getPosition()
                 terranTile = self.map.getTile(terranPos[0], terranPos[1])
-                if terranTile.type != 0:
+                while terranTile.type != 0:
                     vecinas = self.map.getTileVecinas(terranTile)
                     terran.setTilePosition(vecinas[0])
                     terranPos = terran.getPosition()
@@ -75,3 +71,13 @@ class TerranBarracks(Structure):
                 terranWorker = TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
                 self.generateUnit(terranWorker)
 
+    def command(self, command):
+        if command == Command.CommandId.BUILD_STRUCTURE:
+            return Command.Command(Command.CommandId.BUILD_BARRACKS)
+        elif command == Command.CommandId.GENERAR_UNIDAD:
+            return Command.Command(Command.CommandId.GENERAR_UNIDAD)
+        else:
+            return Command.Command(Command.CommandId.NULO)
+        
+    def getBuildSprite(self):
+        return self.sprites[4]

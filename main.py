@@ -61,6 +61,7 @@ keyMap ={
   pg.K_LEFT: CommandId.MOVER_CAMARA_IZQUIERDA,
   pg.K_r: CommandId.ROTAR,
   pg.K_v: CommandId.GENERAR_UNIDAD,
+  pg.K_c: CommandId.BUILD_STRUCTURE,
 }
 commandMap ={
   CommandId.MOVER_CAMARA_ARRIBA: pg.K_UP,
@@ -96,20 +97,32 @@ escena = Escena(player1, player2, aI, mapa, camera, raton, p1Interface, resource
 #escena.mapa.addOre(100,100)
 
 def setEntity(player):
+<<<<<<< Updated upstream
     scv = TerranWorker(5, 12, player1)
     scv2 = TerranWorker(6, 12, player1)
     soldier = TerranSoldier(8, 15, player1)
     structure1 = TerranBuilder(200, 40, 600, 5, 6, player1, mapa, False)
     escena.setBasePlayer1(structure1)
     structure2 = TerranBarracks(200, 40, 600, 15, 9, player1, mapa, False)
+=======
+    scv = TerranWorker.TerranWorker(4, 10, player1)
+    structure1 = TerranBuilder(200, 40, 600, 5, 6, player1, mapa,True, 2)
+    escena.setBasePlayer1(structure1)
+    structure2 = TerranBarracks(200, 200, 600, 15, 9, player1, mapa, True, 3)
+>>>>>>> Stashed changes
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addUnits(scv)
     player.addUnits(soldier)
     player.addUnits(scv2)
 
+<<<<<<< Updated upstream
     hatchery = Hatchery(15, 15, player1, mapa)
     player1.addStructures(hatchery)
+=======
+    zergBuilder = ZergBuilder(200, 50, 10, 15, 14, player1, mapa, False, 8)
+    player1.addStructures(zergBuilder)
+>>>>>>> Stashed changes
 
     drone = Drone(10, 11, player1)
     player1.addUnits(drone)

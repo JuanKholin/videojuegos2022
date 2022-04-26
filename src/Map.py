@@ -47,6 +47,25 @@ class Map():
         #print(xaux, yaux)    
         return self.map[yaux][xaux]
     
+    def getRectTiles(self, rect):
+        tiles = []
+        _, y = self.getTileIndex(rect.x, rect.y)
+        while y*self.th <= rect.y+rect.h:
+            x, _ = self.getTileIndex(rect.x, rect.y)
+            while x*self.tw <= rect.x+rect.w:
+                tiles.append(self.map[y][x])
+                x += 1
+            y += 1
+        return tiles
+            
+    def drawTiles(self, screen, camera, tiles):
+        for tile in tiles:
+            r = tile.getRect()
+            if tile.type == 0:
+                pygame.draw.rect(screen, Utils.GREEN, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
+            else:
+                pygame.draw.rect(screen, Utils.RED, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
+    
     def getTileCenter(self, x, y):
         return ((x*self.tw - self.tw/2), (y*self.th - self.th/2))
 

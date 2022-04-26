@@ -3,7 +3,11 @@ import math
 from . import Player, Raton
 from .Utils import *
 from .Command import *
+
+from .Entities import TerranBarracks, ZergBuilder
 from datetime import datetime
+
+
 
 class Escena():
     def __init__(self, p1, p2, aI, mapa, camera, raton, interfaz, resources):
@@ -32,7 +36,15 @@ class Escena():
         #ejecutar el comando
         if command.id == CommandId.GENERAR_UNIDAD:
             self.p1.execute(command.id, [])
+        
+        elif command.id == CommandId.BUILD_BARRACKS and self.p1.resources >= TERRAN_BARRACK_MINERAL_COST:
+            self.raton.building = True
+            self.raton.buildStructure = self.getTerranBarrack()
+        elif command.id == CommandId.BUILD_ZERG_BUILDER and self.p1.resources >= TERRAN_BARRACK_MINERAL_COST:
+            self.raton.building = True
+            self.raton.buildStructure = self.getZergBuilder()
         elif command.id == CommandId.MOVER:
+            #path = [] ## !!!!
             relative_mouse_pos = pg.mouse.get_pos()
             real_mouse_pos = (relative_mouse_pos[0] + self.camera.x, relative_mouse_pos[1] + self.camera.y)
             tileClicked = self.mapa.getTile(real_mouse_pos[0], real_mouse_pos[1])
@@ -453,3 +465,9 @@ class Escena():
                     pg.draw.ellipse(screen, GREEN, [r.x - self.camera.x, r.y + (0.7*r.h)- self.camera.y,r.w , 0.3*r.h], 2)
                 #screen.blit(unit.image, [r.x - self.camera.x, r.y - self.camera.y])
                 screen.blit(res.image, [drawPos[0] - self.camera.x, drawPos[1] - self.camera.y])
+
+    def getTerranBarrack(self):
+        return TerranBarracks.TerranBarracks(200, 200, 600, 0, 0, None, self.mapa, True, 5)
+    
+    def getZergBuilder(self):
+        return ZergBuilder.ZergBuilder(200, 50, 10, 0, 0, None, self.mapa, False, 8)

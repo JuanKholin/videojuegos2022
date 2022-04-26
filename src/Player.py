@@ -19,6 +19,10 @@ class Player():
     def processEvent(self,event):
         if event.type == pygame.KEYDOWN:
             if event.key in self.keyMap:
+                for structure in self.structuresSelected:
+                    command = structure.command(self.keyMap[event.key])
+                    if command != Command.Command(Command.CommandId.NULO):
+                        return structure.command(self.keyMap[event.key])
                 return Command.Command(self.keyMap[event.key])
         return Command.Command(Command.CommandId.NULO)
 
@@ -47,6 +51,9 @@ class Player():
                 self.unitsSelected[i].paths = param[i]['path']
                 self.unitsSelected[i].setOrder(param[i])
         elif id == Command.CommandId.GENERAR_UNIDAD:
+            for i in self.structuresSelected:
+                i.execute(id)
+        elif id == Command.CommandId.BUILD_BARRACKS:
             for i in self.structuresSelected:
                 i.execute(id)
 

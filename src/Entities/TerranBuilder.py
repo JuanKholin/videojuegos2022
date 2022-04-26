@@ -13,20 +13,16 @@ class TerranBuilder(Structure):
     generationTime = 0
     generationCount = 0
     heightPad = 25
+    tileW = 5
+    tileH = 4
 
-    def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building):
-        (x, y) = map.getTileCenter(xini, yini)
-        x -= 18
-        y -= 16
-        Structure.__init__(self, hp, mineralCost, generationTime, x, y, takeID, player)
-        self.player = player
-
+    def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building,id):
+        Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, map, id, player)
         self.sprites = cargarSprites(TERRAN_BUILDER_PATH, 6, False, WHITE, 1.5)
-        self.map = map
         self.building = building
         self.image = self.sprites[self.index]
-        self.image.set_colorkey(WHITE)
-        self.rectn = pygame.Rect(x, y, self.sprites[4].get_width(), self.sprites[4].get_height() - self.heightPad)
+        self.finalImage = self.sprites[4]
+        
         self.count = 0
         self.paths = []
 
@@ -74,3 +70,14 @@ class TerranBuilder(Structure):
                 self.player.resources -= TERRAN_WORKER_MINERAL_COST
                 terranWorker = TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
                 self.generateUnit(terranWorker)
+            
+    def command(self, command):
+        if command == Command.CommandId.BUILD_STRUCTURE:
+            return Command.Command(Command.CommandId.BUILD_BARRACKS)
+        elif command == Command.CommandId.GENERAR_UNIDAD:
+            return Command.Command(Command.CommandId.GENERAR_UNIDAD)
+        else:
+            return Command.Command(Command.CommandId.NULO)
+
+    def getBuildSprite(self):
+        return self.sprites[4]

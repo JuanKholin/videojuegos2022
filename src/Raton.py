@@ -55,6 +55,8 @@ class Raton(pygame.sprite.Sprite):
     clicked = False
     collide = False
     pulsado = False
+    building = False
+    buildStructure = None
     def __init__(self, ruta, player):
         super().__init__()
         self.index = 0
@@ -80,19 +82,22 @@ class Raton(pygame.sprite.Sprite):
         #la posicion del cursor es relativa a la camara (por que tiene dos rectangulos? (self.rect y mouseRect))
         #mouseRect = pygame.Rect(self.real_pos[0], self.real_pos[1], 1, 1)
         mouse_collide = False
-        for unit in self.player.units:
-            ###---LOGICA
-            #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-            if collides(self.real_pos[0], self.real_pos[1], unit.getRect()):
-                mouse_collide = True
-                break
-        if not mouse_collide:
-            for structure in self.player.structures:
+        if not self.building:
+            for unit in self.player.units:
                 ###---LOGICA
                 #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-                if collides(self.real_pos[0], self.real_pos[1],structure.getRect()):
+                if collides(self.real_pos[0], self.real_pos[1], unit.getRect()):
                     mouse_collide = True
                     break
+            if not mouse_collide:
+                for structure in self.player.structures:
+                    ###---LOGICA
+                    #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
+                    if collides(self.real_pos[0], self.real_pos[1],structure.getRect()):
+                        mouse_collide = True
+                        break
+        else:
+            self.buildStructure.setPosition(self.real_pos[0], self.real_pos[1])
 
         if mouse_collide:
             self.collide = True
@@ -138,10 +143,13 @@ class Raton(pygame.sprite.Sprite):
 
     def draw(self, screen, camera):
         if Utils.state == Utils.System_State.ONGAME:
-            if self.point.getClicked():
-                self.point.draw(screen, camera)
-            if self.pulsado:
-                printRectangulo(screen, self.initialX - camera.x, self.initialY - camera.y, self.rel_pos[0], self.rel_pos[1])
+            if self.building:
+                self.buildStructure.drawBuildStructure(screen, camera)
+            else:
+                if self.point.getClicked():
+                    self.point.draw(screen, camera)
+                if self.pulsado:
+                    printRectangulo(screen, self.initialX - camera.x, self.initialY - camera.y, self.rel_pos[0], self.rel_pos[1])
             screen.blit(self.image, (self.rect.x, self.rect.y))
         else:
             screen.blit(self.sprite[self.index], (self.rect.x, self.rect.y))
@@ -159,63 +167,75 @@ class Raton(pygame.sprite.Sprite):
             if click_type[0]:
                 if not self.pulsado:
                     self.pulsado = True
-                    self.initialX = real_mouse_pos[0]
-                    self.initialY = real_mouse_pos[1]
+                    if not self.building:
+                        self.initialX = real_mouse_pos[0]
+                        self.initialY = real_mouse_pos[1]
             if click_type[2]:
                 if not self.pulsado:
-                    command.setId(Command.CommandId.MOVER)
-                    #print("CALCULANDO PUNTOS")
-                    for unit in self.player.unitsSelected:
-                        pos = unit.getPosition()
-                        command.addParameter(pos)
-                    self.point.click(real_mouse_pos[0], real_mouse_pos[1])
+                    if not self.building:
+                        command.setId(Command.CommandId.MOVER)
+                        #print("CALCULANDO PUNTOS")
+                        for unit in self.player.unitsSelected:
+                            pos = unit.getPosition()
+                            command.addParameter(pos)
+                        self.point.click(real_mouse_pos[0], real_mouse_pos[1])
         elif event.type == pygame.MOUSEBUTTONUP:
             type = pygame.mouse.get_pressed()
             relative_mouse_pos = pygame.mouse.get_pos()
             real_mouse_pos = (relative_mouse_pos[0] + cameraX, relative_mouse_pos[1] + cameraY)
             #print('click liberado', type)
+            
             if not type[0]:
                 if self.pulsado:
                     self.pulsado = False
                     self.clicked = True
                     print('click izq liberado', real_mouse_pos, event.type)
-
-                    unitSel = False
-                    selectedUnit = self.player.unitsSelected
-                    selectedStructures = self.player.structuresSelected
-                    self.player.unitsSelected = []
-                    self.player.structuresSelected = []
-                    isClick = False
-
-                    mouseRect = createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
-
-                    for unit in self.player.units:
-                        #print(unit.getRect())
-                        if len(self.player.unitsSelected) < Utils.MAX_SELECTED_UNIT and collideRect(mouseRect, unit.getRect()):
-                            unit.setClicked(True)
-                            self.player.unitsSelected.append(unit)
-                            unitSel = True
-                            #print("CLICKADO" + str(terran.id))
-                    if not unitSel:
-                        for structure in self.player.structures:
-                            if collideRect(mouseRect, structure.getRect()):
-                                structure.setClicked(True)
-                                unitSel = True
-                                self.player.structuresSelected.append(structure)
-                                #print("CLICKADO ")
-                                break
-
-                    if unitSel:
-                        for unit in self.player.units + self.player.structures:
-                            if unit not in self.player.unitsSelected + self.player.structuresSelected:
-                                #print(unit)
-                                unit.setClicked(False)
+                    if self.building:
+                        if self.buildStructure.checkTiles():
+                            print(self.buildStructure.checkTiles())
+                            self.buildStructure.player = self.player
+                            self.player.addStructures(self.buildStructure)
+                            self.building = False
                     else:
-                        self.player.unitsSelected = selectedUnit
-                        self.player.structuresSelected = selectedStructures
+                        unitSel = False
+                        selectedUnit = self.player.unitsSelected
+                        selectedStructures = self.player.structuresSelected
+                        self.player.unitsSelected = []
+                        self.player.structuresSelected = []
+                        isClick = False
 
-            if not type[2]:
-                print('click der liberado', real_mouse_pos[0], real_mouse_pos[1], event.type)
+                        mouseRect = createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
+
+                        for unit in self.player.units:
+                            #print(unit.getRect())
+                            if len(self.player.unitsSelected) < Utils.MAX_SELECTED_UNIT and collideRect(mouseRect, unit.getRect()):
+                                unit.setClicked(True)
+                                self.player.unitsSelected.append(unit)
+                                unitSel = True
+                                #print("CLICKADO" + str(terran.id))
+                        if not unitSel:
+                            for structure in self.player.structures:
+                                if collideRect(mouseRect, structure.getRect()):
+                                    structure.setClicked(True)
+                                    unitSel = True
+                                    self.player.structuresSelected.append(structure)
+                                    #print("CLICKADO ")
+                                    break
+
+                        if unitSel:
+                            for unit in self.player.units + self.player.structures:
+                                if unit not in self.player.unitsSelected + self.player.structuresSelected:
+                                    #print(unit)
+                                    unit.setClicked(False)
+                        else:
+                            self.player.unitsSelected = selectedUnit
+                            self.player.structuresSelected = selectedStructures
+
+                elif not type[2]:
+                    print('click der liberado', real_mouse_pos[0], real_mouse_pos[1], event.type)
+                    if self.building:
+                        self.buildStructure = None
+                        self.building = False
         return command
 
 class point(pygame.sprite.Sprite):

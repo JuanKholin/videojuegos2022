@@ -1,14 +1,16 @@
 from enum import Enum, auto, IntEnum
 from pickle import GLOBAL
 
+
 import pygame
 
-DEBBUG = True
+DEBBUG = False
 
 class System_State(Enum):
     MAINMENU = auto()
     MAP1 = auto()
     ONGAME = auto()
+    BUILDING_MODE = auto()
     EXIT = auto()
 
 state = System_State.MAINMENU
@@ -46,7 +48,7 @@ HP.set_colorkey(WHITE)
 
 BGM_VOLUME = 0.2
 SOUND_VOLUME = 0.5
-haveBGM = False
+haveBGM = True
 
 MAX_SELECTED_UNIT = 5
 
@@ -147,7 +149,9 @@ DRONE_MINERAL_COST = 20
 TERRAN_BUILDER_PATH = "SPRITE/builder/tile00"
 
 ##---------TERRAN_BARRACK------------------
+
 TERRAN_BARRACK_PATH = "SPRITE/barracks/tile00"
+TERRAN_BARRACK_MINERAL_COST = 100
 
 ##---------HATCHERY------------------
 HATCHERY_PATH = "SPRITE/Hatchery/tile00"
