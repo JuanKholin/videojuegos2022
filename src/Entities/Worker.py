@@ -32,9 +32,12 @@ class Worker(Unit.Unit):
             self.order = {'order':CommandId.TRANSPORTAR_ORE}
             self.cantidadMinada = self.cristal.getMined(self.minePower)
             self.paths = []
-            for path in self.basePath:
-                self.paths.append(path.copy())
-            self.state = State.ORE_TRANSPORTING
+            if self.cantidadMinada == 0: #No ha minado nada, se queda en el sitio
+                self.changeToStill()
+            else:
+                for path in self.basePath:
+                    self.paths.append(path.copy())
+                self.state = State.ORE_TRANSPORTING
         elif frame(self.framesToRefresh):
             self.updateMiningImage()
         elif len(self.paths) > 0:

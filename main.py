@@ -87,7 +87,7 @@ camera = Camera(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)
 # Escena
 
 #Recursos del mapa
-cristal = Cristal(100,1,200,700)
+cristal = Cristal(7,1,200,700)
 resources = []
 resources.append(cristal)
 escena = Escena(player1, player2, aI, mapa, camera, raton, p1Interface, resources)
