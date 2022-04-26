@@ -25,6 +25,7 @@ class Unit(Entity):
         self.count = 0
         self.rectOffY = padding
         self.order = {'order': 0}
+        self.attackedOne = None
         
         #Relativo a los frames
         self.inversibleFrames = inversibleFrames
@@ -232,6 +233,7 @@ class Unit(Entity):
         
     # Pasa al ataque HYAAAA!! >:c
     def changeToAttack(self, attackedOne):
+        print("PASO AL ATAQUE")
         self.attackedOne = attackedOne
         self.state = State.ATTACKING
         self.attackCD = self.cooldown
