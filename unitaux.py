@@ -113,9 +113,7 @@ class Unit(Entity):
             #print("ORDEN AL FINALIZAR CAMINO:" ,self.order['order'])
             if self.order != 0:
                 if self.order['order'] == CommandId.MOVER:
-                    if self.attackedOne == None:
-                        self.changeToStill()
-                    #else keepmoving xdxdxd
+                    self.changeToStill()
                 elif self.order['order'] == CommandId.MINAR:
                     self.miningAngle = self.order['angle']
                     self.basePath = self.order['basePath']
@@ -166,24 +164,14 @@ class Unit(Entity):
 
     # Aplica un frame a la unidad atacando
     def updateAttacking(self):
-        if self.attackedOne.getHP() > 0:
-            if self.distance(self.attackedOne) <= self.rango:
-                self.attackCD -= 1
-                if self.attackCD == 0:
-                    self.attack()
-                    self.attackCD = self.cooldown
-            else:
-                self.changeToMove()
-        else: # Se murio el objetivo, pasa a estar quieto
-            self.attackedOne = None
-            self.changeToStill()
-
+        pass
 
     # Para inflingir un ataque a una unidad
-    def attack(self):
-        hpLeft = self.attackedOne.beingAttacked(self.damage)
-        if hpLeft < 0:
+    def attack(self, attacked):
+        attacked.beingAttacked(self.damage)
+        if attacked.getHp() < 0:
             self.changeToStill()
+        pass
 
     # Para reflejar sobre una unidad que recibe un ataque
     def beingAttacked(self, damage):
@@ -192,7 +180,6 @@ class Unit(Entity):
             self.changeToDying
         else:
             self.hp -= damage
-        return self.hp
 
     # No es por meter mierda, pero a mi Zergling no lo cancela nadie, desgraciados(PUES YO SI :P) D:
     def cancel(self):
@@ -231,10 +218,8 @@ class Unit(Entity):
         self.image = self.sprites[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
         
     # Pasa al ataque HYAAAA!! >:c
-    def changeToAttack(self, attackedOne):
-        self.attackedOne = attackedOne
+    def changeToAttack(self):
         self.state = State.ATTACKING
-        self.attackCD = self.cooldown
         self.frame = 0
         self.image = self.sprites[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
 

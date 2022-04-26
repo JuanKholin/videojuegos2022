@@ -48,7 +48,6 @@ size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen =  pg.display.set_mode(size)
 
 #Controlar frames por segundo
-clock = pg.time.Clock()
 
 mapa = Map.Map(40, 20)
 
@@ -88,20 +87,23 @@ camera = Camera(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)
 # Escena
 
 #Recursos del mapa
-cristal = Cristal(34,1,80,500)
+cristal = Cristal(100,1,200,700)
 resources = []
 resources.append(cristal)
 escena = Escena(player1, player2, aI, mapa, camera, raton, p1Interface, resources)
 #escena.mapa.addOre(100,100)
 
 def setEntity(player):
-    scv = TerranWorker.TerranWorker(4, 10, player1)
+    scv = TerranWorker.TerranWorker(5, 12, player1)
+    scv2 = TerranWorker.TerranWorker(6, 12, player1)
     structure1 = TerranBuilder(200, 40, 600, 5, 6, player1, mapa, False, 2)
     escena.setBasePlayer1(structure1)
     structure2 = TerranBarracks(200, 40, 600, 15, 9, player1, mapa, False, 3)
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addUnits(scv)
+    player.addUnits(scv2)
+
 
     zergBuilder = ZergBuilder(200, 50, 10, 15, 15, player2, mapa, False, 8)
     player1.addStructures(zergBuilder)
@@ -157,4 +159,5 @@ while True:
     #Dibujar
     draw()
 
-    clock.tick(Utils.CLOCK_PER_SEC)
+    Utils.GLOBAL_TIME += Utils.clock.tick(Utils.CLOCK_PER_SEC)
+

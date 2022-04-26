@@ -1,5 +1,6 @@
 from . import Unit
 from ..Utils import *
+from .. import Utils
 from ..Command import *
 import math
 
@@ -27,10 +28,9 @@ class Worker(Unit.Unit):
 
     #Especifico para worker
     def updateMining(self):
-        self.count += pg.time.Clock().tick(CLOCK_PER_SEC)
-        if self.count > self.timeToMine: #Termina de minar
+        if Utils.GLOBAL_TIME - self.startTimeMining > self.timeToMine: #Termina de minar
             self.order = {'order':CommandId.TRANSPORTAR_ORE}
-            self.cristal.getMined(self.minePower)
+            self.cantidadMinada = self.cristal.getMined(self.minePower)
             self.paths = []
             for path in self.basePath:
                 self.paths.append(path.copy())
@@ -69,12 +69,13 @@ class Worker(Unit.Unit):
                 if self.order['order'] == CommandId.TRANSPORTAR_ORE:
                     #sumar minerales al jugador
                     if self.cristal.capacidad < 0:
-                        self.player.resources += self.minePower + self.cristal.capacidad
+                        self.player.resources += self.cantidadMinada
+                        print("cambiamos a still")
                         self.changeToStill()
                         del self.cristal
                     else:
                         self.order = {'order': CommandId.MINAR_BUCLE}
-                        self.player.resources += self.minePower
+                        self.player.resources += self.cantidadMinada
                         self.paths = []
                         for path in self.cristalPath:
                             self.paths.append(path.copy())
