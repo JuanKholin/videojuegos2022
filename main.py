@@ -5,8 +5,7 @@ import math
 
 from src.Utils import *
 from src.Command import *
-from src import Raton, Map
-from src.Player import *
+from src import Player, Raton, Map
 from src.Interface import *
 from src.AI import *
 from src.Camera import *
@@ -14,9 +13,8 @@ from src.Entities.Cristal import *
 from src.Escena import Escena
 from src.Entities.TerranWorker import *
 from src.Entities.TerranBuilder import *
-from src.Entities.TerranSoldier import *
 from src.Entities.TerranBarracks import *
-from src.Entities.Hatchery import *
+from src.Entities.ZergBuilder import *
 from src.Entities.Drone import *
 from src.Entities.Zergling import *
 
@@ -50,6 +48,7 @@ size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen =  pg.display.set_mode(size)
 
 #Controlar frames por segundo
+clock = pg.time.Clock()
 
 mapa = Map.Map(40, 20)
 
@@ -90,39 +89,23 @@ camera = Camera(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)
 # Escena
 
 #Recursos del mapa
-cristal = Cristal(700, 1, 200, 700)
+cristal = Cristal(34,1,80,500)
 resources = []
 resources.append(cristal)
 escena = Escena(player1, player2, aI, mapa, camera, raton, p1Interface, resources)
 #escena.mapa.addOre(100,100)
 
 def setEntity(player):
-<<<<<<< Updated upstream
-    scv = TerranWorker(5, 12, player1)
-    scv2 = TerranWorker(6, 12, player1)
-    soldier = TerranSoldier(8, 15, player1)
-    structure1 = TerranBuilder(200, 40, 600, 5, 6, player1, mapa, False)
-    escena.setBasePlayer1(structure1)
-    structure2 = TerranBarracks(200, 40, 600, 15, 9, player1, mapa, False)
-=======
-    scv = TerranWorker.TerranWorker(4, 10, player1)
-    structure1 = TerranBuilder(200, 40, 600, 5, 6, player1, mapa,True, 2)
+    scv = TerranWorker(4, 10, player1)
+    structure1 = TerranBuilder(200, 40, 600, 5, 6, player1, mapa, False, 2)
     escena.setBasePlayer1(structure1)
     structure2 = TerranBarracks(200, 200, 600, 15, 9, player1, mapa, True, 3)
->>>>>>> Stashed changes
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addUnits(scv)
-    player.addUnits(soldier)
-    player.addUnits(scv2)
 
-<<<<<<< Updated upstream
-    hatchery = Hatchery(15, 15, player1, mapa)
-    player1.addStructures(hatchery)
-=======
     zergBuilder = ZergBuilder(200, 50, 10, 15, 14, player1, mapa, False, 8)
     player1.addStructures(zergBuilder)
->>>>>>> Stashed changes
 
     drone = Drone(10, 11, player1)
     player1.addUnits(drone)
@@ -174,4 +157,5 @@ while True:
 
     #Dibujar
     draw()
-    updateGlobalTime()
+
+    clock.tick(Utils.CLOCK_PER_SEC)

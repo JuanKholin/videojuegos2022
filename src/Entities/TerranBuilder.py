@@ -17,7 +17,7 @@ class TerranBuilder(Structure):
     tileH = 4
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building,id):
-        Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, map, id, player)
+        Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, map, id, player)
         self.sprites = cargarSprites(TERRAN_BUILDER_PATH, 6, False, WHITE, 1.5)
         self.building = building
         self.image = self.sprites[self.index]
