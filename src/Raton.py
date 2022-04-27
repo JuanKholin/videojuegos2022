@@ -191,11 +191,12 @@ class Raton(pygame.sprite.Sprite):
                     self.clicked = True
                     print('click izq liberado', real_mouse_pos, event.type)
                     if self.building:
-                        if self.buildStructure.checkTiles():
-                            print(self.buildStructure.checkTiles())
+                        if self.buildStructure.checkTiles() and self.player.resources >= self.buildStructure.mineralCost:
+                            self.player.resources -= self.buildStructure.mineralCost
                             self.buildStructure.player = self.player
                             self.player.addStructures(self.buildStructure)
                             self.building = False
+                            self.buildStructure = None
                     else:
                         unitSel = False
                         selectedUnit = self.player.unitsSelected

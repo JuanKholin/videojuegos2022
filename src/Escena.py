@@ -36,7 +36,6 @@ class Escena():
         #ejecutar el comando
         if command.id == CommandId.GENERAR_UNIDAD:
             self.p1.execute(command.id, [])
-        
         elif command.id == CommandId.BUILD_BARRACKS and self.p1.resources >= TERRAN_BARRACK_MINERAL_COST:
             self.raton.building = True
             self.raton.buildStructure = self.getTerranBarrack()
@@ -467,7 +466,7 @@ class Escena():
                 screen.blit(res.image, [drawPos[0] - self.camera.x, drawPos[1] - self.camera.y])
 
     def getTerranBarrack(self):
-        return TerranBarracks.TerranBarracks(200, 200, 600, 0, 0, None, self.mapa, True, 5)
+        return TerranBarracks.TerranBarracks(200, 40, 600, 0, 0, None, self.mapa, True, 5)
     
     def getZergBuilder(self):
-        return ZergBuilder.ZergBuilder(200, 50, 10, 0, 0, None, self.mapa, False, 8)
+        return ZergBuilder.ZergBuilder(200, 80, 10, 0, 0, None, self.mapa, False, 8)

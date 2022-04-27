@@ -151,7 +151,7 @@ TERRAN_BUILDER_PATH = "SPRITE/builder/tile00"
 ##---------TERRAN_BARRACK------------------
 
 TERRAN_BARRACK_PATH = "SPRITE/barracks/tile00"
-TERRAN_BARRACK_MINERAL_COST = 100
+TERRAN_BARRACK_MINERAL_COST = 50
 
 ##---------ZERG_BUILDER------------------
 ZERG_BUILDER_PATH = "SPRITE/ZergBuilder/tile00"

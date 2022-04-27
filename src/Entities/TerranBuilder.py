@@ -1,7 +1,7 @@
 import pygame
-from .Structure import *
 from .TerranWorker import *
 from .. import Player, Map, Tile
+from .Structure import *
 from ..Command import *
 from src.Utils import *
 
@@ -13,17 +13,20 @@ class TerranBuilder(Structure):
     generationTime = 0
     generationCount = 0
     heightPad = 25
+    hola = 0
     tileW = 5
     tileH = 4
+    clicked = False
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building,id):
         Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, map, id, player)
         self.sprites = cargarSprites(TERRAN_BUILDER_PATH, 6, False, WHITE, 1.5)
-        self.building = building
         self.image = self.sprites[self.index]
         self.finalImage = self.sprites[4]
-        
+        self.building = building
         self.count = 0
+        
+        self.training = []
         self.paths = []
 
     def update(self):
@@ -72,12 +75,12 @@ class TerranBuilder(Structure):
                 self.generateUnit(terranWorker)
             
     def command(self, command):
-        if command == Command.CommandId.BUILD_STRUCTURE:
-            return Command.Command(Command.CommandId.BUILD_BARRACKS)
-        elif command == Command.CommandId.GENERAR_UNIDAD:
-            return Command.Command(Command.CommandId.GENERAR_UNIDAD)
+        if command == CommandId.BUILD_STRUCTURE:
+            return Command(CommandId.BUILD_BARRACKS)
+        elif command == CommandId.GENERAR_UNIDAD:
+            return Command(CommandId.GENERAR_UNIDAD)
         else:
-            return Command.Command(Command.CommandId.NULO)
+            return Command(CommandId.NULO)
 
     def getBuildSprite(self):
         return self.sprites[4]

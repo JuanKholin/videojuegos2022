@@ -1,11 +1,13 @@
 import pygame
-from . import Structure, Zergling
-from .. import Player, Map, Utils, Tile, Command
-from src.Utils import *
+from .Zergling import *
+from .Structure import *
+from .. import Player, Map
+from ..Command import *
+from ..Utils import *
 
 WHITE   = (255,255,255)
 
-class ZergBuilder(Structure.Structure):
+class ZergBuilder(Structure):
     sprites = []
     training = []
     heightPad = 10
@@ -14,16 +16,18 @@ class ZergBuilder(Structure.Structure):
     widthPad = -20
     rectOffY = 90
     tileW = 6
+    clicked = False
     tileH = 4
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building, id):
-        Structure.Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, map, id, player)
-        self.sprites = cargarSprites(ZERG_BUILDER_PATH, 4, False, BLUE, 1.8)
+        Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, map, id, player)
+        self.sprites = cargarSprites(HATCHERY_PATH, 4, False, BLUE, 1.8)
         self.building = building
         self.image = self.sprites[self.index]
         self.finalImage = self.sprites[3]
 
         self.count = 0
+        self.training = []
         self.paths = []
         
     def update(self):
@@ -48,18 +52,18 @@ class ZergBuilder(Structure.Structure):
 
     def execute(self, command_id):
         if self.clicked:
-            if command_id == Command.CommandId.GENERAR_UNIDAD and self.player.resources >= ZERGLING_MINERAL_COST:
+            if command_id == CommandId.GENERAR_UNIDAD and self.player.resources >= ZERGLING_MINERAL_COST:
                 self.player.resources -= ZERGLING_MINERAL_COST
-                zergling = Zergling.Zergling(self.x / 40, (self.y + self.rectn.h) / 40, 1)
+                zergling = Zergling(self.x / 40, (self.y + self.rectn.h) / 40, 1)
                 self.generateUnit(zergling)
                 
     def command(self, command):
-        if command == Command.CommandId.BUILD_STRUCTURE:
-            return Command.Command(Command.CommandId.BUILD_ZERG_BUILDER)
-        elif command == Command.CommandId.GENERAR_UNIDAD:
-            return Command.Command(Command.CommandId.GENERAR_UNIDAD)
+        if command == CommandId.BUILD_STRUCTURE:
+            return Command(CommandId.BUILD_ZERG_BUILDER)
+        elif command == CommandId.GENERAR_UNIDAD:
+            return Command(CommandId.GENERAR_UNIDAD)
         else:
-            return Command.Command(Command.CommandId.NULO)
+            return Command(CommandId.NULO)
         
     def getBuildSprite(self):
         return self.sprites[3]

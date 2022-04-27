@@ -48,15 +48,12 @@ class Structure(Entity.Entity):
         
     def setPosition(self, x, y):
         xTile, yTile = self.map.getTileIndex(x, y)
-        print(xTile, yTile)
         originX = (xTile - round(self.tileW/2))*self.map.tw
         originY = (yTile - round(self.tileH/2))*self.map.th
         self.rectn.x = originX
         self.rectn.y = originY + self.heightPad/2
         self.rectn.w = self.tileW*self.map.tw - 1
         self.rectn.h = self.tileH*self.map.th - self.heightPad/2 - 1
-        #self.rectn
-        #self.rectn
         
     def draw(self, screen, camera):
         r = self.getRect()

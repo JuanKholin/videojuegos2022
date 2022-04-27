@@ -22,7 +22,7 @@ class Player():
                 for structure in self.structuresSelected:
                     command = structure.command(self.keyMap[event.key])
                     if command != Command.Command(Command.CommandId.NULO):
-                        return structure.command(self.keyMap[event.key])
+                        return command
                 return Command.Command(self.keyMap[event.key])
         return Command.Command(Command.CommandId.NULO)
 
@@ -52,6 +52,7 @@ class Player():
                 self.unitsSelected[i].setOrder(param[i])
         elif id == Command.CommandId.GENERAR_UNIDAD:
             for i in self.structuresSelected:
+                print("structura ", i.id)
                 i.execute(id)
         elif id == Command.CommandId.BUILD_BARRACKS:
             for i in self.structuresSelected:

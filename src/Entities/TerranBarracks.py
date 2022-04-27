@@ -14,6 +14,7 @@ class TerranBarracks(Structure):
     rectOffY = 8
     tileW = 4
     tileH = 3
+    clicked = False
     
     def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building, id):
         Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, map, id, player)
@@ -23,9 +24,11 @@ class TerranBarracks(Structure):
         self.finalImage = self.sprites[4]
         
         self.count = 0
+        self.training = []
         self.paths = []
 
     def update(self):
+        
         if self.building:
             self.count += 1
             if self.count == self.generationTime / 10:
@@ -46,13 +49,13 @@ class TerranBarracks(Structure):
                 terran = self.training[0]
                 terranPos = terran.getPosition()
                 terranTile = self.map.getTile(terranPos[0], terranPos[1])
-                while terranTile.type != 0:
+                if terranTile.type != 0:
                     vecinas = self.map.getTileVecinas(terranTile)
                     terran.setTilePosition(vecinas[0])
                     terranPos = terran.getPosition()
-                    print("tp", terranPos)
+                    #print("tp", terranPos)
                     self.map.addOre(terranPos[0], terranPos[1])
-                    print("vecina ", vecinas[0].centerx, vecinas[0].centery, vecinas[0].type)
+                    #print("vecina ", vecinas[0].centerx, vecinas[0].centery, vecinas[0].type)
                 self.player.addUnits(terran)
                 self.generationCount = 0
                 del self.training[0]
@@ -62,22 +65,24 @@ class TerranBarracks(Structure):
         self.image.set_colorkey(WHITE)
 
     def generateUnit(self, unit):
+        print("genero unidad")
         self.training.append(unit)
 
     def execute(self, command_id):
         if self.clicked:
+            print("soy clickeado?")
             if command_id == CommandId.GENERAR_UNIDAD  and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
                 self.player.resources -= TERRAN_WORKER_MINERAL_COST
                 terranWorker = TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
                 self.generateUnit(terranWorker)
 
     def command(self, command):
-        if command == Command.CommandId.BUILD_STRUCTURE:
-            return Command.Command(Command.CommandId.BUILD_BARRACKS)
-        elif command == Command.CommandId.GENERAR_UNIDAD:
-            return Command.Command(Command.CommandId.GENERAR_UNIDAD)
+        if command == CommandId.BUILD_STRUCTURE:
+            return Command(CommandId.BUILD_BARRACKS)
+        elif command == CommandId.GENERAR_UNIDAD:
+            return Command(CommandId.GENERAR_UNIDAD)
         else:
-            return Command.Command(Command.CommandId.NULO)
+            return Command(CommandId.NULO)
         
     def getBuildSprite(self):
         return self.sprites[4]

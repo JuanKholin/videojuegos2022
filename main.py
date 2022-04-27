@@ -11,8 +11,9 @@ from src.AI import *
 from src.Camera import *
 from src.Entities.Cristal import *
 from src.Escena import Escena
+from src.Entities import TerranBuilder
 from src.Entities.TerranWorker import *
-from src.Entities.TerranBuilder import *
+
 from src.Entities.TerranBarracks import *
 from src.Entities.ZergBuilder import *
 from src.Entities.Drone import *
@@ -32,7 +33,6 @@ def procesarInput():
             escena.camera.w = event.w
             screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pg.RESIZABLE)
         elif event.type == pg.KEYUP:
-            print("·")
             escena.procesarEvent(event)
             escena.checkUnHoldButton(event.key)
         else:
@@ -79,7 +79,7 @@ raton = Raton.Raton(sprite_ruta, player1)
 p1Interface = Interface(player1, raton)
 
 # Player 2 AKA IA
-player2 = Player.Player([], [], 100, [], [])
+player2 = Player.Player([], [], 10, [], [])
 aI = AI(player2)
 
 # Camara
@@ -97,11 +97,14 @@ escena = Escena(player1, player2, aI, mapa, camera, raton, p1Interface, resource
 
 def setEntity(player):
     scv = TerranWorker(4, 10, player1)
-    structure1 = TerranBuilder(200, 40, 600, 5, 6, player1, mapa, False, 2)
+    structure1 = TerranBuilder.TerranBuilder(200, 80, 600, 5, 6, player1, mapa, False, 1)
+    structure3 = TerranBuilder.TerranBuilder(200, 80, 400, 10, 6, player1, mapa, False, 2)
+    
     escena.setBasePlayer1(structure1)
-    structure2 = TerranBarracks(200, 200, 600, 15, 9, player1, mapa, True, 3)
+    structure2 = TerranBarracks(200, 40, 600, 15, 9, player1, mapa, True, 3)
     player.addStructures(structure1)
     player.addStructures(structure2)
+    player.addStructures(structure3)
     player.addUnits(scv)
 
     zergBuilder = ZergBuilder(200, 50, 10, 15, 14, player1, mapa, False, 8)
