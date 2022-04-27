@@ -53,10 +53,24 @@ class Map():
         while y*self.th <= rect.y+rect.h:
             x, _ = self.getTileIndex(rect.x, rect.y)
             while x*self.tw <= rect.x+rect.w:
-                tiles.append(self.map[y][x])
+                if x*self.tw < self.w and y*self.th < self.h:
+                    tiles.append(self.map[y][x])
                 x += 1
             y += 1
         return tiles
+    
+    def getEntityTilesVecinas(self, tile):
+        tilesObj = []
+        if tile.ocupante != None:
+            r = tile.ocupante.getRect()
+            tiles = self.getRectTiles(r)
+            for t in tiles:
+                vecinas = self.getTileVecinas(t)
+                for v in vecinas:
+                    tilesObj.append(v)
+        else:
+            tilesObj.append(tile)
+        return list(set(tilesObj))
             
     def drawTiles(self, screen, camera, tiles):
         for tile in tiles:
@@ -73,10 +87,14 @@ class Map():
         xaux = int(x / self.tw)
         yaux = int(y / self.th)
         
-        if int(x / self.tw) >= len(self.map[0]):
+        if xaux >= len(self.map[0]):
             xaux = len(self.map[0]) - 1
-        if int(y / self.th) >= len(self.map):   
+        elif xaux < 0:
+            xaux = 0
+        if yaux >= len(self.map):   
             yaux = len(self.map) - 1
+        elif yaux < 0:
+            yaux = 0
         #print(xaux, yaux)    
         return xaux, yaux
 
@@ -86,8 +104,7 @@ class Map():
 
     #Pone la tile como vecina
     def setVecina(self, tile, id):
-        self.map[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = 2
-        self.map[int(tile.centery / self.th)][int(tile.centerx / self.tw)].id = id
+        tile.setOcupada(id)
 
     #Pone la tile como recurso
     def setRecurso(self, tile):
@@ -97,7 +114,7 @@ class Map():
     def setLibre(self, tile):
         self.map[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = 0
 
-    #Devuelve una lista de tiles vecinas a la dada
+    #Devuelve una lista de tiles vecinas libres a la dada
     def getTileVecinas(self, tile):
         tilesVecinas = []
         aux = self.getTile(tile.centerx + self.tw,tile.centery)#tile derecha

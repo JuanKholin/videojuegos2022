@@ -27,11 +27,15 @@ class Tile():
         self.tileid = tileid
         self.padre = padre
         self.image = image
+        self.ocupante = None
 
     def setOcupante(self, ocupante):
         self.ocupante = ocupante
         
-    
+    def setOcupada(self, id):
+        self.type = 2
+        self.id = id
+        
     def getRect(self):
         return (int(self.centerx - self.w/2) ,int(self.centery - self.h/2), self.w, self.h)
         

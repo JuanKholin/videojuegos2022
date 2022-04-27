@@ -4,7 +4,7 @@ from pickle import GLOBAL
 
 import pygame
 
-DEBBUG = False
+DEBBUG = True
 
 class System_State(Enum):
     MAINMENU = auto()
@@ -153,9 +153,6 @@ TERRAN_BUILDER_PATH = "SPRITE/builder/tile00"
 TERRAN_BARRACK_PATH = "SPRITE/barracks/tile00"
 TERRAN_BARRACK_MINERAL_COST = 50
 
-##---------ZERG_BUILDER------------------
-ZERG_BUILDER_PATH = "SPRITE/ZergBuilder/tile00"
-
 ##---------HATCHERY------------------
 HATCHERY_PATH = "SPRITE/Hatchery/tile00"
 
@@ -186,6 +183,15 @@ def cargarSprites(path, n, twoDig, color = None, size = None):
 def clock_update():
     global SYSTEM_CLOCK
     SYSTEM_CLOCK = (SYSTEM_CLOCK + 1) % 100000
+    
+def getGlobalTime():
+    global GLOBAL_TIME
+    result = GLOBAL_TIME
+    return result
+
+def updateGlobalTime():
+    global GLOBAL_TIME
+    GLOBAL_TIME += CLOCK.tick(CLOCK_PER_SEC)
 
 def frame(n):
     if SYSTEM_CLOCK % n == 0:
@@ -208,14 +214,7 @@ def muestra_texto(pantalla,fuente,texto,color, dimensiones, pos):
 def aux(screen):
     muestra_texto(screen, str('monotypecorsiva'), "single player", (210, 255, 124), 25, [270, 150])
 
-def getGlobalTime():
-    global GLOBAL_TIME
-    result = GLOBAL_TIME
-    return result
 
-def updateGlobalTime():
-    global GLOBAL_TIME
-    GLOBAL_TIME += CLOCK.tick(CLOCK_PER_SEC)
 
 
 ELEVACION_PATH = "SPRITE/tile/elevacion/tile0"

@@ -1,10 +1,10 @@
 import pygame
 from . import Entity
-from .. import Player, Map, Utils, Command
+from .. import Player, Map, Utils
+from ..Command import *
+from ..Utils import *
 
 class Structure(Entity.Entity):
-    x = 0
-    y = 0
     clicked = False
     index = 0
     rectOffY = 0
@@ -12,9 +12,11 @@ class Structure(Entity.Entity):
     widthPad = 0
     tileW = 0
     tileH = 0
+    training = []
+    nBuildSprites = 1
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, map, id, player):
-        Entity.Entity.__init__(self, hp, xini, yini, mineralCost, generationTime, id, player)
+        Entity.Entity.__init__(self, hp, xini*map.tw, yini*map.th, mineralCost, generationTime, id, player)
         self.map = map
         self.player = player
         
@@ -25,7 +27,7 @@ class Structure(Entity.Entity):
     def getPosition(self):
         return (self.x+self.rectn.w/2, self.y+self.rectn.h/2)
 
-    def update():
+    def update(self):
         pass
     
     def getRect(self):
@@ -55,6 +57,37 @@ class Structure(Entity.Entity):
         self.rectn.w = self.tileW*self.map.tw - 1
         self.rectn.h = self.tileH*self.map.th - self.heightPad/2 - 1
         
+    def update(self):
+        pass
+        
+    def updateBuilding(self, nBuildSprites):
+        if nBuildSprites != 0:
+            self.count += 1
+            if self.count >= self.generationTime*CLOCK_PER_SEC / nBuildSprites:
+                self.index += 1
+                self.count = 0
+            if self.index == 4:
+                self.building = False
+        else:
+            self.building = False
+    
+    def updateTraining(self):
+        self.generationCount += 1
+        if self.generationCount >= CLOCK_PER_SEC * self.training[0].generationTime:
+        #if (getGlobalTime() - self.generationStartTime) > self.training[0].generationTime:
+            unit = self.training[0]
+            tile = self.map.getTile(self.x, self.y)
+            libres = self.map.getEntityTilesVecinas(tile)
+            print(libres[0].x, libres[0].y, libres[0].type)
+            unit.setTilePosition(libres[0])
+            
+            libres[0].setOcupada(1)
+            
+            self.player.addUnits(unit)
+            self.generationCount = 0
+            del self.training[0]
+            self.generationStartTime = getGlobalTime()
+        
     def draw(self, screen, camera):
         r = self.getRect()
         image = self.getImage()
@@ -77,19 +110,51 @@ class Structure(Entity.Entity):
         image = self.getFinalImage()
         screen.blit(sprite, (image.x - camera.x, image.y - camera.y))
         
+        tile = self.map.getTile(r.x + r.w/2, r.y + r.h/2)
+        libres = self.map.getEntityTilesVecinas(tile)
+        pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, 40, 40),5)
+        #print(tilesVecinas)
+        for tile in libres:
+            pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, tile.w, tile.h),5)
+        
     def checkTiles(self):
         r = self.getRect()
         tiles = self.map.getRectTiles(r)
         ok = True
-        for tile in tiles:
-            if tile.type != 0:
-                ok = False
-                break
+        tiles_set = set(tiles)
+        if len(tiles_set) == self.tileH*self.tileW:
+            for tile in tiles_set:
+                if tile.type != 0:
+                    ok = False
+                    break
+        else:
+            ok = False
         return ok
+    
+    def generateUnit(self, unit):
+        print("genero unidad")
+        if len(self.training) == 0:
+            self.generationStartTime = getGlobalTime()
+        self.training.append(unit)
             
     def command(self, command):
         return Command.Command(Command.CommandId.NULO)
     
     def getBuildSprite(self):
         return self.sprites[0]
+    
+    def getOrder(self):
+        return CommandId.NULO
+    
+    def setTilesOcupados(self):
+        rect = self.getRect()
+        x, y = self.map.getTileIndex(rect.x, rect.y)
+        while y*self.map.th <= rect.y+rect.h:
+            x, _ = self.map.getTileIndex(rect.x, rect.y)
+            while x*self.map.tw <= rect.x+rect.w:
+                tile = self.map.map[y][x]
+                self.map.setVecina(tile, self.id)
+                tile.setOcupante(self)
+                x += 1
+            y += 1
         
