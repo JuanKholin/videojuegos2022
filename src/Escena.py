@@ -259,7 +259,6 @@ class Escena():
         #OBTENEMOS LA TILE EN LA QUE SE ENCUENTRAN
         unitPos = unit.getPosition()
         tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
-
         #SI ESTA MOVIENDOSE HAY QUE CALCULAR COLISIONES Y CAMBIAR LAS TILES QUE OCUPAN
         if unit.paths.__len__() > 0:
 
@@ -390,8 +389,7 @@ class Escena():
 ##input()
                 else: #La siguiente es mi objetivo
                     unit.paths = []
-        else:
-            if tileActual.type != 1:
+        if tileActual.type != 1:
                 self.mapa.setVecina(tileActual, unit.id)
 
     def updateStructure(self, structure):
@@ -415,9 +413,8 @@ class Escena():
                 else:
                     if tileActual.type != 1:
                         self.mapa.setVecina(tileActual, structure.id)
-        else:
-            if tileActual.type != 1:
-                structure.setTilesOcupados()
+        if tileActual.type != 1:
+            structure.setTilesOcupados()
 
     def updateResource(self, res):
         rect = res.getRect()
