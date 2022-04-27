@@ -9,6 +9,7 @@ from .Entities.TerranBarracks import *
 from .Entities.Hatchery import *
 from .Entities.Drone import *
 from .Entities.Zergling import *
+from .Entities.ZergBuilder import *
 
 #pre: mapDictionary es un diccionario con la info del mapa
 #   map: mapa dela escena
@@ -49,11 +50,13 @@ def loadUnits(unitDictionaries, player):
 def loadStructures(structureDictionaries, player, map):
     for s in structureDictionaries:
         if s["clase"] == "terranBuilder":
-            player.addStructures(TerranBuilder(s["x"], s["y"], player, map, s["building"]))
+            player.addStructures(TerranBuilder(s["x"], s["y"], player, map, s["building"], s["id"]))
         elif s["clase"] == "terranBarracks":
-            player.addStructures(TerranBarracks(s["x"], s["y"], player, map, s["building"]))
+            player.addStructures(TerranBarracks(s["x"], s["y"], player, map, s["building"], s["id"]))
         elif s["clase"] == "hatchery":
-            player.addStructures(Hatchery(s["x"], s["y"], player, map))
+            player.addStructures(Hatchery(s["x"], s["y"], player, map, s["id"]))
+        elif s["clase"] == "zergBuilder":
+            player.addStructures(ZergBuilder(s["x"], s["y"], player, map, s["building"], s["id"]))
 
 #en el fichero la clave es una string, hay que hacer uno nuevo con clave numerica
 def loadKeyMap(stringKeyKeyMap, p):
@@ -79,5 +82,5 @@ def loadResources(resuorcesDictionary):
     resources = []
     for r in resuorcesDictionary:
         if r["clase"] == "cristal":
-            resources.append(Cristal(r["tipo"], r["capacidad"], r["x"], r["y"]))
+            resources.append(Cristal(r["capacidad"], r["tipo"], r["x"], r["y"]))
     return resources

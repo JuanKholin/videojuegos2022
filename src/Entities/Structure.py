@@ -17,7 +17,8 @@ class Structure(Entity.Entity):
         Entity.Entity.__init__(self, hp, xini, yini, mineralCost, generationTime, id, player)
         self.map = map
         self.player = player
-
+        self.xIni = xini
+        self.yIni = yini
         originX = (xini - round(self.tileW/2))*self.map.tw
         originY = (yini - round(self.tileH/2))*self.map.th
         self.rectn = pygame.Rect(originX, originY + self.heightPad/2, self.tileW*self.map.tw - 1, self.tileH*self.map.th - self.heightPad/2 - 1)

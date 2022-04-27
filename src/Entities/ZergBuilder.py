@@ -6,6 +6,9 @@ from ..Command import *
 from ..Utils import *
 
 WHITE   = (255,255,255)
+GENERATION_TIME = 10
+MINERAL_COST = 50
+HP = 200
 
 class ZergBuilder(Structure):
     sprites = []
@@ -19,8 +22,8 @@ class ZergBuilder(Structure):
     clicked = False
     tileH = 4
 
-    def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building, id):
-        Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, map, id, player)
+    def __init__(self, xini, yini, player, map, building, id):
+        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
         self.sprites = cargarSprites(HATCHERY_PATH, 4, False, BLUE, 1.8)
         self.building = building
         self.image = self.sprites[self.index]
@@ -29,7 +32,7 @@ class ZergBuilder(Structure):
         self.count = 0
         self.training = []
         self.paths = []
-        
+
     def update(self):
         if len(self.training) > 0:
             self.generationCount += 1
@@ -56,7 +59,7 @@ class ZergBuilder(Structure):
                 self.player.resources -= ZERGLING_MINERAL_COST
                 zergling = Zergling(self.x / 40, (self.y + self.rectn.h) / 40, 1)
                 self.generateUnit(zergling)
-                
+
     def command(self, command):
         if command == CommandId.BUILD_STRUCTURE:
             return Command(CommandId.BUILD_ZERG_BUILDER)
@@ -64,6 +67,17 @@ class ZergBuilder(Structure):
             return Command(CommandId.GENERAR_UNIDAD)
         else:
             return Command(CommandId.NULO)
-        
+
     def getBuildSprite(self):
         return self.sprites[3]
+
+    def toDictionary(self, map):
+        #print("x e y del zerg builder ", self.x, self.y)
+        #x, y = map.getTileIndex(self.originX, self.originY)
+        return {
+            "clase": "zergBuilder",
+            "x": self.xIni,
+            "y": self.yIni,
+            "building": self.building,
+            "id": self.id,
+        }

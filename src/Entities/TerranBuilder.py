@@ -21,8 +21,8 @@ class TerranBuilder(Structure):
     tileH = 4
     clicked = False
 
-    def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building,id):
-        Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, map, id, player)
+    def __init__(self, xini, yini, player, map, building, id):
+        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
         self.sprites = cargarSprites(TERRAN_BUILDER_PATH, 6, False, WHITE, 1.5)
         self.image = self.sprites[self.index]
         self.finalImage = self.sprites[4]
@@ -89,10 +89,11 @@ class TerranBuilder(Structure):
         return self.sprites[4]
 
     def toDictionary(self, map):
-        x, y = map.getTileIndex(self.xIni, self.yIni)
+        #x, y = map.getTileIndex(self.originX, self.originY)
         return {
             "clase": "terranBuilder",
-            "x": x,
-            "y": y,
+            "x": self.xIni,
+            "y": self.yIni,
             "building": self.building,
+            "id": self.id,
         }

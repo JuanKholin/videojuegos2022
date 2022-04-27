@@ -3,18 +3,8 @@
     "units": [
       {
         "clase": "terranWorker",
-        "x": 5,
-        "y": 12
-      },
-      {
-        "clase": "terranSoldier",
-        "x": 8,
-        "y": 15
-      },
-      {
-        "clase": "terranWorker",
-        "x": 6,
-        "y": 12
+        "x": 4,
+        "y": 10
       },
       {
         "clase": "drone",
@@ -30,20 +20,31 @@
     "structures": [
       {
         "clase": "terranBuilder",
-        "x": 4,
-        "y": 5,
-        "building": false
+        "x": 5,
+        "y": 6,
+        "building": false,
+        "id": 1
       },
       {
         "clase": "terranBarracks",
-        "x": 14,
-        "y": 8,
-        "building": false
+        "x": 15,
+        "y": 9,
+        "building": false,
+        "id": 3
       },
       {
-        "clase": "hatchery",
-        "x": 14,
-        "y": 14
+        "clase": "terranBuilder",
+        "x": 10,
+        "y": 6,
+        "building": false,
+        "id": 2
+      },
+      {
+        "clase": "zergBuilder",
+        "x": 15,
+        "y": 14,
+        "building": false,
+        "id": 8
       }
     ],
     "resources": 100,
@@ -54,7 +55,8 @@
       "1073741904": 5,
       "114": 7,
       "118": 6,
-      "103": 13
+      "99": 14,
+      "103": 16
     },
     "commandMap": {
       "2": 1073741906,
@@ -926,9 +928,10 @@
   "resources": [
     {
       "clase": "cristal",
+      "capacidad": 34,
       "tipo": 1,
-      "x": 200,
-      "y": 700
+      "x": 80,
+      "y": 500
     }
   ]
 }

@@ -22,7 +22,7 @@ class Hatchery(Structure):
         x -= 20
         y -= 10
         #en el resto de estructuras le estas pasando x e y a Structure, no xini yini como tenias aqui
-        #necesito que sea igual asi que he puesto x e y aqui, espero no haber jodido nada 
+        #necesito que sea igual asi que he puesto x e y aqui, espero no haber jodido nada
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, x, y, takeID(), player)
         self.player = player
         self.sprites = cargarSprites(HATCHERY_PATH, 4, False, BLUE, 1.8)
@@ -68,10 +68,11 @@ class Hatchery(Structure):
 
 
     def toDictionary(self, map):
-        print("x e y del hatchery ", self.x, self.y)
-        x, y = map.getTileIndex(self.xIni, self.yIni)
+        #print("x e y del hatchery ", self.x, self.y)
+        #x, y = map.getTileIndex(self.originX, self.originY)
         return {
             "clase": "hatchery",
-            "x": x,
-            "y": y,
+            "x": self.xIni,
+            "y": self.yIni,
+            "id": self.id,
         }

@@ -20,8 +20,8 @@ class TerranBarracks(Structure):
     tileH = 3
     clicked = False
 
-    def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building, id):
-        Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, map, id, player)
+    def __init__(self, xini, yini, player, map, building, id):
+        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
         self.sprites = Utils.cargarSprites(Utils.TERRAN_BARRACK_PATH, 6, False, Utils.WHITE, 1.1)
         self.building = building
         self.image = self.sprites[self.index]
@@ -92,11 +92,12 @@ class TerranBarracks(Structure):
         return self.sprites[4]
 
     def toDictionary(self, map):
-        print("barracke x e y Ini ", self.xIni, self.yIni)
-        x, y = map.getTileIndex(self.xIni, self.yIni)
+        #print("barracke x e y Ini ", self.xIni, self.yIni)
+        #x, y = map.getTileIndex(self.originX, self.originY)
         return {
             "clase": "terranBarracks",
-            "x": x,
-            "y": y,
+            "x": self.xIni,
+            "y": self.yIni,
             "building": self.building,
+            "id": self.id,
         }
