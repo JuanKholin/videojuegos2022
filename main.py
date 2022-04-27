@@ -2,6 +2,7 @@ import time
 import pygame as pg
 import sys
 import math
+import json
 
 from src.Utils import *
 from src.Command import *
@@ -50,7 +51,7 @@ screen =  pg.display.set_mode(size)
 #Controlar frames por segundo
 clock = pg.time.Clock()
 
-mapa = Map.Map(40, 20)
+mapa = Map.Map(40, 20, Utils.MAPA1, False)
 
 # Player 1
 keyMap ={
@@ -61,6 +62,8 @@ keyMap ={
   pg.K_r: CommandId.ROTAR,
   pg.K_v: CommandId.GENERAR_UNIDAD,
   pg.K_c: CommandId.BUILD_STRUCTURE,
+  pg.K_g: CommandId.GUARDAR_PARTIDA,
+
 }
 commandMap ={
   CommandId.MOVER_CAMARA_ARRIBA: pg.K_UP,
@@ -79,7 +82,7 @@ raton = Raton.Raton(sprite_ruta, player1)
 p1Interface = Interface(player1, raton)
 
 # Player 2 AKA IA
-player2 = Player.Player([], [], 10, [], [])
+player2 = Player.Player([], [], 100, {}, {})
 aI = AI(player2)
 
 # Camara
@@ -89,19 +92,23 @@ camera = Camera(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)
 # Escena
 
 #Recursos del mapa
+
 cristal = Cristal(34,1,80,500)
+
 resources = []
 resources.append(cristal)
 escena = Escena(player1, player2, aI, mapa, camera, raton, p1Interface, resources)
 #escena.mapa.addOre(100,100)
 
 def setEntity(player):
+
     scv = TerranWorker(4, 10, player1)
     structure1 = TerranBuilder.TerranBuilder(200, 80, 600, 5, 6, player1, mapa, False, 1)
     structure3 = TerranBuilder.TerranBuilder(200, 80, 400, 10, 6, player1, mapa, False, 2)
-    
+
     escena.setBasePlayer1(structure1)
     structure2 = TerranBarracks(200, 40, 600, 15, 9, player1, mapa, True, 3)
+
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addStructures(structure3)
@@ -116,12 +123,12 @@ def setEntity(player):
     zergling = Zergling(8, 9, player1)
     player1.addUnits(zergling)
 
-    
+
 
 def update():
     clock_update()
     raton.update(camera)
-    
+
     if Utils.state == System_State.MAINMENU:
         #playMusic(mainMenuBGM, pos = 5)
         #playSound(mainMenuBGM)
@@ -129,7 +136,7 @@ def update():
     elif Utils.state == System_State.MAP1:
         #playMusic(map1BGM)
         #cargar mapa
-        escena.mapa.load(Utils.MAPA1)
+        escena.mapa.load()
         setEntity(player1)
         Utils.state = System_State.ONGAME
     elif Utils.state == System_State.ONGAME:

@@ -85,3 +85,12 @@ class Player():
     # Para que la AI pueda acceder a la informacion
     def get_info(self):
         return self.units, self.structures, self.resources
+
+    def toDictionary(self, map):
+        return {
+            "units": [u.toDictionary(map) for u in self.units],
+            "structures": [s.toDictionary(map) for s in self.structures],
+            "resources": self.resources,
+            "keyMap": self.keyMap,
+            "commandMap": self.commandMap,
+        }

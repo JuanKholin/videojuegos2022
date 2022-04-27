@@ -21,7 +21,9 @@ class Hatchery(Structure):
         (x, y) = map.getTileCenter(xini, yini)
         x -= 20
         y -= 10
-        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, takeID(), player)
+        #en el resto de estructuras le estas pasando x e y a Structure, no xini yini como tenias aqui
+        #necesito que sea igual asi que he puesto x e y aqui, espero no haber jodido nada 
+        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, x, y, takeID(), player)
         self.player = player
         self.sprites = cargarSprites(HATCHERY_PATH, 4, False, BLUE, 1.8)
         self.map = map
@@ -63,3 +65,13 @@ class Hatchery(Structure):
                 self.player.resources -= self.mineralCost
                 drone = Drone(self.x / 40, (self.y + self.rectn.h) / 40, 1)
                 self.generateUnit(drone)
+
+
+    def toDictionary(self, map):
+        print("x e y del hatchery ", self.x, self.y)
+        x, y = map.getTileIndex(self.xIni, self.yIni)
+        return {
+            "clase": "hatchery",
+            "x": x,
+            "y": y,
+        }

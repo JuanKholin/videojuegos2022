@@ -20,7 +20,8 @@ class Cristal():
         #self.image = self.sprites[4 - int(float(capacidad)/float(self.interval) + 0.5)]
         self.image = self.sprites[0]
         self.clicked = False
-    
+
+
     def divideSpritesheetByRows(self,spritesheet, rows):
         totalRows = spritesheet.get_height()
         maxCol = spritesheet.get_width()
@@ -28,7 +29,7 @@ class Cristal():
         for i in range(int(totalRows / rows)):
             aux = pg.Surface.subsurface(spritesheet, (0, rows * i, maxCol, rows))
             aux = pg.transform.scale2x(aux)
-            
+
             sprites.append(aux)
         return sprites
     def __del__(self):
@@ -53,6 +54,18 @@ class Cristal():
         return(self.x - self.image.get_width()/2,  self.y - self.image.get_height()/2)
     # Devuelve el rectangulo que conforma su imagen, creo, esto lo hizo otro
     def getRect(self):
-        rectAux = pg.Rect(self.x - X_PADDING, 
+        rectAux = pg.Rect(self.x - X_PADDING,
                 self.y - Y_PADDING, self.image.get_width() - WEIGHT_PADDING, self.image.get_height()  - HEIGHT_PADDING)
         return rectAux
+
+    def toDictionary(self, map):
+        print("x e y del cristal ", self.x, self.y)
+        x, y = map.getTileIndex(self.x, self.y)
+        print("x e y de la tile del cristal ", x, y)
+        return {
+            "clase": "cristal",
+            "capacidad": self.capacidad
+            "tipo": self.tipo,
+            "x": self.x,
+            "y": self.y,
+        }

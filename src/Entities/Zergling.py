@@ -24,11 +24,11 @@ TOTAL_FRAMES = 296  # [0:203] MOVICION (13 ciclos de 17 frames con solo 16 utile
                     # ciclo 0 estar quieto, ciclos 1 2 y 3 atacacion, el resto moverse
                     # [204:288] ENTERRACION
                     # [289:295] MORICION
-FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)), 
-          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)), 
-          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)), 
+FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
           list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
-          [289] * 16, [290] * 16, [291] * 16, [292] * 16, [293] * 16, [294] * 16, 
+          [289] * 16, [290] * 16, [291] * 16, [292] * 16, [293] * 16, [294] * 16,
           [295] * 16]
 STILL_FRAMES = [0]
 ATTACK_FRAMES = [1, 2, 3]
@@ -45,14 +45,14 @@ X_PADDING = 25
 Y_PADDING = 15
 
 class Zergling(Soldier):
-    # Pre: xIni e yIni marcan posiciones del mapa, (ej: (3, 2) se refiere a la posicion de 
+    # Pre: xIni e yIni marcan posiciones del mapa, (ej: (3, 2) se refiere a la posicion de
     # la cuarta columna y tercera fila del mapa)
     # Post: Crea un bichito mono que no hace practicamente nada pero tu dale tiempo
     def __init__(self, xIni, yIni, player):
-        Soldier.__init__(self, HP, xIni * 40 + 20, yIni * 40 + 20, MINERAL_COST, 
-                GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, PADDING, 
-                takeID(), player, MINE_POWER, TIME_TO_MINE, INVERSIBLE_FRAMES, 
-                FRAMES, DIR_OFFSET, ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, 
+        Soldier.__init__(self, HP, xIni * 40 + 20, yIni * 40 + 20, MINERAL_COST,
+                GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, PADDING,
+                takeID(), player, MINE_POWER, TIME_TO_MINE, INVERSIBLE_FRAMES,
+                FRAMES, DIR_OFFSET, ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES,
                 X_PADDING, Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ATTACK_INFO)
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey(BLACK)
@@ -60,3 +60,11 @@ class Zergling(Soldier):
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
+
+    def toDictionary(self, map):
+        x, y = map.getTileIndex(self.x, self.y)
+        return {
+            "clase": "zergling",
+            "x": x,
+            "y": y,
+        }

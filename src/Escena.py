@@ -1,10 +1,12 @@
 import pygame as pg
 import math
+import json
 from . import Player, Raton
 from .Utils import *
 from .Command import *
 
 from .Entities import TerranBarracks, ZergBuilder
+from .Loader import *
 from datetime import datetime
 
 
@@ -42,6 +44,8 @@ class Escena():
         elif command.id == CommandId.BUILD_ZERG_BUILDER and self.p1.resources >= TERRAN_BARRACK_MINERAL_COST:
             self.raton.building = True
             self.raton.buildStructure = self.getZergBuilder()
+        elif command.id == CommandId.GUARDAR_PARTIDA:
+            self.saveScene()
         elif command.id == CommandId.MOVER:
             #path = [] ## !!!!
             relative_mouse_pos = pg.mouse.get_pos()
@@ -54,7 +58,7 @@ class Escena():
                 tilesObj, tilesCasa = self.pathsToCrystal(tileClicked, tilesObj, tilesCasa)
             else:
                 tilesObj = [tileClicked]
-            
+
             pathsForPlayer = []
             orderForPlayer = []
             for param in command.params:
@@ -146,7 +150,7 @@ class Escena():
             path.append(path1)
             posAux = posIni
             posIni = posFin
-            
+
         #print("Queria ir a", posFin, "y me han calculado", posIni)
         #COMPROBAR QUE LA TILE CLICKADA CORRESPONDE A DISTINTAS ENTIDADES
         # COMPROBAR SI HA CLICKADO UN ORE
@@ -162,7 +166,7 @@ class Escena():
                     if tile.heur(tileIni) < tileObj.heur(tileIni):
                         tileObj = tile
                 tilesCasa.remove(tileObj)
-            poStay = posIni 
+            poStay = posIni
             self.mapa.setLibre(tileObj)
             pathA = self.mapa.Astar(tileIni,tileObj)
             posIni = (tileIni.centerx, tileIni.centery)
@@ -171,13 +175,13 @@ class Escena():
             #print(pathA.__len__())
             #Movernos al centro de la tile
             posFin = (tileIni.centerx, tileIni.centery)
-            pathB.append(Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), 
+            pathB.append(Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]),
                     int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])), posFin))
             posAux = ()
             for tile in pathA:
                 posFin = (tile.centerx, tile.centery)
                 #print("desde: ",posIni,"hacia", posFin)
-                path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), 
+                path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]),
                         int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])), posFin)
                 #print("angulo del camino:", path1.angle)
                 pathB.append(path1)
@@ -200,7 +204,7 @@ class Escena():
             for tile in pathA:
                 posFin = (tile.centerx, tile.centery)
                 #print("desde: ",posIni,"hacia", posFin)
-                path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), 
+                path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]),
                         int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])), posFin)
                 #print("angulo del camino:", path1.angle, self.mapa.getTile(path1.posFin[0], path1.posFin[1]).tileid)
                 pathC.append(path1)
@@ -290,7 +294,7 @@ class Escena():
                     if tile.type != OBSTACLE:
                         self.mapa.setLibre(tile)
             else:
-                    
+
                 ###input()
                 #if tilePath == tileObj:
                     #   #print("Y ademas mi objetivo, me miro otro que no sea", tileObj.centerx, tileObj.centery)
@@ -300,7 +304,7 @@ class Escena():
                 #LA TILE SIGUIENTE ESTA OCUPADA
                 #print("Que me la han ocupao",tilePath.tileid ,"y yo estando en",tileActual.tileid, "Quiero ir a:", tileObj.tileid )
                 #No es mi objetivo pero esta ocupado
-                if tilePath.tileid != tileObj.tileid: 
+                if tilePath.tileid != tileObj.tileid:
                     for unitBlock in units:
                         if unitBlock.id == tilePath.id: #Estamos con la unidad bloqueante
                             if unitBlock.paths.__len__() == 0: # ME bloquea y ademas no se mueve
@@ -313,7 +317,7 @@ class Escena():
                                 for tile in pathA:
                                     posFin = (tile.centerx, tile.centery)
                                     #print("desde: ",posIni,"hacia", posFin)
-                                    path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), 
+                                    path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]),
                                             int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])), posFin)
                                     #print("angulo del camino:", path1.angle)
                                     path.append(path1)
@@ -340,13 +344,13 @@ class Escena():
                                             posFinalT = unit.paths[unit.paths.__len__() - 1].posFin
                                             path = []
                                             posFin = (tileActual.centerx, tileActual.centery)
-                                            path.append(Path(math.atan2(posFin[1] - param[1], posFin[0] - param[0]), 
+                                            path.append(Path(math.atan2(posFin[1] - param[1], posFin[0] - param[0]),
                                                     int(math.hypot(posFin[0] - param[0], posFin[1] - param[1])), posFin))
                                             posIni = posFin
                                             for tile in pathA:
                                                 posFin = (tile.centerx, tile.centery)
                                                 #print("desde: ",posIni,"hacia", posFin)
-                                                path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), 
+                                                path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]),
                                                         int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])), posFin)
                                                 #print("angulo del camino:", path1.angle)
                                                 path.append(path1)
@@ -382,7 +386,7 @@ class Escena():
 ##input()
                                         #for path in unit.paths:
                                             #print(self.mapa.getTile(path.posFin[0],path.posFin[1]).tileid, path.angle)
-                                
+
 ##input()
                 else: #La siguiente es mi objetivo
                     unit.paths = []
@@ -467,6 +471,32 @@ class Escena():
 
     def getTerranBarrack(self):
         return TerranBarracks.TerranBarracks(200, 40, 600, 0, 0, None, self.mapa, True, 5)
-    
+
     def getZergBuilder(self):
         return ZergBuilder.ZergBuilder(200, 80, 10, 0, 0, None, self.mapa, False, 8)
+
+    def toDictionary(self):
+        return {
+            "p1": self.p1.toDictionary(self.mapa),
+            "p2": self.p2.toDictionary(self.mapa),
+            "mapa": self.mapa.toDictionary(),
+            "camera": self.camera.toDictionary(),
+            "resources": [r.toDictionary(self.mapa) for r in self.resources],
+        }
+
+    def saveScene(self):
+        string = json.dumps(self.toDictionary(), indent = 2)
+
+        textFile = open("save_file.json", "w")
+        textFile.write(string)
+        textFile.close()
+
+    def loadScene(self):
+        textFile = open("save_file.json", "r")
+        data = json.load(textFile)
+        self.mapa = loadMap(data["mapa"])
+        self.p1 = loadPlayer(data["p1"], self.mapa)
+        self.p2 = loadPlayer(data["p2"], self.mapa)
+        self.camera = loadCamera(data["camera"])
+        self.resources = loadResources(data["resources"])
+        self.setBasePlayer1(self.p1.structures[0])

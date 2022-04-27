@@ -6,13 +6,13 @@ class Camera():
         self.y = y
         self.h = h
         self.w = w
-        
+
     def setCamera(self, x, y, h, w):
         self.x = x
         self.y = y
         self.h = h
         self.w = w
-        
+
     def moverArriba(self):
         if self.y > 0:
             self.y = self.y - 4
@@ -28,3 +28,11 @@ class Camera():
     def moverDerecha(self, mapWidth):
         if (self.x + self.w) < mapWidth:
             self.x = self.x + 4
+
+    def toDictionary(self):
+        return {
+            "x": self.x,
+            "y": self.y,
+            "h": self.h,
+            "w": self.w,
+        }

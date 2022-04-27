@@ -5,6 +5,10 @@ from .. import Player, Map
 from ..Command import *
 from ..Utils import *
 
+HP = 200
+GENERATION_TIME = 40
+MINERAL_COST = 600
+
 class TerranBarracks(Structure):
     sprites = []
     training = []
@@ -15,20 +19,20 @@ class TerranBarracks(Structure):
     tileW = 4
     tileH = 3
     clicked = False
-    
+
     def __init__(self, hp, mineralCost, generationTime, xini, yini, player, map, building, id):
         Structure.__init__(self, hp, mineralCost, generationTime, xini, yini, map, id, player)
         self.sprites = Utils.cargarSprites(Utils.TERRAN_BARRACK_PATH, 6, False, Utils.WHITE, 1.1)
         self.building = building
         self.image = self.sprites[self.index]
         self.finalImage = self.sprites[4]
-        
+
         self.count = 0
         self.training = []
         self.paths = []
 
     def update(self):
-        
+
         if self.building:
             self.count += 1
             if self.count == self.generationTime / 10:
@@ -83,6 +87,16 @@ class TerranBarracks(Structure):
             return Command(CommandId.GENERAR_UNIDAD)
         else:
             return Command(CommandId.NULO)
-        
+
     def getBuildSprite(self):
         return self.sprites[4]
+
+    def toDictionary(self, map):
+        print("barracke x e y Ini ", self.xIni, self.yIni)
+        x, y = map.getTileIndex(self.xIni, self.yIni)
+        return {
+            "clase": "terranBarracks",
+            "x": x,
+            "y": y,
+            "building": self.building,
+        }

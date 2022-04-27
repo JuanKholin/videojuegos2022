@@ -29,9 +29,9 @@ TOTAL_FRAMES = 296  # 1     STILL
                     # 3-4   ATACAR
                     # 5-13  MOVE
                     # 14    DIE
-FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)), 
-          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)), 
-          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)), 
+FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
           list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
           list(range(205, 221)), [289] * 16, [290] * 16, [291] * 16, [292] * 16,
           [293] * 16, [294] * 16, [295] * 16]
@@ -53,23 +53,29 @@ PADDING = 110
 
 class TerranSoldier(Soldier):
     def __init__(self, xIni, yIni, player):
-        Soldier.__init__(self, HP, xIni * 40 + 20, yIni * 40 + 20, MINERAL_COST, 
-                                GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, 
-                                    PADDING,  takeID(), player, MINE_POWER, TIME_TO_MINE, INVERSIBLE_FRAMES, 
+        Soldier.__init__(self, HP, xIni * 40 + 20, yIni * 40 + 20, MINERAL_COST,
+                                GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME,
+                                    PADDING,  takeID(), player, MINE_POWER, TIME_TO_MINE, INVERSIBLE_FRAMES,
                                         FRAMES, DIR_OFFSET, ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, X_PADDING,
                                             Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ATTACK_INFO)
 
 
         spritesheet = pg.image.load("./SPRITE/terran_soldier/" + self.spritesName).convert()
         spritesheet.set_colorkey((WHITE))
-        self.sprites = Entity.divideSpritesheetByRows(spritesheet, 
+        self.sprites = Entity.divideSpritesheetByRows(spritesheet,
                 SPRITE_PIXEL_ROWS)
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
-        #self.imageRect = Utils.rect(self.x, self.y, self.image.get_width() - WEIGHT_PADDING, 
+        #self.imageRect = Utils.rect(self.x, self.y, self.image.get_width() - WEIGHT_PADDING,
                 #self.image.get_height() - HEIGHT_PADDING)
         #self.imageRect = Utils.rect(self.x - self.image.get_width()/2, self.y -self.image.get_height() , self.image.get_width(), self.image.get_height())
         #self.imageRect = Utils.rect(self.x, self.y, self.image.get_width(), self.image.get_height())
-    
-        
+
+    def toDictionary(self, map):
+        x, y = map.getTileIndex(self.x, self.y)
+        return {
+            "clase": "terranSoldier",
+            "x": x,
+            "y": y,
+        }
