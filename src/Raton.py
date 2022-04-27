@@ -144,7 +144,7 @@ class Raton(pygame.sprite.Sprite):
     def draw(self, screen, camera):
         if Utils.state == Utils.System_State.ONGAME:
             if self.building:
-                self.buildStructure.drawBuildStructure(screen, camera)
+                self.buildStructure.setPosition(self.real_pos[0], self.real_pos[1])
             else:
                 if self.point.getClicked():
                     self.point.draw(screen, camera)
@@ -153,6 +153,10 @@ class Raton(pygame.sprite.Sprite):
             screen.blit(self.image, (self.rect.x, self.rect.y))
         else:
             screen.blit(self.sprite[self.index], (self.rect.x, self.rect.y))
+    def drawBuildStructure(self, screen, camera):       
+        if self.buildStructure != None:
+            self.buildStructure.drawBuildStructure(screen, camera)
+    
 
     def processEvent(self, event, cameraX, cameraY):
         command = Command.Command(Command.CommandId.NULO) # 0 es nada

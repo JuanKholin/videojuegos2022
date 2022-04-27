@@ -42,6 +42,8 @@ BLUE    = (0, 0, 255)
 PURPLE  = (255, 0, 255)
 GREEN2  = (210, 255, 125)
 GREEN3  = (110, 255, 90)
+PINK    = (255, 95, 185)
+ORANGE  = (255, 200, 95)
 
 HP = pygame.image.load("SPRITE/vida3.png")
 HP.set_colorkey(WHITE)
@@ -101,7 +103,6 @@ def takeID():
 # INTERFAZ
 #----------------------------------------------------------------
 
-
 MAIN_MENU = "SPRITE/mainMenu/fondo"
 MAIN_MENU_TEXT_SIZE = 30
 
@@ -126,6 +127,7 @@ EXIT_FB = "SPRITE/mainMenu/Exit/Spanish/exitones"
 EXIT_FB_N = 30
 EXIT_FB_POS = [680, 420]
 
+BARRA_COMANDO = "SPRITE/gui_frame"
 
 #----------------------------------------------------------------
 # TROPAS

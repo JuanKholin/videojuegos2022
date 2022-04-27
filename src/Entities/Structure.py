@@ -1,6 +1,6 @@
 import pygame
 from . import Entity
-from .. import Player, Map, Utils
+from .. import Player, Map
 from ..Command import *
 from ..Utils import *
 
@@ -94,30 +94,29 @@ class Structure(Entity.Entity):
         r = self.getRect()
         image = self.getImage()
         if self.clicked:
-            pygame.draw.ellipse(screen, Utils.GREEN, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
-            hp = pygame.transform.chop(pygame.transform.scale(Utils.HP, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
+            pygame.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
+            hp = pygame.transform.chop(pygame.transform.scale(HP, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
             screen.blit(hp, [r.x + r.w/2 - camera.x - hp.get_rect().w/2, r.y + r.h - camera.y])
         screen.blit(self.image, [image.x - camera.x, image.y - camera.y])
-        if Utils.DEBBUG:
-            pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
-            pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(image.x - camera.x, image.y - camera.y, image.w, image.h),1)
+        if DEBBUG:
+            pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
+            pygame.draw.rect(screen, BLACK, pygame.Rect(image.x - camera.x, image.y - camera.y, image.w, image.h),1)
+            
+            tile = self.map.getTile(r.x + r.w/2, r.y + r.h/2)
+            libres = self.map.getEntityTilesVecinas(tile)
+            pygame.draw.rect(screen, BLACK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, 40, 40),5)
+            for tile in libres:
+                pygame.draw.rect(screen, PINK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, tile.w, tile.h),1)
 
     def drawBuildStructure(self, screen, camera):
         r = self.getRect()
-        #pygame.draw.rect(screen, Utils.GREEN, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h), 5)
+        #pygame.draw.rect(screen, GREEN, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h), 5)
         tiles = self.map.getRectTiles(r)
         self.map.drawTiles(screen, camera, tiles)
 
         sprite = self.getBuildSprite()
         image = self.getFinalImage()
         screen.blit(sprite, (image.x - camera.x, image.y - camera.y))
-
-        tile = self.map.getTile(r.x + r.w/2, r.y + r.h/2)
-        libres = self.map.getEntityTilesVecinas(tile)
-        pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, 40, 40),5)
-        #print(tilesVecinas)
-        for tile in libres:
-            pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, tile.w, tile.h),5)
 
     def checkTiles(self):
         r = self.getRect()

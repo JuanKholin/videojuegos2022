@@ -15,6 +15,10 @@ class Interface():
         self.exit = cargarSprites(EXIT, EXIT_N, True, BLACK, EXIT_SIZE) 
         self.singleSelected = cargarSprites(SINGLE_PLAYER_FB, SINGLE_PLAYER_FB_N, True, BLACK, SINGLE_SIZE) 
         self.exitSelected = cargarSprites(EXIT_FB, EXIT_FB_N, True, BLACK, EXIT_SIZE)
+        self.gui = pg.image.load(BARRA_COMANDO + ".bmp")
+        self.gui = pg.transform.scale(self.gui, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.gui.set_colorkey(BLACK)
+        
         
         self.singleRect = pg.Rect(SINGLE_PLAYER_POS[0], SINGLE_PLAYER_POS[1], self.single[0].get_width(), self.single[0].get_height())
         self.exitRect = pg.Rect(EXIT_POS[0], EXIT_POS[1], self.exit[0].get_width(), self.exit[0].get_height())
@@ -100,3 +104,4 @@ class Interface():
         if Utils.state == System_State.ONGAME:
             muestra_texto(screen, str('monotypecorsiva'), str(round(Utils.SYSTEM_CLOCK / CLOCK_PER_SEC)), BLACK, 30, (20, 20))
             muestra_texto(screen, times, str(self.player.resources), BLACK, 30, (SCREEN_WIDTH - 40, 20))
+            screen.blit(self.gui, (0, 0))

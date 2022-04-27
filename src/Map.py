@@ -65,7 +65,7 @@ class Map():
         tilesObj = []
         if tile.ocupante != None:
             r = tile.ocupante.getRect()
-            tiles = self.getRectTiles(r)
+            tiles = self.getRectTiles(r) #se puede mejorar
             for t in tiles:
                 vecinas = self.getTileVecinas(t)
                 for v in vecinas:
