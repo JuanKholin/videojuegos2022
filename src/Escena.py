@@ -458,10 +458,10 @@ class Escena():
                 screen.blit(res.image, [drawPos[0] - self.camera.x, drawPos[1] - self.camera.y])
 
     def getTerranBarrack(self):
-        return TerranBarracks.TerranBarracks(200, 40, 20, 0, 0, None, self.mapa, True, 5)
+        return TerranBarracks(0, 0, None, self.mapa, True, 5)
 
     def getZergBuilder(self):
-        return ZergBuilder.ZergBuilder(200, 50, 10, 0, 0, None, self.mapa, False, 8)
+        return ZergBuilder(0, 0, None, self.mapa, False, 8)
 
     def toDictionary(self):
         return {

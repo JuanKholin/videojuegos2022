@@ -6,8 +6,7 @@ from ..Command import *
 from ..Utils import *
 
 HP = 200
-GENERATION_TIME = 40
-MINERAL_COST = 600
+GENERATION_TIME = 5
 
 class TerranBarracks(Structure):
     sprites = []
@@ -24,7 +23,7 @@ class TerranBarracks(Structure):
     clicked = False
 
     def __init__(self, xini, yini, player, map, building, id):
-        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
+        Structure.__init__(self, HP, TERRAN_BARRACK_MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
         self.sprites = Utils.cargarSprites(Utils.TERRAN_BARRACK_PATH, 6, False, Utils.WHITE, 1.1)
         self.building = building
         self.image = self.sprites[self.index]
