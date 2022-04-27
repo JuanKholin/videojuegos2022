@@ -28,10 +28,10 @@ class Player():
 
 
     def update(self):
-        for structure in self.structures:
-            structure.update()
         for unit in self.units:
             unit.update()
+        for structure in self.structures:
+            structure.update()
 
     def addUnits(self,unit):
         self.units.append(unit)

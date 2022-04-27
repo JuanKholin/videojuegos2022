@@ -51,7 +51,7 @@ class Escena():
             relative_mouse_pos = pg.mouse.get_pos()
             real_mouse_pos = (relative_mouse_pos[0] + self.camera.x, relative_mouse_pos[1] + self.camera.y)
             tileClicked = self.mapa.getTile(real_mouse_pos[0], real_mouse_pos[1])
-            #print("TILE CLICKED: ", tileCLikced.tileid)
+            print("TILE CLICKED: ", tileClicked.tileid)
             tilesObj = []
             tilesCasa = []
             if tileClicked.type == CRYSTAL:
@@ -389,8 +389,8 @@ class Escena():
 ##input()
                 else: #La siguiente es mi objetivo
                     unit.paths = []
-        if tileActual.type != 1:
-                self.mapa.setVecina(tileActual, unit.id)
+        elif tileActual.type != UNIT:
+            self.mapa.setVecina(tileActual, unit.id)
 
     def updateStructure(self, structure):
         unitPos = structure.getPosition()
@@ -413,7 +413,7 @@ class Escena():
                 else:
                     if tileActual.type != 1:
                         self.mapa.setVecina(tileActual, structure.id)
-        if tileActual.type != 1:
+        if tileActual.type != UNIT:
             structure.setTilesOcupados()
 
     def updateResource(self, res):

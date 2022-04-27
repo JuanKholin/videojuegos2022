@@ -107,7 +107,7 @@ def setEntity(player):
     structure3 = TerranBuilder.TerranBuilder(10, 6, player1, mapa, False, 2)
 
     escena.setBasePlayer1(structure1)
-    structure2 = TerranBarracks(15, 9, player1, mapa, True, 3)
+    structure2 = TerranBarracks(15, 9, player1, mapa, False, 3)
 
     player.addStructures(structure1)
     player.addStructures(structure2)

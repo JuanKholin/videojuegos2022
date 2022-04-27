@@ -33,7 +33,7 @@ class Tile():
         self.ocupante = ocupante
         
     def setOcupada(self, id):
-        self.type = 2
+        self.type = Utils.UNIT
         self.id = id
         
     def getRect(self):

@@ -79,10 +79,11 @@ class Structure(Entity.Entity):
             unit = self.training[0]
             tile = self.map.getTile(self.x, self.y)
             libres = self.map.getEntityTilesVecinas(tile)
-            print(libres[0].x, libres[0].y, libres[0].type)
+            print(libres[0].type, libres[0].tileid)
             unit.setTilePosition(libres[0])
+            print(unit.x, unit.y)
 
-            libres[0].setOcupada(1)
+            #libres[0].setOcupada(1)
 
             self.player.addUnits(unit)
             self.generationCount = 0
