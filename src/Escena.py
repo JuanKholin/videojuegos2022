@@ -417,16 +417,7 @@ class Escena():
                         self.mapa.setVecina(tileActual, structure.id)
         else:
             if tileActual.type != 1:
-                rect = structure.getRect()
-                x, y = self.mapa.getTileIndex(rect.x, rect.y)
-                while y*self.mapa.th <= rect.y+rect.h:
-                    x, _ = self.mapa.getTileIndex(rect.x, rect.y)
-                    while x*self.mapa.tw <= rect.x+rect.w:
-                        tile = self.mapa.map[y][x]
-                        self.mapa.setVecina(tile, structure.id)
-                        tile.setOcupante(structure)
-                        x += 1
-                    y += 1
+                structure.setTilesOcupados()
 
     def updateResource(self, res):
         rect = res.getRect()
@@ -470,10 +461,10 @@ class Escena():
                 screen.blit(res.image, [drawPos[0] - self.camera.x, drawPos[1] - self.camera.y])
 
     def getTerranBarrack(self):
-        return TerranBarracks.TerranBarracks(200, 40, 600, 0, 0, None, self.mapa, True, 5)
+        return TerranBarracks.TerranBarracks(200, 40, 20, 0, 0, None, self.mapa, True, 5)
 
     def getZergBuilder(self):
-        return ZergBuilder.ZergBuilder(200, 80, 10, 0, 0, None, self.mapa, False, 8)
+        return ZergBuilder.ZergBuilder(200, 50, 10, 0, 0, None, self.mapa, False, 8)
 
     def toDictionary(self):
         return {

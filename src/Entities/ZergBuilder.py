@@ -34,24 +34,13 @@ class ZergBuilder(Structure):
         self.paths = []
 
     def update(self):
-        if len(self.training) > 0:
-            self.generationCount += 1
-            if self.generationCount == CLOCK_PER_SEC*self.training[0].generationTime:
-                zergling = self.training[0]
-                zerglingPos = zergling.getPosition()
-                zerglingTile = self.map.getTile(zerglingPos[0], zerglingPos[1])
-                if zerglingTile.type != 0:
-                    vecinas = self.map.getTileVecinas(zerglingTile)
-                    zergling.setTilePosition(vecinas[0])
-                self.player.addUnits(zergling)
-                self.generationCount = 0
-                del self.training[0]
+        if self.building:
+            self.building = False
+        elif len(self.training) > 0:
+            self.updateTraining()
         self.index = (self.index + frame(8)) % 4
         self.image = self.sprites[self.index]
         self.image.set_colorkey(BLUE)
-
-    def generateUnit(self, unit):
-        self.training.append(unit)
 
     def execute(self, command_id):
         if self.clicked:
@@ -59,6 +48,7 @@ class ZergBuilder(Structure):
                 self.player.resources -= ZERGLING_MINERAL_COST
                 zergling = Zergling(self.x / 40, (self.y + self.rectn.h) / 40, 1)
                 self.generateUnit(zergling)
+
 
     def command(self, command):
         if command == CommandId.BUILD_STRUCTURE:

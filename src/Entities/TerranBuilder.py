@@ -16,6 +16,7 @@ class TerranBuilder(Structure):
     generationTime = 0
     generationCount = 0
     heightPad = 25
+    nBuildSprites = 4
     hola = 0
     tileW = 5
     tileH = 4
@@ -34,38 +35,21 @@ class TerranBuilder(Structure):
 
     def update(self):
         if self.building:
-            self.count += 1
-            if self.count == self.generationTime/3:
-                self.index += 1
-                self.count = 0
-                if self.index == 4:
-                    self.building = False
+            self.updateBuilding(4)
         elif len(self.training) > 0:
-            self.count += 1
-            if self.count == 10:
-                self.count = 0
+            if frame(10) == 1:
                 if self.index == 5:
                     self.index = 4
                 else:
                     self.index = 5
-            self.generationCount += 1
-            if self.generationCount == CLOCK_PER_SEC * self.training[0].generationTime:
-                terran = self.training[0]
-                terranPos = terran.getPosition()
-                terranTile = self.map.getTile(terranPos[0], terranPos[1])
-                if terranTile.type != 0:
-                    vecinas = self.map.getTileVecinas(terranTile)
-                    terran.setTilePosition(vecinas[0])
-                self.player.addUnits(terran)
-                self.generationCount = 0
-                del self.training[0]
+            self.updateTraining()
         else:
             self.index = 4
         self.image = self.sprites[self.index]
         self.image.set_colorkey(WHITE)
 
     def generateUnit(self, unit):
-        self.training.append(unit)
+        pass
 
     def getOrder(self):
         return CommandId.TRANSPORTAR_ORE_STILL

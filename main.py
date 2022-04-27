@@ -73,7 +73,7 @@ commandMap ={
   CommandId.ROTAR: pg.K_r,
 }
 
-player1 = Player.Player([], [], 100, keyMap, commandMap)
+player1 = Player.Player([], [], 400, keyMap, commandMap)
 
 # Raton
 sprite_ruta = "./SPRITE/raton/"
