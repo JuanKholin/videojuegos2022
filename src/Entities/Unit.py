@@ -235,6 +235,12 @@ class Unit(Entity):
         self.state = State.STILL
         self.frame = 0
         self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
+        unitPos = self.getPosition()
+        tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
+        tiles = self.mapa.getAllTileVecinas(tileActual)
+        for tile in tiles:
+            if tile.type != OBSTACLE:
+                self.mapa.setLibre(tile)
 
     # Pasa a estado moverse
     def changeToMove(self):
