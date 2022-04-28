@@ -63,7 +63,9 @@ class TerranBarracks(Structure):
                 return Command(CommandId.BUILD_BARRACKS)
             elif command == CommandId.GENERAR_UNIDAD:
                 return Command(CommandId.GENERAR_UNIDAD)
+            return Command(CommandId.NULO)
         else:
+            print(3)
             return Command(CommandId.NULO)
 
     def getBuildSprite(self):

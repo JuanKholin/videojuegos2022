@@ -1,8 +1,7 @@
 import pygame, math
-
-from . import Command
-from . import Utils
+from . import Command, Utils
 from . import Player
+from .Utils import *
 
 def collides(x, y, rect2):
     return (x >= rect2.x and x <= rect2.x + rect2.w and y >= rect2.y and y <= rect2.y + rect2.h )
@@ -33,13 +32,13 @@ def createRect(initialX, initialY, finalX, finalY):
 
 def printRectangulo(screen, initialX, initialY, finalX, finalY):
     if finalX>=initialX and finalY>=initialY:
-        pygame.draw.rect(screen, Utils.GREEN, [initialX, initialY, finalX-initialX, finalY-initialY], 1)
+        pygame.draw.rect(screen, GREEN, [initialX, initialY, finalX-initialX, finalY-initialY], 1)
     elif finalX>=initialX and finalY<initialY:
-        pygame.draw.rect(screen, Utils.GREEN, [initialX, finalY, finalX-initialX, initialY-finalY], 1)
+        pygame.draw.rect(screen, GREEN, [initialX, finalY, finalX-initialX, initialY-finalY], 1)
     elif finalX<initialX and finalY>=initialY:
-        pygame.draw.rect(screen, Utils.GREEN, [finalX, initialY, initialX-finalX, finalY-initialY], 1)
+        pygame.draw.rect(screen, GREEN, [finalX, initialY, initialX-finalX, finalY-initialY], 1)
     else: #finalX<initialX and finalY<initialY
-        pygame.draw.rect(screen, Utils.GREEN, [finalX, finalY, initialX-finalX, initialY-finalY], 1)
+        pygame.draw.rect(screen, GREEN, [finalX, finalY, initialX-finalX, initialY-finalY], 1)
 
 
 #FUNCIONES DEL RATON
@@ -49,28 +48,30 @@ class Raton(pygame.sprite.Sprite):
     sprite2 = []
     index = 0
     index2 = 0
-    frame = 0
     initialX = 0
     initialY = 0
     clicked = False
-    collide = False
+    collideAlly = False
+    collideEnemy = False
+    collideResourse = False
     pulsado = False
     building = False
     buildStructure = None
-    def __init__(self, ruta, player):
+    def __init__(self, player, enemy, resources):
         super().__init__()
         self.index = 0
-        for i in range(5):
-            self.sprite.append(pygame.image.load(ruta+"tile00"+str(i)+".png").convert_alpha())
-        for i in range(14):
-            j = i+34
-            self.sprite2.append(pygame.image.load(ruta+"tile0"+str(j)+".png").convert_alpha())
-        self.clickSprite = pygame.image.load(ruta+"click.png").convert_alpha()
+        self.sprite = cargarSprites(MOUSE_PATH + "tile00", 5, False, WHITE) #raton default
+        self.sprite2 = cargarSprites(MOUSE_PATH + "tile0", 48, True, WHITE, m=34) #raton selectedUnit
+        self.sprite3 = cargarSprites(MOUSE_PATH + "tile0", 65, True, WHITE, m=51) #raton selectedMineral
+        
+        self.clickSprite = pygame.image.load(MOUSE_PATH+"click.png").convert_alpha()
         self.image = self.sprite[0]
         self.rect = self.image.get_rect() #Para posicionar el sprite
         pygame.mouse.set_visible(False)
-        self.point = point(ruta)
+        self.point = point(MOUSE_PATH)
         self.player = player
+        self.enemy = enemy
+        self.resources = resources
 
     def update(self, camera):
         self.point.update()
@@ -82,46 +83,51 @@ class Raton(pygame.sprite.Sprite):
         #la posicion del cursor es relativa a la camara (por que tiene dos rectangulos? (self.rect y mouseRect))
         #mouseRect = pygame.Rect(self.real_pos[0], self.real_pos[1], 1, 1)
         mouse_collide = False
+        self.collideAlly = False
+        self.collideResourse = False
+        self.collideEnemy = False
         if not self.building:
             for unit in self.player.units:
                 ###---LOGICA
                 #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
                 if collides(self.real_pos[0], self.real_pos[1], unit.getRect()):
+                    self.collideAlly = True
                     mouse_collide = True
                     break
             if not mouse_collide:
                 for structure in self.player.structures:
                     ###---LOGICA
                     #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-                    if collides(self.real_pos[0], self.real_pos[1],structure.getRect()):
+                    if collides(self.real_pos[0], self.real_pos[1], structure.getRect()):
+                        self.collideAlly = True
+                        mouse_collide = True
+                        break
+            if not mouse_collide:
+                for resources in self.resources:
+                    ###---LOGICA
+                    #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
+                    if collides(self.real_pos[0], self.real_pos[1], resources.getRect()):
+                        self.collideResourse = True
                         mouse_collide = True
                         break
         else:
             self.buildStructure.setPosition(self.real_pos[0], self.real_pos[1])
 
-        if mouse_collide:
-            self.collide = True
-        else:
-            self.collide = False
-
-
         type = pygame.mouse.get_pressed()
         if type[0]:
             self.image = self.clickSprite
-        elif self.collide:
-            self.frame += 1
-            if self.frame > 5:
-                self.index2 = (self.index2+1)%14
-                self.index = (self.index+1)%5
-                self.image = self.sprite2[self.index2]
-                self.frame = 0
         else:
-            self.frame += 1
-            if self.frame > 5:
+            if frame(6) == 1:
                 self.index = (self.index+1)%5
                 self.index2 = (self.index2+1)%14
+            if self.collideAlly:
+                self.image = self.sprite2[self.index2]
+            elif self.collideResourse:
+                self.image = self.sprite3[self.index2]
+            elif self.collideEnemy:
+                self.image = self.sprite2[self.index2]
+            else:
                 self.image = self.sprite[self.index]
-                self.frame = 0
 
     def getPosition(self):
         return self.real_pos
@@ -142,7 +148,7 @@ class Raton(pygame.sprite.Sprite):
         self.clicked = not self.clicked
 
     def draw(self, screen, camera):
-        if Utils.state == Utils.System_State.ONGAME:
+        if Utils.state == System_State.ONGAME:
             if self.building:
                 self.buildStructure.setPosition(self.real_pos[0], self.real_pos[1])
             else:
@@ -213,7 +219,7 @@ class Raton(pygame.sprite.Sprite):
 
                         for unit in self.player.units:
                             #print(unit.getRect())
-                            if len(self.player.unitsSelected) < Utils.MAX_SELECTED_UNIT and collideRect(mouseRect, unit.getRect()):
+                            if len(self.player.unitsSelected) < MAX_SELECTED_UNIT and collideRect(mouseRect, unit.getRect()):
                                 unit.setClicked(True)
                                 self.player.unitsSelected.append(unit)
                                 unitSel = True
@@ -247,7 +253,6 @@ class point(pygame.sprite.Sprite):
     #Constructor
     sprite = []
     index = 0
-    frame = 0
     clicked = False
     realX = 0
     realY = 0
@@ -261,14 +266,12 @@ class point(pygame.sprite.Sprite):
 
     def update(self):
         if self.clicked:
-            self.frame += 1
-            if self.frame > 5:
+            if frame(6) == 1:
                 self.index = self.index+1
                 self.image = self.sprite[self.index]
                 self.rect = self.image.get_rect()
                 self.rect.x = self.realX-self.rect.width/2
                 self.rect.y = self.realY-self.rect.height/2
-                self.frame = 0
             if self.index == 4:
                 self.clicked = False
 

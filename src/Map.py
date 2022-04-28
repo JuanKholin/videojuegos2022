@@ -1,3 +1,5 @@
+import datetime
+import random
 import pygame
 import math
 from tokenize import Double
@@ -5,20 +7,22 @@ from . import Utils
 from . import Tile
 
 class Map():
-    def __init__(self, w, h, codedMap, load): #load true si quieres que cargue el codedMap
+    def __init__(self, w, h, load, codedMap = None): #load true si quieres que cargue el codedMap
         self.tw = 40
         self.th = 40
         self.map = []
         #matriz de tiles codificadas para guardar en fichero. Formato: "tipoSprite" + "numSprite"
         self.codedMap = codedMap
-        self.h = h * self.th
-        self.w = w * self.tw
+        self.w = w
+        self.h = h
         self.tiles = [[], []]
         self.tiles.insert(0, Utils.cargarSprites(Utils.TERRENO_PATH, 8, False))
         self.tiles.insert(1, Utils.cargarSprites(Utils.ELEVACION_PATH, 40, True))
         if load:
+            if codedMap == None:
+                self.generateRandomMap()
             self.load()
-
+            
     #Dibuja el mapa
     def drawMap(self, screen, camera):
         firstTileX, firstTileY = self.getTileIndex(camera.x, camera.y)
@@ -356,8 +360,11 @@ class Map():
         return pathReturn
 
     def load(self):
+        if self.codedMap == None:
+            self.generateRandomMap()
         self.w = len(self.codedMap[0]) * self.tw
         self.h = len(self.codedMap) * self.th
+        
         for i in range(len(self.codedMap)):
             self.map.insert(i,[])#Es una matriz que representa el mapa(0 es suelo, 1 es obstaculo, 2 vecino)
             for j in range(len(self.codedMap[0])):
@@ -372,7 +379,30 @@ class Map():
         elif code[0] == '2': #elevacion
             index = int(code[1:])
             return self.tiles[1][index], 1
-
+        
+    def generateRandomMap(self):
+        random.seed(datetime.datetime.now())
+        self.codedMap = []
+        for i in range(self.h):
+            self.codedMap.insert(i,[])
+            for j in range(self.w):
+                self.codedMap[i].insert(j, str(100 + random.randint(0, 7)))
+                
+    def setElevacion(self, x, y):
+        tile = 0
+        for j in range(y, y+5):
+            if j == y or j == y+4:
+                tile+=2
+                for i in range(x+2, x+6):
+                    self.codedMap[j][i] = str(200 + tile)
+                    tile += 1
+                tile+=2
+            else:
+                for i in range(x, x+8):
+                    self.codedMap[j][i] = str(200 + tile)
+                    tile += 1
+        pass
+            
     def toDictionary(self):
         return {
             "w": int(self.w / self.tw),

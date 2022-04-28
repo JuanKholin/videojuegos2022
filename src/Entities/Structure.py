@@ -144,7 +144,7 @@ class Structure(Entity.Entity):
         self.training.append(unit)
 
     def command(self, command):
-        return Command.Command(Command.CommandId.NULO)
+        return Command(CommandId.NULO)
 
     def getBuildSprite(self):
         return self.sprites[0]

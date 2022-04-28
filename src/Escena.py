@@ -22,41 +22,37 @@ class Escena():
         self.interfaz = interfaz
         self.resources = resources
 
-
-
     def procesarEvent(self, event):
         #Conseguir el comando
-        if event.type == pg.MOUSEBUTTONDOWN or event.type == pg.MOUSEBUTTONUP:
-            command = self.raton.processEvent(event, self.camera.x, self.camera.y)
-        else:
+        command = self.raton.processEvent(event, self.camera.x, self.camera.y)
+        if Utils.state == System_State.ONGAME:
             command = self.p1.processEvent(event)
+            #ejecutar el comando
+            if not self.raton.building:
+                if command.id == CommandId.GENERAR_UNIDAD:
+                        self.p1.execute(command.id, [])
+                elif command.id == CommandId.BUILD_BARRACKS and self.p1.resources >= TERRAN_BARRACK_MINERAL_COST:
+                    self.raton.building = True
+                    self.raton.buildStructure = self.getTerranBarrack()
+                elif command.id == CommandId.BUILD_ZERG_BUILDER and self.p1.resources >= TERRAN_BARRACK_MINERAL_COST:
+                    self.raton.building = True
+                    self.raton.buildStructure = self.getZergBuilder()
+                elif command.id == CommandId.GUARDAR_PARTIDA:
+                    self.saveScene()
+                elif command.id == CommandId.MOVER:
+                    #path = [] ## !!!!
+                    relative_mouse_pos = pg.mouse.get_pos()
+                    real_mouse_pos = (relative_mouse_pos[0] + self.camera.x, relative_mouse_pos[1] + self.camera.y)
+                    tileClicked = self.mapa.getTile(real_mouse_pos[0], real_mouse_pos[1])
+                    print("TILE CLICKED: ", tileClicked.tileid)
+                    orderForPlayer = []
+                    for param in command.params:
+                        self.processParam(param, tileClicked, tileClicked, orderForPlayer)
+                    self.p1.execute(CommandId.ORDENAR, orderForPlayer)
 
-        #ejecutar el comando
-        if not self.raton.building:
-            if command.id == CommandId.GENERAR_UNIDAD:
-                    self.p1.execute(command.id, [])
-            elif command.id == CommandId.BUILD_BARRACKS and self.p1.resources >= TERRAN_BARRACK_MINERAL_COST:
-                self.raton.building = True
-                self.raton.buildStructure = self.getTerranBarrack()
-            elif command.id == CommandId.BUILD_ZERG_BUILDER and self.p1.resources >= TERRAN_BARRACK_MINERAL_COST:
-                self.raton.building = True
-                self.raton.buildStructure = self.getZergBuilder()
-            elif command.id == CommandId.GUARDAR_PARTIDA:
-                self.saveScene()
-            elif command.id == CommandId.MOVER:
-                #path = [] ## !!!!
-                relative_mouse_pos = pg.mouse.get_pos()
-                real_mouse_pos = (relative_mouse_pos[0] + self.camera.x, relative_mouse_pos[1] + self.camera.y)
-                tileClicked = self.mapa.getTile(real_mouse_pos[0], real_mouse_pos[1])
-                print("TILE CLICKED: ", tileClicked.tileid)
-                orderForPlayer = []
-                for param in command.params:
-                    self.processParam(param, tileClicked, tileClicked, orderForPlayer)
-                self.p1.execute(CommandId.ORDENAR, orderForPlayer)
-
-                #for param in commandp2.params:
-                 #   self.processParam(param, tilesObj, tilesCasa, tileClicked, pathsForPlayer, orderForPlayer)
-                #self.p2.execute(CommandId.ORDENAR, orderForPlayer)
+                    #for param in commandp2.params:
+                    #   self.processParam(param, tilesObj, tilesCasa, tileClicked, pathsForPlayer, orderForPlayer)
+                    #self.p2.execute(CommandId.ORDENAR, orderForPlayer)
                 
                 
 

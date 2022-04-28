@@ -20,8 +20,6 @@ class Player():
     def setBasePlayer(self, base):
         self.base = base
 
-
-
     def processEvent(self,event):
         if event.type == pygame.KEYDOWN:
             if event.key in self.keyMap:

@@ -5,7 +5,7 @@ import math
 
 import pygame
 
-DEBBUG = True
+DEBBUG = False
 
 class System_State(Enum):
     MAINMENU = auto()
@@ -52,6 +52,8 @@ HP.set_colorkey(WHITE)
 BGM_VOLUME = 0.2
 SOUND_VOLUME = 0.5
 haveBGM = True
+
+CAMERA_SPEED = 8
 
 MAX_SELECTED_UNIT = 5
 
@@ -104,6 +106,7 @@ def takeID():
 #----------------------------------------------------------------
 # INTERFAZ
 #----------------------------------------------------------------
+MOUSE_PATH = "./SPRITE/raton/"
 
 MAIN_MENU = "SPRITE/mainMenu/fondo"
 MAIN_MENU_TEXT_SIZE = 30
@@ -164,22 +167,22 @@ HATCHERY_PATH = "SPRITE/Hatchery/tile00"
 #carga n sprites con nombre path + 0 hasta path + (n-1)
 #color para eliminar color del fondo, puede ser None
 #numDigit inidca el numero de digitos para localizar el sprite
-def cargarSprites(path, n, twoDig, color = None, size = None):
+def cargarSprites(path, n, twoDig, color = None, size = None, m = 0):
     sprites = []
-    for i in range(n):
+    for i in range(m, n):
         if twoDig and i < 10:
             nPath = "0" + str(i)
         else:
             nPath = str(i)
         if size == None:
-            sprites.insert(i, pygame.image.load(path + nPath + ".png"))
+            sprites.insert(i, pygame.image.load(path + nPath + ".png").convert_alpha())
         elif size == 2:
-            sprites.insert(i, pygame.transform.scale2x(pygame.image.load(path + nPath + ".png")))
+            sprites.insert(i, pygame.transform.scale2x(pygame.image.load(path + nPath + ".png").convert_alpha()))
         else:
-            image = pygame.image.load(path + nPath + ".png")
+            image = pygame.image.load(path + nPath + ".png").convert_alpha()
             sprites.insert(i, pygame.transform.scale(image, [image.get_rect().w * size, image.get_rect().h * size]))
         if color != None:
-            sprites[i].set_colorkey(color)
+            sprites[i - m].set_colorkey(color)
             pass
 
     return sprites

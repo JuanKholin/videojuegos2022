@@ -20,26 +20,6 @@ from src.Entities.ZergBuilder import *
 from src.Entities.Drone import *
 from src.Entities.Zergling import *
 
-# Auxiliar del bucle principal
-def procesarInput():
-    for event in pg.event.get(): #Identificar lo sucedido en la ventana
-        #print(event)
-        if event.type == pg.QUIT:
-            pg.quit()
-            sys.exit()
-        elif event.type == pg.VIDEORESIZE:
-            SCREEN_HEIGHT = event.h
-            SCREEN_WIDTH = event.w
-            escena.camera.h = event.h
-            escena.camera.w = event.w
-            screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pg.RESIZABLE)
-        elif event.type == pg.KEYUP:
-            escena.procesarEvent(event)
-            escena.checkUnHoldButton(event.key)
-        else:
-            escena.procesarEvent(event)
-    escena.checkPressedButtons()
-
 # Programa principal
 
 pg.init()
@@ -51,7 +31,7 @@ screen =  pg.display.set_mode(size)
 #Controlar frames por segundo
 clock = pg.time.Clock()
 
-mapa = Map.Map(40, 20, Utils.MAPA1, False)
+
 
 # Player 1
 keyMap ={
@@ -73,13 +53,19 @@ commandMap ={
   CommandId.ROTAR: pg.K_r,
 }
 
+mapa = Map.Map(40, 40, True)
+mapa.setElevacion(16, 3)
+mapa.setElevacion(20, 14)
+mapa.setElevacion(17, 30)
+mapa.setElevacion(12, 20)
+mapa.setElevacion(8, 35)
+mapa.setElevacion(5, 12)
+mapa.setElevacion(32, 29)
+
 player1 = Player.Player([], [], 400, keyMap, commandMap, mapa)
 
 # Raton
-sprite_ruta = "./SPRITE/raton/"
-raton = Raton.Raton(sprite_ruta, player1)
 
-p1Interface = Interface(player1, raton)
 
 # Player 2 AKA IA
 player2 = Player.Player([], [], 100, {}, {}, mapa)
@@ -97,6 +83,9 @@ cristal = Cristal(34,1,80,500)
 
 resources = []
 resources.append(cristal)
+
+raton = Raton.Raton(player1, player2, resources)
+p1Interface = Interface(player1, raton)
 escena = Escena(player1, player2, aI, mapa, camera, raton, p1Interface, resources)
 #escena.mapa.addOre(100,100)
 
@@ -123,7 +112,25 @@ def setEntity(player):
     zergling = Zergling(8, 9, player1)
     player1.addUnits(zergling)
 
-
+# Auxiliar del bucle principal
+def procesarInput():
+    for event in pg.event.get(): #Identificar lo sucedido en la ventana
+        #print(event)
+        if event.type == pg.QUIT:
+            pg.quit()
+            sys.exit()
+        elif event.type == pg.VIDEORESIZE:
+            SCREEN_HEIGHT = event.h
+            SCREEN_WIDTH = event.w
+            escena.camera.h = event.h
+            escena.camera.w = event.w
+            screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pg.RESIZABLE)
+        elif event.type == pg.KEYUP:
+            escena.procesarEvent(event)
+            escena.checkUnHoldButton(event.key)
+        else:
+            escena.procesarEvent(event)
+    escena.checkPressedButtons()
 
 def update():
     clock_update()

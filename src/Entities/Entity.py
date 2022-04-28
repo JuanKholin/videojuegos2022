@@ -10,7 +10,8 @@ class Entity():
         self.y = yIni - 40
         self.hp = 200
         self.player = player
-        self.mapa = player.getMap()
+        if player != None:
+            self.mapa = player.getMap()
     def update():
         pass
 
