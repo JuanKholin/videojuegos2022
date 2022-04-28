@@ -1,5 +1,6 @@
 from enum import Enum, auto, IntEnum
 from pickle import GLOBAL
+import math
 
 
 import pygame
@@ -72,6 +73,7 @@ class State(Enum):
     ORE_TRANSPORTING = auto()
     BARREL_TRANSPORTING = auto()
     MINING = auto()
+    MOVING_TO_MINING = auto()
 
 
 class Path():
@@ -215,6 +217,17 @@ def muestra_texto(pantalla,fuente,texto,color, dimensiones, pos):
 
 def aux(screen):
     muestra_texto(screen, str('monotypecorsiva'), "single player", (210, 255, 124), 25, [270, 150])
+
+def calcPath(tileIni, tileObj, mapa):
+        pathA = mapa.Astar(tileIni,tileObj)
+        posIni = (tileIni.centerx, tileIni.centery)
+        path = []
+        for tile in pathA:
+            posFin = (tile.centerx, tile.centery)
+            path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
+            path.append(path1)
+            posIni = posFin
+        return path
 
 
 

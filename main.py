@@ -73,7 +73,7 @@ commandMap ={
   CommandId.ROTAR: pg.K_r,
 }
 
-player1 = Player.Player([], [], 400, keyMap, commandMap)
+player1 = Player.Player([], [], 400, keyMap, commandMap, mapa)
 
 # Raton
 sprite_ruta = "./SPRITE/raton/"
@@ -82,7 +82,7 @@ raton = Raton.Raton(sprite_ruta, player1)
 p1Interface = Interface(player1, raton)
 
 # Player 2 AKA IA
-player2 = Player.Player([], [], 100, {}, {})
+player2 = Player.Player([], [], 100, {}, {}, mapa)
 aI = AI(player2)
 
 # Camara
@@ -106,7 +106,7 @@ def setEntity(player):
     structure1 = TerranBuilder.TerranBuilder(5, 6, player1, mapa, False, 1)
     structure3 = TerranBuilder.TerranBuilder(10, 6, player1, mapa, False, 2)
 
-    escena.setBasePlayer1(structure1)
+    player1.setBasePlayer(structure1)
     structure2 = TerranBarracks(15, 9, player1, mapa, False, 3)
 
     player.addStructures(structure1)

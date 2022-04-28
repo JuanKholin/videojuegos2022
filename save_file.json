@@ -3,18 +3,18 @@
     "units": [
       {
         "clase": "terranWorker",
-        "x": 4,
+        "x": 7,
         "y": 10
       },
       {
         "clase": "drone",
         "x": 10,
-        "y": 11
+        "y": 10
       },
       {
         "clase": "zergling",
         "x": 8,
-        "y": 9
+        "y": 8
       }
     ],
     "structures": [
@@ -31,23 +31,9 @@
         "y": 9,
         "building": false,
         "id": 3
-      },
-      {
-        "clase": "terranBuilder",
-        "x": 10,
-        "y": 6,
-        "building": false,
-        "id": 2
-      },
-      {
-        "clase": "zergBuilder",
-        "x": 15,
-        "y": 14,
-        "building": false,
-        "id": 8
       }
     ],
-    "resources": 100,
+    "resources": 400,
     "keyMap": {
       "1073741906": 2,
       "1073741905": 3,

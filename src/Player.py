@@ -3,7 +3,7 @@ from . import Command, Utils
 
 
 class Player():
-    def __init__(self, units, structures, resources, keyMap, commandMap):
+    def __init__(self, units, structures, resources, keyMap, commandMap, map):
         #Atributos
         self.units = units
         self.unitsSelected = []
@@ -15,6 +15,12 @@ class Player():
         self.pulsado = False
         self.initialX = 0
         self.initialY = 0
+        self.map = map
+    
+    def setBasePlayer(self, base):
+        self.base = base
+
+
 
     def processEvent(self,event):
         if event.type == pygame.KEYDOWN:
@@ -49,7 +55,12 @@ class Player():
             for i in range(param.__len__()):
                 #print("ME han mandado:" ,param[i])
                 self.unitsSelected[i].paths = param[i]['path']
-                self.unitsSelected[i].setOrder(param[i])
+                # En funcion de la orden cambiarle el estado a la unidad
+                if param[i]['order'] == Command.CommandId.MINAR:
+                    self.unitsSelected[i].changeToMovingToMining()
+                    self.unitsSelected[i].setCristal(param[i]['cristal'])
+                elif param[i]['order'] == Command.CommandId.MOVER:
+                    self.unitsSelected[i].changeToMove()
         elif id == Command.CommandId.GENERAR_UNIDAD:
             for i in self.structuresSelected:
                 print("structura ", i.id)
@@ -94,3 +105,6 @@ class Player():
             "keyMap": self.keyMap,
             "commandMap": self.commandMap,
         }
+
+    def getMap(self):
+        return self.map
