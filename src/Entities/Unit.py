@@ -228,6 +228,9 @@ class Unit(Entity):
     #Solo los worker pasan a minar
     def changeToMining(self):
         pass
+    
+    def changeToMovingToMining(self):
+        pass
 
     # Pasa a estado quieto
     def changeToStill(self):

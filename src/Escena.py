@@ -24,9 +24,11 @@ class Escena():
 
     def procesarEvent(self, event):
         #Conseguir el comando
-        command = self.raton.processEvent(event, self.camera.x, self.camera.y)
-        if Utils.state == System_State.ONGAME:
+        if event.type == pg.MOUSEBUTTONDOWN or event.type == pg.MOUSEBUTTONUP:
+            command = self.raton.processEvent(event, self.camera.x, self.camera.y)
+        else:
             command = self.p1.processEvent(event)
+        if Utils.state == System_State.ONGAME:
             #ejecutar el comando
             if not self.raton.building:
                 if command.id == CommandId.GENERAR_UNIDAD:
