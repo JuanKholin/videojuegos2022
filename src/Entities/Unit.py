@@ -296,7 +296,7 @@ class Unit(Entity):
 
     def getPosition(self):
         r = self.getRect()
-        return(r.x + r.w/2, r.y + r.h/2) #!!!
+        return(r.x + r.w/2, r.y + r.h) #!!!
 
     def getX(self):
         return self.x

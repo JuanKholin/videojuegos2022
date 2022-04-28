@@ -24,7 +24,7 @@ OBSTACLE = 1
 UNIT = 2
 CRYSTAL = 3
 
-CLOCK = pygame.time.Clock()
+#CLOCK = pygame.time.Clock()
 
 #contador del sistema
 SYSTEM_CLOCK = 0
@@ -191,9 +191,9 @@ def getGlobalTime():
     result = GLOBAL_TIME
     return result
 
-def updateGlobalTime():
+def updateGlobalTime(clock):
     global GLOBAL_TIME
-    GLOBAL_TIME += CLOCK.tick(CLOCK_PER_SEC)
+    GLOBAL_TIME += clock.tick(CLOCK_PER_SEC)
 
 def frame(n):
     if SYSTEM_CLOCK % n == 0:

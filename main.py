@@ -111,11 +111,11 @@ def setEntity(player):
 
     player.addStructures(structure1)
     player.addStructures(structure2)
-    player.addStructures(structure3)
+    #player.addStructures(structure3)
     player.addUnits(scv)
 
     zergBuilder = ZergBuilder(15, 14, player1, mapa, False, 8)
-    player1.addStructures(zergBuilder)
+    #player1.addStructures(zergBuilder)
 
     drone = Drone(10, 11, player1)
     player1.addUnits(drone)
@@ -168,4 +168,4 @@ while True:
     #Dibujar
     draw()
 
-    clock.tick(Utils.CLOCK_PER_SEC)
+    updateGlobalTime(clock)

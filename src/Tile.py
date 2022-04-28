@@ -56,4 +56,4 @@ class Tile():
             elif self.type == 3:
                 pygame.draw.rect(screen, Utils.BLUE, pygame.Rect(cameraRectCoords), 1)
             else:
-                pygame.draw.rect(screen, Utils.PURPLE, pygame.Rect(cameraRectCoords), 1)
+                pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(cameraRectCoords), 1)

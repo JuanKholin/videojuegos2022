@@ -118,7 +118,7 @@ class Escena():
 
     def processParam(self, param, tilesObj, tilesCasa, tileClicked, pathsForPlayer, orderForPlayer):
         tileIni = self.mapa.getTile(param[0], param[1])
-        print("Me encuentro en: ", tileIni.tileid)
+        #print("Me encuentro en: ", tileIni.tileid)
         tileObj = tilesObj[0]
         if(tilesObj.__len__() > 1):
             for tile in tilesObj:
@@ -285,14 +285,16 @@ class Escena():
                         if tileSiguiente.type != OBSTACLE and tileSiguiente.type != CRYSTAL:
                             self.mapa.setVecina(tileSiguiente, unit.id)
                             tileSiguiente.setOcupante(unit)
+                    tiles = self.mapa.getAllTileVecinas(tileActual)
+                    for tile in tiles:
+                        if tile.type != OBSTACLE:
+                            self.mapa.setLibre(tile)
+                            #print("SETEO LIBRE POR UNIDAD: ", tile.tileid)
                 else:
                     if tileActual.type != OBSTACLE and tileActual.type != CRYSTAL:
                         self.mapa.setVecina(tileActual, unit.id)
                         tileActual.setOcupante(unit)
-                tiles = self.mapa.getAllTileVecinas(tileActual)
-                for tile in tiles:
-                    if tile.type != OBSTACLE:
-                        self.mapa.setLibre(tile)
+
             else:
 
                 ###input()
@@ -411,11 +413,12 @@ class Escena():
                         self.mapa.setLibre(tileActual)
                         if tileSiguiente.type != 1:
                             self.mapa.setVecina(tileSiguiente, structure.id)
+                            #print("SETEO VECINA POR ESTRUCTURA: ", tileSiguiente.tileid)
                 else:
                     if tileActual.type != 1:
                         self.mapa.setVecina(tileActual, structure.id)
-        if tileActual.type != UNIT:
-            structure.setTilesOcupados()
+                        #print("SETEO VECINA POR ESTRUCTURA: ", tileActual.tileid)
+        structure.setTilesOcupados()
 
     def updateResource(self, res):
         rect = res.getRect()

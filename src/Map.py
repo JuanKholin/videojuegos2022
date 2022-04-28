@@ -115,6 +115,7 @@ class Map():
     #Pone la tile como libre
     def setLibre(self, tile):
         self.map[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = 0
+        self.map[int(tile.centery / self.th)][int(tile.centerx / self.tw)].ocupante = None
 
     #Devuelve una lista de tiles vecinas libres a la dada
     def getTileVecinas(self, tile):
