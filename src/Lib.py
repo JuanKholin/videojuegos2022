@@ -8,7 +8,6 @@ def playSound(sound, n = 1):
     sound.set_volume(Utils.SOUND_VOLUME)
     pygame.mixer.Sound.play(sound, n)
     
-
 def playMusic(music, n = -1, pos = 0):
     if not Utils.haveBGM:
         pygame.mixer.music.load(music)

@@ -15,15 +15,15 @@ class Structure(Entity.Entity):
     training = []
     nBuildSprites = 1
 
-    def __init__(self, hp, mineralCost, generationTime, xini, yini, map, id, player):
-        Entity.Entity.__init__(self, hp, xini*map.tw, yini*map.th, mineralCost, generationTime, id, player)
-        self.map = map
+    def __init__(self, hp, mineralCost, generationTime, xini, yini, mapa, id, player):
+        Entity.Entity.__init__(self, hp, xini*mapa.tw, yini*mapa.th, mineralCost, generationTime, id, player)
+        self.mapa = mapa
         self.player = player
         self.xIni = xini
         self.yIni = yini
-        originX = (xini - round(self.tileW/2))*self.map.tw
-        originY = (yini - round(self.tileH/2))*self.map.th
-        self.rectn = pygame.Rect(originX, originY + self.heightPad/2, self.tileW*self.map.tw - 1, self.tileH*self.map.th - self.heightPad/2 - 1)
+        originX = (xini - round(self.tileW/2))*self.mapa.tw
+        originY = (yini - round(self.tileH/2))*self.mapa.th
+        self.rectn = pygame.Rect(originX, originY + self.heightPad/2, self.tileW*self.mapa.tw - 1, self.tileH*self.mapa.th - self.heightPad/2 - 1)
 
     def getPosition(self):
         return (self.x+self.rectn.w/2, self.y+self.rectn.h/2)
@@ -50,13 +50,13 @@ class Structure(Entity.Entity):
         self.clicked = click
 
     def setPosition(self, x, y):
-        xTile, yTile = self.map.getTileIndex(x, y)
-        originX = (xTile - round(self.tileW/2))*self.map.tw
-        originY = (yTile - round(self.tileH/2))*self.map.th
+        xTile, yTile = self.mapa.getTileIndex(x, y)
+        originX = (xTile - round(self.tileW/2))*self.mapa.tw
+        originY = (yTile - round(self.tileH/2))*self.mapa.th
         self.rectn.x = originX
         self.rectn.y = originY + self.heightPad/2
-        self.rectn.w = self.tileW*self.map.tw - 1
-        self.rectn.h = self.tileH*self.map.th - self.heightPad/2 - 1
+        self.rectn.w = self.tileW*self.mapa.tw - 1
+        self.rectn.h = self.tileH*self.mapa.th - self.heightPad/2 - 1
 
     def update(self):
         pass
@@ -77,13 +77,13 @@ class Structure(Entity.Entity):
         if self.generationCount >= CLOCK_PER_SEC * self.training[0].generationTime:
         #if (getGlobalTime() - self.generationStartTime) > self.training[0].generationTime:
             unit = self.training[0]
-            tile = self.map.getTile(self.x, self.y)
-            libres = self.map.getEntityTilesVecinas(tile)
+            tile = self.mapa.getTile(self.x, self.y)
+            libres = self.mapa.getEntityTilesVecinas(tile)
             if len(libres) > 0:
                 #unit.setTilePosition(libres[0])
                 
                 unit.x = libres[0].centerx
-                unit.y = libres[0].centery - self.map.th
+                unit.y = libres[0].centery - self.mapa.th
                 print(unit.x, unit.y)
 
                 #libres[0].setOcupada(1)
@@ -105,8 +105,8 @@ class Structure(Entity.Entity):
             pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
             pygame.draw.rect(screen, BLACK, pygame.Rect(image.x - camera.x, image.y - camera.y, image.w, image.h),1)
             
-            tile = self.map.getTile(r.x + r.w/2, r.y + r.h/2)
-            libres = self.map.getEntityTilesVecinas(tile)
+            tile = self.mapa.getTile(r.x + r.w/2, r.y + r.h/2)
+            libres = self.mapa.getEntityTilesVecinas(tile)
             pygame.draw.rect(screen, BLACK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, 40, 40),5)
             for tile in libres:
                 pygame.draw.rect(screen, PINK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, tile.w, tile.h),1)
@@ -114,8 +114,8 @@ class Structure(Entity.Entity):
     def drawBuildStructure(self, screen, camera):
         r = self.getRect()
         #pygame.draw.rect(screen, GREEN, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h), 5)
-        tiles = self.map.getRectTiles(r)
-        self.map.drawTiles(screen, camera, tiles)
+        tiles = self.mapa.getRectTiles(r)
+        self.mapa.drawTiles(screen, camera, tiles)
 
         sprite = self.getBuildSprite()
         image = self.getFinalImage()
@@ -123,7 +123,7 @@ class Structure(Entity.Entity):
 
     def checkTiles(self):
         r = self.getRect()
-        tiles = self.map.getRectTiles(r)
+        tiles = self.mapa.getRectTiles(r)
         ok = True
         tiles_set = set(tiles)
         if len(tiles_set) == self.tileH*self.tileW:
@@ -152,12 +152,12 @@ class Structure(Entity.Entity):
 
     def setTilesOcupados(self):
         rect = self.getRect()
-        x, y = self.map.getTileIndex(rect.x, rect.y)
-        while y*self.map.th <= rect.y+rect.h:
-            x, _ = self.map.getTileIndex(rect.x, rect.y)
-            while x*self.map.tw <= rect.x+rect.w:
-                tile = self.map.map[y][x]
-                self.map.setVecina(tile, self.id)
+        x, y = self.mapa.getTileIndex(rect.x, rect.y)
+        while y*self.mapa.th <= rect.y+rect.h:
+            x, _ = self.mapa.getTileIndex(rect.x, rect.y)
+            while x*self.mapa.tw <= rect.x+rect.w:
+                tile = self.mapa.mapa[y][x]
+                self.mapa.setVecina(tile, self.id)
                 tile.setOcupante(self)
                 x += 1
             y += 1

@@ -18,9 +18,12 @@ class Worker(Unit):
         
         self.oreTransportingFrames = oreTransportingFrames
 
+    # Indica a la unidad que recolecte mineral o gas del objetivo, si se encuentra
+    # un obstaculo de camino lo esquivara. Recolecta desde la tile libre mas cercana
+    def mine(self, resource):
+        pass # Because esto es Unit, no Worker
 
     def changeToMining(self):
-        print("PASO AL MINING")
         self.state = State.MINING
         self.dir = int(4 - (self.miningAngle * 8 / math.pi)) % 16
         self.count = 0

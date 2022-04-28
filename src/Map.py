@@ -10,7 +10,7 @@ class Map():
     def __init__(self, w, h, load, codedMap = None): #load true si quieres que cargue el codedMap
         self.tw = 40
         self.th = 40
-        self.map = []
+        self.mapa = []
         #matriz de tiles codificadas para guardar en fichero. Formato: "tipoSprite" + "numSprite"
         self.codedMap = codedMap
         self.w = w
@@ -29,29 +29,29 @@ class Map():
         lastTileX, lastTileY = self.getTileIndex(camera.x + camera.w, camera.y + camera.h)
         for i in range(firstTileY, lastTileY + 1):
             for j in range(firstTileX, lastTileX + 1):
-                self.map[i][j].draw(screen, camera)
+                self.mapa[i][j].draw(screen, camera)
 
     #Pone a true las Tiles del rectangulo que forman x,y,w,h
     def addObstacle(self, x, y, w, h):
         for i in range(h): #Recorro el mapa  por las filas
             for j in range(w): #En la fila i recorro las columnas
-                self.map[i + int(y / self.th)][j + int(x / self.tw)].type = 1
+                self.mapa[i + int(y / self.th)][j + int(x / self.tw)].type = 1
 
     def addOre(self, x, y):
         #print(int(y / self.th), int(x / self.tw))
-        self.map[int(y / self.th)][int(x / self.tw)].type = 3
+        self.mapa[int(y / self.th)][int(x / self.tw)].type = 3
 
     #Devuelve la Tile que se encuentra en las coordenadas x,y
     def getTile(self, x, y):
         xaux = int(x / self.tw)
         yaux = int(y / self.th)
 
-        if int(x / self.tw) >= len(self.map[0]):
-            xaux = len(self.map[0]) - 1
-        if int(y / self.th) >= len(self.map):
-            yaux = len(self.map) - 1
+        if int(x / self.tw) >= len(self.mapa[0]):
+            xaux = len(self.mapa[0]) - 1
+        if int(y / self.th) >= len(self.mapa):
+            yaux = len(self.mapa) - 1
         #print(xaux, yaux)
-        return self.map[yaux][xaux]
+        return self.mapa[yaux][xaux]
 
     def getRectTiles(self, rect):
         tiles = []
@@ -60,7 +60,7 @@ class Map():
             x, _ = self.getTileIndex(rect.x, rect.y)
             while x*self.tw <= rect.x+rect.w:
                 if x*self.tw < self.w and y*self.th < self.h:
-                    tiles.append(self.map[y][x])
+                    tiles.append(self.mapa[y][x])
                 x += 1
             y += 1
         return tiles
@@ -93,12 +93,12 @@ class Map():
         xaux = int(x / self.tw)
         yaux = int(y / self.th)
 
-        if xaux >= len(self.map[0]):
-            xaux = len(self.map[0]) - 1
+        if xaux >= len(self.mapa[0]):
+            xaux = len(self.mapa[0]) - 1
         elif xaux < 0:
             xaux = 0
-        if yaux >= len(self.map):
-            yaux = len(self.map) - 1
+        if yaux >= len(self.mapa):
+            yaux = len(self.mapa) - 1
         elif yaux < 0:
             yaux = 0
         #print(xaux, yaux)
@@ -114,12 +114,12 @@ class Map():
 
     #Pone la tile como recurso
     def setRecurso(self, tile):
-        self.map[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = 3
+        self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = 3
 
     #Pone la tile como libre
     def setLibre(self, tile):
-        self.map[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = 0
-        self.map[int(tile.centery / self.th)][int(tile.centerx / self.tw)].ocupante = None
+        self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = 0
+        self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].ocupante = None
 
     #Devuelve una lista de tiles vecinas libres a la dada
     def getTileVecinas(self, tile):
@@ -242,10 +242,10 @@ class Map():
         return path
 
     def setTileG(self, tile, g):
-        self.map[int(tile.centery / self.th)][int(tile.centerx / self.tw)].g = g
+        self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].g = g
 
     def setTilePadre(self, tile, padre):
-        self.map[int(tile.centery / self.th)][int(tile.centerx / self.tw)].padre = padre
+        self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].padre = padre
 
     def getTileVecinaCercana(self, tileIni, tileObj):
         tiles = self.getTileVecinas(tileObj)
@@ -366,11 +366,11 @@ class Map():
         self.h = len(self.codedMap) * self.th
         
         for i in range(len(self.codedMap)):
-            self.map.insert(i,[])#Es una matriz que representa el mapa(0 es suelo, 1 es obstaculo, 2 vecino)
+            self.mapa.insert(i,[])#Es una matriz que representa el mapa(0 es suelo, 1 es obstaculo, 2 vecino)
             for j in range(len(self.codedMap[0])):
                 tile_sprite, type = self.loadTile(str(self.codedMap[i][j]))
                 tile = Tile.Tile(i*len(self.codedMap) + j, self.tw * j, self.th * i, self.tw, self.th, tile_sprite, type)
-                self.map[i].insert(j,tile)
+                self.mapa[i].insert(j,tile)
 
     def loadTile(self, code):
         if code[0] == '1': #terreno

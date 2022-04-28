@@ -51,7 +51,6 @@
                 pathC.append(path1)
                 posIni = posFin
 
-print(self.order['order'])
             if self.order != 0:
                 if self.order['order'] == CommandId.TRANSPORTAR_ORE:
                     #sumar minerales al jugador

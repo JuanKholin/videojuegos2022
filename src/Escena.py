@@ -4,11 +4,9 @@ import json
 from . import Player, Raton
 from .Utils import *
 from .Command import *
-
 from .Entities import TerranBarracks, ZergBuilder
 from .Loader import *
 from datetime import datetime
-
 
 
 class Escena():
@@ -50,16 +48,12 @@ class Escena():
                     orderForPlayer = []
                     for param in command.params:
                         self.processParam(param, tileClicked, tileClicked, orderForPlayer)
-                    self.p1.execute(CommandId.ORDENAR, orderForPlayer)
+                    self.p1.execute(CommandId.ORDENAR, orderForPlayer, tileClicked)
 
                     #for param in commandp2.params:
                     #   self.processParam(param, tilesObj, tilesCasa, tileClicked, pathsForPlayer, orderForPlayer)
                     #self.p2.execute(CommandId.ORDENAR, orderForPlayer)
                 
-                
-
-
-
     def processParam(self, param, tileObj, tileClicked , orderForPlayer):
         tileIni = self.mapa.getTile(param[0], param[1])
         if tileObj.type != 0: #Esta ocupada
@@ -67,7 +61,7 @@ class Escena():
         path = calcPath(tileIni, tileObj, self.mapa)
         # COMPROBAR SI HA CLICKADO UN ORE
         order = {'order': CommandId.MOVER, 'angle': 0, 'path': path}
-        if tileClicked.type == CRYSTAL:
+        if tileClicked.type == RESOURCE:
             Cristal = tileClicked.ocupante
             order['order'] = CommandId.MINAR
             order['cristal'] = Cristal
@@ -183,7 +177,7 @@ class Escena():
         return ZergBuilder(0, 0, None, self.mapa, False, 8)
 
     def toDictionary(self):
-        return {
+        return{
             "p1": self.p1.toDictionary(self.mapa),
             "p2": self.p2.toDictionary(self.mapa),
             "mapa": self.mapa.toDictionary(),

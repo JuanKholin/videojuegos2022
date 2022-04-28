@@ -1,8 +1,6 @@
 from enum import Enum, auto, IntEnum
 from pickle import GLOBAL
 import math
-
-
 import pygame
 
 DEBBUG = True
@@ -21,9 +19,11 @@ DAMAGE_IND = 0
 COOLDOWN_IND = 1
 RANGE_IND = 2
 
+# Tiles types:
+EMPTY = 0
 OBSTACLE = 1
 UNIT = 2
-CRYSTAL = 3
+RESOURCE = 3
 
 #CLOCK = pygame.time.Clock()
 
@@ -70,13 +70,11 @@ class State(Enum):
     STILL = auto()
     MOVING = auto()
     ATTACKING = auto()
+    MINING = auto()
+    ORE_TRANSPORTING = auto()
+    GAS_TRANSPORTING = auto()
     DYING = auto()
     DEAD = auto()
-    ORE_TRANSPORTING = auto()
-    BARREL_TRANSPORTING = auto()
-    MINING = auto()
-    MOVING_TO_MINING = auto()
-
 
 class Path():
     def __init__(self, angle, dist, posFin):
@@ -231,9 +229,6 @@ def calcPath(tileIni, tileObj, mapa):
             path.append(path1)
             posIni = posFin
         return path
-
-
-
 
 ELEVACION_PATH = "SPRITE/tile/elevacion/tile0"
 TERRENO_PATH = "SPRITE/tile/terreno/tile00"

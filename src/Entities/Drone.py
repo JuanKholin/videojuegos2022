@@ -24,7 +24,9 @@ TOTAL_FRAMES = 391 # 23 ristas de 17 frames (solo son necesarios 16 de cada una)
 FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
           list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
           list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
-          list(range(154, 170)), list(range(171, 306))]
+          list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
+          list(range(205, 221)), list(range(222, 238)), list(range(239, 255)),
+          list(range(256, 272)), list(range(273, 289)), list(range(290, 306))]
 #         list(range(307, 323)), list(range(324, 340)), list(range(341, 357)),
 #         list(range(358, 374)), list(range(375, 391))]
 #DONT_TOUCH_FRAMES = [18, 19, 20, 21, 22]
@@ -33,7 +35,7 @@ STILL_FRAMES = [0]
 ATTACK_FRAMES = [6, 7, 8, 9]
 MOVE_FRAMES = [1, 2, 3, 4, 5]
 ORE_TRANSPORTING_FRAMES = MOVE_FRAMES
-DIE_FRAMES = [10]
+DIE_FRAMES = [10, 11, 12, 13, 14, 15, 16, 17]
 
 INVERSIBLE_FRAMES = len(FRAMES) - 1 # los die frames no se invierten
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
@@ -57,8 +59,7 @@ class Drone(Worker):
                 WEIGHT_PADDING, HEIGHT_PADDING, MOVE_FRAMES, ATTACK_INFO)
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey(BLACK)
-        self.sprites = Entity.divideSpritesheetByRows(spritesheet,
-                SPRITE_PIXEL_ROWS)
+        self.sprites = Entity.divideSpritesheetByRows(spritesheet, SPRITE_PIXEL_ROWS)
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()

@@ -3,7 +3,7 @@ from . import Command, Utils
 
 
 class Player():
-    def __init__(self, units, structures, resources, keyMap, commandMap, map):
+    def __init__(self, units, structures, resources, keyMap, commandMap, mapa):
         #Atributos
         self.units = units
         self.unitsSelected = []
@@ -15,7 +15,7 @@ class Player():
         self.pulsado = False
         self.initialX = 0
         self.initialY = 0
-        self.map = map
+        self.mapa = mapa
     
     def setBasePlayer(self, base):
         self.base = base
@@ -32,6 +32,9 @@ class Player():
 
 
     def update(self):
+        for unit in self.unitsSelected:
+            if unit.getHP() == 0:
+                self.unitsSelected.remove(unit)
         for unit in self.units:
             unit.update()
         for structure in self.structures:
@@ -43,7 +46,7 @@ class Player():
     def addStructures(self,structures):
         self.structures.append(structures)
 
-    def execute(self,id, param):
+    def execute(self, id, param, tileClicked):
         if id == Command.CommandId.MOVER: #Mover unidades
             for i in range(param.__len__()):
                 self.unitsSelected[i].paths = param[i]
@@ -55,10 +58,9 @@ class Player():
                 self.unitsSelected[i].paths = param[i]['path']
                 # En funcion de la orden cambiarle el estado a la unidad
                 if param[i]['order'] == Command.CommandId.MINAR:
-                    self.unitsSelected[i].changeToMovingToMining()
-                    self.unitsSelected[i].setCristal(param[i]['cristal'])
+                    self.unitsSelected[i].mine(param[i]['resource'])
                 elif param[i]['order'] == Command.CommandId.MOVER:
-                    self.unitsSelected[i].changeToMove()
+                    self.unitsSelected[i].move(tileClicked)
         elif id == Command.CommandId.GENERAR_UNIDAD:
             for i in self.structuresSelected:
                 print("structura ", i.id)
@@ -79,17 +81,9 @@ class Player():
         for unit in self.units:
             r = unit.getRect()
             #print(r)
-            pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h),1)
             if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
             r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
-                drawPos = unit.getDrawPosition()
-                if unit.clicked:
-                    pygame.draw.ellipse(screen, Utils.GREEN, [r.x - camera.x, r.y + (0.7*r.h)- camera.y,r.w , 0.3*r.h], 2)
-                #screen.blit(unit.image, [r.x - camera.x, r.y - camera.y])
-                screen.blit(unit.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
-                if unit.clicked:
-                    hp = pygame.transform.chop(pygame.transform.scale(Utils.HP, (50, 8)), ((unit.hp/unit.maxHp) * 50, 0, 50, 0))
-                    screen.blit(hp, [unit.x - camera.x - hp.get_rect().w/2, unit.y + r.h/2 - camera.y])
+                unit.draw(screen, camera)
 
     # Para que la AI pueda acceder a la informacion
     def get_info(self):
@@ -104,5 +98,5 @@ class Player():
             "commandMap": self.commandMap,
         }
 
-    def getMap(self):
-        return self.map
+    def getMapa(self):
+        return self.mapa

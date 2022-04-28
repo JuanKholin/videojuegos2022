@@ -32,6 +32,7 @@ class Cristal():
 
             sprites.append(aux)
         return sprites
+
     def __del__(self):
         print("destruction")
 
@@ -49,9 +50,11 @@ class Cristal():
 
     def getPosition(self):
         r = self.getRect()
-        return(r.x + r.w/2, r.y + r.h)
+        return (r.x + r.w/2, r.y + r.h)
+
     def getDrawPosition(self):
         return(self.x - self.image.get_width()/2,  self.y - self.image.get_height()/2)
+
     # Devuelve el rectangulo que conforma su imagen, creo, esto lo hizo otro
     def getRect(self):
         rectAux = pg.Rect(self.x - X_PADDING,
