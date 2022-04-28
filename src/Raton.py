@@ -147,6 +147,24 @@ class Raton(pygame.sprite.Sprite):
 
     def click(self):
         self.clicked = not self.clicked
+    
+    def checkInGUIPosition(self):
+        yes = False
+        if self.rel_pos[1] > 600:
+            yes = True
+        elif self.rel_pos[0] < 15 and self.rel_pos[1] > 485:
+            yes = True
+        elif self.rel_pos[0] < 30 and self.rel_pos[1] > 490:
+            yes = True    
+        elif self.rel_pos[0] < 40 and self.rel_pos[1] > 510:
+            yes = True
+        elif self.rel_pos[0] < 265 and self.rel_pos[1] > 510:
+            yes = True   
+        elif self.rel_pos[0] > 735 and self.rel_pos[1] > 585:
+            yes = True 
+        elif self.rel_pos[0] > 750 and self.rel_pos[1] > 535:
+            yes = True 
+        return yes  
 
     def draw(self, screen, camera):
         if Utils.state == System_State.ONGAME:
@@ -290,8 +308,3 @@ class point(pygame.sprite.Sprite):
     def draw(self, screen, camera):
         screen.blit(self.image, (self.rect.x - camera.x, self.rect.y - camera.y))
         
-    def checkInGUIPosition(self):
-        yes = False
-        if self.rel_pos[0] < 200 and self.rel_pos[1] > 800:
-            yes = False 
-        return yes  
