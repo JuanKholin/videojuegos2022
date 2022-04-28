@@ -69,3 +69,7 @@ class Cristal():
             "x": self.x,
             "y": self.y,
         }
+
+    def getCenter(self):
+        rect = self.getRect()
+        return rect.x + rect.w/2, rect.y + rect.h/2

@@ -142,6 +142,13 @@ class Worker(Unit):
         if len(self.paths) == 0: #Hay que ponerse a minar
             print("Hay que ponerse a minar")
             self.startTimeMining = getGlobalTime()
+            xCristal, yCristal = self.cristal.getCenter()
+            posicionActual = self.getPosition()
+            self.angle = math.atan2(yCristal - posicionActual[1], xCristal - posicionActual[0])
+            if self.angle < 0:
+                self.angle = -self.angle
+            else:
+                self.angle = 2 * math.pi - self.angle
             self.miningAngle = self.angle
             self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
             self.changeToMining()

@@ -408,6 +408,30 @@ class Unit(Entity):
         print(self.state)
         if self.state == State.MOVING:
             self.paths = []
+        elif self.state == State.MOVING_TO_MINING:
+            tilesCristal = self.tilesCristal()
+            if tilesCristal.__len__() == 0: # Me he quedado sin sitio
+                self.changeToStill()
+            else:
+                posicionActual = self.getPosition()
+                tileActual = self.mapa.getTile(posicionActual[0], posicionActual[1])
+                tileObj = tilesCristal[0]
+                for tile in tilesCristal:
+                    if tile.heur(tileActual) < tileObj.heur(tileActual):
+                        tileObj = tile
+                self.paths = calcPath(tileActual, tileObj, self.mapa)
+        elif self.state == State.ORE_TRANSPORTING:
+            tilesCasa = self.tilesCasa()
+            if tilesCasa.__len__() == 0: # Me he quedado sin sitio
+                self.paths = []
+            else:
+                posicionActual = self.getPosition()
+                tileActual = self.mapa.getTile(posicionActual[0], posicionActual[1])
+                tileObj = tilesCasa[0]
+                for tile in tilesCasa:
+                    if tile.heur(tileActual) < tileObj.heur(tileActual):
+                        tileObj = tile
+                self.paths = calcPath(tileActual, tileObj, self.mapa)
 
     def tilesCasa(self):
         tilesCasa = []
