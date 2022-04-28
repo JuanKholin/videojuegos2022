@@ -80,7 +80,12 @@ class Structure(Entity.Entity):
             tile = self.map.getTile(self.x, self.y)
             libres = self.map.getEntityTilesVecinas(tile)
             print(libres[0].type, libres[0].tileid)
-            unit.setTilePosition(libres[0])
+            #unit.setTilePosition(libres[0])
+            
+            r = unit.getRect()
+            #(r.x + r.w/2, r.y + r.h)
+            unit.x = libres[0].centerx
+            unit.y = libres[0].centery - self.map.th
             print(unit.x, unit.y)
 
             #libres[0].setOcupada(1)

@@ -7,7 +7,7 @@ class Entity():
         self.generationTime = generationTime
         self.id = id
         self.x = xIni
-        self.y = yIni
+        self.y = yIni - 40
         self.hp = 200
         self.player = player
 
