@@ -1,7 +1,7 @@
 
 
 import math
-from . import Utils
+from .Utils import *
 import pygame
 
 
@@ -33,7 +33,7 @@ class Tile():
         self.ocupante = ocupante
         
     def setOcupada(self, id):
-        self.type = Utils.UNIT
+        self.type = UNIT
         self.id = id
         
     def getRect(self):
@@ -44,16 +44,16 @@ class Tile():
         return math.sqrt(int(((tfin.centerx - self.centerx)/40))**2 + int((tfin.centery - self.centery)/40)**2)
     
     def draw(self, screen, camera):
-        if not Utils.DEBBUG:
+        if not DEBBUG:
             screen.blit(self.image, [self.x - camera.x, self.y - camera.y])
         else:
             globalRectCoords = self.getRect()
             cameraRectCoords = (globalRectCoords[0] - camera.x, globalRectCoords[1] - camera.y, globalRectCoords[2], globalRectCoords[3])
             if self.type == 1:
-                pygame.draw.rect(screen, Utils.RED, pygame.Rect(cameraRectCoords), 1)
-            elif self.type == 0:
-                pygame.draw.rect(screen, Utils.GREEN, pygame.Rect(cameraRectCoords), 1)
+                pygame.draw.rect(screen, RED, pygame.Rect(cameraRectCoords), 1)
+            elif self.type == EMPTY:
+                pygame.draw.rect(screen, GREEN, pygame.Rect(cameraRectCoords), 1)
             elif self.type == 3:
-                pygame.draw.rect(screen, Utils.BLUE, pygame.Rect(cameraRectCoords), 1)
+                pygame.draw.rect(screen, BLUE, pygame.Rect(cameraRectCoords), 1)
             else:
-                pygame.draw.rect(screen, Utils.BLACK, pygame.Rect(cameraRectCoords), 1)
+                pygame.draw.rect(screen, BLACK, pygame.Rect(cameraRectCoords), 1)

@@ -26,7 +26,7 @@ class Escena():
             command = self.raton.processEvent(event, self.camera.x, self.camera.y)
         else:
             command = self.p1.processEvent(event)
-        if Utils.state == System_State.ONGAME:
+        if getGameState() == System_State.ONGAME:
             #ejecutar el comando
             if not self.raton.building:
                 if command.id == CommandId.GENERAR_UNIDAD:
@@ -65,8 +65,13 @@ class Escena():
             Cristal = tileClicked.ocupante
             order['order'] = CommandId.MINAR
             order['cristal'] = Cristal
+        elif tileClicked.type == UNIT: # Ataque?
+            attacked = tileClicked.ocupante
+            if attacked.getPlayer() != self.p1:
+                order['order'] = CommandId.ATTACK
+                order['attackedOne'] = attacked
         else:
-            rectClicked = Raton.createRect(tileClicked.centerx,tileClicked.centery,tileClicked.centerx + 1, tileClicked.centery + 1)
+            rectClicked = Raton.createRect(tileClicked.centerx, tileClicked.centery, tileClicked.centerx + 1, tileClicked.centery + 1)
             for struct in self.p1.structures:
                 if Raton.collideRect(struct.getRect(), rectClicked):
                     order = struct.getOrder()

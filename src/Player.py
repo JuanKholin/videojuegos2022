@@ -1,5 +1,6 @@
 import pygame, math
-from . import Command, Utils
+from . import Utils
+from .Command import *
 
 
 class Player():
@@ -20,21 +21,18 @@ class Player():
     def setBasePlayer(self, base):
         self.base = base
 
-    def processEvent(self,event):
+    def processEvent(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key in self.keyMap:
                 for structure in self.structuresSelected:
                     command = structure.command(self.keyMap[event.key])
-                    if command != Command.Command(Command.CommandId.NULO):
+                    if command != Command(CommandId.NULO):
                         return command
-                return Command.Command(self.keyMap[event.key])
-        return Command.Command(Command.CommandId.NULO)
+                return Command(self.keyMap[event.key])
+        return Command(CommandId.NULO)
 
 
     def update(self):
-        for unit in self.unitsSelected:
-            if unit.getHP() == 0:
-                self.unitsSelected.remove(unit)
         for unit in self.units:
             unit.update()
         for structure in self.structures:
@@ -47,25 +45,27 @@ class Player():
         self.structures.append(structures)
 
     def execute(self, id, param, tileClicked):
-        if id == Command.CommandId.MOVER: #Mover unidades
+        if id == CommandId.MOVER: #Mover unidades
             for i in range(param.__len__()):
                 self.unitsSelected[i].paths = param[i]
                 #for path in param[i]:
                     #print("Posicion final: ",path.posFin, path.angle)
-        elif id == Command.CommandId.ORDENAR:
+        elif id == CommandId.ORDENAR:
             for i in range(param.__len__()):
                 #print("ME han mandado:" ,param[i])
                 self.unitsSelected[i].paths = param[i]['path']
                 # En funcion de la orden cambiarle el estado a la unidad
-                if param[i]['order'] == Command.CommandId.MINAR:
+                if param[i]['order'] == CommandId.MINAR:
                     self.unitsSelected[i].mine(param[i]['resource'])
-                elif param[i]['order'] == Command.CommandId.MOVER:
+                elif param[i]['order'] == CommandId.MOVER:
                     self.unitsSelected[i].move(tileClicked)
-        elif id == Command.CommandId.GENERAR_UNIDAD:
+                elif param[i]['order'] == CommandId.ATTACK:
+                    self.unitsSelected[i].attack(param[i]['attackedOne'])
+        elif id == CommandId.GENERAR_UNIDAD:
             for i in self.structuresSelected:
                 print("structura ", i.id)
                 i.execute(id)
-        elif id == Command.CommandId.BUILD_BARRACKS:
+        elif id == CommandId.BUILD_BARRACKS:
             for i in self.structuresSelected:
                 i.execute(id)
 
@@ -84,6 +84,9 @@ class Player():
             if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
             r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
                 unit.draw(screen, camera)
+
+    def removeUnit(self, unit):
+        self.unitsSelected.remove(unit)
 
     # Para que la AI pueda acceder a la informacion
     def get_info(self):

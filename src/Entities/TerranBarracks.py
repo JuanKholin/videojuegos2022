@@ -24,7 +24,7 @@ class TerranBarracks(Structure):
 
     def __init__(self, xini, yini, player, map, building, id):
         Structure.__init__(self, HP, TERRAN_BARRACK_MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
-        self.sprites = Utils.cargarSprites(Utils.TERRAN_BARRACK_PATH, 6, False, Utils.WHITE, 1.1)
+        self.sprites = cargarSprites(TERRAN_BARRACK_PATH, 6, False, WHITE, 1.1)
         self.building = building
         self.image = self.sprites[self.index]
         self.finalImage = self.sprites[4]

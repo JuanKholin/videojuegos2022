@@ -55,6 +55,7 @@ class Raton(pygame.sprite.Sprite):
     collideEnemy = False
     collideResourse = False
     pulsado = False
+    derPulsado = False
     building = False
     buildStructure = None
     def __init__(self, player, enemy, resources):
@@ -64,7 +65,7 @@ class Raton(pygame.sprite.Sprite):
         self.sprite2 = cargarSprites(MOUSE_PATH + "tile0", 48, True, WHITE, m=34) #raton selectedUnit
         self.sprite3 = cargarSprites(MOUSE_PATH + "tile0", 65, True, WHITE, m=51) #raton selectedMineral
         
-        self.clickSprite = pygame.image.load(MOUSE_PATH+"click.png").convert_alpha()
+        self.clickSprite = pygame.image.load(MOUSE_PATH + "click.png").convert_alpha()
         self.image = self.sprite[0]
         self.rect = self.image.get_rect() #Para posicionar el sprite
         pygame.mouse.set_visible(False)
@@ -77,8 +78,8 @@ class Raton(pygame.sprite.Sprite):
         self.point.update()
         self.rel_pos = pygame.mouse.get_pos()
         self.real_pos = (self.rel_pos[0] + camera.x, self.rel_pos[1] + camera.y)
-        self.rect.x = self.rel_pos[0] - self.rect.width/2
-        self.rect.y = self.rel_pos[1] - self.rect.height/2
+        self.rect.x = self.rel_pos[0] - self.rect.width / 2
+        self.rect.y = self.rel_pos[1] - self.rect.height / 2
 
         #la posicion del cursor es relativa a la camara (por que tiene dos rectangulos? (self.rect y mouseRect))
         #mouseRect = pygame.Rect(self.real_pos[0], self.real_pos[1], 1, 1)
@@ -178,11 +179,12 @@ class Raton(pygame.sprite.Sprite):
             screen.blit(self.image, (self.rect.x, self.rect.y))
         else:
             screen.blit(self.sprite[self.index], (self.rect.x, self.rect.y))
+
     def drawBuildStructure(self, screen, camera):       
         if self.buildStructure != None:
             self.buildStructure.drawBuildStructure(screen, camera)
     
-
+    
     def processEvent(self, event, cameraX, cameraY):
         command = Command.Command(Command.CommandId.NULO) # 0 es nada
         self.clicked = False
@@ -200,7 +202,8 @@ class Raton(pygame.sprite.Sprite):
                         self.initialX = real_mouse_pos[0]
                         self.initialY = real_mouse_pos[1]
             if click_type[2]:
-                if not self.pulsado:
+                if not self.derPulsado:
+                    self.derPulsado = True
                     if not self.building:
                         command.setId(Command.CommandId.MOVER)
                         #print("CALCULANDO PUNTOS")
@@ -263,6 +266,7 @@ class Raton(pygame.sprite.Sprite):
 
                 elif not type[2]:
                     print('click der liberado', real_mouse_pos[0], real_mouse_pos[1], event.type)
+                    self.derPulsado = False
                     if self.building:
                         self.buildStructure = None
                         self.building = False

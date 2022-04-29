@@ -11,7 +11,7 @@ class Entity():
         self.hp = hp
         self.player = player
         if player != None:
-            self.playerMapa = player.getMapa()
+            self.mapa = player.getMapa()
     def update():
         pass
 

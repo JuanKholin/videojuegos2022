@@ -3,7 +3,7 @@ import random
 import pygame
 import math
 from tokenize import Double
-from . import Utils
+from .Utils import *
 from . import Tile
 
 class Map():
@@ -16,8 +16,8 @@ class Map():
         self.w = w
         self.h = h
         self.tiles = [[], []]
-        self.tiles.insert(0, Utils.cargarSprites(Utils.TERRENO_PATH, 8, False))
-        self.tiles.insert(1, Utils.cargarSprites(Utils.ELEVACION_PATH, 40, True))
+        self.tiles.insert(0, cargarSprites(TERRENO_PATH, 8, False))
+        self.tiles.insert(1, cargarSprites(ELEVACION_PATH, 40, True))
         if load:
             if codedMap == None:
                 self.generateRandomMap()
@@ -82,9 +82,9 @@ class Map():
         for tile in tiles:
             r = tile.getRect()
             if tile.type == 0:
-                pygame.draw.rect(screen, Utils.GREEN, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
+                pygame.draw.rect(screen, GREEN, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
             else:
-                pygame.draw.rect(screen, Utils.RED, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
+                pygame.draw.rect(screen, RED, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
 
     def getTileCenter(self, x, y):
         return ((x*self.tw - self.tw/2), (y*self.th - self.th/2))
@@ -114,11 +114,11 @@ class Map():
 
     #Pone la tile como recurso
     def setRecurso(self, tile):
-        self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = 3
+        self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = RESOURCE
 
     #Pone la tile como libre
     def setLibre(self, tile):
-        self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = 0
+        self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = EMPTY
         self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].ocupante = None
 
     #Devuelve una lista de tiles vecinas libres a la dada

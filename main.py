@@ -62,25 +62,26 @@ def setEntity(player):
     zergling = Zergling(8, 9, player1)
     player1.addUnits(zergling)
 
-
+    droneAI = Drone(3, 2, player2)
+    player2.addUnits(droneAI)
 
 def update():
     clock_update()
     raton.update(camera)
 
-    if Utils.state == System_State.MAINMENU:
+    if getGameState() == System_State.MAINMENU:
         #playMusic(mainMenuBGM, pos = 5)
         #playSound(mainMenuBGM)
         p1Interface.update()
-    elif Utils.state == System_State.MAP1:
+    elif getGameState() == System_State.MAP1:
         #playMusic(map1BGM)
         #cargar mapa
         escena.mapa.load()
         setEntity(player1)
-        Utils.state = System_State.ONGAME
-    elif Utils.state == System_State.ONGAME:
+        setGameState(System_State.ONGAME)
+    elif getGameState() == System_State.ONGAME:
         escena.update()
-    else: #Utils.STATE == Utils.System_State.EXIT:
+    else: #STATE == System_State.EXIT:
         pg.quit()
         sys.exit()
 
@@ -91,7 +92,7 @@ def draw():
     elif Utils.state == System_State.ONGAME:
         escena.draw(screen)
     raton.draw(screen, camera)
-    #Utils.aux(screen)
+    #aux(screen)
     pg.display.flip()
 
 

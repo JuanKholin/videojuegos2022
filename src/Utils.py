@@ -14,6 +14,15 @@ class System_State(Enum):
 
 state = System_State.MAINMENU
 
+def getGameState():
+    global state
+    result = state
+    return result
+
+def setGameState(newState):
+    global state
+    state = newState
+
 # Para el struct de la info de combate
 DAMAGE_IND = 0
 COOLDOWN_IND = 1
