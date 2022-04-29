@@ -1,4 +1,6 @@
 import pygame
+
+from .TerranSoldier import *
 from .TerranWorker import *
 from .Structure import *
 from .. import Player, Map
@@ -54,8 +56,8 @@ class TerranBarracks(Structure):
             print("soy clickeado?")
             if (command_id == CommandId.GENERAR_UNIDAD or command_id == CommandId.GENERATE_SOLDIER) and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
                 self.player.resources -= TERRAN_WORKER_MINERAL_COST
-                terranWorker = TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
-                self.generateUnit(terranWorker)
+                terranSoldier = TerranSoldier(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
+                self.generateUnit(terranSoldier)
 
     def command(self, command):
         if not self.building:

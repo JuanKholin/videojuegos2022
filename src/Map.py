@@ -63,23 +63,27 @@ class Map():
         while x <= finx:
             tileUp = self.getTile(x,y - 40)
             tileDown = self.getTile(x,finy + 40)
-            #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
+            print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
             if tileUp.type == 0:
+                print("tileUp:", tileUp.tileid)
                 tiles.append(tileUp)
             if tileDown.type == 0:
+                print("tileDown: ", tileDown.tileid)
                 tiles.append(tileDown)
             x += 40
         x = self.getTile(rect.x, rect.y).centerx
         while y <= finy:
             tileUp = self.getTile(x - 40,y)
             tileDown = self.getTile(finx + 40,y)
-            #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
+            print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
             if tileUp.type == 0:
+                print("tileUp:", tileUp.tileid)
                 tiles.append(tileUp)
             if tileDown.type == 0:
+                print("tileDown: ", tileDown.tileid)
                 tiles.append(tileDown)
             y += 40
-        
+        input()
         #FALTAN LAS ESQUINA
         x = self.getTile(rect.x, rect.y).centerx
         finx = rect.x + rect.w
@@ -88,13 +92,17 @@ class Map():
         tileUp = self.getTile(x - 40,y - 40)
         tileDown = self.getTile(finx + 40,y - 40)
         #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
-        tiles.append(tileUp)
-        tiles.append(tileDown)
+        if tileUp.type == 0:
+            tiles.append(tileUp)
+        if tileDown.type == 0:
+            tiles.append(tileDown)
         tileUp = self.getTile(x - 40,finy + 40)
         tileDown = self.getTile(finx + 40,finy + 40)
         #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
-        tiles.append(tileUp)
-        tiles.append(tileDown)
+        if tileUp.type == 0:
+            tiles.append(tileUp)
+        if tileDown.type == 0:
+            tiles.append(tileDown)
         return tiles
 
     def getEntityTilesVecinas(self, tile):

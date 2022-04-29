@@ -91,8 +91,8 @@ class Structure(Entity.Entity):
                 #unit.setTilePosition(libres[0])
                 
                 unit.x = libres[0].centerx
-                unit.y = libres[0].centery - self.mapa.th
-                print("hola?", libres[0].centerx, libres[0].centery)
+                unit.y = libres[0].centery
+                print("hola?", libres[0].tileid)
 
                 #libres[0].setOcupada(1)
 
@@ -114,10 +114,10 @@ class Structure(Entity.Entity):
             #pygame.draw.rect(screen, BLACK, pygame.Rect(image.x - camera.x, image.y - camera.y, image.w, image.h),1)
             
             tile = self.mapa.getTile(r.x + r.w/2, r.y + r.h/2)
-            libres = self.mapa.getEntityTilesVecinas(tile)
+            #libres = self.mapa.getEntityTilesVecinas(tile)
             pygame.draw.rect(screen, BLACK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, 40, 40),5)
-            for tile in libres:
-                pygame.draw.rect(screen, PINK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, tile.w, tile.h),1)
+            #for tile in libres:
+             #   pygame.draw.rect(screen, PINK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, tile.w, tile.h),1)
 
     def drawBuildStructure(self, screen, camera):
         r = self.getRect()

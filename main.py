@@ -54,7 +54,7 @@ def setEntity(player):
     structure2 = TerranBarracks(15, 9, player1, mapa, False, 3)
 
     player.addStructures(structure1)
-    #player.addStructures(structure2)
+    player.addStructures(structure2)
     #player.addStructures(structure3)
     player.addUnits(scv)
 
@@ -71,7 +71,7 @@ def setEntity(player):
     player1.addUnits(zergling)
 
     droneAI = Drone(3, 2, player2)
-    #player2.addUnits(droneAI)
+    player2.addUnits(droneAI)
 
 def update():
     clock_update()

@@ -107,6 +107,7 @@ class Unit(Entity):
             self.updateUnit()
             self.updateMoving()
         elif self.state == State.ATTACKING: # Esta atacando
+            self.updateUnit()
             self.updateAttacking()
         elif self.state == State.MINING: # Esta minando
             self.updateUnit()
@@ -150,6 +151,7 @@ class Unit(Entity):
         if self.attackedOne.getHP() > 0:
             tileActual = self.getTile()
             enemyTile = self.attackedOne.getTile()
+            #print("Estoy en: ", tileActual.tileid, "y el enemigo en: ", enemyTile.tileid)
             if len(self.mapa.Astar(tileActual, enemyTile)) - 1 <= self.range:
                 self.updateAttackInRange()
             elif len(self.paths) > 0:
@@ -262,6 +264,7 @@ class Unit(Entity):
         if self.paths.__len__() > 0:
             unitPos = self.getPosition()
             tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
+            #print("estoy en: ", tileActual.tileid, float(self.x), float(self.y) )
             #CON POSFIN DEL PATH ACTUAL Y EL PATH FINAL(OBJETIVO) CALCULO LAS TILES DE LA SIGUIENTE Y OBJETIVO
             path = self.paths[0]
             pathObj = self.paths[self.paths.__len__() - 1]
@@ -272,7 +275,9 @@ class Unit(Entity):
             if tilePath.type != UNIT or ((tilePath.id == self.id) and (tilePath.type == UNIT)):
                 dirX = math.cos(path.angle)
                 dirY = math.sin(path.angle)
-                tileSiguiente = self.mapa.getTile(int(self.x + dirX*self.speed + 0.5), int(self.y + dirY*self.speed + 0.5))
+                tileSiguiente = self.mapa.getTile(self.x + dirX*self.speed, self.y + dirY*self.speed )
+                #print("la siguiente es: ", tileSiguiente.tileid, self.x + dirX*self.speed, self.y + dirY*self.speed )
+                #input()
                 if tileActual != tileSiguiente :
                     if tileActual.type != OBSTACLE and tileActual.type != RESOURCE:
                         self.mapa.setLibre(tileActual)
@@ -341,13 +346,13 @@ class Unit(Entity):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
-        #WHAT IS THIS?: JUAN: THIS IS EL BUG FIXER :P
+        #WHAT IS THIS?: JUAN: THIS IS EL BUG FIXER :P JUAN DEL PRESENTE AL JUAN DEL PASADO: NO ES UN BUG FIXER ES UNA SOLUCION COCHINA A UN FALLO TUYO >:| JUAN DEL PRESENTE AL JUAN DEL PASADO: ES NECESARIO, A EFECTOS VISUALES Y DE GAMEPLAY NO ESTROPEA NADA
         unitPos = self.getPosition()
         tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
         tiles = self.mapa.getAllTileVecinas(tileActual)
         for tile in tiles:
             if tile.type != OBSTACLE:
-                self.mapa.setLibre(tile)
+               self.mapa.setLibre(tile)
 
     # Pasa a estado moverse
     def changeToMoving(self, paths):
@@ -365,6 +370,7 @@ class Unit(Entity):
         
     # Pasa al ataque HYAAAA!! >:c
     def changeToAttacking(self, attackedOne):
+        print("Pasa al ataque HYAAAA!! >:c")
         self.state = State.ATTACKING
         self.attackedOne = attackedOne
         self.attackCD = self.cooldown
@@ -424,7 +430,7 @@ class Unit(Entity):
 
     def takeAim(self):
         paths = calcPath(self.getPosition(), self.getTile(), self.attackedOne.getTile(), self.mapa)
-        actualPath = paths[1]
+        actualPath = paths[paths.__len__() - 1]
         if actualPath.angle < 0:
             self.angle = -actualPath.angle
         else:
