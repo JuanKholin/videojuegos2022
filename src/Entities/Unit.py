@@ -7,7 +7,7 @@ from ..Command import *
 # Representa a una unidad movil de cualquiera de las razas
 class Unit(Entity):
     def __init__(self, hp, xIni, yIni, mineral_cost, generation_time, speed, framesToRefresh, 
-                    sprites, face, frame, padding, id, player, minePower, timeToMine, inversibleFrames,
+                    sprites, face, frame, padding, id, player, inversibleFrames,
                         frames, dirOffset, attackFrames, stillFrames, moveFrames, dieFrames,  xPadding, yPadding, wPadding, hPadding, attackInfo):
         Entity.__init__(self, hp, xIni, yIni, mineral_cost, generation_time, id, player)
         # Relativo al movimiento de la unidad
@@ -42,10 +42,6 @@ class Unit(Entity):
         self.hPadding = hPadding
         #self.distanceToPoint = 0
 
-        # Info minado
-        self.minePower = minePower
-        self.timeToMine = timeToMine
-
         # Info ataque
         self.damage = attackInfo[DAMAGE_IND]
         self.cooldown = attackInfo[COOLDOWN_IND]
@@ -61,7 +57,8 @@ class Unit(Entity):
     # lo mas cerca posible de esta
     def move(self, objectiveTile):
         paths = calcPath(self.getTile(), objectiveTile, self.mapa)
-        self.changeToMoving(paths)
+        if len(paths) > 0:
+            self.changeToMoving(paths)
 
     # Indica a la unidad que ataque al objetivo seleccionado, si se encuentra un
     # obstaculo de camino lo esquivara y si el objetivo se desplaza este le seguira
@@ -69,8 +66,7 @@ class Unit(Entity):
         if (self.attackedOne != objective) or (self.state != State.ATTACKING):        
             self.changeToAttacking(objective)
 
-    # Indica a la unidad que recolecte mineral o gas del objetivo, si se encuentra
-    # un obstaculo de camino lo esquivara. Recolecta desde la tile libre mas cercana
+    # Indica a la unidad que se acerque lo mas posible a un recurso, ya sea mineral o gas
     def mine(self, resource):
         pos = resource.getPosition()
         tile = self.mapa.getTile(pos[0], pos[1])
@@ -81,7 +77,7 @@ class Unit(Entity):
             for tile in tiles:
                 if tile.heur(ownTile) < bestTile.heur(ownTile):
                     bestTile = tile
-            self.move(self, bestTile)
+            self.move(bestTile)
 
     # Pinta la unidad C:
     def draw(self, screen, camera):
@@ -447,14 +443,14 @@ class Unit(Entity):
         if self.state == State.MOVING:
             self.paths = []
         elif self.state == State.MOVING_TO_MINING:
-            tilesCristal = self.tilesCristal()
-            if tilesCristal.__len__() == 0: # Me he quedado sin sitio
+            tilesResource = self.tilesResource()
+            if tilesResource.__len__() == 0: # Me he quedado sin sitio
                 self.changeToStill()
             else:
                 posicionActual = self.getPosition()
                 tileActual = self.mapa.getTile(posicionActual[0], posicionActual[1])
-                tileObj = tilesCristal[0]
-                for tile in tilesCristal:
+                tileObj = tilesResource[0]
+                for tile in tilesResource:
                     if tile.heur(tileActual) < tileObj.heur(tileActual):
                         tileObj = tile
                 self.paths = calcPath(tileActual, tileObj, self.mapa)
@@ -507,7 +503,7 @@ class Unit(Entity):
                     if self.attackedOne == None:
                         self.changeToStill()
                     #else keepmoving xdxdxd
-                elif self.order['order'] == CommandId.MINAR:
+                elif self.order['order'] == CommandId.MINE:
                     self.miningAngle = self.order['angle']
                     self.basePath = self.order['basePath']
                     self.cristalPath = self.order['cristalPath']

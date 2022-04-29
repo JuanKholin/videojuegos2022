@@ -12,6 +12,7 @@ class Entity():
         self.player = player
         if player != None:
             self.mapa = player.getMapa()
+
     def update():
         pass
 
@@ -25,6 +26,21 @@ class Entity():
         for i in range(int(totalRows / rows)):
             aux = pg.Surface.subsurface(spritesheet, (0, rows * i, maxCol, rows))
             aux = pg.transform.scale2x(aux)
+            #aux = pg.transform.scale(aux, [aux.get_rect().w * 1.6, aux.get_rect().h * 1.6])
+
+            sprites.append(aux)
+        return sprites
+    
+    # Pre: Altura del spritesheet % rows == 0
+    # Post: Devuelve el spritesheet dividido en una lista de sprites sin escalado
+    @staticmethod
+    def divideSpritesheetByRowsNoScale(spritesheet, rows):
+        totalRows = spritesheet.get_height()
+        maxCol = spritesheet.get_width()
+        sprites = []
+        for i in range(int(totalRows / rows)):
+            aux = pg.Surface.subsurface(spritesheet, (0, rows * i, maxCol, rows))
+            #aux = pg.transform.scale2x(aux)
             #aux = pg.transform.scale(aux, [aux.get_rect().w * 1.6, aux.get_rect().h * 1.6])
 
             sprites.append(aux)

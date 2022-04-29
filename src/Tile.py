@@ -57,3 +57,6 @@ class Tile():
                 pygame.draw.rect(screen, BLUE, pygame.Rect(cameraRectCoords), 1)
             else:
                 pygame.draw.rect(screen, BLACK, pygame.Rect(cameraRectCoords), 1)
+
+    def getOcupante(self):
+        return self.ocupante

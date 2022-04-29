@@ -6,7 +6,7 @@ class Soldier(Unit):
                         dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, xPadding, yPadding, wPadding, 
                         hPadding, attackInfo):
         Unit.__init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, 
-                        faces, frame, padding, id, player, minePower, timeToMine, inersibleFrames, frames,
+                        faces, frame, padding, id, player, inersibleFrames, frames,
                             dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, xPadding, yPadding, wPadding, 
                             hPadding, attackInfo)
 
