@@ -146,33 +146,16 @@ class Unit(Entity):
 
     # Aplica un frame a la unidad que esta atacando
     def updateAttacking(self):
-        #MOVIMIENTO
         if self.attackedOne.getHP() > 0:
-            unitPos = self.getPosition()
-            tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
-            enemyPos = self.attackedOne.getPosition()
-            enemyTile = self.mapa.getTile(enemyPos[0], enemyPos[1])
+            tileActual = self.getTile()
+            enemyTile = self.attackedOne.getTile()
             if len(self.mapa.Astar(tileActual, enemyTile)) - 1 <= self.range:
-                self.paths = [] #Me quedo quieto y ataco
-                if self.attackCD > 1: # Si hay CD
-                    self.attackCD -= 1 # Disminuye CD
-                elif self.attackCD == 1: # Si acaba el CD empieza la animacion
-                    self.takeAim()
-                    self.attackCD -= 1
-                    self.frame = -1
-                    self.counter = 0
-                    self.updateAttackingImage()
-                elif self.attackCD == 0:
-                    self.counter += 1
-                    if self.counter >= self.framesToRefresh:
-                        self.counter = 0
-                        self.updateAttackingImage()
-                        if self.frame == 0:
-                            self.makeAnAttack()
-                            self.attackCD = self.cooldown
-            #else:
+                self.updateAttackInRange()
+            elif len(self.paths) > 0:
+                self.updateAttackingRoute()
+            else:
                 # Recalcular camino
-                #self.changeToMoving()
+                self.recalcAttackPaths()
         else: # Se murio el objetivo, pasa a estar quieto
             self.attackedOne = None
             self.changeToStill()
@@ -214,6 +197,39 @@ class Unit(Entity):
         self.mapa.setVecina(tileActual, self.id)
         tileActual.setOcupante(self)
     
+    def updateAttackInRange(self):
+        self.paths = [] #Me quedo quieto y ataco
+        if self.attackCD > 1: # Si hay CD
+            self.attackCD -= 1 # Disminuye CD
+        elif self.attackCD == 1: # Si acaba el CD empieza la animacion
+            self.takeAim()
+            self.attackCD -= 1
+            self.frame = -1
+            self.counter = 0
+            self.updateAttackingImage()
+        elif self.attackCD == 0:
+            self.counter += 1
+            if self.counter >= self.framesToRefresh:
+                self.counter = 0
+                self.updateAttackingImage()
+                if self.frame == 0:
+                    self.makeAnAttack()
+                    self.attackCD = self.cooldown
+
+    def updateAttackingRoute(self):
+        if self.paths.__len__() != 0:
+            actualPath = self.paths[0]
+            if actualPath.dist > 0: # Aun queda trecho
+                self.updatePath(actualPath)
+            else: # Se acaba este camino
+                self.finishPath()
+            self.count += 1
+            if self.count >= self.framesToRefresh:
+                self.count = 0
+                self.updateMovingImage()
+        else:
+            self.changeToStill()
+
     # Pasa de frame en los frames quietos, no cambia nada puesto que esta quieto
     def updateStillImage(self):
         self.frame = (self.frame + 1) % len(self.stillFrames)
@@ -348,7 +364,6 @@ class Unit(Entity):
         
     # Pasa al ataque HYAAAA!! >:c
     def changeToAttacking(self, attackedOne):
-        print("ATTACKING", self.x, self.y)
         self.state = State.ATTACKING
         self.attackedOne = attackedOne
         self.attackCD = self.cooldown
@@ -536,6 +551,11 @@ class Unit(Entity):
                     self.changeToMining()
             else:
                 self.changeToStill()
+
+    def recalcAttackPaths(self):
+        self.paths = calcPath(self.getTile(), self.attackedOne.getTile(), self.mapa)
+        self.updatePath(self.paths[len(self.paths) - 1])
+        self.updateMovingImage()
         
     #####################
     # GETTERS Y SETTERS #
@@ -575,9 +595,6 @@ class Unit(Entity):
     # Getter del player que posee la unidad
     def getPlayer(self):
         return self.player
-
-    def setOrder(self, order):
-        self.order = order
 
     def setCristal(self, cristal):
         self.cristal = cristal

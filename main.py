@@ -4,6 +4,9 @@ import sys
 import math
 import json
 
+
+from src.Entities.TerranSoldier import *
+
 from src.Utils import *
 from src.Command import *
 from src import Player, Raton, Map
@@ -59,6 +62,9 @@ def setEntity(player):
 
     drone = Drone(10, 11, player1)
     player1.addUnits(drone)
+
+    soldierChan = TerranSoldier(6, 3, player1)
+    player1.addUnits(soldierChan)
 
     zergling = Zergling(8, 9, player1)
     player1.addUnits(zergling)

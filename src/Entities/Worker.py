@@ -4,8 +4,6 @@ from .. import Utils
 from ..Command import *
 import math
 
-import pygame as pg
-
 class Worker(Unit):
     def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, 
                     faces, frame, padding, id,player, minePower, timeToMine, inersibleFrames, frames,

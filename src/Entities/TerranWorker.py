@@ -45,8 +45,8 @@ INVERSIBLE_FRAMES = len(FRAMES) - len(DIE_FRAMES) # los die frames no se inviert
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
 # horario y empezando desde el norte, el mapeo dir-flist(range(289, 296))rame es:
 DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
-WEIGHT_PADDING =    64
-HEIGHT_PADDING =    60
+WEIGHT_PADDING =    104
+HEIGHT_PADDING =    100
 X_PADDING =         40
 Y_PADDING =         47
 PADDING = 110

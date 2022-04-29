@@ -51,7 +51,6 @@ class Player():
                 #for path in param[i]:
                     #print("Posicion final: ",path.posFin, path.angle)
         elif id == CommandId.ORDENAR:
-            print("Hole")
             for i in range(param.__len__()):
                 #print("ME han mandado:" ,param[i])
                 self.unitsSelected[i].paths = param[i]['path']

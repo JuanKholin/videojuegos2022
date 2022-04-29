@@ -133,9 +133,9 @@ class Raton(pygame.sprite.Sprite):
             else:
                 self.image = self.sprite[self.index]
         
-        if DEBBUG:
-            if frame(360) == 1:
-                print(self.rel_pos[0], self.rel_pos[1])
+        #if DEBBUG:
+        #    if frame(360) == 1:
+        #        print(self.rel_pos[0], self.rel_pos[1])
 
     def getPosition(self):
         return self.real_pos

@@ -24,7 +24,7 @@ SPRITE_PIXEL_ROWS = 64
 FACES = 8
 FRAME = 0
 #Esto es mentira, salen 220 frames no 296
-TOTAL_FRAMES = 296  # 1     STILL
+TOTAL_FRAMES = 13*17# 1     STILL
                     # 2     GUARDIA
                     # 3-4   ATACAR
                     # 5-13  MOVE
@@ -33,13 +33,13 @@ FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
           list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
           list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
           list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
-          list(range(205, 221)), [289] * 16, [290] * 16, [291] * 16, [292] * 16,
-          [293] * 16, [294] * 16, [295] * 16]
+          list(range(205, 221)), [221] * 16, [222] * 16, [223] * 16, [224] * 16,
+          [225] * 16, [226] * 16, [227] * 16, [228] * 16]
 STILL_FRAMES = [0]
 GUARD_FRAMES = [1]
-ATTACK_FRAMES = [2,3]
-MOVE_FRAMES = [4,5,6,7,8,9,10,11,12]
-DIE_FRAMES = [13, 14, 15, 16, 17, 18, 19]
+ATTACK_FRAMES = [2, 3]
+MOVE_FRAMES = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+DIE_FRAMES = [13, 14, 15, 16, 17, 18, 19, 20]
 
 INVERSIBLE_FRAMES = len(FRAMES) - len(DIE_FRAMES) # los die frames no se invierten
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
@@ -60,7 +60,7 @@ class TerranSoldier(Soldier):
                                             Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ATTACK_INFO)
 
 
-        spritesheet = pg.image.load("./SPRITE/terran_soldier/" + self.spritesName).convert()
+        spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey((WHITE))
         self.sprites = Entity.divideSpritesheetByRows(spritesheet,
                 SPRITE_PIXEL_ROWS)
