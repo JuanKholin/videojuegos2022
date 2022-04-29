@@ -6,6 +6,9 @@ from src.Lib import *
 from src.Utils import *
 
 class Interface():
+    buttonX = 0
+    buttonY = 0
+    
     def __init__(self, player, mouse):
         self.player = player
         self.mouse = mouse
@@ -31,6 +34,9 @@ class Interface():
         self.idExitSelected = 0 
         
         self.soundPlayed = False
+        
+        self.entityOptions = []
+        self.button = []
     
     def update(self):
         if Utils.state == System_State.MAINMENU:
@@ -76,7 +82,13 @@ class Interface():
             self.idExit = (self.idExit + frame(5)) % EXIT_N
             self.idSingleSelected = (self.idSingleSelected + frame(5)) % SINGLE_PLAYER_FB_N
             self.idExitSelected = (self.idExitSelected + frame(5)) % EXIT_FB_N
-        
+        elif Utils.state == System_State.ONGAME:
+            pass
+            self.entityOptions = self.player.selectedStructures.getOptions()
+            self.button = self.getButton(self.EntityOptions)
+            self.buttonX = Utils.BUTTON_X
+            self.buttonY = Utils.BUTTON_Y
+         
     def draw(self, screen):
         if Utils.state == System_State.MAINMENU:
             screen.blit(self.mainMenu, [0, 0])
@@ -105,3 +117,15 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), str(round(Utils.SYSTEM_CLOCK / CLOCK_PER_SEC)), BLACK, 30, (20, 20))
             muestra_texto(screen, times, str(self.player.resources), BLACK, 30, (SCREEN_WIDTH - 40, 20))
             screen.blit(self.gui, (0, 0))
+            opcion = 0
+            for b in self.button:
+                opcion += 1
+                b.draw(screen, self.buttonX, self.buttonY)
+                self.buttonX += Utils.BUTTONPADX
+                if opcion % 3 == 0:
+                    self.buttonY += Utils.BUTTONPADY
+                    self.buttonX = Utils.BUTTON_X
+                if opcion == 9:
+                    break
+                
+            
