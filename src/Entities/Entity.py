@@ -12,6 +12,7 @@ class Entity():
         self.player = player
         if player != None:
             self.mapa = player.getMapa()
+
     def update():
         pass
 
@@ -31,7 +32,7 @@ class Entity():
         return sprites
     
     # Pre: Altura del spritesheet % rows == 0
-    # Post: Devuelve el spritesheet dividido en una lista de sprites
+    # Post: Devuelve el spritesheet dividido en una lista de sprites sin escalado
     @staticmethod
     def divideSpritesheetByRowsNoScale(spritesheet, rows):
         totalRows = spritesheet.get_height()

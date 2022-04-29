@@ -39,7 +39,7 @@ RESOURCE = 3
 #contador del sistema
 SYSTEM_CLOCK = 0
 
-GLOBAL_TIME = 0
+global_time = 0
 
 CLOCK_PER_SEC = 60
 
@@ -199,13 +199,13 @@ def clock_update():
     SYSTEM_CLOCK = (SYSTEM_CLOCK + 1) % 100000
     
 def getGlobalTime():
-    global GLOBAL_TIME
-    result = GLOBAL_TIME
+    global global_time
+    result = global_time
     return result
 
 def updateGlobalTime(clock):
-    global GLOBAL_TIME
-    GLOBAL_TIME += clock.tick(CLOCK_PER_SEC)
+    global global_time
+    global_time += clock.tick(CLOCK_PER_SEC)
 
 def frame(n):
     if SYSTEM_CLOCK % n == 0:

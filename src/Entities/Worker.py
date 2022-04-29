@@ -20,6 +20,7 @@ class Worker(Unit):
         self.minePower = minePower
         self.timeToMine = timeToMine
         self.resource = None
+        self.isMining = False
         self.oreTransportingFrames = oreTransportingFrames
 
     # Indica a la unidad que recolecte mineral o gas del objetivo, si se encuentra
@@ -30,6 +31,7 @@ class Worker(Unit):
     def changeToMining(self, resource):
         if resource.getCapacity() != 0: # Si hay recurso, si es gas agotado es -algo
             self.state = State.MINING
+            self.isMining = False
             self.resource = resource
             pos = self.resource.getPosition()
             tile = self.mapa.getTile(pos[0], pos[1])
@@ -51,6 +53,7 @@ class Worker(Unit):
 
     # Manda a la unidad hacia el recurso
     def moveToMining(self):
+        self.isMining = False
         actualPath = self.paths[len(self.paths) - 1]
         if actualPath.angle < 0:
             self.angle = -actualPath.angle
@@ -63,9 +66,10 @@ class Worker(Unit):
         
     # Ya esta al lado del recurso y prepara el minado
     def startMining(self):
-        self.startTimeMining = getGlobalTime()
-        xCristal, yCristal = self.cristal.getCenter()
+        self.startTimeMining = Utils.getGlobalTime()
+        xCristal, yCristal = self.resource.getCenter()
         posicionActual = self.getPosition()
+        self.isMining = True
         self.angle = math.atan2(yCristal - posicionActual[1], xCristal - posicionActual[0])
         if self.angle < 0:
             self.angle = -self.angle
@@ -77,7 +81,10 @@ class Worker(Unit):
     #Especifico para worker
     def updateMining(self):
         if len(self.paths) == 0:
-            self.updateMiningAct()
+            if self.isMining:
+                self.updateMiningAct()
+            else:
+                self.startMining()
         else:
             self.updateMiningRoute()
     
@@ -92,12 +99,11 @@ class Worker(Unit):
                     self.updateMovingImage()
             else: # Se acaba este camino
                 self.paths.pop(0)
-        else:
-            self.startMining()
 
     def updateMiningAct(self):
         self.count += 1
         if getGlobalTime() - self.startTimeMining > self.timeToMine: #Termina de minar
+            self.isMining = False
             #Hay que volver a base transportando un ore
             self.cantidadMinada = self.resource.getMined(self.minePower)
             self.paths = []
