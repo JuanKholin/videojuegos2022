@@ -40,7 +40,7 @@ class Worker(Unit):
                 for tile in tiles:
                     if tile.heur(ownTile) < bestTile.heur(ownTile):
                         bestTile = tile
-                self.paths = calcPath(self.getTile(), bestTile, self.mapa)
+                self.paths = calcPath(self.getPosition(), self.getTile(), bestTile, self.mapa)
                 if len(self.paths) > 0:
                     self.moveToMining()
                 else:
@@ -65,6 +65,7 @@ class Worker(Unit):
     # Ya esta al lado del recurso y prepara el minado
     def startMining(self):
         self.startTimeMining = Utils.getGlobalTime()
+        print("Start mining", self.startTimeMining)
         xCristal, yCristal = self.resource.getCenter()
         posicionActual = self.getPosition()
         self.isMining = True
@@ -106,7 +107,6 @@ class Worker(Unit):
             self.cantidadMinada = self.resource.getMined(self.minePower)
             self.paths = []
             if self.cantidadMinada == 0: #No ha minado nada, se queda en el sitio
-                del self.resource
                 self.changeToStill()
             else:
                 #Calcular el camino a casa
@@ -117,7 +117,7 @@ class Worker(Unit):
                 for tile in tilesCasa:
                     if tile.heur(tileActual) < tileObj.heur(tileActual):
                         tileObj = tile
-                self.paths = calcPath(tileActual, tileObj, self.mapa)
+                self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
                 self.changeToOreTransporting()
         elif self.count >= self.framesToRefresh:
             self.count = 0
@@ -129,7 +129,6 @@ class Worker(Unit):
         self.image = self.sprites[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
 
     def changeToOreTransporting(self):
-        print("PASO AL ORE TRANSPORTING")
         self.state = State.ORE_TRANSPORTING
         self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
         self.count = 0
@@ -155,7 +154,6 @@ class Worker(Unit):
                 self.player.resources += self.cantidadMinada
                 print("cambiamos a still")
                 self.changeToStill()
-                del self.cristal
             else:
                 #Tengo que volver, calculo el camino a minar
                 self.player.resources += self.cantidadMinada
@@ -173,7 +171,7 @@ class Worker(Unit):
                         if tile.heur(tileActual) < tileObj.heur(tileActual):
                             tileObj = tile
 
-                    self.paths = calcPath(tileActual, tileObj, self.mapa)
+                    self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
                     self.changeToMining(self.resource)
                 
                 

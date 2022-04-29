@@ -19,6 +19,7 @@ GENERATION_TIME = 2
 SPEED = 3
 FRAMES_TO_REFRESH = 10
 SPRITES = "scvJusto.bmp"
+SCALE = 1.5
 SPRITE_PIXEL_ROWS = 72
 FACES = 8
 FRAME = 0
@@ -45,10 +46,10 @@ INVERSIBLE_FRAMES = len(FRAMES) - len(DIE_FRAMES) # los die frames no se inviert
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
 # horario y empezando desde el norte, el mapeo dir-flist(range(289, 296))rame es:
 DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
-WEIGHT_PADDING =    104
-HEIGHT_PADDING =    100
-X_PADDING =         40
-Y_PADDING =         47
+WEIGHT_PADDING =    60
+HEIGHT_PADDING =    60
+X_PADDING =         25
+Y_PADDING =         30
 PADDING = 110
 
 class TerranWorker(Worker):
@@ -65,7 +66,7 @@ class TerranWorker(Worker):
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         self.sprites = Entity.divideSpritesheetByRows(spritesheet,
-                SPRITE_PIXEL_ROWS) + Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
+                SPRITE_PIXEL_ROWS, SCALE) + Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
         self.mirrorTheChosen()
         self.dir = 0
         self.changeToStill()

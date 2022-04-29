@@ -111,7 +111,7 @@ class Structure(Entity.Entity):
         screen.blit(self.image, [image.x - camera.x, image.y - camera.y])
         if DEBBUG:
             pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
-            pygame.draw.rect(screen, BLACK, pygame.Rect(image.x - camera.x, image.y - camera.y, image.w, image.h),1)
+            #pygame.draw.rect(screen, BLACK, pygame.Rect(image.x - camera.x, image.y - camera.y, image.w, image.h),1)
             
             tile = self.mapa.getTile(r.x + r.w/2, r.y + r.h/2)
             libres = self.mapa.getEntityTilesVecinas(tile)

@@ -55,14 +55,46 @@ class Map():
 
     def getRectTiles(self, rect):
         tiles = []
-        _, y = self.getTileIndex(rect.x, rect.y)
-        while y*self.th <= rect.y+rect.h:
-            x, _ = self.getTileIndex(rect.x, rect.y)
-            while x*self.tw <= rect.x+rect.w:
-                if x*self.tw < self.w and y*self.th < self.h:
-                    tiles.append(self.mapa[y][x])
-                x += 1
-            y += 1
+        x = self.getTile(rect.x, rect.y).centerx
+        finx = rect.x + rect.w
+        y = self.getTile(rect.x, rect.y).centery
+        finy = rect.y + rect.h
+        #print(rect.x, rect.y, rect.w, rect.h)
+        while x <= finx:
+            tileUp = self.getTile(x,y - 40)
+            tileDown = self.getTile(x,finy + 40)
+            #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
+            if tileUp.type == 0:
+                tiles.append(tileUp)
+            if tileDown.type == 0:
+                tiles.append(tileDown)
+            x += 40
+        x = self.getTile(rect.x, rect.y).centerx
+        while y <= finy:
+            tileUp = self.getTile(x - 40,y)
+            tileDown = self.getTile(finx + 40,y)
+            #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
+            if tileUp.type == 0:
+                tiles.append(tileUp)
+            if tileDown.type == 0:
+                tiles.append(tileDown)
+            y += 40
+        
+        #FALTAN LAS ESQUINA
+        x = self.getTile(rect.x, rect.y).centerx
+        finx = rect.x + rect.w
+        y = self.getTile(rect.x, rect.y).centery
+        finy = rect.y + rect.h
+        tileUp = self.getTile(x - 40,y - 40)
+        tileDown = self.getTile(finx + 40,y - 40)
+        #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
+        tiles.append(tileUp)
+        tiles.append(tileDown)
+        tileUp = self.getTile(x - 40,finy + 40)
+        tileDown = self.getTile(finx + 40,finy + 40)
+        #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
+        tiles.append(tileUp)
+        tiles.append(tileDown)
         return tiles
 
     def getEntityTilesVecinas(self, tile):
@@ -71,9 +103,7 @@ class Map():
             r = tile.ocupante.getRect()
             tiles = self.getRectTiles(r) #se puede mejorar
             for t in tiles:
-                vecinas = self.getTileVecinas(t)
-                for v in vecinas:
-                    tilesObj.append(v)
+                tilesObj.append(t)
         else:
             tilesObj.append(tile)
         return list(set(tilesObj))

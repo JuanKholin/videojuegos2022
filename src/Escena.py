@@ -62,7 +62,7 @@ class Escena():
         tileIni = self.mapa.getTile(param[0], param[1])
         if tileObj.type != 0: #Esta ocupada
             tileObj = self.mapa.getTileCercana(tileIni, tileObj)
-        path = calcPath(tileIni, tileObj, self.mapa)
+        path = calcPath(param, tileIni, tileObj, self.mapa)
         # COMPROBAR SI HA CLICKADO UN ORE
         order = {'order': CommandId.MOVER, 'angle': 0, 'path': path}
         if tileClicked.type == RESOURCE:
@@ -142,7 +142,7 @@ class Escena():
         finx = x + rect.w
         y = rect.y + 1
         finy = y + rect.h
-        if(res.capacidad < 0):
+        if(res.capacidad <= 0):
             while x <= finx:
                 while y <= finy:
                     self.mapa.setLibre(self.mapa.getTile(x,y))

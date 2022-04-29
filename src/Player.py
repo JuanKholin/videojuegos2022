@@ -52,7 +52,6 @@ class Player():
                     #print("Posicion final: ",path.posFin, path.angle)
         elif id == CommandId.ORDENAR:
             for i in range(param.__len__()):
-                #print("ME han mandado:" ,param[i])
                 self.unitsSelected[i].paths = param[i]['path']
                 # En funcion de la orden cambiarle el estado a la unidad
                 if param[i]['order'] == CommandId.MINE:

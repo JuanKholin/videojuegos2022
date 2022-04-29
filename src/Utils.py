@@ -3,7 +3,7 @@ from pickle import GLOBAL
 import math
 import pygame
 
-DEBBUG = True
+DEBBUG = False
 
 class System_State(Enum):
     MAINMENU = auto()
@@ -246,9 +246,10 @@ def muestra_texto(pantalla,fuente,texto,color, dimensiones, pos):
 def aux(screen):
     muestra_texto(screen, str('monotypecorsiva'), "single player", (210, 255, 124), 25, [270, 150])
 
-def calcPath(tileIni, tileObj, mapa):
+def calcPath(posini, tileIni, tileObj, mapa):
         pathA = mapa.Astar(tileIni,tileObj)
-        posIni = (tileIni.centerx, tileIni.centery)
+        pathA.pop(0)
+        posIni = (posini[0], posini[1])
         path = []
         for tile in pathA:
             posFin = (tile.centerx, tile.centery)

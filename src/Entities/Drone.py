@@ -12,12 +12,13 @@ RANGE = 1
 ATTACK_INFO = [DAMAGE, COOLDOWN, RANGE]
 MINE_POWER = 8
 MINERAL_COST = 20
-TIME_TO_MINE = 10000
+TIME_TO_MINE = 1000
 GENERATION_TIME = 200
 SPEED = 2
 FRAMES_TO_REFRESH = 5
 SPRITES = "drone.bmp"
 SPRITE_PIXEL_ROWS = 128
+SCALE = 1.5
 FACES = 8
 FRAME = 0
 TOTAL_FRAMES = 391 # 23 ristas de 17 frames (solo son necesarios 16 de cada una)
@@ -42,10 +43,10 @@ INVERSIBLE_FRAMES = len(FRAMES) - 1 # los die frames no se invierten
 # horario y empezando desde el norte, el mapeo dir-frame es:
 DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
 PADDING = 110
-WEIGHT_PADDING = 210
-HEIGHT_PADDING = 210
-X_PADDING = 25
-Y_PADDING = 15
+WEIGHT_PADDING = 145
+HEIGHT_PADDING = 155
+X_PADDING = 22
+Y_PADDING = 22
 
 class Drone(Worker):
     # Pre: xIni e yIni marcan posiciones del mapa, (ej: (3, 2) se refiere a la posicion de
@@ -59,7 +60,7 @@ class Drone(Worker):
                 WEIGHT_PADDING, HEIGHT_PADDING, MOVE_FRAMES, ATTACK_INFO)
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey(BLACK)
-        self.sprites = Entity.divideSpritesheetByRows(spritesheet, SPRITE_PIXEL_ROWS)
+        self.sprites = Entity.divideSpritesheetByRows(spritesheet, SPRITE_PIXEL_ROWS, SCALE)
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()

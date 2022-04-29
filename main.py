@@ -3,6 +3,7 @@ import pygame as pg
 import sys
 import math
 import json
+from datetime import datetime
 
 
 from src.Entities.TerranSoldier import *
@@ -53,24 +54,24 @@ def setEntity(player):
     structure2 = TerranBarracks(15, 9, player1, mapa, False, 3)
 
     player.addStructures(structure1)
-    player.addStructures(structure2)
+    #player.addStructures(structure2)
     #player.addStructures(structure3)
     player.addUnits(scv)
 
     zergBuilder = ZergBuilder(16, 14, player1, mapa, False, 8)
-    player1.addStructures(zergBuilder)
+    #player1.addStructures(zergBuilder)
 
     drone = Drone(10, 11, player1)
     player1.addUnits(drone)
 
     soldierChan = TerranSoldier(6, 3, player1)
-    player1.addUnits(soldierChan)
+    #player1.addUnits(soldierChan)
 
     zergling = Zergling(8, 9, player1)
-    player1.addUnits(zergling)
+    #player1.addUnits(zergling)
 
     droneAI = Drone(3, 2, player2)
-    player2.addUnits(droneAI)
+    #player2.addUnits(droneAI)
 
 def update():
     clock_update()

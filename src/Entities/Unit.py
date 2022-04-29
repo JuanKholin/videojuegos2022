@@ -56,7 +56,7 @@ class Unit(Entity):
     # obstaculo de camino lo esquivara y si la tile objetivo esta ocupada se detiene
     # lo mas cerca posible de esta
     def move(self, objectiveTile):
-        paths = calcPath(self.getTile(), objectiveTile, self.mapa)
+        paths = calcPath(self.getPosition(), self.getTile(), objectiveTile, self.mapa)
         if len(paths) > 0:
             self.changeToMoving(paths)
 
@@ -84,7 +84,7 @@ class Unit(Entity):
         if self.state != State.DEAD:
             r = self.getRect()
             if DEBBUG:
-                pg.draw.rect(screen, BLACK, pygame.Rect(self.x - camera.x - r.w / 2, r.y  - camera.y, r.w, r.h), 1)
+                pg.draw.rect(screen, BLACK, pygame.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h), 1)
             drawPos = self.getDrawPosition()
             if self.clicked:
                 pg.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y + (0.7*r.h)- camera.y,r.w , 0.3*r.h], 2)
@@ -100,6 +100,7 @@ class Unit(Entity):
 
     # Aplica un frame a la unidad en funcion de su estado
     def update(self):
+        #print(self.state)
         if self.state == State.STILL: # Esta quieto
             self.updateStill()
         elif self.state == State.MOVING: # Esta moviendose
@@ -271,7 +272,7 @@ class Unit(Entity):
             if tilePath.type != UNIT or ((tilePath.id == self.id) and (tilePath.type == UNIT)):
                 dirX = math.cos(path.angle)
                 dirY = math.sin(path.angle)
-                tileSiguiente = self.mapa.getTile(int(unitPos[0] + dirX*self.speed + 0.5), int(unitPos[1] + dirY*self.speed + 0.5))
+                tileSiguiente = self.mapa.getTile(int(self.x + dirX*self.speed + 0.5), int(self.y + dirY*self.speed + 0.5))
                 if tileActual != tileSiguiente :
                     if tileActual.type != OBSTACLE and tileActual.type != RESOURCE:
                         self.mapa.setLibre(tileActual)
@@ -292,7 +293,7 @@ class Unit(Entity):
                 if tilePath.tileid != tileObj.tileid:
                     if tilePath.ocupante.paths.__len__() == 0: # ME bloquea y ademas no se mueve
                         print("Me bloque y no se mueve el tio")
-                        path = calcPath(tileActual,tileObj, self.mapa)
+                        path = calcPath(self.getPosition(),tileActual,tileObj, self.mapa)
                         posFin = (tileObj.centerx, tileObj.centery)
                         self.paths = path
                     else: #Es majo y se va a mover
@@ -303,7 +304,7 @@ class Unit(Entity):
                             else:
                                 if bestTile.heur(tileObj) > tileActual.heur(tileObj):
                                     print("Me tengo que replegar por lo que mejor recalculo")
-                                    path = calcPath(tileActual,tileObj, self.mapa)
+                                    path = calcPath(self.getPosition(), tileActual,tileObj, self.mapa)
                                     posFin = (tileObj.centerx, tileObj.centery)
                                     self.paths = path
                                 else: #HACEMOS EL CAMBIO A LOS PATHS
@@ -340,19 +341,19 @@ class Unit(Entity):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
-        #WHAT IS THIS?:
-        #unitPos = self.getPosition()
-        #tileActual = self.mapaa.getTile(unitPos[0], unitPos[1])
-        #tiles = self.mapa.getAllTileVecinas(tileActual)
-        #for tile in tiles:
-        #    if tile.type != OBSTACLE:
-        #        self.mapa.setLibre(tile)
+        #WHAT IS THIS?: JUAN: THIS IS EL BUG FIXER :P
+        unitPos = self.getPosition()
+        tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
+        tiles = self.mapa.getAllTileVecinas(tileActual)
+        for tile in tiles:
+            if tile.type != OBSTACLE:
+                self.mapa.setLibre(tile)
 
     # Pasa a estado moverse
     def changeToMoving(self, paths):
         print("MOVING", self.x, self.y)
         self.state = State.MOVING
-        actualPath = self.paths[len(self.paths) - 1]
+        actualPath = self.paths[0]
         if actualPath.angle < 0:
             self.angle = -actualPath.angle
         else:
@@ -422,7 +423,7 @@ class Unit(Entity):
         self.y += self.diry * self.speed
 
     def takeAim(self):
-        paths = calcPath(self.getTile(), self.attackedOne.getTile(), self.mapa)
+        paths = calcPath(self.getPosition(), self.getTile(), self.attackedOne.getTile(), self.mapa)
         actualPath = paths[1]
         if actualPath.angle < 0:
             self.angle = -actualPath.angle
@@ -454,10 +455,10 @@ class Unit(Entity):
                         self.sprites[self.frames[i][self.dirOffset[j]]], True, False)
 
     def resolverObjetivoOcupado(self):
-        print(self.state)
+        print("RESOLVER OCUAPDO: ", self.state)
         if self.state == State.MOVING:
             self.paths = []
-        elif self.state == State.MOVING_TO_MINING:
+        elif self.state == State.MINING:
             tilesResource = self.tilesResource()
             if tilesResource.__len__() == 0: # Me he quedado sin sitio
                 self.changeToStill()
@@ -468,7 +469,7 @@ class Unit(Entity):
                 for tile in tilesResource:
                     if tile.heur(tileActual) < tileObj.heur(tileActual):
                         tileObj = tile
-                self.paths = calcPath(tileActual, tileObj, self.mapa)
+                self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
         elif self.state == State.ORE_TRANSPORTING:
             tilesCasa = self.tilesCasa()
             if tilesCasa.__len__() == 0: # Me he quedado sin sitio
@@ -480,33 +481,12 @@ class Unit(Entity):
                 for tile in tilesCasa:
                     if tile.heur(tileActual) < tileObj.heur(tileActual):
                         tileObj = tile
-                self.paths = calcPath(tileActual, tileObj, self.mapa)
+                self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
 
     def tilesCasa(self):
-        tilesCasa = []
         rect = self.player.base.getRect()
-        x = self.mapa.getTile(rect.x, rect.y).centerx
-        finx = x + rect.w
-        y = self.mapa.getTile(rect.x, rect.y).centery
-        finy = y + rect.h
-        while x <= finx:
-            tileUp = self.mapa.getTile(x,y - 40)
-            tileDown = self.mapa.getTile(x,finy + 40)
-            #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
-            if tileUp.type == 0:
-                tilesCasa.append(tileUp)
-            if tileDown.type == 0:
-                tilesCasa.append(tileDown)
-            x += 40
-        while y <= finy:
-            tileUp = self.mapa.getTile(x - 40,y)
-            tileDown = self.mapa.getTile(finx + 40,y)
-            #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
-            if tileUp.type == 0:
-                tilesCasa.append(tileUp)
-            if tileDown.type == 0:
-                tilesCasa.append(tileDown)
-            y += 40
+        tile = self.mapa.getTile(rect.x, rect.y)
+        tilesCasa = self.mapa.getEntityTilesVecinas(tile)
         return tilesCasa
     
     def finishPath(self):
@@ -553,7 +533,7 @@ class Unit(Entity):
                 self.changeToStill()
 
     def recalcAttackPaths(self):
-        self.paths = calcPath(self.getTile(), self.attackedOne.getTile(), self.mapa)
+        self.paths = calcPath(self.getPosition(), self.getTile(), self.attackedOne.getTile(), self.mapa)
         self.updatePath(self.paths[len(self.paths) - 1])
         self.updateMovingImage()
         
@@ -570,7 +550,8 @@ class Unit(Entity):
         return (r.x + r.w/2, r.y + r.h) #!!!
 
     def getTile(self):
-        return self.mapa.getTile(self.x, self.y)
+        pos = self.getPosition()
+        return self.mapa.getTile(pos[0], pos[1])
 
     # Getter de la coordenada X en valores reales
     def getX(self):

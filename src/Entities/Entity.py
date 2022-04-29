@@ -7,7 +7,7 @@ class Entity():
         self.generationTime = generationTime
         self.id = id
         self.x = xIni
-        self.y = yIni - 40
+        self.y = yIni
         self.hp = hp
         self.player = player
         if player != None:
@@ -19,14 +19,14 @@ class Entity():
     # Pre: Altura del spritesheet % rows == 0
     # Post: Devuelve el spritesheet dividido en una lista de sprites
     @staticmethod
-    def divideSpritesheetByRows(spritesheet, rows):
+    def divideSpritesheetByRows(spritesheet, rows, scale):
         totalRows = spritesheet.get_height()
         maxCol = spritesheet.get_width()
         sprites = []
         for i in range(int(totalRows / rows)):
             aux = pg.Surface.subsurface(spritesheet, (0, rows * i, maxCol, rows))
-            aux = pg.transform.scale2x(aux)
-            #aux = pg.transform.scale(aux, [aux.get_rect().w * 1.6, aux.get_rect().h * 1.6])
+            #aux = pg.transform.scale2x(aux)
+            aux = pg.transform.scale(aux, [aux.get_rect().w * scale, aux.get_rect().h * scale])
 
             sprites.append(aux)
         return sprites

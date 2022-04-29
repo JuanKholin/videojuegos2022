@@ -20,6 +20,7 @@ SPRITES = "zergling.bmp"
 SPRITE_PIXEL_ROWS = 128
 FACES = 8
 FRAME = 0
+SCALE = 1.5
 TOTAL_FRAMES = 296  # [0:203] MOVICION (13 ciclos de 17 frames con solo 16 utiles)
                     # ciclo 0 estar quieto, ciclos 1 2 y 3 atacacion, el resto moverse
                     # [204:288] ENTERRACION
@@ -56,7 +57,7 @@ class Zergling(Soldier):
                 X_PADDING, Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ATTACK_INFO)
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey(BLACK)
-        self.sprites = Entity.divideSpritesheetByRows(spritesheet, SPRITE_PIXEL_ROWS)
+        self.sprites = Entity.divideSpritesheetByRows(spritesheet, SPRITE_PIXEL_ROWS, SCALE)
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()

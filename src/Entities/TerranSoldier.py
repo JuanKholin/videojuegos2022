@@ -23,6 +23,7 @@ SPRITES = "terran_soldier_sheet.bmp"
 SPRITE_PIXEL_ROWS = 64
 FACES = 8
 FRAME = 0
+SCALE = 1.5
 #Esto es mentira, salen 220 frames no 296
 TOTAL_FRAMES = 13*17# 1     STILL
                     # 2     GUARDIA
@@ -63,7 +64,7 @@ class TerranSoldier(Soldier):
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey((WHITE))
         self.sprites = Entity.divideSpritesheetByRows(spritesheet,
-                SPRITE_PIXEL_ROWS)
+                SPRITE_PIXEL_ROWS, SCALE)
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
