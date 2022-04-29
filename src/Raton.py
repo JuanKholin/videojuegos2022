@@ -4,7 +4,7 @@ from . import Player
 from .Utils import *
 
 def collides(x, y, rect2):
-    return (x >= rect2.x and x <= rect2.x + rect2.w and y >= rect2.y and y <= rect2.y + rect2.h )
+    return (x >= rect2.x and x <= rect2.x + rect2.w and y >= rect2.y and y <= rect2.y + rect2.h)
 
 def collideRect(rect1, rect2):
     collideX = False
@@ -73,6 +73,8 @@ class Raton(pygame.sprite.Sprite):
         self.player = player
         self.enemy = enemy
         self.resources = resources
+        self.enable = True 
+        self.interface = None
 
     def update(self, camera):
         self.point.update()
@@ -87,7 +89,7 @@ class Raton(pygame.sprite.Sprite):
         self.collideAlly = False
         self.collideResourse = False
         self.collideEnemy = False
-        if not self.checkInGUIPosition():
+        if self.enable:
             if not self.building:
                 for unit in self.player.units:
                     ###---LOGICA
@@ -130,6 +132,10 @@ class Raton(pygame.sprite.Sprite):
                 self.image = self.sprite2[self.index2]
             else:
                 self.image = self.sprite[self.index]
+        
+        if DEBBUG:
+            if frame(360) == 1:
+                print(self.rel_pos[0], self.rel_pos[1])
 
     def getPosition(self):
         return self.real_pos
@@ -149,23 +155,11 @@ class Raton(pygame.sprite.Sprite):
     def click(self):
         self.clicked = not self.clicked
     
-    def checkInGUIPosition(self):
-        yes = False
-        if self.rel_pos[1] > 600:
-            yes = True
-        elif self.rel_pos[0] < 15 and self.rel_pos[1] > 485:
-            yes = True
-        elif self.rel_pos[0] < 30 and self.rel_pos[1] > 490:
-            yes = True    
-        elif self.rel_pos[0] < 40 and self.rel_pos[1] > 510:
-            yes = True
-        elif self.rel_pos[0] < 265 and self.rel_pos[1] > 510:
-            yes = True   
-        elif self.rel_pos[0] > 735 and self.rel_pos[1] > 585:
-            yes = True 
-        elif self.rel_pos[0] > 750 and self.rel_pos[1] > 535:
-            yes = True 
-        return yes  
+    def setEnable(self, enable):
+        self.enable = enable
+        
+    def addInterface(self, interface):
+        self.interface = interface
 
     def draw(self, screen, camera):
         if Utils.state == System_State.ONGAME:
@@ -222,54 +216,63 @@ class Raton(pygame.sprite.Sprite):
                     self.pulsado = False
                     self.clicked = True
                     print('click izq liberado', real_mouse_pos, event.type)
-                    if self.building:
-                        if self.buildStructure.checkTiles() and self.player.resources >= self.buildStructure.mineralCost:
-                            self.player.resources -= self.buildStructure.mineralCost
-                            self.buildStructure.player = self.player
-                            self.player.addStructures(self.buildStructure)
-                            self.building = False
-                            self.buildStructure = None
-                    else:
-                        unitSel = False
-                        selectedUnit = self.player.unitsSelected
-                        selectedStructures = self.player.structuresSelected
-                        self.player.unitsSelected = []
-                        self.player.structuresSelected = []
-                        isClick = False
-
-                        mouseRect = createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
-
-                        for unit in self.player.units:
-                            #print(unit.getRect())
-                            if len(self.player.unitsSelected) < MAX_SELECTED_UNIT and collideRect(mouseRect, unit.getRect()):
-                                unit.setClicked(True)
-                                self.player.unitsSelected.append(unit)
-                                unitSel = True
-                                #print("CLICKADO" + str(terran.id))
-                        if not unitSel:
-                            for structure in self.player.structures:
-                                if collideRect(mouseRect, structure.getRect()):
-                                    structure.setClicked(True)
-                                    unitSel = True
-                                    self.player.structuresSelected.append(structure)
-                                    #print("CLICKADO ")
-                                    break
-
-                        if unitSel:
-                            for unit in self.player.units + self.player.structures:
-                                if unit not in self.player.unitsSelected + self.player.structuresSelected:
-                                    #print(unit)
-                                    unit.setClicked(False)
+                    if self.enable:
+                        if self.building:
+                            if self.buildStructure.checkTiles() and self.player.resources >= self.buildStructure.mineralCost:
+                                self.player.resources -= self.buildStructure.mineralCost
+                                self.buildStructure.player = self.player
+                                self.player.addStructures(self.buildStructure)
+                                self.building = False
+                                self.buildStructure = None
                         else:
-                            self.player.unitsSelected = selectedUnit
-                            self.player.structuresSelected = selectedStructures
+                            unitSel = False
+                            selectedUnit = self.player.unitsSelected
+                            selectedStructures = self.player.structureSelected
+                            self.player.unitsSelected = []
+                            self.player.structureSelected = None
+                            isClick = False
+
+                            mouseRect = createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
+
+                            for unit in self.player.units:
+                                #print(unit.getRect())
+                                if len(self.player.unitsSelected) < MAX_SELECTED_UNIT and collideRect(mouseRect, unit.getRect()):
+                                    unit.setClicked(True)
+                                    self.player.unitsSelected.append(unit)
+                                    unitSel = True
+                                    #print("CLICKADO" + str(terran.id))
+                            if not unitSel:
+                                for structure in self.player.structures:
+                                    if collideRect(mouseRect, structure.getRect()):
+                                        structure.setClicked(True)
+                                        unitSel = True
+                                        self.player.structureSelected = structure
+                                        #print("CLICKADO ")
+                                        break
+
+                            if unitSel:
+                                for unit in self.player.units + self.player.structures:
+                                    if unit not in self.player.unitsSelected + [self.player.structureSelected]:
+                                        #print(unit)
+                                        unit.setClicked(False)
+                            else:
+                                self.player.unitsSelected = selectedUnit
+                                self.player.structuresSelected = selectedStructures
+                    else: #si estoy en GUI
+                        #comprobar colision con los botones
+                        for b in self.interface.button:
+                            if collides(self.rel_pos[0], self.rel_pos[1], b.getRect()):
+                                command = b.getCommand()
+                                print(command.id)
+                                break
 
                 elif not type[2]:
                     print('click der liberado', real_mouse_pos[0], real_mouse_pos[1], event.type)
                     self.derPulsado = False
-                    if self.building:
-                        self.buildStructure = None
-                        self.building = False
+                    if self.enable:
+                        if self.building:
+                            self.buildStructure = None
+                            self.building = False
         return command
 
 class point(pygame.sprite.Sprite):

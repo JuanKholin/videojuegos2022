@@ -30,6 +30,9 @@ class Structure(Entity.Entity):
 
     def update(self):
         pass
+    
+    def getOptions(self):
+        return Options.NULO
 
     def getRect(self):
         return self.rectn
@@ -53,6 +56,8 @@ class Structure(Entity.Entity):
         xTile, yTile = self.mapa.getTileIndex(x, y)
         originX = (xTile - round(self.tileW/2))*self.mapa.tw
         originY = (yTile - round(self.tileH/2))*self.mapa.th
+        self.x = xTile * self.mapa.tw
+        self.y = yTile * self.mapa.th
         self.rectn.x = originX
         self.rectn.y = originY + self.heightPad/2
         self.rectn.w = self.tileW*self.mapa.tw - 1
@@ -74,17 +79,20 @@ class Structure(Entity.Entity):
 
     def updateTraining(self):
         self.generationCount += 1
+        if frame(60) == 1:
+            print("entrenamiento", self.id, len(self.training))
         if self.generationCount >= CLOCK_PER_SEC * self.training[0].generationTime:
         #if (getGlobalTime() - self.generationStartTime) > self.training[0].generationTime:
             unit = self.training[0]
             tile = self.mapa.getTile(self.x, self.y)
+            print("tile", tile.x, tile.y)
             libres = self.mapa.getEntityTilesVecinas(tile)
             if len(libres) > 0:
                 #unit.setTilePosition(libres[0])
                 
                 unit.x = libres[0].centerx
                 unit.y = libres[0].centery - self.mapa.th
-                print(unit.x, unit.y)
+                print("hola?", libres[0].centerx, libres[0].centery)
 
                 #libres[0].setOcupada(1)
 

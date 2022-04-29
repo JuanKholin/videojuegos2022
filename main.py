@@ -16,6 +16,7 @@ from src.Entities import TerranBuilder
 from src.Entities.TerranWorker import *
 from src.Entities.TerranBarracks import *
 from src.Entities.ZergBuilder import *
+from src.Entities.Hatchery import *
 from src.Entities.Drone import *
 from src.Entities.Zergling import *
 
@@ -53,8 +54,8 @@ def setEntity(player):
     #player.addStructures(structure3)
     player.addUnits(scv)
 
-    zergBuilder = ZergBuilder(15, 14, player1, mapa, False, 8)
-    #player1.addStructures(zergBuilder)
+    zergBuilder = ZergBuilder(16, 14, player1, mapa, False, 8)
+    player1.addStructures(zergBuilder)
 
     drone = Drone(10, 11, player1)
     player1.addUnits(drone)
@@ -118,7 +119,6 @@ keyMap ={
   pg.K_v: CommandId.GENERAR_UNIDAD,
   pg.K_c: CommandId.BUILD_STRUCTURE,
   pg.K_g: CommandId.GUARDAR_PARTIDA,
-
 }
 commandMap ={
   CommandId.MOVER_CAMARA_ARRIBA: pg.K_UP,
@@ -160,6 +160,8 @@ resources.append(cristal)
 
 raton = Raton.Raton(player1, player2, resources)
 p1Interface = Interface(player1, raton)
+raton.addInterface(p1Interface)
+
 escena = Escena(player1, player2, aI, mapa, camera, raton, p1Interface, resources)
 #escena.mapa.addOre(100,100)
 

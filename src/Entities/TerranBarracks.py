@@ -52,7 +52,7 @@ class TerranBarracks(Structure):
     def execute(self, command_id):
         if self.clicked:
             print("soy clickeado?")
-            if command_id == CommandId.GENERAR_UNIDAD and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
+            if (command_id == CommandId.GENERAR_UNIDAD or command_id == CommandId.GENERATE_SOLDIER) and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
                 self.player.resources -= TERRAN_WORKER_MINERAL_COST
                 terranWorker = TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
                 self.generateUnit(terranWorker)
@@ -70,6 +70,9 @@ class TerranBarracks(Structure):
 
     def getBuildSprite(self):
         return self.sprites[4]
+    
+    def getOptions(self):
+        return [Options.GENERATE_SOLDIER]
 
     def toDictionary(self, map):
         #print("barracke x e y Ini ", self.xIni, self.yIni)

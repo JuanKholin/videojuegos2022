@@ -49,6 +49,7 @@ BLACK   = (0,0,0)
 GREEN   = (0, 255, 0)
 RED     = (255, 0, 0)
 BLUE    = (0, 0, 255)
+BLUE2    = (35, 35, 255)
 PURPLE  = (255, 0, 255)
 GREEN2  = (210, 255, 125)
 GREEN3  = (110, 255, 90)
@@ -142,6 +143,25 @@ EXIT_FB_POS = [680, 420]
 BARRA_COMANDO = "SPRITE/gui_frame"
 
 #----------------------------------------------------------------
+# GUI
+#----------------------------------------------------------------
+BUTTON_X = 810
+BUTTON_Y = 575
+BUTTON_W = 60
+BUTTON_H = 55
+BUTTONPADY = 64
+BUTTONPADX = 74
+
+
+class Options(IntEnum):
+    BUILD_BARRACKS = 0
+    GENERATE_WORKER = 1
+    GENERATE_SOLDIER = 2
+    BUILD_HATCHERY = 0
+    NULO = -1
+    
+BUTTON_PATH = "SPRITE/button/gui_button_"
+#----------------------------------------------------------------
 # TROPAS
 #----------------------------------------------------------------
 
@@ -190,8 +210,6 @@ def cargarSprites(path, n, twoDig, color = None, size = None, m = 0):
             sprites.insert(i, pygame.transform.scale(image, [image.get_rect().w * size, image.get_rect().h * size]))
         if color != None:
             sprites[i - m].set_colorkey(color)
-            pass
-
     return sprites
 
 def clock_update():

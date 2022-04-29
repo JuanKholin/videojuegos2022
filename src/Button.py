@@ -5,9 +5,6 @@ from .Lib import *
 from .Utils import *
 from .Command import *
 
-class ButtonType(Enum):
-    GENERAR_UNIDAD = auto()
-
 class Button():
     def __init__(self, image, command):
         self.image = pg.image.load(image)
@@ -26,8 +23,11 @@ class Button():
         self.y = y
         screen.blit(self.image, (x, y))
         if self.collide:
-            text = Utils.text[self.command] 
-            muestra_texto(screen, times, text, BLACK, 30, (self.x, self.y-20))
+            pygame.draw.rect(screen, BLUE, pygame.Rect(self.x, self.y-15, 50, 20))
+            #text = Utils.text[self.option] 
+            #muestra_texto(screen, times, text, BLACK, 30, (self.x, self.y-20))
+        if Utils.DEBBUG:
+            pygame.draw.rect(screen, PINK, pygame.Rect(self.x, self.y, Utils.BUTTON_W, Utils.BUTTON_H), 1)
             
     def getRect(self):
         return pg.Rect(self.x, self.y, Utils.BUTTON_W, Utils.BUTTON_H)
@@ -35,10 +35,12 @@ class Button():
     def setClicked(self):
         self.click = True 
         
-    def setCollide(self):
-        self.collide = True  
+    def setCollide(self, collide):
+        self.collide = collide 
         
     def getCommand(self):
-        return self.command
+        return Command(self.command)
+    
+    
            
         

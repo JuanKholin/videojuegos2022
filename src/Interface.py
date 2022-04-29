@@ -1,6 +1,6 @@
 
 import pygame as pg
-from . import Player, Command, Utils, Raton
+from . import Player, Command, Utils, Raton, Button
 from src.Music import *
 from src.Lib import *
 from src.Utils import *
@@ -18,10 +18,12 @@ class Interface():
         self.exit = cargarSprites(EXIT, EXIT_N, True, BLACK, EXIT_SIZE) 
         self.singleSelected = cargarSprites(SINGLE_PLAYER_FB, SINGLE_PLAYER_FB_N, True, BLACK, SINGLE_SIZE) 
         self.exitSelected = cargarSprites(EXIT_FB, EXIT_FB_N, True, BLACK, EXIT_SIZE)
+        
         self.gui = pg.image.load(BARRA_COMANDO + ".bmp")
         self.gui = pg.transform.scale(self.gui, (SCREEN_WIDTH, SCREEN_HEIGHT))
         self.gui.set_colorkey(BLACK)
         
+        self.allButton = self.loadAllButton()
         
         self.singleRect = pg.Rect(SINGLE_PLAYER_POS[0], SINGLE_PLAYER_POS[1], self.single[0].get_width(), self.single[0].get_height())
         self.exitRect = pg.Rect(EXIT_POS[0], EXIT_POS[1], self.exit[0].get_width(), self.exit[0].get_height())
@@ -37,6 +39,16 @@ class Interface():
         
         self.entityOptions = []
         self.button = []
+    
+    def loadAllButton(self):
+        allButton = []
+        aux = Button.Button(BUTTON_PATH + "barracks" + ".bmp", Command.CommandId.BUILD_BARRACKS)
+        allButton.append(aux)
+        aux = Button.Button(BUTTON_PATH + "worker" + ".bmp", Command.CommandId.GENERATE_WORKER)
+        allButton.append(aux)
+        aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", Command.CommandId.GENERATE_SOLDIER)
+        allButton.append(aux)
+        return allButton
     
     def update(self):
         if Utils.state == System_State.MAINMENU:
@@ -83,11 +95,26 @@ class Interface():
             self.idSingleSelected = (self.idSingleSelected + frame(5)) % SINGLE_PLAYER_FB_N
             self.idExitSelected = (self.idExitSelected + frame(5)) % EXIT_FB_N
         elif Utils.state == System_State.ONGAME:
-            pass
-            self.entityOptions = self.player.selectedStructures.getOptions()
-            self.button = self.getButton(self.EntityOptions)
-            self.buttonX = Utils.BUTTON_X
-            self.buttonY = Utils.BUTTON_Y
+            #si esta en GUI desactivar funciones de raton
+            if self.checkInGUIPosition():
+                self.mouse.setEnable(False)
+            else:
+                self.mouse.setEnable(True)
+            
+            self.button = []
+            #obtener opciones de la unidad seleccionada
+            if self.player.structureSelected != None:
+                self.entityOptions = self.player.structureSelected.getOptions()
+                self.button = self.getButton(self.entityOptions)
+                self.buttonX = Utils.BUTTON_X
+                self.buttonY = Utils.BUTTON_Y
+                
+            #comprobar colision del raton
+            for b in self.button:
+                if Raton.collides(self.mouse.rel_pos[0], self.mouse.rel_pos[1], b.getRect()):
+                    b.setCollide(True)
+                else:
+                    b.setCollide(False)
          
     def draw(self, screen):
         if Utils.state == System_State.MAINMENU:
@@ -110,10 +137,8 @@ class Interface():
                 muestra_texto(screen, str('monotypecorsiva'), "exit", GREEN2, MAIN_MENU_TEXT_SIZE, EXIT_TEXT_POS)
             else:
                 muestra_texto(screen, str('monotypecorsiva'), "exit", GREEN3, MAIN_MENU_TEXT_SIZE, EXIT_TEXT_POS)
-                    
             
-            
-        if Utils.state == System_State.ONGAME:
+        elif Utils.state == System_State.ONGAME:
             muestra_texto(screen, str('monotypecorsiva'), str(round(Utils.SYSTEM_CLOCK / CLOCK_PER_SEC)), BLACK, 30, (20, 20))
             muestra_texto(screen, times, str(self.player.resources), BLACK, 30, (SCREEN_WIDTH - 40, 20))
             screen.blit(self.gui, (0, 0))
@@ -127,5 +152,34 @@ class Interface():
                     self.buttonX = Utils.BUTTON_X
                 if opcion == 9:
                     break
+                
+    def checkInGUIPosition(self):
+        x = self.mouse.rel_pos[0]
+        y = self.mouse.rel_pos[1]
+        yes = False
+        if y > 600:
+            yes = True
+        elif x < 15 and y > 485:
+            yes = True
+        elif x < 30 and y > 490:
+            yes = True    
+        elif x < 40 and y > 510:
+            yes = True
+        elif x < 265 and y > 510:
+            yes = True   
+        elif x > 735 and y > 585:
+            yes = True 
+        elif x > 750 and y > 535:
+            yes = True 
+        return yes
+    
+    def getButton(self, entityOptions):
+        buttons = []
+        for e in entityOptions:
+            if e != Options.NULO:
+                buttons.append(self.allButton[e])
+        return buttons
+    
+        
                 
             

@@ -48,17 +48,18 @@ class TerranBuilder(Structure):
         self.image = self.sprites[self.index]
         self.image.set_colorkey(WHITE)
 
-    def generateUnit(self, unit):
-        pass
+    #def generateUnit(self, unit):
+    #    pass
 
     def getOrder(self):
         return CommandId.TRANSPORTAR_ORE_STILL
 
     def execute(self, command_id):
         if self.clicked:
-            if command_id == CommandId.GENERAR_UNIDAD and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
+            if (command_id == CommandId.GENERAR_UNIDAD or command_id == CommandId.GENERATE_WORKER) and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
                 self.player.resources -= TERRAN_WORKER_MINERAL_COST
                 terranWorker = TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
+                print("xd")
                 self.generateUnit(terranWorker)
 
     def command(self, command):
@@ -71,6 +72,10 @@ class TerranBuilder(Structure):
 
     def getBuildSprite(self):
         return self.sprites[4]
+    
+    def getOptions(self):
+        #return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS]
+        return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS]
 
     def toDictionary(self, map):
         #x, y = map.getTileIndex(self.originX, self.originY)

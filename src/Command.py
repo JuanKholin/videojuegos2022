@@ -19,6 +19,8 @@ class CommandId(IntEnum):
     BUILD_ZERG_BUILDER = 15
     GUARDAR_PARTIDA = 16
     ATTACK = 17
+    GENERATE_WORKER = 18
+    GENERATE_SOLDIER = 19
 
 class Command:
     def __init__(self, id):

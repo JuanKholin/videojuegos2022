@@ -8,7 +8,7 @@ class Player():
         #Atributos
         self.units = units
         self.unitsSelected = []
-        self.structuresSelected = []
+        self.structureSelected = None
         self.structures = structures
         self.resources = resources
         self.keyMap = keyMap
@@ -24,10 +24,10 @@ class Player():
     def processEvent(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key in self.keyMap:
-                for structure in self.structuresSelected:
-                    command = structure.command(self.keyMap[event.key])
+                if self.structureSelected != None:
+                    command = self.structureSelected.command(self.keyMap[event.key])
                     if command != Command(CommandId.NULO):
-                        return command
+                            return command
                 return Command(self.keyMap[event.key])
         return Command(CommandId.NULO)
 
@@ -61,13 +61,10 @@ class Player():
                     self.unitsSelected[i].move(tileClicked)
                 elif param[i]['order'] == CommandId.ATTACK:
                     self.unitsSelected[i].attack(param[i]['attackedOne'])
-        elif id == CommandId.GENERAR_UNIDAD:
-            for i in self.structuresSelected:
-                print("structura ", i.id)
-                i.execute(id)
+        elif id == CommandId.GENERAR_UNIDAD or id == CommandId.GENERATE_WORKER or id == CommandId.GENERATE_SOLDIER:
+            self.structureSelected.execute(id)
         elif id == CommandId.BUILD_BARRACKS:
-            for i in self.structuresSelected:
-                i.execute(id)
+            self.structureSelected.execute(id)
 
     def draw(self, screen, camera):
         for structure in self.structures:

@@ -30,7 +30,11 @@ class Escena():
             #ejecutar el comando
             if not self.raton.building:
                 if command.id == CommandId.GENERAR_UNIDAD:
-                        self.p1.execute(command.id, [])
+                    self.p1.execute(command.id, [], None)
+                elif command.id == CommandId.GENERATE_WORKER:
+                    self.p1.execute(command.id, [], None)
+                elif command.id == CommandId.GENERATE_SOLDIER:
+                    self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.BUILD_BARRACKS and self.p1.resources >= TERRAN_BARRACK_MINERAL_COST:
                     self.raton.building = True
                     self.raton.buildStructure = self.getTerranBarrack()
@@ -103,6 +107,7 @@ class Escena():
 
         self.p1.update()
         self.p2.update()
+        self.interfaz.update()
         self.raton.update(self.camera)
         self.aI.make_commands()
 

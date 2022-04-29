@@ -24,7 +24,7 @@ class ZergBuilder(Structure):
 
     def __init__(self, xini, yini, player, map, building, id):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
-        self.sprites = cargarSprites(HATCHERY_PATH, 4, False, BLUE, 1.8)
+        self.sprites = cargarSprites(HATCHERY_PATH, 4, False, BLUE2, 1.8, 0)
         self.building = building
         self.image = self.sprites[self.index]
         self.finalImage = self.sprites[3]
@@ -40,7 +40,7 @@ class ZergBuilder(Structure):
             self.updateTraining()
         self.index = (self.index + frame(8)) % 4
         self.image = self.sprites[self.index]
-        self.image.set_colorkey(BLUE)
+        self.image.set_colorkey(BLUE2)
 
     def execute(self, command_id):
         if self.clicked:
@@ -49,6 +49,9 @@ class ZergBuilder(Structure):
                 zergling = Zergling(self.x / 40, (self.y + self.rectn.h) / 40, 1)
                 self.generateUnit(zergling)
 
+    def getOptions(self):
+        #return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS]
+        return [Options.GENERATE_WORKER, Options.BUILD_HATCHERY]
 
     def command(self, command):
         if command == CommandId.BUILD_STRUCTURE:
