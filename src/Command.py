@@ -10,7 +10,7 @@ class CommandId(IntEnum):
     GENERAR_UNIDAD = 6
     ROTAR = 7
     ORDENAR = 8
-    MINAR = 9
+    MINE = 9
     MINAR_BUCLE = 10
     TRANSPORTAR_ORE = 11
     TRANSPORTAR_ORE_STILL = 12

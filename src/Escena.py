@@ -62,9 +62,9 @@ class Escena():
         # COMPROBAR SI HA CLICKADO UN ORE
         order = {'order': CommandId.MOVER, 'angle': 0, 'path': path}
         if tileClicked.type == RESOURCE:
-            Cristal = tileClicked.ocupante
-            order['order'] = CommandId.MINAR
-            order['cristal'] = Cristal
+            resource = tileClicked.getOcupante()
+            order['order'] = CommandId.MINE
+            order['resource'] = resource
         elif tileClicked.type == UNIT: # Ataque?
             attacked = tileClicked.ocupante
             if attacked.getPlayer() != self.p1:

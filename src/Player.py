@@ -51,11 +51,12 @@ class Player():
                 #for path in param[i]:
                     #print("Posicion final: ",path.posFin, path.angle)
         elif id == CommandId.ORDENAR:
+            print("Hole")
             for i in range(param.__len__()):
                 #print("ME han mandado:" ,param[i])
                 self.unitsSelected[i].paths = param[i]['path']
                 # En funcion de la orden cambiarle el estado a la unidad
-                if param[i]['order'] == CommandId.MINAR:
+                if param[i]['order'] == CommandId.MINE:
                     self.unitsSelected[i].mine(param[i]['resource'])
                 elif param[i]['order'] == CommandId.MOVER:
                     self.unitsSelected[i].move(tileClicked)

@@ -32,14 +32,14 @@ FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
           list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
           list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
           list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
-          list(range(205, 221)), [289] * 16, [290] * 16, [291] * 16, [292] * 16,
-          [293] * 16, [294] * 16, [295] * 16]
+          list(range(205, 221)), [221] * 16, [222] * 16, [223] * 16, [224] * 16,
+          [225] * 16, [226] * 16, [227] * 16, [228] * 16, [229] * 16, [230] * 16]
 STILL_FRAMES = [0]
 ORE_TRANSPORTING_FRAMES = [3]
 BARREL_TRANSPORTING_FRAMES = [4]
 ATTACK_FRAMES = [1, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 MOVE_FRAMES = [0]
-DIE_FRAMES = [13, 14, 15, 16, 17, 18, 19]
+DIE_FRAMES = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
 
 INVERSIBLE_FRAMES = len(FRAMES) - len(DIE_FRAMES) # los die frames no se invierten
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
@@ -61,9 +61,11 @@ class TerranWorker(Worker):
 
 
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
-        spritesheet.set_colorkey((BLACK))
+        spritesheet.set_colorkey(BLACK)
+        deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
+        deadSpritesheet.set_colorkey(BLACK)
         self.sprites = Entity.divideSpritesheetByRows(spritesheet,
-                SPRITE_PIXEL_ROWS)
+                SPRITE_PIXEL_ROWS) + Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
         self.mirrorTheChosen()
         self.dir = 0
         self.changeToStill()
