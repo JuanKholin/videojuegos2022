@@ -64,11 +64,11 @@ def setEntity(player):
     drone = Drone(10, 11, player1)
     player1.addUnits(drone)
 
-    soldierChan = TerranSoldier(6, 3, player1)
-    #player1.addUnits(soldierChan)
+    soldierChan = TerranSoldier(6, 1, player1)
+    player1.addUnits(soldierChan)
 
     zergling = Zergling(8, 9, player1)
-    #player1.addUnits(zergling)
+    player1.addUnits(zergling)
 
     droneAI = Drone(3, 2, player2)
     #player2.addUnits(droneAI)

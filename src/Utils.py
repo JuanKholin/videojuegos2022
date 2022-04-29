@@ -1,9 +1,10 @@
 from enum import Enum, auto, IntEnum
 from pickle import GLOBAL
 import math
+from re import T
 import pygame
 
-DEBBUG = False
+DEBBUG = True
 
 class System_State(Enum):
     MAINMENU = auto()

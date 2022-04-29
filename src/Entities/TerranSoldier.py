@@ -46,10 +46,10 @@ INVERSIBLE_FRAMES = len(FRAMES) - len(DIE_FRAMES) # los die frames no se inviert
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
 # horario y empezando desde el norte, el mapeo dir-flist(range(289, 296))rame es:
 DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
-WEIGHT_PADDING =    80
-HEIGHT_PADDING =    70
-X_PADDING =         25
-Y_PADDING =         30
+WEIGHT_PADDING =    65
+HEIGHT_PADDING =    65
+X_PADDING =         15
+Y_PADDING =         15
 PADDING = 110
 
 class TerranSoldier(Soldier):

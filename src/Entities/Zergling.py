@@ -40,10 +40,11 @@ INVERSIBLE_FRAMES = len(FRAMES) - 1 # los die frames no se invierten
 # horario y empezando desde el norte, el mapeo dir-frame es:
 DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
 PADDING = 110
-WEIGHT_PADDING = 210
-HEIGHT_PADDING = 210
-X_PADDING = 25
+WEIGHT_PADDING = 165
+HEIGHT_PADDING = 155
+X_PADDING = 13
 Y_PADDING = 15
+
 
 class Zergling(Soldier):
     # Pre: xIni e yIni marcan posiciones del mapa, (ej: (3, 2) se refiere a la posicion de
