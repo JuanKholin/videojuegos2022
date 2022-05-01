@@ -346,7 +346,11 @@ class Unit(Entity):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
-        #WHAT IS THIS?: JUAN: THIS IS EL BUG FIXER :P JUAN DEL PRESENTE AL JUAN DEL PASADO: NO ES UN BUG FIXER ES UNA SOLUCION COCHINA A UN FALLO TUYO >:| JUAN DEL PRESENTE AL JUAN DEL PASADO: ES NECESARIO, A EFECTOS VISUALES Y DE GAMEPLAY NO ESTROPEA NADA
+        #Yo:WHAT IS THIS?: 
+        #JUAN: THIS IS EL BUG FIXER :P 
+        #JUAN DEL PRESENTE AL JUAN DEL PASADO: NO ES UN BUG FIXER ES UNA SOLUCION COCHINA A UN FALLO TUYO >:| 
+        #JUAN DEL PRESENTE AL JUAN DEL PASADO: ES NECESARIO, A EFECTOS VISUALES Y DE GAMEPLAY NO ESTROPEA NADA
+        #Yo otra vez: vaaleee... (  9 _9)
         unitPos = self.getPosition()
         tileActual = self.mapa.getTile(unitPos[0], unitPos[1])
         tiles = self.mapa.getAllTileVecinas(tileActual)
@@ -358,7 +362,7 @@ class Unit(Entity):
     def changeToMoving(self, paths):
         print("MOVING", self.x, self.y)
         self.state = State.MOVING
-        actualPath = self.paths[0]
+        actualPath = paths[0]
         if actualPath.angle < 0:
             self.angle = -actualPath.angle
         else:

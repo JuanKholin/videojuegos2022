@@ -150,7 +150,7 @@ player1 = Player.Player([], [], 400, keyMap, commandMap, mapa)
 
 
 # Player 2 AKA IA
-player2 = Player.Player([], [], 100, {}, {}, mapa)
+player2 = Player.Player([], [], 400, {}, {}, mapa)
 aI = AI(player2)
 
 # Camara

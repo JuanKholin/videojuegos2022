@@ -35,6 +35,15 @@ OBSTACLE = 1
 UNIT = 2
 RESOURCE = 3
 
+# dificultades IA (margen de decision en frames):
+EASY = 1000
+MEDIUM = 600
+HARD = 200
+
+# espera de la IA para tomar decisiones ligeras:
+AI_LAPSE = 50
+
+
 #CLOCK = pygame.time.Clock()
 
 #contador del sistema
