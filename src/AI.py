@@ -1,4 +1,4 @@
-from Utils import *
+from .Utils import *
 from random import *
 
 # Esta clase va a sacar lo peor de nosotros mismos, me temo

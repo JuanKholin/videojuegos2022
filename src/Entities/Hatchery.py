@@ -1,78 +1,78 @@
 import pygame
+from .Zergling import *
 from .Structure import *
-from .. import Player, Map, Utils, Tile
+from .. import Player, Map
 from ..Command import *
-from src.Utils import *
-from .Drone import *
+from ..Utils import *
 
+WHITE   = (255,255,255)
 GENERATION_TIME = 10
-MINERAL_COST = DRONE_MINERAL_COST
-HP = 10
-
+MINERAL_COST = 50
+HP = 200
 
 class Hatchery(Structure):
     sprites = []
     training = []
-    heightPad = 100
+    heightPad = 10
+    generationTime = 0
+    generationCount = 0
     widthPad = -20
-    rectOffY = 5
+    rectOffY = 90
+    tileW = 6
+    clicked = False
+    tileH = 4
 
-    def __init__(self, xini, yini, player, map):
-        (x, y) = map.getTileCenter(xini, yini)
-        x -= 20
-        y -= 10
-        #en el resto de estructuras le estas pasando x e y a Structure, no xini yini como tenias aqui
-        #necesito que sea igual asi que he puesto x e y aqui, espero no haber jodido nada
-        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, x, y, takeID(), player)
-        self.player = player
-        self.sprites = cargarSprites(HATCHERY_PATH, 4, False, BLUE, 1.8)
-        self.map = map
-        self.generationCount = 0
+    def __init__(self, xini, yini, player, map, building, id):
+        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
+        self.sprites = cargarSprites(HATCHERY_PATH, 4, False, BLUE2, 1.8, 0)
+        self.building = building
         self.image = self.sprites[self.index]
-        self.image.set_colorkey(BLUE)
-        self.rectn = pygame.Rect(x, y, self.sprites[0].get_width() + self.widthPad, self.sprites[0].get_height() - self.heightPad)
+        self.finalImage = self.sprites[3]
+        
+        self.render = pygame.transform.scale(pygame.image.load(HATCHERY_RENDER), RENDER_SIZE)
+
         self.count = 0
-        self.framesToRefresh = 10
+        self.training = []
         self.paths = []
 
     def update(self):
-        if len(self.training) > 0:
-            self.generationCount += 1
-            if self.generationCount == CLOCK_PER_SEC * self.training[0].generationTime:
-                unit = self.training[0]
-                unitPos = unit.getPosition()
-                unitTile = self.map.getTile(unitPos[0], unitPos[1])
-                if unitTile.type != 0:
-                    vecinas = self.map.getTileVecinas(unitTile)
-                    unit.setTilePosition(vecinas[0])
-                self.player.addUnits(unit)
-                self.generationCount = 0
-                del self.training[0]
-        self.count += 1
-        if self.count >= self.framesToRefresh:
-            self.count = 0
-            self.index = self.index + 1
-            self.index = self.index % 4
-            self.image = self.sprites[self.index]
-            self.image.set_colorkey(BLUE)
-
-    def generateUnit(self, unit):
-        self.training.append(unit)
+        if self.building:
+            self.building = False
+        elif len(self.training) > 0:
+            self.updateTraining()
+        self.index = (self.index + frame(8)) % 4
+        self.image = self.sprites[self.index]
+        self.image.set_colorkey(BLUE2)
 
     def execute(self, command_id):
         if self.clicked:
-            if command_id == CommandId.GENERAR_UNIDAD and self.player.resources >= self.mineralCost:
-                self.player.resources -= self.mineralCost
-                drone = Drone(self.x / 40, (self.y + self.rectn.h) / 40, 1)
-                self.generateUnit(drone)
+            if command_id == CommandId.GENERAR_UNIDAD and self.player.resources >= ZERGLING_MINERAL_COST:
+                self.player.resources -= ZERGLING_MINERAL_COST
+                zergling = Zergling(self.x / 40, (self.y + self.rectn.h) / 40, 1)
+                self.generateUnit(zergling)
 
+    def getOptions(self):
+        #return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS]
+        return [Options.GENERATE_WORKER, Options.BUILD_HATCHERY]
+
+    def command(self, command):
+        if command == CommandId.BUILD_STRUCTURE:
+            return Command(CommandId.BUILD_ZERG_BUILDER)
+        elif command == CommandId.GENERAR_UNIDAD:
+            return Command(CommandId.GENERAR_UNIDAD)
+        else:
+            return Command(CommandId.NULO)
+
+    def getBuildSprite(self):
+        return self.sprites[3]
 
     def toDictionary(self, map):
-        #print("x e y del hatchery ", self.x, self.y)
+        #print("x e y del zerg builder ", self.x, self.y)
         #x, y = map.getTileIndex(self.originX, self.originY)
         return {
-            "clase": "hatchery",
+            "clase": "zergBuilder",
             "x": self.xIni,
             "y": self.yIni,
+            "building": self.building,
             "id": self.id,
         }

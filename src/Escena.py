@@ -4,7 +4,7 @@ import json
 from . import Player, Raton
 from .Utils import *
 from .Command import *
-from .Entities import TerranBarracks, ZergBuilder
+from .Entities import TerranBarracks
 from .Loader import *
 from datetime import datetime
 
@@ -23,7 +23,7 @@ class Escena():
     def procesarEvent(self, event):
         #Conseguir el comando
         if event.type == pg.MOUSEBUTTONDOWN or event.type == pg.MOUSEBUTTONUP:
-            command = self.raton.processEvent(event, self.camera.x, self.camera.y)
+            command = self.raton.processEvent(event, self.camera)
         else:
             command = self.p1.processEvent(event)
         if getGameState() == System_State.ONGAME:
@@ -87,7 +87,7 @@ class Escena():
         if key[self.p1.commandMap[CommandId.MOVER_CAMARA_ARRIBA]]:
             self.camera.moverArriba()
         if key[self.p1.commandMap[CommandId.MOVER_CAMARA_ABAJO]]:
-            self.camera.moverAbajo(self.mapa.h)
+            self.camera.moverAbajo(self.mapa.h - 160)
         if key[self.p1.commandMap[CommandId.MOVER_CAMARA_IZQUIERDA]]:
             self.camera.moverIzquierda()
         if key[self.p1.commandMap[CommandId.MOVER_CAMARA_DERECHA]]:
@@ -109,7 +109,7 @@ class Escena():
         self.p2.update()
         self.interfaz.update()
         self.raton.update(self.camera)
-        self.aI.make_commands()
+        #self.aI.make_commands()
 
 
     def updateStructure(self, structure):
@@ -165,26 +165,18 @@ class Escena():
         self.mapa.drawMap(screen, self.camera)
         
         for res in self.resources:
-            r = res.getRect()
-            pg.draw.rect(screen, BLACK, pg.Rect(r.x - self.camera.x, r.y  - self.camera.y, r.w, r.h),1)
-            if (r.x + r.w >= self.camera.x and r.x <= self.camera.x + self.camera.w and
-            r.y + r.h >= self.camera.y and r.y <= self.camera.y + self.camera.h):
-                drawPos = res.getDrawPosition()
-                if res.clicked:
-                    pg.draw.ellipse(screen, GREEN, [r.x - self.camera.x, r.y + (0.7*r.h)- self.camera.y,r.w , 0.3*r.h], 2)
-                #screen.blit(unit.image, [r.x - self.camera.x, r.y - self.camera.y])
-                screen.blit(res.image, [drawPos[0] - self.camera.x, drawPos[1] - self.camera.y])
+            res.draw(screen, self.camera)
                 
         self.p1.draw(screen, self.camera)
         self.p2.draw(screen, self.camera)
         self.raton.drawBuildStructure(screen, self.camera)
-        self.interfaz.draw(screen)
+        self.interfaz.draw(screen, self.camera)
         
     def getTerranBarrack(self):
         return TerranBarracks(0, 0, None, self.mapa, True, 5)
 
     def getZergBuilder(self):
-        return ZergBuilder(0, 0, None, self.mapa, False, 8)
+        return Hatchery(0, 0, None, self.mapa, False, 8)
 
     def toDictionary(self):
         return{

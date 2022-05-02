@@ -1,14 +1,18 @@
 import pygame, math
 from . import Utils
 from .Command import *
+from .Utils import *
 
 
 class Player():
-    def __init__(self, units, structures, resources, keyMap, commandMap, mapa):
+    def __init__(self, units, structures, resources, keyMap, commandMap, mapa, isPlayer):
         #Atributos
+        self.isPlayer = isPlayer
+        
         self.units = units
         self.unitsSelected = []
         self.structureSelected = None
+        self.resourcesSelected = None
         self.structures = structures
         self.resources = resources
         self.keyMap = keyMap
@@ -22,13 +26,14 @@ class Player():
         self.base = base
 
     def processEvent(self, event):
-        if event.type == pygame.KEYDOWN:
-            if event.key in self.keyMap:
-                if self.structureSelected != None:
-                    command = self.structureSelected.command(self.keyMap[event.key])
-                    if command != Command(CommandId.NULO):
-                            return command
-                return Command(self.keyMap[event.key])
+        if self.isPlayer:
+            if event.type == pygame.KEYDOWN:
+                if event.key in self.keyMap:
+                    if self.structureSelected != None:
+                        command = self.structureSelected.command(self.keyMap[event.key])
+                        if command != Command(CommandId.NULO):
+                                return command
+                    return Command(self.keyMap[event.key])
         return Command(CommandId.NULO)
 
 
@@ -80,6 +85,25 @@ class Player():
             if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
             r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
                 unit.draw(screen, camera)
+                
+    def drawEntity(self, screen, isMe):
+        if isMe:
+            for structure in self.structures:
+                pos = structure.getPosition()
+                pygame.draw.rect(screen, BLUE, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
+            for unit in self.units:
+                if unit.state != State.DEAD:
+                    pos = unit.getPosition()
+                    pygame.draw.rect(screen, GREEN, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))    
+        else:
+            for structure in self.structures:
+                pos = structure.getPosition()
+                pygame.draw.rect(screen, ORANGE, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
+            for unit in self.units:
+                if unit.state != State.DEAD:
+                    pos = unit.getPosition()
+                    pygame.draw.rect(screen, RED, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))    
+
 
     def removeUnit(self, unit):
         self.unitsSelected.remove(unit)

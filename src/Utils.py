@@ -59,19 +59,22 @@ BLACK   = (0, 0, 0)
 GREEN   = (0, 255, 0)
 RED     = (255, 0, 0)
 BLUE    = (0, 0, 255)
-BLUE2    = (35, 35, 255)
+YELLOW  = (255, 255, 0)
+BLUE2   = (35, 35, 255)
 PURPLE  = (255, 0, 255)
 GREEN2  = (210, 255, 125)
 GREEN3  = (110, 255, 90)
 PINK    = (255, 95, 185)
 ORANGE  = (255, 200, 95)
 
-HP = pygame.image.load("SPRITE/vida3.png")
+HP = pygame.image.load("SPRITE/EXTRA/vida3.png")
+HP.set_colorkey(WHITE)
+HP2 = pygame.image.load("SPRITE/EXTRA/vida2.png")
 HP.set_colorkey(WHITE)
 
-BGM_VOLUME = 0.2
+BGM_VOLUME = 0.5
 SOUND_VOLUME = 0.5
-haveBGM = True
+haveBGM = False
 
 CAMERA_SPEED = 8
 
@@ -150,7 +153,7 @@ EXIT_FB = "SPRITE/mainMenu/Exit/Spanish/exitones"
 EXIT_FB_N = 30
 EXIT_FB_POS = [680, 420]
 
-BARRA_COMANDO = "SPRITE/gui_frame"
+BARRA_COMANDO = "SPRITE/EXTRA/gui_frame"
 
 #----------------------------------------------------------------
 # GUI
@@ -161,6 +164,19 @@ BUTTON_W = 60
 BUTTON_H = 55
 BUTTONPADY = 64
 BUTTONPADX = 74
+
+MINIMAP_X = 10
+MINIMAP_Y = 560
+MINIMAP_W = 205 
+MINIMAP_H = 205
+
+GUI_INFO_X = 280
+GUI_INFO_Y = 610
+
+#---
+HEROE_PATH = "SPRITE/Heroes/Terran/Alexei Stukov/taxfid000"
+HEROE_N = 10
+#----
 
 
 class Options(IntEnum):
@@ -175,30 +191,47 @@ BUTTON_PATH = "SPRITE/button/gui_button_"
 # TROPAS
 #----------------------------------------------------------------
 
+RENDER_SIZE = [85*2, 97*2]
+UNIT_RENDER_SIZE = [85*1.4, 97*1.4]
+
 ##---------TERRAN_WORKER------------------
 TERRAN_WORKER_MINERAL_COST = 20
+WORKER_RENDER = "SPRITE/render/terranWorker.png"
+
+SOLDIER_RENDER = "SPRITE/render/terranSoldier.png"
 
 ##---------ZERGLING-----------------------
 ZERGLING_MINERAL_COST = 20
+ZERGLING_RENDER = "SPRITE/render/zergling.png"
 
 ##---------DRONE--------------------------
 DRONE_MINERAL_COST = 20
-
+DRONE_RENDER = "SPRITE/render/drone.png"
 
 #----------------------------------------------------------------
 # ESTRUCTURAS
 #----------------------------------------------------------------
 
 ##---------TERRAN_BUILDER------------------
-TERRAN_BUILDER_PATH = "SPRITE/builder/tile00"
+TERRAN_BUILDER_PATH = "SPRITE/structure/builder/tile00"
+BUILDER_RENDER = "SPRITE/render/terranBuilder.png"
 
 ##---------TERRAN_BARRACK------------------
 
-TERRAN_BARRACK_PATH = "SPRITE/barracks/tile00"
+TERRAN_BARRACK_PATH = "SPRITE/structure/barracks/tile00"
 TERRAN_BARRACK_MINERAL_COST = 50
+BARRACKS_RENDER = "SPRITE/render/terranBarracks.png"
 
 ##---------HATCHERY------------------
-HATCHERY_PATH = "SPRITE/Hatchery/tile00"
+HATCHERY_PATH = "SPRITE/structure/Hatchery/tile00"
+HATCHERY_RENDER = "SPRITE/render/hatchery.png"
+
+##---------SUPPLY------------------
+TERRAN_SUPPLY_PATH = "SPRITE/structure/supply_depot/tile00"
+TERRAN_SUPPLY_MINERAL_COST = 50
+SUPPLY_RENDER = "SPRITE/render/terranSupply.png"
+
+CRYSTAL_RENDER = "SPRITE/render/mineral.png"
 
 
 #carga n sprites con nombre path + 0 hasta path + (n-1)

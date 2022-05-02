@@ -27,6 +27,9 @@ class TerranBuilder(Structure):
         self.sprites = cargarSprites(TERRAN_BUILDER_PATH, 6, False, WHITE, 1.5)
         self.image = self.sprites[self.index]
         self.finalImage = self.sprites[4]
+        
+        self.render = pygame.transform.scale(pygame.image.load(BUILDER_RENDER), RENDER_SIZE)
+        
         self.building = building
         self.count = 0
 

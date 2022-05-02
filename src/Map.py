@@ -22,6 +22,7 @@ class Map():
             if codedMap == None:
                 self.generateRandomMap()
             self.load()
+            #self.loadMinimap()
             
     #Dibuja el mapa
     def drawMap(self, screen, camera):
@@ -63,27 +64,27 @@ class Map():
         while x <= finx:
             tileUp = self.getTile(x,y - 40)
             tileDown = self.getTile(x,finy + 40)
-            print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
+            #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
             if tileUp.type == 0:
-                print("tileUp:", tileUp.tileid)
+                #print("tileUp:", tileUp.tileid)
                 tiles.append(tileUp)
             if tileDown.type == 0:
-                print("tileDown: ", tileDown.tileid)
+                #print("tileDown: ", tileDown.tileid)
                 tiles.append(tileDown)
             x += 40
         x = self.getTile(rect.x, rect.y).centerx
         while y <= finy:
             tileUp = self.getTile(x - 40,y)
             tileDown = self.getTile(finx + 40,y)
-            print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
+            #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
             if tileUp.type == 0:
-                print("tileUp:", tileUp.tileid)
+                #print("tileUp:", tileUp.tileid)
                 tiles.append(tileUp)
             if tileDown.type == 0:
-                print("tileDown: ", tileDown.tileid)
+                #print("tileDown: ", tileDown.tileid)
                 tiles.append(tileDown)
             y += 40
-        input()
+        #input()
         #FALTAN LAS ESQUINA
         x = self.getTile(rect.x, rect.y).centerx
         finx = rect.x + rect.w
@@ -397,6 +398,7 @@ class Map():
 
         return pathReturn
 
+    #empieza a cargar el mapa
     def load(self):
         if self.codedMap == None:
             self.generateRandomMap()
@@ -410,6 +412,7 @@ class Map():
                 tile = Tile.Tile(i*len(self.codedMap) + j, self.tw * j, self.th * i, self.tw, self.th, tile_sprite, type)
                 self.mapa[i].insert(j,tile)
 
+    #carga el tile con codigo code
     def loadTile(self, code):
         if code[0] == '1': #terreno
             index = int(code[1:])
@@ -418,6 +421,7 @@ class Map():
             index = int(code[1:])
             return self.tiles[1][index], 1
         
+    #genera mapa con suelos aleatorios
     def generateRandomMap(self):
         random.seed(datetime.datetime.now())
         self.codedMap = []
@@ -425,7 +429,8 @@ class Map():
             self.codedMap.insert(i,[])
             for j in range(self.w):
                 self.codedMap[i].insert(j, str(100 + random.randint(0, 7)))
-                
+    
+    #setea una elevacion en la coordenada x, y           
     def setElevacion(self, x, y):
         tile = 0
         for j in range(y, y+5):
@@ -440,7 +445,31 @@ class Map():
                     self.codedMap[j][i] = str(200 + tile)
                     tile += 1
         pass
-            
+    
+    def drawMinimap(self, screen):
+        y = 0
+        for i in range(len(self.minimap)):
+            x = 0
+            for j in range(len(self.minimap[0])):
+                screen.blit(self.minimap[i][j], [round(MINIMAP_X + x), round(MINIMAP_Y + y)])
+                x += round(200/len(self.mapa[0]))
+                #print(205/len(self.mapa[0]))
+            y += round(200/len(self.mapa))
+            #print("y ", 205/len(self.mapa))
+    
+    def loadMinimap(self):
+        self.minimap = []
+        for i in range(len(self.mapa)):
+            self.minimap.insert(i,[])#Es una matriz que representa el mapa(0 es suelo, 1 es obstaculo, 2 vecino)
+            for j in range(len(self.mapa[0])):
+                image = (self.mapa[i][j]).image
+                tile_sprite = pygame.transform.scale(image, [round(200/len(self.mapa[0])), round(200/len(self.mapa))])
+                #print(tile_sprite.get_rect())
+                self.minimap[i].insert(j, tile_sprite)
+    
+    def getMinimap(self):
+        return self.minimap
+        
     def toDictionary(self):
         return {
             "w": int(self.w / self.tw),

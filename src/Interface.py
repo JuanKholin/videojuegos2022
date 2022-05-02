@@ -9,8 +9,9 @@ class Interface():
     buttonX = 0
     buttonY = 0
     
-    def __init__(self, player, mouse):
+    def __init__(self, player, enemy, mouse):
         self.player = player
+        self.enemy = enemy
         self.mouse = mouse
         self.mainMenu = pg.image.load(MAIN_MENU + ".png")
         self.mainMenu = pg.transform.scale(self.mainMenu, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -29,6 +30,9 @@ class Interface():
         self.exitRect = pg.Rect(EXIT_POS[0], EXIT_POS[1], self.exit[0].get_width(), self.exit[0].get_height())
         self.singlePress = False
         self.exitPress = False
+        
+        self.heroeSprites = cargarSprites(HEROE_PATH, HEROE_N, False, None, 1.3)
+        self.heroeIndex = 0
         
         self.idExit = 0 
         self.idSingle = 0 
@@ -115,8 +119,11 @@ class Interface():
                     b.setCollide(True)
                 else:
                     b.setCollide(False)
+                    
+            if frame(10):
+                self.heroeIndex = (self.heroeIndex+1)%HEROE_N
          
-    def draw(self, screen):
+    def draw(self, screen, camera):
         if Utils.state == System_State.MAINMENU:
             screen.blit(self.mainMenu, [0, 0])
             
@@ -142,6 +149,22 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), str(round(Utils.SYSTEM_CLOCK / CLOCK_PER_SEC)), BLACK, 30, (20, 20))
             muestra_texto(screen, times, str(self.player.resources), BLACK, 30, (SCREEN_WIDTH - 40, 20))
             screen.blit(self.gui, (0, 0))
+            
+            #draw minimapa
+            pygame.draw.rect(screen, BLUE, pygame.Rect(MINIMAP_X, MINIMAP_Y, MINIMAP_W, MINIMAP_H), 1)
+            #self.player.mapa.drawMinimap(screen)
+            self.player.drawEntity(screen, True)
+            self.enemy.drawEntity(screen, False)
+            
+            pygame.draw.rect(screen, WHITE, pygame.Rect(MINIMAP_X + (camera.x/self.player.mapa.w * MINIMAP_W), MINIMAP_Y + (camera.y/self.player.mapa.h * MINIMAP_H), camera.w/self.player.mapa.w * MINIMAP_W, camera.h/self.player.mapa.h * MINIMAP_H), 2)
+            
+            #informacion de entidades seleccionadas
+            self.drawEntityInfo(screen, camera)
+            
+            #draw cara del heroe
+            screen.blit(self.heroeSprites[self.heroeIndex], (672, 667))
+            
+            #draw comandos de la entidad seleccionada
             opcion = 0
             for b in self.button:
                 opcion += 1
@@ -152,6 +175,35 @@ class Interface():
                     self.buttonX = Utils.BUTTON_X
                 if opcion == 9:
                     break
+    
+    def drawEntityInfo(self, screen, camera):
+        if len(self.player.unitsSelected) == 1:
+            image = self.player.unitsSelected[0].getRender()
+            screen.blit(image, (GUI_INFO_X + 10, GUI_INFO_Y + 20))
+        elif len(self.player.unitsSelected) > 1:
+            images = []
+            for unit in self.player.unitsSelected:
+                image = unit.getRender()
+                image = pygame.transform.scale(image, [image.get_rect().w * 0.7, image.get_rect().h * 0.7])
+                images.append(image)
+            x = 0
+            y = 0
+            n = 0
+            for image in images:
+                screen.blit(image, (GUI_INFO_X + x, GUI_INFO_Y + 5 + y))
+                x += 85
+                n += 1
+                if n == 4:
+                    y = 100
+                    x = 0
+                if n == 8:
+                    break
+        elif self.player.structureSelected != None:
+            image = self.player.structureSelected.getRender()
+            screen.blit(image, (GUI_INFO_X, GUI_INFO_Y))
+        elif self.player.resourceSelected != None:
+            image = self.player.resourceSelected.getRender()
+            screen.blit(image, (GUI_INFO_X, GUI_INFO_Y))
                 
     def checkInGUIPosition(self):
         x = self.mouse.rel_pos[0]

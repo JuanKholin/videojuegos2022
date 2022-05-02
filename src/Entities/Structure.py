@@ -65,6 +65,9 @@ class Structure(Entity.Entity):
 
     def update(self):
         pass
+    
+    def execute(self, command_id):
+        pass
 
     def updateBuilding(self, nBuildSprites):
         if nBuildSprites != 0:
@@ -105,8 +108,12 @@ class Structure(Entity.Entity):
         r = self.getRect()
         image = self.getImage()
         if self.clicked:
-            pygame.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
-            hp = pygame.transform.chop(pygame.transform.scale(HP, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
+            if self.player.isPlayer:
+                pygame.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
+                hp = pygame.transform.chop(pygame.transform.scale(HP, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
+            else:
+                pygame.draw.ellipse(screen, RED, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
+                hp = pygame.transform.chop(pygame.transform.scale(HP2, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
             screen.blit(hp, [r.x + r.w/2 - camera.x - hp.get_rect().w/2, r.y + r.h - camera.y])
         screen.blit(self.image, [image.x - camera.x, image.y - camera.y])
         if DEBBUG:
@@ -157,6 +164,9 @@ class Structure(Entity.Entity):
 
     def getOrder(self):
         return CommandId.NULO
+    
+    def getPlayer(self):
+        return self.player
 
     def setTilesOcupados(self):
         rect = self.getRect()

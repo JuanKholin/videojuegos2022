@@ -16,13 +16,13 @@ from src.AI import *
 from src.Camera import *
 from src.Entities.Crystal import *
 from src.Escena import Escena
-from src.Entities import TerranBuilder
+from src.Entities.TerranBuilder import * 
 from src.Entities.TerranWorker import *
 from src.Entities.TerranBarracks import *
-from src.Entities.ZergBuilder import *
 from src.Entities.Hatchery import *
 from src.Entities.Drone import *
 from src.Entities.Zergling import *
+from src.Entities.TerranSupplyDepot import *
 
 # Auxiliar del bucle principal
 def procesarInput():
@@ -47,19 +47,19 @@ def procesarInput():
 def setEntity(player):
 
     scv = TerranWorker(4, 10, player1)
-    structure1 = TerranBuilder.TerranBuilder(5, 6, player1, mapa, False, 1)
-    structure3 = TerranBuilder.TerranBuilder(10, 6, player1, mapa, False, 2)
+    structure1 = TerranBuilder(5, 6, player1, mapa, False, 1)
+    structure3 = TerranSupplyDepot(10, 6, player1, mapa, True, 2)
 
     player1.setBasePlayer(structure1)
     structure2 = TerranBarracks(15, 9, player1, mapa, False, 3)
 
     player.addStructures(structure1)
     player.addStructures(structure2)
-    #player.addStructures(structure3)
+    player.addStructures(structure3)
     player.addUnits(scv)
 
-    zergBuilder = ZergBuilder(16, 14, player1, mapa, False, 8)
-    #player1.addStructures(zergBuilder)
+    hatchery = Hatchery(16, 14, player2, mapa, False, 8)
+    player2.addStructures(hatchery)
 
     drone = Drone(10, 11, player1)
     player1.addUnits(drone)
@@ -78,13 +78,14 @@ def update():
     raton.update(camera)
 
     if getGameState() == System_State.MAINMENU:
-        #playMusic(mainMenuBGM, pos = 5)
+        playMusic(mainMenuBGM, pos = 5)
         #playSound(mainMenuBGM)
         p1Interface.update()
     elif getGameState() == System_State.MAP1:
-        #playMusic(map1BGM)
+        playMusic(map1BGM)
         #cargar mapa
         escena.mapa.load()
+        #escena.mapa.loadMinimap()
         setEntity(player1)
         setGameState(System_State.ONGAME)
     elif getGameState() == System_State.ONGAME:
@@ -96,7 +97,7 @@ def update():
 def draw():
     screen.fill(WHITE)
     if Utils.state == System_State.MAINMENU:
-        p1Interface.draw(screen)
+        p1Interface.draw(screen, camera)
     elif Utils.state == System_State.ONGAME:
         escena.draw(screen)
     raton.draw(screen, camera)
@@ -144,18 +145,18 @@ mapa.setElevacion(8, 35)
 mapa.setElevacion(5, 12)
 mapa.setElevacion(32, 29)
 
-player1 = Player.Player([], [], 400, keyMap, commandMap, mapa)
+player1 = Player.Player([], [], 400, keyMap, commandMap, mapa, True)
 
 # Raton
 
 
 # Player 2 AKA IA
-player2 = Player.Player([], [], 400, {}, {}, mapa)
-aI = AI(player2)
+player2 = Player.Player([], [], 400, {}, {}, mapa, False)
+#aI = AI(player2)
 
 # Camara
 # pre: mapa tan grande como ventana
-camera = Camera(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)
+camera = Camera(0, 0, SCREEN_HEIGHT - 160, SCREEN_WIDTH)
 
 # Escena
 
@@ -166,10 +167,10 @@ resources = []
 resources.append(cristal)
 
 raton = Raton.Raton(player1, player2, resources)
-p1Interface = Interface(player1, raton)
+p1Interface = Interface(player1, player2, raton)
 raton.addInterface(p1Interface)
 
-escena = Escena(player1, player2, aI, mapa, camera, raton, p1Interface, resources)
+escena = Escena(player1, player2, None, mapa, camera, raton, p1Interface, resources)
 #escena.mapa.addOre(100,100)
 
 # Bucle principal

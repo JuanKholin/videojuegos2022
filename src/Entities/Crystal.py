@@ -1,5 +1,5 @@
 import pygame as pg
-from .. import Utils
+from ..Utils import *
 
 SPRITE_PIXEL_ROWS = 96
 WEIGHT_PADDING =    0
@@ -15,12 +15,24 @@ class Cristal():
         self.tipo = tipo
         self.interval = capacidad/4
         spritesheet = pg.image.load("./SPRITE/Cristal/min0" + str(tipo) + ".bmp").convert()
-        spritesheet.set_colorkey((Utils.BLACK))
+        spritesheet.set_colorkey((BLACK))
         self.sprites = self.divideSpritesheetByRows(spritesheet, SPRITE_PIXEL_ROWS)
         #self.image = self.sprites[4 - int(float(capacidad)/float(self.interval) + 0.5)]
         self.image = self.sprites[0]
         self.clicked = False
-
+        
+        self.render = pygame.transform.scale(pygame.image.load(CRYSTAL_RENDER), RENDER_SIZE)
+        
+    def draw(self, screen, camera):
+        r = self.getRect()
+        pg.draw.rect(screen, BLACK, pg.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h),1)
+        if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
+        r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
+            drawPos = self.getDrawPosition()
+            if self.clicked:
+                pg.draw.ellipse(screen, YELLOW, [r.x - camera.x, r.y + (0.7*r.h)- camera.y,r.w , 0.3*r.h], 2)
+            #screen.blit(unit.image, [r.x - self.camera.x, r.y - self.camera.y])
+            screen.blit(self.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
 
     def divideSpritesheetByRows(self,spritesheet, rows):
         totalRows = spritesheet.get_height()
@@ -35,6 +47,9 @@ class Cristal():
 
     def __del__(self):
         print("destruction")
+        
+    def setClicked(self, click):
+        self.clicked = click
 
     def getMined(self, cantidad):
         if (self.capacidad <= 0):
@@ -59,6 +74,9 @@ class Cristal():
         rectAux = pg.Rect(self.x - X_PADDING,
                 self.y - Y_PADDING, self.image.get_width() - WEIGHT_PADDING, self.image.get_height()  - HEIGHT_PADDING)
         return rectAux
+    
+    def getRender(self):
+        return self.render
 
     def toDictionary(self, map):
         print("x e y del cristal ", self.x, self.y)

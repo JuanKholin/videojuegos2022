@@ -64,6 +64,7 @@ class Drone(Worker):
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
+        self.render = pygame.transform.scale(pygame.image.load(DRONE_RENDER), UNIT_RENDER_SIZE)
 
     def toDictionary(self, map):
         x, y = map.getTileIndex(self.x, self.y)

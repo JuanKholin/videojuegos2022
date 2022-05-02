@@ -30,6 +30,8 @@ class TerranBarracks(Structure):
         self.building = building
         self.image = self.sprites[self.index]
         self.finalImage = self.sprites[4]
+        
+        self.render = pygame.transform.scale(pygame.image.load(BARRACKS_RENDER), RENDER_SIZE)
 
         self.count = 0
         self.training = []

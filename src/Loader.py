@@ -9,7 +9,7 @@ from .Entities.TerranBarracks import *
 from .Entities.Hatchery import *
 from .Entities.Drone import *
 from .Entities.Zergling import *
-from .Entities.ZergBuilder import *
+
 
 #pre: mapDictionary es un diccionario con la info del mapa
 #   map: mapa dela escena
@@ -56,7 +56,7 @@ def loadStructures(structureDictionaries, player, map):
         elif s["clase"] == "hatchery":
             player.addStructures(Hatchery(s["x"], s["y"], player, map, s["id"]))
         elif s["clase"] == "zergBuilder":
-            player.addStructures(ZergBuilder(s["x"], s["y"], player, map, s["building"], s["id"]))
+            player.addStructures(Hatchery(s["x"], s["y"], player, map, s["building"], s["id"]))
 
 #en el fichero la clave es una string, hay que hacer uno nuevo con clave numerica
 def loadKeyMap(stringKeyKeyMap, p):

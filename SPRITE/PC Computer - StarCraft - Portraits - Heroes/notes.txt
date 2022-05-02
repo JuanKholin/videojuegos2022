@@ -1,0 +1,10 @@
+Portraits extracted and converted by ACE_Spark.
+Portraits have been sorted and renamed according to their final game designation, how-ever the file-names of the portraits themselves remain as they were in the games' files.
+
+Portrait Naming:
+id = Idle
+tlk = Speaking
+
+
+Note, the portraits really do use so few colours.
+The game gives the impression of a greater colour palette through use of scan lines.

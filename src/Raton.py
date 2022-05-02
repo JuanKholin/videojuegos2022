@@ -136,6 +136,14 @@ class Raton(pygame.sprite.Sprite):
         #if DEBBUG:
         #    if frame(360) == 1:
         #        print(self.rel_pos[0], self.rel_pos[1])
+        
+        if pygame.mouse.get_pressed()[0]:
+            mouse_pos = pygame.mouse.get_pos()
+            minimapRect = createRect(MINIMAP_X, MINIMAP_Y, MINIMAP_X + MINIMAP_W, MINIMAP_Y + MINIMAP_H)
+            if collides(mouse_pos[0], mouse_pos[1], minimapRect):
+                camera.setX(((mouse_pos[0]-MINIMAP_X)/MINIMAP_W*self.player.mapa.w) - camera.w/2, self.player.mapa.w)
+                camera.setY(((mouse_pos[1]-MINIMAP_Y)/MINIMAP_H*self.player.mapa.h) - camera.h/2, self.player.mapa.h)
+                    
 
     def getPosition(self):
         return self.real_pos
@@ -168,7 +176,7 @@ class Raton(pygame.sprite.Sprite):
             else:
                 if self.point.getClicked():
                     self.point.draw(screen, camera)
-                if self.pulsado:
+                if self.pulsado and self.enable:
                     printRectangulo(screen, self.initialX - camera.x, self.initialY - camera.y, self.rel_pos[0], self.rel_pos[1])
             screen.blit(self.image, (self.rect.x, self.rect.y))
         else:
@@ -179,14 +187,14 @@ class Raton(pygame.sprite.Sprite):
             self.buildStructure.drawBuildStructure(screen, camera)
     
     
-    def processEvent(self, event, cameraX, cameraY):
+    def processEvent(self, event, camera):
         command = Command.Command(Command.CommandId.NULO) # 0 es nada
         self.clicked = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             click_type = pygame.mouse.get_pressed()
             #la posicion del cursor es relativa a la camara
             relative_mouse_pos = pygame.mouse.get_pos()
-            real_mouse_pos = (relative_mouse_pos[0] + cameraX, relative_mouse_pos[1] + cameraY)
+            real_mouse_pos = (relative_mouse_pos[0] + camera.x, relative_mouse_pos[1] + camera.y)
             #print(relative_mouse_pos)
 
             if click_type[0]:
@@ -195,10 +203,11 @@ class Raton(pygame.sprite.Sprite):
                     if not self.building:
                         self.initialX = real_mouse_pos[0]
                         self.initialY = real_mouse_pos[1]
+                    
             if click_type[2]:
                 if not self.derPulsado:
                     self.derPulsado = True
-                    if not self.building:
+                    if not self.building and self.enable:
                         command.setId(Command.CommandId.MOVER)
                         #print("CALCULANDO PUNTOS")
                         for unit in self.player.unitsSelected:
@@ -208,7 +217,7 @@ class Raton(pygame.sprite.Sprite):
         elif event.type == pygame.MOUSEBUTTONUP:
             type = pygame.mouse.get_pressed()
             relative_mouse_pos = pygame.mouse.get_pos()
-            real_mouse_pos = (relative_mouse_pos[0] + cameraX, relative_mouse_pos[1] + cameraY)
+            real_mouse_pos = (relative_mouse_pos[0] + camera.x, relative_mouse_pos[1] + camera.y)
             #print('click liberado', type)
             
             if not type[0]:
@@ -228,8 +237,10 @@ class Raton(pygame.sprite.Sprite):
                             unitSel = False
                             selectedUnit = self.player.unitsSelected
                             selectedStructures = self.player.structureSelected
+                            selectedResources = self.player.resourcesSelected
                             self.player.unitsSelected = []
                             self.player.structureSelected = None
+                            self.player.selectedResources = None
                             isClick = False
 
                             mouseRect = createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
@@ -241,6 +252,17 @@ class Raton(pygame.sprite.Sprite):
                                     self.player.unitsSelected.append(unit)
                                     unitSel = True
                                     #print("CLICKADO" + str(terran.id))
+                            
+                            if not unitSel:
+                                for unit in self.enemy.units:
+                                    #print(unit.getRect())
+                                    if collideRect(mouseRect, unit.getRect()):
+                                        unit.setClicked(True)
+                                        self.player.unitsSelected.append(unit)
+                                        unitSel = True
+                                        #print("CLICKADO" + str(terran.id))    
+                                        break    
+                                
                             if not unitSel:
                                 for structure in self.player.structures:
                                     if collideRect(mouseRect, structure.getRect()):
@@ -249,15 +271,34 @@ class Raton(pygame.sprite.Sprite):
                                         self.player.structureSelected = structure
                                         #print("CLICKADO ")
                                         break
+                                    
+                            if not unitSel:
+                                for structure in self.enemy.structures:
+                                    if collideRect(mouseRect, structure.getRect()):
+                                        structure.setClicked(True)
+                                        unitSel = True
+                                        self.player.structureSelected = structure
+                                        #print("CLICKADO ")
+                                        break
+                            
+                            if not unitSel:
+                                for resource in self.resources:
+                                    if collideRect(mouseRect, resource.getRect()):
+                                        resource.setClicked(True)
+                                        unitSel = True
+                                        self.player.resourceSelected = resource
+                                        #print("CLICKADO ")
+                                        break
 
                             if unitSel:
-                                for unit in self.player.units + self.player.structures:
-                                    if unit not in self.player.unitsSelected + [self.player.structureSelected]:
+                                for unit in self.player.units + self.player.structures + self.enemy.units + self.enemy.structures + self.resources:
+                                    if unit not in self.player.unitsSelected + [self.player.structureSelected] + [self.player.resourceSelected]:
                                         #print(unit)
                                         unit.setClicked(False)
                             else:
                                 self.player.unitsSelected = selectedUnit
                                 self.player.structuresSelected = selectedStructures
+                                self.player.resourceSelected = selectedResources
                     else: #si estoy en GUI
                         #comprobar colision con los botones
                         for b in self.interface.button:

@@ -60,3 +60,7 @@ class Tile():
 
     def getOcupante(self):
         return self.ocupante
+    
+    def getMiniTile(self):
+        pygame.transform.scale(self.image, [self.image.get_rect().w * size, self.image.get_rect().h * size])
+        return self.ocupante

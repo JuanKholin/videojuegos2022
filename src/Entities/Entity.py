@@ -15,6 +15,9 @@ class Entity():
 
     def update():
         pass
+    
+    def getRender(self):
+        return self.render
 
     # Pre: Altura del spritesheet % rows == 0
     # Post: Devuelve el spritesheet dividido en una lista de sprites
