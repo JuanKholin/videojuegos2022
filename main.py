@@ -124,6 +124,7 @@ keyMap ={
   pg.K_r: CommandId.ROTAR,
   pg.K_v: CommandId.GENERAR_UNIDAD,
   pg.K_c: CommandId.BUILD_STRUCTURE,
+  pg.K_u: CommandId.MEJORAR_UNIDAD,
   pg.K_g: CommandId.GUARDAR_PARTIDA,
 }
 commandMap ={

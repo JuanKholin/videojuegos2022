@@ -49,14 +49,14 @@ class Crystal(Resource):
         self.clicked = click
 
     def getMined(self, cantidad):
-        if (self.capacidad <= 0):
+        if (self.capacity <= 0):
             return 0
-        self.capacidad -= cantidad
-        print("Me han minado: ", self.capacidad)
-        if (self.capacidad <= 0):
-            return cantidad + self.capacidad
+        self.capacity -= cantidad
+        print("Me han minado: ", self.capacity)
+        if (self.capacity <= 0):
+            return cantidad + self.capacity
         else:
-            self.image = self.sprites[3 - int(float(self.capacidad)/float(self.interval))]
+            self.image = self.sprites[3 - int(float(self.capacity)/float(self.interval))]
             return cantidad
 
     def getPosition(self):
@@ -81,7 +81,7 @@ class Crystal(Resource):
         print("x e y de la tile del cristal ", x, y)
         return {
             "clase": "cristal",
-            "capacidad": self.capacidad,
+            "capacidad": self.capacity,
             "tipo": self.tipo,
             "x": self.x,
             "y": self.y,
@@ -92,4 +92,4 @@ class Crystal(Resource):
         return rect.x + rect.w/2, rect.y + rect.h/2
 
     def getCapacity(self):
-        return self.capacidad
+        return self.capacity

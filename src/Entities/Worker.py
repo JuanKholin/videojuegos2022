@@ -150,7 +150,7 @@ class Worker(Unit):
     def finishOrePath(self):
         self.paths.pop(0)
         if len(self.paths) == 0: # he entregado el ore, miro si tengo que volver
-            if self.resource.capacidad < 0:
+            if self.resource.capacity < 0:
                 self.player.resources += self.cantidadMinada
                 print("cambiamos a still")
                 self.changeToStill()
@@ -248,4 +248,4 @@ class Worker(Unit):
 
     # Indica a la IA si es soldado o worker
     def isSoldier(self):
-        return false
+        return False
