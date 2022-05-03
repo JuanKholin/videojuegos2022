@@ -162,10 +162,12 @@ class Unit(Entity):
     # Aplica un frame a la unidad que esta atacando
     def updateAttacking(self):
         if self.attackedOne.getHP() > 0:
-            tileActual = self.getTile()
-            enemyTile = self.attackedOne.getTile()
+            '''tileActual = self.getTile()
+            enemyTile = self.attackedOne.getTile()'''
+            
             #print("Estoy en: ", tileActual.tileid, "y el enemigo en: ", enemyTile.tileid)
-            if len(self.mapa.Astar(tileActual, enemyTile)) - 1 <= self.range:
+            print(int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) )
+            if int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) <= self.range:
                 self.updateAttackInRange()
             elif len(self.paths) > 0:
                 self.updateAttackingRoute()
@@ -447,12 +449,11 @@ class Unit(Entity):
         self.y += self.diry * self.speed
 
     def takeAim(self):
-        paths = calcPath(self.getPosition(), self.getTile(), self.attackedOne.getTile(), self.mapa)
-        actualPath = paths[paths.__len__() - 1]
-        if actualPath.angle < 0:
-            self.angle = -actualPath.angle
+        self.angle = math.atan2(self.attackedOne.y - self.y, self.attackedOne.x - self.x)
+        if self.angle < 0:
+            self.angle = -self.angle
         else:
-            self.angle = 2 * math.pi - actualPath.angle
+            self.angle = 2 * math.pi - self.angle
         self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
 
     # Para inflingir un ataque a una unidad
