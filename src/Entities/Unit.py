@@ -56,7 +56,8 @@ class Unit(Entity):
     # obstaculo de camino lo esquivara y si la tile objetivo esta ocupada se detiene
     # lo mas cerca posible de esta
     def move(self, objectiveTile):
-        objectiveTile = self.mapa.getTileCercana(self.getTile(), objectiveTile)
+        if objectiveTile.type != EMPTY:
+            objectiveTile = self.mapa.getTileCercana(self.getTile(), objectiveTile)
         paths = calcPath(self.getPosition(), self.getTile(), objectiveTile, self.mapa)
         if len(paths) > 0:
             self.changeToMoving(paths)
@@ -604,4 +605,5 @@ class Unit(Entity):
 
     # Es darle un valor a un booleano, nada mas y nada menos
     def setClicked(self, click):
+        print("ME HACEN CLICK LOCO, ", self.id)
         self.clicked = click
