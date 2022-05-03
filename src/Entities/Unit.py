@@ -56,6 +56,7 @@ class Unit(Entity):
     # obstaculo de camino lo esquivara y si la tile objetivo esta ocupada se detiene
     # lo mas cerca posible de esta
     def move(self, objectiveTile):
+        objectiveTile = self.mapa.getTileCercana(self.getTile(), objectiveTile)
         paths = calcPath(self.getPosition(), self.getTile(), objectiveTile, self.mapa)
         if len(paths) > 0:
             self.changeToMoving(paths)
@@ -279,7 +280,7 @@ class Unit(Entity):
             if tilePath.type != UNIT or ((tilePath.id == self.id) and (tilePath.type == UNIT)):
                 dirX = math.cos(path.angle)
                 dirY = math.sin(path.angle)
-                tileSiguiente = self.mapa.getTile(self.x + dirX*self.speed, self.y + dirY*self.speed )
+                tileSiguiente = self.mapa.getTile(self.x + 2 * dirX*self.speed, self.y + 2 * dirY*self.speed )
                 #print("la siguiente es: ", tileSiguiente.tileid, self.x + dirX*self.speed, self.y + dirY*self.speed )
                 #input()
                 if tileActual != tileSiguiente :
