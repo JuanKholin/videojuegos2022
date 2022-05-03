@@ -81,7 +81,7 @@ class Crystal(Resource):
         print("x e y de la tile del cristal ", x, y)
         return {
             "clase": "cristal",
-            "capacidad": self.capacidad,
+            "capacidad": self.capacity,
             "tipo": self.tipo,
             "x": self.x,
             "y": self.y,

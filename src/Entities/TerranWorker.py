@@ -16,7 +16,19 @@ MINE_POWER = 8
 MINERAL_COST = 20
 TIME_TO_MINE = 1000
 GENERATION_TIME = 2
-SPEED = 3
+
+speed = 3
+
+
+def getTWSpeed():
+    global speed
+    result = speed
+    return result
+
+def setTWSpeed(_speed):
+    global state
+    state = _speed
+
 FRAMES_TO_REFRESH = 10
 SPRITES = "scvJusto.bmp"
 SCALE = 1.5
@@ -55,12 +67,11 @@ PADDING = 110
 class TerranWorker(Worker):
     def __init__(self, xIni, yIni, player):
         Worker.__init__(self, HP, xIni * TILE_WIDTH + 20, yIni * TILE_HEIGHT, MINERAL_COST,
-                GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME,
+                GENERATION_TIME, speed, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME,
                 PADDING,  takeID(), player, MINE_POWER, TIME_TO_MINE, INVERSIBLE_FRAMES,
                 FRAMES, DIR_OFFSET, ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, X_PADDING,
                 Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ORE_TRANSPORTING_FRAMES, ATTACK_INFO)
-
-
+        print(self.speed)
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey(BLACK)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()

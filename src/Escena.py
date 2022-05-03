@@ -5,6 +5,7 @@ from . import Player, Raton
 from .Utils import *
 from .Command import *
 from .Entities import TerranBarracks
+from .Entities import TerranWorker
 from .Loader import *
 from datetime import datetime
 
@@ -43,6 +44,14 @@ class Escena():
                     self.raton.buildStructure = self.getZergBuilder()
                 elif command.id == CommandId.GUARDAR_PARTIDA:
                     self.saveScene()
+
+
+                #TEMPORAL, JUST TESTING
+                elif command.id == CommandId.MEJORAR_UNIDAD:
+                    TerranWorker.setTWSpeed(1)
+                    print("SPID")
+
+                
                 elif command.id == CommandId.MOVER:
                     #path = [] ## !!!!
                     relative_mouse_pos = pg.mouse.get_pos()

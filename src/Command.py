@@ -21,6 +21,7 @@ class CommandId(IntEnum):
     ATTACK = 17
     GENERATE_WORKER = 18
     GENERATE_SOLDIER = 19
+    MEJORAR_UNIDAD = 20
 
 class Command:
     def __init__(self, id):

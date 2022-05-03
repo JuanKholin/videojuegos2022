@@ -601,5 +601,4 @@ class Unit(Entity):
 
     # Es darle un valor a un booleano, nada mas y nada menos
     def setClicked(self, click):
-        print("ME HACEN CLICK LOCO, ", self.id)
         self.clicked = click
