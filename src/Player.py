@@ -8,7 +8,6 @@ class Player():
     def __init__(self, units, structures, resources, keyMap, commandMap, mapa, isPlayer):
         #Atributos
         self.isPlayer = isPlayer
-        
         self.units = units
         self.unitsSelected = []
         self.structureSelected = None
@@ -46,10 +45,12 @@ class Player():
     def addUnits(self,unit):
         self.units.append(unit)
 
+
     def addStructures(self,structures):
         self.structures.append(structures)
 
     def execute(self, id, param, tileClicked):
+        print("Soy player, ", self.isPlayer)
         if id == CommandId.MOVER: #Mover unidades
             for i in range(param.__len__()):
                 self.unitsSelected[i].paths = param[i]
@@ -81,7 +82,6 @@ class Player():
                 structure.draw(screen, camera)
         for unit in self.units:
             r = unit.getRect()
-            #print(r)
             if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
             r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
                 unit.draw(screen, camera)

@@ -201,8 +201,8 @@ class Interface():
         elif self.player.structureSelected != None:
             image = self.player.structureSelected.getRender()
             screen.blit(image, (GUI_INFO_X, GUI_INFO_Y))
-        elif self.player.resourceSelected != None:
-            image = self.player.resourceSelected.getRender()
+        elif self.player.resourcesSelected != None:
+            image = self.player.resourcesSelected.getRender()
             screen.blit(image, (GUI_INFO_X, GUI_INFO_Y))
                 
     def checkInGUIPosition(self):
