@@ -258,6 +258,7 @@ class Raton(pygame.sprite.Sprite):
                                     self.player.unitsSelected.append(unit)
                                     unitSel = True
                                     #print("CLICKADO" + str(terran.id))
+                                    self.player.resourceSelected = None
                             
                             if not unitSel:
                                 for unit in self.enemy.units:
@@ -266,7 +267,8 @@ class Raton(pygame.sprite.Sprite):
                                         unit.setClicked(True)
                                         self.player.enemySelected.append(unit)
                                         unitSel = True
-                                        #print("CLICKADO" + str(terran.id))    
+                                        #print("CLICKADO" + str(terran.id))
+                                        self.player.resourceSelected = None    
                                         break  
                                 
                             if not unitSel:
@@ -276,6 +278,7 @@ class Raton(pygame.sprite.Sprite):
                                         unitSel = True
                                         self.player.structureSelected = structure
                                         #print("CLICKADO ")
+                                        self.player.resourceSelected = None
                                         break
                                     
                             if not unitSel:
@@ -285,6 +288,7 @@ class Raton(pygame.sprite.Sprite):
                                         unitSel = True
                                         self.player.enemyStructureSelected = structure
                                         #print("CLICKADO ")
+                                        self.player.resourceSelected = None
                                         break
                             
                             if not unitSel:
