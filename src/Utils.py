@@ -4,7 +4,7 @@ import math
 from re import T
 import pygame
 
-DEBBUG = False
+DEBBUG = True
 
 class System_State(Enum):
     MAINMENU = auto()
@@ -34,6 +34,7 @@ EMPTY = 0
 OBSTACLE = 1
 UNIT = 2
 RESOURCE = 3
+GEYSER = 4
 
 # Resource types:
 CRYSTAL = 1

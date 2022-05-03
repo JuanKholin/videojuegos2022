@@ -55,6 +55,8 @@ class Tile():
                 pygame.draw.rect(screen, GREEN, pygame.Rect(cameraRectCoords), 1)
             elif self.type == 3:
                 pygame.draw.rect(screen, BLUE, pygame.Rect(cameraRectCoords), 1)
+            elif self.type == GEYSER:
+                pygame.draw.rect(screen, ORANGE, pygame.Rect(cameraRectCoords), 1)
             else:
                 pygame.draw.rect(screen, BLACK, pygame.Rect(cameraRectCoords), 1)
 

@@ -43,7 +43,6 @@ class Structure(Entity.Entity):
             self.updateCollapsing()
         elif self.state == BuildingState.DESTROYED:
             pass
-        print(self.index)
         self.image = self.sprites[self.index]
 
 

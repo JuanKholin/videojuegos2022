@@ -2,16 +2,16 @@ import pygame as pg
 from ..Utils import *
 from .Resource import *
 
-SPRITE_PIXEL_ROWS = 96
-WEIGHT_PADDING =    0
-HEIGHT_PADDING =    85
-X_PADDING =         65
-Y_PADDING =         55
+SPRITE_PIXEL_ROWS = 64
+WEIGHT_PADDING =    40
+HEIGHT_PADDING =    20
+X_PADDING =         80
+Y_PADDING =         20
 
-class Crystal(Resource):
+class Geyser(Resource):
     def __init__(self, x, y, capacidad):
         Resource.__init__(self, x * TILE_WIDTH, y * TILE_HEIGHT + 20, CRYSTAL, capacidad)
-        spritesheet = pg.image.load("./SPRITE/Cristal/min0" + str(self.type) + ".bmp").convert()
+        spritesheet = pg.image.load("./sprites/geyser.bmp").convert()
         spritesheet.set_colorkey((BLACK))
         self.sprites = self.divideSpritesheetByRows(spritesheet, SPRITE_PIXEL_ROWS)
         #self.image = self.sprites[4 - int(float(capacidad)/float(self.interval) + 0.5)]
@@ -37,7 +37,7 @@ class Crystal(Resource):
         sprites = []
         for i in range(int(totalRows / rows)):
             aux = pg.Surface.subsurface(spritesheet, (0, rows * i, maxCol, rows))
-            aux = pg.transform.scale2x(aux)
+            aux = pg.transform.scale(aux, [aux.get_rect().w * 1.5, aux.get_rect().h * 1.5])
 
             sprites.append(aux)
         return sprites
@@ -50,7 +50,7 @@ class Crystal(Resource):
 
     def getMined(self, cantidad):
         if (self.capacity <= 0):
-            return 0
+            return 2
         self.capacity -= cantidad
         print("Me han minado: ", self.capacity)
         if (self.capacity <= 0):
@@ -64,7 +64,7 @@ class Crystal(Resource):
         return (r.x + r.w/2, r.y + r.h)
 
     def getDrawPosition(self):
-        return(self.x - self.image.get_width()/2,  self.y - self.image.get_height()/2)
+        return(self.x - self.image.get_width()/2 + 20,  self.y - self.image.get_height()/2)
 
     # Devuelve el rectangulo que conforma su imagen, creo, esto lo hizo otro
     def getRect(self):
@@ -76,14 +76,14 @@ class Crystal(Resource):
         return self.render
     
     def getType(self):
-        return RESOURCE
+        return GEYSER
 
     def toDictionary(self, map):
         print("x e y del cristal ", self.x, self.y)
         x, y = map.getTileIndex(self.x, self.y)
         print("x e y de la tile del cristal ", x, y)
         return {
-            "clase": "cristal",
+            "clase": "geyser",
             "capacidad": self.capacity,
             "tipo": self.tipo,
             "x": self.x,

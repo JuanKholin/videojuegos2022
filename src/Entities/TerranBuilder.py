@@ -9,6 +9,7 @@ from src.Utils import *
 HP = 200
 GENERATION_TIME = 40
 MINERAL_COST = 600
+LIMIT_MINADO = 1600
 
 class TerranBuilder(Structure):
     sprites = []
@@ -46,6 +47,11 @@ class TerranBuilder(Structure):
         self.training = []
         self.paths = []
 
+        #MEJORAR LAS UNIDADES
+        self.dañoUpCost = 50
+        self.armorUpCost = 50
+        self.mineUpCost = 50
+
     #def generateUnit(self, unit):
     #    pass
 
@@ -60,12 +66,30 @@ class TerranBuilder(Structure):
                 print("xd")
                 self.generateUnit(terranWorker)
                 self.state = BuildingState.SPAWNING
+            elif command_id == CommandId.MEJORAR_DAÑO_SOLDADO and self.player.resources and self.player.resources >= self.dañoUpCost:
+                self.player.resources -= self.dañoUpCost
+                self.player.dañoUpgrade += 1
+                self.dañoUpCost += 50
+            elif command_id == CommandId.MEJORAR_ARMADURA_SOLDADO and self.player.resources and self.player.resources >= self.armorUpCost:
+                self.player.resources -= self.armorUpCost
+                self.player.armorUpgrade += 1
+                self.armorUpCost += 50
+            elif command_id == CommandId.MEJORAR_MINADO_WORKER and self.player.resources and self.player.resources >= self.mineUpCost and self.player.mineUpgrade != LIMIT_MINADO:
+                self.player.resources -= self.mineUpCost
+                self.player.mineUpgrade += 200
+                self.mineUpCost += 50
 
     def command(self, command):
         if command == CommandId.BUILD_STRUCTURE:
             return Command(CommandId.BUILD_BARRACKS)
         elif command == CommandId.GENERAR_UNIDAD:
             return Command(CommandId.GENERAR_UNIDAD)
+        elif command == CommandId.MEJORAR_ARMADURA_SOLDADO:
+            return Command(CommandId.MEJORAR_ARMADURA_SOLDADO)
+        elif command == CommandId.MEJORAR_DAÑO_SOLDADO:
+            return Command(CommandId.MEJORAR_DAÑO_SOLDADO)
+        elif command == CommandId.MEJORAR_MINADO_WORKER:
+            return Command(CommandId.MEJORAR_MINADO_WORKER)
         else:
             return Command(CommandId.NULO)
 

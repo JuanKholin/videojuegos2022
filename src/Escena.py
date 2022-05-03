@@ -29,12 +29,21 @@ class Escena():
             command = self.p1.processEvent(event)
         if getGameState() == System_State.ONGAME:
             #ejecutar el comando
+            if command.id == CommandId.MEJORAR_MINADO_WORKER:
+                print(command.id)
             if not self.raton.building:
                 if command.id == CommandId.GENERAR_UNIDAD:
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.GENERATE_WORKER:
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.GENERATE_SOLDIER:
+                    self.p1.execute(command.id, [], None)
+                elif command.id == CommandId.MEJORAR_DAÑO_SOLDADO:
+                    self.p1.execute(command.id, [], None)
+                elif command.id == CommandId.MEJORAR_ARMADURA_SOLDADO:
+                    self.p1.execute(command.id, [], None)
+                elif command.id == CommandId.MEJORAR_MINADO_WORKER:
+                    print("PUTAAAAAAAAAAA")
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.BUILD_BARRACKS and self.p1.resources >= TERRAN_BARRACK_MINERAL_COST:
                     self.raton.building = True
@@ -44,14 +53,6 @@ class Escena():
                     self.raton.buildStructure = self.getZergBuilder()
                 elif command.id == CommandId.GUARDAR_PARTIDA:
                     self.saveScene()
-
-
-                #TEMPORAL, JUST TESTING
-                elif command.id == CommandId.MEJORAR_UNIDAD:
-                    TerranWorker.setTWSpeed(1)
-                    print("SPID")
-
-                
                 elif command.id == CommandId.MOVER:
                     #path = [] ## !!!!
                     relative_mouse_pos = pg.mouse.get_pos()
@@ -151,7 +152,7 @@ class Escena():
         finx = x + rect.w
         y = rect.y + 1
         finy = y + rect.h
-        if(res.capacity <= 0):
+        if(res.capacity <= 0 and res.getType() == RESOURCE):
             while x <= finx:
                 while y <= finy:
                     self.mapa.setLibre(self.mapa.getTile(x,y))
@@ -163,7 +164,7 @@ class Escena():
         else:
             while x <= finx:
                     while y <= finy:
-                        self.mapa.setRecurso(self.mapa.getTile(x,y))
+                        self.mapa.setType(self.mapa.getTile(x,y), res.getType())
                         self.mapa.getTile(x,y).setOcupante(res)
                         y = y + self.mapa.th
                     y = rect.y + 1

@@ -101,7 +101,7 @@ class Worker(Unit):
 
     def updateMiningAct(self):
         self.count += 1
-        if getGlobalTime() - self.startTimeMining > self.timeToMine: #Termina de minar
+        if getGlobalTime() - self.startTimeMining > (self.timeToMine - self.player.mineUpgrade): #Termina de minar
             self.isMining = False
             #Hay que volver a base transportando un ore
             self.cantidadMinada = self.resource.getMined(self.minePower)

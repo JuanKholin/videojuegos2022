@@ -14,12 +14,16 @@ class Player():
         self.resourcesSelected = None
         self.structures = structures
         self.resources = resources
+        self.gas = 0
         self.keyMap = keyMap
         self.commandMap = commandMap #keyMap pero las claves son los valores y los valores las claves (solo necesario para las teclas de la camara)
         self.pulsado = False
         self.initialX = 0
         self.initialY = 0
         self.mapa = mapa
+        self.dañoUpgrade = 0
+        self.armorUpgrade = 0
+        self.mineUpgrade = 0
 
         # Para la IA
         self.unitsFree = []
@@ -70,10 +74,17 @@ class Player():
                     self.unitsSelected[i].move(tileClicked)
                 elif param[i]['order'] == CommandId.ATTACK:
                     self.unitsSelected[i].attack(param[i]['attackedOne'])
-        elif id == CommandId.GENERAR_UNIDAD or id == CommandId.GENERATE_WORKER or id == CommandId.GENERATE_SOLDIER:
-            self.structureSelected.execute(id)
-        elif id == CommandId.BUILD_BARRACKS:
-            self.structureSelected.execute(id)
+        elif self.structureSelected != None:
+            if id == CommandId.GENERAR_UNIDAD or id == CommandId.GENERATE_WORKER or id == CommandId.GENERATE_SOLDIER:
+                self.structureSelected.execute(id)
+            elif id == CommandId.BUILD_BARRACKS:
+                self.structureSelected.execute(id)
+            elif id == CommandId.MEJORAR_DAÑO_SOLDADO:
+                self.structureSelected.execute(id)
+            elif id == CommandId.MEJORAR_ARMADURA_SOLDADO:
+                self.structureSelected.execute(id)
+            elif id == CommandId.MEJORAR_MINADO_WORKER:
+                self.structureSelected.execute(id)
 
     def draw(self, screen, camera):
         for structure in self.structures:

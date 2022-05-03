@@ -15,6 +15,7 @@ from src.Interface import *
 from src.AI import *
 from src.Camera import *
 from src.Entities.Crystal import *
+from src.Entities.Geyser import *
 from src.Escena import Escena
 from src.Entities.TerranBuilder import * 
 from src.Entities.TerranWorker import *
@@ -124,7 +125,9 @@ keyMap ={
   pg.K_r: CommandId.ROTAR,
   pg.K_v: CommandId.GENERAR_UNIDAD,
   pg.K_c: CommandId.BUILD_STRUCTURE,
-  pg.K_u: CommandId.MEJORAR_UNIDAD,
+  pg.K_d: CommandId.MEJORAR_DAÑO_SOLDADO,
+  pg.K_a: CommandId.MEJORAR_ARMADURA_SOLDADO,
+  pg.K_m: CommandId.MEJORAR_MINADO_WORKER,
   pg.K_g: CommandId.GUARDAR_PARTIDA,
 }
 commandMap ={
@@ -163,10 +166,15 @@ camera = Camera(0, 0, SCREEN_HEIGHT - 160, SCREEN_WIDTH)
 crystal = Crystal(2, 10, 34)
 crystal2 = Crystal(2, 16, 34)
 
+geyser1 = Geyser(10, 2, 34)
+geyser2 = Geyser(2, 22, 34)
+
 
 resources = []
 resources.append(crystal)
 resources.append(crystal2)
+resources.append(geyser1)
+#resources.append(geyser2)
 
 raton = Raton.Raton(player1, player2, resources)
 p1Interface = Interface(player1, player2, raton)

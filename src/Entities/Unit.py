@@ -56,11 +56,18 @@ class Unit(Entity):
     # obstaculo de camino lo esquivara y si la tile objetivo esta ocupada se detiene
     # lo mas cerca posible de esta
     def move(self, objectiveTile):
-        if objectiveTile.type != EMPTY:
+        if objectiveTile.type == OBSTACLE:
             objectiveTile = self.mapa.getTileCercana(self.getTile(), objectiveTile)
-        paths = calcPath(self.getPosition(), self.getTile(), objectiveTile, self.mapa)
-        if len(paths) > 0:
-            self.changeToMoving(paths)
+        elif objectiveTile.type != EMPTY:
+            print("AAAAAAAAAAAAAAAAAAAAAAAAA")
+            tilesRound = self.mapa.getEntityTilesVecinas(objectiveTile)
+            objectiveTile = tilesRound[0]
+            for tile in tilesRound:
+                if tile.heur(self.getTile()) < objectiveTile.heur(self.getTile()):
+                    objectiveTile = tile
+        self.paths = calcPath(self.getPosition(), self.getTile(), objectiveTile, self.mapa)
+        if len(self.paths) > 0:
+            self.changeToMoving(self.paths)
 
     # Indica a la unidad que ataque al objetivo seleccionado, si se encuentra un
     # obstaculo de camino lo esquivara y si el objetivo se desplaza este le seguira
@@ -366,7 +373,7 @@ class Unit(Entity):
 
     # Pasa a estado moverse
     def changeToMoving(self, paths):
-        print("MOVING", self.x, self.y)
+        print("MOVING", self.x, self.y, paths.__len__())
         self.state = UnitState.MOVING
         actualPath = paths[0]
         if actualPath.angle < 0:
