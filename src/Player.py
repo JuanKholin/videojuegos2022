@@ -10,8 +10,10 @@ class Player():
         self.isPlayer = isPlayer
         self.units = units
         self.unitsSelected = []
+        self.enemySelected = []
         self.structureSelected = None
-        self.resourcesSelected = None
+        self.enemyStructureSelected = None
+        self.resourceSelected = None
         self.structures = structures
         self.resources = resources
         self.keyMap = keyMap
@@ -44,6 +46,8 @@ class Player():
             unit.update()
         for structure in self.structures:
             structure.update()
+        if frame(120) == 1:
+            print(self.resourceSelected)
 
     def addUnits(self,unit):
         self.units.append(unit)

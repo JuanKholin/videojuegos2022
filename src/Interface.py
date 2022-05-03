@@ -52,6 +52,8 @@ class Interface():
         allButton.append(aux)
         aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", Command.CommandId.GENERATE_SOLDIER)
         allButton.append(aux)
+        aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", Command.CommandId.BUILD_HATCHERY)
+        allButton.append(aux)
         return allButton
     
     def update(self):
@@ -198,11 +200,35 @@ class Interface():
                     x = 0
                 if n == 8:
                     break
+        if len(self.player.enemySelected) == 1:
+            image = self.player.enemySelected[0].getRender()
+            screen.blit(image, (GUI_INFO_X + 10, GUI_INFO_Y + 20))
+        elif len(self.player.enemySelected) > 1:
+            images = []
+            for unit in self.player.enemySelected:
+                image = unit.getRender()
+                image = pygame.transform.scale(image, [image.get_rect().w * 0.7, image.get_rect().h * 0.7])
+                images.append(image)
+            x = 0
+            y = 0
+            n = 0
+            for image in images:
+                screen.blit(image, (GUI_INFO_X + x, GUI_INFO_Y + 5 + y))
+                x += 85
+                n += 1
+                if n == 4:
+                    y = 100
+                    x = 0
+                if n == 8:
+                    break
         elif self.player.structureSelected != None:
             image = self.player.structureSelected.getRender()
-            screen.blit(image, (GUI_INFO_X, GUI_INFO_Y))
-        elif self.player.resourcesSelected != None:
-            image = self.player.resourcesSelected.getRender()
+            screen.blit(image, (GUI_INFO_X, GUI_INFO_Y + 5))
+        elif self.player.enemyStructureSelected != None:
+            image = self.player.enemyStructureSelected.getRender()
+            screen.blit(image, (GUI_INFO_X, GUI_INFO_Y + 5))
+        elif self.player.resourceSelected != None:
+            image = self.player.resourceSelected.getRender()
             screen.blit(image, (GUI_INFO_X, GUI_INFO_Y))
                 
     def checkInGUIPosition(self):

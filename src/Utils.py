@@ -4,7 +4,7 @@ import math
 from re import T
 import pygame
 
-DEBBUG = False
+DEBBUG = True
 
 class System_State(Enum):
     MAINMENU = auto()
@@ -198,7 +198,7 @@ class Options(IntEnum):
     BUILD_BARRACKS = 0
     GENERATE_WORKER = 1
     GENERATE_SOLDIER = 2
-    BUILD_HATCHERY = 0
+    BUILD_HATCHERY = 3
     NULO = -1
     
 BUTTON_PATH = "SPRITE/button/gui_button_"
@@ -240,11 +240,17 @@ BARRACKS_RENDER = "SPRITE/render/terranBarracks.png"
 ##---------HATCHERY------------------
 HATCHERY_PATH = "SPRITE/structure/Hatchery/tile00"
 HATCHERY_RENDER = "SPRITE/render/hatchery.png"
+HATCHERY_MINERAL_COST = 100
+
+#-------------EXTRACTOR---------------
+EXTRACTOR_PATH = "SPRITE/structure/extractor/tile00"
+EXTRACTOR_RENDER = "SPRITE/render/extractor.png"
+EXTRACTOR_MINERAL_COST = 60
 
 ##---------SUPPLY------------------
 TERRAN_SUPPLY_PATH = "SPRITE/structure/supply_depot/tile00"
-TERRAN_SUPPLY_MINERAL_COST = 50
 SUPPLY_RENDER = "SPRITE/render/terranSupply.png"
+TERRAN_SUPPLY_MINERAL_COST = 50
 
 CRYSTAL_RENDER = "SPRITE/render/mineral.png"
 

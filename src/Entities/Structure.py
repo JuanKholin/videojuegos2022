@@ -43,7 +43,6 @@ class Structure(Entity.Entity):
             self.updateCollapsing()
         elif self.state == BuildingState.DESTROYED:
             pass
-        print(self.index)
         self.image = self.sprites[self.index]
 
 
@@ -145,7 +144,7 @@ class Structure(Entity.Entity):
 
     def updateSpawning(self):
         self.generationCount += 1
-        if frame(8) == 1: 
+        if frame(self.frame) == 1: 
             self.indexCount = (self.indexCount + 1) % len(self.spawningIndex) 
             self.index = self.spawningIndex[self.indexCount]
         if self.generationCount >= CLOCK_PER_SEC * self.training[0].generationTime:

@@ -59,9 +59,7 @@ class TerranBarracks(Structure):
 
     def command(self, command):
         if self.state != BuildingState.BUILDING:
-            if command == CommandId.BUILD_STRUCTURE:
-                return Command(CommandId.BUILD_BARRACKS)
-            elif command == CommandId.GENERAR_UNIDAD:
+            if command == CommandId.GENERAR_UNIDAD:
                 return Command(CommandId.GENERAR_UNIDAD)
             return Command(CommandId.NULO)
         else:
@@ -81,6 +79,5 @@ class TerranBarracks(Structure):
             "clase": "terranBarracks",
             "x": self.xIni,
             "y": self.yIni,
-            "building": self.building,
             "id": self.id,
         }

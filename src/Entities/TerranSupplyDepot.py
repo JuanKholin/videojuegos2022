@@ -28,7 +28,6 @@ class TerranSupplyDepot(Structure):
     def __init__(self, xini, yini, player, map, building, id):
         Structure.__init__(self, HP, TERRAN_SUPPLY_MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
         self.sprites = cargarSprites(TERRAN_SUPPLY_PATH, 5, False, WHITE, 1.5)
-        self.building = building
         self.image = self.sprites[self.index]
         self.operativeIndex = [4]
         self.spawningIndex = [4]
@@ -38,15 +37,11 @@ class TerranSupplyDepot(Structure):
 
         self.training = []
         self.paths = []
-
-    '''def update(self):
-
-        if self.building:
-            self.updateBuilding(4)
+        
+        if building:
+            self.state = BuildingState.BUILDING
         else:
-            self.index = 4
-        self.image = self.sprites[self.index]
-        self.image.set_colorkey(WHITE)'''
+            self.state = BuildingState.OPERATIVE
 
     def command(self, command):
         return Command(CommandId.NULO)
@@ -64,6 +59,5 @@ class TerranSupplyDepot(Structure):
             "clase": "terranBarracks",
             "x": self.xIni,
             "y": self.yIni,
-            "building": self.building,
             "id": self.id,
         }

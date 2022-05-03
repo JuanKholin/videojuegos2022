@@ -39,7 +39,7 @@ class Escena():
                 elif command.id == CommandId.BUILD_BARRACKS and self.p1.resources >= TERRAN_BARRACK_MINERAL_COST:
                     self.raton.building = True
                     self.raton.buildStructure = self.getTerranBarrack()
-                elif command.id == CommandId.BUILD_ZERG_BUILDER and self.p1.resources >= TERRAN_BARRACK_MINERAL_COST:
+                elif command.id == CommandId.BUILD_HATCHERY and self.p1.resources >= HATCHERY_MINERAL_COST:
                     self.raton.building = True
                     self.raton.buildStructure = self.getZergBuilder()
                 elif command.id == CommandId.GUARDAR_PARTIDA:

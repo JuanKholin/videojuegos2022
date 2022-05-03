@@ -26,24 +26,28 @@ class Hatchery(Structure):
     def __init__(self, xini, yini, player, map, building, id):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
         self.sprites = cargarSprites(HATCHERY_PATH, 4, False, BLUE2, 1.8, 0)
-        self.building = building
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2, 3]
         self.spawningIndex = [0, 1, 2, 3]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
         
-        
         self.render = pygame.transform.scale(pygame.image.load(HATCHERY_RENDER), RENDER_SIZE)
+
+        if building:
+            self.state = BuildingState.BUILDING
+        else:
+            self.state = BuildingState.OPERATIVE
+        self.count = 0
 
         self.count = 0
         self.training = []
         self.paths = []
-
+        
     def execute(self, command_id):
         if self.clicked:
             if command_id == CommandId.GENERAR_UNIDAD and self.player.resources >= ZERGLING_MINERAL_COST:
                 self.player.resources -= ZERGLING_MINERAL_COST
-                zergling = Zergling(self.x / 40, (self.y + self.rectn.h) / 40, 1)
+                zergling = Zergling(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
                 self.generateUnit(zergling)
 
     def getOptions(self):
@@ -52,7 +56,7 @@ class Hatchery(Structure):
 
     def command(self, command):
         if command == CommandId.BUILD_STRUCTURE:
-            return Command(CommandId.BUILD_ZERG_BUILDER)
+            return Command(CommandId.BUILD_HATCHERY)
         elif command == CommandId.GENERAR_UNIDAD:
             return Command(CommandId.GENERAR_UNIDAD)
         else:

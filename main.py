@@ -23,6 +23,8 @@ from src.Entities.Hatchery import *
 from src.Entities.Drone import *
 from src.Entities.Zergling import *
 from src.Entities.TerranSupplyDepot import *
+from src.Entities.Extractor import * 
+
 
 # Auxiliar del bucle principal
 def procesarInput():
@@ -52,14 +54,15 @@ def setEntity(player):
 
     player1.setBasePlayer(structure1)
     structure2 = TerranBarracks(15, 9, player1, mapa, False, 3)
-
+    structure4 = Extractor(12, 27, player1, mapa, True, 4)
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addStructures(structure3)
+    player.addStructures(structure4)
     player.addUnits(scv)
 
-    hatchery = Hatchery(16, 14, player2, mapa, False, 8)
-    player2.addStructures(hatchery)
+    hatchery = Hatchery(16, 14, player1, mapa, False, 8)
+    player.addStructures(hatchery)
 
     drone = Drone(10, 11, player1)
     player1.addUnits(drone)
@@ -168,11 +171,12 @@ resources = []
 resources.append(crystal)
 resources.append(crystal2)
 
-raton = Raton.Raton(player1, player2, resources)
+raton = Raton.Raton(player1, player2)
 p1Interface = Interface(player1, player2, raton)
 raton.addInterface(p1Interface)
 
 escena = Escena(player1, player2, aI, mapa, camera, raton, p1Interface, resources)
+raton.setEscena(escena)
 #escena.mapa.addOre(100,100)
 
 # Bucle principal
