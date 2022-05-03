@@ -41,7 +41,7 @@ class Map():
     def addOre(self, x, y):
         #print(int(y / self.th), int(x / self.tw))
         self.mapa[int(y / self.th)][int(x / self.tw)].type = 3
-
+        
     #Devuelve la Tile que se encuentra en las coordenadas x,y
     def getTile(self, x, y):
         xaux = int(x / self.tw)
@@ -55,6 +55,34 @@ class Map():
         return self.mapa[yaux][xaux]
 
     def getRectTiles(self, rect):
+        tiles = []
+        x = self.getTile(rect.x, rect.y).centerx
+        finx = rect.x + rect.w
+        y = self.getTile(rect.x, rect.y).centery
+        finy = rect.y + rect.h
+        #print(rect.x, rect.y, rect.w, rect.h)
+        while x <= finx:
+            while y <= finy:
+                tile = self.getTile(x,y)
+                tiles.append(tile)
+                y = y + self.th
+            y = self.getTile(rect.x, rect.y).centery
+            x = x + self.tw
+        return tiles
+
+    #Devuelve la Tile que se encuentra en las coordenadas x,y
+    def getTile(self, x, y):
+        xaux = int(x / self.tw)
+        yaux = int(y / self.th)
+
+        if int(x / self.tw) >= len(self.mapa[0]):
+            xaux = len(self.mapa[0]) - 1
+        if int(y / self.th) >= len(self.mapa):
+            yaux = len(self.mapa) - 1
+        #print(xaux, yaux)
+        return self.mapa[yaux][xaux]
+
+    def getRectRoundTiles(self, rect):
         tiles = []
         x = self.getTile(rect.x, rect.y).centerx
         finx = rect.x + rect.w
@@ -110,7 +138,7 @@ class Map():
         tilesObj = []
         if tile.ocupante != None:
             r = tile.ocupante.getRect()
-            tiles = self.getRectTiles(r) #se puede mejorar
+            tiles = self.getRectRoundTiles(r) #se puede mejorar
             for t in tiles:
                 tilesObj.append(t)
         else:
