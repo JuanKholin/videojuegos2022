@@ -265,7 +265,6 @@ class Raton(pygame.sprite.Sprite):
                                         self.enemy.unitsSelected.append(unit)
                                         unitSel = True
                                         print("CLICKADO" , str(unit.id))    
-                                        break
                                     else:
                                         unit.setClicked(False) 
                             else:
@@ -278,8 +277,6 @@ class Raton(pygame.sprite.Sprite):
                                         structure.setClicked(True)
                                         unitSel = True
                                         self.player.structureSelected = structure
-                                        #print("CLICKADO ")
-                                        break
                                     else:
                                         structure.setClicked(False) 
                             else:
@@ -293,7 +290,6 @@ class Raton(pygame.sprite.Sprite):
                                         unitSel = True
                                         self.player.structureSelected = structure
                                         #print("CLICKADO ")
-                                        break
                                     else:
                                         structure.setClicked(False)
                             else:
@@ -307,7 +303,6 @@ class Raton(pygame.sprite.Sprite):
                                         unitSel = True
                                         self.player.resourceSelected = resource
                                         #print("CLICKADO ")
-                                        break
                                     else:
                                         resource.setClicked(False)
                             else:
