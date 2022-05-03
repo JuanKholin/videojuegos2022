@@ -14,21 +14,9 @@ ATTACK_INFO[COOLDOWN_IND] = 1
 ATTACK_INFO[RANGE_IND] = 1
 MINE_POWER = 8
 MINERAL_COST = 20
-TIME_TO_MINE = 1000
+TIME_TO_MINE = 2000
 GENERATION_TIME = 2
-
 speed = 3
-
-
-def getTWSpeed():
-    global speed
-    result = speed
-    return result
-
-def setTWSpeed(_speed):
-    global state
-    state = _speed
-
 FRAMES_TO_REFRESH = 10
 SPRITES = "scvJusto.bmp"
 SCALE = 1.5

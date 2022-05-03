@@ -183,6 +183,9 @@ class Map():
     def setRecurso(self, tile):
         self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = RESOURCE
 
+    def setType(self, tile, type):
+        self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = type
+
     #Pone la tile como libre
     def setLibre(self, tile):
         self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = EMPTY
