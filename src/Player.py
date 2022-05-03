@@ -50,8 +50,6 @@ class Player():
             unit.update()
         for structure in self.structures:
             structure.update()
-        if frame(120) == 1:
-            print(self.resourceSelected)
 
     def addUnits(self,unit):
         self.units.append(unit)
