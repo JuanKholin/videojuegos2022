@@ -89,33 +89,33 @@ class Raton(pygame.sprite.Sprite):
         self.collideAlly = False
         self.collideResourse = False
         self.collideEnemy = False
-        if self.enable:
-            if not self.building:
-                for unit in self.player.units:
+        
+        if not self.building:
+            for unit in self.player.units:
+                ###---LOGICA
+                #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
+                if collides(self.real_pos[0], self.real_pos[1], unit.getRect()):
+                    self.collideAlly = True
+                    mouse_collide = True
+                    break
+            if not mouse_collide:
+                for structure in self.player.structures:
                     ###---LOGICA
                     #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-                    if collides(self.real_pos[0], self.real_pos[1], unit.getRect()):
+                    if collides(self.real_pos[0], self.real_pos[1], structure.getRect()):
                         self.collideAlly = True
                         mouse_collide = True
                         break
-                if not mouse_collide:
-                    for structure in self.player.structures:
-                        ###---LOGICA
-                        #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-                        if collides(self.real_pos[0], self.real_pos[1], structure.getRect()):
-                            self.collideAlly = True
-                            mouse_collide = True
-                            break
-                if not mouse_collide:
-                    for resources in self.resources:
-                        ###---LOGICA
-                        #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-                        if collides(self.real_pos[0], self.real_pos[1], resources.getRect()):
-                            self.collideResourse = True
-                            mouse_collide = True
-                            break
-            else:
-                self.buildStructure.setPosition(self.real_pos[0], self.real_pos[1])
+            if not mouse_collide:
+                for resources in self.resources:
+                    ###---LOGICA
+                    #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
+                    if collides(self.real_pos[0], self.real_pos[1], resources.getRect()):
+                        self.collideResourse = True
+                        mouse_collide = True
+                        break
+        else:
+            self.buildStructure.setPosition(self.real_pos[0], self.real_pos[1])
 
         type = pygame.mouse.get_pressed()
         if type[0]:

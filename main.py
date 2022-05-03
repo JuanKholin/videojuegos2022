@@ -85,7 +85,7 @@ def update():
         playMusic(map1BGM)
         #cargar mapa
         escena.mapa.load()
-        #escena.mapa.loadMinimap()
+        escena.mapa.loadMinimap()
         setEntity(player1)
         setGameState(System_State.ONGAME)
     elif getGameState() == System_State.ONGAME:
