@@ -5,7 +5,7 @@ from ..Utils import *
 from .Worker import *
 
 # Constantes del Drone
-HP = 400
+HP = 1000
 DAMAGE = 5
 COOLDOWN = 22
 RANGE = 40

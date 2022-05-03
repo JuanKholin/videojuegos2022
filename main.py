@@ -62,11 +62,11 @@ def setEntity(player):
     player.addStructures(structure4)
     player.addUnits(scv)
 
-    hatchery = Hatchery(16, 14, player1, mapa, False, 8)
-    player.addStructures(hatchery)
+    hatchery = Hatchery(16, 14, player2, mapa, False, 8)
+    player2.addStructures(hatchery)
 
     drone = Drone(10, 11, player1)
-    player1.addUnits(drone)
+    #player1.addUnits(drone)
 
     soldierChan = TerranSoldier(6, 1, player1)
     player1.addUnits(soldierChan)
@@ -74,7 +74,7 @@ def setEntity(player):
     zergling = Zergling(0, 0, player1)
     player1.addUnits(zergling)
 
-    droneAI = Drone(3, 2, player2)
+    droneAI = Drone(30, 10, player2)
     player2.addUnits(droneAI)
 
 def update():
