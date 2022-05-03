@@ -569,10 +569,6 @@ class Unit(Entity):
         r = self.getRect()
         return (r.x + r.w/2, r.y + r.h) #!!!
 
-    def getTile(self):
-        pos = self.getPosition()
-        return self.mapa.getTile(pos[0], pos[1])
-
     # Getter de la coordenada X en valores reales
     def getX(self):
         return self.x

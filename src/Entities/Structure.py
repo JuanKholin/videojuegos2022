@@ -14,6 +14,8 @@ class Structure(Entity.Entity):
     tileH = 0
     training = []
     nBuildSprites = 1
+    count = 0
+    indexCount = 0
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, mapa, id, player):
         Entity.Entity.__init__(self, hp, xini*mapa.tw, yini*mapa.th, mineralCost, generationTime, id, player)
@@ -31,17 +33,18 @@ class Structure(Entity.Entity):
         return (self.x+self.rectn.w/2, self.y+self.rectn.h/2)
 
     def update(self):
-        pass
-        #if self.state == BuildingState.BUILDING:
-        #    self.updateBuilding()
-        #elif self.state == BuildingState.OPERATIVE:
-        #    self.updateOperative()
-        #elif self.state == BuildingState.SPAWNING:
-        #    self.updateSpawning()
-        #elif self.state == BuildingState.COLLAPSING:
-        #    self.updateCollapsing()
-        #elif self.state == BuildingState.DESTROYED:
-        #    pass
+        if self.state == BuildingState.BUILDING:
+            self.updateBuilding()
+        elif self.state == BuildingState.OPERATIVE:
+            self.updateOperative()
+        elif self.state == BuildingState.SPAWNING:
+            self.updateSpawning()
+        elif self.state == BuildingState.COLLAPSING:
+            self.updateCollapsing()
+        elif self.state == BuildingState.DESTROYED:
+            pass
+        print(self.index)
+        self.image = self.sprites[self.index]
 
 
     ################
@@ -118,47 +121,50 @@ class Structure(Entity.Entity):
         self.rectn.y = originY + self.heightPad/2
         self.rectn.w = self.tileW*self.mapa.tw - 1
         self.rectn.h = self.tileH*self.mapa.th - self.heightPad/2 - 1
-
-    def update(self):
-        pass
     
     def execute(self, command_id):
         pass
+    
+    def updateOperative(self):
+        if frame(self.frame) == 1:
+            self.indexCount = (self.indexCount + 1) % len(self.operativeIndex)
+            self.index = self.operativeIndex[self.indexCount]
 
-    def updateBuilding(self, nBuildSprites):
-        if nBuildSprites != 0:
+    def updateBuilding(self):
+        if self.nBuildSprites != 0:
             self.count += 1
-            if self.count >= self.generationTime * CLOCK_PER_SEC / nBuildSprites:
+            if self.count >= self.generationTime * CLOCK_PER_SEC / self.nBuildSprites:
                 self.index += 1
                 self.count = 0
-            if self.index == 4:
-                self.building = False
+            if self.index >= self.nBuildSprites:
+                self.indexCount = 0
+                self.state = BuildingState.OPERATIVE
         else:
-            self.building = False
+            self.indexCount = 0
+            self.state = BuildingState.OPERATIVE
 
     def updateSpawning(self):
         self.generationCount += 1
-        if frame(60) == 1:
-            print("entrenamiento", self.id, len(self.training))
+        if frame(8) == 1: 
+            self.indexCount = (self.indexCount + 1) % len(self.spawningIndex) 
+            self.index = self.spawningIndex[self.indexCount]
         if self.generationCount >= CLOCK_PER_SEC * self.training[0].generationTime:
-        #if (getGlobalTime() - self.generationStartTime) > self.training[0].generationTime:
             unit = self.training[0]
             tile = self.mapa.getTile(self.x, self.y)
-            print("tile", tile.x, tile.y)
+            
             libres = self.mapa.getEntityTilesVecinas(tile)
             if len(libres) > 0:
-                #unit.setTilePosition(libres[0])
-                
                 unit.x = libres[0].centerx
                 unit.y = libres[0].centery
-                print("hola?", libres[0].tileid)
-
-                #libres[0].setOcupada(1)
 
                 self.player.addUnits(unit)
                 self.generationCount = 0
                 del self.training[0]
-                self.generationStartTime = getGlobalTime()
+                if len(self.training) == 0:
+                    self.state = BuildingState.OPERATIVE
+                    
+    def updateCollapsing(self):
+        pass
 
     def draw(self, screen, camera):
         r = self.getRect()
@@ -237,7 +243,7 @@ class Structure(Entity.Entity):
             y += 1
 
     # Invocar para reflejar el damage de un ataque
-    def beingAttacked(self, damage):
+    def beingAttacked(self, damage, unit):
         if self.hp <= damage:
             self.changeToCollapsing()
         else:

@@ -16,6 +16,13 @@ class Entity():
     def update():
         pass
     
+    def getHP(self):
+        return self.hp
+    
+    def getTile(self):
+        pos = self.getPosition()
+        return self.mapa.getTile(pos[0], pos[1])
+    
     def getRender(self):
         return self.render
 

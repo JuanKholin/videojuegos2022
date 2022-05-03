@@ -313,7 +313,12 @@ class Raton(pygame.sprite.Sprite):
                             else:
                                 for resource in self.resources:
                                     resource.setClicked(False) 
-
+                                    
+                            '''if not unitSel and not enemySel:
+                                self.player.unitsSelected = selectedUnit
+                                self.enemy.unitsSelected = []
+                                self.player.structureSelected = selectedStructures
+                                self.player.selectedResources = selectedResources'''
 
                             
                     else: #si estoy en GUI

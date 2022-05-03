@@ -21,28 +21,23 @@ class Hatchery(Structure):
     tileW = 6
     clicked = False
     tileH = 4
+    frame = 8
 
     def __init__(self, xini, yini, player, map, building, id):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
         self.sprites = cargarSprites(HATCHERY_PATH, 4, False, BLUE2, 1.8, 0)
         self.building = building
         self.image = self.sprites[self.index]
-        self.finalImage = self.sprites[3]
+        self.operativeIndex = [0, 1, 2, 3]
+        self.spawningIndex = [0, 1, 2, 3]
+        self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
+        
         
         self.render = pygame.transform.scale(pygame.image.load(HATCHERY_RENDER), RENDER_SIZE)
 
         self.count = 0
         self.training = []
         self.paths = []
-
-    def update(self):
-        if self.building:
-            self.building = False
-        elif len(self.training) > 0:
-            self.updateSpawning()
-        self.index = (self.index + frame(8)) % 4
-        self.image = self.sprites[self.index]
-        self.image.set_colorkey(BLUE2)
 
     def execute(self, command_id):
         if self.clicked:

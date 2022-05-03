@@ -22,6 +22,7 @@ class TerranBuilder(Structure):
     tileW = 5
     tileH = 4
     clicked = False
+    frame = 8
 
     def __init__(self, xini, yini, player, map, building, id):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
@@ -30,30 +31,20 @@ class TerranBuilder(Structure):
         self.sprites = cargarSprites(TERRAN_BUILDER_PATH, 6, False, WHITE, 
                 1.5) + Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
         self.image = self.sprites[self.index]
-        self.finalImage = self.sprites[4]
+        self.operativeIndex = [4]
+        self.spawningIndex = [4, 5]
+        self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
 
         self.render = pygame.transform.scale(pygame.image.load(BUILDER_RENDER), RENDER_SIZE)
         
-        self.building = building
+        if building:
+            self.state = BuildingState.BUILDING
+        else:
+            self.state = BuildingState.OPERATIVE
         self.count = 0
 
         self.training = []
         self.paths = []
-
-    def update(self):
-        if self.building:
-            self.updateBuilding(4)
-        elif len(self.training) > 0:
-            if frame(10) == 1:
-                if self.index == 5:
-                    self.index = 4
-                else:
-                    self.index = 5
-            self.updateSpawning()
-        else:
-            self.index = 4
-        self.image = self.sprites[self.index]
-        self.image.set_colorkey(WHITE)
 
     #def generateUnit(self, unit):
     #    pass
@@ -68,6 +59,7 @@ class TerranBuilder(Structure):
                 terranWorker = TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
                 print("xd")
                 self.generateUnit(terranWorker)
+                self.state = BuildingState.SPAWNING
 
     def command(self, command):
         if command == CommandId.BUILD_STRUCTURE:
@@ -78,7 +70,7 @@ class TerranBuilder(Structure):
             return Command(CommandId.NULO)
 
     def getBuildSprite(self):
-        return self.sprites[4]
+        return self.sprites[self.operativeIndex]
     
     def getOptions(self):
         #return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS]

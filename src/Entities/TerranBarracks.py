@@ -24,6 +24,7 @@ class TerranBarracks(Structure):
     tileW = 4
     tileH = 3
     clicked = False
+    frame = 8
 
     def __init__(self, xini, yini, player, map, building, id):
         Structure.__init__(self, HP, TERRAN_BARRACK_MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
@@ -31,30 +32,21 @@ class TerranBarracks(Structure):
         deadSpritesheet.set_colorkey(BLACK)
         self.sprites = cargarSprites(TERRAN_BARRACK_PATH, 6, False, WHITE, 
                 1.1) + Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
-        self.building = building
+        
         self.image = self.sprites[self.index]
-        self.finalImage = self.sprites[4]
+        self.operativeIndex = [4]
+        self.spawningIndex = [4, 5]
+        self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
+        
         self.render = pygame.transform.scale(pygame.image.load(BARRACKS_RENDER), RENDER_SIZE)
 
-        self.count = 0
+        if building:
+            self.state = BuildingState.BUILDING
+        else:
+            self.state = BuildingState.OPERATIVE
+
         self.training = []
         self.paths = []
-
-    def update(self):
-
-        if self.building:
-            self.updateBuilding(4)
-        elif len(self.training) > 0:
-            if frame(10) == 1:
-                if self.index == 5:
-                    self.index = 4
-                else:
-                    self.index = 5
-            self.updateSpawning()
-        else:
-            self.index = 4
-        self.image = self.sprites[self.index]
-        self.image.set_colorkey(WHITE)
 
     def execute(self, command_id):
         if self.clicked:
@@ -63,9 +55,10 @@ class TerranBarracks(Structure):
                 self.player.resources -= TERRAN_WORKER_MINERAL_COST
                 terranSoldier = TerranSoldier(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
                 self.generateUnit(terranSoldier)
+                self.state = BuildingState.SPAWNING
 
     def command(self, command):
-        if not self.building:
+        if self.state != BuildingState.BUILDING:
             if command == CommandId.BUILD_STRUCTURE:
                 return Command(CommandId.BUILD_BARRACKS)
             elif command == CommandId.GENERAR_UNIDAD:

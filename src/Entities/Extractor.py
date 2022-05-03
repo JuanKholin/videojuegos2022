@@ -10,7 +10,7 @@ from ..Utils import *
 HP = 200
 GENERATION_TIME = 5
 
-class TerranSupplyDepot(Structure):
+class Extractor(Structure):
     sprites = []
     training = []
     generationTime = 0
@@ -23,39 +23,44 @@ class TerranSupplyDepot(Structure):
     tileW = 4
     tileH = 3
     clicked = False
-    frame = 8
 
     def __init__(self, xini, yini, player, map, building, id):
-        Structure.__init__(self, HP, TERRAN_SUPPLY_MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
-        self.sprites = cargarSprites(TERRAN_SUPPLY_PATH, 5, False, WHITE, 1.5)
+        Structure.__init__(self, HP, EXTRACTOR_MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
+        self.sprites = cargarSprites(EXTRATOR_SUPPLY_PATH, 5, False, WHITE, 1.5)
         self.building = building
         self.image = self.sprites[self.index]
-        self.operativeIndex = [4]
-        self.spawningIndex = [4]
-        self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
+        self.finalImage = self.sprites[4]
         
-        self.render = pygame.transform.scale(pygame.image.load(SUPPLY_RENDER), RENDER_SIZE)
+        self.render = pygame.transform.scale(pygame.image.load(EXTRATOR_RENDER), RENDER_SIZE)
 
+        self.count = 0
         self.training = []
         self.paths = []
 
-    '''def update(self):
-
+    def update(self):
         if self.building:
-            self.updateBuilding(4)
-        else:
-            self.index = 4
+            self.building = False
+        elif len(self.training) > 0:
+            self.updateSpawning()
+        self.index = (self.index + frame(8)) % 4
         self.image = self.sprites[self.index]
-        self.image.set_colorkey(WHITE)'''
+        self.image.set_colorkey(BLUE2)
+
+    def execute(self, command_id):
+        if self.clicked:
+            if command_id == CommandId.GENERAR_UNIDAD and self.player.resources >= ZERGLING_MINERAL_COST:
+                self.player.resources -= ZERGLING_MINERAL_COST
+                zergling = Zergling(self.x / 40, (self.y + self.rectn.h) / 40, 1)
+                self.generateUnit(zergling)
+
+    def getOptions(self):
+        return []
 
     def command(self, command):
         return Command(CommandId.NULO)
 
     def getBuildSprite(self):
-        return self.sprites[self.operativeIndex]
-    
-    def getOptions(self):
-        return []
+        return self.sprites[0]
 
     def toDictionary(self, map):
         #print("barracke x e y Ini ", self.xIni, self.yIni)
