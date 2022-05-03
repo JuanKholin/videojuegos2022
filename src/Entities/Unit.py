@@ -423,6 +423,7 @@ class Unit(Entity):
         print("DEAD", self.x, self.y)
         self.state = UnitState.DEAD
         self.mapa.setLibre(self.getTile())
+        self.player.units.remove(self)
         self.clicked = False
 
     ##############

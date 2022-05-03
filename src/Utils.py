@@ -307,7 +307,8 @@ def aux(screen):
 
 def calcPath(posini, tileIni, tileObj, mapa):
         pathA = mapa.Astar(tileIni,tileObj)
-        pathA.pop(0)
+        if pathA.__len__() > 0:
+            pathA.pop(0)
         posIni = (posini[0], posini[1])
         path = []
         for tile in pathA:
