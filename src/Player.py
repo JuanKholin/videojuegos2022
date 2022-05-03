@@ -92,7 +92,7 @@ class Player():
                 pos = structure.getPosition()
                 pygame.draw.rect(screen, BLUE, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
             for unit in self.units:
-                if unit.state != State.DEAD:
+                if unit.state != UnitState.DEAD:
                     pos = unit.getPosition()
                     pygame.draw.rect(screen, GREEN, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))    
         else:
@@ -100,7 +100,7 @@ class Player():
                 pos = structure.getPosition()
                 pygame.draw.rect(screen, ORANGE, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
             for unit in self.units:
-                if unit.state != State.DEAD:
+                if unit.state != UnitState.DEAD:
                     pos = unit.getPosition()
                     pygame.draw.rect(screen, RED, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))    
 

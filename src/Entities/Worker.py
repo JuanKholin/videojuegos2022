@@ -28,7 +28,7 @@ class Worker(Unit):
 
     def changeToMining(self, resource):
         if resource.getCapacity() != 0: # Si hay recurso, si es gas agotado es -algo
-            self.state = State.MINING
+            self.state = UnitState.MINING
             self.isMining = False
             self.resource = resource
             pos = self.resource.getPosition()
@@ -129,7 +129,7 @@ class Worker(Unit):
         self.image = self.sprites[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
 
     def changeToOreTransporting(self):
-        self.state = State.ORE_TRANSPORTING
+        self.state = UnitState.ORE_TRANSPORTING
         self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
         self.count = 0
         self.frame = 0
@@ -172,9 +172,7 @@ class Worker(Unit):
                             tileObj = tile
 
                     self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
-                    self.changeToMining(self.resource)
-                
-                
+                    self.changeToMining(self.resource)         
             
     
     # Pasa de frame en una animacion de minado
@@ -187,7 +185,7 @@ class Worker(Unit):
 
     def changeToMovingToMining(self):
         print("PASO A MOVERME AL CRISTAL")
-        self.state = State.MOVING_TO_MINING
+        self.state = UnitState.MOVING_TO_MINING
         self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
         self.count = 0
         self.frame = 0

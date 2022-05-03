@@ -24,13 +24,69 @@ class Structure(Entity.Entity):
         originX = (xini - round(self.tileW/2))*self.mapa.tw
         originY = (yini - round(self.tileH/2))*self.mapa.th
         self.rectn = pygame.Rect(originX, originY + self.heightPad/2, self.tileW*self.mapa.tw - 1, self.tileH*self.mapa.th - self.heightPad/2 - 1)
+        
+        self.state = BuildingState.BUILDING
 
     def getPosition(self):
         return (self.x+self.rectn.w/2, self.y+self.rectn.h/2)
 
     def update(self):
         pass
+        #if self.state == BuildingState.BUILDING:
+        #    self.updateBuilding()
+        #elif self.state == BuildingState.OPERATIVE:
+        #    self.updateOperative()
+        #elif self.state == BuildingState.SPAWNING:
+        #    self.updateSpawning()
+        #elif self.state == BuildingState.COLLAPSING:
+        #    self.updateCollapsing()
+        #elif self.state == BuildingState.DESTROYED:
+        #    pass
+
+
+    ################
+    # TRANSICIONES #
+    ################
+
+    # Pasa a estado construyendo, si lo hay
+    def changeToBuilding(self):
+        print("BUILDING ", self.x, " ", self.y)
+        self.state = BuildingState.BUILDING
+        self.frame = 0
+        self.count = 0
+        self.image = self.sprites[self.frames[self.buildingFrames[self.frame]]]
+        
+    # Pasa a estado operative, es decir, disponible, on, preparado, etc.
+    def changeToOperative(self):
+        print("OPERATIVE ", self.x, " ", self.y)
+        self.state = BuildingState.OPERATIVE
+        self.frame = 0
+        self.count = 0
+        self.image = self.sprites[self.frames[self.operativeFrames[self.frame]]]
+        
+    # Pasa a estado lucecitas, para sacar unidades, si lo tiene claro
+    def changeToSpawning(self):        
+        print("SPAWNING ", self.x, " ", self.y)
+        self.state = BuildingState.SPAWNING
+        self.frame = 0
+        self.count = 0
+        self.image = self.sprites[self.frames[self.spawningFrames[self.frame]]]
+
+    # Pasa a empezar a derrumbarse, crashear, hp a 0 y esas cosas
+    def changeToCollapsing(self):
+        print("COLLAPSING ", self.x, " ", self.y)
+        self.state = BuildingState.COLLAPSING
+        self.frame = 0
+        self.count = 0
+        self.image = self.sprites[self.frames[self.collapsingFrames[self.frame]]]
     
+    # Pasa a destruido del todo, no quedan ni los restos
+    def changeToDestroyed(self):
+        print("DESTROYED ", self.x, " ", self.y)
+        self.state = BuildingState.DESTROYED
+        self.mapa.setLibre(self.getTile())
+        self.clicked = False
+
     def getOptions(self):
         return Options.NULO
 
@@ -72,7 +128,7 @@ class Structure(Entity.Entity):
     def updateBuilding(self, nBuildSprites):
         if nBuildSprites != 0:
             self.count += 1
-            if self.count >= self.generationTime*CLOCK_PER_SEC / nBuildSprites:
+            if self.count >= self.generationTime * CLOCK_PER_SEC / nBuildSprites:
                 self.index += 1
                 self.count = 0
             if self.index == 4:
@@ -80,7 +136,7 @@ class Structure(Entity.Entity):
         else:
             self.building = False
 
-    def updateTraining(self):
+    def updateSpawning(self):
         self.generationCount += 1
         if frame(60) == 1:
             print("entrenamiento", self.id, len(self.training))
@@ -179,3 +235,11 @@ class Structure(Entity.Entity):
                 tile.setOcupante(self)
                 x += 1
             y += 1
+
+    # Invocar para reflejar el damage de un ataque
+    def beingAttacked(self, damage):
+        if self.hp <= damage:
+            self.changeToCollapsing()
+        else:
+            self.hp -= damage
+        return self.hp

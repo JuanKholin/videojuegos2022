@@ -16,7 +16,7 @@ class Unit(Entity):
         self.angle = 0
 
         # Relativo a estado
-        self.state = State.STILL
+        self.state = UnitState.STILL
         self.clicked = False
         self.face = face
         self.frame = frame
@@ -63,7 +63,7 @@ class Unit(Entity):
     # Indica a la unidad que ataque al objetivo seleccionado, si se encuentra un
     # obstaculo de camino lo esquivara y si el objetivo se desplaza este le seguira
     def attack(self, objective):
-        if (self.attackedOne != objective) or (self.state != State.ATTACKING):        
+        if (self.attackedOne != objective) or (self.state != UnitState.ATTACKING):        
             self.changeToAttacking(objective)
 
     # Indica a la unidad que se acerque lo mas posible a un recurso, ya sea mineral o gas
@@ -81,7 +81,7 @@ class Unit(Entity):
 
     # Pinta la unidad C:
     def draw(self, screen, camera):
-        if self.state != State.DEAD:
+        if self.state != UnitState.DEAD:
             r = self.getRect()
             if DEBBUG:
                 pg.draw.rect(screen, BLACK, pygame.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h), 1)
@@ -105,26 +105,26 @@ class Unit(Entity):
     # Aplica un frame a la unidad en funcion de su estado
     def update(self):
         #print(self.state)
-        if self.state == State.STILL: # Esta quieto
+        if self.state == UnitState.STILL: # Esta quieto
             self.updateStill()
-        elif self.state == State.MOVING: # Esta moviendose
+        elif self.state == UnitState.MOVING: # Esta moviendose
             self.updateUnit()
             self.updateMoving()
-        elif self.state == State.ATTACKING: # Esta atacando
+        elif self.state == UnitState.ATTACKING: # Esta atacando
             self.updateUnit()
             self.updateAttacking()
-        elif self.state == State.MINING: # Esta minando
+        elif self.state == UnitState.MINING: # Esta minando
             self.updateUnit()
             self.updateMining()
-        elif self.state == State.ORE_TRANSPORTING: # Esta transportando mineral
+        elif self.state == UnitState.ORE_TRANSPORTING: # Esta transportando mineral
             self.updateUnit()
             self.updateOreTransporting()
-        elif self.state == State.GAS_TRANSPORTING: # Esta transportando gas
+        elif self.state == UnitState.GAS_TRANSPORTING: # Esta transportando gas
             self.updateUnit()
             self.updateGasTransporting()
-        elif self.state == State.DYING: # Esta muriendose
+        elif self.state == UnitState.DYING: # Esta muriendose
             self.updateDying()
-        elif self.state == State.DEAD: # Esta muerta
+        elif self.state == UnitState.DEAD: # Esta muerta
             self.updateDead()
     
     # Aplica un frame a la unidad que esta quieta
@@ -346,7 +346,7 @@ class Unit(Entity):
     # Pasa a estado quieto
     def changeToStill(self):
         print("STILL", self.x, self.y)
-        self.state = State.STILL
+        self.state = UnitState.STILL
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
@@ -365,7 +365,7 @@ class Unit(Entity):
     # Pasa a estado moverse
     def changeToMoving(self, paths):
         print("MOVING", self.x, self.y)
-        self.state = State.MOVING
+        self.state = UnitState.MOVING
         actualPath = paths[0]
         if actualPath.angle < 0:
             self.angle = -actualPath.angle
@@ -379,7 +379,7 @@ class Unit(Entity):
     # Pasa al ataque HYAAAA!! >:c
     def changeToAttacking(self, attackedOne):
         print("Pasa al ataque HYAAAA!! >:c")
-        self.state = State.ATTACKING
+        self.state = UnitState.ATTACKING
         self.attackedOne = attackedOne
         self.attackCD = self.cooldown
         self.frame = 0
@@ -400,7 +400,7 @@ class Unit(Entity):
     # Pasa a morirse (chof)
     def changeToDying(self):
         print("DYING", self.x, self.y)
-        self.state = State.DYING
+        self.state = UnitState.DYING
         self.hp = 0
         if self.clicked:
             self.player.removeUnit(self)
@@ -412,7 +412,7 @@ class Unit(Entity):
     # Pasa a estar muerto del todo (puf, a lo Thanos)
     def changeToDead(self):
         print("DEAD", self.x, self.y)
-        self.state = State.DEAD
+        self.state = UnitState.DEAD
         self.mapa.setLibre(self.getTile())
         self.clicked = False
 
@@ -457,7 +457,7 @@ class Unit(Entity):
             self.changeToDying()
         else:
             self.hp -= damage
-            if self.state != State.ATTACKING: # Cambiar a atacar si no esta haciendo nada
+            if self.state != UnitState.ATTACKING: # Cambiar a atacar si no esta haciendo nada
                 self.attack(attacker)
         return self.hp
     
@@ -470,9 +470,9 @@ class Unit(Entity):
 
     def resolverObjetivoOcupado(self):
         print("RESOLVER OCUAPDO: ", self.state)
-        if self.state == State.MOVING:
+        if self.state == UnitState.MOVING:
             self.paths = []
-        elif self.state == State.MINING:
+        elif self.state == UnitState.MINING:
             tilesResource = self.tilesResource()
             if tilesResource.__len__() == 0: # Me he quedado sin sitio
                 self.changeToStill()
@@ -484,7 +484,7 @@ class Unit(Entity):
                     if tile.heur(tileActual) < tileObj.heur(tileActual):
                         tileObj = tile
                 self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
-        elif self.state == State.ORE_TRANSPORTING:
+        elif self.state == UnitState.ORE_TRANSPORTING:
             tilesCasa = self.tilesCasa()
             if tilesCasa.__len__() == 0: # Me he quedado sin sitio
                 self.paths = []

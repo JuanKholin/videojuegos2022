@@ -39,7 +39,7 @@ class Hatchery(Structure):
         if self.building:
             self.building = False
         elif len(self.training) > 0:
-            self.updateTraining()
+            self.updateSpawning()
         self.index = (self.index + frame(8)) % 4
         self.image = self.sprites[self.index]
         self.image.set_colorkey(BLUE2)

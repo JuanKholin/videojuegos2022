@@ -89,7 +89,7 @@ SCREEN_WIDTH = 1025
 SCREEN_HEIGHT = 770
 
 # Para los estados de las entidades
-class State(Enum):
+class UnitState(Enum):
     STILL = auto()
     MOVING = auto()
     ATTACKING = auto()
@@ -98,6 +98,13 @@ class State(Enum):
     GAS_TRANSPORTING = auto()
     DYING = auto()
     DEAD = auto()
+
+class BuildingState(Enum):
+    BUILDING = auto()
+    OPERATIVE = auto()  
+    SPAWNING = auto() # porque lucecitas suena demasiado profesional
+    COLLAPSING = auto()
+    DESTROYED = auto()
 
 class Path():
     def __init__(self, angle, dist, posFin):
