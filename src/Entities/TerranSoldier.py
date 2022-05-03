@@ -54,11 +54,11 @@ PADDING = 110
 
 class TerranSoldier(Soldier):
     def __init__(self, xIni, yIni, player):
-        Soldier.__init__(self, HP, xIni * 40 + 20, yIni * 40 + 20, MINERAL_COST,
-                                GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME,
-                                    PADDING,  takeID(), player, MINE_POWER, TIME_TO_MINE, INVERSIBLE_FRAMES,
-                                        FRAMES, DIR_OFFSET, ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, X_PADDING,
-                                            Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ATTACK_INFO)
+        Soldier.__init__(self, HP, xIni * TILE_WIDTH + 20, yIni * TILE_HEIGHT, MINERAL_COST,
+                GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME,
+                PADDING,  takeID(), player, INVERSIBLE_FRAMES, FRAMES, DIR_OFFSET, ATTACK_FRAMES, 
+                STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, X_PADDING,
+                Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ATTACK_INFO)
 
 
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()

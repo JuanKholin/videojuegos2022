@@ -245,3 +245,7 @@ class Worker(Unit):
                 tilesObj.append(tileDown)
             y += 40
         return tilesObj
+
+    # Indica a la IA si es soldado o worker
+    def isSoldier(self):
+        return false

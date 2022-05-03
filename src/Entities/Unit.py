@@ -551,6 +551,10 @@ class Unit(Entity):
         self.paths = calcPath(self.getPosition(), self.getTile(), self.attackedOne.getTile(), self.mapa)
         self.updatePath(self.paths[len(self.paths) - 1])
         self.updateMovingImage()
+
+    # Indica a la IA si es soldado o worker
+    def isSoldier(self):
+        pass
         
     #####################
     # GETTERS Y SETTERS #

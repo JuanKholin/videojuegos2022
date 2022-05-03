@@ -21,6 +21,9 @@ class Player():
         self.initialX = 0
         self.initialY = 0
         self.mapa = mapa
+
+        # Para la IA
+        self.unitsFree = []
     
     def setBasePlayer(self, base):
         self.base = base
@@ -45,6 +48,7 @@ class Player():
 
     def addUnits(self,unit):
         self.units.append(unit)
+        self.unitsFree.append(unit)
 
     def addStructures(self,structures):
         self.structures.append(structures)
@@ -108,9 +112,12 @@ class Player():
     def removeUnit(self, unit):
         self.unitsSelected.remove(unit)
 
+    def removeUnitFromFree(self, unit):
+        self.unitsFree.remove(unit)
+
     # Para que la AI pueda acceder a la informacion
     def get_info(self):
-        return self.units, self.structures, self.resources
+        return self.unitsFree, self.structures, self.resources
 
     def toDictionary(self, map):
         return {

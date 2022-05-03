@@ -12,6 +12,9 @@ class AI():
         self.decissionsPool = sum(self.decissionsChance)
         self.minimalDecissionChance = 1
 
+        # Para las invasiones
+        self.invaders = [] 
+
     # Haz lo tuyo IA, es tu turno
     def make_commands(self):
         units, structures, resources = self.data.get_info()
@@ -30,6 +33,7 @@ class AI():
         self.minimalBuild()
         self.restoreArmy()
         self.gatherNearbyResources()
+        self.updateInvaders()
 
     # Toma una decision trascendental
     def makeDecission(self, units, structures, resources):
@@ -43,7 +47,7 @@ class AI():
         elif decission == 3:
             self.gatherFarResources()
         elif decission == 4:
-            self.seekAndDestroy()
+            self.seekAndDestroy(units)
 
     # Toma una decision y rebalancea el pool de decisiones, me ha quedado bastante original la verdad, 
     # estoy orgulloso y no se ni si funciona xdxdxdxd
@@ -58,6 +62,12 @@ class AI():
                             self.decissionsChance[j] += 1
                 return i
             randPick - self.decissionsChance[i]
+
+    # Recorre las unidades invasoras para que vayan a atacar objetivos conocidos y si no hay explorar
+    # tiles no exploradas y atacar lo que se encuentren hasta la muerte o la victoria
+    # CLARO ESTO SI HUBIERA VISION ASJIDASJFIDSFJEWR
+    def updateInvaders(self):
+        pass
 
     ####################
     # ACCIONES LIGERAS #
@@ -91,5 +101,32 @@ class AI():
     def gatherFarResources(self):
         pass
 
-    def seekAndDestroy(self):
-        pass
+    # Apunta a ciertos soldados libres en funcion del ejercito disponible 
+    # para invadir hasta su muerte o la victoria
+    def seekAndDestroy(self, units):
+        soldiers = self.getSoldiers(units)
+        num = 0
+        if soldiers.len > 3:
+            #ejercito de 1
+            num = 1
+        elif soldiers.len > 5:
+            #ejercito de 2
+            num = 2
+        elif soldiers.len > 10:
+            #ejercito de 3
+            num = 3
+        for i in range(num):
+            self.player.removeFromFree(soldiers[i])
+            self.invaders.append(soldiers[i])
+
+    ##############
+    # AUXILIARES #
+    ##############
+
+    # De las unidades devuelve a todos los soldados
+    def getSoldiers(self, units):
+        soldiers = []
+        for unit in units:
+            if unit.isSoldier():
+                soldiers.append(unit)
+        return soldiers

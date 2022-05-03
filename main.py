@@ -67,7 +67,7 @@ def setEntity(player):
     soldierChan = TerranSoldier(6, 1, player1)
     player1.addUnits(soldierChan)
 
-    zergling = Zergling(8, 9, player1)
+    zergling = Zergling(0, 0, player1)
     player1.addUnits(zergling)
 
     droneAI = Drone(3, 2, player2)
@@ -115,8 +115,6 @@ screen =  pg.display.set_mode(size)
 #Controlar frames por segundo
 clock = pg.time.Clock()
 
-
-
 # Player 1
 keyMap ={
   pg.K_UP: CommandId.MOVER_CAMARA_ARRIBA,
@@ -152,7 +150,7 @@ player1 = Player.Player([], [], 400, keyMap, commandMap, mapa, True)
 
 # Player 2 AKA IA
 player2 = Player.Player([], [], 400, {}, {}, mapa, False)
-#aI = AI(player2)
+aI = AI(player2, EASY)
 
 # Camara
 # pre: mapa tan grande como ventana
@@ -161,16 +159,19 @@ camera = Camera(0, 0, SCREEN_HEIGHT - 160, SCREEN_WIDTH)
 # Escena
 
 #Recursos del mapa
-cristal = Cristal(34,1,80,500)
+crystal = Crystal(2, 10, 34)
+crystal2 = Crystal(2, 16, 34)
+
 
 resources = []
-resources.append(cristal)
+resources.append(crystal)
+resources.append(crystal2)
 
 raton = Raton.Raton(player1, player2, resources)
 p1Interface = Interface(player1, player2, raton)
 raton.addInterface(p1Interface)
 
-escena = Escena(player1, player2, None, mapa, camera, raton, p1Interface, resources)
+escena = Escena(player1, player2, aI, mapa, camera, raton, p1Interface, resources)
 #escena.mapa.addOre(100,100)
 
 # Bucle principal

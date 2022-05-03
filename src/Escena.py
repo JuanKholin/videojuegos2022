@@ -142,7 +142,7 @@ class Escena():
         finx = x + rect.w
         y = rect.y + 1
         finy = y + rect.h
-        if(res.capacidad <= 0):
+        if(res.capacity <= 0):
             while x <= finx:
                 while y <= finy:
                     self.mapa.setLibre(self.mapa.getTile(x,y))

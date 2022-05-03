@@ -35,6 +35,14 @@ OBSTACLE = 1
 UNIT = 2
 RESOURCE = 3
 
+# Resource types:
+CRYSTAL = 1
+VESPENE = 2
+
+# Info de las tiles
+TILE_WIDTH = 40
+TILE_HEIGHT = 40
+
 # dificultades IA (margen de decision en frames):
 EASY = 1000
 MEDIUM = 600

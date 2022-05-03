@@ -1,5 +1,6 @@
 import pygame as pg
 from ..Utils import *
+from .Resource import *
 
 SPRITE_PIXEL_ROWS = 96
 WEIGHT_PADDING =    0
@@ -7,14 +8,10 @@ HEIGHT_PADDING =    85
 X_PADDING =         65
 Y_PADDING =         55
 
-class Cristal():
-    def __init__(self, capacidad, tipo, x, y):
-        self.x = x
-        self.y = y
-        self.capacidad = capacidad
-        self.tipo = tipo
-        self.interval = capacidad/4
-        spritesheet = pg.image.load("./SPRITE/Cristal/min0" + str(tipo) + ".bmp").convert()
+class Crystal(Resource):
+    def __init__(self, x, y, capacidad):
+        Resource.__init__(self, x * TILE_WIDTH, y * TILE_HEIGHT + 20, CRYSTAL, capacidad)
+        spritesheet = pg.image.load("./SPRITE/Cristal/min0" + str(self.type) + ".bmp").convert()
         spritesheet.set_colorkey((BLACK))
         self.sprites = self.divideSpritesheetByRows(spritesheet, SPRITE_PIXEL_ROWS)
         #self.image = self.sprites[4 - int(float(capacidad)/float(self.interval) + 0.5)]
