@@ -49,11 +49,11 @@ class Tile():
         else:
             globalRectCoords = self.getRect()
             cameraRectCoords = (globalRectCoords[0] - camera.x, globalRectCoords[1] - camera.y, globalRectCoords[2], globalRectCoords[3])
-            if self.type == 1:
+            if self.type == OBSTACLE:
                 pygame.draw.rect(screen, RED, pygame.Rect(cameraRectCoords), 1)
             elif self.type == EMPTY:
                 pygame.draw.rect(screen, GREEN, pygame.Rect(cameraRectCoords), 1)
-            elif self.type == 3:
+            elif self.type == UNIT:
                 pygame.draw.rect(screen, BLUE, pygame.Rect(cameraRectCoords), 1)
             elif self.type == GEYSER:
                 pygame.draw.rect(screen, ORANGE, pygame.Rect(cameraRectCoords), 1)

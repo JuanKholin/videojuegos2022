@@ -24,6 +24,7 @@ class CommandId(IntEnum):
     MEJORAR_DAÑO_SOLDADO = 20
     MEJORAR_ARMADURA_SOLDADO = 21
     MEJORAR_MINADO_WORKER = 22
+    BUILD_REFINERY = 23
 
 class Command:
     def __init__(self, id):

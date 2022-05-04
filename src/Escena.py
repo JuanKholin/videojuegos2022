@@ -5,6 +5,7 @@ from . import Player, Raton
 from .Utils import *
 from .Command import *
 from .Entities import TerranBarracks
+from .Entities.TerranRefinery import *
 from .Entities import TerranWorker
 from .Loader import *
 from datetime import datetime
@@ -50,7 +51,10 @@ class Escena():
                     self.raton.buildStructure = self.getTerranBarrack()
                 elif command.id == CommandId.BUILD_HATCHERY and self.p1.resources >= HATCHERY_MINERAL_COST:
                     self.raton.building = True
-                    self.raton.buildStructure = self.getZergBuilder()
+                    self.raton.buildStructure = self.getHatchery()
+                elif command.id == CommandId.BUILD_REFINERY and self.p1.resources >= TERRAN_REFINERY_MINERAL_COST:
+                    self.raton.building = True
+                    self.raton.buildStructure = self.getTerranRefinery()
                 elif command.id == CommandId.GUARDAR_PARTIDA:
                     self.saveScene()
                 elif command.id == CommandId.MOVER:
@@ -162,7 +166,8 @@ class Escena():
             self.resources.remove(res)
             del res
         else:
-            while x <= finx:
+            if res.enable:
+                while x <= finx:
                     while y <= finy:
                         self.mapa.setType(self.mapa.getTile(x,y), res.getType())
                         self.mapa.getTile(x,y).setOcupante(res)
@@ -185,8 +190,11 @@ class Escena():
     def getTerranBarrack(self):
         return TerranBarracks(0, 0, None, self.mapa, True, 5)
 
-    def getZergBuilder(self):
+    def getHatchery(self):
         return Hatchery(0, 0, None, self.mapa, False, 8)
+    
+    def getTerranRefinery(self):
+        return TerranRefinery(0, 0, None, self.mapa, True, 8)
 
     def toDictionary(self):
         return{

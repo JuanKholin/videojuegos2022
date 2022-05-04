@@ -145,14 +145,6 @@ class Map():
             tilesObj.append(tile)
         return list(set(tilesObj))
 
-    def drawTiles(self, screen, camera, tiles):
-        for tile in tiles:
-            r = tile.getRect()
-            if tile.type == 0:
-                pygame.draw.rect(screen, GREEN, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
-            else:
-                pygame.draw.rect(screen, RED, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
-
     def getTileCenter(self, x, y):
         return ((x*self.tw - self.tw/2), (y*self.th - self.th/2))
 

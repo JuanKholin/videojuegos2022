@@ -25,6 +25,7 @@ from src.Entities.Drone import *
 from src.Entities.Zergling import *
 from src.Entities.TerranSupplyDepot import *
 from src.Entities.Extractor import * 
+from src.Entities.TerranRefinery import * 
 
 
 # Auxiliar del bucle principal
@@ -56,10 +57,12 @@ def setEntity(player):
     player1.setBasePlayer(structure1)
     structure2 = TerranBarracks(15, 9, player1, mapa, False, 3)
     structure4 = Extractor(12, 27, player1, mapa, True, 4)
+    structure5 = TerranRefinery(13, 18, player1, mapa, True, 5)
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addStructures(structure3)
     player.addStructures(structure4)
+    player.addStructures(structure5)
     player.addUnits(scv)
 
     hatchery = Hatchery(16, 14, player2, mapa, False, 8)
@@ -127,7 +130,8 @@ keyMap ={
   pg.K_LEFT: CommandId.MOVER_CAMARA_IZQUIERDA,
   pg.K_r: CommandId.ROTAR,
   pg.K_v: CommandId.GENERAR_UNIDAD,
-  pg.K_c: CommandId.BUILD_STRUCTURE,
+  pg.K_c: CommandId.BUILD_BARRACKS,
+  pg.K_x: CommandId.BUILD_REFINERY,
   pg.K_d: CommandId.MEJORAR_DAÑO_SOLDADO,
   pg.K_a: CommandId.MEJORAR_ARMADURA_SOLDADO,
   pg.K_m: CommandId.MEJORAR_MINADO_WORKER,

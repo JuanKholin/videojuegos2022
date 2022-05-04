@@ -191,11 +191,19 @@ class Structure(Entity.Entity):
         r = self.getRect()
         #pygame.draw.rect(screen, GREEN, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h), 5)
         tiles = self.mapa.getRectTiles(r)
-        self.mapa.drawTiles(screen, camera, tiles)
+        self.drawBuildTiles(screen, camera, tiles)
 
         sprite = self.getBuildSprite()
         image = self.getFinalImage()
         screen.blit(sprite, (image.x - camera.x, image.y - camera.y))
+        
+    def drawBuildTiles(self, screen, camera, tiles):
+        for tile in tiles:
+            r = tile.getRect()
+            if tile.type == EMPTY:
+                pygame.draw.rect(screen, GREEN, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
+            else:
+                pygame.draw.rect(screen, RED, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
 
     def checkTiles(self):
         r = self.getRect()
@@ -204,12 +212,15 @@ class Structure(Entity.Entity):
         tiles_set = set(tiles)
         if len(tiles_set) == self.tileH*self.tileW:
             for tile in tiles_set:
-                if tile.type != 0:
+                if tile.type != EMPTY:
                     ok = False
                     break
         else:
             ok = False
         return ok
+    
+    def buildProcess(self):
+        pass
 
     def generateUnit(self, unit):
         print("genero unidad")

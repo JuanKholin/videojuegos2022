@@ -179,7 +179,7 @@ class Raton(pygame.sprite.Sprite):
             else:
                 if self.point.getClicked():
                     self.point.draw(screen, camera)
-                if self.pulsado and self.enable:
+                if self.pulsado:
                     printRectangulo(screen, self.initialX - camera.x, self.initialY - camera.y, self.rel_pos[0], self.rel_pos[1])
             screen.blit(self.image, (self.rect.x, self.rect.y))
         else:
@@ -234,6 +234,7 @@ class Raton(pygame.sprite.Sprite):
                                 self.player.resources -= self.buildStructure.mineralCost
                                 self.buildStructure.player = self.player
                                 self.player.addStructures(self.buildStructure)
+                                self.buildStructure.buildProcess()
                                 self.building = False
                                 self.buildStructure = None
                         else:

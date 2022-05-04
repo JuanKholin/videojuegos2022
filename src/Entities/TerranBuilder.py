@@ -29,8 +29,9 @@ class TerranBuilder(Structure):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
-        self.sprites = cargarSprites(TERRAN_BUILDER_PATH, 6, False, WHITE, 
-                1.5) + Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
+        self.sprites = cargarSprites(TERRAN_BUILDER_PATH, 6, False, WHITE, 1.5)
+        #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
+        
         self.image = self.sprites[self.index]
         self.operativeIndex = [4]
         self.spawningIndex = [4, 5]
@@ -80,8 +81,10 @@ class TerranBuilder(Structure):
                 self.mineUpCost += 50
 
     def command(self, command):
-        if command == CommandId.BUILD_STRUCTURE:
+        if command == CommandId.BUILD_BARRACKS:
             return Command(CommandId.BUILD_BARRACKS)
+        elif command == CommandId.BUILD_REFINERY:
+            return Command(CommandId.BUILD_REFINERY)
         elif command == CommandId.GENERAR_UNIDAD:
             return Command(CommandId.GENERAR_UNIDAD)
         elif command == CommandId.MEJORAR_ARMADURA_SOLDADO:
@@ -98,7 +101,7 @@ class TerranBuilder(Structure):
     
     def getOptions(self):
         #return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS]
-        return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS]
+        return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.BUILD_REFINERY]
 
     def toDictionary(self, map):
         #x, y = map.getTileIndex(self.originX, self.originY)

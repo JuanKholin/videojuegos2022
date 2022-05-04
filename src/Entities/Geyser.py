@@ -21,15 +21,16 @@ class Geyser(Resource):
         self.render = pygame.transform.scale(pygame.image.load(CRYSTAL_RENDER), RENDER_SIZE)
         
     def draw(self, screen, camera):
-        r = self.getRect()
-        pg.draw.rect(screen, BLACK, pg.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h),1)
-        if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
-        r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
-            drawPos = self.getDrawPosition()
-            if self.clicked:
-                pg.draw.ellipse(screen, YELLOW, [r.x - camera.x, r.y + (0.7*r.h)- camera.y,r.w , 0.3*r.h], 2)
-            #screen.blit(unit.image, [r.x - self.camera.x, r.y - self.camera.y])
-            screen.blit(self.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
+        if self.enable:
+            r = self.getRect()
+            pg.draw.rect(screen, BLACK, pg.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h),1)
+            if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
+            r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
+                drawPos = self.getDrawPosition()
+                if self.clicked:
+                    pg.draw.ellipse(screen, YELLOW, [r.x - camera.x, r.y + (0.7*r.h)- camera.y,r.w , 0.3*r.h], 2)
+                #screen.blit(unit.image, [r.x - self.camera.x, r.y - self.camera.y])
+                screen.blit(self.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
 
     def divideSpritesheetByRows(self,spritesheet, rows):
         totalRows = spritesheet.get_height()

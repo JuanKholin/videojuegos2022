@@ -7,3 +7,7 @@ class Resource():
         self.capacity = capacity
         self.type = resourceType
         self.interval = capacity / 4
+        self.enable = True
+        
+    def disable(self):
+        self.enable = False

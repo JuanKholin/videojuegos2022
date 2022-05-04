@@ -1,7 +1,5 @@
 import pygame
 
-from .TerranSoldier import *
-from .TerranWorker import *
 from .Structure import *
 from .. import Player, Map
 from ..Command import *
@@ -11,51 +9,43 @@ from ..Utils import *
 HP = 200
 GENERATION_TIME = 5
 
-class TerranBarracks(Structure):
+class TerranRefinery(Structure):
     sprites = []
     training = []
     generationTime = 0
     generationCount = 0
     nBuildSprites = 4
-    deafault_index = 4
+    deafault_index = 5
     generationStartTime = 0
     heightPad = 5
-    rectOffY = 8
+    rectOffY = 57
     tileW = 4
-    tileH = 3
+    tileH = 2
     clicked = False
     frame = 8
 
     def __init__(self, xini, yini, player, map, building, id):
-        Structure.__init__(self, HP, TERRAN_BARRACK_MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
+        Structure.__init__(self, HP, TERRAN_REFINERY_MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
-        self.sprites = cargarSprites(TERRAN_BARRACK_PATH, 6, False, WHITE, 1.1) 
+        self.sprites = cargarSprites(TERRAN_REFINERY_PATH, 5, False, BLACK) 
         #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
         
         self.image = self.sprites[self.index]
         self.operativeIndex = [4]
-        self.spawningIndex = [4, 5]
+        self.spawningIndex = [4]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
         
-        self.render = pygame.transform.scale(pygame.image.load(BARRACKS_RENDER), RENDER_SIZE)
+        self.render = pygame.transform.scale(pygame.image.load(REFINERY_RENDER), RENDER_SIZE)
 
         if building:
             self.state = BuildingState.BUILDING
         else:
             self.state = BuildingState.OPERATIVE
-
+            
+        self.resource = None
         self.training = []
         self.paths = []
-
-    def execute(self, command_id):
-        if self.clicked:
-            print("soy clickeado?")
-            if (command_id == CommandId.GENERAR_UNIDAD or command_id == CommandId.GENERATE_SOLDIER) and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
-                self.player.resources -= TERRAN_WORKER_MINERAL_COST
-                terranSoldier = TerranSoldier(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
-                self.generateUnit(terranSoldier)
-                self.state = BuildingState.SPAWNING
 
     def command(self, command):
         if self.state != BuildingState.BUILDING:
@@ -71,12 +61,45 @@ class TerranBarracks(Structure):
     
     def getOptions(self):
         return [Options.GENERATE_SOLDIER]
+    
+    def drawBuildTiles(self, screen, camera, tiles):
+        for tile in tiles:
+            r = tile.getRect()
+            if tile.type == GEYSER:
+                pygame.draw.rect(screen, GREEN, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
+            else:
+                pygame.draw.rect(screen, RED, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
+                
+    def draw(self, screen, camera):
+        Structure.draw(self, screen, camera)
+        if self.resource != None:
+            muestra_texto(screen, str('monotypecorsiva'), str(self.resource.capacity), BLUE, 20, [60, 10])
+    
+    def checkTiles(self):
+        r = self.getRect()
+        tiles = self.mapa.getRectTiles(r)
+        ok = True
+        tiles_set = set(tiles)
+        if len(tiles_set) == self.tileH*self.tileW:
+            for tile in tiles_set:
+                if tile.type != GEYSER:
+                    ok = False
+                    break
+        else:
+            ok = False
+        return ok
+    
+    def buildProcess(self):
+        gas = (self.mapa.getTile(self.x, self.y)).ocupante
+        if gas != None:
+            self.resource = gas
+            gas.disable()
 
     def toDictionary(self, map):
         #print("barracke x e y Ini ", self.xIni, self.yIni)
         #x, y = map.getTileIndex(self.originX, self.originY)
         return {
-            "clase": "terranBarracks",
+            "clase": "terranRefinery",
             "x": self.xIni,
             "y": self.yIni,
             "id": self.id,

@@ -199,7 +199,8 @@ class Options(IntEnum):
     BUILD_BARRACKS = 0
     GENERATE_WORKER = 1
     GENERATE_SOLDIER = 2
-    BUILD_HATCHERY = 3
+    BUILD_REFINERY = 3
+    BUILD_HATCHERY = 4
     NULO = -1
     
 BUTTON_PATH = "SPRITE/button/gui_button_"
@@ -237,6 +238,12 @@ BUILDER_RENDER = "SPRITE/render/terranBuilder.png"
 TERRAN_BARRACK_PATH = "SPRITE/structure/barracks/tile00"
 TERRAN_BARRACK_MINERAL_COST = 50
 BARRACKS_RENDER = "SPRITE/render/terranBarracks.png"
+
+##---------TERRAN_REFINERY------------------
+
+TERRAN_REFINERY_PATH = "SPRITE/structure/refinery/refinery000"
+TERRAN_REFINERY_MINERAL_COST = 50
+REFINERY_RENDER = "SPRITE/render/terranRefinery.png"
 
 ##---------HATCHERY------------------
 HATCHERY_PATH = "SPRITE/structure/Hatchery/tile00"
