@@ -505,7 +505,7 @@ class Unit(Entity):
         print("RESOLVER OCUAPDO: ", self.state)
         if self.state == UnitState.MOVING:
             self.paths = []
-        elif self.state == UnitState.MINING or self.stare == UnitState.EXTRACTING:
+        elif self.state == UnitState.MINING or self.state == UnitState.EXTRACTING:
             tilesResource = self.tilesResource()
             if tilesResource.__len__() == 0: # Me he quedado sin sitio
                 self.changeToStill()

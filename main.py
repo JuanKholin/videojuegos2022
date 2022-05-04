@@ -68,8 +68,8 @@ def setEntity(player):
     hatchery = Hatchery(16, 14, player2, mapa, False, 8)
     #player2.addStructures(hatchery)
 
-    drone = Drone(10, 11, player1)
-    #player1.addUnits(drone)
+    drone = Drone(10, 11, player2)
+    player2.addUnits(drone)
 
     soldierChan = TerranSoldier(6, 1, player1)
     #player1.addUnits(soldierChan)
@@ -173,7 +173,7 @@ camera = Camera(0, 0, SCREEN_HEIGHT - 160, SCREEN_WIDTH)
 crystal = Crystal(2, 10, 34)
 crystal2 = Crystal(2, 16, 34)
 
-geyser1 = Geyser(20, 2, 34)
+geyser1 = Geyser(14, 2, 34)
 geyser2 = Geyser(2, 22, 34)
 
 
@@ -181,7 +181,7 @@ resources = []
 resources.append(crystal)
 resources.append(crystal2)
 resources.append(geyser1)
-#resources.append(geyser2)
+resources.append(geyser2)
 
 raton = Raton.Raton(player1, player2)
 p1Interface = Interface(player1, player2, raton)

@@ -74,6 +74,7 @@ BLUE2   = (35, 35, 255)
 PURPLE  = (255, 0, 255)
 GREEN2  = (210, 255, 125)
 GREEN3  = (110, 255, 90)
+GREEN4  = (140, 255, 150)
 PINK    = (255, 95, 185)
 ORANGE  = (255, 200, 95)
 
@@ -190,6 +191,8 @@ MINIMAP_H = 205
 
 GUI_INFO_X = 280
 GUI_INFO_Y = 610
+
+RESOURCES_COUNT_X = SCREEN_WIDTH - 300
 
 #---
 HEROE_PATH = "SPRITE/Heroes/Terran/Alexei Stukov/taxfid000"
