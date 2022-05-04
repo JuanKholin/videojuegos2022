@@ -82,7 +82,7 @@ class Map():
         #print(xaux, yaux)
         return self.mapa[yaux][xaux]
 
-    def getRectRoundTiles(self, rect):
+    def getRectRoundTiles(self, rect, tileActual):
         tiles = []
         x = self.getTile(rect.x, rect.y).centerx
         finx = rect.x + rect.w
@@ -93,10 +93,10 @@ class Map():
             tileUp = self.getTile(x,y - 40)
             tileDown = self.getTile(x,finy + 40)
             #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
-            if tileUp.type == 0:
+            if tileUp.type == 0 or tileUp == tileActual:
                 #print("tileUp:", tileUp.tileid)
                 tiles.append(tileUp)
-            if tileDown.type == 0:
+            if tileDown.type == 0 or tileDown == tileActual:
                 #print("tileDown: ", tileDown.tileid)
                 tiles.append(tileDown)
             x += 40
@@ -105,10 +105,10 @@ class Map():
             tileUp = self.getTile(x - 40,y)
             tileDown = self.getTile(finx + 40,y)
             #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
-            if tileUp.type == 0:
+            if tileUp.type == 0 or tileUp == tileActual:
                 #print("tileUp:", tileUp.tileid)
                 tiles.append(tileUp)
-            if tileDown.type == 0:
+            if tileDown.type == 0 or tileDown == tileActual:
                 #print("tileDown: ", tileDown.tileid)
                 tiles.append(tileDown)
             y += 40
@@ -121,24 +121,28 @@ class Map():
         tileUp = self.getTile(x - 40,y - 40)
         tileDown = self.getTile(finx + 40,y - 40)
         #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
-        if tileUp.type == 0:
+        if tileUp.type == 0 or tileUp == tileActual:
+            #print("tileUp:", tileUp.tileid)
             tiles.append(tileUp)
-        if tileDown.type == 0:
+        if tileDown.type == 0 or tileDown == tileActual:
+            #print("tileDown: ", tileDown.tileid)
             tiles.append(tileDown)
         tileUp = self.getTile(x - 40,finy + 40)
         tileDown = self.getTile(finx + 40,finy + 40)
         #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
-        if tileUp.type == 0:
+        if tileUp.type == 0 or tileUp == tileActual:
+            #print("tileUp:", tileUp.tileid)
             tiles.append(tileUp)
-        if tileDown.type == 0:
+        if tileDown.type == 0 or tileDown == tileActual:
+            #print("tileDown: ", tileDown.tileid)
             tiles.append(tileDown)
         return tiles
 
-    def getEntityTilesVecinas(self, tile):
+    def getEntityTilesVecinas(self, tile, tileActual):
         tilesObj = []
         if tile.ocupante != None:
             r = tile.ocupante.getRect()
-            tiles = self.getRectRoundTiles(r) #se puede mejorar
+            tiles = self.getRectRoundTiles(r, tileActual) #se puede mejorar
             for t in tiles:
                 tilesObj.append(t)
         else:

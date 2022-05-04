@@ -43,7 +43,7 @@ class Worker(Unit):
             self.resource = resource
             pos = self.resource.getPosition()
             tile = self.mapa.getTile(pos[0], pos[1])
-            tiles = self.mapa.getEntityTilesVecinas(tile)
+            tiles = self.mapa.getEntityTilesVecinas(tile, self.getTile())
             if len(tiles) > 0:
                 ownTile = self.getTile()
                 bestTile = tiles[0]
@@ -66,7 +66,7 @@ class Worker(Unit):
             self.resource = resource
             pos = self.resource.getPosition()
             tile = self.mapa.getTile(pos[0], pos[1])
-            tiles = self.mapa.getEntityTilesVecinas(tile)
+            tiles = self.mapa.getEntityTilesVecinas(tile, self.getTile())
             if len(tiles) > 0:
                 ownTile = self.getTile()
                 bestTile = tiles[0]
@@ -170,7 +170,7 @@ class Worker(Unit):
                 #Calcular el camino a casa
                 posicionActual = self.getPosition()
                 tileActual = self.mapa.getTile(posicionActual[0], posicionActual[1])
-                tilesCasa = self.tilesCasa()
+                tilesCasa = self.tilesCasa(tileActual)
                 tileObj = tilesCasa[0]
                 for tile in tilesCasa:
                     if tile.heur(tileActual) < tileObj.heur(tileActual):
@@ -195,7 +195,7 @@ class Worker(Unit):
                 #Calcular el camino a casa
                 posicionActual = self.getPosition()
                 tileActual = self.mapa.getTile(posicionActual[0], posicionActual[1])
-                tilesCasa = self.tilesCasa()
+                tilesCasa = self.tilesCasa(tileActual)
                 tileObj = tilesCasa[0]
                 for tile in tilesCasa:
                     if tile.heur(tileActual) < tileObj.heur(tileActual):
@@ -230,6 +230,8 @@ class Worker(Unit):
                 self.updatePath(actualPath)
             else: # Se acaba este camino
                 self.finishOrePath()
+        else:
+            self.finishOrePath()
         if self.count >= self.framesToRefresh:
             self.count = 0
             self.updateOreTransportingImage()
@@ -242,25 +244,55 @@ class Worker(Unit):
                 self.updatePath(actualPath)
             else: # Se acaba este camino
                 self.finishGasPath()
+        else: # Se acaba este camino
+            self.finishGasPath()
         if self.count >= self.framesToRefresh:
             self.count = 0
             self.updateGasTransportingImage()
     
     def finishOrePath(self):
-        self.paths.pop(0)
-        if len(self.paths) == 0: # he entregado el ore, miro si tengo que volver
-            if self.resource.capacity < 0:
-                self.player.resources += self.cantidadMinada
-                print("cambiamos a still")
-                self.changeToStill()
-            else:
-                #Tengo que volver, calculo el camino a minar
-                self.player.resources += self.cantidadMinada
+        if len(self.paths) > 0:
+            self.paths.pop(0)
+        if len(self.paths) == 0: # PUEDE QUE NO 
+            tilesCasa = self.tilesCasa(self.getTile())
+            if self.getTile() in tilesCasa: # He entregado sino me quedo en el sitio
+                if self.resource.capacity < 0:
+                    self.player.resources += self.cantidadMinada
+                    print("cambiamos a still")
+                    self.changeToStill()
+                else:
+                    #Tengo que volver, calculo el camino a minar
+                    self.player.resources += self.cantidadMinada
+                    self.paths = []
+
+                    posicionActual = self.getPosition()
+                    tileActual = self.mapa.getTile(posicionActual[0], posicionActual[1])
+                    tilesResource = self.tilesResource(tileActual)
+                    if tilesResource.__len__() == 0:
+                        #No hay sitio para minar
+                        self.changeToStill()
+                    else:
+                        tileObj = tilesResource[0]
+                        for tile in tilesResource:
+                            if tile.heur(tileActual) < tileObj.heur(tileActual):
+                                tileObj = tile
+
+                        self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
+                        self.changeToMining(self.resource)
+
+    def finishGasPath(self):
+        if len(self.paths) > 0:
+            self.paths.pop(0)
+        if len(self.paths) == 0: # PUEDE QUE NO
+            tilesCasa = self.tilesCasa(self.getTile())
+            if self.getTile() in tilesCasa: # He entregado sino me quedo en el sitio
+                #Tengo que volver siempre, TRABAJO DE POR VIDA :D
+                self.player.gas += self.cantidadMinada
                 self.paths = []
 
                 posicionActual = self.getPosition()
                 tileActual = self.mapa.getTile(posicionActual[0], posicionActual[1])
-                tilesResource = self.tilesResource()
+                tilesResource = self.tilesResource(tileActual)
                 if tilesResource.__len__() == 0:
                     #No hay sitio para minar
                     self.changeToStill()
@@ -271,29 +303,7 @@ class Worker(Unit):
                             tileObj = tile
 
                     self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
-                    self.changeToMining(self.resource)
-
-    def finishGasPath(self):
-        self.paths.pop(0)
-        if len(self.paths) == 0: # he entregado el ore, miro si tengo que volver
-            #Tengo que volver siempre, TRABAJO DE POR VIDA :D
-            self.player.gas += self.cantidadMinada
-            self.paths = []
-
-            posicionActual = self.getPosition()
-            tileActual = self.mapa.getTile(posicionActual[0], posicionActual[1])
-            tilesResource = self.tilesResource()
-            if tilesResource.__len__() == 0:
-                #No hay sitio para minar
-                self.changeToStill()
-            else:
-                tileObj = tilesResource[0]
-                for tile in tilesResource:
-                    if tile.heur(tileActual) < tileObj.heur(tileActual):
-                        tileObj = tile
-
-                self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
-                self.changeToExtracting(self.resource)         
+                    self.changeToExtracting(self.resource)         
             
     
     # Pasa de frame en una animacion de minado
@@ -345,32 +355,12 @@ class Worker(Unit):
             self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
             self.changeToMining()
 
-    def tilesResource(self):
-        tilesObj = []
+    def tilesResource(self, tileActual):
         rect = self.resource.getRect()
-        x = self.mapa.getTile(rect.x, rect.y).centerx
-        finx = x + rect.w
-        y = self.mapa.getTile(rect.x, rect.y).centery
-        finy = y + rect.h
-        while x <= finx:
-            tileUp = self.mapa.getTile(x,y - 40)
-            tileDown = self.mapa.getTile(x,finy + 40)
-            #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
-            if tileUp.type == 0:
-                tilesObj.append(tileUp)
-            if tileDown.type == 0:
-                tilesObj.append(tileDown)
-            x += 40
-        while y <= finy:
-            tileUp = self.mapa.getTile(x - 40,y)
-            tileDown = self.mapa.getTile(finx + 40,y)
-            #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
-            if tileUp.type == 0:
-                tilesObj.append(tileUp)
-            if tileDown.type == 0:
-                tilesObj.append(tileDown)
-            y += 40
-        return tilesObj
+        tile = self.mapa.getTile(rect.x, rect.y)
+        tilesCasa = self.mapa.getEntityTilesVecinas(tile, tileActual)
+        return tilesCasa
+
 
     # Indica a la IA si es soldado o worker
     def isSoldier(self):

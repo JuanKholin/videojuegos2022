@@ -60,13 +60,13 @@ class Unit(Entity):
             objectiveTile = self.mapa.getTileCercana(self.getTile(), objectiveTile)
         elif objectiveTile.type != EMPTY:
             print("AAAAAAAAAAAAAAAAAAAAAAAAA")
-            tilesRound = self.mapa.getEntityTilesVecinas(objectiveTile)
+            tilesRound = self.mapa.getEntityTilesVecinas(objectiveTile, self.getTile())
             objectiveTile = tilesRound[0]
             for tile in tilesRound:
                 if tile.heur(self.getTile()) < objectiveTile.heur(self.getTile()):
                     objectiveTile = tile
         self.paths = calcPath(self.getPosition(), self.getTile(), objectiveTile, self.mapa)
-        if len(self.paths) > 0:
+        if len(self.paths) > 0 and (self.state != UnitState.ORE_TRANSPORTING or self.state != UnitState.GAS_TRANSPORTING) :
             self.changeToMoving(self.paths)
 
     # Indica a la unidad que ataque al objetivo seleccionado, si se encuentra un
@@ -79,7 +79,7 @@ class Unit(Entity):
     def mine(self, resource):
         pos = resource.getPosition()
         tile = self.mapa.getTile(pos[0], pos[1])
-        tiles = self.mapa.getEntityTilesVecinas(tile)
+        tiles = self.mapa.getEntityTilesVecinas(tile, self.getTile())
         if len(tiles) > 0:
             ownTile = self.getTile()
             bestTile = tiles[0]
@@ -92,7 +92,7 @@ class Unit(Entity):
     def extract(self, resource):
         pos = resource.getPosition()
         tile = self.mapa.getTile(pos[0], pos[1])
-        tiles = self.mapa.getEntityTilesVecinas(tile)
+        tiles = self.mapa.getEntityTilesVecinas(tile, self.getTile())
         if len(tiles) > 0:
             ownTile = self.getTile()
             bestTile = tiles[0]
@@ -530,10 +530,10 @@ class Unit(Entity):
                         tileObj = tile
                 self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
 
-    def tilesCasa(self):
+    def tilesCasa(self, tileActual):
         rect = self.player.base.getRect()
         tile = self.mapa.getTile(rect.x, rect.y)
-        tilesCasa = self.mapa.getEntityTilesVecinas(tile)
+        tilesCasa = self.mapa.getEntityTilesVecinas(tile, tileActual)
         return tilesCasa
     
     def finishPath(self):
