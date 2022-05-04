@@ -61,6 +61,9 @@ class TerranRefinery(Structure):
     
     def getOptions(self):
         return [Options.GENERATE_SOLDIER]
+
+    def getOrder(self):
+        return CommandId.EXTRACT_GAS
     
     def drawBuildTiles(self, screen, camera, tiles):
         for tile in tiles:

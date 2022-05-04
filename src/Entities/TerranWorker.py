@@ -37,7 +37,7 @@ FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
           [225] * 16, [226] * 16, [227] * 16, [228] * 16, [229] * 16, [230] * 16]
 STILL_FRAMES = [0]
 ORE_TRANSPORTING_FRAMES = [3]
-BARREL_TRANSPORTING_FRAMES = [4]
+BARREL_TRANSPORTING_FRAMES = [2]
 ATTACK_FRAMES = [1, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 MOVE_FRAMES = [0]
 DIE_FRAMES = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
@@ -58,7 +58,7 @@ class TerranWorker(Worker):
                 GENERATION_TIME, speed, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME,
                 PADDING,  takeID(), player, MINE_POWER, TIME_TO_MINE, INVERSIBLE_FRAMES,
                 FRAMES, DIR_OFFSET, ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, X_PADDING,
-                Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ORE_TRANSPORTING_FRAMES, ATTACK_INFO)
+                Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ORE_TRANSPORTING_FRAMES,BARREL_TRANSPORTING_FRAMES, ATTACK_INFO)
         print(self.speed)
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey(BLACK)

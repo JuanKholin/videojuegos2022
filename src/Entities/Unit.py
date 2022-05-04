@@ -75,8 +75,21 @@ class Unit(Entity):
         if (self.attackedOne != objective) or (self.state != UnitState.ATTACKING):        
             self.changeToAttacking(objective)
 
-    # Indica a la unidad que se acerque lo mas posible a un recurso, ya sea mineral o gas
+    # Indica a la unidad que se acerque lo mas posible a un recurso mineral
     def mine(self, resource):
+        pos = resource.getPosition()
+        tile = self.mapa.getTile(pos[0], pos[1])
+        tiles = self.mapa.getEntityTilesVecinas(tile)
+        if len(tiles) > 0:
+            ownTile = self.getTile()
+            bestTile = tiles[0]
+            for tile in tiles:
+                if tile.heur(ownTile) < bestTile.heur(ownTile):
+                    bestTile = tile
+            self.move(bestTile)
+    
+    # Indica a la unidad que se acerque lo mas posible a un recurso gas
+    def extract(self, resource):
         pos = resource.getPosition()
         tile = self.mapa.getTile(pos[0], pos[1])
         tiles = self.mapa.getEntityTilesVecinas(tile)
@@ -125,6 +138,10 @@ class Unit(Entity):
         elif self.state == UnitState.MINING: # Esta minando
             self.updateUnit()
             self.updateMining()
+        elif self.state == UnitState.EXTRACTING: # Esta extrayendo gas
+            if self.isExtracting == False:
+                self.updateUnit()
+            self.updateExtracting()
         elif self.state == UnitState.ORE_TRANSPORTING: # Esta transportando mineral
             self.updateUnit()
             self.updateOreTransporting()
@@ -181,6 +198,11 @@ class Unit(Entity):
     # Aplica un frame a la unidad que esta minando
     # El minado es especifico de worker por lo que lo implementa worker
     def updateMining(self):
+        pass
+
+    # Aplica un frame a la unidad que esta minando
+    # La extraccion de gas es especifico de worker por lo que lo implementa worker
+    def updateExtracting(self):
         pass
 
     # Aplica un frame a la unidad que esta llevando mineral
@@ -483,7 +505,7 @@ class Unit(Entity):
         print("RESOLVER OCUAPDO: ", self.state)
         if self.state == UnitState.MOVING:
             self.paths = []
-        elif self.state == UnitState.MINING:
+        elif self.state == UnitState.MINING or self.stare == UnitState.EXTRACTING:
             tilesResource = self.tilesResource()
             if tilesResource.__len__() == 0: # Me he quedado sin sitio
                 self.changeToStill()
@@ -495,7 +517,7 @@ class Unit(Entity):
                     if tile.heur(tileActual) < tileObj.heur(tileActual):
                         tileObj = tile
                 self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
-        elif self.state == UnitState.ORE_TRANSPORTING:
+        elif self.state == UnitState.ORE_TRANSPORTING or self.state == UnitState.GAS_TRANSPORTING:
             tilesCasa = self.tilesCasa()
             if tilesCasa.__len__() == 0: # Me he quedado sin sitio
                 self.paths = []

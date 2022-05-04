@@ -35,6 +35,7 @@ OBSTACLE = 1
 UNIT = 2
 RESOURCE = 3
 GEYSER = 4
+STRUCTURE = 5
 
 # Resource types:
 CRYSTAL = 1
@@ -107,6 +108,7 @@ class UnitState(Enum):
     GAS_TRANSPORTING = auto()
     DYING = auto()
     DEAD = auto()
+    EXTRACTING = auto()
 
 class BuildingState(Enum):
     BUILDING = auto()

@@ -68,18 +68,25 @@ class Player():
                     #print("Posicion final: ",path.posFin, path.angle)
         elif id == CommandId.ORDENAR:
             for i in range(param.__len__()):
+                print(param[i]['order'])
                 self.unitsSelected[i].paths = param[i]['path']
                 # En funcion de la orden cambiarle el estado a la unidad
                 if param[i]['order'] == CommandId.MINE:
                     self.unitsSelected[i].mine(param[i]['resource'])
                 elif param[i]['order'] == CommandId.MOVER:
                     self.unitsSelected[i].move(tileClicked)
+                elif param[i]['order'] == CommandId.EXTRACT_GAS:
+                    self.unitsSelected[i].extract(tileClicked)
                 elif param[i]['order'] == CommandId.ATTACK:
                     self.unitsSelected[i].attack(param[i]['attackedOne'])
         elif self.structureSelected != None:
             if id == CommandId.GENERAR_UNIDAD or id == CommandId.GENERATE_WORKER or id == CommandId.GENERATE_SOLDIER:
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_BARRACKS:
+                self.structureSelected.execute(id)
+            elif id == CommandId.BUILD_REFINERY:
+                self.structureSelected.execute(id)
+            elif id == CommandId.BUILD_HATCHERY:
                 self.structureSelected.execute(id)
             elif id == CommandId.MEJORAR_DAÑO_SOLDADO:
                 self.structureSelected.execute(id)

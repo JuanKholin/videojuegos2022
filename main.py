@@ -51,7 +51,7 @@ def procesarInput():
 def setEntity(player):
 
     scv = TerranWorker(4, 10, player1)
-    structure1 = TerranBuilder(5, 6, player1, mapa, False, 1)
+    structure1 = TerranBuilder(5, 6, player1, mapa, False,raton, 1)
     structure3 = TerranSupplyDepot(10, 6, player1, mapa, True, 2)
 
     player1.setBasePlayer(structure1)
@@ -66,19 +66,19 @@ def setEntity(player):
     player.addUnits(scv)
 
     hatchery = Hatchery(16, 14, player2, mapa, False, 8)
-    player2.addStructures(hatchery)
+    #player2.addStructures(hatchery)
 
     drone = Drone(10, 11, player1)
     #player1.addUnits(drone)
 
     soldierChan = TerranSoldier(6, 1, player1)
-    player1.addUnits(soldierChan)
+    #player1.addUnits(soldierChan)
 
-    zergling = Zergling(0, 0, player1)
-    player1.addUnits(zergling)
+    #zergling = Zergling(0, 0, player1)
+    #player1.addUnits(zergling)
 
     droneAI = Drone(30, 10, player2)
-    player2.addUnits(droneAI)
+    #player2.addUnits(droneAI)
 
 def update():
     clock_update()
@@ -173,7 +173,7 @@ camera = Camera(0, 0, SCREEN_HEIGHT - 160, SCREEN_WIDTH)
 crystal = Crystal(2, 10, 34)
 crystal2 = Crystal(2, 16, 34)
 
-geyser1 = Geyser(10, 2, 34)
+geyser1 = Geyser(20, 2, 34)
 geyser2 = Geyser(2, 22, 34)
 
 

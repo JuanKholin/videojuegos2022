@@ -44,17 +44,13 @@ class Escena():
                 elif command.id == CommandId.MEJORAR_ARMADURA_SOLDADO:
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.MEJORAR_MINADO_WORKER:
-                    print("PUTAAAAAAAAAAA")
                     self.p1.execute(command.id, [], None)
-                elif command.id == CommandId.BUILD_BARRACKS and self.p1.resources >= TERRAN_BARRACK_MINERAL_COST:
-                    self.raton.building = True
-                    self.raton.buildStructure = self.getTerranBarrack()
-                elif command.id == CommandId.BUILD_HATCHERY and self.p1.resources >= HATCHERY_MINERAL_COST:
-                    self.raton.building = True
-                    self.raton.buildStructure = self.getHatchery()
-                elif command.id == CommandId.BUILD_REFINERY and self.p1.resources >= TERRAN_REFINERY_MINERAL_COST:
-                    self.raton.building = True
-                    self.raton.buildStructure = self.getTerranRefinery()
+                elif command.id == CommandId.BUILD_BARRACKS:
+                    self.p1.execute(command.id, [], None)
+                elif command.id == CommandId.BUILD_HATCHERY:
+                    self.p1.execute(command.id, [], None)
+                elif command.id == CommandId.BUILD_REFINERY:
+                    self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.GUARDAR_PARTIDA:
                     self.saveScene()
                 elif command.id == CommandId.MOVER:
@@ -80,15 +76,18 @@ class Escena():
         # COMPROBAR SI HA CLICKADO UN ORE
         order = {'order': CommandId.MOVER, 'angle': 0, 'path': path}
         if tileClicked.type == RESOURCE:
+            print("CLICKO UN RECURSO")
             resource = tileClicked.getOcupante()
             order['order'] = CommandId.MINE
             order['resource'] = resource
         elif tileClicked.type == UNIT: # Ataque?
+            print("CLICKO UNA UNIDAD")
             attacked = tileClicked.ocupante
             if attacked.getPlayer() != self.p1:
                 order['order'] = CommandId.ATTACK
                 order['attackedOne'] = attacked
         else:
+            print("CLICKO UNA ESTRUCTURA")
             rectClicked = Raton.createRect(tileClicked.centerx, tileClicked.centery, tileClicked.centerx + 1, tileClicked.centery + 1)
             for struct in self.p1.structures:
                 if Raton.collideRect(struct.getRect(), rectClicked):
@@ -147,6 +146,7 @@ class Escena():
                 else:
                     if tileActual.type != 1:
                         self.mapa.setVecina(tileActual, structure.id)
+                        self.mapa.setType(tileActual, STRUCTURE)
                         #print("SETEO VECINA POR ESTRUCTURA: ", tileActual.tileid)
         structure.setTilesOcupados()
 

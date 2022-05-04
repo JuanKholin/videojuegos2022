@@ -247,7 +247,7 @@ class Structure(Entity.Entity):
             x, _ = self.mapa.getTileIndex(rect.x, rect.y)
             while x*self.mapa.tw <= rect.x+rect.w:
                 tile = self.mapa.mapa[y][x]
-                self.mapa.setVecina(tile, self.id)
+                self.mapa.setType(tile, STRUCTURE)
                 tile.setOcupante(self)
                 x += 1
             y += 1

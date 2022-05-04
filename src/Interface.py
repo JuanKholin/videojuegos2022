@@ -149,7 +149,9 @@ class Interface():
             
         elif Utils.state == System_State.ONGAME:
             muestra_texto(screen, str('monotypecorsiva'), str(round(Utils.SYSTEM_CLOCK / CLOCK_PER_SEC)), BLACK, 30, (20, 20))
-            muestra_texto(screen, times, str(self.player.resources), BLACK, 30, (SCREEN_WIDTH - 40, 20))
+            muestra_texto(screen, times, str(self.player.resources), BLUE, 30, (SCREEN_WIDTH - 90, 20))
+            muestra_texto(screen, times, str(self.player.gas), GREEN, 30, (SCREEN_WIDTH - 130, 20))
+            muestra_texto(screen, times, str(self.player.units.__len__()) + "/18", BLACK, 30, (SCREEN_WIDTH - 40, 20))
             screen.blit(self.gui, (0, 0))
             
             #draw minimapa

@@ -57,7 +57,7 @@ class Drone(Worker):
                 SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, PADDING, takeID(), player,
                 MINE_POWER, TIME_TO_MINE, INVERSIBLE_FRAMES, FRAMES, DIR_OFFSET,
                 ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, X_PADDING, Y_PADDING,
-                WEIGHT_PADDING, HEIGHT_PADDING, MOVE_FRAMES, ATTACK_INFO)
+                WEIGHT_PADDING, HEIGHT_PADDING, MOVE_FRAMES,[], ATTACK_INFO)
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey(BLACK)
         self.sprites = Entity.divideSpritesheetByRows(spritesheet, SPRITE_PIXEL_ROWS, SCALE)
