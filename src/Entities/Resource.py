@@ -11,3 +11,9 @@ class Resource():
         
     def disable(self):
         self.enable = False
+        
+    def getCapacity(self):
+        return self.capacity
+    
+    def getInfo(self):
+        return "None"

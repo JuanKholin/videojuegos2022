@@ -68,7 +68,7 @@ def setEntity(player):
     hatchery = Hatchery(16, 14, player2, mapa, False, 8)
     #player2.addStructures(hatchery)
 
-    drone = Drone(10, 11, player2)
+    drone = Drone(10, 10, player2)
     player2.addUnits(drone)
 
     soldierChan = TerranSoldier(6, 1, player1)

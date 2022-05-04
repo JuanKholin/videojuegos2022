@@ -94,6 +94,3 @@ class Geyser(Resource):
     def getCenter(self):
         rect = self.getRect()
         return rect.x + rect.w/2, rect.y + rect.h/2
-
-    def getCapacity(self):
-        return self.capacity

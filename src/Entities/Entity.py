@@ -19,6 +19,12 @@ class Entity():
     def getHP(self):
         return self.hp
     
+    def getInfo(self):
+        return "None"
+    
+    def getMaxHP(self):
+        return self.maxHp
+    
     def getTile(self):
         pos = self.getPosition()
         return self.mapa.getTile(pos[0], pos[1])

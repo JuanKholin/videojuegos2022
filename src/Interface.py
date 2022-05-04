@@ -46,13 +46,13 @@ class Interface():
         self.gui.set_colorkey(BLACK)
         
         self.resources = []
-        self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/crystal.png"), (30, 30)))
+        self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/crystal.png"), (25, 25)))
         self.resources[0].set_colorkey(BLACK)
         
-        self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/gastank.png"), (30, 30)))
+        self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/gastank.png"), (25, 25)))
         self.resources[1].set_colorkey(BLACK)
         
-        self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unit.png"), (30, 30)))
+        self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unit.png"), (25, 25)))
         self.resources[2].set_colorkey(BLACK)
         
         self.allButton = self.loadAllButton()
@@ -163,7 +163,7 @@ class Interface():
         elif Utils.state == System_State.ONGAME:
             muestra_texto(screen, str('monotypecorsiva'), str(round(Utils.SYSTEM_CLOCK / CLOCK_PER_SEC)), BLACK, 30, (20, 20))
             screen.blit(self.resources[0], (RESOURCES_COUNT_X, 3))
-            muestra_texto(screen, times, str(self.player.resources + 1000), GREEN4, 30, (RESOURCES_COUNT_X + 60, 20))
+            muestra_texto(screen, times, str(self.player.resources), GREEN4, 30, (RESOURCES_COUNT_X + 60, 20))
             screen.blit(self.resources[1], (RESOURCES_COUNT_X + 100, 3))
             muestra_texto(screen, times, str(self.player.gas), GREEN4, 30, (RESOURCES_COUNT_X + 160, 20))
             screen.blit(self.resources[2], (RESOURCES_COUNT_X + 200, 3))
@@ -199,7 +199,11 @@ class Interface():
     def drawEntityInfo(self, screen, camera):
         if len(self.player.unitsSelected) == 1:
             image = self.player.unitsSelected[0].getRender()
-            screen.blit(image, (GUI_INFO_X + 10, GUI_INFO_Y + 20))
+            hpState = str(self.player.unitsSelected[0].getMaxHP()) + "/" + str(self.player.unitsSelected[0].getHP())
+            info = self.player.unitsSelected[0].getInfo()
+            
+            screen.blit(image, (GUI_INFO_X + 10, GUI_INFO_Y + 10))
+            muestra_texto(screen, 'monotypecorsiva', hpState, GREEN3, 20, [GUI_INFO_X + 60, GUI_INFO_Y + 135])
         elif len(self.player.unitsSelected) > 1:
             images = []
             for unit in self.player.unitsSelected:
@@ -214,13 +218,12 @@ class Interface():
                 x += 85
                 n += 1
                 if n == 4:
-                    y = 100
+                    y = 75
                     x = 0
                 if n == 8:
                     break
         if len(self.player.enemySelected) == 1:
-            image = self.player.enemySelected[0].getRender()
-            screen.blit(image, (GUI_INFO_X + 10, GUI_INFO_Y + 20))
+            self.showInfo(screen, self.player.enemySelected[0], RED, 10, 10, 60, 135)
         elif len(self.player.enemySelected) > 1:
             images = []
             for unit in self.player.enemySelected:
@@ -241,13 +244,30 @@ class Interface():
                     break
         elif self.player.structureSelected != None:
             image = self.player.structureSelected.getRender()
+            hpState = str(self.player.structureSelected.getMaxHP()) + "/" + str(self.player.structureSelected.getHP())
+            
+            
             screen.blit(image, (GUI_INFO_X, GUI_INFO_Y + 5))
+            muestra_texto(screen, 'monotypecorsiva', hpState, GREEN3, 20, [GUI_INFO_X + 60, GUI_INFO_Y + 135])
         elif self.player.enemyStructureSelected != None:
             image = self.player.enemyStructureSelected.getRender()
+            hpState = str(self.player.enemyStructureSelected.getMaxHP()) + "/" + str(self.player.enemyStructureSelected.getHP())
+            
             screen.blit(image, (GUI_INFO_X, GUI_INFO_Y + 5))
+            muestra_texto(screen, 'monotypecorsiva', hpState, RED, 20, [GUI_INFO_X + 60, GUI_INFO_Y + 135])
         elif self.player.resourceSelected != None:
             image = self.player.resourceSelected.getRender()
+            capacity = str(self.player.resourceSelected.getCapacity())
+            
             screen.blit(image, (GUI_INFO_X, GUI_INFO_Y))
+            muestra_texto(screen, 'monotypecorsiva', capacity, YELLOW, 20, [GUI_INFO_X + 60, GUI_INFO_Y + 135])
+            
+    def showInfo(self, screen, unit, color, renderX = 0, renderY = 0, hpX = 0, hpY = 0):
+        image = unit.getRender()
+        hpState = str(unit.getMaxHP()) + "/" + str(unit.getHP())
+            
+        screen.blit(image, (GUI_INFO_X + renderX, GUI_INFO_Y + renderY))
+        muestra_texto(screen, 'monotypecorsiva', hpState, color, 20, [GUI_INFO_X + hpX, GUI_INFO_Y + hpY])
                 
     def checkInGUIPosition(self):
         x = self.mouse.rel_pos[0]

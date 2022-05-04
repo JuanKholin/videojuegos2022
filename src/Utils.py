@@ -89,7 +89,7 @@ haveBGM = False
 
 CAMERA_SPEED = 8
 
-MAX_SELECTED_UNIT = 5
+MAX_SELECTED_UNIT = 8
 
 ENTITY_ID = 0
 
@@ -213,7 +213,7 @@ BUTTON_PATH = "SPRITE/button/gui_button_"
 # TROPAS
 #----------------------------------------------------------------
 
-RENDER_SIZE = [85*2, 97*2]
+RENDER_SIZE = [85*1.6, 97*1.6]
 UNIT_RENDER_SIZE = [85*1.4, 97*1.4]
 
 ##---------TERRAN_WORKER------------------
