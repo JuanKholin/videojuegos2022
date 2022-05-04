@@ -72,9 +72,9 @@ class Escena():
         tileIni = self.mapa.getTile(param[0], param[1])
         if tileObj.type != 0: #Esta ocupada
             tileObj = self.mapa.getTileCercana(tileIni, tileObj)
-        path = calcPath(param, tileIni, tileObj, self.mapa)
+        #path = calcPath(param, tileIni, tileObj, self.mapa)
         # COMPROBAR SI HA CLICKADO UN ORE
-        order = {'order': CommandId.MOVER, 'angle': 0, 'path': path}
+        order = {'order': CommandId.MOVER, 'angle': 0}
         if tileClicked.type == RESOURCE:
             print("CLICKO UN RECURSO")
             resource = tileClicked.getOcupante()
@@ -92,7 +92,7 @@ class Escena():
             for struct in self.p1.structures:
                 if Raton.collideRect(struct.getRect(), rectClicked):
                     order = struct.getOrder()
-                    order = {'order': order,'path': path}
+                    order = {'order': order}
         orderForPlayer.append(order)
 
     def checkPressedButtons(self):

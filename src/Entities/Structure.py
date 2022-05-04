@@ -151,7 +151,7 @@ class Structure(Entity.Entity):
             unit = self.training[0]
             tile = self.mapa.getTile(self.x, self.y)
             
-            libres = self.mapa.getEntityTilesVecinas(tile)
+            libres = self.mapa.getEntityTilesVecinas(tile, unit.getTile())
             if len(libres) > 0:
                 unit.x = libres[0].centerx
                 unit.y = libres[0].centery

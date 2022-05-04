@@ -69,7 +69,7 @@ class Player():
         elif id == CommandId.ORDENAR:
             for i in range(param.__len__()):
                 print(param[i]['order'])
-                self.unitsSelected[i].paths = param[i]['path']
+                #self.unitsSelected[i].paths = param[i]['path']
                 # En funcion de la orden cambiarle el estado a la unidad
                 if param[i]['order'] == CommandId.MINE:
                     self.unitsSelected[i].mine(param[i]['resource'])

@@ -58,7 +58,7 @@ class Unit(Entity):
     def move(self, objectiveTile):
         if objectiveTile.type == OBSTACLE:
             objectiveTile = self.mapa.getTileCercana(self.getTile(), objectiveTile)
-        elif objectiveTile.type != EMPTY:
+        elif objectiveTile.type != EMPTY and objectiveTile.type != UNIT:
             print("AAAAAAAAAAAAAAAAAAAAAAAAA")
             tilesRound = self.mapa.getEntityTilesVecinas(objectiveTile, self.getTile())
             objectiveTile = tilesRound[0]
@@ -333,22 +333,29 @@ class Unit(Entity):
             #LA SIGUIENTE TILE ESTA OCUPADA HAY QUE TRATAR COLISIONES
             else:
                 if tilePath.tileid != tileObj.tileid:
+                    path = calcPath(self.getPosition(),tileActual, tileObj, self.mapa)
+                    posFin = (tileObj.centerx, tileObj.centery)
+                    self.paths = path
+                    '''
                     if tilePath.ocupante.paths.__len__() == 0: # ME bloquea y ademas no se mueve
                         print("Me bloque y no se mueve el tio")
                         path = calcPath(self.getPosition(),tileActual,tileObj, self.mapa)
                         posFin = (tileObj.centerx, tileObj.centery)
                         self.paths = path
                     else: #Es majo y se va a mover
+                            
                             bestTile = self.mapa.getTileVecinaCercana(tileObj,tileActual)
                             #NO TIENE A DONDE IR
                             if bestTile.tileid == -1:
                                 self.paths = []
                             else:
+                                
                                 if bestTile.heur(tileObj) > tileActual.heur(tileObj):
                                     print("Me tengo que replegar por lo que mejor recalculo")
                                     path = calcPath(self.getPosition(), tileActual,tileObj, self.mapa)
                                     posFin = (tileObj.centerx, tileObj.centery)
                                     self.paths = path
+                                
                                 else: #HACEMOS EL CAMBIO A LOS PATHS
                                     self.paths.pop(0) #quitamos el path a la ocupada
                                     #CAMINO A LA MEJOR TILE
@@ -363,7 +370,7 @@ class Unit(Entity):
                                     posIni = posFin
                                     posFin = (tilePath.centerx, tilePath.centery)
                                     path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
-                                    self.paths.insert(1, path1)
+                                    self.paths.insert(1, path1)'''
                 else: #La siguiente es mi objetivo
                     self.resolverObjetivoOcupado()
         else:
@@ -505,8 +512,8 @@ class Unit(Entity):
         print("RESOLVER OCUAPDO: ", self.state)
         if self.state == UnitState.MOVING:
             self.paths = []
-        elif self.state == UnitState.MINING or self.stare == UnitState.EXTRACTING:
-            tilesResource = self.tilesResource()
+        elif self.state == UnitState.MINING or self.state == UnitState.EXTRACTING:
+            tilesResource = self.tilesResource(self.getTile())
             if tilesResource.__len__() == 0: # Me he quedado sin sitio
                 self.changeToStill()
             else:
@@ -518,8 +525,9 @@ class Unit(Entity):
                         tileObj = tile
                 self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
         elif self.state == UnitState.ORE_TRANSPORTING or self.state == UnitState.GAS_TRANSPORTING:
-            tilesCasa = self.tilesCasa()
+            tilesCasa = self.tilesCasa(self.getTile())
             if tilesCasa.__len__() == 0: # Me he quedado sin sitio
+                print("Me he quedado sin sitio")
                 self.paths = []
             else:
                 posicionActual = self.getPosition()

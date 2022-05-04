@@ -188,31 +188,31 @@ class Map():
         self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].ocupante = None
 
     #Devuelve una lista de tiles vecinas libres a la dada
-    def getTileVecinas(self, tile):
+    def getTileVecinas(self, tile, tileObj):
         tilesVecinas = []
         aux = self.getTile(tile.centerx + self.tw,tile.centery)#tile derecha
-        if aux.type == 0:
+        if aux.type == 0 or aux == tileObj:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx + self.tw,tile.centery + self.th) #tile esquina superior derecha
-        if aux.type == 0:
+        if aux.type == 0 or aux == tileObj:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx + self.tw,tile.centery - self.th) #tile esquina inferior derecha
-        if aux.type == 0:
+        if aux.type == 0 or aux == tileObj:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx,tile.centery - self.th) #tile inferior
-        if aux.type == 0:
+        if aux.type == 0 or aux == tileObj:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx,tile.centery + self.th) #tile superior
-        if aux.type == 0:
+        if aux.type == 0 or aux == tileObj:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx - self.tw,tile.centery) #tile izquierda
-        if aux.type == 0:
+        if aux.type == 0 or aux == tileObj:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx - self.tw,tile.centery + self.th) #tile esquina superior izquierda
-        if aux.type == 0:
+        if aux.type == 0 or aux == tileObj:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx - self.tw,tile.centery - self.th) #tile esquina inferior izquierda
-        if aux.type == 0:
+        if aux.type == 0 or aux == tileObj:
             tilesVecinas.append(aux)
 
         return tilesVecinas
@@ -314,7 +314,7 @@ class Map():
         self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].padre = padre
 
     def getTileVecinaCercana(self, tileIni, tileObj):
-        tiles = self.getTileVecinas(tileObj)
+        tiles = self.getTileVecinas(tileObj, None)
         if tiles.__len__() == 0:
             return Tile.Tile(-1,0,0,0,0,0,0)
         bestTile = tiles[0]
@@ -347,8 +347,8 @@ class Map():
 #input()
         if tileIni.tileid == tileObj.tileid:
             return [tileIni]
-        if(tileObj.type != 0):
-            tileObj = self.getTileVecinaCercana(tileIni, tileObj)
+        #if(tileObj.type != 0):
+            #tileObj = self.getTileVecinaCercana(tileIni, tileObj)
         nodosAbiertos = []
         nodosCerrados = []
         nodosAbiertos.append(tileIni)
@@ -373,10 +373,10 @@ class Map():
             nodosCerrados.append(currentTile)
             nodosAbiertos.pop(currentId)
             if currentTile.tileid == tileObj.tileid:
-                #print("EH VOS")
+                print("EH VOS")
 
                 break
-            for tile in self.getTileVecinas(currentTile):
+            for tile in self.getTileVecinas(currentTile, tileObj):
                 #print("miro tile: ", tile.tileid , tile.g)
                 ##input()
                 if Tile.mismoId(nodosCerrados, tile).tileid == -1:# No esta
@@ -413,7 +413,7 @@ class Map():
         else:
             currentTile = self.getTile(tileObj.centerx, tileObj.centery)
             while currentTile != tileIni:
-                #print(currentTile.tileid)
+                print(currentTile.tileid)
                 path.append(currentTile)
                 currentTile = currentTile.padre
             #print(currentTile.tileid)

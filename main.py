@@ -51,6 +51,7 @@ def procesarInput():
 def setEntity(player):
 
     scv = TerranWorker(4, 10, player1)
+    scv2 = TerranWorker(14, 10, player1)
     structure1 = TerranBuilder(5, 6, player1, mapa, False,raton, 1)
     structure3 = TerranSupplyDepot(10, 6, player1, mapa, True, 2)
 
@@ -64,6 +65,7 @@ def setEntity(player):
     player.addStructures(structure4)
     player.addStructures(structure5)
     player.addUnits(scv)
+    player.addUnits(scv2)
 
     hatchery = Hatchery(16, 14, player2, mapa, False, 8)
     #player2.addStructures(hatchery)

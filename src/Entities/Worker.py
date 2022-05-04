@@ -113,7 +113,6 @@ class Worker(Unit):
     # Ya esta al lado de la refineria y se mete en ella
     def startExtracting(self):
         self.startTimeMining = Utils.getGlobalTime()
-        print("Start extracting", self.startTimeMining)
         if self.clicked:
             self.player.unitsSelected.remove(self)
             self.clicked = False
@@ -263,6 +262,7 @@ class Worker(Unit):
                 else:
                     #Tengo que volver, calculo el camino a minar
                     self.player.resources += self.cantidadMinada
+
                     self.paths = []
 
                     posicionActual = self.getPosition()

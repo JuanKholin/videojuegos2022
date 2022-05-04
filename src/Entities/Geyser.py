@@ -53,7 +53,7 @@ class Geyser(Resource):
         if (self.capacity <= 0):
             return 2
         self.capacity -= cantidad
-        print("Me han minado: ", self.capacity)
+        #print("Me han minado: ", self.capacity)
         if (self.capacity <= 0):
             return cantidad + self.capacity
         else:
