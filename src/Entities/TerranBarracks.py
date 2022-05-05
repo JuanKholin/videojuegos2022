@@ -19,7 +19,7 @@ class TerranBarracks(Structure):
     nBuildSprites = 4
     deafault_index = 4
     generationStartTime = 0
-    heightPad = 5
+    heightPad = 15
     rectOffY = 8
     tileW = 4
     tileH = 3

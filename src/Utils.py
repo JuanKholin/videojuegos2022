@@ -267,6 +267,7 @@ SUPPLY_RENDER = "SPRITE/render/terranSupply.png"
 TERRAN_SUPPLY_MINERAL_COST = 50
 
 CRYSTAL_RENDER = "SPRITE/render/mineral.png"
+GEYSER_RENDER = "SPRITE/render/geyser.png"
 
 
 #carga n sprites con nombre path + 0 hasta path + (n-1)

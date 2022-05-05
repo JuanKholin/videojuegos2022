@@ -158,12 +158,14 @@ crystal = Crystal(2, 10, 34)
 crystal2 = Crystal(2, 18, 60)
 crystal3 = Crystal(2, 22, 60)
 crystal4 = Crystal(2, 26, 60)
+gas = Geyser(16, 13, 50)
 
 resources = []
 resources.append(crystal)
 resources.append(crystal2)
 resources.append(crystal3)
 resources.append(crystal4)
+resources.append(gas)
 
 raton = Raton.Raton(player1, player2)
 p1Interface = Interface(player1, player2, raton)

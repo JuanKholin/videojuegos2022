@@ -60,27 +60,28 @@ class Worker(Unit):
                 #exit(1) te las pueden estar ocupando los mineros
     
     def changeToExtracting(self, resource):
-        if resource.getCapacity() != 0: # Si hay recurso, si es gas agotado es -algo
-            self.state = UnitState.EXTRACTING
-            self.isMining = False
-            self.resource = resource
-            pos = self.resource.getPosition()
-            tile = self.mapa.getTile(pos[0], pos[1])
-            tiles = self.mapa.getEntityTilesVecinas(tile, self.getTile())
-            if len(tiles) > 0:
-                ownTile = self.getTile()
-                bestTile = tiles[0]
-                for tile in tiles:
-                    if tile.heur(ownTile) < bestTile.heur(ownTile):
-                        bestTile = tile
-                self.paths = calcPath(self.getPosition(), self.getTile(), bestTile, self.mapa)
-                if len(self.paths) > 0:
-                    self.moveToMining()
+        if resource != None:
+            if resource.getCapacity() != 0: # Si hay recurso, si es gas agotado es -algo
+                self.state = UnitState.EXTRACTING
+                self.isMining = False
+                self.resource = resource
+                pos = self.resource.getPosition()
+                tile = self.mapa.getTile(pos[0], pos[1])
+                tiles = self.mapa.getEntityTilesVecinas(tile, self.getTile())
+                if len(tiles) > 0:
+                    ownTile = self.getTile()
+                    bestTile = tiles[0]
+                    for tile in tiles:
+                        if tile.heur(ownTile) < bestTile.heur(ownTile):
+                            bestTile = tile
+                    self.paths = calcPath(self.getPosition(), self.getTile(), bestTile, self.mapa)
+                    if len(self.paths) > 0:
+                        self.moveToMining()
+                    else:
+                        self.startExtracting()
                 else:
-                    self.startExtracting()
-            else:
-                print("No hay tiles libres weird")
-                #exit(1) 
+                    print("No hay tiles libres weird")
+                    #exit(1) 
 
     # Manda a la unidad hacia el recurso
     def moveToMining(self):

@@ -1,3 +1,5 @@
+import pygame as pg
+
 from ..Utils import *
 
 class Resource():
@@ -12,8 +14,50 @@ class Resource():
     def disable(self):
         self.enable = False
         
+    def setClicked(self, click):
+        self.clicked = click
+        
     def getCapacity(self):
         return self.capacity
+    
+    def draw(self, screen, camera):
+        r = self.getRect()
+        pg.draw.rect(screen, BLACK, pg.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h),1)
+        if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
+        r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
+            drawPos = self.getDrawPosition()
+            if self.clicked:
+                pg.draw.ellipse(screen, YELLOW, [r.x - camera.x - 10, r.y - camera.y, r.w + 20, r.h], 2)
+            #screen.blit(unit.image, [r.x - self.camera.x, r.y - self.camera.y])
+            screen.blit(self.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
+            
+    def getMined(self, cantidad):
+        if (self.capacity <= 0):
+            return 0
+        self.capacity -= cantidad
+        print("Me han minado: ", self.capacity)
+        if (self.capacity <= 0):
+            return cantidad + self.capacity
+        else:
+            self.image = self.sprites[3 - int(float(self.capacity)/float(self.interval))]
+            return cantidad
+        
+    def getPosition(self):
+        r = self.getRect()
+        return (r.x + r.w/2, r.y + r.h)
+    
+    def getCenter(self):
+        rect = self.getRect()
+        return rect.x + rect.w/2, rect.y + rect.h/2
+
+    def getDrawPosition(self):
+        return(self.x - self.image.get_width()/2,  self.y - self.image.get_height()/2)
+    
+    def getRender(self):
+        return self.render
+    
+    def getType(self):
+        return RESOURCE
     
     def getInfo(self):
         return "None"

@@ -573,17 +573,6 @@ class Unit(Entity):
                         self.player.resources += self.minePower + self.cristal.capacidad
                         self.changeToStill()
                         del self.cristal
-                    else:
-                        self.order = {'order': CommandId.MINAR_BUCLE}
-                        self.player.resources += self.minePower
-                        self.paths = []
-                        for path in self.cristalPath:
-                            self.paths.append(path.copy())
-                        self.changeToMoving()
-                elif self.order['order'] == CommandId.MINAR_BUCLE:
-                    #sumar minerales al jugador 
-                    self.startTimeMining = getGlobalTime()     
-                    self.changeToMining()
             else:
                 self.changeToStill()
 

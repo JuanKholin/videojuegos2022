@@ -69,3 +69,6 @@ class Entity():
     def setTilePosition(self, tile):
         self.x = tile.centerx
         self.y = tile.centery
+        
+    def drawInfo(self):
+        pass

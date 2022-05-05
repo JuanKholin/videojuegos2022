@@ -205,12 +205,7 @@ class Interface():
     
     def drawEntityInfo(self, screen, camera):
         if len(self.player.unitsSelected) == 1:
-            image = self.player.unitsSelected[0].getRender()
-            hpState = str(self.player.unitsSelected[0].getMaxHP()) + "/" + str(self.player.unitsSelected[0].getHP())
-            info = self.player.unitsSelected[0].getInfo()
-            
-            screen.blit(image, (GUI_INFO_X + 10, GUI_INFO_Y + 10))
-            muestra_texto(screen, 'monotypecorsiva', hpState, GREEN3, 20, [GUI_INFO_X + 60, GUI_INFO_Y + 135])
+            self.showInfo(screen, self.player.unitsSelected[0], GREEN3, 10, 10, 60, 135)
         elif len(self.player.unitsSelected) > 1:
             images = []
             for unit in self.player.unitsSelected:
@@ -250,18 +245,9 @@ class Interface():
                 if n == 8:
                     break
         elif self.player.structureSelected != None:
-            image = self.player.structureSelected.getRender()
-            hpState = str(self.player.structureSelected.getMaxHP()) + "/" + str(self.player.structureSelected.getHP())
-            
-            
-            screen.blit(image, (GUI_INFO_X, GUI_INFO_Y + 5))
-            muestra_texto(screen, 'monotypecorsiva', hpState, GREEN3, 20, [GUI_INFO_X + 60, GUI_INFO_Y + 135])
+            self.showInfo(screen, self.player.structureSelected, GREEN3, 0, 5, 60, 135)
         elif self.player.enemyStructureSelected != None:
-            image = self.player.enemyStructureSelected.getRender()
-            hpState = str(self.player.enemyStructureSelected.getMaxHP()) + "/" + str(self.player.enemyStructureSelected.getHP())
-            
-            screen.blit(image, (GUI_INFO_X, GUI_INFO_Y + 5))
-            muestra_texto(screen, 'monotypecorsiva', hpState, RED, 20, [GUI_INFO_X + 60, GUI_INFO_Y + 135])
+            self.showInfo(screen, self.player.enemyStructureSelected, RED, 0, 5, 60, 135)
         elif self.player.resourceSelected != None:
             image = self.player.resourceSelected.getRender()
             capacity = str(self.player.resourceSelected.getCapacity())
@@ -275,6 +261,7 @@ class Interface():
             
         screen.blit(image, (GUI_INFO_X + renderX, GUI_INFO_Y + renderY))
         muestra_texto(screen, 'monotypecorsiva', hpState, color, 20, [GUI_INFO_X + hpX, GUI_INFO_Y + hpY])
+        unit.drawInfo()
                 
     def checkInGUIPosition(self):
         x = self.mouse.rel_pos[0]
