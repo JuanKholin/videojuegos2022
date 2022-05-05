@@ -114,8 +114,10 @@ class TerranBuilder(Structure):
         return self.sprites[self.operativeIndex]
     
     def getOptions(self):
-        #return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS]
-        return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.BUILD_REFINERY]
+        if DEBBUG == True:
+            return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.BUILD_REFINERY, Options.BUILD_HATCHERY]
+        else:
+            return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.BUILD_REFINERY]
 
     def getTerranBarrack(self):
         return TerranBarracks(0, 0, None, self.mapa, True, 5)

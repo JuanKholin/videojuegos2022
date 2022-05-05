@@ -45,7 +45,7 @@ class Extractor(Structure):
         return []
 
     def command(self, command):
-        return Command(CommandId.NULO)
+        return Command(CommandId.NULL)
 
     def getBuildSprite(self):
         return self.sprites[0]

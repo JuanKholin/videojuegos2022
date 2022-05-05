@@ -44,7 +44,7 @@ class TerranSupplyDepot(Structure):
             self.state = BuildingState.OPERATIVE
 
     def command(self, command):
-        return Command(CommandId.NULO)
+        return Command(CommandId.NULL)
 
     def getBuildSprite(self):
         return self.sprites[self.operativeIndex]

@@ -51,20 +51,19 @@ class TerranBarracks(Structure):
     def execute(self, command_id):
         if self.clicked:
             print("soy clickeado?")
-            if (command_id == CommandId.GENERAR_UNIDAD or command_id == CommandId.GENERATE_SOLDIER) and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
-                self.player.resources -= TERRAN_WORKER_MINERAL_COST
+            if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_SOLDIER) and self.player.resources >= TERRAN_SOLDIER_MINERAL_COST:
+                self.player.resources -= TERRAN_SOLDIER_MINERAL_COST
                 terranSoldier = TerranSoldier(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
                 self.generateUnit(terranSoldier)
                 self.state = BuildingState.SPAWNING
 
     def command(self, command):
         if self.state != BuildingState.BUILDING:
-            if command == CommandId.GENERAR_UNIDAD:
-                return Command(CommandId.GENERAR_UNIDAD)
-            return Command(CommandId.NULO)
+            if command == CommandId.GENERATE_UNIT:
+                return Command(CommandId.GENERATE_SOLDIER)
+            return Command(CommandId.NULL)
         else:
-            print(3)
-            return Command(CommandId.NULO)
+            return Command(CommandId.NULL)
 
     def getBuildSprite(self):
         return self.sprites[4]

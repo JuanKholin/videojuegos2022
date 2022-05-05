@@ -90,7 +90,7 @@ class Structure(Entity.Entity):
         self.clicked = False
 
     def getOptions(self):
-        return Options.NULO
+        return []
 
     def getRect(self):
         return self.rectn
@@ -229,13 +229,13 @@ class Structure(Entity.Entity):
         self.training.append(unit)
 
     def command(self, command):
-        return Command(CommandId.NULO)
+        return Command(CommandId.NULL)
 
     def getBuildSprite(self):
         return self.sprites[0]
 
     def getOrder(self):
-        return CommandId.NULO
+        return CommandId.NULL
     
     def getPlayer(self):
         return self.player

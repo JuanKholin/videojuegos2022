@@ -200,13 +200,13 @@ HEROE_N = 10
 #----
 
 
-class Options(IntEnum):
-    BUILD_BARRACKS = 0
-    GENERATE_WORKER = 1
-    GENERATE_SOLDIER = 2
-    BUILD_REFINERY = 3
-    BUILD_HATCHERY = 4
-    NULO = -1
+class Options(Enum):
+    BUILD_BARRACKS = auto()
+    GENERATE_WORKER = auto()
+    GENERATE_SOLDIER = auto()
+    BUILD_REFINERY = auto()
+    BUILD_HATCHERY = auto()
+    NULO = auto()
     
 BUTTON_PATH = "SPRITE/button/gui_button_"
 #----------------------------------------------------------------
@@ -220,6 +220,7 @@ UNIT_RENDER_SIZE = [85*1.4, 97*1.4]
 TERRAN_WORKER_MINERAL_COST = 20
 WORKER_RENDER = "SPRITE/render/terranWorker.png"
 
+TERRAN_SOLDIER_MINERAL_COST = 20
 SOLDIER_RENDER = "SPRITE/render/terranSoldier.png"
 
 ##---------ZERGLING-----------------------

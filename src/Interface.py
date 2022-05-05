@@ -58,15 +58,17 @@ class Interface():
         self.allButton = self.loadAllButton()
     
     def loadAllButton(self):
-        allButton = []
+        allButton = {}
         aux = Button.Button(BUTTON_PATH + "barracks" + ".bmp", Command.CommandId.BUILD_BARRACKS)
-        allButton.append(aux)
+        allButton[Options.BUILD_BARRACKS] = aux
         aux = Button.Button(BUTTON_PATH + "worker" + ".bmp", Command.CommandId.GENERATE_WORKER)
-        allButton.append(aux)
+        allButton[Options.GENERATE_WORKER] = aux
         aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", Command.CommandId.GENERATE_SOLDIER)
-        allButton.append(aux)
+        allButton[Options.GENERATE_SOLDIER] = aux
         aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", Command.CommandId.BUILD_HATCHERY)
-        allButton.append(aux)
+        allButton[Options.BUILD_HATCHERY] = aux
+        aux = Button.Button(BUTTON_PATH + "refinery" + ".bmp", Command.CommandId.BUILD_REFINERY)
+        allButton[Options.BUILD_REFINERY] = aux
         return allButton
     
     def update(self):
@@ -125,8 +127,8 @@ class Interface():
             if self.player.structureSelected != None:
                 self.entityOptions = self.player.structureSelected.getOptions()
                 self.button = self.getButton(self.entityOptions)
-                self.buttonX = Utils.BUTTON_X
-                self.buttonY = Utils.BUTTON_Y
+                self.buttonX = BUTTON_X
+                self.buttonY = BUTTON_Y
                 
             #comprobar colision del raton
             for b in self.button:
@@ -161,9 +163,18 @@ class Interface():
                 muestra_texto(screen, str('monotypecorsiva'), "exit", GREEN3, MAIN_MENU_TEXT_SIZE, EXIT_TEXT_POS)
             
         elif Utils.state == System_State.ONGAME:
-            muestra_texto(screen, str('monotypecorsiva'), str(round(Utils.SYSTEM_CLOCK / CLOCK_PER_SEC)), BLACK, 30, (20, 20))
-            muestra_texto(screen, times, str(self.player.resources), BLACK, 30, (SCREEN_WIDTH - 40, 20))
-            muestra_texto(screen, times, str(self.enemy.resources), BLACK, 30, (SCREEN_WIDTH - 40, 60))
+            if DEBBUG == True:
+                muestra_texto(screen, str('monotypecorsiva'), str(round(Utils.SYSTEM_CLOCK / CLOCK_PER_SEC)), BLACK, 30, (20, 20))
+                muestra_texto(screen, times, str(self.player.resources), BLUE, 30, (SCREEN_WIDTH - 40, 60))
+                muestra_texto(screen, times, str(self.enemy.resources), RED, 30, (SCREEN_WIDTH - 40, 100))
+            
+            screen.blit(self.resources[0], (RESOURCES_COUNT_X, 3))
+            muestra_texto(screen, times, str(self.player.resources), GREEN4, 30, (RESOURCES_COUNT_X + 60, 20))
+            screen.blit(self.resources[1], (RESOURCES_COUNT_X + 100, 3))
+            muestra_texto(screen, times, str(self.player.gas), GREEN4, 30, (RESOURCES_COUNT_X + 160, 20))
+            screen.blit(self.resources[2], (RESOURCES_COUNT_X + 200, 3))
+            muestra_texto(screen, times, str(self.player.units.__len__() + 10) + "/18", GREEN4, 28, (RESOURCES_COUNT_X + 260, 18))
+            
             screen.blit(self.gui, (0, 0))
             
             #draw minimapa
@@ -185,10 +196,10 @@ class Interface():
             for b in self.button:
                 opcion += 1
                 b.draw(screen, self.buttonX, self.buttonY)
-                self.buttonX += Utils.BUTTONPADX
+                self.buttonX += BUTTONPADX
                 if opcion % 3 == 0:
-                    self.buttonY += Utils.BUTTONPADY
-                    self.buttonX = Utils.BUTTON_X
+                    self.buttonY += BUTTONPADY
+                    self.buttonX = BUTTON_X
                 if opcion == 9:
                     break
     

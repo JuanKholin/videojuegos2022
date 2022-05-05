@@ -549,7 +549,7 @@ class Unit(Entity):
         if len(self.paths) == 0:
             #print("ORDEN AL FINALIZAR CAMINO:" ,self.order['order'])
             if self.order != 0:
-                if self.order['order'] == CommandId.MOVER:
+                if self.order['order'] == CommandId.MOVE:
                     if self.attackedOne == None:
                         self.changeToStill()
                     #else keepmoving xdxdxd

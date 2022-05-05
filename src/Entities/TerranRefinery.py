@@ -47,20 +47,8 @@ class TerranRefinery(Structure):
         self.training = []
         self.paths = []
 
-    def command(self, command):
-        if self.state != BuildingState.BUILDING:
-            if command == CommandId.GENERAR_UNIDAD:
-                return Command(CommandId.GENERAR_UNIDAD)
-            return Command(CommandId.NULO)
-        else:
-            print(3)
-            return Command(CommandId.NULO)
-
     def getBuildSprite(self):
         return self.sprites[4]
-    
-    def getOptions(self):
-        return [Options.GENERATE_SOLDIER]
 
     def getOrder(self):
         return CommandId.EXTRACT_GAS
