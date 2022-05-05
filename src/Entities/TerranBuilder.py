@@ -115,9 +115,9 @@ class TerranBuilder(Structure):
     
     def getOptions(self):
         if DEBBUG == True:
-            return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.BUILD_REFINERY, Options.BUILD_HATCHERY]
+            return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.BUILD_REFINERY, Options.BUILD_HATCHERY, Options.DANYO_UPGRADE]
         else:
-            return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.BUILD_REFINERY]
+            return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.BUILD_REFINERY, Options.DANYO_UPGRADE]
 
     def getTerranBarrack(self):
         return TerranBarracks(0, 0, None, self.mapa, True, 5)

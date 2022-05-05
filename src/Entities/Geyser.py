@@ -37,6 +37,17 @@ class Geyser(Resource):
 
     def __del__(self):
         print("destruction")
+
+    def getMined(self, cantidad):
+        if (self.capacity <= 0):
+            return 2
+        self.capacity -= cantidad
+        #print("Me han minado: ", self.capacity)
+        if (self.capacity <= 0):
+            return cantidad + self.capacity
+        else:
+            self.image = self.sprites[3 - int(float(self.capacity)/float(self.interval))]
+            return cantidad
         
     # Devuelve el rectangulo que conforma su imagen, creo, esto lo hizo otro
     def getRect(self):

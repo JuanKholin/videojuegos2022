@@ -69,6 +69,8 @@ class Interface():
         allButton[Options.BUILD_HATCHERY] = aux
         aux = Button.Button(BUTTON_PATH + "refinery" + ".bmp", Command.CommandId.BUILD_REFINERY)
         allButton[Options.BUILD_REFINERY] = aux
+        aux = Button.Button(BUTTON_PATH + "danyoUpgrade" + ".png", Command.CommandId.UPGRADE_SOLDIER_DAMAGE)
+        allButton[Options.DANYO_UPGRADE] = aux
         return allButton
     
     def update(self):

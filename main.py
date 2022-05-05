@@ -50,6 +50,10 @@ def procesarInput():
 
 def setEntity(player):
     scv = TerranWorker(4, 10, player)
+    scv2 = TerranWorker(5, 10, player)
+    scv3 = TerranWorker(6, 10, player)
+    scv4 = TerranWorker(7, 10, player)
+    scv5 = TerranWorker(8, 10, player)
     structure1 = TerranBuilder(5, 6, player, mapa, False, raton, 1)
     structure3 = TerranSupplyDepot(10, 6, player, mapa, True, 2)
 
@@ -63,6 +67,11 @@ def setEntity(player):
     player.addStructures(structure4)
     player.addStructures(structure5)
     player.addUnits(scv)
+    player.addUnits(scv2)
+    player.addUnits(scv3)
+    player.addUnits(scv4)
+    player.addUnits(scv5)
+    
 
 def update():
     clock_update()

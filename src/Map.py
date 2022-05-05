@@ -105,10 +105,10 @@ class Map():
             tileUp = self.getTile(x - TILE_WIDTH, y)
             tileDown = self.getTile(finx + TILE_WIDTH, y)
             #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
-            if tileUp.type == EMPTY:
+            if tileUp.type == 0 or tileUp == tileActual:
                 #print("tileUp:", tileUp.tileid)
                 tiles.append(tileUp)
-            if tileDown.type == EMPTY:
+            if tileDown.type == 0 or tileDown == tileActual:
                 #print("tileDown: ", tileDown.tileid)
                 tiles.append(tileDown)
             y += TILE_HEIGHT
@@ -121,16 +121,20 @@ class Map():
         tileUp = self.getTile(x - 40, y - 40)
         tileDown = self.getTile(finx + 40,y - 40)
         #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
-        if tileUp.type == EMPTY:
+        if tileUp.type == 0 or tileUp == tileActual:
+            #print("tileUp:", tileUp.tileid)
             tiles.append(tileUp)
-        if tileDown.type == EMPTY:
+        if tileDown.type == 0 or tileDown == tileActual:
+            #print("tileDown: ", tileDown.tileid)
             tiles.append(tileDown)
         tileUp = self.getTile(x - 40, finy + 40)
         tileDown = self.getTile(finx + 40, finy + 40)
         #print("tileUp:", tileUp.tileid, "tileDown: ", tileDown.tileid)
-        if tileUp.type == EMPTY:
+        if tileUp.type == 0 or tileUp == tileActual:
+            #print("tileUp:", tileUp.tileid)
             tiles.append(tileUp)
-        if tileDown.type == EMPTY:
+        if tileDown.type == 0 or tileDown == tileActual:
+            #print("tileDown: ", tileDown.tileid)
             tiles.append(tileDown)
         return tiles
 
@@ -187,28 +191,28 @@ class Map():
     def getTileVecinas(self, tile, tileObj):
         tilesVecinas = []
         aux = self.getTile(tile.centerx + self.tw, tile.centery)#tile derecha
-        if aux.type == 0:
+        if aux.type == 0 or aux == tileObj:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx + self.tw, tile.centery + self.th) #tile esquina superior derecha
-        if aux.type == 0:
+        if aux.type == 0 or aux == tileObj:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx + self.tw, tile.centery - self.th) #tile esquina inferior derecha
-        if aux.type == 0:
+        if aux.type == 0 or aux == tileObj:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx, tile.centery - self.th) #tile inferior
-        if aux.type == 0:
+        if aux.type == 0 or aux == tileObj:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx, tile.centery + self.th) #tile superior
-        if aux.type == 0:
+        if aux.type == 0 or aux == tileObj:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx - self.tw, tile.centery) #tile izquierda
-        if aux.type == 0:
+        if aux.type == 0 or aux == tileObj:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx - self.tw, tile.centery + self.th) #tile esquina superior izquierda
-        if aux.type == 0:
+        if aux.type == 0 or aux == tileObj:
             tilesVecinas.append(aux)
         aux = self.getTile(tile.centerx - self.tw, tile.centery - self.th) #tile esquina inferior izquierda
-        if aux.type == 0:
+        if aux.type == 0 or aux == tileObj:
             tilesVecinas.append(aux)
 
         return tilesVecinas
@@ -371,7 +375,8 @@ class Map():
             if currentTile.tileid == tileObj.tileid:
                 break
             for tile in self.getTileVecinas(currentTile, tileObj):
-                #print("miro tile: ", tile.tileid , tile.g)
+                if tile.tileid == 328:
+                    print("miro tile: ", tile.tileid , tile.g)
                 ##input()
                 if Tile.mismoId(nodosCerrados, tile).tileid == -1:# No esta
                     #print("No esta en cerrados, miro en abiertos")
@@ -403,11 +408,13 @@ class Map():
         for tile in nodosAbiertos:
             tile.g = 0
         if nodosAbiertos.__len__() == 0:
-            print("camino no encontrado")
+            print("camino no encontrado", tileObj.tileid)
+            input()
         else:
+            print("camino encontrado")
             currentTile = self.getTile(tileObj.centerx, tileObj.centery)
             while currentTile != tileIni:
-                print(currentTile.tileid)
+                #print(currentTile.tileid)
                 path.append(currentTile)
                 currentTile = currentTile.padre
             #print(currentTile.tileid)

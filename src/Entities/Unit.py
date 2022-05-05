@@ -66,7 +66,7 @@ class Unit(Entity):
                 if tile.heur(self.getTile()) < objectiveTile.heur(self.getTile()):
                     objectiveTile = tile
         self.paths = calcPath(self.getPosition(), self.getTile(), objectiveTile, self.mapa)
-        if len(self.paths) > 0 and (self.state != UnitState.ORE_TRANSPORTING or self.state != UnitState.GAS_TRANSPORTING) :
+        if len(self.paths) > 0 and (self.state != UnitState.ORE_TRANSPORTING and self.state != UnitState.GAS_TRANSPORTING) :
             self.changeToMoving(self.paths)
 
     # Indica a la unidad que ataque al objetivo seleccionado, si se encuentra un

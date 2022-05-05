@@ -209,6 +209,9 @@ class Options(Enum):
     GENERATE_SOLDIER = auto()
     BUILD_REFINERY = auto()
     BUILD_HATCHERY = auto()
+    DANYO_UPGRADE = auto()
+    MINE_UPGRADE = auto()
+    ARMOR_UPGRADE = auto()
     NULO = auto()
     
 BUTTON_PATH = "SPRITE/button/gui_button_"
