@@ -209,7 +209,7 @@ class Raton(pygame.sprite.Sprite):
     
     
     def processEvent(self, event, camera):
-        command = Command.Command(Command.CommandId.NULO) # 0 es nada
+        command = Command.Command(Command.CommandId.NULL) # 0 es nada
         self.clicked = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             click_type = pygame.mouse.get_pressed()
@@ -229,7 +229,7 @@ class Raton(pygame.sprite.Sprite):
                 if not self.derPulsado:
                     self.derPulsado = True
                     if not self.building and self.enable:
-                        command.setId(Command.CommandId.MOVER)
+                        command.setId(Command.CommandId.MOVE)
                         #print("CALCULANDO PUNTOS")
                         for unit in self.player.unitsSelected:
                             pos = unit.getPosition()

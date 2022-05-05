@@ -11,9 +11,10 @@ class AI():
         self.decissionsChance = [ 20, 20, 20, 20, 20 ]
         self.decissionsPool = sum(self.decissionsChance)
         self.minimalDecissionChance = 1
+        self.mapa = self.data.getMapa()
 
         # Para las invasiones
-        self.invaders = [] 
+        self.invaders = []
 
     # Haz lo tuyo IA, es tu turno
     def make_commands(self):
@@ -39,14 +40,19 @@ class AI():
     def makeDecission(self, units, structures, resources):
         decission = self.decide()
         if decission == 0:
+            print("IA DECIDE ATACAR LO VISIBLE")
             self.attackVisible()
         elif decission == 1:
+            print("IA DECIDE EXPANDIR CONSTRUCCIONES")
             self.buildExpansion()
         elif decission == 2:
+            print("IA DECIDE EXPANDIR SU EJERCITO")
             self.armyExpansion()
         elif decission == 3:
+            print("IA DECIDE IR POR RECURSOS LEJOS")
             self.gatherFarResources()
         elif decission == 4:
+            print("IA DECIDE INVADIR")
             self.seekAndDestroy(units)
 
     # Toma una decision y rebalancea el pool de decisiones, me ha quedado bastante original la verdad, 
@@ -106,15 +112,15 @@ class AI():
     def seekAndDestroy(self, units):
         soldiers = self.getSoldiers(units)
         num = 0
-        if soldiers.len > 3:
-            #ejercito de 1
-            num = 1
+        if soldiers.len > 10:
+            #ejercito de 3
+            num = 3
         elif soldiers.len > 5:
             #ejercito de 2
             num = 2
-        elif soldiers.len > 10:
+        elif soldiers.len > 3:
             #ejercito de 3
-            num = 3
+            num = 1
         for i in range(num):
             self.player.removeFromFree(soldiers[i])
             self.invaders.append(soldiers[i])

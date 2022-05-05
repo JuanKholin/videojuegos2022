@@ -30,20 +30,20 @@ class Escena():
             command = self.p1.processEvent(event)
         if getGameState() == System_State.ONGAME:
             #ejecutar el comando
-            if command.id == CommandId.MEJORAR_MINADO_WORKER:
+            if command.id == CommandId.UPGRADE_WORKER_MINING:
                 print(command.id)
             if not self.raton.building:
-                if command.id == CommandId.GENERAR_UNIDAD:
+                if command.id == CommandId.GENERATE_UNIT:
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.GENERATE_WORKER:
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.GENERATE_SOLDIER:
                     self.p1.execute(command.id, [], None)
-                elif command.id == CommandId.MEJORAR_DAÑO_SOLDADO:
+                elif command.id == CommandId.UPGRADE_SOLDIER_DAMAGE:
                     self.p1.execute(command.id, [], None)
-                elif command.id == CommandId.MEJORAR_ARMADURA_SOLDADO:
+                elif command.id == CommandId.UPGRADE_SOLDIER_ARMOR:
                     self.p1.execute(command.id, [], None)
-                elif command.id == CommandId.MEJORAR_MINADO_WORKER:
+                elif command.id == CommandId.UPGRADE_WORKER_MINING:
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.BUILD_BARRACKS:
                     self.p1.execute(command.id, [], None)
@@ -51,9 +51,9 @@ class Escena():
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.BUILD_REFINERY:
                     self.p1.execute(command.id, [], None)
-                elif command.id == CommandId.GUARDAR_PARTIDA:
+                elif command.id == CommandId.SAVE_GAME:
                     self.saveScene()
-                elif command.id == CommandId.MOVER:
+                elif command.id == CommandId.MOVE:
                     #path = [] ## !!!!
                     relative_mouse_pos = pg.mouse.get_pos()
                     real_mouse_pos = (relative_mouse_pos[0] + self.camera.x, relative_mouse_pos[1] + self.camera.y)
@@ -62,7 +62,7 @@ class Escena():
                     orderForPlayer = []
                     for param in command.params:
                         self.processParam(param, tileClicked, tileClicked, orderForPlayer)
-                    self.p1.execute(CommandId.ORDENAR, orderForPlayer, tileClicked)
+                    self.p1.execute(CommandId.ORDER, orderForPlayer, tileClicked)
 
                     #for param in commandp2.params:
                     #   self.processParam(param, tilesObj, tilesCasa, tileClicked, pathsForPlayer, orderForPlayer)
@@ -72,9 +72,9 @@ class Escena():
         tileIni = self.mapa.getTile(param[0], param[1])
         if tileObj.type != 0: #Esta ocupada
             tileObj = self.mapa.getTileCercana(tileIni, tileObj)
-        #path = calcPath(param, tileIni, tileObj, self.mapa)
+        path = calcPath(param, tileIni, tileObj, self.mapa)
         # COMPROBAR SI HA CLICKADO UN ORE
-        order = {'order': CommandId.MOVER, 'angle': 0}
+        order = {'order': CommandId.MOVE, 'angle': 0, 'path': path}
         if tileClicked.type == RESOURCE:
             print("CLICKO UN RECURSO")
             resource = tileClicked.getOcupante()
@@ -97,17 +97,17 @@ class Escena():
 
     def checkPressedButtons(self):
         key = pg.key.get_pressed()
-        if key[self.p1.commandMap[CommandId.MOVER_CAMARA_ARRIBA]]:
+        if key[self.p1.commandMap[CommandId.MOVE_CAMERA_UP]]:
             self.camera.moverArriba()
-        if key[self.p1.commandMap[CommandId.MOVER_CAMARA_ABAJO]]:
+        if key[self.p1.commandMap[CommandId.MOVE_CAMERA_DOWN]]:
             self.camera.moverAbajo(self.mapa.h - 160)
-        if key[self.p1.commandMap[CommandId.MOVER_CAMARA_IZQUIERDA]]:
+        if key[self.p1.commandMap[CommandId.MOVE_CAMERA_LEFT]]:
             self.camera.moverIzquierda()
-        if key[self.p1.commandMap[CommandId.MOVER_CAMARA_DERECHA]]:
+        if key[self.p1.commandMap[CommandId.MOVE_CAMERA_RIGHT]]:
             self.camera.moverDerecha(self.mapa.w)
 
     def checkUnHoldButton(self, key):
-        if self.p1.commandMap[CommandId.ROTAR] == key:
+        if self.p1.commandMap[CommandId.ROTATE] == key:
             for unit in self.p1.unitsSelected:
                 #print(unit.getRect().x - unit.getRect().w,unit.getRect().y - unit.getRect().h)
                 unit.dir = (unit.dir + 1)%16

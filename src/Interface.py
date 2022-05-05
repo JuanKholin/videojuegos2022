@@ -162,12 +162,8 @@ class Interface():
             
         elif Utils.state == System_State.ONGAME:
             muestra_texto(screen, str('monotypecorsiva'), str(round(Utils.SYSTEM_CLOCK / CLOCK_PER_SEC)), BLACK, 30, (20, 20))
-            screen.blit(self.resources[0], (RESOURCES_COUNT_X, 3))
-            muestra_texto(screen, times, str(self.player.resources), GREEN4, 30, (RESOURCES_COUNT_X + 60, 20))
-            screen.blit(self.resources[1], (RESOURCES_COUNT_X + 100, 3))
-            muestra_texto(screen, times, str(self.player.gas), GREEN4, 30, (RESOURCES_COUNT_X + 160, 20))
-            screen.blit(self.resources[2], (RESOURCES_COUNT_X + 200, 3))
-            muestra_texto(screen, times, str(self.player.units.__len__() + 10) + "/18", GREEN4, 28, (RESOURCES_COUNT_X + 260, 18))
+            muestra_texto(screen, times, str(self.player.resources), BLACK, 30, (SCREEN_WIDTH - 40, 20))
+            muestra_texto(screen, times, str(self.enemy.resources), BLACK, 30, (SCREEN_WIDTH - 40, 60))
             screen.blit(self.gui, (0, 0))
             
             #draw minimapa

@@ -49,38 +49,20 @@ def procesarInput():
     escena.checkPressedButtons()
 
 def setEntity(player):
+    scv = TerranWorker(4, 10, player)
+    structure1 = TerranBuilder(5, 6, player, mapa, False, raton, 1)
+    structure3 = TerranSupplyDepot(10, 6, player, mapa, True, 2)
 
-    scv = TerranWorker(4, 10, player1)
-    scv2 = TerranWorker(14, 10, player1)
-    structure1 = TerranBuilder(5, 6, player1, mapa, False,raton, 1)
-    structure3 = TerranSupplyDepot(10, 6, player1, mapa, True, 2)
-
-    player1.setBasePlayer(structure1)
-    structure2 = TerranBarracks(15, 9, player1, mapa, False, 3)
-    structure4 = Extractor(12, 27, player1, mapa, True, 4)
-    structure5 = TerranRefinery(13, 18, player1, mapa, True, 5)
+    player.setBasePlayer(structure1)
+    structure2 = TerranBarracks(15, 9, player, mapa, False, 3)
+    structure4 = Extractor(12, 27, player, mapa, True, 4)
+    structure5 = TerranRefinery(13, 18, player, mapa, True, 5)
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addStructures(structure3)
     player.addStructures(structure4)
     player.addStructures(structure5)
     player.addUnits(scv)
-    player.addUnits(scv2)
-
-    hatchery = Hatchery(16, 14, player2, mapa, False, 8)
-    #player2.addStructures(hatchery)
-
-    drone = Drone(10, 10, player2)
-    player2.addUnits(drone)
-
-    soldierChan = TerranSoldier(6, 1, player1)
-    #player1.addUnits(soldierChan)
-
-    #zergling = Zergling(0, 0, player1)
-    #player1.addUnits(zergling)
-
-    droneAI = Drone(30, 10, player2)
-    #player2.addUnits(droneAI)
 
 def update():
     clock_update()
@@ -126,25 +108,25 @@ clock = pg.time.Clock()
 
 # Player 1
 keyMap ={
-  pg.K_UP: CommandId.MOVER_CAMARA_ARRIBA,
-  pg.K_DOWN: CommandId.MOVER_CAMARA_ABAJO,
-  pg.K_RIGHT: CommandId.MOVER_CAMARA_DERECHA,
-  pg.K_LEFT: CommandId.MOVER_CAMARA_IZQUIERDA,
-  pg.K_r: CommandId.ROTAR,
-  pg.K_v: CommandId.GENERAR_UNIDAD,
+  pg.K_UP: CommandId.MOVE_CAMERA_UP,
+  pg.K_DOWN: CommandId.MOVE_CAMERA_DOWN,
+  pg.K_RIGHT: CommandId.MOVE_CAMERA_RIGHT,
+  pg.K_LEFT: CommandId.MOVE_CAMERA_LEFT,
+  pg.K_r: CommandId.ROTATE,
+  pg.K_v: CommandId.GENERATE_UNIT,
   pg.K_c: CommandId.BUILD_BARRACKS,
   pg.K_x: CommandId.BUILD_REFINERY,
-  pg.K_d: CommandId.MEJORAR_DAÑO_SOLDADO,
-  pg.K_a: CommandId.MEJORAR_ARMADURA_SOLDADO,
-  pg.K_m: CommandId.MEJORAR_MINADO_WORKER,
-  pg.K_g: CommandId.GUARDAR_PARTIDA,
+  pg.K_d: CommandId.UPGRADE_SOLDIER_DAMAGE,
+  pg.K_a: CommandId.UPGRADE_SOLDIER_ARMOR,
+  pg.K_m: CommandId.UPGRADE_WORKER_MINING,
+  pg.K_g: CommandId.SAVE_GAME,
 }
 commandMap ={
-  CommandId.MOVER_CAMARA_ARRIBA: pg.K_UP,
-  CommandId.MOVER_CAMARA_ABAJO: pg.K_DOWN,
-  CommandId.MOVER_CAMARA_DERECHA: pg.K_RIGHT,
-  CommandId.MOVER_CAMARA_IZQUIERDA: pg.K_LEFT,
-  CommandId.ROTAR: pg.K_r,
+  CommandId.MOVE_CAMERA_UP: pg.K_UP,
+  CommandId.MOVE_CAMERA_DOWN: pg.K_DOWN,
+  CommandId.MOVE_CAMERA_RIGHT: pg.K_RIGHT,
+  CommandId.MOVE_CAMERA_LEFT: pg.K_LEFT,
+  CommandId.ROTATE: pg.K_r,
 }
 
 mapa = Map.Map(40, 40, True)
@@ -173,17 +155,15 @@ camera = Camera(0, 0, SCREEN_HEIGHT - 160, SCREEN_WIDTH)
 
 #Recursos del mapa
 crystal = Crystal(2, 10, 34)
-crystal2 = Crystal(2, 16, 34)
-
-geyser1 = Geyser(14, 2, 34)
-geyser2 = Geyser(2, 22, 34)
-
+crystal2 = Crystal(2, 18, 60)
+crystal3 = Crystal(2, 22, 60)
+crystal4 = Crystal(2, 26, 60)
 
 resources = []
 resources.append(crystal)
 resources.append(crystal2)
-resources.append(geyser1)
-resources.append(geyser2)
+resources.append(crystal3)
+resources.append(crystal4)
 
 raton = Raton.Raton(player1, player2)
 p1Interface = Interface(player1, player2, raton)

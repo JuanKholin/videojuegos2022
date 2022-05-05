@@ -67,25 +67,25 @@ class TerranBuilder(Structure):
 
     def execute(self, command_id):
         if self.clicked:
-            if (command_id == CommandId.GENERAR_UNIDAD or command_id == CommandId.GENERATE_WORKER) and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
+            if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_WORKER) and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
                 self.player.resources -= TERRAN_WORKER_MINERAL_COST
                 terranWorker = TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
                 print("xd")
                 self.generateUnit(terranWorker)
                 self.state = BuildingState.SPAWNING
-            elif command_id == CommandId.MEJORAR_DAÑO_SOLDADO and self.player.resources and self.player.resources >= self.dañoMineralUpCost and self.player.gas >= self.dañoGasUpCost:
+            elif command_id == CommandId.UPGRADE_SOLDIER_DAMAGE and self.player.resources and self.player.resources >= self.dañoMineralUpCost and self.player.gas >= self.dañoGasUpCost:
                 self.player.resources -= self.dañoMineralUpCost
                 self.player.gas -= self.dañoGasUpCost
                 self.player.dañoUpgrade += 1
                 self.dañoMineralUpCost += 25
                 self.dañoGasUpCost += 25
-            elif command_id == CommandId.MEJORAR_ARMADURA_SOLDADO and self.player.resources and self.player.gas >= self.armorGasUpCost and self.player.resources >= self.armorMineralUpCost:
+            elif command_id == CommandId.UPGRADE_SOLDIER_ARMOR and self.player.resources and self.player.gas >= self.armorGasUpCost and self.player.resources >= self.armorMineralUpCost:
                 self.player.resources -= self.armorMineralUpCost
                 self.player.gas -= self.armorGasUpCost
                 self.player.armorUpgrade += 1
                 self.armorMineralUpCost += 25
                 self.armorGasUpCost += 25
-            elif command_id == CommandId.MEJORAR_MINADO_WORKER and self.player.resources and self.player.resources >= self.mineMineralUpCost and self.player.gas >= self.mineGasUpCost and self.player.mineUpgrade != LIMIT_MINADO:
+            elif command_id == CommandId.UPGRADE_WORKER_MINING and self.player.resources and self.player.resources >= self.mineMineralUpCost and self.player.gas >= self.mineGasUpCost and self.player.mineUpgrade != LIMIT_MINADO:
                 self.player.resources -= self.mineMineralUpCost
                 self.player.gas -= self.mineGasUpCost
                 self.player.mineUpgrade += 200
@@ -102,22 +102,13 @@ class TerranBuilder(Structure):
                 self.raton.buildStructure = self.getTerranRefinery()
 
     def command(self, command):
-        if command == CommandId.BUILD_BARRACKS:
-            return Command(CommandId.BUILD_BARRACKS)
-        elif command == CommandId.BUILD_REFINERY:
-            return Command(CommandId.BUILD_REFINERY)
-        elif command == CommandId.BUILD_HATCHERY:
-            return Command(CommandId.BUILD_HATCHERY)
-        elif command == CommandId.GENERAR_UNIDAD:
-            return Command(CommandId.GENERAR_UNIDAD)
-        elif command == CommandId.MEJORAR_ARMADURA_SOLDADO:
-            return Command(CommandId.MEJORAR_ARMADURA_SOLDADO)
-        elif command == CommandId.MEJORAR_DAÑO_SOLDADO:
-            return Command(CommandId.MEJORAR_DAÑO_SOLDADO)
-        elif command == CommandId.MEJORAR_MINADO_WORKER:
-            return Command(CommandId.MEJORAR_MINADO_WORKER)
+        if (command == CommandId.BUILD_BARRACKS) or (command == CommandId.BUILD_REFINERY) or (command == 
+                CommandId.BUILD_HATCHERY) or (command == CommandId.GENERATE_UNIT) or (command == 
+                CommandId.UPGRADE_SOLDIER_ARMOR) or (command == 
+                CommandId.UPGRADE_SOLDIER_DAMAGE) or (command == CommandId.UPGRADE_WORKER_MINING):
+            return Command(command)
         else:
-            return Command(CommandId.NULO)
+            return Command(CommandId.NULL)
 
     def getBuildSprite(self):
         return self.sprites[self.operativeIndex]

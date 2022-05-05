@@ -1,4 +1,5 @@
-import pygame, math
+import pygame as pg
+import math
 from . import Utils
 from .Command import *
 from .Utils import *
@@ -35,14 +36,14 @@ class Player():
 
     def processEvent(self, event):
         if self.isPlayer:
-            if event.type == pygame.KEYDOWN:
+            if event.type == pg.KEYDOWN:
                 if event.key in self.keyMap:
                     if self.structureSelected != None:
                         command = self.structureSelected.command(self.keyMap[event.key])
-                        if command != Command(CommandId.NULO):
+                        if command != Command(CommandId.NULL):
                                 return command
                     return Command(self.keyMap[event.key])
-        return Command(CommandId.NULO)
+        return Command(CommandId.NULL)
 
 
     def update(self):
@@ -61,26 +62,26 @@ class Player():
 
     def execute(self, id, param, tileClicked):
         print("Soy player, ", self.isPlayer)
-        if id == CommandId.MOVER: #Mover unidades
+        if id == CommandId.MOVE: #Mover unidades
             for i in range(param.__len__()):
                 self.unitsSelected[i].paths = param[i]
                 #for path in param[i]:
                     #print("Posicion final: ",path.posFin, path.angle)
-        elif id == CommandId.ORDENAR:
+        elif id == CommandId.ORDER:
             for i in range(param.__len__()):
                 print(param[i]['order'])
                 #self.unitsSelected[i].paths = param[i]['path']
                 # En funcion de la orden cambiarle el estado a la unidad
                 if param[i]['order'] == CommandId.MINE:
                     self.unitsSelected[i].mine(param[i]['resource'])
-                elif param[i]['order'] == CommandId.MOVER:
+                elif param[i]['order'] == CommandId.MOVE:
                     self.unitsSelected[i].move(tileClicked)
                 elif param[i]['order'] == CommandId.EXTRACT_GAS:
                     self.unitsSelected[i].extract(tileClicked)
                 elif param[i]['order'] == CommandId.ATTACK:
                     self.unitsSelected[i].attack(param[i]['attackedOne'])
         elif self.structureSelected != None:
-            if id == CommandId.GENERAR_UNIDAD or id == CommandId.GENERATE_WORKER or id == CommandId.GENERATE_SOLDIER:
+            if id == CommandId.GENERATE_UNIT or id == CommandId.GENERATE_WORKER or id == CommandId.GENERATE_SOLDIER:
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_BARRACKS:
                 self.structureSelected.execute(id)
@@ -88,11 +89,11 @@ class Player():
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_HATCHERY:
                 self.structureSelected.execute(id)
-            elif id == CommandId.MEJORAR_DAÑO_SOLDADO:
+            elif id == CommandId.UPGRADE_SOLDIER_DAMAGE:
                 self.structureSelected.execute(id)
-            elif id == CommandId.MEJORAR_ARMADURA_SOLDADO:
+            elif id == CommandId.UPGRADE_SOLDIER_ARMOR:
                 self.structureSelected.execute(id)
-            elif id == CommandId.MEJORAR_MINADO_WORKER:
+            elif id == CommandId.UPGRADE_WORKER_MINING:
                 self.structureSelected.execute(id)
 
     def draw(self, screen, camera):

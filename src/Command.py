@@ -1,31 +1,30 @@
-from enum import IntEnum
+from enum import Enum, auto
 
-class CommandId(IntEnum):
-    NULO = 0
-    MOVER = 1
-    MOVER_CAMARA_ARRIBA = 2
-    MOVER_CAMARA_ABAJO = 3
-    MOVER_CAMARA_DERECHA = 4
-    MOVER_CAMARA_IZQUIERDA = 5
-    GENERAR_UNIDAD = 6
-    ROTAR = 7
-    ORDENAR = 8
-    MINE = 9
-    MINAR_BUCLE = 10
-    TRANSPORTAR_ORE = 11
-    TRANSPORTAR_ORE_STILL = 12
-    BUILD_BARRACKS = 13
-    BUILD_STRUCTURE = 14
-    BUILD_HATCHERY = 15
-    GUARDAR_PARTIDA = 16
-    ATTACK = 17
-    GENERATE_WORKER = 18
-    GENERATE_SOLDIER = 19
-    MEJORAR_DAÑO_SOLDADO = 20
-    MEJORAR_ARMADURA_SOLDADO = 21
-    MEJORAR_MINADO_WORKER = 22
-    BUILD_REFINERY = 23
-    EXTRACT_GAS = 24
+class CommandId(Enum):
+    NULL = auto()
+    MOVE = auto()
+    MOVE_CAMERA_UP = auto()
+    MOVE_CAMERA_DOWN = auto()
+    MOVE_CAMERA_RIGHT = auto()
+    MOVE_CAMERA_LEFT = auto()
+    GENERATE_UNIT = auto()
+    ROTATE = auto()
+    ORDER = auto()
+    MINE = auto()
+    TRANSPORTAR_ORE = auto()
+    TRANSPORTAR_ORE_STILL = auto()
+    BUILD_BARRACKS = auto()
+    BUILD_STRUCTURE = auto()
+    BUILD_HATCHERY = auto()
+    SAVE_GAME = auto()
+    ATTACK = auto()
+    GENERATE_WORKER = auto()
+    GENERATE_SOLDIER = auto()
+    UPGRADE_SOLDIER_DAMAGE = auto()
+    UPGRADE_SOLDIER_ARMOR = auto()
+    UPGRADE_WORKER_MINING = auto()
+    BUILD_REFINERY = auto()
+    EXTRACT_GAS = auto()
 
 class Command:
     def __init__(self, id):
