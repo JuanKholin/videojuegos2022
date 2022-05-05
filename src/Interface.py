@@ -74,9 +74,9 @@ class Interface():
         allButton[Options.BUILD_REFINERY] = aux
         aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "danyoUpgrade" + ".png", Command.CommandId.UPGRADE_SOLDIER_DAMAGE,BUTTON_PATH + "cartelUpgrade.bmp", "Mejorar daño;de las unidades", 90, 50)
         allButton[Options.DANYO_UPGRADE] = aux
-        aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "mineUpgrade" + ".png", Command.CommandId.UPGRADE_WORKER_MINING,BUTTON_PATH + "cartelUpgrade.bmp", "Reducir tiempo de minado;de los VCE", 90, 120)
+        aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "mineUpgrade" + ".png", Command.CommandId.UPGRADE_WORKER_MINING,BUTTON_PATH + "cartelUpgrade.bmp", "Reducir tiempo de minado;de los VCE", 90, 50)
         allButton[Options.MINE_UPGRADE] = aux
-        aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "armorUpgrade" + ".png", Command.CommandId.UPGRADE_SOLDIER_ARMOR,BUTTON_PATH + "cartelUpgrade.bmp", "Mejorar blindaje;de las unidades", 90, 50)
+        aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "armorUpgrade" + ".png", Command.CommandId.UPGRADE_SOLDIER_ARMOR,BUTTON_PATH + "cartelUpgrade.bmp", "Mejorar blindaje;de las unidades", 90, 120)
         allButton[Options.ARMOR_UPGRADE] = aux
         return allButton
 

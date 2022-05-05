@@ -4,7 +4,7 @@ import math
 from re import T
 import pygame
 
-DEBBUG = True
+DEBBUG = False
 
 class System_State(Enum):
     MAINMENU = auto()
