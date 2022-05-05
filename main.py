@@ -48,6 +48,8 @@ def procesarInput():
             escena.procesarEvent(event)
     escena.checkPressedButtons()
 
+
+
 def setEntity(player):
     scv = TerranWorker(4, 10, player)
     scv2 = TerranWorker(5, 10, player)
@@ -103,7 +105,6 @@ def draw():
     raton.draw(screen, camera)
     #aux(screen)
     pg.display.flip()
-
 
 # Programa principal
 pg.init()
