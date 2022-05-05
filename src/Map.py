@@ -369,8 +369,6 @@ class Map():
             nodosCerrados.append(currentTile)
             nodosAbiertos.pop(currentId)
             if currentTile.tileid == tileObj.tileid:
-                print("EH VOS")
-
                 break
             for tile in self.getTileVecinas(currentTile, tileObj):
                 #print("miro tile: ", tile.tileid , tile.g)

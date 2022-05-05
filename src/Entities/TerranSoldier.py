@@ -80,4 +80,6 @@ class TerranSoldier(Soldier):
             "clase": "terranSoldier",
             "x": x,
             "y": y,
+            "nombre": "Soldado Terran", 
+            "funcion": "unidad de infanteria"
         }

@@ -79,4 +79,6 @@ class TerranBarracks(Structure):
             "x": self.xIni,
             "y": self.yIni,
             "id": self.id,
+            "nombre": "Terran cuartel", 
+            "funcion": "entrena tropas de infanteria"
         }

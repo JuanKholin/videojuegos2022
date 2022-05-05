@@ -134,6 +134,7 @@ class TerranBuilder(Structure):
             "clase": "terranBuilder",
             "x": self.xIni,
             "y": self.yIni,
-            "building": self.building,
             "id": self.id,
+            "nombre": "Base de comandos", 
+            "funcion": "Protege la base de comandos"
         }

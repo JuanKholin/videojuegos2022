@@ -19,4 +19,4 @@ class Soldier(Unit):
 
     # Indica a la IA si es soldado o worker
     def isSoldier(self):
-        return true
+        return True

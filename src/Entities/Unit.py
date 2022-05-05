@@ -59,7 +59,7 @@ class Unit(Entity):
         if objectiveTile.type == OBSTACLE:
             objectiveTile = self.mapa.getTileCercana(self.getTile(), objectiveTile)
         elif objectiveTile.type != EMPTY and objectiveTile.type != UNIT:
-            print("AAAAAAAAAAAAAAAAAAAAAAAAA")
+            #print("AAAAAAAAAAAAAAAAAAAAAAAAA")
             tilesRound = self.mapa.getEntityTilesVecinas(objectiveTile, self.getTile())
             objectiveTile = tilesRound[0]
             for tile in tilesRound:
@@ -119,6 +119,11 @@ class Unit(Entity):
                 else:
                     hp = pygame.transform.chop(pg.transform.scale(HP2, (50, 8)), ((self.hp / self.maxHp) * 50, 0, 50, 0))
                     screen.blit(hp, [self.x - camera.x - hp.get_rect().w / 2, self.y + r.h / 2 - camera.y])
+
+    def drawInfo(self, screen, color):
+        dic = self.toDictionary(self.mapa)
+        muestra_texto(screen, str('monotypecorsiva'), dic['nombre'], color, 25, [GUI_INFO_X2, GUI_INFO_Y2])
+        muestra_texto(screen, str('monotypecorsiva'), dic['funcion'], color, 20, [GUI_INFO_X2, GUI_INFO_Y2 + 50])
 
     ###########
     # UPDATES #
@@ -183,7 +188,7 @@ class Unit(Entity):
             enemyTile = self.attackedOne.getTile()'''
             
             #print("Estoy en: ", tileActual.tileid, "y el enemigo en: ", enemyTile.tileid)
-            print(int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) )
+            #print(int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) )
             if int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) <= self.range:
                 self.updateAttackInRange()
             elif len(self.paths) > 0:

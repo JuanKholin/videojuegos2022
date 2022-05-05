@@ -58,4 +58,6 @@ class Extractor(Structure):
             "x": self.xIni,
             "y": self.yIni,
             "id": self.id,
+            "nombre": "Extractor de Zerg", 
+            "funcion": "extrae recursos"
         }

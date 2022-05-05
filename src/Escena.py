@@ -31,7 +31,8 @@ class Escena():
         if getGameState() == System_State.ONGAME:
             #ejecutar el comando
             if command.id == CommandId.UPGRADE_WORKER_MINING:
-                print(command.id)
+                #print(command.id)
+                pass
             if not self.raton.building:
                 if command.id == CommandId.GENERATE_UNIT:
                     self.p1.execute(command.id, [], None)

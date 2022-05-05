@@ -81,4 +81,6 @@ class TerranWorker(Worker):
             "clase": "terranWorker",
             "x": x,
             "y": y,
+            "nombre": "Terran Worker", 
+            "funcion": "Unidad obrera"
         }

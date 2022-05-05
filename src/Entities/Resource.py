@@ -31,6 +31,11 @@ class Resource():
             #screen.blit(unit.image, [r.x - self.camera.x, r.y - self.camera.y])
             screen.blit(self.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
             
+    def drawInfo(self, screen, color):
+        dic = self.toDictionary()
+        muestra_texto(screen, str('monotypecorsiva'), dic['nombre'], color, 25, [GUI_INFO_X2, GUI_INFO_Y2])
+        muestra_texto(screen, str('monotypecorsiva'), dic['funcion'], color, 20, [GUI_INFO_X2, GUI_INFO_Y2 + 50])
+            
     def getMined(self, cantidad):
         if (self.capacity <= 0):
             return 0

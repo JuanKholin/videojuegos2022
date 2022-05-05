@@ -254,6 +254,7 @@ class Interface():
             
             screen.blit(image, (GUI_INFO_X, GUI_INFO_Y))
             muestra_texto(screen, 'monotypecorsiva', capacity, YELLOW, 20, [GUI_INFO_X + 60, GUI_INFO_Y + 135])
+            self.player.resourceSelected.drawInfo(screen, YELLOW)
             
     def showInfo(self, screen, unit, color, renderX = 0, renderY = 0, hpX = 0, hpY = 0):
         image = unit.getRender()
@@ -261,7 +262,7 @@ class Interface():
             
         screen.blit(image, (GUI_INFO_X + renderX, GUI_INFO_Y + renderY))
         muestra_texto(screen, 'monotypecorsiva', hpState, color, 20, [GUI_INFO_X + hpX, GUI_INFO_Y + hpY])
-        unit.drawInfo()
+        unit.drawInfo(screen, color)
                 
     def checkInGUIPosition(self):
         x = self.mouse.rel_pos[0]

@@ -43,14 +43,13 @@ class Crystal(Resource):
     def getType(self):
         return RESOURCE
 
-    def toDictionary(self, map):
+    def toDictionary(self):
         print("x e y del cristal ", self.x, self.y)
-        x, y = map.getTileIndex(self.x, self.y)
-        print("x e y de la tile del cristal ", x, y)
         return {
             "clase": "cristal",
             "capacidad": self.capacity,
-            "tipo": self.tipo,
             "x": self.x,
             "y": self.y,
+            "nombre": "Cristal", 
+            "funcion": "Esencial para todo"
         }

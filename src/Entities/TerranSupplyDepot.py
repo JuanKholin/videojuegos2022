@@ -60,6 +60,8 @@ class TerranSupplyDepot(Structure):
             "x": self.xIni,
             "y": self.yIni,
             "id": self.id,
+            "nombre": "Deposito de suministros", 
+            "funcion": "aumenta la capacidad de suministros"
         }
         
     

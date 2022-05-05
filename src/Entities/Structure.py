@@ -132,11 +132,11 @@ class Structure(Entity.Entity):
     def updateBuilding(self):
         if self.nBuildSprites != 0:
             self.count += 1
-            if self.count >= self.generationTime * CLOCK_PER_SEC / self.nBuildSprites:
+            if self.count % (self.generationTime * CLOCK_PER_SEC / self.nBuildSprites) == 0:
                 self.index += 1
-                self.count = 0
             if self.index >= self.nBuildSprites:
                 self.indexCount = 0
+                self.count = 0
                 self.state = BuildingState.OPERATIVE
         else:
             self.indexCount = 0
@@ -204,6 +204,58 @@ class Structure(Entity.Entity):
                 pygame.draw.rect(screen, GREEN, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
             else:
                 pygame.draw.rect(screen, RED, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
+                
+    def drawInfo(self, screen, color):
+        dic = self.toDictionary(self.mapa)
+        muestra_texto(screen, str('monotypecorsiva'), dic['nombre'], color, 25, [GUI_INFO_X2, GUI_INFO_Y2])
+        if self.state == BuildingState.BUILDING:
+            self.drawInfoBuilding(screen, color)
+        elif self.state == BuildingState.OPERATIVE:
+            self.drawInfoOperative(screen, color)
+        elif self.state == BuildingState.SPAWNING:
+            self.drawInfoSpawning(screen, color)
+            
+    def drawInfoBuilding(self, screen, color):
+        muestra_texto(screen, str('monotypecorsiva'), "Construyendo...", color, 20, [GUI_INFO_X2, GUI_INFO_Y2 + 30])
+        
+        progreso = self.count / (self.generationTime * CLOCK_PER_SEC)
+        if progreso > 1:
+            progreso = 1
+        pygame.draw.rect(screen, BLUE2, pygame.Rect(GUI_INFO_X2 - 75, GUI_INFO_Y2 + 55, 150*(progreso), 15))
+        pygame.draw.rect(screen, BLUE, pygame.Rect(GUI_INFO_X2 - 75, GUI_INFO_Y2 + 55, 150, 15), 2)
+
+    def drawInfoOperative(self, screen, color):
+        dic = self.toDictionary(self.mapa)
+        muestra_texto(screen, str('monotypecorsiva'), dic['funcion'], color, 20, [GUI_INFO_X2, GUI_INFO_Y2 + 50])
+        
+    def drawInfoSpawning(self, screen, color):
+        #render de la tropa
+        image = self.training[0].getRender()
+        image = pygame.transform.scale(image, SPAW_UNIT_RENDER_SIZE)
+        screen.blit(image, (GUI_INFO_X2 - 100, GUI_INFO_Y2 + 10))
+        pygame.draw.rect(screen, GREEN, pygame.Rect(GUI_INFO_X2 - 95, GUI_INFO_Y2 + 15, 55, 60), 2)
+        
+        #progreso
+        progreso = self.generationCount / (CLOCK_PER_SEC * self.training[0].generationTime)
+        if progreso > 1:
+            progreso = 1
+        pygame.draw.rect(screen, BLUE2, pygame.Rect(GUI_INFO_X2 - 30, GUI_INFO_Y2 + 35, 130*(progreso), 10))
+        pygame.draw.rect(screen, BLUE, pygame.Rect(GUI_INFO_X2 - 30, GUI_INFO_Y2 + 35, 130, 10), 2)
+        
+        #tropas pendientes
+        pygame.draw.rect(screen, BLUE, pygame.Rect(GUI_INFO_X2 - 30, GUI_INFO_Y2 +60, 145, 55), 2)
+        xPad = 0
+        n = 0
+        for unit in self.training[1:]:
+            image = unit.getRender()
+            image = pygame.transform.scale(image, WAIT_UNIT_RENDER_SIZE)
+            screen.blit(image, (GUI_INFO_X2 - 30 + xPad, GUI_INFO_Y2 + 58))
+            n += 1
+            xPad += 45
+            if n >= 3:
+                break 
+
+            
 
     def checkTiles(self):
         r = self.getRect()

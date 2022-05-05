@@ -94,4 +94,6 @@ class TerranRefinery(Structure):
             "x": self.xIni,
             "y": self.yIni,
             "id": self.id,
+            "nombre": "Refineria", 
+            "funcion": "extrae gas geyser"
         }
