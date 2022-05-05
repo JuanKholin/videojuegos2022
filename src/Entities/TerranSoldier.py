@@ -73,6 +73,18 @@ class TerranSoldier(Soldier):
         #self.imageRect = rect(self.x - self.image.get_width()/2, self.y -self.image.get_height() , self.image.get_width(), self.image.get_height())
         #self.imageRect = rect(self.x, self.y, self.image.get_width(), self.image.get_height())
         self.render = pygame.transform.scale(pygame.image.load(SOLDIER_RENDER), UNIT_RENDER_SIZE)
+    
+    def getUpgrades(self):
+        upgrades = []
+        if self.player.armorUpgrade == 0:
+            upgrades.append({'upgrade': Upgrades.NO_ARMOR, 'cantidad': 0})
+        else:
+            upgrades.append({'upgrade': Upgrades.ARMOR, 'cantidad': self.player.armorUpgrade})
+        if self.player.dañoUpgrade == 0:
+            upgrades.append({'upgrade': Upgrades.NO_DANYO, 'cantidad': 0})
+        else:
+            upgrades.append({'upgrade': Upgrades.DANYO, 'cantidad': self.player.dañoUpgrade})
+        return upgrades
 
     def toDictionary(self, map):
         x, y = map.getTileIndex(self.x, self.y)

@@ -185,6 +185,8 @@ BUTTON_H = 55
 BUTTONPADY = 64
 BUTTONPADX = 74
 
+UPGRADEPADX = 80
+
 MINIMAP_X = 10
 MINIMAP_Y = 560
 MINIMAP_W = 205 
@@ -213,6 +215,15 @@ class Options(Enum):
     MINE_UPGRADE = auto()
     ARMOR_UPGRADE = auto()
     NULO = auto()
+
+
+class Upgrades(Enum):
+    DANYO = auto()
+    ARMOR = auto()
+    MINE = auto()
+    NO_DANYO = auto()
+    NO_ARMOR = auto()
+    NO_MINE = auto()
     
 BUTTON_PATH = "SPRITE/button/gui_button_"
 #----------------------------------------------------------------

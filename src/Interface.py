@@ -1,6 +1,6 @@
 
 import pygame as pg
-from . import Player, Command, Utils, Raton, Button
+from . import Player, Command, Utils, Raton, Button, Upgrade
 from src.Music import *
 from src.Lib import *
 from src.Utils import *
@@ -8,6 +8,8 @@ from src.Utils import *
 class Interface():
     buttonX = 0
     buttonY = 0
+    upgradeX = 400
+    upgradeY = 705
     
     def __init__(self, player, enemy, mouse):
         self.player = player
@@ -56,6 +58,7 @@ class Interface():
         self.resources[2].set_colorkey(BLACK)
         
         self.allButton = self.loadAllButton()
+        self.allUpgrades = self.loadAllUpgrades()
     
     def loadAllButton(self):
         allButton = {}
@@ -71,7 +74,27 @@ class Interface():
         allButton[Options.BUILD_REFINERY] = aux
         aux = Button.Button(BUTTON_PATH + "danyoUpgrade" + ".png", Command.CommandId.UPGRADE_SOLDIER_DAMAGE)
         allButton[Options.DANYO_UPGRADE] = aux
+        aux = Button.Button(BUTTON_PATH + "mineUpgrade" + ".png", Command.CommandId.UPGRADE_WORKER_MINING)
+        allButton[Options.MINE_UPGRADE] = aux
+        aux = Button.Button(BUTTON_PATH + "armorUpgrade" + ".png", Command.CommandId.UPGRADE_SOLDIER_ARMOR)
+        allButton[Options.ARMOR_UPGRADE] = aux
         return allButton
+
+    def loadAllUpgrades(self):
+        allUpgrades = {}
+        aux = Upgrade.Upgrade("./SPRITE/upgrades/armorConUpgrade.png")
+        allUpgrades[Upgrades.ARMOR] = aux
+        aux = Upgrade.Upgrade("./SPRITE/upgrades/danyoConUpgrade.png")
+        allUpgrades[Upgrades.DANYO] = aux
+        aux = Upgrade.Upgrade("./SPRITE/upgrades/mineConUpgrade.png")
+        allUpgrades[Upgrades.MINE] = aux
+        aux = Upgrade.Upgrade("./SPRITE/upgrades/armorSinUpgrade.png")
+        allUpgrades[Upgrades.NO_ARMOR] = aux
+        aux = Upgrade.Upgrade("./SPRITE/upgrades/danyoSinUpgrade.png")
+        allUpgrades[Upgrades.NO_DANYO] = aux
+        aux = Upgrade.Upgrade("./SPRITE/upgrades/mineSinUpgrade.png")
+        allUpgrades[Upgrades.NO_MINE] = aux
+        return allUpgrades
     
     def update(self):
         if Utils.state == System_State.MAINMENU:
@@ -139,6 +162,19 @@ class Interface():
                 else:
                     b.setCollide(False)
                     
+            #Comprobar collisiones con las mejoras
+            self.upgrades = []
+            if self.player.unitsSelected.__len__() == 1:
+                self.upgrades = self.getUpgrades(self.player.unitsSelected[0].getUpgrades())
+                
+
+            #comprobar colision del raton
+            for up in self.upgrades:
+                if Raton.collides(self.mouse.rel_pos[0], self.mouse.rel_pos[1], up.getRect()):
+                    up.setCollide(True)
+                else:
+                    up.setCollide(False)
+            
             if frame(10):
                 self.heroeIndex = (self.heroeIndex+1)%HEROE_N
          
@@ -207,7 +243,8 @@ class Interface():
     
     def drawEntityInfo(self, screen, camera):
         if len(self.player.unitsSelected) == 1:
-            self.showInfo(screen, self.player.unitsSelected[0], GREEN3, 10, 10, 60, 135)
+            upgrades = self.getUpgrades( self.player.unitsSelected[0].getUpgrades())
+            self.showInfo(screen, self.player.unitsSelected[0], GREEN3, 10, 10, 60, 135, upgrades)
         elif len(self.player.unitsSelected) > 1:
             images = []
             for unit in self.player.unitsSelected:
@@ -258,10 +295,14 @@ class Interface():
             muestra_texto(screen, 'monotypecorsiva', capacity, YELLOW, 20, [GUI_INFO_X + 60, GUI_INFO_Y + 135])
             self.player.resourceSelected.drawInfo(screen, YELLOW)
             
-    def showInfo(self, screen, unit, color, renderX = 0, renderY = 0, hpX = 0, hpY = 0):
+    def showInfo(self, screen, unit, color, renderX = 0, renderY = 0, hpX = 0, hpY = 0, upgrades = None):
         image = unit.getRender()
         hpState = str(unit.getMaxHP()) + "/" + str(unit.getHP())
-            
+        x = self.upgradeX
+        if upgrades != None: #Dibujar las upgrades
+            for upgrade in upgrades:
+                upgrade.draw(screen, x, self.upgradeY)
+                x += UPGRADEPADX
         screen.blit(image, (GUI_INFO_X + renderX, GUI_INFO_Y + renderY))
         muestra_texto(screen, 'monotypecorsiva', hpState, color, 20, [GUI_INFO_X + hpX, GUI_INFO_Y + hpY])
         unit.drawInfo(screen, color)
@@ -292,6 +333,13 @@ class Interface():
             if e != Options.NULO:
                 buttons.append(self.allButton[e])
         return buttons
+
+    def getUpgrades(self, upgrades):
+        ups = []
+        for upgrade in upgrades:
+            self.allUpgrades[upgrade['upgrade']].cantidad = upgrade['cantidad']
+            ups.append(self.allUpgrades[upgrade['upgrade']])
+        return ups
     
         
                 

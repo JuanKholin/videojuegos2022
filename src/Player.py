@@ -17,7 +17,7 @@ class Player():
         self.resourceSelected = None
         self.structures = structures
         self.resources = resources
-        self.gas = 0
+        self.gas = 400
         self.keyMap = keyMap
         self.commandMap = commandMap #keyMap pero las claves son los valores y los valores las claves (solo necesario para las teclas de la camara)
         self.pulsado = False
