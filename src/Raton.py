@@ -63,7 +63,8 @@ class Raton(pygame.sprite.Sprite):
         self.index = 0
         self.sprite = cargarSprites(MOUSE_PATH + "tile00", 5, False, WHITE) #raton default
         self.sprite2 = cargarSprites(MOUSE_PATH + "tile0", 48, True, WHITE, m=34) #raton selectedUnit
-        self.sprite3 = cargarSprites(MOUSE_PATH + "tile0", 65, True, WHITE, m=51) #raton selectedMineral
+        self.sprite3 = cargarSprites(MOUSE_PATH + "tile0", 82, True, WHITE, m=68) #raton selectedEnemy
+        self.sprite4 = cargarSprites(MOUSE_PATH + "tile0", 65, True, WHITE, m=51) #raton selectedMineral
         
         self.clickSprite = pygame.image.load(MOUSE_PATH + "click.png").convert_alpha()
         self.image = self.sprite[0]
@@ -91,29 +92,46 @@ class Raton(pygame.sprite.Sprite):
         self.collideEnemy = False
         
         if not self.building:
-            for unit in self.player.units:
-                ###---LOGICA
-                #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-                if collides(self.real_pos[0], self.real_pos[1], unit.getRect()):
-                    self.collideAlly = True
-                    mouse_collide = True
-                    break
-            if not mouse_collide:
-                for structure in self.player.structures:
+            if self.enable:
+                for unit in self.player.units:
                     ###---LOGICA
                     #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-                    if collides(self.real_pos[0], self.real_pos[1], structure.getRect()):
+                    if collides(self.real_pos[0], self.real_pos[1], unit.getRect()):
                         self.collideAlly = True
                         mouse_collide = True
                         break
-            if not mouse_collide:
-                for resources in self.escena.resources:
-                    ###---LOGICA
-                    #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-                    if collides(self.real_pos[0], self.real_pos[1], resources.getRect()):
-                        self.collideResourse = True
-                        mouse_collide = True
-                        break
+                if not mouse_collide:
+                    for structure in self.player.structures:
+                        ###---LOGICA
+                        #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
+                        if collides(self.real_pos[0], self.real_pos[1], structure.getRect()):
+                            self.collideAlly = True
+                            mouse_collide = True
+                            break
+                if not mouse_collide:
+                    for unit in self.enemy.units:
+                        ###---LOGICA
+                        #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
+                        if collides(self.real_pos[0], self.real_pos[1], unit.getRect()):
+                            self.collideEnemy = True
+                            mouse_collide = True
+                            break
+                if not mouse_collide:
+                    for structure in self.enemy.structures:
+                        ###---LOGICA
+                        #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
+                        if collides(self.real_pos[0], self.real_pos[1], structure.getRect()):
+                            self.collideEnemy = True
+                            mouse_collide = True
+                            break
+                if not mouse_collide:
+                    for resources in self.escena.resources:
+                        ###---LOGICA
+                        #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
+                        if collides(self.real_pos[0], self.real_pos[1], resources.getRect()):
+                            self.collideResourse = True
+                            mouse_collide = True
+                            break
         else:
             self.buildStructure.setPosition(self.real_pos[0], self.real_pos[1])
 
@@ -126,10 +144,10 @@ class Raton(pygame.sprite.Sprite):
                 self.index2 = (self.index2+1)%14
             if self.collideAlly:
                 self.image = self.sprite2[self.index2]
-            elif self.collideResourse:
-                self.image = self.sprite3[self.index2]
             elif self.collideEnemy:
-                self.image = self.sprite2[self.index2]
+                self.image = self.sprite3[self.index2]
+            elif self.collideResourse:
+                self.image = self.sprite4[self.index2]
             else:
                 self.image = self.sprite[self.index]
         
@@ -179,7 +197,7 @@ class Raton(pygame.sprite.Sprite):
             else:
                 if self.point.getClicked():
                     self.point.draw(screen, camera)
-                if self.pulsado:
+                if self.pulsado and self.enable:
                     printRectangulo(screen, self.initialX - camera.x, self.initialY - camera.y, self.rel_pos[0], self.rel_pos[1])
             screen.blit(self.image, (self.rect.x, self.rect.y))
         else:

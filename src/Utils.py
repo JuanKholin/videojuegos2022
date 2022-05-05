@@ -74,6 +74,7 @@ BLUE2   = (35, 35, 255)
 PURPLE  = (255, 0, 255)
 GREEN2  = (210, 255, 125)
 GREEN3  = (110, 255, 90)
+GREEN4  = (140, 255, 150)
 PINK    = (255, 95, 185)
 ORANGE  = (255, 200, 95)
 
@@ -88,7 +89,7 @@ haveBGM = False
 
 CAMERA_SPEED = 8
 
-MAX_SELECTED_UNIT = 5
+MAX_SELECTED_UNIT = 8
 
 ENTITY_ID = 0
 
@@ -191,6 +192,8 @@ MINIMAP_H = 205
 GUI_INFO_X = 280
 GUI_INFO_Y = 610
 
+RESOURCES_COUNT_X = SCREEN_WIDTH - 300
+
 #---
 HEROE_PATH = "SPRITE/Heroes/Terran/Alexei Stukov/taxfid000"
 HEROE_N = 10
@@ -210,7 +213,7 @@ BUTTON_PATH = "SPRITE/button/gui_button_"
 # TROPAS
 #----------------------------------------------------------------
 
-RENDER_SIZE = [85*2, 97*2]
+RENDER_SIZE = [85*1.6, 97*1.6]
 UNIT_RENDER_SIZE = [85*1.4, 97*1.4]
 
 ##---------TERRAN_WORKER------------------
