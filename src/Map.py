@@ -173,7 +173,10 @@ class Map():
 
     #Pone la tile como vecina
     def setVecina(self, tile, id):
-        tile.setOcupada(id)
+        if tile.type == EMPTY:
+            tile.setOcupada(id)
+        else:
+            print("HI")
 
     #Pone la tile como recurso
     def setRecurso(self, tile):
@@ -184,8 +187,11 @@ class Map():
 
     #Pone la tile como libre
     def setLibre(self, tile):
-        self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = EMPTY
-        self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].ocupante = None
+        if self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type == EMPTY:
+            print("hi")
+        else:
+            self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = EMPTY
+            self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].ocupante = None
 
     #Devuelve una lista de tiles vecinas libres a la dada
     def getTileVecinas(self, tile, tileObj):

@@ -11,7 +11,7 @@ HP = 40
 ATTACK_INFO = [0, 0, 0]
 ATTACK_INFO[DAMAGE_IND] = 1
 ATTACK_INFO[COOLDOWN_IND] = 1
-ATTACK_INFO[RANGE_IND] = 1
+ATTACK_INFO[RANGE_IND] = 60
 MINE_POWER = 8
 MINERAL_COST = 50
 TIME_TO_MINE = 2000
@@ -67,8 +67,9 @@ class TerranWorker(Worker):
         self.sprites = Entity.divideSpritesheetByRows(spritesheet,
                 SPRITE_PIXEL_ROWS, SCALE) + Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
         self.mirrorTheChosen()
-        self.dir = 0
+        self.dir = 8
         self.changeToStill()
+        self.updateOwnSpace()
         #self.imageRect = rect(self.x, self.y, self.image.get_width() - WEIGHT_PADDING,
                 #self.image.get_height() - HEIGHT_PADDING)
         #self.imageRect = rect(self.x - self.image.get_width()/2, self.y -self.image.get_height() , self.image.get_width(), self.image.get_height())

@@ -62,6 +62,7 @@ class Zergling(Soldier):
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
+        self.updateOwnSpace()
         
         self.render = pygame.transform.scale(pygame.image.load(ZERGLING_RENDER), UNIT_RENDER_SIZE)
 

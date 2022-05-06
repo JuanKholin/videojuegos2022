@@ -68,6 +68,7 @@ class TerranSoldier(Soldier):
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
+        self.updateOwnSpace()
         #self.imageRect = rect(self.x, self.y, self.image.get_width() - WEIGHT_PADDING,
                 #self.image.get_height() - HEIGHT_PADDING)
         #self.imageRect = rect(self.x - self.image.get_width()/2, self.y -self.image.get_height() , self.image.get_width(), self.image.get_height())

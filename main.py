@@ -50,7 +50,7 @@ def procesarInput():
 
 
 
-def setEntity(player):
+def setEntity(player, ai):
     scv = TerranWorker(4, 10, player)
     scv2 = TerranWorker(5, 10, player)
     scv3 = TerranWorker(6, 10, player)
@@ -73,6 +73,9 @@ def setEntity(player):
     player.addUnits(scv3)
     player.addUnits(scv4)
     player.addUnits(scv5)
+
+    drone = Drone(10, 10, ai)
+    ai.addUnits(drone)
     
 
 def update():
@@ -88,7 +91,7 @@ def update():
         #cargar mapa
         escena.mapa.load()
         escena.mapa.loadMinimap()
-        setEntity(player1)
+        setEntity(player1, player2)
         setGameState(System_State.ONGAME)
     elif getGameState() == System_State.ONGAME:
         escena.update()
