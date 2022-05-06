@@ -51,11 +51,14 @@ def procesarInput():
 
 
 def setEntity(player, ai):
-    scv = TerranWorker(4, 10, player)
-    scv2 = TerranWorker(5, 10, player)
-    scv3 = TerranWorker(6, 10, player)
-    scv4 = TerranWorker(7, 10, player)
-    scv5 = TerranWorker(8, 10, player)
+    scv = TerranSoldier(4, 10, player)
+    scv2 = TerranSoldier(5, 10, player)
+    scv3 = TerranSoldier(6, 10, player)
+    scv4 = TerranSoldier(7, 10, player)
+    scv5 = TerranSoldier(8, 10, player)
+    scv6 = TerranSoldier(9, 10, player)
+    scv7 = TerranSoldier(10, 10, player)
+    scv8 = TerranSoldier(11, 10, player)
     structure1 = TerranBuilder(5, 6, player, mapa, False, raton, 1)
     structure3 = TerranSupplyDepot(10, 6, player, mapa, True, 2)
 
@@ -73,8 +76,11 @@ def setEntity(player, ai):
     player.addUnits(scv3)
     player.addUnits(scv4)
     player.addUnits(scv5)
+    player.addUnits(scv6)
+    player.addUnits(scv7)
+    player.addUnits(scv8)
 
-    drone = Drone(10, 10, ai)
+    drone = Drone(25, 10, ai)
     ai.addUnits(drone)
     
 

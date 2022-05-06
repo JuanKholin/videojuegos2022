@@ -39,6 +39,7 @@ class Worker(Unit):
     def changeToMining(self, resource):
         if resource.getCapacity() != 0: # Si hay recurso, si es gas agotado es -algo
             self.state = UnitState.MINING
+            
             self.isMining = False
             self.resource = resource
             pos = self.resource.getPosition()
@@ -51,6 +52,7 @@ class Worker(Unit):
                     if tile.heur(ownTile) < bestTile.heur(ownTile):
                         bestTile = tile
                 self.paths = calcPath(self.getPosition(), self.getTile(), bestTile, self.mapa)
+                self.changeObjectiveTile()
                 if len(self.paths) > 0:
                     self.moveToMining()
                 else:
@@ -75,6 +77,7 @@ class Worker(Unit):
                         if tile.heur(ownTile) < bestTile.heur(ownTile):
                             bestTile = tile
                     self.paths = calcPath(self.getPosition(), self.getTile(), bestTile, self.mapa)
+                    self.changeObjectiveTile()
                     if len(self.paths) > 0:
                         self.moveToMining()
                     else:
@@ -156,6 +159,8 @@ class Worker(Unit):
                     self.updateMovingImage()
             else: # Se acaba este camino
                 self.paths.pop(0)
+                if len(self.paths) != 0:
+                    self.changeObjectiveTile()
 
     def updateMiningAct(self):
         self.count += 1
@@ -253,7 +258,9 @@ class Worker(Unit):
     def finishOrePath(self):
         if len(self.paths) > 0:
             self.paths.pop(0)
-        if len(self.paths) == 0: # PUEDE QUE NO 
+        if len(self.paths) > 0:
+            self.changeObjectiveTile() 
+        else: # PUEDE QUE NO 
             tilesCasa = self.tilesCasa(self.getTile())
             if self.getTile() in tilesCasa: # He entregado sino me quedo en el sitio
                 if self.resource.capacity < 0:
@@ -280,11 +287,14 @@ class Worker(Unit):
 
                         self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
                         self.changeToMining(self.resource)
+                                   
 
     def finishGasPath(self):
         if len(self.paths) > 0:
             self.paths.pop(0)
-        if len(self.paths) == 0: # PUEDE QUE NO
+        if len(self.paths) > 0:
+            self.changeObjectiveTile() 
+        else: # PUEDE QUE NO
             tilesCasa = self.tilesCasa(self.getTile())
             if self.getTile() in tilesCasa: # He entregado sino me quedo en el sitio
                 #Tengo que volver siempre, TRABAJO DE POR VIDA :D
@@ -304,7 +314,7 @@ class Worker(Unit):
                             tileObj = tile
 
                     self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
-                    self.changeToExtracting(self.resource)         
+                    self.changeToExtracting(self.resource)     
             
     
     # Pasa de frame en una animacion de minado
@@ -355,6 +365,8 @@ class Worker(Unit):
             self.miningAngle = self.angle
             self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
             self.changeToMining()
+        else:
+            self.changeObjectiveTile()
 
     def tilesResource(self, tileActual):
         rect = self.resource.getRect()

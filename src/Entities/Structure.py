@@ -157,6 +157,7 @@ class Structure(Entity.Entity):
                 unit.y = libres[0].centery
 
                 self.player.addUnits(unit)
+                unit.updateOwnSpace()
                 self.generationCount = 0
                 del self.training[0]
                 if len(self.training) == 0:

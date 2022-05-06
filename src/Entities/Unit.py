@@ -179,7 +179,6 @@ class Unit(Entity):
         if self.attackedOne.getHP() > 0:
             '''tileActual = self.getTile()
             enemyTile = self.attackedOne.getTile()'''
-            
             #print("Estoy en: ", tileActual.tileid, "y el enemigo en: ", enemyTile.tileid)
             #print(int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) )
             if int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) <= self.range:
@@ -236,7 +235,12 @@ class Unit(Entity):
         self.occupiedTile.setOcupante(self)
     
     def updateAttackInRange(self):
-        self.paths = [] #Me quedo quieto y ataco
+        if len(self.paths) != 0:
+            objectivePath = self.paths[0]
+            nextTile = self.mapa.getTile(objectivePath.posFin[0], objectivePath.posFin[1])
+            self.mapa.setLibre(nextTile)
+            self.updateOwnSpace()
+            self.paths = [] #Me quedo quieto y ataco
         if self.attackCD > 1: # Si hay CD
             self.attackCD -= 1 # Disminuye CD
         elif self.attackCD == 1: # Si acaba el CD empieza la animacion
@@ -260,6 +264,11 @@ class Unit(Entity):
             if actualPath.dist > 0: # Aun queda trecho
                 self.updatePath(actualPath)
             else: # Se acaba este camino
+                #COMPROBAR QUE EL BICHO SIGUE EN SU SITIO
+                lastPath = self.paths[len(self.paths) - 1]
+                lastTile = self.mapa.getTile(lastPath.posFin[0], lastPath.posFin[1])
+                if lastTile != self.attackedOne.getTile():
+                    self.recalcAttackPaths()
                 self.finishPath()
             self.count += 1
             if self.count >= self.framesToRefresh:
@@ -528,6 +537,7 @@ class Unit(Entity):
                     if tile.heur(tileActual) < tileObj.heur(tileActual):
                         tileObj = tile
                 self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
+                self.changeObjectiveTile()
         elif self.state == UnitState.ORE_TRANSPORTING or self.state == UnitState.GAS_TRANSPORTING:
             tilesCasa = self.tilesCasa(self.getTile())
             if tilesCasa.__len__() == 0: # Me he quedado sin sitio
@@ -541,6 +551,7 @@ class Unit(Entity):
                     if tile.heur(tileActual) < tileObj.heur(tileActual):
                         tileObj = tile
                 self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
+                self.changeObjectiveTile()
 
     def tilesCasa(self, tileActual):
         rect = self.player.base.getRect()
@@ -559,6 +570,7 @@ class Unit(Entity):
 
     def recalcAttackPaths(self):
         self.paths = calcPath(self.getPosition(), self.getTile(), self.attackedOne.getTile(), self.mapa)
+        self.changeObjectiveTile()
         self.updatePath(self.paths[len(self.paths) - 1])
         self.updateMovingImage()
 
@@ -572,14 +584,19 @@ class Unit(Entity):
         if objectiveTile.type == EMPTY:
             self.mapa.setVecina(objectiveTile, self.id)
             objectiveTile.setOcupante(self)
+            #print("Ocupo: ", objectiveTile.tileid, objectiveTile.type)
             self.mapa.setLibre(self.occupiedTile)
             self.occupiedTile = objectiveTile
         else:
+            print("Collide")
             lastPath = self.paths[len(self.paths) - 1]
             lastTile = self.mapa.getTile(lastPath.posFin[0], lastPath.posFin[1])
-            self.paths = calcPath(self.getPosition(), objectiveTile, lastTile, self.mapa)
-            if len(self.paths) != 0:
+            self.paths = calcPath(self.getPosition(), self.getTile(), lastTile, self.mapa)
+            if len(self.paths) > 1:
                 self.changeObjectiveTile()
+            else:
+                self.resolverObjetivoOcupado()
+        input()
         
     #####################
     # GETTERS Y SETTERS #
