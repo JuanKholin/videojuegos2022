@@ -177,6 +177,15 @@ class Structure(Entity.Entity):
                 pygame.draw.ellipse(screen, RED, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
                 hp = pygame.transform.chop(pygame.transform.scale(HP2, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
             screen.blit(hp, [r.x + r.w/2 - camera.x - hp.get_rect().w/2, r.y + r.h - camera.y])
+            
+        #sombra
+        aux = pygame.mask.from_surface(self.image, 0)
+        mask = aux.to_surface(setcolor=(1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        screen.blit(mask, [image.x - camera.x - 8, image.y - camera.y - 5])
+        
+        #self.image.blit(dark, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
         screen.blit(self.image, [image.x - camera.x, image.y - camera.y])
         if DEBBUG:
             pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)

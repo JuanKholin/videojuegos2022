@@ -22,7 +22,6 @@ class TerranBuilder(Structure):
     generationCount = 0
     heightPad = 25
     nBuildSprites = 4
-    hola = 0
     tileW = 5
     tileH = 4
     clicked = False
@@ -33,6 +32,7 @@ class TerranBuilder(Structure):
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         self.sprites = cargarSprites(TERRAN_BUILDER_PATH, 6, False, WHITE, 1.5)
+        
         #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
         self.raton = raton
         self.image = self.sprites[self.index]

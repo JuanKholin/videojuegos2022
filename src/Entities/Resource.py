@@ -29,6 +29,12 @@ class Resource():
             if self.clicked:
                 pg.draw.ellipse(screen, YELLOW, [r.x - camera.x - 10, r.y - camera.y, r.w + 20, r.h], 2)
             #screen.blit(unit.image, [r.x - self.camera.x, r.y - self.camera.y])
+            aux = pygame.mask.from_surface(self.image, 0)
+            mask = aux.to_surface(setcolor=(1, 0, 0))
+            mask.set_colorkey(BLACK)
+            mask.set_alpha(150)
+            screen.blit(mask, [drawPos[0] - camera.x - 5, drawPos[1] - camera.y - 10])
+            
             screen.blit(self.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
             
     def drawInfo(self, screen, color):

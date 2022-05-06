@@ -73,4 +73,6 @@ class Drone(Worker):
             "clase": "drone",
             "x": x,
             "y": y,
+            "nombre": "Drone",
+            "funcion": "muy tanke"
         }
