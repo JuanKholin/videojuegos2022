@@ -5,10 +5,10 @@ from ..Utils import *
 from .Worker import *
 
 # Constantes del Drone
-HP = 1000
+HP = 10000
 DAMAGE = 5
 COOLDOWN = 22
-RANGE = 40
+RANGE = 67
 ATTACK_INFO = [DAMAGE, COOLDOWN, RANGE]
 MINE_POWER = 8
 MINERAL_COST = 20

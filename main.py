@@ -58,7 +58,8 @@ def setEntity(player, ai):
     scv5 = TerranSoldier(8, 10, player)
     scv6 = TerranSoldier(9, 10, player)
     scv7 = TerranSoldier(10, 10, player)
-    scv8 = TerranSoldier(11, 10, player)
+    scv8 = TerranWorker(11, 10, player)
+    print("ID del scv 4", scv4.id)
     structure1 = TerranBuilder(5, 6, player, mapa, False, raton, 1)
     structure3 = TerranSupplyDepot(10, 6, player, mapa, True, 2)
 

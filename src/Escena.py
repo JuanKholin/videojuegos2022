@@ -84,6 +84,7 @@ class Escena():
         elif tileClicked.type == UNIT: # Ataque?
             print("CLICKO UNA UNIDAD")
             attacked = tileClicked.ocupante
+            
             if attacked.getPlayer() != self.p1:
                 order['order'] = CommandId.ATTACK
                 order['attackedOne'] = attacked
