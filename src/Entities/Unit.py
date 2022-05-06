@@ -6,7 +6,7 @@ from ..Command import *
 
 # Representa a una unidad movil de cualquiera de las razas
 class Unit(Entity):
-    def __init__(self, hp, xIni, yIni, mineral_cost, generation_time, speed, framesToRefresh, 
+    def __init__(self, hp, xIni, yIni, mineral_cost, generation_time, speed, framesToRefresh,
                     sprites, face, frame, padding, id, player, inversibleFrames,
                         frames, dirOffset, attackFrames, stillFrames, moveFrames, dieFrames,  xPadding, yPadding, wPadding, hPadding, attackInfo):
         Entity.__init__(self, hp, xIni, yIni, mineral_cost, generation_time, id, player)
@@ -23,7 +23,7 @@ class Unit(Entity):
         self.count = 0
         self.rectOffY = padding
         self.attackedOne = None
-        
+
         # Relativo a los frames
         self.inversibleFrames = inversibleFrames
         self.framesToRefresh = framesToRefresh
@@ -73,13 +73,13 @@ class Unit(Entity):
     # Indica a la unidad que ataque al objetivo seleccionado, si se encuentra un
     # obstaculo de camino lo esquivara y si el objetivo se desplaza este le seguira
     def attack(self, objective):
-        if (self.attackedOne != objective) or (self.state != UnitState.ATTACKING):   
+        if (self.attackedOne != objective) or (self.state != UnitState.ATTACKING):
             self.paths = calcPath(self.getPosition(), self.getTile(), objective.getTile(), self.mapa)
             print("CAMINOS:" ,len(self.paths))
             self.changeToAttacking(objective)
             if int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) <= self.range:
                 self.updateAttackInRange()
-            
+
 
     # Indica a la unidad que se acerque lo mas posible a un recurso mineral
     def mine(self, resource):
@@ -93,7 +93,7 @@ class Unit(Entity):
                 if tile.heur(ownTile) < bestTile.heur(ownTile):
                     bestTile = tile
             self.move(bestTile)
-    
+
     # Indica a la unidad que se acerque lo mas posible a un recurso gas
     def extract(self, resource):
         pos = resource.getPosition()
@@ -109,6 +109,9 @@ class Unit(Entity):
 
     # Pinta la unidad C:
     def draw(self, screen, camera):
+        t = self.mapa.getTile(self.x, self.y)
+        if not t.visible:
+            return
         if self.state != UnitState.DEAD:
             r = self.getRect()
             if DEBBUG:
@@ -155,14 +158,14 @@ class Unit(Entity):
             self.updateDying()
         elif self.state == UnitState.DEAD: # Esta muerta
             self.updateDead()
-    
+
     # Aplica un frame a la unidad que esta quieta
     def updateStill(self):
         # Marca como ocupada la propia tile
         #self.updateOwnSpace()
         # Actualiza la animacion
         self.updateStillImage()
-    
+
     # Aplica un frame a la unidad que esta moviendose
     def updateMoving(self):
         if self.paths.__len__() != 0:
@@ -237,7 +240,7 @@ class Unit(Entity):
         self.occupiedTile = self.mapa.getTile(unitPos[0], unitPos[1])
         self.mapa.setVecina(self.occupiedTile, self.id)
         self.occupiedTile.setOcupante(self)
-    
+
     def updateAttackInRange(self):
         if int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) <= self.range:
             if len(self.paths) != 0:
@@ -283,8 +286,8 @@ class Unit(Entity):
                         self.recalcAttackPaths()
                     else:
                         self.finishPath()
-                
-                
+
+
             self.count += 1
             if self.count >= self.framesToRefresh:
                 self.count = 0
@@ -297,12 +300,12 @@ class Unit(Entity):
     def updateStillImage(self):
         self.frame = (self.frame + 1) % len(self.stillFrames)
         self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
-        
+
     # Pasa de frame en animaciones de movimiento
     def updateMovingImage(self):
         self.frame = (self.frame + 1) % len(self.moveFrames)
         self.image = self.sprites[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
-    
+
     # Pasa de frame en una animacion de ataque
     def updateAttackingImage(self):
         self.frame = (self.frame + 1) % len(self.attackFrames)
@@ -312,7 +315,7 @@ class Unit(Entity):
     def updateMiningImage(self):
         self.frame = (self.frame + 1) % len(self.attackFrames)
         self.image = self.sprites[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
-       
+
     # Pasa de frame en una animacion de muerte
     def updateDyingImage(self):
         self.frame = (self.frame + 1)
@@ -366,19 +369,19 @@ class Unit(Entity):
                         posFin = (tileObj.centerx, tileObj.centery)
                         self.paths = path
                     else: #Es majo y se va a mover
-                            
+
                             bestTile = self.mapa.getTileVecinaCercana(tileObj,tileActual)
                             #NO TIENE A DONDE IR
                             if bestTile.tileid == -1:
                                 self.paths = []
                             else:
-                                
+
                                 if bestTile.heur(tileObj) > tileActual.heur(tileObj):
                                     print("Me tengo que replegar por lo que mejor recalculo")
                                     path = calcPath(self.getPosition(), tileActual,tileObj, self.mapa)
                                     posFin = (tileObj.centerx, tileObj.centery)
                                     self.paths = path
-                                
+
                                 else: #HACEMOS EL CAMBIO A LOS PATHS
                                     self.paths.pop(0) #quitamos el path a la ocupada
                                     #CAMINO A LA MEJOR TILE
@@ -416,9 +419,9 @@ class Unit(Entity):
         print(self.dirOffset[self.dir])
         print(self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]])
         self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
-        #Yo:WHAT IS THIS?: 
-        #JUAN: THIS IS EL BUG FIXER :P 
-        #JUAN DEL PRESENTE AL JUAN DEL PASADO: NO ES UN BUG FIXER ES UNA SOLUCION COCHINA A UN FALLO TUYO >:| 
+        #Yo:WHAT IS THIS?:
+        #JUAN: THIS IS EL BUG FIXER :P
+        #JUAN DEL PRESENTE AL JUAN DEL PASADO: NO ES UN BUG FIXER ES UNA SOLUCION COCHINA A UN FALLO TUYO >:|
         #JUAN DEL PRESENTE AL JUAN DEL PASADO: ES NECESARIO, A EFECTOS VISUALES Y DE GAMEPLAY NO ESTROPEA NADA
         #Yo otra vez: vaaleee... (  9 _9)
         #unitPos = self.getPosition()
@@ -433,9 +436,9 @@ class Unit(Entity):
         print("MOVING", self.x, self.y, paths.__len__())
         self.state = UnitState.MOVING
         self.changeObjectiveTile()
-        
+
         actualPath = paths[0]
-        
+
         if actualPath.angle < 0:
             self.angle = -actualPath.angle
         else:
@@ -444,7 +447,7 @@ class Unit(Entity):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
-        
+
     # Pasa al ataque HYAAAA!! >:c
     def changeToAttacking(self, attackedOne):
         print("Pasa al ataque HYAAAA!! >:c")
@@ -459,7 +462,7 @@ class Unit(Entity):
     # Pasa a recolectar mineral o gas
     def changeToMining(self):
         pass
-    
+
     # Pasa a transportar mineral
     def changeToOreTransporting(self):
         pass
@@ -500,13 +503,13 @@ class Unit(Entity):
         if actualPath.angle < 0:
             self.angle = -actualPath.angle
         else:
-            self.angle = 2 * math.pi - actualPath.angle          
-                
+            self.angle = 2 * math.pi - actualPath.angle
+
         self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
         self.dirx = math.cos(actualPath.angle)
         self.diry = math.sin(actualPath.angle)
         pos = self.getPosition()
-        distrec = math.hypot((pos[0] + self.dirx * self.speed) - pos[0], 
+        distrec = math.hypot((pos[0] + self.dirx * self.speed) - pos[0],
                 (pos[1] + self.diry * self.speed) - pos[1])
         actualPath.dist -= distrec
         self.x += self.dirx * self.speed
@@ -536,7 +539,7 @@ class Unit(Entity):
             if self.state != UnitState.ATTACKING: # Cambiar a atacar si no esta haciendo nada
                 self.attack(attacker)
         return self.hp
-    
+
     # Para crear los sprites invertidos, los guarda en el mismo sitio que se indica
     def mirrorTheChosen(self):
         for i in range(self.inversibleFrames):
@@ -581,7 +584,7 @@ class Unit(Entity):
         tile = self.mapa.getTile(rect.x, rect.y)
         tilesCasa = self.mapa.getEntityTilesVecinas(tile, tileActual)
         return tilesCasa
-    
+
     def finishPath(self):
         self.paths.pop(0)
         if len(self.paths) == 0:
@@ -621,7 +624,7 @@ class Unit(Entity):
                 self.changeObjectiveTile()
             else:
                 self.resolverObjetivoOcupado()
-        
+
     #####################
     # GETTERS Y SETTERS #
     #####################
@@ -646,14 +649,14 @@ class Unit(Entity):
         return (self.x - self.image.get_width()/2,  self.y - self.image.get_height()/2)
 
     def getRect(self):
-        rectAux = pg.Rect(self.x - self.xPadding, self.y - self.yPadding, 
+        rectAux = pg.Rect(self.x - self.xPadding, self.y - self.yPadding,
                 self.image.get_width() - self.wPadding, self.image.get_height()  - self.hPadding)
         return rectAux
 
     # Getter de la HP de la unidad
     def getHP(self):
         return self.hp
-    
+
     # Getter del player que posee la unidad
     def getPlayer(self):
         return self.player

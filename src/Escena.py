@@ -68,7 +68,7 @@ class Escena():
                     #for param in commandp2.params:
                     #   self.processParam(param, tilesObj, tilesCasa, tileClicked, pathsForPlayer, orderForPlayer)
                     #self.p2.execute(CommandId.ORDENAR, orderForPlayer)
-                
+
     def processParam(self, param, tileObj, tileClicked , orderForPlayer):
         tileIni = self.mapa.getTile(param[0], param[1])
         if tileObj.type != 0: #Esta ocupada
@@ -122,6 +122,7 @@ class Escena():
 
         self.p1.update()
         self.p2.update()
+        self.mapa.updateNiebla(self.camera, self.p1.getEntitesLocation(self.camera))
         self.interfaz.update()
         self.raton.update(self.camera)
         #self.aI.make_commands()
@@ -180,21 +181,22 @@ class Escena():
     def draw(self, screen):
         #importa el orden porfavor
         self.mapa.drawMap(screen, self.camera)
-        
+
         for res in self.resources:
             res.draw(screen, self.camera)
-                
+
         self.p1.draw(screen, self.camera)
         self.p2.draw(screen, self.camera)
+        self.mapa.drawNiebla(screen, self.camera)
         self.raton.drawBuildStructure(screen, self.camera)
         self.interfaz.draw(screen, self.camera)
-        
+
     def getTerranBarrack(self):
         return TerranBarracks(0, 0, None, self.mapa, True, 5)
 
     def getHatchery(self):
         return Hatchery(0, 0, None, self.mapa, False, 8)
-    
+
     def getTerranRefinery(self):
         return TerranRefinery(0, 0, None, self.mapa, True, 8)
 

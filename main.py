@@ -17,15 +17,15 @@ from src.Camera import *
 from src.Entities.Crystal import *
 from src.Entities.Geyser import *
 from src.Escena import Escena
-from src.Entities.TerranBuilder import * 
+from src.Entities.TerranBuilder import *
 from src.Entities.TerranWorker import *
 from src.Entities.TerranBarracks import *
 from src.Entities.Hatchery import *
 from src.Entities.Drone import *
 from src.Entities.Zergling import *
 from src.Entities.TerranSupplyDepot import *
-from src.Entities.Extractor import * 
-from src.Entities.TerranRefinery import * 
+from src.Entities.Extractor import *
+from src.Entities.TerranRefinery import *
 
 
 # Auxiliar del bucle principal

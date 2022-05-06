@@ -30,7 +30,7 @@ class Player():
 
         # Para la IA
         self.unitsFree = []
-    
+
     def setBasePlayer(self, base):
         self.base = base
 
@@ -110,7 +110,7 @@ class Player():
             if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
             r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
                 unit.draw(screen, camera)
-                
+
     def drawEntity(self, screen, isMe):
         if isMe:
             for structure in self.structures:
@@ -119,7 +119,7 @@ class Player():
             for unit in self.units:
                 if unit.state != UnitState.DEAD:
                     pos = unit.getPosition()
-                    pygame.draw.rect(screen, GREEN, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))    
+                    pygame.draw.rect(screen, GREEN, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
         else:
             for structure in self.structures:
                 pos = structure.getPosition()
@@ -127,7 +127,7 @@ class Player():
             for unit in self.units:
                 if unit.state != UnitState.DEAD:
                     pos = unit.getPosition()
-                    pygame.draw.rect(screen, RED, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))    
+                    pygame.draw.rect(screen, RED, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
 
 
     def removeUnit(self, unit):
@@ -151,3 +151,18 @@ class Player():
 
     def getMapa(self):
         return self.mapa
+
+    #devuelve las coordenadas de las entidades que ve la camara
+    def getEntitesLocation(self, camera):
+        locations = []
+        for u in self.units:
+            if (u.x > (camera.x - VISION_RADIUS_PIXELS) and u.x < (camera.x + camera.w + VISION_RADIUS_PIXELS)
+                    and u.y > (camera.y - VISION_RADIUS_PIXELS) and u.y < (camera.y + camera.h + VISION_RADIUS_PIXELS)):
+                location = (u.x, u.y)
+                locations.append(location)
+        for s in self.structures:
+            if (s.x > (camera.x - VISION_RADIUS_PIXELS) and s.x < (camera.x + camera.w + VISION_RADIUS_PIXELS)
+                    and s.y > (camera.y - VISION_RADIUS_PIXELS) and s.y < (camera.y + camera.h + VISION_RADIUS_PIXELS)):
+                location = (s.x, s.y)
+                locations.append(location)
+        return locations

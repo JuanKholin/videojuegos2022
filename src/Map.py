@@ -23,7 +23,7 @@ class Map():
                 self.generateRandomMap()
             self.load()
             #self.loadMinimap()
-            
+
     #Dibuja el mapa
     def drawMap(self, screen, camera):
         firstTileX, firstTileY = self.getTileIndex(camera.x, camera.y)
@@ -31,6 +31,37 @@ class Map():
         for i in range(firstTileY, lastTileY + 1):
             for j in range(firstTileX, lastTileX + 1):
                 self.mapa[i][j].draw(screen, camera)
+
+    def drawNiebla(self, screen, camera):
+        firstTileX, firstTileY = self.getTileIndex(camera.x, camera.y)
+        lastTileX, lastTileY = self.getTileIndex(camera.x + camera.w, camera.y + camera.h)
+        for i in range(firstTileY, lastTileY + 1):
+            for j in range(firstTileX, lastTileX + 1):
+                self.mapa[i][j].drawNiebla(screen, camera)
+
+
+    def updateNiebla(self, camera, locationEntitiesOnCamera):
+        firstTileX, firstTileY = self.getTileIndex(camera.x, camera.y)
+        lastTileX, lastTileY = self.getTileIndex(camera.x + camera.w, camera.y + camera.h)
+        for i in range(firstTileY, lastTileY + 1):
+            for j in range(firstTileX, lastTileX + 1):
+                self.mapa[i][j].visible = False
+
+        centers = []
+        for l in locationEntitiesOnCamera:
+            i, j = self.getTileIndex(l[0], l[1])
+            centers.append((i, j))
+
+        maxI, maxJ = self.getTileIndex(self.w, self.h)
+        for c in centers:
+            for i in range(c[1] - VISION_RADIUS, c[1] + VISION_RADIUS):
+                for j in range(c[0] - VISION_RADIUS, c[0] + VISION_RADIUS):
+                    if ((i >= 0 and j >= 0) and (i < maxI and j < maxJ)
+                            and ((i - (c[1]))**2 + ((j - (c[0]))**2)) < VISION_RADIUS**2):
+                        self.mapa[i][j].visible = True
+                        self.mapa[i][j].oscura = False
+
+
 
     #Pone a true las Tiles del rectangulo que forman x,y,w,h
     def addObstacle(self, x, y, w, h):
@@ -41,7 +72,7 @@ class Map():
     def addOre(self, x, y):
         #print(int(y / self.th), int(x / self.tw))
         self.mapa[int(y / self.th)][int(x / self.tw)].type = 3
-        
+
     #Devuelve la Tile que se encuentra en las coordenadas x,y
     def getTile(self, x, y):
         xaux = int(x / self.tw)
@@ -438,7 +469,7 @@ class Map():
             self.generateRandomMap()
         self.w = len(self.codedMap[0]) * self.tw
         self.h = len(self.codedMap) * self.th
-        
+
         for i in range(len(self.codedMap)):
             self.mapa.insert(i,[])#Es una matriz que representa el mapa(0 es suelo, 1 es obstaculo, 2 vecino)
             for j in range(len(self.codedMap[0])):
@@ -454,7 +485,7 @@ class Map():
         elif code[0] == '2': #elevacion
             index = int(code[1:])
             return self.tiles[1][index], 1
-        
+
     #genera mapa con suelos aleatorios
     def generateRandomMap(self):
         random.seed(datetime.datetime.now())
@@ -463,8 +494,8 @@ class Map():
             self.codedMap.insert(i,[])
             for j in range(self.w):
                 self.codedMap[i].insert(j, str(100 + random.randint(0, 7)))
-    
-    #setea una elevacion en la coordenada x, y           
+
+    #setea una elevacion en la coordenada x, y
     def setElevacion(self, x, y):
         tile = 0
         for j in range(y, y+5):
@@ -479,7 +510,7 @@ class Map():
                     self.codedMap[j][i] = str(200 + tile)
                     tile += 1
         pass
-    
+
     def drawMinimap(self, screen):
         y = 0
         for i in range(len(self.minimap)):
@@ -490,7 +521,7 @@ class Map():
                 #print(205/len(self.mapa[0]))
             y += round(200/len(self.mapa))
             #print("y ", 205/len(self.mapa))
-    
+
     def loadMinimap(self):
         self.minimap = []
         for i in range(len(self.mapa)):
@@ -500,10 +531,10 @@ class Map():
                 tile_sprite = pygame.transform.scale(image, [round(200/len(self.mapa[0])), round(200/len(self.mapa))])
                 #print(tile_sprite.get_rect())
                 self.minimap[i].insert(j, tile_sprite)
-    
+
     def getMinimap(self):
         return self.minimap
-        
+
     def toDictionary(self):
         return {
             "w": int(self.w / self.tw),

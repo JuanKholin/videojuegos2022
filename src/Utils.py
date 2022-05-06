@@ -114,7 +114,7 @@ class UnitState(Enum):
 
 class BuildingState(Enum):
     BUILDING = auto()
-    OPERATIVE = auto()  
+    OPERATIVE = auto()
     SPAWNING = auto() # porque lucecitas suena demasiado profesional
     COLLAPSING = auto()
     DESTROYED = auto()
@@ -189,7 +189,7 @@ UPGRADEPADX = 80
 
 MINIMAP_X = 10
 MINIMAP_Y = 560
-MINIMAP_W = 205 
+MINIMAP_W = 205
 MINIMAP_H = 205
 
 GUI_INFO_X = 280
@@ -224,7 +224,7 @@ class Upgrades(Enum):
     NO_DANYO = auto()
     NO_ARMOR = auto()
     NO_MINE = auto()
-    
+
 BUTTON_PATH = "SPRITE/button/gui_button_"
 #----------------------------------------------------------------
 # TROPAS
@@ -313,7 +313,7 @@ def cargarSprites(path, n, twoDig, color = None, size = None, m = 0):
 def clock_update():
     global SYSTEM_CLOCK
     SYSTEM_CLOCK = (SYSTEM_CLOCK + 1) % 100000
-    
+
 def getGlobalTime():
     global global_time
     result = global_time
@@ -357,6 +357,11 @@ def calcPath(posini, tileIni, tileObj, mapa):
             posIni = posFin
         return path
 
+SURF_TILE_NIEBLA = pygame.Surface((40,40), pygame.SRCALPHA)
+SURF_TILE_NIEBLA.fill((0,0,0,128))
+SURF_TILE_OSCURA = pygame.Surface((40,40))
+SURF_TILE_OSCURA.fill((0,0,0))
+
 ELEVACION_PATH = "SPRITE/tile/elevacion/tile0"
 TERRENO_PATH = "SPRITE/tile/terreno/tile00"
 
@@ -381,3 +386,6 @@ MAPA1 = [[100, 101, 102, 103, 104, 105, 106, 107, 100, 101, 102, 103, 104, 105, 
          [100, 101, 102, 103, 104, 105, 106, 107, 100, 101, 102, 103, 104, 105, 106, 107, 100, 101, 102, 103, 104, 105, 106, 107, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
          [100, 101, 102, 103, 104, 105, 106, 107, 100, 101, 102, 103, 104, 105, 106, 107, 100, 101, 102, 103, 104, 105, 106, 107, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
          ]
+
+VISION_RADIUS = 7
+VISION_RADIUS_PIXELS = VISION_RADIUS * TILE_WIDTH
