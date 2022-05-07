@@ -42,6 +42,7 @@ class Hatchery(Structure):
         self.count = 0
         self.training = []
         self.paths = []
+        self.building = False
         
     def execute(self, command_id):
         if self.clicked:
@@ -74,4 +75,6 @@ class Hatchery(Structure):
             "y": self.yIni,
             "building": self.building,
             "id": self.id,
+            "nombre": "Criadera de Zerg", 
+            "funcion": "Base enemiga"
         }

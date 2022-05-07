@@ -170,6 +170,29 @@ class Map():
             tiles.append(tileDown)
         return tiles
 
+    def getAttackRoundTiles(self, rect):
+        tiles = []
+        x = self.getTile(rect.x, rect.y).centerx
+        finx = rect.x + rect.w
+        y = self.getTile(rect.x, rect.y).centery
+        finy = rect.y + rect.h
+        #print(rect.x, rect.y, rect.w, rect.h)
+        while x <= finx:
+            tileUp = self.getTile(x, y)
+            tileDown = self.getTile(x, finy)
+            tiles.append(tileUp)
+            tiles.append(tileDown)
+            print(tileUp.tileid, tileDown.tileid)
+            x += TILE_WIDTH
+        x = self.getTile(rect.x, rect.y).centerx
+        while y <= finy:
+            tileUp = self.getTile(x, y)
+            tileDown = self.getTile(finx, y)
+            print(tileUp.tileid, tileDown.tileid)
+            y += TILE_HEIGHT
+        #input()
+        return tiles
+
     def getEntityTilesVecinas(self, tile, tileActual):
         tilesObj = []
         if tile.ocupante != None:

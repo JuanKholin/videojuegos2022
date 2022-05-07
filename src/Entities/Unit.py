@@ -49,6 +49,8 @@ class Unit(Entity):
 
         self.occupiedTile = None
 
+        self.esEstructura = False
+
     ##########
     # ORDERS #
     ##########
@@ -80,7 +82,18 @@ class Unit(Entity):
             self.mapa.setLibre(self.occupiedTile)
         if (self.attackedOne != objective) or (self.state != UnitState.ATTACKING):
             self.mapa.setLibre(self.occupiedTile)
-            self.paths = calcPath(self.getPosition(), self.getTile(), objective.getTile(), self.mapa)
+            if objective.esEstructura == False:
+                print("Atacamos a una unidad")
+                self.tileAAtacar = objective.getTile()
+                self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
+            else:
+                print("Atacamos a una estructura")
+                tilesAAtacar = self.mapa.getAttackRoundTiles(objective.getRect())
+                self.tileAAtacar = tilesAAtacar[0]
+                for tile in tilesAAtacar:
+                    if tile.heur(self.getTile()) < self.tileAAtacar.heur(self.getTile()):
+                        self.tileAAtacar = tile
+                self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
             self.mapa.setVecina(self.occupiedTile, self.id)
             self.occupiedTile.setOcupante(self)
             print("CAMINOS:" ,len(self.paths))
@@ -265,7 +278,8 @@ class Unit(Entity):
         self.occupiedTile.setOcupante(self)
 
     def updateAttackInRange(self):
-        if int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) <= self.range:
+        ownTile = self.getTile()
+        if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
             if len(self.paths) != 0:
                 objectivePath = self.paths[0]
                 nextTile = self.mapa.getTile(objectivePath.posFin[0], objectivePath.posFin[1])
@@ -300,7 +314,8 @@ class Unit(Entity):
                 #COMPROBAR QUE EL BICHO SIGUE EN SU SITIO
                 if(self.id == 8):
                     print(int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)))
-                if int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) <= self.range:
+                ownTile = self.getTile()
+                if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
                     print(type(self), "estoy en rango")
                     self.updateAttackInRange()
                 else:
@@ -641,12 +656,24 @@ class Unit(Entity):
 
     def recalcAttackPaths(self):
         self.mapa.setLibre(self.occupiedTile)
-        self.paths = calcPath(self.getPosition(), self.getTile(), self.attackedOne.getTile(), self.mapa)
+        if self.attackedOne.esEstructura == False:
+            print("Atacamos a una unidad")
+            self.tileAAtacar = self.attackedOne.getTile()
+            self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
+        else:
+            print("Atacamos a una estructura")
+            tilesAAtacar = self.mapa.getAttackRoundTiles(self.attackedOne.getRect())
+            self.tileAAtacar = tilesAAtacar[0]
+            for tile in tilesAAtacar:
+                if tile.heur(self.getTile()) < self.tileAAtacar.heur(self.getTile()):
+                    self.tileAAtacar = tile
+            self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
         self.mapa.setVecina(self.occupiedTile, self.id)
         self.occupiedTile.setOcupante(self)
         if len(self.paths) > 0:
             self.changeObjectiveTile()
-            if int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) <= self.range:
+            ownTile = self.getTile()
+            if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
                 self.updateAttackInRange()
             else:
                 #self.updatePath(self.paths[len(self.paths) - 1])
