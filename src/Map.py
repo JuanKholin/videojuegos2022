@@ -447,7 +447,7 @@ class Map():
             tile.g = 0
         if nodosAbiertos.__len__() == 0:
             print("camino no encontrado", tileObj.tileid)
-            input()
+            #input()
         else:
             #print("camino encontrado")
             currentTile = self.getTile(tileObj.centerx, tileObj.centery)

@@ -47,7 +47,7 @@ class Unit(Entity):
         self.range = attackInfo[RANGE_IND]
         self.attackedOne = None
 
-        self.ocuppiedTile = None
+        self.occupiedTile = None
 
     ##########
     # ORDERS #
@@ -66,7 +66,10 @@ class Unit(Entity):
             for tile in tilesRound:
                 if tile.heur(self.getTile()) < objectiveTile.heur(self.getTile()):
                     objectiveTile = tile
+        self.mapa.setLibre(self.occupiedTile)
         self.paths = calcPath(self.getPosition(), self.getTile(), objectiveTile, self.mapa)
+        self.mapa.setVecina(self.occupiedTile, self.id)
+        self.occupiedTile.setOcupante(self)
         if len(self.paths) > 0 and (self.state != UnitState.ORE_TRANSPORTING and self.state != UnitState.GAS_TRANSPORTING) :
             self.changeToMoving(self.paths)
 
@@ -76,7 +79,10 @@ class Unit(Entity):
         if self.occupiedTile != None:
             self.mapa.setLibre(self.occupiedTile)
         if (self.attackedOne != objective) or (self.state != UnitState.ATTACKING):
+            self.mapa.setLibre(self.occupiedTile)
             self.paths = calcPath(self.getPosition(), self.getTile(), objective.getTile(), self.mapa)
+            self.mapa.setVecina(self.occupiedTile, self.id)
+            self.occupiedTile.setOcupante(self)
             print("CAMINOS:" ,len(self.paths))
             self.changeToAttacking(objective)
             if len(self.paths) == 1:
@@ -377,7 +383,10 @@ class Unit(Entity):
             #LA SIGUIENTE TILE ESTA OCUPADA HAY QUE TRATAR COLISIONES
             else:
                 if tilePath.tileid != tileObj.tileid:
+                    self.mapa.setLibre(self.occupiedTile)
                     path = calcPath(self.getPosition(),tileActual, tileObj, self.mapa)
+                    self.mapa.setVecina(self.occupiedTile, self.id)
+                    self.occupiedTile.setOcupante(self)
                     posFin = (tileObj.centerx, tileObj.centery)
                     self.paths = path
                     '''
@@ -590,7 +599,10 @@ class Unit(Entity):
                 for tile in tilesResource:
                     if tile.heur(tileActual) < tileObj.heur(tileActual):
                         tileObj = tile
+                self.mapa.setLibre(self.occupiedTile)
                 self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
+                self.mapa.setVecina(self.occupiedTile, self.id)
+                self.occupiedTile.setOcupante(self)
                 self.changeObjectiveTile()
         elif self.state == UnitState.ORE_TRANSPORTING or self.state == UnitState.GAS_TRANSPORTING:
             tilesCasa = self.tilesCasa(self.getTile())
@@ -604,8 +616,12 @@ class Unit(Entity):
                 for tile in tilesCasa:
                     if tile.heur(tileActual) < tileObj.heur(tileActual):
                         tileObj = tile
+                self.mapa.setLibre(self.occupiedTile)
                 self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
-                self.changeObjectiveTile()
+                self.mapa.setVecina(self.occupiedTile, self.id)
+                self.occupiedTile.setOcupante(self)
+                if len(self.paths) != 0:
+                    self.changeObjectiveTile()
 
     def tilesCasa(self, tileActual):
         rect = self.player.base.getRect()
@@ -624,7 +640,10 @@ class Unit(Entity):
 
 
     def recalcAttackPaths(self):
+        self.mapa.setLibre(self.occupiedTile)
         self.paths = calcPath(self.getPosition(), self.getTile(), self.attackedOne.getTile(), self.mapa)
+        self.mapa.setVecina(self.occupiedTile, self.id)
+        self.occupiedTile.setOcupante(self)
         if len(self.paths) > 0:
             self.changeObjectiveTile()
             if int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) <= self.range:
@@ -640,7 +659,8 @@ class Unit(Entity):
     def changeObjectiveTile(self):
         actualPath = self.paths[0]
         objectiveTile = self.mapa.getTile(actualPath.posFin[0], actualPath.posFin[1])
-        if objectiveTile.type == EMPTY:
+        print(objectiveTile.id, self.id)
+        if objectiveTile.type == EMPTY or (objectiveTile.type == UNIT and objectiveTile.id == self.id):
             self.mapa.setVecina(objectiveTile, self.id)
             objectiveTile.setOcupante(self)
             self.mapa.setLibre(self.occupiedTile)
@@ -648,7 +668,10 @@ class Unit(Entity):
         else:
             lastPath = self.paths[len(self.paths) - 1]
             lastTile = self.mapa.getTile(lastPath.posFin[0], lastPath.posFin[1])
+            self.mapa.setLibre(self.occupiedTile)
             self.paths = calcPath(self.getPosition(), self.getTile(), lastTile, self.mapa)
+            self.mapa.setVecina(self.occupiedTile, self.id)
+            self.occupiedTile.setOcupante(self)
             if len(self.paths) > 1:
                 self.changeObjectiveTile()
             else:
