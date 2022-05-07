@@ -83,7 +83,7 @@ def setEntity(player, ai):
 
     drone = Drone(25, 10, ai)
     ai.addUnits(drone)
-    
+
 
 def update():
     clock_update()
@@ -187,7 +187,7 @@ resources.append(crystal3)
 resources.append(crystal4)
 resources.append(gas)
 
-raton = Raton.Raton(player1, player2)
+raton = Raton.Raton(player1, player2, mapa)
 p1Interface = Interface(player1, player2, raton)
 raton.addInterface(p1Interface)
 
