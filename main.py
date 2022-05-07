@@ -82,7 +82,7 @@ def setEntity(player, ai):
     player.addUnits(scv8)
 
     aiUnits = [] 
-    aiUnits.append(Drone(20, 10, ai))
+    #aiUnits.append(Drone(20, 10, ai))
     '''aiUnits.append(Drone(25, 11, ai))
     aiUnits.append(Zergling(27, 10, ai))
     aiUnits.append(Zergling(27, 11, ai))
@@ -94,7 +94,7 @@ def setEntity(player, ai):
         ai.addUnits(unit)
    
     aiStructures = []
-    aiStructures.append(Hatchery(31, 12, ai, mapa, False))
+    aiStructures.append(Hatchery(20, 12, ai, mapa, False))
 
     for structure in aiStructures:
         ai.addStructures(structure)
