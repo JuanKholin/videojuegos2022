@@ -23,8 +23,8 @@ class Hatchery(Structure):
     tileH = 4
     frame = 8
 
-    def __init__(self, xini, yini, player, map, building, id):
-        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
+    def __init__(self, xini, yini, player, map, building):
+        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, takeID(), player)
         self.sprites = cargarSprites(HATCHERY_PATH, 4, False, BLUE2, 1.8, 0)
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2, 3]

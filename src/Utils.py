@@ -51,7 +51,7 @@ MEDIUM = 600
 HARD = 300
 
 # espera de la IA para tomar decisiones ligeras:
-AI_LAPSE = 20
+AI_LAPSE = 30
 
 # Rango de autoataque (al matar a un objetivo que ataque a otro)
 NEARBY_RANGE = 3

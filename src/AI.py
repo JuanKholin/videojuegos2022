@@ -99,14 +99,14 @@ class AI():
         for structure in structures: 
             if structure.lastAttacker != None:
                 if structure.lastAttacker.attackedOne == structure:
-                    objectivesSet.add(structure.lastAttacker.attackedOne)
+                    objectivesSet.add(structure.lastAttacker)
                 structure.lastAttacker = None
         for unit in units:
             if unit.attackedOne != None:
                 objectivesSet.add(unit.attackedOne)
-        objectivesList = list(objectivesSet) # Lo pasa a lista
+        objectivesList = list(objectivesSet) # Lo pasa a lista por comodi<padre_en_ingles>
         defenses = self.getSoldiers(units)
-        if len(objectivesList) > 0:
+        if len(objectivesList) > 0: # Si hay amenazas reparte las tropas libres a por ellas
             i = 0
             for soldier in defenses:
                 soldier.attack(objectivesList[i])

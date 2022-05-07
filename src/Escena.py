@@ -90,11 +90,15 @@ class Escena():
                 order['attackedOne'] = attacked
         else:
             print("CLICKO UNA ESTRUCTURA")
-            rectClicked = Raton.createRect(tileClicked.centerx, tileClicked.centery, tileClicked.centerx + 1, tileClicked.centery + 1)
-            for struct in self.p1.structures:
-                if Raton.collideRect(struct.getRect(), rectClicked):
-                    order = struct.getOrder()
-                    order = {'order': order}
+            if tileClicked.type == STRUCTURE and tileClicked.ocupante.player != self.p1:
+                order['order'] = CommandId.ATTACK
+                order['attackedOne'] = tileClicked.ocupante
+            else:
+                rectClicked = Raton.createRect(tileClicked.centerx, tileClicked.centery, tileClicked.centerx + 1, tileClicked.centery + 1)
+                for struct in self.p1.structures:
+                    if Raton.collideRect(struct.getRect(), rectClicked):
+                        order = struct.getOrder()
+                        order = {'order': order}
         orderForPlayer.append(order)
 
     def checkPressedButtons(self):

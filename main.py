@@ -92,6 +92,12 @@ def setEntity(player, ai):
 
     for unit in aiUnits:
         ai.addUnits(unit)
+   
+    aiStructures = []
+    aiStructures.append(Hatchery(31, 12, ai, mapa, False))
+
+    for structure in aiStructures:
+        ai.addStructures(structure)
     
 
 def update():
