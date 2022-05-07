@@ -28,6 +28,7 @@ class Structure(Entity.Entity):
         self.rectn = pygame.Rect(originX, originY + self.heightPad/2, self.tileW*self.mapa.tw - 1, self.tileH*self.mapa.th - self.heightPad/2 - 1)
         
         self.state = BuildingState.BUILDING
+        self.lastAttacker = None
 
     def getPosition(self):
         return (self.x+self.rectn.w/2, self.y+self.rectn.h/2)
@@ -316,6 +317,7 @@ class Structure(Entity.Entity):
 
     # Invocar para reflejar el damage de un ataque
     def beingAttacked(self, damage, unit):
+        self.lastAttacker = unit
         if self.hp <= damage:
             self.changeToCollapsing()
         else:

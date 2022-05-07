@@ -39,7 +39,7 @@ class Worker(Unit):
     def changeToMining(self, resource):
         if resource.getCapacity() != 0: # Si hay recurso, si es gas agotado es -algo
             self.state = UnitState.MINING
-            
+            self.attackedOne = None
             self.isMining = False
             self.resource = resource
             pos = self.resource.getPosition()
@@ -65,6 +65,7 @@ class Worker(Unit):
         if resource != None:
             if resource.getCapacity() != 0: # Si hay recurso, si es gas agotado es -algo
                 self.state = UnitState.EXTRACTING
+                self.attackedOne = None
                 self.isMining = False
                 self.resource = resource
                 pos = self.resource.getPosition()

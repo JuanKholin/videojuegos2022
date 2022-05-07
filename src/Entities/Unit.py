@@ -80,7 +80,6 @@ class Unit(Entity):
             if int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) <= self.range:
                 self.updateAttackInRange()
 
-
     # Indica a la unidad que se acerque lo mas posible a un recurso mineral
     def mine(self, resource):
         pos = resource.getPosition()
@@ -202,8 +201,11 @@ class Unit(Entity):
                 self.updateAttackInRange()
         else: # Se murio el objetivo, pasa a estar quieto
             self.attackedOne = None
-            print("Se murio")
-            self.changeToStill()
+            enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
+            if enemy != None:
+                self.attack(enemy)
+            else:
+                self.changeToStill()
 
     # Aplica un frame a la unidad que esta minando
     # El minado es especifico de worker por lo que lo implementa worker
@@ -419,6 +421,7 @@ class Unit(Entity):
     def changeToStill(self):
         print("STILL", type(self))
         self.state = UnitState.STILL
+        self.attackedOne = None
         self.frame = 0
         self.count = 0
         print(self.stillFrames[self.frame])
@@ -441,6 +444,7 @@ class Unit(Entity):
     def changeToMoving(self, paths):
         print("MOVING", self.x, self.y, paths.__len__())
         self.state = UnitState.MOVING
+        self.attackedOne = None
         self.changeObjectiveTile()
 
         actualPath = paths[0]
@@ -480,12 +484,13 @@ class Unit(Entity):
     # Pasa a morirse (chof)
     def changeToDying(self):
         print("DYING", self.x, self.y)
+        self.state = UnitState.DYING
+        self.attackedOne = None
         self.mapa.setLibre(self.getTile())
         if len(self.paths) > 0:
             actualPath = self.paths[0]
             objectiveTile = self.mapa.getTile(actualPath.posFin[0], actualPath.posFin[1])
             self.mapa.setLibre(objectiveTile)
-        self.state = UnitState.DYING
         self.hp = 0
         if self.clicked:
             self.player.removeUnit(self)
@@ -498,6 +503,7 @@ class Unit(Entity):
     def changeToDead(self):
         print("DEAD", self.x, self.y)
         self.state = UnitState.DEAD
+        self.attackedOne = None
         self.player.units.remove(self)
         self.clicked = False
 
@@ -534,11 +540,16 @@ class Unit(Entity):
         hpLeft = self.attackedOne.beingAttacked(self.damage, self)
         if hpLeft <= 0:
             print("Se queda sin vida")
-            self.changeToStill()
+            enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
+            if enemy != None:
+                self.attack(enemy)
+            else:
+                self.changeToStill()
 
     # Para reflejar sobre una unidad que recibe un ataque
     def beingAttacked(self, damage, attacker):
         if self.hp <= damage:
+            self.attackedOne = None
             self.changeToDying()
         else:
             self.hp -= damage
@@ -603,12 +614,13 @@ class Unit(Entity):
 
     def recalcAttackPaths(self):
         self.paths = calcPath(self.getPosition(), self.getTile(), self.attackedOne.getTile(), self.mapa)
-        self.changeObjectiveTile()
-        if int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) <= self.range:
-            self.updateAttackInRange()
-        else:
-            #self.updatePath(self.paths[len(self.paths) - 1])
-            self.updateMovingImage()
+        if len(self.paths) > 0:
+            self.changeObjectiveTile()
+            if int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) <= self.range:
+                self.updateAttackInRange()
+            else:
+                #self.updatePath(self.paths[len(self.paths) - 1])
+                self.updateMovingImage()
 
     # Indica a la IA si es soldado o worker
     def isSoldier(self):
@@ -631,6 +643,9 @@ class Unit(Entity):
             else:
                 self.resolverObjetivoOcupado()
 
+    def isReadyToFight(self):
+        return (self.state != UnitState.ATTACKING) and (self.hp > 0)
+   
     #####################
     # GETTERS Y SETTERS #
     #####################

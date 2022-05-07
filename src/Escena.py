@@ -125,7 +125,7 @@ class Escena():
         self.mapa.updateNiebla(self.camera, self.p1.getEntitesLocation(self.camera))
         self.interfaz.update()
         self.raton.update(self.camera)
-        #self.aI.make_commands()
+        self.aI.make_commands()
 
 
     def updateStructure(self, structure):

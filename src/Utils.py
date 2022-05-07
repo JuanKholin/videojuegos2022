@@ -48,11 +48,13 @@ TILE_HEIGHT = 40
 # dificultades IA (margen de decision en frames):
 EASY = 1000
 MEDIUM = 600
-HARD = 200
+HARD = 300
 
 # espera de la IA para tomar decisiones ligeras:
-AI_LAPSE = 50
+AI_LAPSE = 20
 
+# Rango de autoataque (al matar a un objetivo que ataque a otro)
+NEARBY_RANGE = 3
 
 #CLOCK = pygame.time.Clock()
 

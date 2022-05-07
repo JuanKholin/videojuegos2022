@@ -56,7 +56,6 @@ class Player():
         self.units.append(unit)
         self.unitsFree.append(unit)
 
-
     def addStructures(self,structures):
         self.structures.append(structures)
 

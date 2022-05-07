@@ -81,9 +81,18 @@ def setEntity(player, ai):
     player.addUnits(scv7)
     player.addUnits(scv8)
 
-    drone = Drone(25, 10, ai)
-    ai.addUnits(drone)
+    aiUnits = [] 
+    aiUnits.append(Drone(25, 10, ai))
+    aiUnits.append(Drone(25, 11, ai))
+    aiUnits.append(Zergling(27, 10, ai))
+    aiUnits.append(Zergling(27, 11, ai))
+    aiUnits.append(Zergling(27, 12, ai))
+    aiUnits.append(Zergling(27, 13, ai))
+    aiUnits.append(Zergling(27, 14, ai))
 
+    for unit in aiUnits:
+        ai.addUnits(unit)
+    
 
 def update():
     clock_update()
@@ -94,7 +103,7 @@ def update():
         #playSound(mainMenuBGM)
         p1Interface.update()
     elif getGameState() == System_State.MAP1:
-        playMusic(map1BGM)
+        #playMusic(map1BGM)
         #cargar mapa
         escena.mapa.load()
         escena.mapa.loadMinimap()

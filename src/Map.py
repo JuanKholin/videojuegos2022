@@ -1,5 +1,6 @@
 import datetime
 import random
+from types import NoneType
 import pygame
 import math
 from tokenize import Double
@@ -541,3 +542,21 @@ class Map():
             "h": int(self.h / self.th),
             "map": self.codedMap
         }
+
+    # Devuelve la primera entidad enemiga (estructura o unidad) encontrada en un cuadrado de NEARBY_RANGE
+    # que no sea del player player alrededor de la tile tile
+    def getNearbyRival(self, tile, player):
+        player1 = player
+        x = tile.x / 40
+        y = tile.y / 40
+        for i in range(2 * NEARBY_RANGE + 1):
+            col = int(i - NEARBY_RANGE + x)
+            for j in range(2 * NEARBY_RANGE + 1):
+                row = int(j - NEARBY_RANGE + y)
+                if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
+                    aux = self.mapa[row][col]
+                    if (aux.type == UNIT) or (aux.type == STRUCTURE):
+                        print("PLAYER2? ", aux.ocupante.player)
+                        if aux.ocupante.player != player1:
+                            return aux.ocupante
+        return None

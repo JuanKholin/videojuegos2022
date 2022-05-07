@@ -6,12 +6,14 @@ class AI():
     def __init__(self, artificialPlayer, difficult):
         self.data = artificialPlayer
         self.reactionTime = AI_LAPSE
+        self.rotativeReaction = 0
         self.decissionRate = difficult
         self.count = 0
         self.decissionsChance = [ 20, 20, 20, 20, 20 ]
         self.decissionsPool = sum(self.decissionsChance)
         self.minimalDecissionChance = 1
         self.mapa = self.data.getMapa()
+        self.miniCount = 0
 
         # Para las invasiones
         self.invaders = []
@@ -23,18 +25,29 @@ class AI():
         if self.miniCount >= AI_LAPSE: # Acciones ligeras
             self.miniCount = 0
             self.alwaysToDoActions(units, structures, resources)
-        self.count += 1
-        if self.count >= self.decissionRate: # Decisiones importantes
-            self.count = 0
-            self.makeDecission(units, structures, resources)
+        #self.count += 1
+        #if self.count >= self.decissionRate: # Decisiones importantes
+        #    self.count = 0
+        #    self.makeDecission(units, structures, resources)
 
-    # Acciones que debe hacer siempre la IA
+    # Acciones que debe hacer casi siempre la IA
     def alwaysToDoActions(self, units, structures, resources):
-        self.selfDefense()
-        self.minimalBuild()
-        self.restoreArmy()
-        self.gatherNearbyResources()
-        self.updateInvaders()
+        if self.rotativeReaction == 0:
+            print("self defense")
+            self.selfDefense(units, structures)
+        elif self.rotativeReaction == 1:
+            print("minimal build")
+            #self.minimalBuild()
+        elif self.rotativeReaction == 2:
+            print("restore army")
+            #self.restoreArmy()
+        elif self.rotativeReaction == 3:
+            print("gather nearby resources")
+            #self.gatherNearbyResources()
+        elif self.rotativeReaction == 4:
+            print("update invaders")
+            #self.updateInvaders()
+        self.rotativeReaction = (self.rotativeReaction + 1) % 5 # 5 acciones distintas hay
 
     # Toma una decision trascendental
     def makeDecission(self, units, structures, resources):
@@ -79,8 +92,25 @@ class AI():
     # ACCIONES LIGERAS #
     ####################
 
-    def selfDefense(self):
-        pass
+    # Encuentra las unidades atacando a las estructuras y a las unidades de la IA y se defiende
+    def selfDefense(self, units, structures):
+        # Consigue el set de objetivos sin repetidos
+        objectivesSet = set()
+        for structure in structures: 
+            if structure.lastAttacker != None:
+                if structure.lastAttacker.attackedOne == structure:
+                    objectivesSet.add(structure.lastAttacker.attackedOne)
+                structure.lastAttacker = None
+        for unit in units:
+            if unit.attackedOne != None:
+                objectivesSet.add(unit.attackedOne)
+        objectivesList = list(objectivesSet) # Lo pasa a lista
+        defenses = self.getSoldiers(units)
+        if len(objectivesList) > 0:
+            i = 0
+            for soldier in defenses:
+                soldier.attack(objectivesList[i])
+                i = (i + 1) % len(objectivesList)
 
     def minimalBuild(self):
         pass
@@ -129,10 +159,10 @@ class AI():
     # AUXILIARES #
     ##############
 
-    # De las unidades devuelve a todos los soldados
+    # De las unidades devuelve a todos los soldados libres
     def getSoldiers(self, units):
         soldiers = []
         for unit in units:
-            if unit.isSoldier():
+            if unit.isSoldier() and unit.isReadyToFight():
                 soldiers.append(unit)
         return soldiers
