@@ -572,7 +572,7 @@ class Unit(Entity):
 
     # Para inflingir un ataque a una unidad
     def makeAnAttack(self):
-        hpLeft = self.attackedOne.beingAttacked(self.damage, self)
+        hpLeft = self.attackedOne.beingAttacked(self.damage + self.player.dañoUpgrade, self)
         if hpLeft <= 0:
             print("Se queda sin vida")
             enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
@@ -583,11 +583,11 @@ class Unit(Entity):
 
     # Para reflejar sobre una unidad que recibe un ataque
     def beingAttacked(self, damage, attacker):
-        if self.hp <= damage:
+        if self.hp <= (damage - self.player.armorUpgrade):
             self.attackedOne = None
             self.changeToDying()
         else:
-            self.hp -= damage
+            self.hp -= (damage - self.player.armorUpgrade)
             if self.state != UnitState.ATTACKING: # Cambiar a atacar si no esta haciendo nada
                 self.attack(attacker)
         return self.hp
