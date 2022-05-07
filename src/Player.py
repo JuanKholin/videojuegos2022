@@ -123,11 +123,13 @@ class Player():
         else:
             for structure in self.structures:
                 pos = structure.getPosition()
-                pygame.draw.rect(screen, ORANGE, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
+                if self.mapa.getTile(pos[0], pos[1]).visible:
+                    pygame.draw.rect(screen, ORANGE, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
             for unit in self.units:
                 if unit.state != UnitState.DEAD:
                     pos = unit.getPosition()
-                    pygame.draw.rect(screen, RED, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
+                    if self.mapa.getTile(pos[0], pos[1]).visible:
+                        pygame.draw.rect(screen, RED, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
 
 
     def removeUnit(self, unit):
