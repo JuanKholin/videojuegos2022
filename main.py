@@ -70,7 +70,7 @@ def setEntity(player, ai):
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addStructures(structure3)
-    player.addStructures(structure4)
+    ai.addStructures(structure4)
     player.addStructures(structure5)
     player.addUnits(scv)
     player.addUnits(scv2)
