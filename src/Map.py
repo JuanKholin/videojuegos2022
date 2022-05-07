@@ -557,6 +557,6 @@ class Map():
                     aux = self.mapa[row][col]
                     if (aux.type == UNIT) or (aux.type == STRUCTURE):
                         print("PLAYER2? ", aux.ocupante.player)
-                        if aux.ocupante.player != player1:
+                        if aux.ocupante.player != player1 and aux.ocupante in aux.ocupante.player.units:
                             return aux.ocupante
         return None

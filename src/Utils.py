@@ -88,7 +88,7 @@ HP.set_colorkey(WHITE)
 
 BGM_VOLUME = 0.5
 SOUND_VOLUME = 0.5
-haveBGM = False
+haveBGM = True
 
 CAMERA_SPEED = 8
 

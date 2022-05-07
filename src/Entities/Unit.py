@@ -73,12 +73,18 @@ class Unit(Entity):
     # Indica a la unidad que ataque al objetivo seleccionado, si se encuentra un
     # obstaculo de camino lo esquivara y si el objetivo se desplaza este le seguira
     def attack(self, objective):
+        if self.occupiedTile != None:
+            self.mapa.setLibre(self.occupiedTile)
         if (self.attackedOne != objective) or (self.state != UnitState.ATTACKING):
             self.paths = calcPath(self.getPosition(), self.getTile(), objective.getTile(), self.mapa)
             print("CAMINOS:" ,len(self.paths))
             self.changeToAttacking(objective)
-            if int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) <= self.range:
-                self.updateAttackInRange()
+            if len(self.paths) == 1:
+                #LO MEJOR ES MOVERSE AL CENTRO DE LA TILE, SINO NO ATOMICO
+                unitPos = self.getPosition()
+                tilePos = (self.getTile().centerx,self.getTile().centery)
+                path = Path(math.atan2(tilePos[1] - unitPos[1], tilePos[0] - unitPos[0]), int(math.hypot(tilePos[0] - unitPos[0], tilePos[1] - unitPos[1])),tilePos)
+                self.paths = [path]
 
     # Indica a la unidad que se acerque lo mas posible a un recurso mineral
     def mine(self, resource):
@@ -202,9 +208,12 @@ class Unit(Entity):
         else: # Se murio el objetivo, pasa a estar quieto
             self.attackedOne = None
             enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
+            print(type(enemy))
             if enemy != None:
+                print("ataco a otro")
                 self.attack(enemy)
             else:
+                print("no hay naide")
                 self.changeToStill()
 
     # Aplica un frame a la unidad que esta minando
@@ -286,6 +295,7 @@ class Unit(Entity):
                 if(self.id == 8):
                     print(int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)))
                 if int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) <= self.range:
+                    print(type(self), "estoy en rango")
                     self.updateAttackInRange()
                 else:
                     lastPath = self.paths[len(self.paths) - 1]
@@ -463,6 +473,7 @@ class Unit(Entity):
         print("Pasa al ataque HYAAAA!! >:c")
         self.state = UnitState.ATTACKING
         if(len(self.paths) > 1):
+            print("changeToAttacking objetiveTile")
             self.changeObjectiveTile()
         self.attackedOne = attackedOne
         self.attackCD = self.cooldown

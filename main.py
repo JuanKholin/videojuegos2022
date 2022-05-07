@@ -82,13 +82,13 @@ def setEntity(player, ai):
     player.addUnits(scv8)
 
     aiUnits = [] 
-    aiUnits.append(Drone(25, 10, ai))
-    aiUnits.append(Drone(25, 11, ai))
+    aiUnits.append(Drone(20, 10, ai))
+    '''aiUnits.append(Drone(25, 11, ai))
     aiUnits.append(Zergling(27, 10, ai))
     aiUnits.append(Zergling(27, 11, ai))
     aiUnits.append(Zergling(27, 12, ai))
     aiUnits.append(Zergling(27, 13, ai))
-    aiUnits.append(Zergling(27, 14, ai))
+    aiUnits.append(Zergling(27, 14, ai))'''
 
     for unit in aiUnits:
         ai.addUnits(unit)

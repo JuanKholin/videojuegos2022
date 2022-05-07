@@ -33,39 +33,40 @@ class AI():
     # Acciones que debe hacer casi siempre la IA
     def alwaysToDoActions(self, units, structures, resources):
         if self.rotativeReaction == 0:
-            print("self defense")
+            #print("self defense")
             self.selfDefense(units, structures)
+        '''
         elif self.rotativeReaction == 1:
-            print("minimal build")
+            #print("minimal build")
             #self.minimalBuild()
         elif self.rotativeReaction == 2:
-            print("restore army")
+            #print("restore army")
             #self.restoreArmy()
         elif self.rotativeReaction == 3:
-            print("gather nearby resources")
+            #print("gather nearby resources")
             #self.gatherNearbyResources()
         elif self.rotativeReaction == 4:
-            print("update invaders")
-            #self.updateInvaders()
+            #print("update invaders")
+            #self.updateInvaders()'''
         self.rotativeReaction = (self.rotativeReaction + 1) % 5 # 5 acciones distintas hay
 
     # Toma una decision trascendental
     def makeDecission(self, units, structures, resources):
         decission = self.decide()
         if decission == 0:
-            print("IA DECIDE ATACAR LO VISIBLE")
+            #print("IA DECIDE ATACAR LO VISIBLE")
             self.attackVisible()
         elif decission == 1:
-            print("IA DECIDE EXPANDIR CONSTRUCCIONES")
+            #print("IA DECIDE EXPANDIR CONSTRUCCIONES")
             self.buildExpansion()
         elif decission == 2:
-            print("IA DECIDE EXPANDIR SU EJERCITO")
+            #print("IA DECIDE EXPANDIR SU EJERCITO")
             self.armyExpansion()
         elif decission == 3:
-            print("IA DECIDE IR POR RECURSOS LEJOS")
+            #print("IA DECIDE IR POR RECURSOS LEJOS")
             self.gatherFarResources()
         elif decission == 4:
-            print("IA DECIDE INVADIR")
+            #print("IA DECIDE INVADIR")
             self.seekAndDestroy(units)
 
     # Toma una decision y rebalancea el pool de decisiones, me ha quedado bastante original la verdad, 
