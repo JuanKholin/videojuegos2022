@@ -61,13 +61,13 @@ class Geyser(Resource):
     def getType(self):
         return GEYSER
 
-    def toDictionary(self):
-        print("x e y del cristal ", self.x, self.y)
+    def toDictionary(self, mapa):
+        x, y = mapa.getTileIndex(self.x, self.y)
         return {
             "clase": "geyser",
             "capacidad": self.capacity,
-            "x": self.x,
-            "y": self.y,
+            "x": x,
+            "y": y,
             "nombre": "Geyser", 
             "funcion": "Recurso para construccion"
         }

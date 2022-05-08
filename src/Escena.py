@@ -11,7 +11,7 @@ from datetime import datetime
 
 
 class Escena():
-    def __init__(self, p1, p2, aI, mapa, camera, raton, interfaz, resources):
+    def __init__(self, p1, p2, aI, mapa, camera, raton, interfaz, resources, nombre = "PartidaDefault"):
         self.p1 = p1
         self.p2 = p2
         self.aI = aI
@@ -20,6 +20,7 @@ class Escena():
         self.raton = raton
         self.interfaz = interfaz
         self.resources = resources
+        self.nombre = nombre
 
     def procesarEvent(self, event):
         #Conseguir el comando
@@ -205,6 +206,7 @@ class Escena():
 
     def toDictionary(self):
         return{
+            "nombre": self.nombre,
             "p1": self.p1.toDictionary(self.mapa),
             "p2": self.p2.toDictionary(self.mapa),
             "mapa": self.mapa.toDictionary(),
@@ -216,7 +218,7 @@ class Escena():
         print(self.toDictionary())
         string = json.dumps(self.toDictionary(), indent = 2)
 
-        textFile = open("save_file.json", "w")
+        textFile = open("games/" + self.nombre + ".json", "w")
         textFile.write(string)
         textFile.close()
 
