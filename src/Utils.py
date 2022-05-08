@@ -15,6 +15,11 @@ class System_State(Enum):
     BUILDING_MODE = auto()
     EXIT = auto()
 
+class Race(Enum):
+    ZERG = auto()
+    TERRAN = auto()
+    PROTOSS = auto()
+
 state = System_State.MAINMENU
 
 def getGameState():
@@ -54,6 +59,25 @@ HARD = 300
 
 # espera de la IA para tomar decisiones ligeras:
 AI_LAPSE = 30
+
+# Razas:
+
+# Edificios de las razas:
+TERRAN_BASE = "TerranBuilder" 
+TERRAN_BARRACKS = "TerranBarracks"
+TERRAN_DEPOT = "TerranSuplyDepot" 
+TERRAN_GEYSER_STRUCTURE = "TerranRefinery"
+
+ZERG_BASE = "Hatchery" 
+ZERG_BARRACKS = None # Faltan
+ZERG_DEPOT = None
+ZERG_GEYSER_STRUCTURE = "Extractor"
+
+PROTOSS_BASE = None
+PROTOSS_BARRACKS = None
+PROTOSS_DEPOT = None
+PROTOSS_GEYSER_STRUCTURE = None
+
 
 # Rango de autoataque (al matar a un objetivo que ataque a otro)
 NEARBY_RANGE = 3

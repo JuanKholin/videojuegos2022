@@ -8,6 +8,8 @@ from ..Utils import *
 WHITE   = (255,255,255)
 GENERATION_TIME = 10
 MINERAL_COST = 50
+WIDTH = 6 
+HEIGHT = 4
 HP = 200
 
 class Hatchery(Structure):

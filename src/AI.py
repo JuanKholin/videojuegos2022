@@ -3,7 +3,7 @@ from random import *
 
 # Esta clase va a sacar lo peor de nosotros mismos, me temo
 class AI():
-    def __init__(self, artificialPlayer, difficult):
+    def __init__(self, artificialPlayer, race, difficult):
         self.data = artificialPlayer
         self.reactionTime = AI_LAPSE
         self.rotativeReaction = 0
@@ -14,6 +14,22 @@ class AI():
         self.minimalDecissionChance = 1
         self.mapa = self.data.getMapa()
         self.miniCount = 0
+
+        if race == Race.ZERG:
+            self.base = ZERG_BASE
+            self.barracks = ZERG_BARRACKS
+            self.depot = ZERG_DEPOT
+            self.geyserBuilding = ZERG_GEYSER_STRUCTURE
+        elif race == Race.TERRAN:
+            self.base = TERRAN_BASE
+            self.barracks = TERRAN_BARRACKS
+            self.depot = TERRAN_DEPOT
+            self.geyserBuilding = TERRAN_GEYSER_STRUCTURE
+        elif race == Race.PROTOSS:
+            self.base = PROTOSS_BASE
+            self.barracks = PROTOSS_BARRACKS
+            self.depot = PROTOSS_DEPOT
+            self.geyserBuilding = PROTOSS_GEYSER_STRUCTURE
 
         # Para las invasiones
         self.invaders = []
@@ -37,8 +53,8 @@ class AI():
             self.selfDefense(units, structures)
         '''
         elif self.rotativeReaction == 1:
-            #print("minimal build")
-            #self.minimalBuild()
+            print("minimal build")
+            #self.minimalBuild(structures)
         elif self.rotativeReaction == 2:
             #print("restore army")
             #self.restoreArmy()
@@ -57,8 +73,8 @@ class AI():
             #print("IA DECIDE ATACAR LO VISIBLE")
             self.attackVisible()
         elif decission == 1:
-            #print("IA DECIDE EXPANDIR CONSTRUCCIONES")
-            self.buildExpansion()
+            print("IA DECIDE HACER MEJORAS")
+            self.armyUpgrade()
         elif decission == 2:
             #print("IA DECIDE EXPANDIR SU EJERCITO")
             self.armyExpansion()
@@ -85,7 +101,6 @@ class AI():
 
     # Recorre las unidades invasoras para que vayan a atacar objetivos conocidos y si no hay explorar
     # tiles no exploradas y atacar lo que se encuentren hasta la muerte o la victoria
-    # CLARO ESTO SI HUBIERA VISION ASJIDASJFIDSFJEWR
     def updateInvaders(self):
         pass
 
@@ -113,9 +128,25 @@ class AI():
                 soldier.attack(objectivesList[i])
                 i = (i + 1) % len(objectivesList)
 
-    def minimalBuild(self):
-        pass
-
+    # Si la IA tiene al menos una estructura puede construir mas, se considera build minima
+    # un edificio de cada
+    def minimalBuild(self, structures, resources):
+        if haveBase(structures):
+            if not haveBarracks(structures):
+                if (self.barracks == ZERG_BARRACKS) and (self.resources >= ZERG_BARRACKS_MINERAL_COST):
+                    self.data.resources -= ZERG_BARRACKS_MINERAL_COST
+                    self.buildZergBarracks(structures)
+                elif (self.barracks == TERRAN_BARRACKS) and (self.resources >= TERRAN_BARRACKS_MINERAL_COST):
+                    self.data.resources -= TERRAN_BARRACKS_MINERAL_COST
+                    self.buildTerranBarracks(structures)
+            elif not haveDepot(structures):
+                if (self.depot == ZERG_DEPOT) and (self.resources >= ZERG_DEPOT_MINERAL_COST):
+                    self.data.resources -= ZERG_DEPOT_MINERAL_COST
+                    self.buildZergDepot(structures)
+                elif (self.barracks == TERRAN_DEPOT) and (self.resources >= TERRAN_DEPOT_MINERAL_COST):
+                    self.data.resources -= TERRAN_DEPOT_MINERAL_COST
+                    self.buildTerranDepot(structures)
+            
     def restoreArmy(self):
         pass
 
@@ -129,7 +160,7 @@ class AI():
     def attackVisible(self):
         pass
 
-    def buildExpansion(self):
+    def armyUpgrade(self):
         pass
 
     def armyExpansion(self):
@@ -167,3 +198,82 @@ class AI():
             if unit.isSoldier() and unit.isReadyToFight():
                 soldiers.append(unit)
         return soldiers
+
+    # Devuelve una lista con los tipos de edificios que no se tienen
+    def findHavingBuildings(self, structures):
+        haveBarrack = False
+        haveDepot = False
+        for structure in structures:
+            havingBuildings.add(self.buildingSet.index(type(structure)))
+        nonHavingBuildings = list(set(range(len(self.buildingSet))).difference(havingBuildings))
+
+    # Devuelve si hay una base
+    def haveBase(self, structures):
+        for structure in structures:
+            if type(structure) == self.base:
+                return True
+        return False
+
+    # Devuelve si hay un barrack
+    def haveBarrack(self, structures):
+        for structure in structures:
+            if type(structure) == self.barrack:
+                return True
+        return False
+
+    # Devuelve si hay un depot
+    def haveDepot(self, structures):
+        for structure in structures:
+            if type(structure) == self.depot:
+                return True
+        return False
+
+    # Construye si se puede el edificio indicado en el buildingSet con indice i
+    def build(self, i, structures):
+        if self.buildStructure.checkTiles() and self.player.resources >= self.buildStructure.mineralCost:
+            self.player.resources -= self.buildStructure.mineralCost
+            self.buildStructure.player = self.player
+            self.player.addStructures(self.buildStructure)
+            self.buildStructure.buildProcess()
+            self.building = False
+            self.buildStructure = None
+
+            building = globals()[self.buildingSet[i]]
+            buildingInstance = building()
+            
+    # Construye un barracks de los Terran cerca de una estructura aliada aleatoria
+    def buildTerranBarracks(self, structures):
+        randBuilding = structures[randInt(0, len(structures) - 1)]
+        x, y = self.getRandDirection()
+
+    # Construye un barracks de los Zerg cerca de una estructura aliada aleatoria
+    def buildZergBarracks(self, structures):
+        randBuilding = structures[randInt(0, len(structures) - 1)]
+
+    # Construye un depot de los Terran cerca de una estructura aliada aleatoria
+    def buildTerranDepot(self, structures):
+        randBuilding = structures[randInt(0, len(structures) - 1)]
+
+    # Construye un depot de los Zerg cerca de una estructura aliada aleatoria
+    def buildZergDepot(self, structures):
+        randBuilding = structures[randInt(0, len(structures) - 1)]
+
+    # Devuelve una direccion por la que avanzar para probar construcciones
+    def getRandDirection(self):
+        randDirection = randInt(0, 7)
+        if randDirection == 0:
+            return 0, -1
+        elif randDirection == 1:
+            return 1, -1
+        elif randDirection == 2:
+            return 1, 0
+        elif randDirection == 3:
+            return 1, 1
+        elif randDirection == 4:
+            return 0, 1
+        elif randDirection == 5:
+            return -1, 1
+        elif randDirection == 6:
+            return -1, 0
+        elif randDirection == 7:
+            return -1, -1
