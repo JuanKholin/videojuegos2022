@@ -15,6 +15,19 @@ class Interface():
         self.player = player
         self.enemy = enemy
         self.mouse = mouse
+        # GAME SELECT
+        self.gameSelect = pg.image.load(GAME_SELECT + "gameSelect.png")
+        self.gameSelect = pg.transform.scale(self.gameSelect, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+        self.aceptarRect = pg.Rect(ACEPTAR_POS[0], ACEPTAR_POS[1], 260, 40)
+        self.cancelarRect = pg.Rect(CANCELAR_POS[0], CANCELAR_POS[1], 260, 40)
+        self.nuevaPartidaRect = pg.Rect(NUEVA_PARTIDA_POS[0], NUEVA_PARTIDA_POS[1], 260, 40)
+
+        self.aceptarPress = False
+        self.cancelarPress = False
+        self.nuevaPartidaPress = False
+
+        #MAIN MENU
         self.mainMenu = pg.image.load(MAIN_MENU + ".png")
         self.mainMenu = pg.transform.scale(self.mainMenu, (SCREEN_WIDTH, SCREEN_HEIGHT))
         self.single = cargarSprites(SINGLE_PLAYER, SINGLE_PLAYER_N, True, BLACK, SINGLE_SIZE) 
@@ -113,8 +126,9 @@ class Interface():
                     self.singlePress = True
                 elif self.mouse.getClick() and self.singlePress and Raton.collides(endPos[0], endPos[1], self.singleRect):
                     print("Seleccionado single player")
-                    Utils.state = System_State.MAP1
-                    stopMusic()
+                    #Utils.state = System_State.MAP1
+                    Utils.state = System_State.GAMESELECT
+                    #stopMusic()
                     self.singlePress = False
                 
             if self.mouse.isCollide(self.exitRect):
@@ -140,6 +154,58 @@ class Interface():
             self.idExit = (self.idExit + frame(5)) % EXIT_N
             self.idSingleSelected = (self.idSingleSelected + frame(5)) % SINGLE_PLAYER_FB_N
             self.idExitSelected = (self.idExitSelected + frame(5)) % EXIT_FB_N
+        elif Utils.state == System_State.GAMESELECT:
+            aceptarCollide = True
+
+            press, iniPos = self.mouse.getPressed()
+            #Boton aceptar
+            if self.mouse.isCollide(self.aceptarRect):
+                aceptarCollide = True
+                if not self.soundPlayed:
+                    playSound(botonSound)
+                    self.soundPlayed = True
+                endPos = self.mouse.getPosition()
+                if not self.aceptarPress and press and Raton.collides(iniPos[0], iniPos[1], self.aceptarRect):
+                    self.aceptarPress = True
+                elif self.mouse.getClick() and self.aceptarPress and Raton.collides(endPos[0], endPos[1], self.aceptarRect):
+                    print("Aceptar")
+                    #Hay que hacer uno generico, o que carge el mapa y pase a ONGAME aqui
+                    Utils.state = System_State.MAP1
+                    stopMusic()
+                    self.singlePress = False
+                
+            elif self.mouse.isCollide(self.cancelarRect):
+                if not self.soundPlayed:
+                    playSound(botonSound)
+                    self.soundPlayed = True
+                endPos = self.mouse.getPosition()
+                if not self.cancelarPress and press and Raton.collides(iniPos[0], iniPos[1], self.cancelarRect):
+                    self.cancelarPress = True
+                elif self.mouse.getClick() and self.cancelarPress and Raton.collides(endPos[0], endPos[1], self.cancelarRect):
+                    print("Cancelar")
+                    Utils.state = System_State.MAINMENU
+                    self.cancelarPress = False
+            elif self.mouse.isCollide(self.nuevaPartidaRect):
+                if not self.soundPlayed:
+                    playSound(botonSound)
+                    self.soundPlayed = True
+                endPos = self.mouse.getPosition()
+                if not self.nuevaPartidaPress and press and Raton.collides(iniPos[0], iniPos[1], self.nuevaPartidaRect):
+                    self.nuevaPartidaPress = True
+                elif self.mouse.getClick() and self.nuevaPartidaPress and Raton.collides(endPos[0], endPos[1], self.nuevaPartidaRect):
+                    print("Nueva partida")
+                    #Pasar a menu de nueva partida
+                    Utils.state = System_State.MAP1
+                    stopMusic()
+                    self.nuevaPartidaPress = False
+            elif not aceptarCollide:
+                self.soundPlayed = False
+                    
+            if self.mouse.getClick():
+                self.aceptarPress = False
+                self.cancelarPress = False
+                self.nuevaPartidaPress = False
+        
         elif Utils.state == System_State.ONGAME:
             #si esta en GUI desactivar funciones de raton
             if self.checkInGUIPosition():
@@ -199,6 +265,30 @@ class Interface():
                 muestra_texto(screen, str('monotypecorsiva'), "exit", GREEN2, MAIN_MENU_TEXT_SIZE, EXIT_TEXT_POS)
             else:
                 muestra_texto(screen, str('monotypecorsiva'), "exit", GREEN3, MAIN_MENU_TEXT_SIZE, EXIT_TEXT_POS)
+            
+        elif Utils.state == System_State.GAMESELECT:
+            screen.blit(self.gameSelect, [0, 0])
+            pg.draw.rect(screen, GREEN, self.aceptarRect, 1)
+            pg.draw.rect(screen, BLUE, self.cancelarRect, 1)
+            pg.draw.rect(screen, BLACK, self.nuevaPartidaRect, 1)
+            '''
+            #Boton single player
+            if self.mouse.isCollide(self.singleRect):
+                screen.blit(self.singleSelected[self.idSingleSelected], SINGLE_PLAYER_FB_POS)
+                screen.blit(self.single[self.idSingle], SINGLE_PLAYER_POS)
+                muestra_texto(screen, 'monotypecorsiva', "single player", GREEN2, MAIN_MENU_TEXT_SIZE, SINGLE_TEXT_POS)
+            else: 
+                screen.blit(self.single[self.idSingle], SINGLE_PLAYER_POS)
+                muestra_texto(screen, 'monotypecorsiva', "single player", GREEN3, MAIN_MENU_TEXT_SIZE, SINGLE_TEXT_POS)
+            #screen.blit(self.single[self.idSingle], SINGLE_PLAYER_POS)
+            
+            #Boton Exit
+            screen.blit(self.exit[self.idExit], EXIT_POS)
+            if self.mouse.isCollide(self.exitRect):
+                screen.blit(self.exitSelected[self.idExitSelected], EXIT_FB_POS)
+                muestra_texto(screen, str('monotypecorsiva'), "exit", GREEN2, MAIN_MENU_TEXT_SIZE, EXIT_TEXT_POS)
+            else:
+                muestra_texto(screen, str('monotypecorsiva'), "exit", GREEN3, MAIN_MENU_TEXT_SIZE, EXIT_TEXT_POS)            '''
             
         elif Utils.state == System_State.ONGAME:
             if DEBBUG == True:

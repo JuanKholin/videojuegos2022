@@ -4,10 +4,11 @@ import math
 from re import T
 import pygame
 
-DEBBUG = True
+DEBBUG = False
 
 class System_State(Enum):
     MAINMENU = auto()
+    GAMESELECT = auto()
     MAP1 = auto()
     ONGAME = auto()
     BUILDING_MODE = auto()
@@ -154,6 +155,7 @@ MOUSE_PATH = "./SPRITE/raton/"
 MAIN_MENU = "SPRITE/mainMenu/fondo"
 MAIN_MENU_TEXT_SIZE = 30
 
+
 SINGLE_TEXT_POS = [340, 215]
 EXIT_TEXT_POS = [720, 600]
 
@@ -174,6 +176,18 @@ EXIT_POS = [650, 420]
 EXIT_FB = "SPRITE/mainMenu/Exit/Spanish/exitones"
 EXIT_FB_N = 30
 EXIT_FB_POS = [680, 420]
+
+    ###########
+    #MAIN MENU#
+    ###########
+
+ACEPTAR_POS = [700, 585]
+CANCELAR_POS = [700, 700]
+NUEVA_PARTIDA_POS = [80, 650]
+
+
+GAME_SELECT = "SPRITE/gameSelect/"
+GAME_SELECT_TEXT_SIZE = 30
 
 BARRA_COMANDO = "SPRITE/EXTRA/gui_frame"
 
