@@ -24,25 +24,26 @@ class TerranRefinery(Structure):
     clicked = False
     frame = 8
 
-    def __init__(self, xini, yini, player, map, building, id):
-        Structure.__init__(self, HP, TERRAN_REFINERY_MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
+    def __init__(self, xini, yini, player, map, building):
+        Structure.__init__(self, HP, TERRAN_REFINERY_MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
-        self.sprites = cargarSprites(TERRAN_REFINERY_PATH, 5, False, BLACK) 
+        self.sprites = cargarSprites(TERRAN_REFINERY_PATH, 5, False, BLACK)
         #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
-        
+
         self.image = self.sprites[self.index]
         self.operativeIndex = [4]
         self.spawningIndex = [4]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
-        
+
         self.render = pygame.transform.scale(pygame.image.load(REFINERY_RENDER), RENDER_SIZE)
 
+        self.building = building
         if building:
             self.state = BuildingState.BUILDING
         else:
             self.state = BuildingState.OPERATIVE
-            
+
         self.resource = None
         self.training = []
         self.paths = []
@@ -52,7 +53,7 @@ class TerranRefinery(Structure):
 
     def getOrder(self):
         return CommandId.EXTRACT_GAS
-    
+
     def drawBuildTiles(self, screen, camera, tiles):
         for tile in tiles:
             r = tile.getRect()
@@ -60,12 +61,12 @@ class TerranRefinery(Structure):
                 pygame.draw.rect(screen, GREEN, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
             else:
                 pygame.draw.rect(screen, RED, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
-                
+
     def draw(self, screen, camera):
         Structure.draw(self, screen, camera)
         if self.resource != None:
             muestra_texto(screen, str('monotypecorsiva'), str(self.resource.capacity), BLUE, 20, [60, 10])
-    
+
     def checkTiles(self):
         r = self.getRect()
         tiles = self.mapa.getRectTiles(r)
@@ -79,7 +80,7 @@ class TerranRefinery(Structure):
         else:
             ok = False
         return ok
-    
+
     def buildProcess(self):
         gas = (self.mapa.getTile(self.x, self.y)).ocupante
         if gas != None:
@@ -93,7 +94,7 @@ class TerranRefinery(Structure):
             "clase": "terranRefinery",
             "x": self.xIni,
             "y": self.yIni,
-            "id": self.id,
-            "nombre": "Refineria", 
+            "building": self.building,
+            "nombre": "Refineria",
             "funcion": "extrae gas geyser"
         }

@@ -25,18 +25,20 @@ class Extractor(Structure):
     clicked = False
     frame = 8
 
-    def __init__(self, xini, yini, player, map, building, id):
-        Structure.__init__(self, HP, EXTRACTOR_MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
+    def __init__(self, xini, yini, player, map, building):
+        Structure.__init__(self, HP, EXTRACTOR_MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
         self.sprites = cargarSprites(EXTRACTOR_PATH, 4, False, BLUE2, 1.1)
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2, 3]
         self.spawningIndex = [0, 1, 2, 3]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
-        
+
         self.render = pygame.transform.scale(pygame.image.load(EXTRACTOR_RENDER), RENDER_SIZE)
 
         self.state = BuildingState.OPERATIVE
 
+        self.building = building
+        
         self.count = 0
         self.training = []
         self.paths = []
@@ -57,7 +59,7 @@ class Extractor(Structure):
             "clase": "extractor",
             "x": self.xIni,
             "y": self.yIni,
-            "id": self.id,
-            "nombre": "Extractor de Zerg", 
+            "building": self.building,
+            "nombre": "Extractor de Zerg",
             "funcion": "extrae recursos"
         }

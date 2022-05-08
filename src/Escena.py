@@ -7,7 +7,6 @@ from .Command import *
 from .Entities import TerranBarracks
 from .Entities.TerranRefinery import *
 from .Entities import TerranWorker
-from .Loader import *
 from datetime import datetime
 
 
@@ -84,7 +83,7 @@ class Escena():
         elif tileClicked.type == UNIT: # Ataque?
             print("CLICKO UNA UNIDAD")
             attacked = tileClicked.ocupante
-            
+
             if attacked.getPlayer() != self.p1:
                 order['order'] = CommandId.ATTACK
                 order['attackedOne'] = attacked
@@ -196,13 +195,13 @@ class Escena():
         self.interfaz.draw(screen, self.camera)
 
     def getTerranBarrack(self):
-        return TerranBarracks(0, 0, None, self.mapa, True, 5)
+        return TerranBarracks(0, 0, None, self.mapa, True)
 
     def getHatchery(self):
-        return Hatchery(0, 0, None, self.mapa, False, 8)
+        return Hatchery(0, 0, None, self.mapa, False)
 
     def getTerranRefinery(self):
-        return TerranRefinery(0, 0, None, self.mapa, True, 8)
+        return TerranRefinery(0, 0, None, self.mapa, True)
 
     def toDictionary(self):
         return{
@@ -210,22 +209,24 @@ class Escena():
             "p2": self.p2.toDictionary(self.mapa),
             "mapa": self.mapa.toDictionary(),
             "camera": self.camera.toDictionary(),
-            "resources": [r.toDictionary(self.mapa) for r in self.resources],
+            "resources": [r.toDictionary() for r in self.resources],
         }
 
     def saveScene(self):
+        print(self.toDictionary())
         string = json.dumps(self.toDictionary(), indent = 2)
 
         textFile = open("save_file.json", "w")
         textFile.write(string)
         textFile.close()
 
-    def loadScene(self):
+    '''def loadScene(self):
         textFile = open("save_file.json", "r")
         data = json.load(textFile)
         self.mapa = loadMap(data["mapa"])
-        self.p1 = loadPlayer(data["p1"], self.mapa)
-        self.p2 = loadPlayer(data["p2"], self.mapa)
+        self.p1 = loadPlayer(data["p1"], self.mapa, True)
+        self.p2 = loadPlayer(data["p2"], self.mapa, False)
         self.camera = loadCamera(data["camera"])
         self.resources = loadResources(data["resources"])
         self.setBasePlayer1(self.p1.structures[0])
+    '''

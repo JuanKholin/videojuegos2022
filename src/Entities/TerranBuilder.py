@@ -27,12 +27,12 @@ class TerranBuilder(Structure):
     clicked = False
     frame = 8
 
-    def __init__(self, xini, yini, player, map, building, raton, id):
-        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
+    def __init__(self, xini, yini, player, map, building, raton):
+        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         self.sprites = cargarSprites(TERRAN_BUILDER_PATH, 6, False, WHITE, 1.5)
-        
+
         #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
         self.raton = raton
         self.image = self.sprites[self.index]
@@ -41,7 +41,8 @@ class TerranBuilder(Structure):
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
 
         self.render = pygame.transform.scale(pygame.image.load(BUILDER_RENDER), RENDER_SIZE)
-        
+
+        self.building = building
         if building:
             self.state = BuildingState.BUILDING
         else:
@@ -102,9 +103,9 @@ class TerranBuilder(Structure):
                 self.raton.buildStructure = self.getTerranRefinery()
 
     def command(self, command):
-        if (command == CommandId.BUILD_BARRACKS) or (command == CommandId.BUILD_REFINERY) or (command == 
-                CommandId.BUILD_HATCHERY) or (command == CommandId.GENERATE_UNIT) or (command == 
-                CommandId.UPGRADE_SOLDIER_ARMOR) or (command == 
+        if (command == CommandId.BUILD_BARRACKS) or (command == CommandId.BUILD_REFINERY) or (command ==
+                CommandId.BUILD_HATCHERY) or (command == CommandId.GENERATE_UNIT) or (command ==
+                CommandId.UPGRADE_SOLDIER_ARMOR) or (command ==
                 CommandId.UPGRADE_SOLDIER_DAMAGE) or (command == CommandId.UPGRADE_WORKER_MINING):
             return Command(command)
         else:
@@ -112,7 +113,7 @@ class TerranBuilder(Structure):
 
     def getBuildSprite(self):
         return self.sprites[self.operativeIndex]
-    
+
     def getOptions(self):
         if DEBBUG == True:
             return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.BUILD_REFINERY, Options.BUILD_HATCHERY, Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE]
@@ -120,13 +121,13 @@ class TerranBuilder(Structure):
             return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.BUILD_REFINERY, Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE]
 
     def getTerranBarrack(self):
-        return TerranBarracks(0, 0, None, self.mapa, True, 5)
+        return TerranBarracks(0, 0, None, self.mapa, True)
 
     def getHatchery(self):
-        return Hatchery(0, 0, None, self.mapa, False, 8)
-    
+        return Hatchery(0, 0, None, self.mapa, False)
+
     def getTerranRefinery(self):
-        return TerranRefinery(0, 0, None, self.mapa, True, 8)
+        return TerranRefinery(0, 0, None, self.mapa, True)
 
     def toDictionary(self, map):
         #x, y = map.getTileIndex(self.originX, self.originY)
@@ -134,7 +135,7 @@ class TerranBuilder(Structure):
             "clase": "terranBuilder",
             "x": self.xIni,
             "y": self.yIni,
-            "id": self.id,
-            "nombre": "Base de comandos", 
+            "building": self.building,
+            "nombre": "Base de comandos",
             "funcion": "Protege la base de comandos"
         }

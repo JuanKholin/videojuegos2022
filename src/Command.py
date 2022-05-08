@@ -1,6 +1,6 @@
-from enum import Enum, auto
+from enum import IntEnum, auto
 
-class CommandId(Enum):
+class CommandId(IntEnum):
     NULL = auto()
     MOVE = auto()
     MOVE_CAMERA_UP = auto()

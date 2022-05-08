@@ -26,20 +26,21 @@ class TerranBarracks(Structure):
     clicked = False
     frame = 8
 
-    def __init__(self, xini, yini, player, map, building, id):
-        Structure.__init__(self, HP, TERRAN_BARRACK_MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
+    def __init__(self, xini, yini, player, map, building):
+        Structure.__init__(self, HP, TERRAN_BARRACK_MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
-        self.sprites = cargarSprites(TERRAN_BARRACK_PATH, 6, False, WHITE, 1.1) 
+        self.sprites = cargarSprites(TERRAN_BARRACK_PATH, 6, False, WHITE, 1.1)
         #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
-        
+
         self.image = self.sprites[self.index]
         self.operativeIndex = [4]
         self.spawningIndex = [4, 5]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
-        
+
         self.render = pygame.transform.scale(pygame.image.load(BARRACKS_RENDER), RENDER_SIZE)
 
+        self.building = building
         if building:
             self.state = BuildingState.BUILDING
         else:
@@ -67,7 +68,7 @@ class TerranBarracks(Structure):
 
     def getBuildSprite(self):
         return self.sprites[4]
-    
+
     def getOptions(self):
         return [Options.GENERATE_SOLDIER]
 
@@ -78,7 +79,7 @@ class TerranBarracks(Structure):
             "clase": "terranBarracks",
             "x": self.xIni,
             "y": self.yIni,
-            "id": self.id,
-            "nombre": "Terran cuartel", 
+            "building": self.building,
+            "nombre": "Terran cuartel",
             "funcion": "entrena tropas de infanteria"
         }

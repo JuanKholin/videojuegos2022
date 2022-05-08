@@ -17,8 +17,8 @@ class Structure(Entity.Entity):
     count = 0
     indexCount = 0
 
-    def __init__(self, hp, mineralCost, generationTime, xini, yini, mapa, id, player):
-        Entity.Entity.__init__(self, hp, xini*mapa.tw, yini*mapa.th, mineralCost, generationTime, id, player)
+    def __init__(self, hp, mineralCost, generationTime, xini, yini, mapa, player):
+        Entity.Entity.__init__(self, hp, xini*mapa.tw, yini*mapa.th, mineralCost, generationTime, takeID(), player)
         self.mapa = mapa
         self.player = player
         self.xIni = xini
@@ -58,7 +58,7 @@ class Structure(Entity.Entity):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.buildingFrames[self.frame]]]
-        
+
     # Pasa a estado operative, es decir, disponible, on, preparado, etc.
     def changeToOperative(self):
         print("OPERATIVE ", self.x, " ", self.y)
@@ -66,9 +66,9 @@ class Structure(Entity.Entity):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.operativeFrames[self.frame]]]
-        
+
     # Pasa a estado lucecitas, para sacar unidades, si lo tiene claro
-    def changeToSpawning(self):        
+    def changeToSpawning(self):
         print("SPAWNING ", self.x, " ", self.y)
         self.state = BuildingState.SPAWNING
         self.frame = 0
@@ -82,7 +82,7 @@ class Structure(Entity.Entity):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.collapsingFrames[self.frame]]]
-    
+
     # Pasa a destruido del todo, no quedan ni los restos
     def changeToDestroyed(self):
         print("DESTROYED ", self.x, " ", self.y)
@@ -121,10 +121,10 @@ class Structure(Entity.Entity):
         self.rectn.y = originY + self.heightPad/2
         self.rectn.w = self.tileW*self.mapa.tw - 1
         self.rectn.h = self.tileH*self.mapa.th - self.heightPad/2 - 1
-    
+
     def execute(self, command_id):
         pass
-    
+
     def updateOperative(self):
         if frame(self.frame) == 1:
             self.indexCount = (self.indexCount + 1) % len(self.operativeIndex)
@@ -145,13 +145,13 @@ class Structure(Entity.Entity):
 
     def updateSpawning(self):
         self.generationCount += 1
-        if frame(self.frame) == 1: 
-            self.indexCount = (self.indexCount + 1) % len(self.spawningIndex) 
+        if frame(self.frame) == 1:
+            self.indexCount = (self.indexCount + 1) % len(self.spawningIndex)
             self.index = self.spawningIndex[self.indexCount]
         if self.generationCount >= CLOCK_PER_SEC * self.training[0].generationTime:
             unit = self.training[0]
             tile = self.mapa.getTile(self.x, self.y)
-            
+
             libres = self.mapa.getEntityTilesVecinas(tile, unit.getTile())
             if len(libres) > 0:
                 unit.x = libres[0].centerx
@@ -163,7 +163,7 @@ class Structure(Entity.Entity):
                 del self.training[0]
                 if len(self.training) == 0:
                     self.state = BuildingState.OPERATIVE
-                    
+
     def updateCollapsing(self):
         pass
 
@@ -178,20 +178,20 @@ class Structure(Entity.Entity):
                 pygame.draw.ellipse(screen, RED, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
                 hp = pygame.transform.chop(pygame.transform.scale(HP2, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
             screen.blit(hp, [r.x + r.w/2 - camera.x - hp.get_rect().w/2, r.y + r.h - camera.y])
-            
+
         #sombra
         aux = pygame.mask.from_surface(self.image, 0)
         mask = aux.to_surface(setcolor=(1, 0, 0))
         mask.set_colorkey(BLACK)
         mask.set_alpha(150)
         screen.blit(mask, [image.x - camera.x - 8, image.y - camera.y - 5])
-        
+
         #self.image.blit(dark, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
         screen.blit(self.image, [image.x - camera.x, image.y - camera.y])
         if DEBBUG:
             pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
             #pygame.draw.rect(screen, BLACK, pygame.Rect(image.x - camera.x, image.y - camera.y, image.w, image.h),1)
-            
+
             tile = self.mapa.getTile(r.x + r.w/2, r.y + r.h/2)
             #libres = self.mapa.getEntityTilesVecinas(tile)
             pygame.draw.rect(screen, BLACK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, 40, 40),5)
@@ -207,7 +207,7 @@ class Structure(Entity.Entity):
         sprite = self.getBuildSprite()
         image = self.getFinalImage()
         screen.blit(sprite, (image.x - camera.x, image.y - camera.y))
-        
+
     def drawBuildTiles(self, screen, camera, tiles):
         for tile in tiles:
             r = tile.getRect()
@@ -215,7 +215,7 @@ class Structure(Entity.Entity):
                 pygame.draw.rect(screen, GREEN, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
             else:
                 pygame.draw.rect(screen, RED, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
-                
+
     def drawInfo(self, screen, color):
         dic = self.toDictionary(self.mapa)
         muestra_texto(screen, str('monotypecorsiva'), dic['nombre'], color, 25, [GUI_INFO_X2, GUI_INFO_Y2])
@@ -225,10 +225,10 @@ class Structure(Entity.Entity):
             self.drawInfoOperative(screen, color)
         elif self.state == BuildingState.SPAWNING:
             self.drawInfoSpawning(screen, color)
-            
+
     def drawInfoBuilding(self, screen, color):
         muestra_texto(screen, str('monotypecorsiva'), "Construyendo...", color, 20, [GUI_INFO_X2, GUI_INFO_Y2 + 30])
-        
+
         progreso = self.count / (self.generationTime * CLOCK_PER_SEC)
         if progreso > 1:
             progreso = 1
@@ -238,21 +238,21 @@ class Structure(Entity.Entity):
     def drawInfoOperative(self, screen, color):
         dic = self.toDictionary(self.mapa)
         muestra_texto(screen, str('monotypecorsiva'), dic['funcion'], color, 20, [GUI_INFO_X2, GUI_INFO_Y2 + 50])
-        
+
     def drawInfoSpawning(self, screen, color):
         #render de la tropa
         image = self.training[0].getRender()
         image = pygame.transform.scale(image, SPAW_UNIT_RENDER_SIZE)
         screen.blit(image, (GUI_INFO_X2 - 100, GUI_INFO_Y2 + 10))
         pygame.draw.rect(screen, GREEN, pygame.Rect(GUI_INFO_X2 - 95, GUI_INFO_Y2 + 15, 55, 60), 2)
-        
+
         #progreso
         progreso = self.generationCount / (CLOCK_PER_SEC * self.training[0].generationTime)
         if progreso > 1:
             progreso = 1
         pygame.draw.rect(screen, BLUE2, pygame.Rect(GUI_INFO_X2 - 30, GUI_INFO_Y2 + 35, 130*(progreso), 10))
         pygame.draw.rect(screen, BLUE, pygame.Rect(GUI_INFO_X2 - 30, GUI_INFO_Y2 + 35, 130, 10), 2)
-        
+
         #tropas pendientes
         pygame.draw.rect(screen, BLUE, pygame.Rect(GUI_INFO_X2 - 30, GUI_INFO_Y2 +60, 145, 55), 2)
         xPad = 0
@@ -264,9 +264,9 @@ class Structure(Entity.Entity):
             n += 1
             xPad += 45
             if n >= 3:
-                break 
+                break
 
-            
+
 
     def checkTiles(self):
         r = self.getRect()
@@ -281,7 +281,7 @@ class Structure(Entity.Entity):
         else:
             ok = False
         return ok
-    
+
     def buildProcess(self):
         pass
 
@@ -299,7 +299,7 @@ class Structure(Entity.Entity):
 
     def getOrder(self):
         return CommandId.NULL
-    
+
     def getPlayer(self):
         return self.player
 

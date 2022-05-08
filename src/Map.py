@@ -1,6 +1,5 @@
 import datetime
 import random
-from types import NoneType
 import pygame
 import math
 from tokenize import Double
@@ -168,29 +167,6 @@ class Map():
         if tileDown.type == 0 or tileDown == tileActual:
             #print("tileDown: ", tileDown.tileid)
             tiles.append(tileDown)
-        return tiles
-
-    def getAttackRoundTiles(self, rect):
-        tiles = []
-        x = self.getTile(rect.x, rect.y).centerx
-        finx = rect.x + rect.w
-        y = self.getTile(rect.x, rect.y).centery
-        finy = rect.y + rect.h
-        #print(rect.x, rect.y, rect.w, rect.h)
-        while x <= finx:
-            tileUp = self.getTile(x, y)
-            tileDown = self.getTile(x, finy)
-            tiles.append(tileUp)
-            tiles.append(tileDown)
-            print(tileUp.tileid, tileDown.tileid)
-            x += TILE_WIDTH
-        x = self.getTile(rect.x, rect.y).centerx
-        while y <= finy:
-            tileUp = self.getTile(x, y)
-            tileDown = self.getTile(finx, y)
-            print(tileUp.tileid, tileDown.tileid)
-            y += TILE_HEIGHT
-        #input()
         return tiles
 
     def getEntityTilesVecinas(self, tile, tileActual):
@@ -470,7 +446,7 @@ class Map():
             tile.g = 0
         if nodosAbiertos.__len__() == 0:
             print("camino no encontrado", tileObj.tileid)
-            #input()
+            input()
         else:
             #print("camino encontrado")
             currentTile = self.getTile(tileObj.centerx, tileObj.centery)
@@ -497,6 +473,7 @@ class Map():
         for i in range(len(self.codedMap)):
             self.mapa.insert(i,[])#Es una matriz que representa el mapa(0 es suelo, 1 es obstaculo, 2 vecino)
             for j in range(len(self.codedMap[0])):
+                print(i, j)
                 tile_sprite, type = self.loadTile(str(self.codedMap[i][j]))
                 tile = Tile.Tile(i*len(self.codedMap) + j, self.tw * j, self.th * i, self.tw, self.th, tile_sprite, type)
                 self.mapa[i].insert(j,tile)
@@ -556,30 +533,25 @@ class Map():
                 #print(tile_sprite.get_rect())
                 self.minimap[i].insert(j, tile_sprite)
 
+    #Pre: en mapa está cargado/construido
+    def loadOscuridad(self, matrizOscuridad):
+        for i in range(len(self.mapa)):
+            for j in range(len(self.mapa[0])):
+                self.mapa[i][j].oscura = matrizOscuridad[i][j]
+
     def getMinimap(self):
         return self.minimap
 
     def toDictionary(self):
+        matrizOscuridad = []
+        for i in range(len(self.mapa)):
+            matrizOscuridad.insert(i,[])
+            for j in range(len(self.mapa[0])):
+                matrizOscuridad[i].insert(j, self.mapa[i][j].oscura)
+
         return {
             "w": int(self.w / self.tw),
             "h": int(self.h / self.th),
-            "map": self.codedMap
+            "map": self.codedMap,
+            "matrizOscuridad": matrizOscuridad
         }
-
-    # Devuelve la primera entidad enemiga (estructura o unidad) encontrada en un cuadrado de NEARBY_RANGE
-    # que no sea del player player alrededor de la tile tile
-    def getNearbyRival(self, tile, player):
-        player1 = player
-        x = tile.x / 40
-        y = tile.y / 40
-        for i in range(2 * NEARBY_RANGE + 1):
-            col = int(i - NEARBY_RANGE + x)
-            for j in range(2 * NEARBY_RANGE + 1):
-                row = int(j - NEARBY_RANGE + y)
-                if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
-                    aux = self.mapa[row][col]
-                    if (aux.type == UNIT) or (aux.type == STRUCTURE):
-                        print("PLAYER2? ", aux.ocupante.player)
-                        if aux.ocupante.player != player1 and aux.ocupante in aux.ocupante.player.units:
-                            return aux.ocupante
-        return None

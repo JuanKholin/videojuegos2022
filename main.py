@@ -38,8 +38,8 @@ def procesarInput():
         elif event.type == pg.VIDEORESIZE:
             SCREEN_HEIGHT = event.h
             SCREEN_WIDTH = event.w
-            escena.camera.h = event.h
-            escena.camera.w = event.w
+            escena.camera.h = SCREEN_HEIGHT - 160
+            escena.camera.w = SCREEN_WIDTH
             screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pg.RESIZABLE)
         elif event.type == pg.KEYUP:
             escena.procesarEvent(event)
@@ -60,13 +60,13 @@ def setEntity(player, ai):
     scv7 = TerranSoldier(10, 10, player)
     scv8 = TerranWorker(11, 10, player)
     print("ID del scv 4", scv4.id)
-    structure1 = TerranBuilder(5, 6, player, mapa, False, raton, 1)
-    structure3 = TerranSupplyDepot(10, 6, player, mapa, True, 2)
+    structure1 = TerranBuilder(5, 6, player, mapa, False, raton)
+    structure3 = TerranSupplyDepot(10, 6, player, mapa, True)
 
     player.setBasePlayer(structure1)
-    structure2 = TerranBarracks(15, 9, player, mapa, False, 3)
-    structure4 = Extractor(12, 27, player, mapa, True, 4)
-    structure5 = TerranRefinery(13, 18, player, mapa, True, 5)
+    structure2 = TerranBarracks(15, 9, player, mapa, False)
+    structure4 = Extractor(12, 27, player, mapa, True)
+    structure5 = TerranRefinery(13, 18, player, mapa, True)
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addStructures(structure3)

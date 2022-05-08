@@ -25,19 +25,20 @@ class TerranSupplyDepot(Structure):
     clicked = False
     frame = 8
 
-    def __init__(self, xini, yini, player, map, building, id):
-        Structure.__init__(self, HP, TERRAN_SUPPLY_MINERAL_COST, GENERATION_TIME, xini, yini, map, id, player)
+    def __init__(self, xini, yini, player, map, building):
+        Structure.__init__(self, HP, TERRAN_SUPPLY_MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
         self.sprites = cargarSprites(TERRAN_SUPPLY_PATH, 5, False, WHITE, 1.5)
         self.image = self.sprites[self.index]
         self.operativeIndex = [4]
         self.spawningIndex = [4]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
-        
+
         self.render = pygame.transform.scale(pygame.image.load(SUPPLY_RENDER), RENDER_SIZE)
 
         self.training = []
         self.paths = []
-        
+
+        self.building = building
         if building:
             self.state = BuildingState.BUILDING
         else:
@@ -48,7 +49,7 @@ class TerranSupplyDepot(Structure):
 
     def getBuildSprite(self):
         return self.sprites[self.operativeIndex]
-    
+
     def getOptions(self):
         return []
 
@@ -56,12 +57,10 @@ class TerranSupplyDepot(Structure):
         #print("barracke x e y Ini ", self.xIni, self.yIni)
         #x, y = map.getTileIndex(self.originX, self.originY)
         return {
-            "clase": "terranBarracks",
+            "clase": "TerranSupplyDepot",
             "x": self.xIni,
             "y": self.yIni,
-            "id": self.id,
-            "nombre": "Deposito de suministros", 
+            "building": self.building,
+            "nombre": "Deposito de suministros",
             "funcion": "aumenta la capacidad de suministros"
         }
-        
-    

@@ -24,15 +24,16 @@ class Hatchery(Structure):
     frame = 8
 
     def __init__(self, xini, yini, player, map, building):
-        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, takeID(), player)
+        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
         self.sprites = cargarSprites(HATCHERY_PATH, 4, False, BLUE2, 1.8, 0)
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2, 3]
         self.spawningIndex = [0, 1, 2, 3]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
-        
+
         self.render = pygame.transform.scale(pygame.image.load(HATCHERY_RENDER), RENDER_SIZE)
 
+        self.building = building
         if building:
             self.state = BuildingState.BUILDING
         else:
@@ -43,7 +44,7 @@ class Hatchery(Structure):
         self.training = []
         self.paths = []
         self.building = False
-        
+
     def execute(self, command_id):
         if self.clicked:
             if command_id == CommandId.GENERAR_UNIDAD and self.player.resources >= ZERGLING_MINERAL_COST:
@@ -70,11 +71,10 @@ class Hatchery(Structure):
         #print("x e y del zerg builder ", self.x, self.y)
         #x, y = map.getTileIndex(self.originX, self.originY)
         return {
-            "clase": "zergBuilder",
+            "clase": "hatchery",
             "x": self.xIni,
             "y": self.yIni,
             "building": self.building,
-            "id": self.id,
-            "nombre": "Criadera de Zerg", 
+            "nombre": "Criadera de Zerg",
             "funcion": "Base enemiga"
         }
