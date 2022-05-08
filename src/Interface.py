@@ -268,9 +268,6 @@ class Interface():
             
         elif Utils.state == System_State.GAMESELECT:
             screen.blit(self.gameSelect, [0, 0])
-            pg.draw.rect(screen, GREEN, self.aceptarRect, 1)
-            pg.draw.rect(screen, BLUE, self.cancelarRect, 1)
-            pg.draw.rect(screen, BLACK, self.nuevaPartidaRect, 1)
             '''
             #Boton single player
             if self.mouse.isCollide(self.singleRect):

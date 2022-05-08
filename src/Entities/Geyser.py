@@ -61,8 +61,7 @@ class Geyser(Resource):
     def getType(self):
         return GEYSER
 
-    def toDictionary(self):
-        print("x e y del cristal ", self.x, self.y)
+    def toDictionary(self, mapa):
         return {
             "clase": "geyser",
             "capacidad": self.capacity,
