@@ -10,14 +10,14 @@ Y_PADDING =         55
 
 class Crystal(Resource):
     def __init__(self, x, y, capacidad):
-        Resource.__init__(self, x * TILE_WIDTH, y * TILE_HEIGHT + 20, CRYSTAL, capacidad)
+        Resource.__init__(self, x, y, CRYSTAL, capacidad)
         spritesheet = pg.image.load("./SPRITE/Cristal/min0" + str(self.type) + ".bmp").convert()
         spritesheet.set_colorkey((BLACK))
         self.sprites = self.divideSpritesheetByRows(spritesheet, SPRITE_PIXEL_ROWS)
         #self.image = self.sprites[4 - int(float(capacidad)/float(self.interval) + 0.5)]
         self.image = self.sprites[0]
         self.clicked = False
-        
+
         self.render = pygame.transform.scale(pygame.image.load(CRYSTAL_RENDER), RENDER_SIZE)
 
     def divideSpritesheetByRows(self,spritesheet, rows):
@@ -39,7 +39,7 @@ class Crystal(Resource):
         rectAux = pg.Rect(self.x - X_PADDING,
                 self.y - Y_PADDING, self.image.get_width() - WEIGHT_PADDING, self.image.get_height()  - HEIGHT_PADDING)
         return rectAux
-    
+
     def getType(self):
         return RESOURCE
 
@@ -48,8 +48,8 @@ class Crystal(Resource):
         return {
             "clase": "cristal",
             "capacidad": self.capacity,
-            "x": self.x,
-            "y": self.y,
-            "nombre": "Cristal", 
+            "x": self.xTile,
+            "y": self.yTile,
+            "nombre": "Cristal",
             "funcion": "Esencial para todo"
         }

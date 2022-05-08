@@ -57,7 +57,7 @@ class TerranSupplyDepot(Structure):
         #print("barracke x e y Ini ", self.xIni, self.yIni)
         #x, y = map.getTileIndex(self.originX, self.originY)
         return {
-            "clase": "TerranSupplyDepot",
+            "clase": "terranSupplyDepot",
             "x": self.xIni,
             "y": self.yIni,
             "building": self.building,
