@@ -260,7 +260,7 @@ class Interface():
                     self.cancelarPress = True
                 elif self.mouse.getClick() and self.cancelarPress and Raton.collides(endPos[0], endPos[1], self.cancelarRect):
                     print("Cancelar")
-                    Utils.state = System_State.MAINMENU
+                    Utils.state = System_State.GAMESELECT
                     self.cancelarPress = False
             elif self.mouse.isCollide(self.mapa1Rect) and press:
                     print("Mapa1")
