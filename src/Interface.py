@@ -27,6 +27,31 @@ class Interface():
         self.cancelarPress = False
         self.nuevaPartidaPress = False
 
+        # NEW GAME
+        self.newGame = pg.image.load(NEW_GAME + "newGame.png")
+        self.newGame = pg.transform.scale(self.newGame, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+        self.aceptarRect = pg.Rect(ACEPTAR_POS[0], ACEPTAR_POS[1], 260, 40)
+        self.cancelarRect = pg.Rect(CANCELAR_POS[0], CANCELAR_POS[1], 260, 40)
+        
+        self.mapa1Rect = pg.Rect(MAPA1_POS[0], MAPA1_POS[1], 90, 40)
+        self.mapa2Rect = pg.Rect(MAPA2_POS[0], MAPA2_POS[1], 90, 40)
+        self.mapa3Rect = pg.Rect(MAPA3_POS[0], MAPA3_POS[1], 90, 40)
+        self.mapa4Rect = pg.Rect(MAPA4_POS[0], MAPA4_POS[1], 90, 40)
+
+        self.facilRect = pg.Rect(FACIL_POS[0], FACIL_POS[1], 125, 40)
+        self.normalRect = pg.Rect(NORMAL_POS[0], NORMAL_POS[1], 125, 40)
+        self.dificilRect = pg.Rect(DIFICIL_POS[0], DIFICIL_POS[1], 125, 40)
+
+        self.terranRect = pg.Rect(TERRAN_POS[0], TERRAN_POS[1], 190, 40)
+        self.zergRect = pg.Rect(ZERG_POS[0], ZERG_POS[1], 190, 40)
+
+        self.selectedMap = 1
+        self.selectedDif = "Facil"
+        self.selectedRaza = "Terran"
+
+
+
         #MAIN MENU
         self.mainMenu = pg.image.load(MAIN_MENU + ".png")
         self.mainMenu = pg.transform.scale(self.mainMenu, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -195,7 +220,7 @@ class Interface():
                 elif self.mouse.getClick() and self.nuevaPartidaPress and Raton.collides(endPos[0], endPos[1], self.nuevaPartidaRect):
                     print("Nueva partida")
                     #Pasar a menu de nueva partida
-                    Utils.state = System_State.MAP1
+                    Utils.state = System_State.NEWGAME
                     stopMusic()
                     self.nuevaPartidaPress = False
             elif not aceptarCollide:
@@ -205,6 +230,80 @@ class Interface():
                 self.aceptarPress = False
                 self.cancelarPress = False
                 self.nuevaPartidaPress = False
+
+        elif Utils.state == System_State.NEWGAME:
+            aceptarCollide = True
+
+            press, iniPos = self.mouse.getPressed()
+            #Boton aceptar
+            if self.mouse.isCollide(self.aceptarRect):
+                aceptarCollide = True
+                if not self.soundPlayed:
+                    playSound(botonSound)
+                    self.soundPlayed = True
+                endPos = self.mouse.getPosition()
+                if not self.aceptarPress and press and Raton.collides(iniPos[0], iniPos[1], self.aceptarRect):
+                    self.aceptarPress = True
+                elif self.mouse.getClick() and self.aceptarPress and Raton.collides(endPos[0], endPos[1], self.aceptarRect):
+                    print("Aceptar")
+                    #Con self.selectedMap selectedDif selectedRaza se crea la partida
+                    Utils.state = System_State.MAP1
+                    stopMusic()
+                    self.singlePress = False
+                
+            elif self.mouse.isCollide(self.cancelarRect):
+                if not self.soundPlayed:
+                    playSound(botonSound)
+                    self.soundPlayed = True
+                endPos = self.mouse.getPosition()
+                if not self.cancelarPress and press and Raton.collides(iniPos[0], iniPos[1], self.cancelarRect):
+                    self.cancelarPress = True
+                elif self.mouse.getClick() and self.cancelarPress and Raton.collides(endPos[0], endPos[1], self.cancelarRect):
+                    print("Cancelar")
+                    Utils.state = System_State.MAINMENU
+                    self.cancelarPress = False
+            elif self.mouse.isCollide(self.mapa1Rect) and press:
+                    print("Mapa1")
+                    #Pasar a menu de nueva partida
+                    self.selectedMap = 1
+            elif self.mouse.isCollide(self.mapa2Rect) and press:
+                    print("Mapa2")
+                    #Pasar a menu de nueva partida
+                    self.selectedMap = 2
+            elif self.mouse.isCollide(self.mapa3Rect) and press:
+                    print("Mapa3")
+                    #Pasar a menu de nueva partida
+                    self.selectedMap = 3
+            elif self.mouse.isCollide(self.mapa4Rect) and press:
+                    print("Mapa4")
+                    #Pasar a menu de nueva partida
+                    self.selectedMap = 4
+            elif self.mouse.isCollide(self.facilRect) and press:
+                    print("FACIL")
+                    #Pasar a menu de nueva partida
+                    self.selectedDif = "Facil"
+            elif self.mouse.isCollide(self.normalRect) and press:
+                    print("NORMAL")
+                    #Pasar a menu de nueva partida
+                    self.selectedDif = "Normal"
+            elif self.mouse.isCollide(self.dificilRect) and press:
+                    print("DIFICL")
+                    #Pasar a menu de nueva partida
+                    self.selectedDif = "Dificil"
+            elif self.mouse.isCollide(self.terranRect) and press:
+                    print("TERRAN")
+                    #Pasar a menu de nueva partida
+                    self.selectedRaza = "Terran"
+            elif self.mouse.isCollide(self.zergRect) and press:
+                    print("ZERG")
+                    #Pasar a menu de nueva partida
+                    self.selectedRaza = "Zerg"
+            elif not aceptarCollide:
+                self.soundPlayed = False
+                    
+            if self.mouse.getClick():
+                self.aceptarPress = False
+                self.cancelarPress = False
         
         elif Utils.state == System_State.ONGAME:
             #si esta en GUI desactivar funciones de raton
@@ -286,6 +385,25 @@ class Interface():
                 muestra_texto(screen, str('monotypecorsiva'), "exit", GREEN2, MAIN_MENU_TEXT_SIZE, EXIT_TEXT_POS)
             else:
                 muestra_texto(screen, str('monotypecorsiva'), "exit", GREEN3, MAIN_MENU_TEXT_SIZE, EXIT_TEXT_POS)            '''
+
+        elif Utils.state == System_State.NEWGAME:
+            screen.blit(self.newGame, [0, 0])
+            '''
+            pygame.draw.rect(screen, BLUE, self.mapa1Rect, 1)
+            pygame.draw.rect(screen, BLACK, self.mapa2Rect, 1)
+            pygame.draw.rect(screen, GREEN, self.mapa3Rect, 1)
+            pygame.draw.rect(screen, PINK, self.mapa4Rect, 1)
+
+            pygame.draw.rect(screen, BLACK, self.facilRect, 1)
+            pygame.draw.rect(screen, GREEN, self.normalRect, 1)
+            pygame.draw.rect(screen, PINK, self.dificilRect, 1)
+
+            pygame.draw.rect(screen, GREEN, self.terranRect, 1)
+            pygame.draw.rect(screen, PINK, self.zergRect, 1)'''
+
+            muestra_texto(screen, str('monotypecorsiva'), str(self.selectedMap), WHITE, 40, (740,193))
+            muestra_texto(screen, str('monotypecorsiva'), self.selectedDif, WHITE, 40, (840,299))
+            muestra_texto(screen, str('monotypecorsiva'), self.selectedRaza, WHITE, 40, (765,410))
             
         elif Utils.state == System_State.ONGAME:
             if DEBBUG == True:

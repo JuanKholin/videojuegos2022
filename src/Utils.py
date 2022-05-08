@@ -9,6 +9,7 @@ DEBBUG = False
 class System_State(Enum):
     MAINMENU = auto()
     GAMESELECT = auto()
+    NEWGAME = auto()
     MAP1 = auto()
     ONGAME = auto()
     BUILDING_MODE = auto()
@@ -177,9 +178,9 @@ EXIT_FB = "SPRITE/mainMenu/Exit/Spanish/exitones"
 EXIT_FB_N = 30
 EXIT_FB_POS = [680, 420]
 
-    ###########
-    #MAIN MENU#
-    ###########
+    #############
+    #GAME SELECT#
+    #############
 
 ACEPTAR_POS = [700, 585]
 CANCELAR_POS = [700, 700]
@@ -188,6 +189,25 @@ NUEVA_PARTIDA_POS = [80, 650]
 
 GAME_SELECT = "SPRITE/gameSelect/"
 GAME_SELECT_TEXT_SIZE = 30
+
+    #############
+    #GAME SELECT#
+    #############
+
+MAPA1_POS = [80, 265]
+MAPA2_POS = [200, 265]
+MAPA3_POS = [310, 265]
+MAPA4_POS = [425, 265]
+
+FACIL_POS = [80, 370]
+NORMAL_POS = [240, 370]
+DIFICIL_POS = [390, 370]
+
+TERRAN_POS = [80, 490]
+ZERG_POS = [320, 490]
+
+NEW_GAME = "SPRITE/newGame/"
+NEW_GAME_TEXT_SIZE = 30
 
 BARRA_COMANDO = "SPRITE/EXTRA/gui_frame"
 

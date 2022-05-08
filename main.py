@@ -120,6 +120,8 @@ def update():
     elif getGameState() == System_State.GAMESELECT:
         #Cargar las partidas
         escena.update()
+    elif getGameState() == System_State.NEWGAME:
+        escena.update()
     else: #STATE == System_State.EXIT:
         pg.quit()
         sys.exit()
@@ -130,7 +132,7 @@ def draw():
         p1Interface.draw(screen, camera)
     elif Utils.state == System_State.ONGAME:
         escena.draw(screen)
-    elif Utils.state == System_State.GAMESELECT:
+    elif Utils.state == System_State.GAMESELECT or Utils.state == System_State.NEWGAME:
         escena.draw(screen)
     raton.draw(screen, camera)
     #aux(screen)
