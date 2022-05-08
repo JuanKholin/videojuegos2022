@@ -43,7 +43,7 @@ class Crystal(Resource):
     def getType(self):
         return RESOURCE
 
-    def toDictionary(self, mapa):
+    def toDictionary(self):
         return {
             "clase": "cristal",
             "capacidad": self.capacity,

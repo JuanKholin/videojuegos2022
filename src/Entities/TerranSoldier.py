@@ -56,7 +56,7 @@ class TerranSoldier(Soldier):
     def __init__(self, xIni, yIni, player):
         Soldier.__init__(self, HP, xIni * TILE_WIDTH + 20, yIni * TILE_HEIGHT, MINERAL_COST,
                 GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME,
-                PADDING,  takeID(), player, INVERSIBLE_FRAMES, FRAMES, DIR_OFFSET, ATTACK_FRAMES, 
+                PADDING,  takeID(), player, INVERSIBLE_FRAMES, FRAMES, DIR_OFFSET, ATTACK_FRAMES,
                 STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, X_PADDING,
                 Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ATTACK_INFO)
 
@@ -74,7 +74,7 @@ class TerranSoldier(Soldier):
         #self.imageRect = rect(self.x - self.image.get_width()/2, self.y -self.image.get_height() , self.image.get_width(), self.image.get_height())
         #self.imageRect = rect(self.x, self.y, self.image.get_width(), self.image.get_height())
         self.render = pygame.transform.scale(pygame.image.load(SOLDIER_RENDER), UNIT_RENDER_SIZE)
-    
+
     def getUpgrades(self):
         upgrades = []
         if self.player.armorUpgrade == 0:
@@ -88,11 +88,11 @@ class TerranSoldier(Soldier):
         return upgrades
 
     def toDictionary(self, map):
-        x, y = map.getTileIndex(self.x, self.y)
-        return {
+        fatherDictionary = super().toDictionary(map)
+        sonDictionary = {
             "clase": "terranSoldier",
-            "x": x,
-            "y": y,
-            "nombre": "Soldado Terran", 
+            "nombre": "Soldado Terran",
             "funcion": "unidad de infanteria"
         }
+        sonDictionary.update(fatherDictionary)
+        return sonDictionary

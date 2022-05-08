@@ -143,7 +143,7 @@ class Unit(Entity):
             drawPos = self.getDrawPosition()
             if self.clicked:
                 pg.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y + (0.7*r.h)- camera.y,r.w , 0.3*r.h], 2)
-            
+
             aux = pygame.mask.from_surface(self.image, 0)
             mask = aux.to_surface(setcolor=(1, 0, 0))
             mask.set_colorkey(BLACK)
@@ -706,7 +706,7 @@ class Unit(Entity):
 
     def isReadyToFight(self):
         return (self.state != UnitState.ATTACKING) and (self.hp > 0)
-   
+
     #####################
     # GETTERS Y SETTERS #
     #####################
@@ -752,3 +752,10 @@ class Unit(Entity):
     # Es darle un valor a un booleano, nada mas y nada menos
     def setClicked(self, click):
         self.clicked = click
+
+    def toDictionary(self, map):
+        x, y = map.getTileIndex(self.x, self.y)
+        return {
+            "x": x,
+            "y": y,
+        }
