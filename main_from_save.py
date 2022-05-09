@@ -98,7 +98,7 @@ textFile = open("save_file.json", "r")
 data = json.load(textFile)
 escena, raton, p1Interface, camera = loadFromSave(data)
 
-aI = AI(escena.p2, EASY)
+aI = AI(escena.p2, Race.ZERG ,EASY)
 
 escena.aI = aI
 

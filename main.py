@@ -26,6 +26,73 @@ from src.Entities.Zergling import *
 from src.Entities.TerranSupplyDepot import *
 from src.Entities.Extractor import *
 from src.Entities.TerranRefinery import *
+# Programa principal
+pg.init()
+
+flags = pg.FULLSCREEN | pg.DOUBLEBUF
+size = (SCREEN_WIDTH, SCREEN_HEIGHT)
+screen =  pg.display.set_mode(size)
+
+#Controlar frames por segundo
+clock = pg.time.Clock()
+
+# Player 1
+keyMap ={
+  pg.K_UP: CommandId.MOVE_CAMERA_UP,
+  pg.K_DOWN: CommandId.MOVE_CAMERA_DOWN,
+  pg.K_RIGHT: CommandId.MOVE_CAMERA_RIGHT,
+  pg.K_LEFT: CommandId.MOVE_CAMERA_LEFT,
+  pg.K_r: CommandId.ROTATE,
+  pg.K_v: CommandId.GENERATE_UNIT,
+  pg.K_c: CommandId.BUILD_BARRACKS,
+  pg.K_x: CommandId.BUILD_REFINERY,
+  pg.K_d: CommandId.UPGRADE_SOLDIER_DAMAGE,
+  pg.K_a: CommandId.UPGRADE_SOLDIER_ARMOR,
+  pg.K_m: CommandId.UPGRADE_WORKER_MINING,
+  pg.K_g: CommandId.SAVE_GAME,
+}
+commandMap ={
+  CommandId.MOVE_CAMERA_UP: pg.K_UP,
+  CommandId.MOVE_CAMERA_DOWN: pg.K_DOWN,
+  CommandId.MOVE_CAMERA_RIGHT: pg.K_RIGHT,
+  CommandId.MOVE_CAMERA_LEFT: pg.K_LEFT,
+  CommandId.ROTATE: pg.K_r,
+}
+
+
+mapa = Map.Map(40, 40, True)
+mapa.setElevacion(16, 3)
+mapa.setElevacion(20, 14)
+mapa.setElevacion(17, 30)
+mapa.setElevacion(12, 20)
+mapa.setElevacion(8, 35)
+mapa.setElevacion(5, 12)
+mapa.setElevacion(32, 29)
+
+player1 = Player.Player([], [], 400, keyMap, commandMap, mapa, True)
+
+# Raton
+
+
+# Player 2 AKA IA
+player2 = Player.Player([], [], 40000, {}, {}, mapa, False)
+aI = AI(player2, Race.ZERG, EASY)
+
+# Camara
+# pre: mapa tan grande como ventana
+camera = Camera(0, 0, SCREEN_HEIGHT - 160, SCREEN_WIDTH)
+
+# Escena
+
+
+
+raton = Raton.Raton(player1, player2, mapa)
+p1Interface = Interface(player1, player2, raton)
+raton.addInterface(p1Interface)
+
+escena = Escena(player1, player2, aI, mapa, camera, raton, p1Interface, [])
+raton.setEscena(escena)
+#escena.mapa.addOre(100,100)
 
 
 # Auxiliar del bucle principal
@@ -153,72 +220,10 @@ def draw():
     #aux(screen)
     pg.display.flip()
 
-# Programa principal
-pg.init()
-
-flags = pg.FULLSCREEN | pg.DOUBLEBUF
-size = (SCREEN_WIDTH, SCREEN_HEIGHT)
-screen =  pg.display.set_mode(size)
-
-#Controlar frames por segundo
-clock = pg.time.Clock()
-
-# Player 1
-keyMap ={
-  pg.K_UP: CommandId.MOVE_CAMERA_UP,
-  pg.K_DOWN: CommandId.MOVE_CAMERA_DOWN,
-  pg.K_RIGHT: CommandId.MOVE_CAMERA_RIGHT,
-  pg.K_LEFT: CommandId.MOVE_CAMERA_LEFT,
-  pg.K_r: CommandId.ROTATE,
-  pg.K_v: CommandId.GENERATE_UNIT,
-  pg.K_c: CommandId.BUILD_BARRACKS,
-  pg.K_x: CommandId.BUILD_REFINERY,
-  pg.K_d: CommandId.UPGRADE_SOLDIER_DAMAGE,
-  pg.K_a: CommandId.UPGRADE_SOLDIER_ARMOR,
-  pg.K_m: CommandId.UPGRADE_WORKER_MINING,
-  pg.K_g: CommandId.SAVE_GAME,
-}
-commandMap ={
-  CommandId.MOVE_CAMERA_UP: pg.K_UP,
-  CommandId.MOVE_CAMERA_DOWN: pg.K_DOWN,
-  CommandId.MOVE_CAMERA_RIGHT: pg.K_RIGHT,
-  CommandId.MOVE_CAMERA_LEFT: pg.K_LEFT,
-  CommandId.ROTATE: pg.K_r,
-}
-
-mapa = Map.Map(40, 40, True)
-mapa.setElevacion(16, 3)
-mapa.setElevacion(20, 14)
-mapa.setElevacion(17, 30)
-mapa.setElevacion(12, 20)
-mapa.setElevacion(8, 35)
-mapa.setElevacion(5, 12)
-mapa.setElevacion(32, 29)
-
-player1 = Player.Player([], [], 400, keyMap, commandMap, mapa, True)
-
-# Raton
-
-
-# Player 2 AKA IA
-player2 = Player.Player([], [], 40000, {}, {}, mapa, False)
-aI = AI(player2, Race.ZERG, EASY)
-
-# Camara
-# pre: mapa tan grande como ventana
-camera = Camera(0, 0, SCREEN_HEIGHT - 160, SCREEN_WIDTH)
-
-# Escena
 
 
 
-raton = Raton.Raton(player1, player2, mapa)
-p1Interface = Interface(player1, player2, raton)
-raton.addInterface(p1Interface)
 
-escena = Escena(player1, player2, aI, [], camera, raton, p1Interface, [])
-raton.setEscena(escena)
-#escena.mapa.addOre(100,100)
 
 # Bucle principal
 while True:

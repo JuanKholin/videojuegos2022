@@ -44,7 +44,7 @@
         "funcion": "unidad de infanteria"
       },
       {
-        "clase": "terranSoldier",
+        "clase": "terranWorker",
         "x": 10,
         "y": 10,
         "nombre": "Soldado Terran",
