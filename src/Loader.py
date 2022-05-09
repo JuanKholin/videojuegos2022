@@ -30,11 +30,11 @@ def loadFromSave(nombre):
 
     # Raton
     raton = Raton.Raton(escena.p1, escena.p2, escena.mapa)
-   
-    
+
+
     raton.setEscena(escena)
     escena.raton = raton
-    
+
 
     loadUnits(data["p1"]["units"], escena.p1)
     loadStructures(data["p1"]["structures"], escena.p1, escena.mapa, escena.raton)
@@ -59,13 +59,16 @@ def loadMap(mapDictionary):
     m.loadOscuridad(mapDictionary["matrizOscuridad"])
     return m
 
-#pre: playerDictionarie es un diccionario con la info del jugador
+#pre: playerDictionary es un diccionario con la info del jugador
 #   map: mapa dela escena
 #post: devuelve un Player
 def loadPlayer(playerDictionary, map, isPlayer):
     p = Player.Player([], [], playerDictionary["resources"], {}, {}, map, isPlayer)
     loadKeyMap(playerDictionary["keyMap"], p)
     loadCommandMap(playerDictionary["commandMap"], p)
+    p.dañoUpgrade = playerDictionary["dañoUpgrade"]
+    p.armorUpgrade = playerDictionary["armorUpgrade"]
+    p.mineUpgrade = playerDictionary["mineUpgrade"]
     return p
 
 #pre: unitDictionaries: es una lista de diccionarios con la info de las unidades
@@ -99,7 +102,15 @@ def loadUnits(unitDictionaries, player):
 def loadStructures(structureDictionaries, player, map, raton):
     for s in structureDictionaries:
         if s["clase"] == "terranBuilder":
-            player.addStructures(TerranBuilder(s["x"], s["y"], player, map, s["building"], raton))
+            structure = TerranBuilder(s["x"], s["y"], player, map, s["building"], raton)
+            structure.dañoMineralUpCost = s["dañoMineralUpCost"]
+            structure.dañoGasUpCost = s["dañoGasUpCost"]
+            structure.armorMineralUpCost = s["armorMineralUpCost"]
+            structure.armorGasUpCost = s["armorGasUpCost"]
+            structure.mineMineralUpCost = s["mineMineralUpCost"]
+            structure.mineGasUpCost = s["mineGasUpCost"]
+            player.addStructures(structure)
+
         elif s["clase"] == "terranBarracks":
             player.addStructures(TerranBarracks(s["x"], s["y"], player, map, s["building"]))
         elif s["clase"] == "hatchery":

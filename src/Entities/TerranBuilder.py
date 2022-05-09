@@ -141,7 +141,13 @@ class TerranBuilder(Structure):
             "clase": "terranBuilder",
             "building": self.building,
             "nombre": "Base de comandos",
-            "funcion": "Protege la base de comandos"
+            "funcion": "Protege la base de comandos",
+            "dañoMineralUpCost": self.dañoMineralUpCost,
+            "dañoGasUpCost": self.dañoGasUpCost,
+            "armorMineralUpCost": self.armorMineralUpCost,
+            "armorGasUpCost": self.armorGasUpCost,
+            "mineMineralUpCost": self.mineMineralUpCost,
+            "mineGasUpCost": self.mineGasUpCost,
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary
