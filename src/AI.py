@@ -94,7 +94,7 @@ class AI():
             #print("IA DECIDE INVADIR")
             self.seekAndDestroy(units)
 
-    # Toma una decision y rebalancea el pool de decisiones, me ha quedado bastante original la verdad, 
+    # Toma una decision y rebalancea el pool de decisiones, me ha quedado bastante original la verdad,
     # estoy orgulloso y no se ni si funciona xdxdxdxd
     def decide(self):
         randPick = randint(1, 100)
@@ -121,7 +121,7 @@ class AI():
     def selfDefense(self, units, structures):
         # Consigue el set de objetivos sin repetidos
         objectivesSet = set()
-        for structure in structures: 
+        for structure in structures:
             if structure.lastAttacker != None:
                 if structure.lastAttacker.attackedOne == structure:
                     objectivesSet.add(structure.lastAttacker)
@@ -146,7 +146,7 @@ class AI():
                 if (self.barracks == ZERG_BARRACKS) and (self.data.resources >= ZERG_BARRACKS_MINERAL_COST):
                     print("Construye zergbarracks")
                     self.data.resources -= ZERG_BARRACKS_MINERAL_COST
-                    self.buildZergBarracks(structures) # Seria Zerg pero no hay edificio xd
+                    self.buildTerranBarracks(structures) # Seria Zerg pero no hay edificio xd
                 elif (self.barracks == TERRAN_BARRACKS) and (self.data.resources >= TERRAN_BARRACKS_MINERAL_COST):
                     print("Construye terranbarracks")
                     self.data.resources -= TERRAN_BARRACKS_MINERAL_COST
@@ -160,7 +160,7 @@ class AI():
                     print("Construye terrandepot")
                     self.data.resources -= TERRAN_DEPOT_MINERAL_COST
                     self.buildTerranDepot(structures)
-            
+
     def restoreArmy(self, units, structures):
         nWorkers = 0
         nSoldiers = 0
@@ -204,7 +204,7 @@ class AI():
     def gatherFarResources(self):
         pass
 
-    # Apunta a ciertos soldados libres en funcion del ejercito disponible 
+    # Apunta a ciertos soldados libres en funcion del ejercito disponible
     # para invadir hasta su muerte o la victoria
     def seekAndDestroy(self, units):
         soldiers = self.getSoldiers(units)

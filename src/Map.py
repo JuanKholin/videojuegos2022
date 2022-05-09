@@ -564,7 +564,7 @@ class Map():
     def getNextTileByOffset(self, x, y, xOffset, yOffset):
         xAux = x + xOffset
         yAux = y + yOffset
-        if (xAux >= 0) and (xAux < self.tilesW) and (yAux >= 0) and (yAux < self.tilesH):        
+        if (xAux >= 0) and (xAux < self.tilesW) and (yAux >= 0) and (yAux < self.tilesH):
             return self.mapa[int(yAux)][int(xAux)]
         return None
 
@@ -578,3 +578,44 @@ class Map():
                             return False
                 return True
         return False
+
+    def getAttackRoundTiles(self, rect):
+        tiles = []
+        x = self.getTile(rect.x, rect.y).centerx
+        finx = rect.x + rect.w
+        y = self.getTile(rect.x, rect.y).centery
+        finy = rect.y + rect.h
+        #print(rect.x, rect.y, rect.w, rect.h)
+        while x <= finx:
+            tileUp = self.getTile(x, y)
+            tileDown = self.getTile(x, finy)
+            tiles.append(tileUp)
+            tiles.append(tileDown)
+            print(tileUp.tileid, tileDown.tileid)
+            x += TILE_WIDTH
+        x = self.getTile(rect.x, rect.y).centerx
+        while y <= finy:
+            tileUp = self.getTile(x, y)
+            tileDown = self.getTile(finx, y)
+            print(tileUp.tileid, tileDown.tileid)
+            y += TILE_HEIGHT
+        #input()
+        return tiles
+
+    # Devuelve la primera entidad enemiga (estructura o unidad) encontrada en un cuadrado de NEARBY_RANGE
+    # que no sea del player player alrededor de la tile tile
+    def getNearbyRival(self, tile, player):
+        player1 = player
+        x = tile.x / 40
+        y = tile.y / 40
+        for i in range(2 * NEARBY_RANGE + 1):
+            col = int(i - NEARBY_RANGE + x)
+            for j in range(2 * NEARBY_RANGE + 1):
+                row = int(j - NEARBY_RANGE + y)
+                if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
+                    aux = self.mapa[row][col]
+                    if (aux.type == UNIT) or (aux.type == STRUCTURE):
+                        print("PLAYER2? ", aux.ocupante.player)
+                        if aux.ocupante.player != player1 and aux.ocupante in aux.ocupante.player.units:
+                            return aux.ocupante
+        return None
