@@ -74,6 +74,7 @@ class TerranSoldier(Soldier):
         #self.imageRect = rect(self.x - self.image.get_width()/2, self.y -self.image.get_height() , self.image.get_width(), self.image.get_height())
         #self.imageRect = rect(self.x, self.y, self.image.get_width(), self.image.get_height())
         self.render = pygame.transform.scale(pygame.image.load(SOLDIER_RENDER), UNIT_RENDER_SIZE)
+        self.type = TERRAN_SOLDIER
 
     def getUpgrades(self):
         upgrades = []

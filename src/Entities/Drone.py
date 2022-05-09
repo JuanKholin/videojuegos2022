@@ -66,6 +66,7 @@ class Drone(Worker):
         self.changeToStill()
         self.updateOwnSpace()
         self.render = pygame.transform.scale(pygame.image.load(DRONE_RENDER), UNIT_RENDER_SIZE)
+        self.type = ZERG_WORKER
 
     def toDictionary(self, map):
         x, y = map.getTileIndex(self.x, self.y)

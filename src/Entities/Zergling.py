@@ -66,6 +66,8 @@ class Zergling(Soldier):
         
         self.render = pygame.transform.scale(pygame.image.load(ZERGLING_RENDER), UNIT_RENDER_SIZE)
 
+        self.type = ZERG_SOLDIER
+
     def toDictionary(self, map):
         x, y = map.getTileIndex(self.x, self.y)
         return {

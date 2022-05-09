@@ -56,13 +56,13 @@ class TerranBarracks(Structure):
         self.type = TERRAN_BARRACKS
 
     def execute(self, command_id):
-        if self.clicked:
-            print("soy clickeado?")
-            if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_SOLDIER) and self.player.resources >= TERRAN_SOLDIER_MINERAL_COST:
-                self.player.resources -= TERRAN_SOLDIER_MINERAL_COST
-                terranSoldier = TerranSoldier(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
-                self.generateUnit(terranSoldier)
-                self.state = BuildingState.SPAWNING
+        #if self.clicked:
+        #print("soy clickeado?")
+        if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_SOLDIER) and self.player.resources >= TERRAN_SOLDIER_MINERAL_COST:
+            self.player.resources -= TERRAN_SOLDIER_MINERAL_COST
+            terranSoldier = TerranSoldier(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
+            self.generateUnit(terranSoldier)
+            self.state = BuildingState.SPAWNING
 
     def command(self, command):
         if self.state != BuildingState.BUILDING:
