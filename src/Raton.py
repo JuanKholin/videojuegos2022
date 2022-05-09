@@ -157,13 +157,13 @@ class Raton(pygame.sprite.Sprite):
         #if DEBBUG:
         #    if frame(360) == 1:
         #        print(self.rel_pos[0], self.rel_pos[1])
-
-        if pygame.mouse.get_pressed()[0]:
-            mouse_pos = pygame.mouse.get_pos()
-            minimapRect = createRect(MINIMAP_X, MINIMAP_Y, MINIMAP_X + MINIMAP_W, MINIMAP_Y + MINIMAP_H)
-            if collides(mouse_pos[0], mouse_pos[1], minimapRect):
-                camera.setX(((mouse_pos[0]-MINIMAP_X)/MINIMAP_W*self.player.mapa.w) - camera.w/2, self.player.mapa.w)
-                camera.setY(((mouse_pos[1]-MINIMAP_Y)/MINIMAP_H*self.player.mapa.h) - camera.h/2, self.player.mapa.h)
+        if Utils.state == System_State.ONGAME:
+            if pygame.mouse.get_pressed()[0]:
+                mouse_pos = pygame.mouse.get_pos()
+                minimapRect = createRect(MINIMAP_X, MINIMAP_Y, MINIMAP_X + MINIMAP_W, MINIMAP_Y + MINIMAP_H)
+                if collides(mouse_pos[0], mouse_pos[1], minimapRect):
+                    camera.setX(((mouse_pos[0]-MINIMAP_X)/MINIMAP_W*self.player.mapa.w) - camera.w/2, self.player.mapa.w)
+                    camera.setY(((mouse_pos[1]-MINIMAP_Y)/MINIMAP_H*self.player.mapa.h) - camera.h/2, self.player.mapa.h)
 
 
     def getPosition(self):
@@ -319,7 +319,7 @@ class Raton(pygame.sprite.Sprite):
                                         resource.setClicked(True)
                                         unitSel = True
                                         self.player.resourceSelected = resource
-                                        print("CLICKADO ")
+                                        print("CLICKADO aaaa")
                                         break
 
                             if unitSel:
