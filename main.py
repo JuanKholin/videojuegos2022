@@ -131,7 +131,7 @@ def update():
         setEntity(player1, player2)
         setGameState(System_State.ONGAME)
     elif getGameState() == System_State.ONGAME:
-        p1Interface.update()
+        escena.update()
     elif getGameState() == System_State.GAMESELECT:
         #Cargar las partidas
         p1Interface.update()
