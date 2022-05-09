@@ -165,6 +165,10 @@ class Raton(pygame.sprite.Sprite):
                     camera.setX(((mouse_pos[0]-MINIMAP_X)/MINIMAP_W*self.player.mapa.w) - camera.w/2, self.player.mapa.w)
                     camera.setY(((mouse_pos[1]-MINIMAP_Y)/MINIMAP_H*self.player.mapa.h) - camera.h/2, self.player.mapa.h)
 
+    def setSelf(self, raton):
+        self.player = raton.player
+        self.enemy = raton.enemy
+        self.mapa = raton.mapa
 
     def getPosition(self):
         return self.real_pos

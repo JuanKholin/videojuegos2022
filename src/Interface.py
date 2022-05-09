@@ -7,6 +7,8 @@ from . import Player, Command, Utils, Raton, Button, Upgrade, UpgradeButton
 from src.Music import *
 from src.Lib import *
 from src.Utils import *
+from src.Loader import *
+from src.AI import *
 
 class Interface():
     buttonX = 0
@@ -106,21 +108,21 @@ class Interface():
     
     def loadAllButton(self):
         allButton = {}
-        aux = Button.Button(BUTTON_PATH + "barracks" + ".bmp", Command.CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineral.png", "Construir Barracas", 55, 50)
+        aux = Button.Button(BUTTON_PATH + "barracks" + ".bmp", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineral.png", "Construir Barracas", 55, 50)
         allButton[Options.BUILD_BARRACKS] = aux
-        aux = Button.Button(BUTTON_PATH + "worker" + ".bmp", Command.CommandId.GENERATE_WORKER, BUTTON_PATH + "construirConMineral.png", "Construir VCE", 45, 50)
+        aux = Button.Button(BUTTON_PATH + "worker" + ".bmp", CommandId.GENERATE_WORKER, BUTTON_PATH + "construirConMineral.png", "Construir VCE", 45, 50)
         allButton[Options.GENERATE_WORKER] = aux
-        aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", Command.CommandId.GENERATE_SOLDIER, BUTTON_PATH + "construirConMineral.png", "Construir Soldado", 55, 50)
+        aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.GENERATE_SOLDIER, BUTTON_PATH + "construirConMineral.png", "Construir Soldado", 55, 50)
         allButton[Options.GENERATE_SOLDIER] = aux
-        aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", Command.CommandId.BUILD_HATCHERY)
+        aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.BUILD_HATCHERY)
         allButton[Options.BUILD_HATCHERY] = aux
-        aux = Button.Button(BUTTON_PATH + "refinery" + ".bmp", Command.CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineral.png", "Construir Refineria", 50, 50, 45)
+        aux = Button.Button(BUTTON_PATH + "refinery" + ".bmp", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineral.png", "Construir Refineria", 50, 50, 45)
         allButton[Options.BUILD_REFINERY] = aux
-        aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "danyoUpgrade" + ".png", Command.CommandId.UPGRADE_SOLDIER_DAMAGE,BUTTON_PATH + "cartelUpgrade.bmp", "Mejorar daño;de las unidades", 90, 50)
+        aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "danyoUpgrade" + ".png", CommandId.UPGRADE_SOLDIER_DAMAGE,BUTTON_PATH + "cartelUpgrade.bmp", "Mejorar daño;de las unidades", 90, 50)
         allButton[Options.DANYO_UPGRADE] = aux
-        aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "mineUpgrade" + ".png", Command.CommandId.UPGRADE_WORKER_MINING,BUTTON_PATH + "cartelUpgrade.bmp", "Reducir tiempo de minado;de los VCE", 90, 50)
+        aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "mineUpgrade" + ".png", CommandId.UPGRADE_WORKER_MINING,BUTTON_PATH + "cartelUpgrade.bmp", "Reducir tiempo de minado;de los VCE", 90, 50)
         allButton[Options.MINE_UPGRADE] = aux
-        aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "armorUpgrade" + ".png", Command.CommandId.UPGRADE_SOLDIER_ARMOR,BUTTON_PATH + "cartelUpgrade.bmp", "Mejorar blindaje;de las unidades", 90, 120)
+        aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "armorUpgrade" + ".png", CommandId.UPGRADE_SOLDIER_ARMOR,BUTTON_PATH + "cartelUpgrade.bmp", "Mejorar blindaje;de las unidades", 90, 120)
         allButton[Options.ARMOR_UPGRADE] = aux
         return allButton
 
@@ -147,7 +149,7 @@ class Interface():
             self.partidas.append({'nombre': str(file).split('.')[0], 'rect': pg.Rect(PARTIDA_POS[0], PARTIDA_POS[1] + YPARTIDA_PAD*pad, 440, 30)})
             pad += 1
     
-    def update(self):
+    def update(self, escena, raton, camera):
         if Utils.state == System_State.MAINMENU:
             
             singleCollide = False
@@ -211,7 +213,17 @@ class Interface():
                 elif self.mouse.getClick() and self.aceptarPress and Raton.collides(endPos[0], endPos[1], self.aceptarRect):
                     print("Aceptar")
                     #Hay que hacer uno generico, o que carge el mapa y pase a ONGAME aqui
-                    Utils.state = System_State.MAP1
+                    _escena, _raton, _camera = loadFromSave(self.selectedPartida['nombre'])
+                    escena.setSelf(_escena)
+                    aI = AI(escena.p2, Race.TERRAN, EASY)
+                    escena.aI = aI
+                    raton.setSelf(_raton)
+                    _p1Interface = Interface(escena.p1, escena.p2, raton)
+                    raton.addInterface(_p1Interface)
+                    escena.interfaz = _p1Interface
+                    camera.setSelf(_camera)
+                    print("mapa: ", type(escena))
+                    Utils.state = System_State.ONGAME
                     stopMusic()
                     self.singlePress = False
                 

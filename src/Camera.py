@@ -52,3 +52,9 @@ class Camera():
             "h": self.h,
             "w": self.w,
         }
+    
+    def setSelf(self, camera):
+        self.x = camera.x
+        self.y = camera.y
+        self.h = camera.h
+        self.w = camera.w

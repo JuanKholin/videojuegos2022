@@ -22,6 +22,17 @@ class Escena():
         self.resources = resources
         self.nombre = nombre
 
+    def setSelf(self, escena):
+        self.p1 = escena.p1
+        self.p2 = escena.p2
+        self.aI = escena.aI
+        self.mapa = escena.mapa
+        self.camera = escena.camera
+        self.raton = escena.raton
+        self.interfaz = escena.interfaz
+        self.resources = escena.resources
+        self.nombre = escena.nombre
+
     def procesarEvent(self, event):
         #Conseguir el comando
         if event.type == pg.MOUSEBUTTONDOWN or event.type == pg.MOUSEBUTTONUP:
@@ -127,7 +138,7 @@ class Escena():
         self.p1.update()
         self.p2.update()
         self.mapa.updateNiebla(self.camera, self.p1.getEntitesLocation(self.camera))
-        self.interfaz.update()
+        self.interfaz.update(self, self.raton, self.camera)
         self.raton.update(self.camera)
         self.aI.make_commands()
 
