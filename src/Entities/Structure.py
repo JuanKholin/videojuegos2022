@@ -87,7 +87,7 @@ class Structure(Entity.Entity):
         #print("DESTROYED ", self.x, " ", self.y)
         self.state = BuildingState.DESTROYED
         self.index = 0
-        self.mapa.setLibre(self.getTile())
+        self.mapa.setLibres(self.getTile(), self.TILES_WIDTH, self.TILES_HEIGHT)
         self.clicked = False
         self.player.structures.remove(self)
 
