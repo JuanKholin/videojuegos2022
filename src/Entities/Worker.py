@@ -381,3 +381,15 @@ class Worker(Unit):
     # Indica a la IA si es soldado o worker
     def isSoldier(self):
         return False
+
+    # Indica a la IA si esta libre como worker
+    def isReadyToWork(self):
+        if (self.state != UnitState.DYING) and (self.state != UnitState.DEAD) and (self.state != UnitState.ATTACKING) and (self.state != UnitState.MOVING):
+            return True
+        return False
+
+    # Indica a la IA si esta extrayendo gas
+    def isExtracting(self):
+        if (self.state == UnitState.EXTRACTING) or (self.state != UnitState.GAS_TRANSPORTING):
+            return True
+        return False

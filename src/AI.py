@@ -12,14 +12,14 @@ class AI():
         self.rotativeReaction = 0
         self.decissionRate = difficult
         self.count = 0
-        self.decissionsChance = [ 20, 20, 20, 20, 20 ]
+        self.decissionsChance = [ 25, 25, 25, 25 ]
         self.decissionsPool = sum(self.decissionsChance)
         self.minimalDecissionChance = 1
         self.mapa = self.data.getMapa()
         self.miniCount = 0
 
-        self.minWorkers = 3
-        self.minSoldiers = 1
+        self.minWorkers = 2
+        self.minSoldiers = 2
 
         if race == Race.ZERG:
             self.base = ZERG_BASE
@@ -28,6 +28,8 @@ class AI():
             self.geyserBuilding = ZERG_GEYSER_STRUCTURE
             self.worker = ZERG_WORKER
             self.soldier = ZERG_SOLDIER
+            self.workerCost = ZERG_WORKER_MINERAL_COST
+            self.soldierCost = ZERG_SOLDIER_MINERAL_COST
         elif race == Race.TERRAN:
             self.base = TERRAN_BASE
             self.barracks = TERRAN_BARRACKS
@@ -35,6 +37,8 @@ class AI():
             self.geyserBuilding = TERRAN_GEYSER_STRUCTURE
             self.worker = TERRAN_WORKER
             self.soldier = TERRAN_SOLDIER
+            self.workerCost = TERRAN_WORKER_MINERAL_COST
+            self.soldierCost = TERRAN_SOLDIER_MINERAL_COST
         elif race == Race.PROTOSS:
             self.base = PROTOSS_BASE
             self.barracks = PROTOSS_BARRACKS
@@ -42,6 +46,11 @@ class AI():
             self.geyserBuilding = PROTOSS_GEYSER_STRUCTURE
             self.worker = PROTOSS_WORKER
             self.soldier = PROTOSS_SOLDIER
+            self.workerCost = PROTOSS_WORKER_MINERAL_COST
+            self.soldierCost = PROTOSS_SOLDIER_MINERAL_COST
+        # Para los recursos
+        self.crystalsSeen = set()
+        self.geysersSeen = set()
 
         # Para las invasiones
         self.invaders = []
@@ -53,10 +62,10 @@ class AI():
         if self.miniCount >= AI_LAPSE: # Acciones ligeras
             self.miniCount = 0
             self.alwaysToDoActions(units, structures)
-        #self.count += 1
-        #if self.count >= self.decissionRate: # Decisiones importantes
-        #    self.count = 0
-        #    self.makeDecission(units, structures, resources)
+        self.count += 1
+        if self.count >= self.decissionRate: # Decisiones importantes
+            self.count = 0
+            self.makeDecission(units, structures)
 
     # Acciones que debe hacer casi siempre la IA
     def alwaysToDoActions(self, units, structures):
@@ -65,55 +74,47 @@ class AI():
         elif self.rotativeReaction == 1:
             self.minimalBuild(structures)
         elif self.rotativeReaction == 2:
-            #print("restore army")
             self.restoreArmy(units, structures)
         elif self.rotativeReaction == 3:
-            pass
-            #print("gather nearby resources")
-            #self.gatherNearbyResources()
+            self.gatherResources(units, structures)
         elif self.rotativeReaction == 4:
-            pass
-            #print("update invaders")
-            #self.updateInvaders()
-        self.rotativeReaction = (self.rotativeReaction + 1) % 5 # 5 acciones distintas hay
+            self.updateInvaders()
+        elif self.rotativeReaction == 5:
+            self.updateVision(units, structures)
+        self.rotativeReaction = (self.rotativeReaction + 1) % 6 # 6 acciones distintas hay
 
     # Toma una decision trascendental
     def makeDecission(self, units, structures):
         decission = self.decide()
         if decission == 0:
-            #print("IA DECIDE ATACAR LO VISIBLE")
+            print("IA DECIDE ATACAR LO VISIBLE")
             self.attackVisible()
         elif decission == 1:
             #print("IA DECIDE HACER MEJORAS")
             self.armyUpgrade()
         elif decission == 2:
-            #print("IA DECIDE EXPANDIR SU EJERCITO")
-            self.armyExpansion()
+            print("IA DECIDE EXPANDIR SU EJERCITO")
+            self.armyExpansion(structures)
         elif decission == 3:
-            #print("IA DECIDE IR POR RECURSOS LEJOS")
-            self.gatherFarResources()
-        elif decission == 4:
-            #print("IA DECIDE INVADIR")
+            print("IA DECIDE INVADIR")
             self.seekAndDestroy(units)
+
+        print(self.decissionsChance)
 
     # Toma una decision y rebalancea el pool de decisiones, me ha quedado bastante original la verdad,
     # estoy orgulloso y no se ni si funciona xdxdxdxd
     def decide(self):
-        randPick = randint(1, 100)
+        randPick = randint(0, 99)
         for i in range(len(self.decissionsChance)):
             if randPick < self.decissionsChance[i]:
-                if self.decissionsChance[i] - len(self.decissionsChance - 1) > self.minimalDecissionChance:
-                    self.decissionsChance[i] - len(self.decissionsChance - 1)
+                # Rebalancea
+                if self.decissionsChance[i] - (len(self.decissionsChance) - 1) > self.minimalDecissionChance:
+                    self.decissionsChance[i] = self.decissionsChance[i] - (len(self.decissionsChance) - 1)
                     for j in range(len(self.decissionsChance)):
                         if j != i:
                             self.decissionsChance[j] += 1
                 return i
-            randPick - self.decissionsChance[i]
-
-    # Recorre las unidades invasoras para que vayan a atacar objetivos conocidos y si no hay explorar
-    # tiles no exploradas y atacar lo que se encuentren hasta la muerte o la victoria
-    def updateInvaders(self):
-        pass
+            randPick = randPick - self.decissionsChance[i] 
 
     ####################
     # ACCIONES LIGERAS #
@@ -143,16 +144,8 @@ class AI():
     # un edificio de cada
     def minimalBuild(self, structures):
         if self.haveBase(structures):
-            #print("Have base")
             if not self.haveBarracks(structures):
-                if (self.barracks == ZERG_BARRACKS) and (self.data.resources >= ZERG_BARRACKS_MINERAL_COST):
-                    #print("Construye zergbarracks")
-                    self.data.resources -= ZERG_BARRACKS_MINERAL_COST
-                    self.buildTerranBarracks(structures) # Seria Zerg pero no hay edificio xd
-                elif (self.barracks == TERRAN_BARRACKS) and (self.data.resources >= TERRAN_BARRACKS_MINERAL_COST):
-                    #print("Construye terranbarracks")
-                    self.data.resources -= TERRAN_BARRACKS_MINERAL_COST
-                    self.buildTerranBarracks(structures)
+                self.buildBarracks(structures)
             elif not self.haveDepot(structures):
                 if (self.depot == ZERG_DEPOT) and (self.data.resources >= ZERG_DEPOT_MINERAL_COST):
                     #print("Construye zergdepot")
@@ -162,7 +155,8 @@ class AI():
                     #print("Construye terrandepot")
                     self.data.resources -= TERRAN_DEPOT_MINERAL_COST
                     self.buildTerranDepot(structures)
-
+            
+    # Si faltan workers o soldados los genera, si tiene recursos y hay edificios libres para ello
     def restoreArmy(self, units, structures):
         nWorkers = 0
         nSoldiers = 0
@@ -187,7 +181,37 @@ class AI():
                         #print("gensoldier")
                         structure.execute(CommandId.GENERATE_SOLDIER)
 
-    def gatherNearbyResources(self):
+    # Es un update de workers bastante cool, si no hace nada a minar, y si mina mina y ya
+    def gatherResources(self, units, structures):
+        workers = self.getWorkers(units)
+        skipGasNeed = False
+        if len(workers) > 0: # Si hay workers vivos y sin ser atacados
+            for worker in workers:
+                if (worker.state != UnitState.EXTRACTING) and (worker.state != UnitState.GAS_TRANSPORTING):
+                    skipGasNeed = True 
+            if not skipGasNeed: # Si hay al menos un worker extrayendo gas no es necesario hacer nada de gas
+                gasMan = workers.pop()
+                if self.haveGeyserInUse():
+                    pass
+                else:
+                    if len(self.geysersSeen) > 0:
+                        pass
+            if len(workers) > 0: # Para el resto de workers
+                if len(self.crystalsSeen) > 0: # si hay cristales conocidos,
+                    crystalToMine = 0
+                    for worker in workers: # todos a la mina
+                        if worker.state == UnitState.STILL: # si les viene bien xd
+                            worker.mine(self.crystalsSeen[crystalToMine]) 
+                            crystalToMine = (crystalToMine + 1) % len(self.crystalsSeen)
+
+
+    # Recorre las unidades invasoras para que vayan a atacar objetivos conocidos y si no hay explorar
+    # tiles no exploradas y atacar lo que se encuentren hasta la muerte o la victoria
+    def updateInvaders(self):
+        pass
+
+    #
+    def updateVision(self, units, structures):
         pass
 
     ##############################
@@ -200,13 +224,30 @@ class AI():
     def armyUpgrade(self):
         pass
 
-    def armyExpansion(self):
-        pass
+    # Aumenta los minimos del ejercito si se puede permitir al menos otro como el que tiene
+    # Tambien construye un almacen si los recursos estan cerca del tope o construye otro
+    # barracks si estan todos los edificios trabajando
+    def armyExpansion(self, structures):
+        # Almacen extra
+        # AH QUE NO HACEN NADA VAYA PUTA ESTAFA
 
-    def gatherFarResources(self):
-        pass
+        # Barracks extra
+        needExtraBarrack = True
+        for structure in structures:
+            if ((structure.type == self.base) or (structure.type == self.barracks)) and ((structure.state == BuildingState.OPERATIVE) or (structure.state == BuildingState.BUILDING)):
+                needExtraBarrack = False
+        if needExtraBarrack:
+           self.buildBarracks(structures)
 
-    # Apunta a ciertos soldados libres en funcion del ejercito disponible
+        # Minimos aumentados
+        soldiersCost = self.minSoldiers * self.soldierCost
+        if self.data.resources > soldiersCost:
+            self.minSoldiers = self.minSoldiers + 1
+        workersCost = self.minWorkers * self.workerCost
+        if self.data.resources > workersCost + (soldiersCost / 2):
+            self.minWorkers = self.minWorkers + 1
+
+    # Apunta a ciertos soldados libres en funcion del ejercito disponible 
     # para invadir hasta su muerte o la victoria
     def seekAndDestroy(self, units):
         soldiers = self.getSoldiers(units)
@@ -235,6 +276,14 @@ class AI():
             if unit.type == self.soldier and unit.isReadyToFight():
                 soldiers.append(unit)
         return soldiers
+
+    # De las unidades devuelve a todos los workers libres
+    def getWorkers(self, units):
+        workers = []
+        for unit in units:
+            if unit.type == self.worker and unit.isReadyToWork():
+                workers.append(unit)
+        return workers
 
     # Devuelve si hay una base
     def haveBase(self, structures):
@@ -433,3 +482,13 @@ class AI():
             if structure.type == self.barracks:
                 result.append(structure)
         return result
+
+    def buildBarracks(self, structures):
+        if (self.barracks == ZERG_BARRACKS) and (self.data.resources >= ZERG_BARRACKS_MINERAL_COST):
+            print("Construye zergbarracks")
+            self.data.resources -= ZERG_BARRACKS_MINERAL_COST
+            self.buildTerranBarracks(structures) # Seria Zerg pero no hay edificio xd
+        elif (self.barracks == TERRAN_BARRACKS) and (self.data.resources >= TERRAN_BARRACKS_MINERAL_COST):
+            print("Construye terranbarracks")
+            self.data.resources -= TERRAN_BARRACKS_MINERAL_COST
+            self.buildTerranBarracks(structures)
