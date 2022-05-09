@@ -28,7 +28,7 @@ class TerranRefinery(Structure):
     frame = 8
     nSprites = 5
 
-    def __init__(self, xini, yini, player, map, building):
+    def __init__(self, xini, yini, player, map, building, gas):
         Structure.__init__(self, HP, TERRAN_REFINERY_MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
         self.sprites = cargarSprites(TERRAN_REFINERY_PATH, self.nSprites, False, BLACK)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
@@ -37,6 +37,8 @@ class TerranRefinery(Structure):
 
         self.sprites += deadSprites
         #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
+        
+        self.type = TERRAN_GEYSER_STRUCTURE
 
         self.image = self.sprites[self.index]
         self.operativeIndex = [4]
@@ -51,7 +53,11 @@ class TerranRefinery(Structure):
         else:
             self.state = BuildingState.OPERATIVE
 
-        self.resource = None
+        self.resource = gas
+        if gas != None:
+            gas.x = self.x
+            gas.y = self.y
+            gas.disable()
         self.training = []
         self.paths = []
 
@@ -60,6 +66,15 @@ class TerranRefinery(Structure):
 
     def getOrder(self):
         return CommandId.EXTRACT_GAS
+    
+    def changeToDestroyed(self):
+        #print("DESTROYED ", self.x, " ", self.y)
+        self.state = BuildingState.DESTROYED
+        self.index = 0
+        self.mapa.setLibre(self.getTile())
+        self.resource.setEnable()
+        self.clicked = False
+        self.player.structures.remove(self)
 
     def drawBuildTiles(self, screen, camera, tiles):
         for tile in tiles:

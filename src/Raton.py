@@ -133,7 +133,8 @@ class Raton(pygame.sprite.Sprite):
                     for resources in self.escena.resources:
                         ###---LOGICA
                         #pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camarax, r.y - camaray, r.w, r.h),1)
-                        if collides(self.real_pos[0], self.real_pos[1], resources.getRect()):
+                        if (self.mapa.getTile(self.real_pos[0], self.real_pos[1]).visible
+                                and collides(self.real_pos[0], self.real_pos[1], resources.getRect())):
                             self.collideResourse = True
                             mouse_collide = True
                             break
@@ -281,7 +282,6 @@ class Raton(pygame.sprite.Sprite):
                             mouseRect = createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
 
                             for unit in self.player.units:
-                                #print(unit.getRect())
                                 if len(self.player.unitsSelected) < MAX_SELECTED_UNIT and collideRect(mouseRect, unit.getRect()):
                                     unit.setClicked(True)
                                     self.player.unitsSelected.append(unit)
@@ -292,7 +292,9 @@ class Raton(pygame.sprite.Sprite):
                             if not unitSel:
                                 for unit in self.enemy.units:
                                     #print(unit.getRect())
-                                    if collideRect(mouseRect, unit.getRect()):
+                                    pos = unit.getPosition()
+                                    if (collideRect(mouseRect, unit.getRect()) and 
+                                            self.mapa.getTile(pos[0] - camera.x, pos[1] - camera.y).visible):
                                         unit.setClicked(True)
                                         self.player.enemySelected.append(unit)
                                         unitSel = True
@@ -312,21 +314,25 @@ class Raton(pygame.sprite.Sprite):
 
                             if not unitSel:
                                 for structure in self.enemy.structures:
-                                    if collideRect(mouseRect, structure.getRect()):
+                                    pos = structure.getPosition()
+                                    if (collideRect(mouseRect, structure.getRect())
+                                            and self.mapa.getTile(pos[0], pos[1]).visible):
                                         structure.setClicked(True)
                                         unitSel = True
                                         self.player.enemyStructureSelected = structure
-                                        #print("CLICKADO ")
+                                        print("CLICKADO ")
                                         self.player.resourceSelected = None
                                         break
 
                             if not unitSel:
                                 for resource in self.escena.resources:
-                                    if collideRect(mouseRect, resource.getRect()):
+                                    pos = resource.getPosition()
+                                    if (collideRect(mouseRect, resource.getRect())
+                                            and self.mapa.getTile(pos[0], pos[1]).visible):
                                         resource.setClicked(True)
                                         unitSel = True
                                         self.player.resourceSelected = resource
-                                        #print("CLICKADO aaaa")
+                                        print("CLICKADO aaaa")
                                         break
 
                             if unitSel:

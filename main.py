@@ -65,13 +65,14 @@ def setEntity(player, ai):
 
     player.setBasePlayer(structure1)
     structure2 = TerranBarracks(15, 9, player, mapa, False)
+    gas2 = Geyser(13, 20, 50)
     structure4 = Extractor(12, 27, player, mapa, True)
-    structure5 = TerranRefinery(13, 18, player, mapa, True)
+    structure5 = TerranRefinery(13, 18, ai, mapa, True, gas2)
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addStructures(structure3)
     ai.addStructures(structure4)
-    player.addStructures(structure5)
+    ai.addStructures(structure5)
     player.addUnits(scv)
     player.addUnits(scv2)
     player.addUnits(scv3)
@@ -113,6 +114,7 @@ def setEntity(player, ai):
     resources.append(crystal3)
     resources.append(crystal4)
     resources.append(gas)
+    resources.append(gas2)
     escena.resources = resources
 
 def update():
