@@ -52,11 +52,13 @@ class Worker(Unit):
                     if tile.heur(ownTile) < bestTile.heur(ownTile):
                         bestTile = tile
                 self.paths = calcPath(self.getPosition(), self.getTile(), bestTile, self.mapa)
-                self.changeObjectiveTile()
                 if len(self.paths) > 0:
                     self.moveToMining()
+                    self.changeObjectiveTile()
                 else:
                     self.startMining()
+
+
             else:
                 print("No hay tiles libres weird")
                 #exit(1) te las pueden estar ocupando los mineros
@@ -78,9 +80,9 @@ class Worker(Unit):
                         if tile.heur(ownTile) < bestTile.heur(ownTile):
                             bestTile = tile
                     self.paths = calcPath(self.getPosition(), self.getTile(), bestTile, self.mapa)
-                    self.changeObjectiveTile()
                     if len(self.paths) > 0:
                         self.moveToMining()
+                        self.changeObjectiveTile()
                     else:
                         self.startExtracting()
                 else:
