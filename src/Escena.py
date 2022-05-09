@@ -37,7 +37,7 @@ class Escena():
         #Conseguir el comando
         if event.type == pg.MOUSEBUTTONDOWN or event.type == pg.MOUSEBUTTONUP:
             command = self.raton.processEvent(event, self.camera)
-            print("ENABLE DE ESCENA: ", self.raton.enable, self.raton.id)
+            #print("ENABLE DE ESCENA: ", self.raton.enable, self.raton.id)
         else:
             command = self.p1.processEvent(event)
         if getGameState() == System_State.ONGAME:
