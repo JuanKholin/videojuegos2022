@@ -121,7 +121,7 @@ def update():
     if getGameState() == System_State.MAINMENU:
         playMusic(mainMenuBGM, pos = 5)
         #playSound(mainMenuBGM)
-        p1Interface.update()
+        escena.interfaz.update(escena,raton, camera)
     elif getGameState() == System_State.MAP1:
         #playMusic(map1BGM)
         #cargar mapa
@@ -134,9 +134,9 @@ def update():
         escena.update()
     elif getGameState() == System_State.GAMESELECT:
         #Cargar las partidas
-        p1Interface.update()
+        escena.interfaz.update(escena,raton, camera)
     elif getGameState() == System_State.NEWGAME:
-        p1Interface.update()
+        escena.interfaz.update(escena,raton, camera)
     else: #STATE == System_State.EXIT:
         pg.quit()
         sys.exit()
@@ -144,11 +144,11 @@ def update():
 def draw():
     screen.fill(WHITE)
     if Utils.state == System_State.MAINMENU:
-        p1Interface.draw(screen, camera)
+        escena.interfaz.draw(screen, camera)
     elif Utils.state == System_State.ONGAME:
         escena.draw(screen)
     elif Utils.state == System_State.GAMESELECT or Utils.state == System_State.NEWGAME:
-        p1Interface.draw(screen, camera)
+        escena.interfaz.draw(screen, camera)
     raton.draw(screen, camera)
     #aux(screen)
     pg.display.flip()

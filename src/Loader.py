@@ -16,10 +16,10 @@ from .Entities.Extractor import *
 from .Entities.Drone import *
 from .Entities.Zergling import *
 
-def loadFromSave():
+def loadFromSave(nombre):
     escena = Escena(None, None, None, None, None, None, None, None)
 
-    textFile = open("games/" + escena.nombre + ".json", "r")
+    textFile = open("games/" + nombre + ".json", "r")
     data = json.load(textFile)
 
     #mapa
@@ -30,11 +30,11 @@ def loadFromSave():
 
     # Raton
     raton = Raton.Raton(escena.p1, escena.p2, escena.mapa)
-    p1Interface = Interface(escena.p1, escena.p2, raton)
-    raton.addInterface(p1Interface)
+   
+    
     raton.setEscena(escena)
     escena.raton = raton
-    escena.interfaz = p1Interface
+    
 
     loadUnits(data["p1"]["units"], escena.p1)
     loadStructures(data["p1"]["structures"], escena.p1, escena.mapa, escena.raton)
@@ -48,7 +48,7 @@ def loadFromSave():
 
     escena.p1.setBasePlayer(escena.p1.structures[0])
 
-    return escena, raton, p1Interface, camera
+    return escena, raton, camera
 
 
 #pre: mapDictionary es un diccionario con la info del mapa
