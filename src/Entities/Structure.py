@@ -31,7 +31,7 @@ class Structure(Entity.Entity):
         self.lastAttacker = None
 
     def getPosition(self):
-        return (self.x+self.rectn.w/2, self.y+self.rectn.h/2)
+        return (self.x, self.y)
 
     def update(self):
         if self.state == BuildingState.BUILDING:
