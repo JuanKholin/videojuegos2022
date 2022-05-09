@@ -230,6 +230,20 @@ class Map():
         else:
             self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = EMPTY
             self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].ocupante = None
+    
+    #Pone las tiles como libre dada la esquina inferior derecha de un rectangulo y su altura y su anchura
+    def setLibres(self, tile, width, height):
+        #print("CAGO EN DIOS")
+        x = int(tile.centerx / self.tw)
+        y = int(tile.centery / self.th)
+        for xAux in range(x, x - (width - 1), -1):
+            for yAux in range(y, y - (height - 1), -1):
+                if self.mapa[yAux][xAux].type == EMPTY:
+                    #print("hi")
+                    pass
+                else:
+                    self.mapa[yAux][xAux].type = EMPTY
+                    self.mapa[yAux][xAux].ocupante = None
 
     #Devuelve una lista de tiles vecinas libres a la dada
     def getTileVecinas(self, tile, tileObj):
@@ -620,7 +634,7 @@ class Map():
                 if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
                     aux = self.mapa[row][col]
                     if (aux.type == UNIT) or (aux.type == STRUCTURE):
-                        print("PLAYER2? ", aux.ocupante.player)
+                        #print("PLAYER2? ", aux.ocupante.player)
                         if aux.ocupante.player != player1:
                             return aux.ocupante
         return None
@@ -639,7 +653,7 @@ class Map():
                 if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
                     aux = self.mapa[row][col]
                     if (aux.type == UNIT) or (aux.type == STRUCTURE):
-                        print(aux.ocupante.type, " ", col, " ", row)
+                        #print(aux.ocupante.type, " ", col, " ", row)
                         if aux.ocupante.player != player1:
                             result.add(aux.ocupante)
         return result
