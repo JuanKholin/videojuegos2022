@@ -180,13 +180,11 @@ class Interface():
             self.idSingleSelected = (self.idSingleSelected + frame(5)) % SINGLE_PLAYER_FB_N
             self.idExitSelected = (self.idExitSelected + frame(5)) % EXIT_FB_N
         elif Utils.state == System_State.GAMESELECT:
-            aceptarCollide = False
+            aceptarCollide = True
 
             press, iniPos = self.mouse.getPressed()
             #Boton aceptar
-            #print(self.mouse.isCollide(self.nuevaPartidaRect), self.mouse.real_pos, self.aceptarRect.x, self.aceptarRect.y, self.aceptarRect.w, self.aceptarRect.h )
             if self.mouse.isCollide(self.aceptarRect):
-                #print("acepar")
                 aceptarCollide = True
                 if not self.soundPlayed:
                     playSound(botonSound)
@@ -202,7 +200,6 @@ class Interface():
                     self.singlePress = False
                 
             elif self.mouse.isCollide(self.cancelarRect):
-                #print("cancelar")
                 if not self.soundPlayed:
                     playSound(botonSound)
                     self.soundPlayed = True
@@ -214,7 +211,6 @@ class Interface():
                     Utils.state = System_State.MAINMENU
                     self.cancelarPress = False
             elif self.mouse.isCollide(self.nuevaPartidaRect):
-                #print("newgame")
                 if not self.soundPlayed:
                     playSound(botonSound)
                     self.soundPlayed = True
@@ -236,7 +232,7 @@ class Interface():
                 self.nuevaPartidaPress = False
 
         elif Utils.state == System_State.NEWGAME:
-            aceptarCollide = False
+            aceptarCollide = True
 
             press, iniPos = self.mouse.getPressed()
             #Boton aceptar
@@ -351,7 +347,6 @@ class Interface():
         if Utils.state == System_State.MAINMENU:
             screen.blit(self.mainMenu, [0, 0])
             
-            
             #Boton single player
             if self.mouse.isCollide(self.singleRect):
                 screen.blit(self.singleSelected[self.idSingleSelected], SINGLE_PLAYER_FB_POS)
@@ -372,7 +367,6 @@ class Interface():
             
         elif Utils.state == System_State.GAMESELECT:
             screen.blit(self.gameSelect, [0, 0])
-            pygame.draw.rect(screen, BLUE, self.nuevaPartidaRect, 1)
             '''
             #Boton single player
             if self.mouse.isCollide(self.singleRect):

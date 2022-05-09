@@ -99,20 +99,6 @@ def setEntity(player, ai):
     for structure in aiStructures:
         ai.addStructures(structure)
     
-    #Recursos del mapa
-    crystal = Crystal(2, 10, 34)
-    crystal2 = Crystal(2, 18, 60)
-    crystal3 = Crystal(2, 22, 60)
-    crystal4 = Crystal(2, 26, 60)
-    gas = Geyser(16, 13, 50)
-
-    resources = []
-    resources.append(crystal)
-    resources.append(crystal2)
-    resources.append(crystal3)
-    resources.append(crystal4)
-    resources.append(gas)
-    escena.resources = resources
 
 def update():
     clock_update()
@@ -125,18 +111,17 @@ def update():
     elif getGameState() == System_State.MAP1:
         #playMusic(map1BGM)
         #cargar mapa
-        escena.mapa = mapa
         escena.mapa.load()
         escena.mapa.loadMinimap()
         setEntity(player1, player2)
         setGameState(System_State.ONGAME)
     elif getGameState() == System_State.ONGAME:
-        p1Interface.update()
+        escena.update()
     elif getGameState() == System_State.GAMESELECT:
         #Cargar las partidas
-        p1Interface.update()
+        escena.update()
     elif getGameState() == System_State.NEWGAME:
-        p1Interface.update()
+        escena.update()
     else: #STATE == System_State.EXIT:
         pg.quit()
         sys.exit()
@@ -148,7 +133,7 @@ def draw():
     elif Utils.state == System_State.ONGAME:
         escena.draw(screen)
     elif Utils.state == System_State.GAMESELECT or Utils.state == System_State.NEWGAME:
-        p1Interface.draw(screen, camera)
+        escena.draw(screen)
     raton.draw(screen, camera)
     #aux(screen)
     pg.display.flip()
@@ -210,13 +195,25 @@ camera = Camera(0, 0, SCREEN_HEIGHT - 160, SCREEN_WIDTH)
 
 # Escena
 
+#Recursos del mapa
+crystal = Crystal(2, 10, 34)
+crystal2 = Crystal(2, 18, 60)
+crystal3 = Crystal(2, 22, 60)
+crystal4 = Crystal(2, 26, 60)
+gas = Geyser(16, 13, 50)
 
+resources = []
+resources.append(crystal)
+resources.append(crystal2)
+resources.append(crystal3)
+resources.append(crystal4)
+resources.append(gas)
 
 raton = Raton.Raton(player1, player2, mapa)
 p1Interface = Interface(player1, player2, raton)
 raton.addInterface(p1Interface)
 
-escena = Escena(player1, player2, aI, [], camera, raton, p1Interface, [])
+escena = Escena(player1, player2, aI, mapa, camera, raton, p1Interface, resources)
 raton.setEscena(escena)
 #escena.mapa.addOre(100,100)
 
