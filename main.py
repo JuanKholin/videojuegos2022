@@ -46,7 +46,10 @@ def procesarInput():
             escena.checkUnHoldButton(event.key)
         else:
             escena.procesarEvent(event)
-    escena.checkPressedButtons()
+    if getGameState() == System_State.ONGAME: #si pulsamos en los menus peta por lo que
+        escena.checkPressedButtons()
+
+
 
 def setEntity(player, ai):
     scv = TerranSoldier(4, 10, player)
@@ -90,11 +93,10 @@ def setEntity(player, ai):
 
     for unit in aiUnits:
         ai.addUnits(unit)
-   
+
     aiStructures = []
     #aiStructures.append(Hatchery(20, 12, ai, mapa, False))
     aiStructures.append(TerranBuilder(20, 12, ai, mapa, False, raton))
-
 
     for structure in aiStructures:
         ai.addStructures(structure)
