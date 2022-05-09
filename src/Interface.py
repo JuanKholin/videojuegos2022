@@ -1,5 +1,8 @@
 
 import pygame as pg
+from os import listdir
+from os.path import isfile, join
+
 from . import Player, Command, Utils, Raton, Button, Upgrade, UpgradeButton
 from src.Music import *
 from src.Lib import *
@@ -16,6 +19,8 @@ class Interface():
         self.enemy = enemy
         self.mouse = mouse
         # GAME SELECT
+        self.partidas = []
+        self.selectedPartida = None
 
         self.gameSelect = pg.image.load(GAME_SELECT + "gameSelect.png")
         self.gameSelect = pg.transform.scale(self.gameSelect, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -134,6 +139,13 @@ class Interface():
         aux = Upgrade.Upgrade("./SPRITE/upgrades/mineSinUpgrade.png")
         allUpgrades[Upgrades.NO_MINE] = aux
         return allUpgrades
+
+    def loadPartidas(self):
+        onlyfiles = [f for f in listdir("./games") if isfile(join("./games", f))]
+        pad = 0
+        for file in onlyfiles:
+            self.partidas.append({'nombre': str(file).split('.')[0], 'rect': pg.Rect(PARTIDA_POS[0], PARTIDA_POS[1] + YPARTIDA_PAD*pad, 440, 30)})
+            pad += 1
     
     def update(self):
         if Utils.state == System_State.MAINMENU:
@@ -153,6 +165,7 @@ class Interface():
                 elif self.mouse.getClick() and self.singlePress and Raton.collides(endPos[0], endPos[1], self.singleRect):
                     print("Seleccionado single player")
                     #Utils.state = System_State.MAP1
+                    self.loadPartidas()
                     Utils.state = System_State.GAMESELECT
                     #stopMusic()
                     self.singlePress = False
@@ -230,6 +243,11 @@ class Interface():
                     self.nuevaPartidaPress = False
             elif not aceptarCollide:
                 self.soundPlayed = False
+            for partida in self.partidas:
+                if self.mouse.isCollide(partida['rect']) and press:
+                    print(partida['nombre'])
+                    #Pasar a menu de nueva partida
+                    self.selectedPartida = partida
                     
             if self.mouse.getClick():
                 self.aceptarPress = False
@@ -374,6 +392,9 @@ class Interface():
         elif Utils.state == System_State.GAMESELECT:
             screen.blit(self.gameSelect, [0, 0])
             pygame.draw.rect(screen, BLUE, self.nuevaPartidaRect, 1)
+            for partida in self.partidas:
+                pygame.draw.rect(screen, BLUE, partida['rect'], 1)
+                muestra_texto(screen, str('monotypecorsiva'), partida['nombre'], WHITE, 30, (partida['rect'].x + 200, partida['rect'].y + 18))
             '''
             #Boton single player
             if self.mouse.isCollide(self.singleRect):

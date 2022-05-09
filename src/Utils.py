@@ -230,6 +230,8 @@ GAME_SELECT_TEXT_SIZE = 30
     #############
     #GAME SELECT#
     #############
+PARTIDA_POS = [80, 205]
+YPARTIDA_PAD = 31
 
 MAPA1_POS = [80, 265]
 MAPA2_POS = [200, 265]
