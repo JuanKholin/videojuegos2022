@@ -71,12 +71,12 @@ TERRAN_DEPOT_MINERAL_COST = 90
 # Edificios de las razas:
 TERRAN_BASE = "TerranBuilder"
 TERRAN_BARRACKS = "TerranBarracks"
-TERRAN_DEPOT = "TerranSuplyDepot" 
+TERRAN_DEPOT = "TerranSuplyDepot"
 TERRAN_GEYSER_STRUCTURE = "TerranRefinery"
 TERRAN_WORKER = "TerranWorker"
 TERRAN_SOLDIER = "TerranSoldier"
 
-ZERG_BASE = "Hatchery" 
+ZERG_BASE = "Hatchery"
 ZERG_BARRACKS = None # Faltan
 ZERG_DEPOT = None
 ZERG_GEYSER_STRUCTURE = "Extractor"
@@ -221,6 +221,7 @@ EXIT_FB_POS = [680, 420]
 ACEPTAR_POS = [700, 585]
 CANCELAR_POS = [700, 700]
 NUEVA_PARTIDA_POS = [80, 650]
+PARTIDA_DEFAULT_POS = [80, 300]
 
 
 GAME_SELECT = "SPRITE/gameSelect/"

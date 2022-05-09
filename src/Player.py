@@ -146,8 +146,8 @@ class Player():
             "units": [u.toDictionary(map) for u in self.units],
             "structures": [s.toDictionary(map) for s in self.structures],
             "resources": self.resources,
-            #"keyMap": self.keyMap,
-            #"commandMap": self.commandMap,
+            "keyMap": self.keyMap,
+            "commandMap": self.commandMap,
         }
 
     def getMapa(self):

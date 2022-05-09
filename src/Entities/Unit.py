@@ -755,4 +755,7 @@ class Unit(Entity):
         return {
             "x": x,
             "y": y,
+            "hp": self.hp
         }
+    def load(self, hp):
+        self.hp = hp

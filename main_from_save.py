@@ -39,8 +39,8 @@ def procesarInput():
         elif event.type == pg.VIDEORESIZE:
             SCREEN_HEIGHT = event.h
             SCREEN_WIDTH = event.w
-            escena.camera.h = event.h
-            escena.camera.w = event.w
+            escena.camera.h = SCREEN_HEIGHT - 160
+            escena.camera.w = SCREEN_WIDTH
             screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pg.RESIZABLE)
         elif event.type == pg.KEYUP:
             escena.procesarEvent(event)
@@ -48,8 +48,6 @@ def procesarInput():
         else:
             escena.procesarEvent(event)
     escena.checkPressedButtons()
-
-
 
 def update():
     clock_update()
@@ -62,13 +60,18 @@ def update():
     elif getGameState() == System_State.MAP1:
         #playMusic(map1BGM)
         #cargar mapa
+        #escena.mapa = mapa
+        #escena.mapa.load()
+        escena.mapa.loadMinimap()
         #setEntity(player1, player2)
         setGameState(System_State.ONGAME)
     elif getGameState() == System_State.ONGAME:
         escena.update()
     elif getGameState() == System_State.GAMESELECT:
         #Cargar las partidas
-        escena.update()
+        p1Interface.update()
+    elif getGameState() == System_State.NEWGAME:
+        p1Interface.update()
     else: #STATE == System_State.EXIT:
         pg.quit()
         sys.exit()
@@ -79,12 +82,11 @@ def draw():
         p1Interface.draw(screen, camera)
     elif Utils.state == System_State.ONGAME:
         escena.draw(screen)
-    elif Utils.state == System_State.GAMESELECT:
-        escena.draw(screen)
+    elif Utils.state == System_State.GAMESELECT or Utils.state == System_State.NEWGAME:
+        p1Interface.draw(screen, camera)
     raton.draw(screen, camera)
     #aux(screen)
     pg.display.flip()
-
 # Programa principal
 pg.init()
 
@@ -92,9 +94,7 @@ flags = pg.FULLSCREEN | pg.DOUBLEBUF
 size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen =  pg.display.set_mode(size)
 
-textFile = open("save_file.json", "r")
-data = json.load(textFile)
-escena, raton, p1Interface, camera = loadFromSave(data)
+escena, raton, p1Interface, camera = loadFromSave()
 
 aI = AI(escena.p2,Race.ZERG, EASY)
 

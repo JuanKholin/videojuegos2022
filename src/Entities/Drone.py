@@ -69,11 +69,11 @@ class Drone(Worker):
         self.type = ZERG_WORKER
 
     def toDictionary(self, map):
-        x, y = map.getTileIndex(self.x, self.y)
-        return {
+        fatherDictionary = super().toDictionary(map)
+        sonDictionary = {
             "clase": "drone",
-            "x": x,
-            "y": y,
             "nombre": "Drone",
             "funcion": "muy tanke"
         }
+        sonDictionary.update(fatherDictionary)
+        return sonDictionary

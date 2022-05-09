@@ -95,11 +95,11 @@ class TerranWorker(Worker):
         return upgrades
 
     def toDictionary(self, map):
-        x, y = map.getTileIndex(self.x, self.y)
-        return {
+        fatherDictionary = super().toDictionary(map)
+        sonDictionary = {
             "clase": "terranWorker",
-            "x": x,
-            "y": y,
-            "nombre": "Terran Worker", 
+            "nombre": "Terran Worker",
             "funcion": "Unidad obrera"
         }
+        sonDictionary.update(fatherDictionary)
+        return sonDictionary
