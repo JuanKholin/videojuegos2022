@@ -349,12 +349,13 @@ class Raton(pygame.sprite.Sprite):
                                 break
 
                 elif not type[2]:
-                    #print('click der liberado', real_mouse_pos[0], real_mouse_pos[1], event.type)
-                    self.derPulsado = False
-                    if self.enable:
-                        if self.building:
-                            self.buildStructure = None
-                            self.building = False
+                    if self.derPulsado:
+                        #print('click der liberado', real_mouse_pos[0], real_mouse_pos[1], event.type)
+                        self.derPulsado = False
+                        if self.enable:
+                            if self.building:
+                                self.buildStructure = None
+                                self.building = False
         return command
 
 class point(pygame.sprite.Sprite):
