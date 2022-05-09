@@ -15,6 +15,9 @@ MINERAL_COST = 600
 LIMIT_MINADO = 1600
 
 class TerranBuilder(Structure):
+    TILES_HEIGHT = 4
+    TILES_WIDTH = 5
+    CENTER_TILE = [2, 2]
     sprites = []
     training = []
     rectOffY = 3

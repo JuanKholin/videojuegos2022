@@ -10,6 +10,9 @@ HP = 200
 GENERATION_TIME = 5
 
 class TerranRefinery(Structure):
+    TILES_WIDTH = 4
+    TILES_HEIGHT = 2
+    CENTER_TILE = [1, 1]
     sprites = []
     training = []
     generationTime = 0

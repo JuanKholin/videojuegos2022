@@ -27,7 +27,6 @@ class TerranBarracks(Structure):
     rectOffY = 8
     tileW = 4
     tileH = 3
-    centerTile = [1, 1]
     clicked = False
     frame = 8
 

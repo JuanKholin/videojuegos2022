@@ -60,8 +60,8 @@ def setEntity(player, ai):
     scv7 = TerranSoldier(10, 10, player)
     scv8 = TerranWorker(11, 10, player)
     print("ID del scv 4", scv4.id)
-    structure1 = TerranBuilder(5, 6, player, mapa, False, raton)
-    structure3 = TerranSupplyDepot(10, 6, player, mapa, True)
+    structure1 = TerranBuilder(6, 7, player, mapa, False, raton)
+    structure3 = TerranSupplyDepot(20, 7, player, mapa, True)
 
     player.setBasePlayer(structure1)
     structure2 = TerranBarracks(15, 9, player, mapa, False)
@@ -187,13 +187,13 @@ commandMap ={
 }
 
 mapa = Map.Map(40, 40, True)
-mapa.setElevacion(16, 3)
-mapa.setElevacion(20, 14)
-mapa.setElevacion(17, 30)
-mapa.setElevacion(12, 20)
-mapa.setElevacion(8, 35)
-mapa.setElevacion(5, 12)
-mapa.setElevacion(32, 29)
+#mapa.setElevacion(16, 3)
+#mapa.setElevacion(20, 14)
+#mapa.setElevacion(17, 30)
+#mapa.setElevacion(12, 20)
+#mapa.setElevacion(8, 35)
+#mapa.setElevacion(5, 12)
+#mapa.setElevacion(32, 29)
 
 player1 = Player.Player([], [], 400, keyMap, commandMap, mapa, True)
 

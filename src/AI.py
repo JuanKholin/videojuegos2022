@@ -216,14 +216,14 @@ class AI():
     # Devuelve si hay un barracks
     def haveBarracks(self, structures):
         for structure in structures:
-            if structure.type == TERRAN_BARRACKS:
+            if structure.type == TERRAN_BARRACKS: # Seria self.barracks
                 return True
         return False
 
     # Devuelve si hay un depot
     def haveDepot(self, structures):
         for structure in structures:
-            if structure.type == self.depot:
+            if structure.type == TERRAN_DEPOT: # Seria self.depot
                 return True
         return False
 
@@ -231,7 +231,7 @@ class AI():
     def buildTerranBarracks(self, structures):
         width = TerranBarracks.TILES_WIDTH
         height = TerranBarracks.TILES_HEIGHT
-        centerTile = TerranBarracks.centerTile
+        centerTile = TerranBarracks.CENTER_TILE
         randBuilding = randint(0, len(structures) - 1)
         building = structures[randBuilding]
         randDirection = randint(0, 7)
@@ -289,32 +289,41 @@ class AI():
     def buildTerranDepot(self, structures):
         width = TerranSupplyDepot.TILES_WIDTH
         height = TerranSupplyDepot.TILES_HEIGHT
-        centerTile = TerranSupplyDepot.centerTile
+        centerTile = TerranSupplyDepot.CENTER_TILE
         randBuilding = randint(0, len(structures) - 1)
         building = structures[randBuilding]
         randDirection = randint(0, 7)
         buildingsTried = 0
         directionsTried = 0
         x, y = self.getDirection(randDirection)
-        buildX, buildY = randBuilding.getCords()
-
+        buildX, buildY = building.getCords()
+        print("HAOSDHAS")
         builded = False
         while not builded:
             tryNew = True
-            tile = self.mapa.getNextTileByDirection(buildX, buildY, x, y)
+            tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
+            print("hasdjkasd")
             if (tile != None) and (tile.type == STRUCTURE) and (tile.ocupante == building):
                 buildX = buildX + x
                 buildY = buildY + y
+                print(buildX," ", buildY, " STRUCTURE")
                 tryNew = False
             elif (tile != None) and (tile.type == EMPTY): # Hueco tras edificio
                 #Ahora checkear que haya hueco para el edificio a construir
                 buildX = buildX + x
                 buildY = buildY + y
-                tile = self.mapa.getNextTileByDirection(buildX, buildY, x, y)
+                print("first ", buildX, " ", buildY, " EMPTY")
+                tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
                 if (tile != None) and (tile.type == EMPTY): # Primera tile libre para plantar edificio
+                    buildX = buildX + x
+                    buildY = buildY + y
+                    print("second ", buildX," ", buildY, " EMPTY")
                     buildX, buildY = self.getTopLeft(buildX, buildY, randDirection, width, height, centerTile)
+                    print("topLeft ", buildX," ", buildY)
+
                     if self.mapa.checkIfEmptyZone(buildX, buildY, buildX + (width - 1), buildY + (height - 1)):
-                        toBuild = TerranSupplyDepot(buildX + centerTile[0], buildY + centerTile[1], self.map, False)
+                        print("buildea")
+                        toBuild = TerranSupplyDepot(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
                         self.data.addStructures(toBuild)
                         toBuild.buildProcess()
                         builded = True
@@ -332,19 +341,8 @@ class AI():
                 else: # Quedan direcciones por probar
                     randDirection = (randDirection + 1) % TOTAL_DIRECTIONS
                     x, y = self.getDirection(randDirection)
-                    buildX, buildY = randBuilding.getCords()
-
-    # Construye un barracks de los Zerg cerca de una estructura aliada aleatoria
-    def buildZergBarracks(self, structures):
-        randBuilding = structures[randint(0, len(structures) - 1)]
-
-    # Construye un depot de los Terran cerca de una estructura aliada aleatoria
-    def buildTerranDepot(self, structures):
-        randBuilding = structures[randint(0, len(structures) - 1)]
-
-    # Construye un depot de los Zerg cerca de una estructura aliada aleatoria
-    def buildZergDepot(self, structures):
-        randBuilding = structures[randint(0, len(structures) - 1)]
+                    print ("New x e y ", x, " ", y)
+                    buildX, buildY = building.getCords()
 
     # Devuelve una direccion por la que avanzar para probar construcciones
     def getDirection(self, direction):

@@ -13,6 +13,9 @@ HEIGHT = 4
 HP = 200
 
 class Hatchery(Structure):
+    TILES_HEIGHT = 4
+    TILES_WIDTH = 6
+    CENTER_TILE = [2, 2]
     sprites = []
     training = []
     heightPad = 10

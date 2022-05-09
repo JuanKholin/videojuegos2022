@@ -10,11 +10,12 @@ from ..Utils import *
 HP = 200
 GENERATION_TIME = 5
 
-TILES_HEIGHT = 3
-TILES_WIDTH = 4
-CENTER_TILE = [1, 1]
+
 
 class TerranSupplyDepot(Structure):
+    TILES_HEIGHT = 3
+    TILES_WIDTH = 4
+    CENTER_TILE = [1, 1]
     sprites = []
     training = []
     generationTime = 0
