@@ -180,11 +180,15 @@ class Structure(Entity.Entity):
         if self.clicked:
             if self.player.isPlayer:
                 pygame.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
-                hp = pygame.transform.chop(pygame.transform.scale(HP, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
             else:
                 pygame.draw.ellipse(screen, RED, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
+        if self.hp < self.maxHp:
+            if self.player.isPlayer:
+                hp = pygame.transform.chop(pygame.transform.scale(HP, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
+            else:
                 hp = pygame.transform.chop(pygame.transform.scale(HP2, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
             screen.blit(hp, [r.x + r.w/2 - camera.x - hp.get_rect().w/2, r.y + r.h - camera.y])
+            
 
         #sombra
         aux = pygame.mask.from_surface(self.image, 0)
@@ -218,7 +222,7 @@ class Structure(Entity.Entity):
     def drawBuildTiles(self, screen, camera, tiles):
         for tile in tiles:
             r = tile.getRect()
-            if tile.type == EMPTY:
+            if tile.type == EMPTY and tile.visible:
                 pygame.draw.rect(screen, GREEN, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
             else:
                 pygame.draw.rect(screen, RED, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
@@ -282,7 +286,7 @@ class Structure(Entity.Entity):
         tiles_set = set(tiles)
         if len(tiles_set) == self.tileH*self.tileW:
             for tile in tiles_set:
-                if tile.type != EMPTY:
+                if tile.type != EMPTY or not tile.visible:
                     ok = False
                     break
         else:

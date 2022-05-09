@@ -2,6 +2,9 @@ import pygame
 
 from .TerranSoldier import *
 from .TerranWorker import *
+from .TerranBarracks import *
+from .TerranRefinery import *
+from .Hatchery import *
 from .Structure import *
 from .. import Player, Map
 from ..Command import *
