@@ -60,7 +60,6 @@ def setEntity(player, ai):
     scv6 = TerranSoldier(9, 10, player)
     scv7 = TerranSoldier(10, 10, player)
     scv8 = TerranWorker(11, 10, player)
-    print("ID del scv 4", scv4.id)
     structure1 = TerranBuilder(6, 7, player, mapa, False, raton)
     structure3 = TerranSupplyDepot(20, 7, player, mapa, True)
 
@@ -91,11 +90,11 @@ def setEntity(player, ai):
     aiUnits.append(Zergling(27, 13, ai))
     aiUnits.append(Zergling(27, 14, ai))'''
 
-    for unit in aiUnits:
-        ai.addUnits(unit)
+    #for unit in aiUnits:
+    #    ai.addUnits(unit)
 
     aiStructures = []
-    #aiStructures.append(Hatchery(20, 12, ai, mapa, False))
+    aiStructures.append(TerranBarracks(12, 6, ai, mapa, False))
     aiStructures.append(TerranBuilder(20, 12, ai, mapa, False, raton))
 
     for structure in aiStructures:

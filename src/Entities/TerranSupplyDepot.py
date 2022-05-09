@@ -5,6 +5,7 @@ from .TerranWorker import *
 from .Structure import *
 from .. import Player, Map
 from ..Command import *
+from .Entity import *
 from ..Utils import *
 
 HP = 200
@@ -29,10 +30,17 @@ class TerranSupplyDepot(Structure):
     tileH = 3
     clicked = False
     frame = 8
+    nSprites = 5
 
     def __init__(self, xini, yini, player, map, building):
         Structure.__init__(self, HP, TERRAN_SUPPLY_MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
-        self.sprites = cargarSprites(TERRAN_SUPPLY_PATH, 5, False, WHITE, 1.5)
+        self.sprites = cargarSprites(TERRAN_SUPPLY_PATH, self.nSprites, False, WHITE, 1.5)
+        deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
+        deadSpritesheet.set_colorkey(BLACK)
+        deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
+
+        self.sprites += deadSprites
+        
         self.image = self.sprites[self.index]
         self.operativeIndex = [4]
         self.spawningIndex = [4]

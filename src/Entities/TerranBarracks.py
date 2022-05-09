@@ -29,14 +29,18 @@ class TerranBarracks(Structure):
     tileH = 3
     clicked = False
     frame = 8
+    nSprites = 6
 
     def __init__(self, xini, yini, player, map, building):
         Structure.__init__(self, HP, TERRAN_BARRACKS_MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
+        
+        self.sprites = cargarSprites(TERRAN_BARRACKS_PATH, self.nSprites, False, WHITE, 1.1)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
-        self.sprites = cargarSprites(TERRAN_BARRACKS_PATH, 6, False, WHITE, 1.1)
-        #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
+        deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
+        self.sprites += deadSprites
+        
         self.image = self.sprites[self.index]
         self.operativeIndex = [4]
         self.spawningIndex = [4, 5]

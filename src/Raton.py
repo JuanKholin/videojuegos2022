@@ -78,7 +78,7 @@ class Raton(pygame.sprite.Sprite):
         self.interface = None
         self.mapa = mapa
         self.id = takeID()
-        print("raton: ", self.id)
+        #print("raton: ", self.id)
 
     def update(self, camera):
         self.point.update()
@@ -255,7 +255,7 @@ class Raton(pygame.sprite.Sprite):
                     self.pulsado = False
                     self.clicked = True
                     #print('click izq liberado', real_mouse_pos, event.type)
-                    print(self.enable)
+                    #print(self.enable)
                     if self.enable:
                         if self.building:
                             if self.buildStructure.checkTiles() and self.player.resources >= self.buildStructure.mineralCost:
@@ -326,7 +326,7 @@ class Raton(pygame.sprite.Sprite):
                                         resource.setClicked(True)
                                         unitSel = True
                                         self.player.resourceSelected = resource
-                                        print("CLICKADO aaaa")
+                                        #print("CLICKADO aaaa")
                                         break
 
                             if unitSel:

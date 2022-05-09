@@ -26,12 +26,16 @@ class TerranRefinery(Structure):
     tileH = 2
     clicked = False
     frame = 8
+    nSprites = 5
 
     def __init__(self, xini, yini, player, map, building):
         Structure.__init__(self, HP, TERRAN_REFINERY_MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
+        self.sprites = cargarSprites(TERRAN_REFINERY_PATH, self.nSprites, False, BLACK)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
-        self.sprites = cargarSprites(TERRAN_REFINERY_PATH, 5, False, BLACK)
+        deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
+
+        self.sprites += deadSprites
         #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.image = self.sprites[self.index]

@@ -77,18 +77,19 @@ class Structure(Entity.Entity):
 
     # Pasa a empezar a derrumbarse, crashear, hp a 0 y esas cosas
     def changeToCollapsing(self):
-        #print("COLLAPSING ", self.x, " ", self.y)
         self.state = BuildingState.COLLAPSING
-        self.frame = 0
         self.count = 0
-        self.image = self.sprites[self.frame[self.collapsingFrames[self.frame]]]
+        self.index = 6
+        #self.image = self.sprites[self.frames[self.collapsingFrames[self.frame]]]
 
     # Pasa a destruido del todo, no quedan ni los restos
     def changeToDestroyed(self):
         #print("DESTROYED ", self.x, " ", self.y)
         self.state = BuildingState.DESTROYED
+        self.index = 0
         self.mapa.setLibre(self.getTile())
         self.clicked = False
+        self.player.structures.remove(self)
 
     def getOptions(self):
         return []
@@ -165,7 +166,13 @@ class Structure(Entity.Entity):
                     self.state = BuildingState.OPERATIVE
 
     def updateCollapsing(self):
-        pass
+        print("hola", self.frame)
+        if frame(self.frame) == 1:
+            self.index += 1
+            if self.index == self.nSprites + 10:
+                self.changeToDestroyed()
+        
+
 
     def draw(self, screen, camera):
         r = self.getRect()
@@ -286,7 +293,7 @@ class Structure(Entity.Entity):
         pass
 
     def generateUnit(self, unit):
-        print("genero unidad")
+        #print("genero unidad")
         if len(self.training) == 0:
             self.generationStartTime = getGlobalTime()
         self.training.append(unit)
@@ -320,6 +327,7 @@ class Structure(Entity.Entity):
     def beingAttacked(self, damage, unit):
         self.lastAttacker = unit
         if self.hp <= damage:
+            self.hp -= damage
             self.changeToCollapsing()
         else:
             self.hp -= damage

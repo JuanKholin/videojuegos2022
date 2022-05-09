@@ -1,13 +1,12 @@
 import pygame
+
+from .TerranSoldier import *
 from .TerranWorker import *
-from .. import Player, Map, Tile
 from .Structure import *
+from .. import Player, Map
 from ..Command import *
 from .Entity import *
-from src.Utils import *
-from .TerranBarracks import *
-from .TerranRefinery import *
-from .Hatchery import *
+from ..Utils import *
 
 HP = 200
 GENERATION_TIME = 40
@@ -29,12 +28,17 @@ class TerranBuilder(Structure):
     tileH = 4
     clicked = False
     frame = 8
+    nSprites = 6
 
     def __init__(self, xini, yini, player, map, building, raton):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
+        self.sprites = cargarSprites(TERRAN_BUILDER_PATH, self.nSprites, False, WHITE, 1.5)
+        
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
-        self.sprites = cargarSprites(TERRAN_BUILDER_PATH, 6, False, WHITE, 1.5)
+        deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
+
+        self.sprites += deadSprites
 
         #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
         self.raton = raton

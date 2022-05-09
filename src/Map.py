@@ -211,7 +211,8 @@ class Map():
         if tile.type == EMPTY:
             tile.setOcupada(id)
         else:
-            print("HI")
+            #print("HI")
+            pass
 
     #Pone la tile como recurso
     def setRecurso(self, tile):
@@ -224,7 +225,8 @@ class Map():
     def setLibre(self, tile):
         #print("CAGO EN DIOS")
         if self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type == EMPTY:
-            print("hi")
+            #print("hi")
+            pass
         else:
             self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = EMPTY
             self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].ocupante = None
@@ -451,6 +453,7 @@ class Map():
             tile.g = 0
         if nodosAbiertos.__len__() == 0:
             print("camino no encontrado", tileObj.tileid)
+            
             #input()
         else:
             #print("camino encontrado")
@@ -593,13 +596,13 @@ class Map():
             tileDown = self.getTile(x, finy)
             tiles.append(tileUp)
             tiles.append(tileDown)
-            print(tileUp.tileid, tileDown.tileid)
+            #tileUp.tileid, tileDown.tileid)
             x += TILE_WIDTH
         x = self.getTile(rect.x, rect.y).centerx
         while y <= finy:
             tileUp = self.getTile(x, y)
             tileDown = self.getTile(finx, y)
-            print(tileUp.tileid, tileDown.tileid)
+            #print(tileUp.tileid, tileDown.tileid)
             y += TILE_HEIGHT
         #input()
         return tiles
@@ -617,7 +620,7 @@ class Map():
                 if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
                     aux = self.mapa[row][col]
                     if (aux.type == UNIT) or (aux.type == STRUCTURE):
-                        print("PLAYER2? ", aux.ocupante.player)
+                        #print("PLAYER2? ", aux.ocupante.player)
                         if aux.ocupante.player != player1 and aux.ocupante in aux.ocupante.player.units:
                             return aux.ocupante
         return None
