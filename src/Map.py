@@ -222,6 +222,7 @@ class Map():
 
     #Pone la tile como libre
     def setLibre(self, tile):
+        print("CAGO EN DIOS")
         if self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type == EMPTY:
             print("hi")
         else:
@@ -450,7 +451,7 @@ class Map():
             tile.g = 0
         if nodosAbiertos.__len__() == 0:
             print("camino no encontrado", tileObj.tileid)
-            input()
+            #input()
         else:
             #print("camino encontrado")
             currentTile = self.getTile(tileObj.centerx, tileObj.centery)

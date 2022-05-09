@@ -16,6 +16,7 @@ class Interface():
         self.enemy = enemy
         self.mouse = mouse
         # GAME SELECT
+
         self.gameSelect = pg.image.load(GAME_SELECT + "gameSelect.png")
         self.gameSelect = pg.transform.scale(self.gameSelect, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
