@@ -52,7 +52,7 @@ def procesarInput():
 
 
 def setEntity(player, ai):
-    scv = TerranSoldier(4, 10, player)
+    scv = TerranSoldier(2, 2, player)
     scv2 = TerranSoldier(5, 10, player)
     scv3 = TerranSoldier(6, 10, player)
     scv4 = TerranSoldier(7, 10, player)
@@ -61,7 +61,7 @@ def setEntity(player, ai):
     scv7 = TerranSoldier(10, 10, player)
     scv8 = TerranWorker(11, 10, player)
     structure1 = TerranBuilder(2, 7, player, mapa, False, raton)
-    structure3 = TerranSupplyDepot(2, 2, player, mapa, True)
+    structure3 = TerranSupplyDepot(4, 4, player, mapa, True)
     structure7 = Hatchery(30, 30, player, mapa, True)
 
     player.setBasePlayer(structure1)
@@ -70,7 +70,7 @@ def setEntity(player, ai):
     structure4 = Extractor(12, 27, player, mapa, True)
     structure5 = TerranRefinery(13, 18, ai, mapa, True, gas2)
 
-    a = structure4.getPosition()
+    a = structure3.getPosition()
     print(a[0] / 40, a[1] /40)
     player.addStructures(structure1)
     player.addStructures(structure2)
