@@ -73,7 +73,7 @@ class Structure(Entity.Entity):
         self.state = BuildingState.SPAWNING
         self.frame = 0
         self.count = 0
-        self.image = self.sprites[self.frames[self.spawningFrames[self.frame]]]
+        self.image = self.sprites[self.frame[self.spawningFrames[self.frame]]]
 
     # Pasa a empezar a derrumbarse, crashear, hp a 0 y esas cosas
     def changeToCollapsing(self):
@@ -81,7 +81,7 @@ class Structure(Entity.Entity):
         self.state = BuildingState.COLLAPSING
         self.frame = 0
         self.count = 0
-        self.image = self.sprites[self.frames[self.collapsingFrames[self.frame]]]
+        self.image = self.sprites[self.frame[self.collapsingFrames[self.frame]]]
 
     # Pasa a destruido del todo, no quedan ni los restos
     def changeToDestroyed(self):
