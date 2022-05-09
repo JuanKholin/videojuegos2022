@@ -232,18 +232,19 @@ class Map():
             self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].ocupante = None
     
     #Pone las tiles como libre dada la esquina inferior derecha de un rectangulo y su altura y su anchura
-    def setLibres(self, tile, width, height):
+    def setLibres(self, structure, tile, width, height):
         #print("CAGO EN DIOS")
         x = int(tile.centerx / self.tw)
         y = int(tile.centery / self.th)
-        for xAux in range(x, x - (width - 1), -1):
-            for yAux in range(y, y - (height - 1), -1):
-                if self.mapa[yAux][xAux].type == EMPTY:
-                    #print("hi")
-                    pass
-                else:
-                    self.mapa[yAux][xAux].type = EMPTY
-                    self.mapa[yAux][xAux].ocupante = None
+        for xAux in range(x - height, x + width):
+            for yAux in range(y - height, y + height):
+                if (xAux >= 0) and (xAux < self.w) and (yAux >= 0) and (yAux < self.h):
+                    if self.mapa[yAux][xAux].type == EMPTY:
+                        #print("hi")
+                        pass
+                    elif (self.mapa[yAux][xAux].type == STRUCTURE) and (self.mapa[yAux][xAux].ocupante == structure):
+                        self.mapa[yAux][xAux].type = EMPTY
+                        self.mapa[yAux][xAux].ocupante = None
 
     #Devuelve una lista de tiles vecinas libres a la dada
     def getTileVecinas(self, tile, tileObj):
