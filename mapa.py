@@ -52,7 +52,10 @@ def procesarInput():
 
 
 def setEntity(player, ai):
-    scv = TerranWorker(4, 10, player)
+
+    structure1 = TerranBuilder(10, 72, player, mapa, False, raton)
+    scv = TerranWorker(13, 69, player)
+    
     '''
     scv2 = TerranSoldier(5, 10, player)
     scv3 = TerranSoldier(6, 10, player)
@@ -61,7 +64,6 @@ def setEntity(player, ai):
     scv6 = TerranSoldier(9, 10, player)
     scv7 = TerranSoldier(10, 10, player)
     scv8 = TerranWorker(11, 10, player)'''
-    structure1 = TerranBuilder(6, 7, player, mapa, False, raton)
     structure3 = TerranSupplyDepot(20, 7, player, mapa, True)
 
     player.setBasePlayer(structure1)
@@ -72,9 +74,9 @@ def setEntity(player, ai):
     player.addStructures(structure1)
     '''player.addStructures(structure2)
     player.addStructures(structure3)
-    ai.addStructures(structure4)
+    
     player.addStructures(structure5)'''
-
+    ai.addStructures(structure4)
     player.addUnits(scv)
 
     aiUnits = []
@@ -97,17 +99,26 @@ def setEntity(player, ai):
      #   ai.addStructures(structure)
 
     #Recursos del mapa
-    crystal = Crystal(2, 10, 34)
-    crystal2 = Crystal(2, 18, 60)
-    crystal3 = Crystal(2, 22, 60)
-    crystal4 = Crystal(2, 26, 60)
-    gas = Geyser(16, 13, 50)
-
     resources = []
+    crystal2 = Crystal(32, 74, 800)
+    crystal = Crystal(30, 70, 800)
+    crystal3 = Crystal(26, 66, 800)
+    crystal4 = Crystal(25, 74, 800)
+    crystal5 = Crystal(25, 70, 800)
+    crystal6 = Crystal(28, 78, 800)
+    
+    
+    resources.append(crystal3)
     resources.append(crystal)
     resources.append(crystal2)
-    resources.append(crystal3)
     resources.append(crystal4)
+    resources.append(crystal5)
+    resources.append(crystal6)
+    
+    
+    gas = Geyser(6, 61, 500)
+    resources.append(gas)
+    gas = Geyser(4, 64, 500)
     resources.append(gas)
     escena.resources = resources
 
@@ -125,6 +136,8 @@ def update():
         escena.mapa = mapa
         escena.mapa.load()
         escena.mapa.loadMinimap()
+        camera.x = 200
+        camera.y = 2400
         setEntity(player1, player2)
         setGameState(System_State.ONGAME)
     elif getGameState() == System_State.ONGAME:
@@ -183,15 +196,28 @@ commandMap ={
   CommandId.ROTATE: pg.K_r,
 }
 
-print(MAPA1.__len__(), MAPA1[0].__len__())
-mapa = Map.Map( MAPA1[0].__len__(),MAPA1.__len__(), True, MAPA1)
-#mapa.setElevacion(16, 3)
-#mapa.setElevacion(20, 14)
-#mapa.setElevacion(17, 30)
-#mapa.setElevacion(12, 20)
-#mapa.setElevacion(8, 35)
-#mapa.setElevacion(5, 12)
-#mapa.setElevacion(32, 29)
+print(EMPTY_MAP.__len__(), EMPTY_MAP[0].__len__())
+mapa = Map.Map( EMPTY_MAP[0].__len__(),EMPTY_MAP.__len__(), True, EMPTY_MAP)
+mapa.setElevacion(0, 55)
+mapa.setElevacion(8, 55)
+mapa.setElevacion(16, 55)
+mapa.setElevacion(24, 55)
+mapa.setElevacion(32, 60)
+mapa.setElevacion(32, 65)
+mapa.setElevacion(32, 70)
+mapa.setElevacion(32, 75)
+
+
+mapa.setElevacion(72, 20)
+mapa.setElevacion(64, 20)
+mapa.setElevacion(56, 20)
+mapa.setElevacion(48, 20)
+mapa.setElevacion(40, 15)
+mapa.setElevacion(40, 10)
+mapa.setElevacion(40, 5)
+mapa.setElevacion(40, 0)
+
+
 
 player1 = Player.Player([], [], 400, keyMap, commandMap, mapa, True)
 
@@ -216,7 +242,6 @@ raton.addInterface(p1Interface)
 
 escena = Escena(player1, player2, aI, [], camera, raton, p1Interface, [])
 raton.setEscena(escena)
-#escena.mapa.addOre(100,100)
 
 # Bucle principal
 while True:

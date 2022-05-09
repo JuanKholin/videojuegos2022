@@ -312,6 +312,7 @@ class AI():
         height = TerranBarracks.TILES_HEIGHT
         centerTile = TerranBarracks.CENTER_TILE
         randBuilding = randint(0, len(structures) - 1)
+        randBuilding = 0
         building = structures[randBuilding]
         randDirection = randint(0, 7)
         buildingsTried = 0
