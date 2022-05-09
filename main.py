@@ -48,8 +48,6 @@ def procesarInput():
             escena.procesarEvent(event)
     escena.checkPressedButtons()
 
-
-
 def setEntity(player, ai):
     scv = TerranSoldier(4, 10, player)
     scv2 = TerranSoldier(5, 10, player)
@@ -94,7 +92,9 @@ def setEntity(player, ai):
         ai.addUnits(unit)
    
     aiStructures = []
-    aiStructures.append(Hatchery(20, 12, ai, mapa, False))
+    #aiStructures.append(Hatchery(20, 12, ai, mapa, False))
+    aiStructures.append(TerranBuilder(20, 12, ai, mapa, False, raton))
+
 
     for structure in aiStructures:
         ai.addStructures(structure)
@@ -201,8 +201,8 @@ player1 = Player.Player([], [], 400, keyMap, commandMap, mapa, True)
 
 
 # Player 2 AKA IA
-player2 = Player.Player([], [], 40000, {}, {}, mapa, False)
-aI = AI(player2, Race.ZERG, EASY)
+player2 = Player.Player([], [], 4000, {}, {}, mapa, False)
+aI = AI(player2, Race.TERRAN, EASY)
 
 # Camara
 # pre: mapa tan grande como ventana

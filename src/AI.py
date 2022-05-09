@@ -1,6 +1,7 @@
 from .Utils import *
 from .Entities.TerranBarracks import *
 from .Entities.TerranSupplyDepot import *
+from .Command import *
 from random import *
 
 # Esta clase va a sacar lo peor de nosotros mismos, me temo
@@ -17,21 +18,30 @@ class AI():
         self.mapa = self.data.getMapa()
         self.miniCount = 0
 
+        self.minWorkers = 3
+        self.minSoldiers = 1
+
         if race == Race.ZERG:
             self.base = ZERG_BASE
             self.barracks = ZERG_BARRACKS
             self.depot = ZERG_DEPOT
             self.geyserBuilding = ZERG_GEYSER_STRUCTURE
+            self.worker = ZERG_WORKER
+            self.soldier = ZERG_SOLDIER
         elif race == Race.TERRAN:
             self.base = TERRAN_BASE
             self.barracks = TERRAN_BARRACKS
             self.depot = TERRAN_DEPOT
             self.geyserBuilding = TERRAN_GEYSER_STRUCTURE
+            self.worker = TERRAN_WORKER
+            self.soldier = TERRAN_SOLDIER
         elif race == Race.PROTOSS:
             self.base = PROTOSS_BASE
             self.barracks = PROTOSS_BARRACKS
             self.depot = PROTOSS_DEPOT
             self.geyserBuilding = PROTOSS_GEYSER_STRUCTURE
+            self.worker = PROTOSS_WORKER
+            self.soldier = PROTOSS_SOLDIER
 
         # Para las invasiones
         self.invaders = []
@@ -51,14 +61,12 @@ class AI():
     # Acciones que debe hacer casi siempre la IA
     def alwaysToDoActions(self, units, structures):
         if self.rotativeReaction == 0:
-            print("self defense")
             self.selfDefense(units, structures)
         elif self.rotativeReaction == 1:
-            print("minimal build")
             self.minimalBuild(structures)
         elif self.rotativeReaction == 2:
             print("restore army")
-            #self.restoreArmy()
+            self.restoreArmy(units, structures)
         elif self.rotativeReaction == 3:
             print("gather nearby resources")
             #self.gatherNearbyResources()
@@ -132,14 +140,13 @@ class AI():
     # Si la IA tiene al menos una estructura puede construir mas, se considera build minima
     # un edificio de cada
     def minimalBuild(self, structures):
-        print("start")
         if self.haveBase(structures):
             print("Have base")
             if not self.haveBarracks(structures):
                 if (self.barracks == ZERG_BARRACKS) and (self.data.resources >= ZERG_BARRACKS_MINERAL_COST):
                     print("Construye zergbarracks")
                     self.data.resources -= ZERG_BARRACKS_MINERAL_COST
-                    self.buildTerranBarracks(structures) # Seria Zerg pero no hay edificio xd
+                    self.buildZergBarracks(structures) # Seria Zerg pero no hay edificio xd
                 elif (self.barracks == TERRAN_BARRACKS) and (self.data.resources >= TERRAN_BARRACKS_MINERAL_COST):
                     print("Construye terranbarracks")
                     self.data.resources -= TERRAN_BARRACKS_MINERAL_COST
@@ -148,14 +155,35 @@ class AI():
                 if (self.depot == ZERG_DEPOT) and (self.data.resources >= ZERG_DEPOT_MINERAL_COST):
                     print("Construye zergdepot")
                     self.data.resources -= ZERG_DEPOT_MINERAL_COST
-                    self.buildTerranDepot(structures) # Seria Zerg pero no hay edificio xd
-                elif (self.barracks == TERRAN_DEPOT) and (self.data.resources >= TERRAN_DEPOT_MINERAL_COST):
+                    self.buildZergDepot(structures) # Seria Zerg pero no hay edificio xd
+                elif (self.depot == TERRAN_DEPOT) and (self.data.resources >= TERRAN_DEPOT_MINERAL_COST):
                     print("Construye terrandepot")
                     self.data.resources -= TERRAN_DEPOT_MINERAL_COST
                     self.buildTerranDepot(structures)
             
-    def restoreArmy(self):
-        pass
+    def restoreArmy(self, units, structures):
+        nWorkers = 0
+        nSoldiers = 0
+        for unit in units:
+            if unit.type == self.worker:
+                nWorkers += 1
+            elif unit.type == self.soldier:
+                nSoldiers += 1
+        workersToCreate = self.minWorkers - nWorkers
+        base = self.getBase(structures)
+        if base != None:
+            if workersToCreate > 0:
+                if base.state == BuildingState.OPERATIVE:
+                    print("genworker")
+                    base.execute(CommandId.GENERATE_WORKER)
+            soldiersToCreate = self.minSoldiers - nSoldiers
+            if soldiersToCreate > 0:
+                barracks = self.getBarracks(structures)
+                for structure in barracks:
+                    if (structure.state == BuildingState.OPERATIVE) and (soldiersToCreate > 0):
+                        soldiersToCreate = soldiersToCreate - 1
+                        print("gensoldier")
+                        structure.execute(CommandId.GENERATE_SOLDIER)
 
     def gatherNearbyResources(self):
         pass
@@ -202,7 +230,7 @@ class AI():
     def getSoldiers(self, units):
         soldiers = []
         for unit in units:
-            if unit.isSoldier() and unit.isReadyToFight():
+            if unit.type == self.soldier and unit.isReadyToFight():
                 soldiers.append(unit)
         return soldiers
 
@@ -216,14 +244,14 @@ class AI():
     # Devuelve si hay un barracks
     def haveBarracks(self, structures):
         for structure in structures:
-            if structure.type == TERRAN_BARRACKS: # Seria self.barracks
+            if structure.type == self.barracks:
                 return True
         return False
 
     # Devuelve si hay un depot
     def haveDepot(self, structures):
         for structure in structures:
-            if structure.type == TERRAN_DEPOT: # Seria self.depot
+            if structure.type == self.depot:
                 return True
         return False
 
@@ -390,3 +418,16 @@ class AI():
             buildX = buildX - (w - 1)
             buildY = buildY - (h - 1)
             return buildX, buildY
+
+    def getBase(self, structures):
+        for structure in structures:
+            if structure.type == self.base:
+                return structure
+        return None
+
+    def getBarracks(self, structures):
+        result = []
+        for structure in structures:
+            if structure.type == self.barracks:
+                result.append(structure)
+        return result

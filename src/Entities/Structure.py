@@ -310,7 +310,7 @@ class Structure(Entity.Entity):
             x, _ = self.mapa.getTileIndex(rect.x, rect.y)
             while x*self.mapa.tw <= rect.x+rect.w:
                 tile = self.mapa.mapa[y][x]
-                #print("ocupo", x, " ", y)
+                print("ocupo", x, " ", y)
                 self.mapa.setType(tile, STRUCTURE)
                 tile.setOcupante(self)
                 x += 1

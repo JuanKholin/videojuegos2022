@@ -76,6 +76,8 @@ class TerranWorker(Worker):
         #self.imageRect = rect(self.x, self.y, self.image.get_width(), self.image.get_height())
         self.render = pygame.transform.scale(pygame.image.load(WORKER_RENDER), UNIT_RENDER_SIZE)
 
+        self.type = TERRAN_WORKER
+
     def getUpgrades(self):
         upgrades = []
         if self.player.mineUpgrade == 0:
