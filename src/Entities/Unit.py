@@ -453,14 +453,11 @@ class Unit(Entity):
 
     # Pasa a estado quieto
     def changeToStill(self):
-        print("STILL", type(self))
+        #print("STILL", type(self))
         self.state = UnitState.STILL
         self.attackedOne = None
         self.frame = 0
         self.count = 0
-        print(self.stillFrames[self.frame])
-        print(self.dirOffset[self.dir])
-        print(self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]])
         self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
         #Yo:WHAT IS THIS?:
         #JUAN: THIS IS EL BUG FIXER :P

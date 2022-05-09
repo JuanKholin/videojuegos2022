@@ -60,7 +60,7 @@ class Player():
         self.structures.append(structures)
 
     def execute(self, id, param, tileClicked):
-        print("Soy player, ", self.isPlayer)
+        #print("Soy player, ", self.isPlayer)
         if id == CommandId.MOVE: #Mover unidades
             for i in range(param.__len__()):
                 self.unitsSelected[i].paths = param[i]
@@ -139,7 +139,7 @@ class Player():
 
     # Para que la AI pueda acceder a la informacion
     def get_info(self):
-        return self.unitsFree, self.structures, self.resources
+        return self.unitsFree, self.structures
 
     def toDictionary(self, map):
         return {

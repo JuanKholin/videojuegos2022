@@ -248,7 +248,7 @@ class Raton(pygame.sprite.Sprite):
                 if self.pulsado:
                     self.pulsado = False
                     self.clicked = True
-                    print('click izq liberado', real_mouse_pos, event.type)
+                    #print('click izq liberado', real_mouse_pos, event.type)
                     if self.enable:
                         if self.building:
                             if self.buildStructure.checkTiles() and self.player.resources >= self.buildStructure.mineralCost:
@@ -342,7 +342,7 @@ class Raton(pygame.sprite.Sprite):
                                 break
 
                 elif not type[2]:
-                    print('click der liberado', real_mouse_pos[0], real_mouse_pos[1], event.type)
+                    #print('click der liberado', real_mouse_pos[0], real_mouse_pos[1], event.type)
                     self.derPulsado = False
                     if self.enable:
                         if self.building:

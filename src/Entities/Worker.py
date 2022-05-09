@@ -103,7 +103,7 @@ class Worker(Unit):
     # Ya esta al lado del recurso y prepara el minado
     def startMining(self):
         self.startTimeMining = Utils.getGlobalTime()
-        print("Start mining", self.startTimeMining)
+        #print("Start mining", self.startTimeMining)
         xCristal, yCristal = self.resource.getCenter()
         posicionActual = self.getPosition()
         self.isMining = True
@@ -266,7 +266,7 @@ class Worker(Unit):
             if self.getTile() in tilesCasa: # He entregado sino me quedo en el sitio
                 if self.resource.capacity < 0:
                     self.player.resources += self.cantidadMinada
-                    print("cambiamos a still")
+                    #print("cambiamos a still")
                     self.changeToStill()
                 else:
                     #Tengo que volver, calculo el camino a minar
@@ -332,7 +332,7 @@ class Worker(Unit):
         self.cristal = cristal
 
     def changeToMovingToMining(self):
-        print("PASO A MOVERME AL CRISTAL")
+        #print("PASO A MOVERME AL CRISTAL")
         self.state = UnitState.MOVING_TO_MINING
         self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
         self.count = 0
@@ -354,7 +354,7 @@ class Worker(Unit):
     def finishMiningPath(self):
         self.paths.pop(0)
         if len(self.paths) == 0: #Hay que ponerse a minar
-            print("Hay que ponerse a minar")
+            #print("Hay que ponerse a minar")
             self.startTimeMining = getGlobalTime()
             xCristal, yCristal = self.cristal.getCenter()
             posicionActual = self.getPosition()

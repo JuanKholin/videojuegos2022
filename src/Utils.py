@@ -4,7 +4,7 @@ import math
 from re import T
 import pygame
 
-DEBBUG = False
+DEBBUG = True
 
 class System_State(Enum):
     MAINMENU = auto()
@@ -52,6 +52,9 @@ VESPENE = 2
 TILE_WIDTH = 40
 TILE_HEIGHT = 40
 
+# En un mundo de  solo hay 8 direcciones creo yo
+TOTAL_DIRECTIONS = 8
+
 # dificultades IA (margen de decision en frames):
 EASY = 1000
 MEDIUM = 600
@@ -60,10 +63,13 @@ HARD = 300
 # espera de la IA para tomar decisiones ligeras:
 AI_LAPSE = 30
 
-# Razas:
+# FALTAN POR DEFINIR PERO LAS TENGO QUE PONER:
+ZERG_BARRACKS_MINERAL_COST = 90
+ZERG_DEPOT_MINERAL_COST = 90
+TERRAN_DEPOT_MINERAL_COST = 90
 
 # Edificios de las razas:
-TERRAN_BASE = "TerranBuilder" 
+TERRAN_BASE = "TerranBuilder"
 TERRAN_BARRACKS = "TerranBarracks"
 TERRAN_DEPOT = "TerranSuplyDepot" 
 TERRAN_GEYSER_STRUCTURE = "TerranRefinery"
@@ -320,8 +326,8 @@ BUILDER_RENDER = "SPRITE/render/terranBuilder.png"
 
 ##---------TERRAN_BARRACK------------------
 
-TERRAN_BARRACK_PATH = "SPRITE/structure/barracks/tile00"
-TERRAN_BARRACK_MINERAL_COST = 50
+TERRAN_BARRACKS_PATH = "SPRITE/structure/barracks/tile00"
+TERRAN_BARRACKS_MINERAL_COST = 50
 BARRACKS_RENDER = "SPRITE/render/terranBarracks.png"
 
 ##---------TERRAN_REFINERY------------------

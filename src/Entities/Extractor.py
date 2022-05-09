@@ -43,6 +43,8 @@ class Extractor(Structure):
         self.training = []
         self.paths = []
 
+        self.type = ZERG_GEYSER_STRUCTURE
+
     def getOptions(self):
         return []
 

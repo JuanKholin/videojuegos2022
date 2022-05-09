@@ -53,7 +53,7 @@ class Structure(Entity.Entity):
 
     # Pasa a estado construyendo, si lo hay
     def changeToBuilding(self):
-        print("BUILDING ", self.x, " ", self.y)
+        #print("BUILDING ", self.x, " ", self.y)
         self.state = BuildingState.BUILDING
         self.frame = 0
         self.count = 0
@@ -61,7 +61,7 @@ class Structure(Entity.Entity):
 
     # Pasa a estado operative, es decir, disponible, on, preparado, etc.
     def changeToOperative(self):
-        print("OPERATIVE ", self.x, " ", self.y)
+        #print("OPERATIVE ", self.x, " ", self.y)
         self.state = BuildingState.OPERATIVE
         self.frame = 0
         self.count = 0
@@ -69,7 +69,7 @@ class Structure(Entity.Entity):
 
     # Pasa a estado lucecitas, para sacar unidades, si lo tiene claro
     def changeToSpawning(self):
-        print("SPAWNING ", self.x, " ", self.y)
+        #print("SPAWNING ", self.x, " ", self.y)
         self.state = BuildingState.SPAWNING
         self.frame = 0
         self.count = 0
@@ -77,7 +77,7 @@ class Structure(Entity.Entity):
 
     # Pasa a empezar a derrumbarse, crashear, hp a 0 y esas cosas
     def changeToCollapsing(self):
-        print("COLLAPSING ", self.x, " ", self.y)
+        #print("COLLAPSING ", self.x, " ", self.y)
         self.state = BuildingState.COLLAPSING
         self.frame = 0
         self.count = 0
@@ -85,7 +85,7 @@ class Structure(Entity.Entity):
 
     # Pasa a destruido del todo, no quedan ni los restos
     def changeToDestroyed(self):
-        print("DESTROYED ", self.x, " ", self.y)
+        #print("DESTROYED ", self.x, " ", self.y)
         self.state = BuildingState.DESTROYED
         self.mapa.setLibre(self.getTile())
         self.clicked = False
@@ -310,6 +310,7 @@ class Structure(Entity.Entity):
             x, _ = self.mapa.getTileIndex(rect.x, rect.y)
             while x*self.mapa.tw <= rect.x+rect.w:
                 tile = self.mapa.mapa[y][x]
+                print("ocupo", x, " ", y)
                 self.mapa.setType(tile, STRUCTURE)
                 tile.setOcupante(self)
                 x += 1
@@ -323,3 +324,6 @@ class Structure(Entity.Entity):
         else:
             self.hp -= damage
         return self.hp
+
+    def getCords(self):
+        return self.x / TILE_WIDTH, self.y / TILE_HEIGHT

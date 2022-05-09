@@ -1,4 +1,6 @@
 from .Utils import *
+from .Entities.TerranBarracks import *
+from .Entities.TerranSupplyDepot import *
 from random import *
 
 # Esta clase va a sacar lo peor de nosotros mismos, me temo
@@ -36,38 +38,37 @@ class AI():
 
     # Haz lo tuyo IA, es tu turno
     def make_commands(self):
-        units, structures, resources = self.data.get_info()
+        units, structures = self.data.get_info()
         self.miniCount += 1
         if self.miniCount >= AI_LAPSE: # Acciones ligeras
             self.miniCount = 0
-            self.alwaysToDoActions(units, structures, resources)
+            self.alwaysToDoActions(units, structures)
         #self.count += 1
         #if self.count >= self.decissionRate: # Decisiones importantes
         #    self.count = 0
         #    self.makeDecission(units, structures, resources)
 
     # Acciones que debe hacer casi siempre la IA
-    def alwaysToDoActions(self, units, structures, resources):
+    def alwaysToDoActions(self, units, structures):
         if self.rotativeReaction == 0:
-            #print("self defense")
+            print("self defense")
             self.selfDefense(units, structures)
-        '''
         elif self.rotativeReaction == 1:
             print("minimal build")
-            #self.minimalBuild(structures)
+            self.minimalBuild(structures)
         elif self.rotativeReaction == 2:
-            #print("restore army")
+            print("restore army")
             #self.restoreArmy()
         elif self.rotativeReaction == 3:
-            #print("gather nearby resources")
+            print("gather nearby resources")
             #self.gatherNearbyResources()
         elif self.rotativeReaction == 4:
-            #print("update invaders")
-            #self.updateInvaders()'''
+            print("update invaders")
+            #self.updateInvaders()
         self.rotativeReaction = (self.rotativeReaction + 1) % 5 # 5 acciones distintas hay
 
     # Toma una decision trascendental
-    def makeDecission(self, units, structures, resources):
+    def makeDecission(self, units, structures):
         decission = self.decide()
         if decission == 0:
             #print("IA DECIDE ATACAR LO VISIBLE")
@@ -130,20 +131,26 @@ class AI():
 
     # Si la IA tiene al menos una estructura puede construir mas, se considera build minima
     # un edificio de cada
-    def minimalBuild(self, structures, resources):
-        if haveBase(structures):
-            if not haveBarracks(structures):
-                if (self.barracks == ZERG_BARRACKS) and (self.resources >= ZERG_BARRACKS_MINERAL_COST):
+    def minimalBuild(self, structures):
+        print("start")
+        if self.haveBase(structures):
+            print("Have base")
+            if not self.haveBarracks(structures):
+                if (self.barracks == ZERG_BARRACKS) and (self.data.resources >= ZERG_BARRACKS_MINERAL_COST):
+                    print("Construye zergbarracks")
                     self.data.resources -= ZERG_BARRACKS_MINERAL_COST
-                    self.buildZergBarracks(structures)
-                elif (self.barracks == TERRAN_BARRACKS) and (self.resources >= TERRAN_BARRACKS_MINERAL_COST):
+                    self.buildTerranBarracks(structures) # Seria Zerg pero no hay edificio xd
+                elif (self.barracks == TERRAN_BARRACKS) and (self.data.resources >= TERRAN_BARRACKS_MINERAL_COST):
+                    print("Construye terranbarracks")
                     self.data.resources -= TERRAN_BARRACKS_MINERAL_COST
                     self.buildTerranBarracks(structures)
-            elif not haveDepot(structures):
-                if (self.depot == ZERG_DEPOT) and (self.resources >= ZERG_DEPOT_MINERAL_COST):
+            elif not self.haveDepot(structures):
+                if (self.depot == ZERG_DEPOT) and (self.data.resources >= ZERG_DEPOT_MINERAL_COST):
+                    print("Construye zergdepot")
                     self.data.resources -= ZERG_DEPOT_MINERAL_COST
-                    self.buildZergDepot(structures)
-                elif (self.barracks == TERRAN_DEPOT) and (self.resources >= TERRAN_DEPOT_MINERAL_COST):
+                    self.buildTerranDepot(structures) # Seria Zerg pero no hay edificio xd
+                elif (self.barracks == TERRAN_DEPOT) and (self.data.resources >= TERRAN_DEPOT_MINERAL_COST):
+                    print("Construye terrandepot")
                     self.data.resources -= TERRAN_DEPOT_MINERAL_COST
                     self.buildTerranDepot(structures)
             
@@ -199,81 +206,189 @@ class AI():
                 soldiers.append(unit)
         return soldiers
 
-    # Devuelve una lista con los tipos de edificios que no se tienen
-    def findHavingBuildings(self, structures):
-        haveBarrack = False
-        haveDepot = False
-        for structure in structures:
-            havingBuildings.add(self.buildingSet.index(type(structure)))
-        nonHavingBuildings = list(set(range(len(self.buildingSet))).difference(havingBuildings))
-
     # Devuelve si hay una base
     def haveBase(self, structures):
         for structure in structures:
-            if type(structure) == self.base:
+            if structure.type == self.base:
                 return True
         return False
 
-    # Devuelve si hay un barrack
-    def haveBarrack(self, structures):
+    # Devuelve si hay un barracks
+    def haveBarracks(self, structures):
         for structure in structures:
-            if type(structure) == self.barrack:
+            if structure.type == TERRAN_BARRACKS:
                 return True
         return False
 
     # Devuelve si hay un depot
     def haveDepot(self, structures):
         for structure in structures:
-            if type(structure) == self.depot:
+            if structure.type == self.depot:
                 return True
         return False
 
-    # Construye si se puede el edificio indicado en el buildingSet con indice i
-    def build(self, i, structures):
-        if self.buildStructure.checkTiles() and self.player.resources >= self.buildStructure.mineralCost:
-            self.player.resources -= self.buildStructure.mineralCost
-            self.buildStructure.player = self.player
-            self.player.addStructures(self.buildStructure)
-            self.buildStructure.buildProcess()
-            self.building = False
-            self.buildStructure = None
-
-            building = globals()[self.buildingSet[i]]
-            buildingInstance = building()
-            
     # Construye un barracks de los Terran cerca de una estructura aliada aleatoria
     def buildTerranBarracks(self, structures):
-        randBuilding = structures[randInt(0, len(structures) - 1)]
-        x, y = self.getRandDirection()
+        width = TerranBarracks.TILES_WIDTH
+        height = TerranBarracks.TILES_HEIGHT
+        centerTile = TerranBarracks.centerTile
+        randBuilding = randint(0, len(structures) - 1)
+        building = structures[randBuilding]
+        randDirection = randint(0, 7)
+        buildingsTried = 0
+        directionsTried = 0
+        x, y = self.getDirection(randDirection)
+        buildX, buildY = building.getCords()
 
-    # Construye un barracks de los Zerg cerca de una estructura aliada aleatoria
-    def buildZergBarracks(self, structures):
-        randBuilding = structures[randInt(0, len(structures) - 1)]
+        builded = False
+        while not builded:
+            tryNew = True
+            tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
+            if (tile != None) and (tile.type == STRUCTURE) and (tile.ocupante == building):
+                buildX = buildX + x
+                buildY = buildY + y
+                print(buildX," ", buildY, " STRUCTURE")
+                tryNew = False
+            elif (tile != None) and (tile.type == EMPTY): # Hueco tras edificio
+                #Ahora checkear que haya hueco para el edificio a construir
+                buildX = buildX + x
+                buildY = buildY + y
+                print("first ", buildX, " ", buildY, " EMPTY")
+                tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
+                if (tile != None) and (tile.type == EMPTY): # Primera tile libre para plantar edificio
+                    buildX = buildX + x
+                    buildY = buildY + y
+                    print("second ", buildX," ", buildY, " EMPTY")
+                    buildX, buildY = self.getTopLeft(buildX, buildY, randDirection, width, height, centerTile)
+                    print("topLeft ", buildX," ", buildY)
+
+                    if self.mapa.checkIfEmptyZone(buildX, buildY, buildX + (width - 1), buildY + (height - 1)):
+                        print("buildea")
+                        toBuild = TerranBarracks(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
+                        self.data.addStructures(toBuild)
+                        toBuild.buildProcess()
+                        builded = True
+            if tryNew and not builded:
+                directionsTried = directionsTried + 1
+                if directionsTried >= TOTAL_DIRECTIONS: # Se han probado todas las direcciones
+                    directionsTried = 0
+                    buildingsTried = buildingsTried + 1
+                    if buildingsTried >= len(structures): # No hay espacio en el mapa (  9 _9)
+                        print("Wrong map, full occupied?")
+                        exit()
+                    else: # Quedan edificios por probar
+                        randBuilding = (randBuilding + 1) % len(structures)
+                        building = structures[randBuilding]
+                else: # Quedan direcciones por probar
+                    randDirection = (randDirection + 1) % TOTAL_DIRECTIONS
+                    x, y = self.getDirection(randDirection)
+                    print ("New x e y ", x, " ", y)
+                    buildX, buildY = building.getCords()
 
     # Construye un depot de los Terran cerca de una estructura aliada aleatoria
     def buildTerranDepot(self, structures):
-        randBuilding = structures[randInt(0, len(structures) - 1)]
+        width = TerranSupplyDepot.TILES_WIDTH
+        height = TerranSupplyDepot.TILES_HEIGHT
+        centerTile = TerranSupplyDepot.centerTile
+        randBuilding = randint(0, len(structures) - 1)
+        building = structures[randBuilding]
+        randDirection = randint(0, 7)
+        buildingsTried = 0
+        directionsTried = 0
+        x, y = self.getDirection(randDirection)
+        buildX, buildY = randBuilding.getCords()
+
+        builded = False
+        while not builded:
+            tryNew = True
+            tile = self.mapa.getNextTileByDirection(buildX, buildY, x, y)
+            if (tile != None) and (tile.type == STRUCTURE) and (tile.ocupante == building):
+                buildX = buildX + x
+                buildY = buildY + y
+                tryNew = False
+            elif (tile != None) and (tile.type == EMPTY): # Hueco tras edificio
+                #Ahora checkear que haya hueco para el edificio a construir
+                buildX = buildX + x
+                buildY = buildY + y
+                tile = self.mapa.getNextTileByDirection(buildX, buildY, x, y)
+                if (tile != None) and (tile.type == EMPTY): # Primera tile libre para plantar edificio
+                    buildX, buildY = self.getTopLeft(buildX, buildY, randDirection, width, height, centerTile)
+                    if self.mapa.checkIfEmptyZone(buildX, buildY, buildX + (width - 1), buildY + (height - 1)):
+                        toBuild = TerranSupplyDepot(buildX + centerTile[0], buildY + centerTile[1], self.map, False)
+                        self.data.addStructures(toBuild)
+                        toBuild.buildProcess()
+                        builded = True
+            if tryNew and not builded:
+                directionsTried = directionsTried + 1
+                if directionsTried >= TOTAL_DIRECTIONS: # Se han probado todas las direcciones
+                    directionsTried = 0
+                    buildingsTried = buildingsTried + 1
+                    if buildingsTried >= len(structures): # No hay espacio en el mapa (  9 _9)
+                        print("Wrong map, full occupied?")
+                        exit()
+                    else: # Quedan edificios por probar
+                        randBuilding = (randBuilding + 1) % len(structures)
+                        building = structures[randBuilding]
+                else: # Quedan direcciones por probar
+                    randDirection = (randDirection + 1) % TOTAL_DIRECTIONS
+                    x, y = self.getDirection(randDirection)
+                    buildX, buildY = randBuilding.getCords()
+
+    # Construye un barracks de los Zerg cerca de una estructura aliada aleatoria
+    def buildZergBarracks(self, structures):
+        randBuilding = structures[randint(0, len(structures) - 1)]
+
+    # Construye un depot de los Terran cerca de una estructura aliada aleatoria
+    def buildTerranDepot(self, structures):
+        randBuilding = structures[randint(0, len(structures) - 1)]
 
     # Construye un depot de los Zerg cerca de una estructura aliada aleatoria
     def buildZergDepot(self, structures):
-        randBuilding = structures[randInt(0, len(structures) - 1)]
+        randBuilding = structures[randint(0, len(structures) - 1)]
 
     # Devuelve una direccion por la que avanzar para probar construcciones
-    def getRandDirection(self):
-        randDirection = randInt(0, 7)
-        if randDirection == 0:
+    def getDirection(self, direction):
+        if direction == 0:
             return 0, -1
-        elif randDirection == 1:
+        elif direction == 1:
             return 1, -1
-        elif randDirection == 2:
+        elif direction == 2:
             return 1, 0
-        elif randDirection == 3:
+        elif direction == 3:
             return 1, 1
-        elif randDirection == 4:
+        elif direction == 4:
             return 0, 1
-        elif randDirection == 5:
+        elif direction == 5:
             return -1, 1
-        elif randDirection == 6:
+        elif direction == 6:
             return -1, 0
-        elif randDirection == 7:
+        elif direction == 7:
             return -1, -1
+
+    def getTopLeft(self, buildX, buildY, direction, w, h, centerTile):
+        if direction == 0:
+            buildX = buildX - centerTile[0]
+            buildY = buildY - (h - 1)
+            return buildX, buildY
+        elif direction == 1:
+            buildY = buildY - (h - 1)
+            return buildX, buildY
+        elif direction == 2:
+            buildY = buildY - centerTile[1]
+            return buildX, buildY
+        elif direction == 3:
+            return buildX, buildY
+        elif direction == 4:
+            buildX = buildX - centerTile[0]
+            return buildX, buildY
+        elif direction == 5:
+            buildX = buildX - (w - 1)
+            return buildX, buildY
+        elif direction == 6:
+            buildX = buildX - (w - 1)
+            buildY = buildY - centerTile[1]
+            return buildX, buildY
+        elif direction == 7:
+            buildX = buildX - (w - 1)
+            buildY = buildY - (h - 1)
+            return buildX, buildY

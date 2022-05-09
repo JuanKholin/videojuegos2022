@@ -47,6 +47,8 @@ class Hatchery(Structure):
         self.paths = []
         self.building = False
 
+        self.type = ZERG_BASE
+
     def execute(self, command_id):
         if self.clicked:
             if command_id == CommandId.GENERAR_UNIDAD and self.player.resources >= ZERGLING_MINERAL_COST:

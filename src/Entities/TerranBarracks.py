@@ -11,7 +11,11 @@ from ..Utils import *
 HP = 200
 GENERATION_TIME = 5
 
+
 class TerranBarracks(Structure):
+    TILES_WIDTH = 4 
+    TILES_HEIGHT = 3
+    CENTER_TILE = [1, 1]
     sprites = []
     training = []
     generationTime = 0
@@ -23,14 +27,15 @@ class TerranBarracks(Structure):
     rectOffY = 8
     tileW = 4
     tileH = 3
+    centerTile = [1, 1]
     clicked = False
     frame = 8
 
     def __init__(self, xini, yini, player, map, building):
-        Structure.__init__(self, HP, TERRAN_BARRACK_MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
+        Structure.__init__(self, HP, TERRAN_BARRACKS_MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
-        self.sprites = cargarSprites(TERRAN_BARRACK_PATH, 6, False, WHITE, 1.1)
+        self.sprites = cargarSprites(TERRAN_BARRACKS_PATH, 6, False, WHITE, 1.1)
         #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.image = self.sprites[self.index]
@@ -48,6 +53,8 @@ class TerranBarracks(Structure):
 
         self.training = []
         self.paths = []
+
+        self.type = TERRAN_BARRACKS
 
     def execute(self, command_id):
         if self.clicked:

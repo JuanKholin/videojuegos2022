@@ -10,6 +10,10 @@ from ..Utils import *
 HP = 200
 GENERATION_TIME = 5
 
+TILES_HEIGHT = 3
+TILES_WIDTH = 4
+CENTER_TILE = [1, 1]
+
 class TerranSupplyDepot(Structure):
     sprites = []
     training = []
@@ -43,6 +47,8 @@ class TerranSupplyDepot(Structure):
             self.state = BuildingState.BUILDING
         else:
             self.state = BuildingState.OPERATIVE
+
+        self.type = TERRAN_DEPOT
 
     def command(self, command):
         return Command(CommandId.NULL)

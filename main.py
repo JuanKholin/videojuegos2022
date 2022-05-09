@@ -186,7 +186,7 @@ player1 = Player.Player([], [], 400, keyMap, commandMap, mapa, True)
 
 
 # Player 2 AKA IA
-player2 = Player.Player([], [], 400, {}, {}, mapa, False)
+player2 = Player.Player([], [], 40000, {}, {}, mapa, False)
 aI = AI(player2, Race.ZERG, EASY)
 
 # Camara

@@ -1,5 +1,6 @@
 import datetime
 import random
+from re import A
 import pygame
 import math
 from tokenize import Double
@@ -15,6 +16,7 @@ class Map():
         self.codedMap = codedMap
         self.w = w
         self.h = h
+
         self.tiles = [[], []]
         self.tiles.insert(0, cargarSprites(TERRENO_PATH, 8, False))
         self.tiles.insert(1, cargarSprites(ELEVACION_PATH, 40, True))
@@ -23,6 +25,8 @@ class Map():
                 self.generateRandomMap()
             self.load()
             #self.loadMinimap()
+        self.tilesW = w
+        self.tilesH = h
 
     #Dibuja el mapa
     def drawMap(self, screen, camera):
@@ -554,3 +558,22 @@ class Map():
             "map": self.codedMap,
             "matrizOscuridad": matrizOscuridad
         }
+
+    # Devuelve si existe la siguiente tile en funcion de base y desplazamiento
+    def getNextTileByOffset(self, x, y, xOffset, yOffset):
+        xAux = x + xOffset
+        yAux = y + yOffset
+        if (xAux >= 0) and (xAux < self.tilesW) and (yAux >= 0) and (yAux < self.tilesH):        
+            return self.mapa[int(yAux)][int(xAux)]
+        return None
+
+    # Devuelve si estan libres todas las tiles entre esquina sup izq y inf der
+    def checkIfEmptyZone(self, xUpLeft, yUpLeft, xBotRight, yBotRight):
+        if (xUpLeft >= 0) and (xUpLeft < self.w) and (yUpLeft >= 0) and (yUpLeft < self.h):
+            if (xBotRight >= 0) and (xBotRight < self.w) and (yBotRight >= 0) and (yBotRight < self.h):
+                for x in range(int(xUpLeft), int(xBotRight)):
+                    for y in range(int(yUpLeft), int(yBotRight)):
+                        if self.mapa[y][x].type != EMPTY:
+                            return False
+                return True
+        return False
