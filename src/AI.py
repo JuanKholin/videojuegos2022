@@ -252,13 +252,13 @@ class AI():
     def seekAndDestroy(self, units):
         soldiers = self.getSoldiers(units)
         num = 0
-        if soldiers.len > 10:
+        if len(soldiers) > 10:
             #ejercito de 3
             num = 3
-        elif soldiers.len > 5:
+        elif len(soldiers) > 5:
             #ejercito de 2
             num = 2
-        elif soldiers.len > 3:
+        elif len(soldiers) > 3:
             #ejercito de 3
             num = 1
         for i in range(num):
@@ -312,6 +312,7 @@ class AI():
         height = TerranBarracks.TILES_HEIGHT
         centerTile = TerranBarracks.CENTER_TILE
         randBuilding = randint(0, len(structures) - 1)
+        randBuilding = 0
         building = structures[randBuilding]
         randDirection = randint(0, 7)
         buildingsTried = 0

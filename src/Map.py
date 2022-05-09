@@ -75,7 +75,7 @@ class Map():
 
     def addOre(self, x, y):
         #print(int(y / self.th), int(x / self.tw))
-        self.mapa[int(y / self.th)][int(x / self.tw)].type = 3
+        self.mapa[x][y].type = 3
 
     #Devuelve la Tile que se encuentra en las coordenadas x,y
     def getTile(self, x, y):
