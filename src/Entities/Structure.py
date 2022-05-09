@@ -29,6 +29,10 @@ class Structure(Entity.Entity):
         self.esEstructura = True
         self.state = BuildingState.BUILDING
         self.lastAttacker = None
+        
+    def __del__(self):
+        print("fin")
+        pass
 
     def getPosition(self):
         return (self.x, self.y)
@@ -87,9 +91,12 @@ class Structure(Entity.Entity):
         #print("DESTROYED ", self.x, " ", self.y)
         self.state = BuildingState.DESTROYED
         self.index = 0
-        self.mapa.setLibres(self.getTile(), self.TILES_WIDTH, self.TILES_HEIGHT)
+        tiles = self.mapa.getRectTiles(self.getRect())
+        for tile in tiles: 
+            self.mapa.setLibre(tile)
         self.clicked = False
         self.player.structures.remove(self)
+        self.__del__()
 
     def getOptions(self):
         return []
