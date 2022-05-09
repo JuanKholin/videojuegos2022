@@ -105,6 +105,7 @@ class Interface():
         
         self.allButton = self.loadAllButton()
         self.allUpgrades = self.loadAllUpgrades()
+        print("LOADEADOS")
     
     def loadAllButton(self):
         allButton = {}
@@ -218,11 +219,13 @@ class Interface():
                     aI = AI(escena.p2, Race.TERRAN, EASY)
                     escena.aI = aI
                     raton.setSelf(_raton)
-                    _p1Interface = Interface(escena.p1, escena.p2, raton)
-                    raton.addInterface(_p1Interface)
-                    escena.interfaz = _p1Interface
+                    self.player = escena.p1
+                    self.enemy = escena.p2
+                    escena.raton = raton
+                    self.raton = escena.raton
+                    raton.addInterface(self)
+                    escena.interfaz = self
                     camera.setSelf(_camera)
-                    print("mapa: ", type(escena))
                     Utils.state = System_State.ONGAME
                     stopMusic()
                     self.singlePress = False
