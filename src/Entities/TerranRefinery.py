@@ -55,6 +55,8 @@ class TerranRefinery(Structure):
         self.training = []
         self.paths = []
 
+        self.type = TERRAN_GEYSER_STRUCTURE
+
     def getBuildSprite(self):
         return self.sprites[4]
 

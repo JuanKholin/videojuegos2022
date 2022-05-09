@@ -48,9 +48,11 @@ class AI():
             self.soldier = PROTOSS_SOLDIER
             self.workerCost = PROTOSS_WORKER_MINERAL_COST
             self.soldierCost = PROTOSS_SOLDIER_MINERAL_COST
-        # Para los recursos
+        
+        # La vision de la IA: 
         self.crystalsSeen = set()
         self.geysersSeen = set()
+        self.structuresSeen = set()
 
         # Para las invasiones
         self.invaders = []
@@ -88,7 +90,7 @@ class AI():
         decission = self.decide()
         if decission == 0:
             print("IA DECIDE ATACAR LO VISIBLE")
-            self.attackVisible()
+            self.attackVisible(units, structures)
         elif decission == 1:
             #print("IA DECIDE HACER MEJORAS")
             self.armyUpgrade()
@@ -204,22 +206,41 @@ class AI():
                             worker.mine(self.crystalsSeen[crystalToMine]) 
                             crystalToMine = (crystalToMine + 1) % len(self.crystalsSeen)
 
-
     # Recorre las unidades invasoras para que vayan a atacar objetivos conocidos y si no hay explorar
     # tiles no exploradas y atacar lo que se encuentren hasta la muerte o la victoria
     def updateInvaders(self):
         pass
 
-    #
+    # 
     def updateVision(self, units, structures):
-        pass
+        for unit in units:
+            pass
+        for structure in structures:
+            structure.getTile()
 
     ##############################
     # DECISIONES TRASCENDENTALES #
     ##############################
 
-    def attackVisible(self):
-        pass
+    # Manda a los soldados libres atacar lo que tengan a tiro en el momento, la tipica
+    # venada de IA cabreada de aqui te pillo aqui te mato
+    def attackVisible(self, units, structures):
+        targets = set()
+        for structure in structures:
+            pos = structure.getPosition()
+            tile = self.mapa.getTile(pos[0], pos[1])
+            targets = targets.union(self.mapa.getNearbyRivals(tile, self.data, 6))
+        for unit in units:
+            tile = unit.getTile()
+            targets = targets.union(self.mapa.getNearbyRivals(tile, self.data, 4))
+        soldiers = self.getSoldiers(units)
+        targets = list(targets)
+        print("Len de targets", len(targets))
+        if len(targets) > 0:
+            i = 0
+            for soldier in soldiers:
+                soldier.attack(targets[i])
+                i = (i + 1) % len(targets)
 
     def armyUpgrade(self):
         pass
@@ -243,6 +264,11 @@ class AI():
         soldiersCost = self.minSoldiers * self.soldierCost
         if self.data.resources > soldiersCost:
             self.minSoldiers = self.minSoldiers + 1
+        else:
+            if self.minSoldiers > self.minWorkers * 2:
+                self.minSoldiers -= 1
+            elif self.minWorkers > 3:
+                self.minWorkers -= 1
         workersCost = self.minWorkers * self.workerCost
         if self.data.resources > workersCost + (soldiersCost / 2):
             self.minWorkers = self.minWorkers + 1
@@ -258,11 +284,10 @@ class AI():
         elif len(soldiers) > 5:
             #ejercito de 2
             num = 2
-        elif len(soldiers) > 3:
-            #ejercito de 3
+        elif len(soldiers) > self.minSoldiers:
             num = 1
         for i in range(num):
-            self.player.removeFromFree(soldiers[i])
+            self.data.removeUnitFromFree(soldiers[i])
             self.invaders.append(soldiers[i])
 
     ##############
@@ -443,6 +468,10 @@ class AI():
         elif direction == 7:
             return -1, -1
 
+    # Dadas unas coordenadas, una anchura y una altura, una direccion y una tile central, devuelve
+    # las coordenadas de la esquina superior izquierda, util para poder descifrar el cacao mental
+    # que ha llevado a Alex y a Juan a traves creo yo de llamadas psionicas de Cthulu a hacer el
+    # mapeado y construccion de edificios con ese constructor malvado y metaforico
     def getTopLeft(self, buildX, buildY, direction, w, h, centerTile):
         if direction == 0:
             buildX = buildX - centerTile[0]
@@ -471,12 +500,14 @@ class AI():
             buildY = buildY - (h - 1)
             return buildX, buildY
 
+    # Devuelve la base de la IA
     def getBase(self, structures):
         for structure in structures:
             if structure.type == self.base:
                 return structure
         return None
 
+    # Devuelve los barracks que se tengan
     def getBarracks(self, structures):
         result = []
         for structure in structures:
@@ -484,12 +515,17 @@ class AI():
                 result.append(structure)
         return result
 
+    # Manda construir unos barracks en funcion de la raza
     def buildBarracks(self, structures):
         if (self.barracks == ZERG_BARRACKS) and (self.data.resources >= ZERG_BARRACKS_MINERAL_COST):
             print("Construye zergbarracks")
             self.data.resources -= ZERG_BARRACKS_MINERAL_COST
-            self.buildTerranBarracks(structures) # Seria Zerg pero no hay edificio xd
+            self.buildZergBarracks(structures)
         elif (self.barracks == TERRAN_BARRACKS) and (self.data.resources >= TERRAN_BARRACKS_MINERAL_COST):
             print("Construye terranbarracks")
             self.data.resources -= TERRAN_BARRACKS_MINERAL_COST
             self.buildTerranBarracks(structures)
+        elif (self.barracks == PROTOSS_BARRACKS) and (self.data.resources >= PROTOSS_BARRACKS_MINERAL_COST):
+            print("Construye protossbarracks")
+            self.data.resources -= PROTOSS_BARRACKS_MINERAL_COST
+            self.buildProtossBarracks(structures)
