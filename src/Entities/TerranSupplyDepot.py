@@ -9,7 +9,7 @@ from ..Utils import *
 
 HP = 200
 GENERATION_TIME = 5
-
+CAPACITY = 400
 
 
 class TerranSupplyDepot(Structure):

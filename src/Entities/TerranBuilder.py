@@ -97,7 +97,7 @@ class TerranBuilder(Structure):
             self.player.mineUpgrade += 200
             self.mineMineralUpCost += 25
             self.mineGasUpCost += 25
-        elif command_id == CommandId.BUILD_BARRACKS and self.player.resources >= TERRAN_BARRACK_MINERAL_COST:
+        elif command_id == CommandId.BUILD_BARRACKS and self.player.resources >= TERRAN_BARRACKS_MINERAL_COST:
             self.raton.building = True
             self.raton.buildStructure = self.getTerranBarrack()
         elif command_id == CommandId.BUILD_HATCHERY and self.player.resources >= HATCHERY_MINERAL_COST:

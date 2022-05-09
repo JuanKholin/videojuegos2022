@@ -479,7 +479,9 @@ class Map():
             self.mapa.insert(i,[])#Es una matriz que representa el mapa(0 es suelo, 1 es obstaculo, 2 vecino)
             for j in range(len(self.codedMap[0])):
                 tile_sprite, type = self.loadTile(str(self.codedMap[i][j]))
-                tile = Tile.Tile(i*len(self.codedMap) + j, self.tw * j, self.th * i, self.tw, self.th, tile_sprite, type)
+                if type == 1:
+                    print("Elevacion", i*len(self.codedMap[0]) + j)
+                tile = Tile.Tile(i*len(self.codedMap[0]) + j, self.tw * j, self.th * i, self.tw, self.th, tile_sprite, type)
                 self.mapa[i].insert(j,tile)
 
     #carga el tile con codigo code
