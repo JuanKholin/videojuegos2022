@@ -63,13 +63,15 @@ class Zergling(Soldier):
         self.dir = 8
         self.changeToStill()
         self.updateOwnSpace()
-        
+
         self.render = pygame.transform.scale(pygame.image.load(ZERGLING_RENDER), UNIT_RENDER_SIZE)
 
     def toDictionary(self, map):
-        x, y = map.getTileIndex(self.x, self.y)
-        return {
+        fatherDictionary = super().toDictionary(map)
+        sonDictionary = {
             "clase": "zergling",
-            "x": x,
-            "y": y,
+            "nombre": "Zerling",
+            "funcion": "unidad de infanteria"
         }
+        sonDictionary.update(fatherDictionary)
+        return sonDictionary

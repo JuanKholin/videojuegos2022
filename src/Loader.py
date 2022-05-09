@@ -16,8 +16,12 @@ from .Entities.Extractor import *
 from .Entities.Drone import *
 from .Entities.Zergling import *
 
-def loadFromSave(data):
+def loadFromSave():
     escena = Escena(None, None, None, None, None, None, None, None)
+
+    textFile = open("games/" + escena.nombre + ".json", "r")
+    data = json.load(textFile)
+
     #mapa
     escena.mapa = loadMap(data["mapa"])
     #players
@@ -70,13 +74,22 @@ def loadPlayer(playerDictionary, map, isPlayer):
 def loadUnits(unitDictionaries, player):
     for u in unitDictionaries:
         if u["clase"] == "terranWorker":
-            player.addUnits(TerranWorker(u["x"], u["y"], player))
+            unit = TerranWorker(u["x"], u["y"], player)
+            unit.load(u["hp"])
+            player.addUnits(unit)
         elif u["clase"] == "terranSoldier":
-            player.addUnits(TerranSoldier(u["x"], u["y"], player))
+            unit = TerranSoldier(u["x"], u["y"], player)
+            unit.load(u["hp"])
+            player.addUnits(unit)
         elif u["clase"] == "zergling":
-            player.addUnits(Zergling(u["x"], u["y"], player))
+            unit = Zergling(u["x"], u["y"], player)
+            unit.load(u["hp"])
+            player.addUnits(unit)
         elif u["clase"] == "drone":
-            player.addUnits(Drone(u["x"], u["y"], player))
+            unit = Drone(u["x"], u["y"], player)
+            unit.load(u["hp"])
+            player.addUnits(unit)
+
 
 
 #pre: structureDictionaries: es una lista de diccionarios con la info de las estructuras

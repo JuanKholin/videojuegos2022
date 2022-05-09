@@ -68,11 +68,11 @@ class Drone(Worker):
         self.render = pygame.transform.scale(pygame.image.load(DRONE_RENDER), UNIT_RENDER_SIZE)
 
     def toDictionary(self, map):
-        x, y = map.getTileIndex(self.x, self.y)
-        return {
+        fatherDictionary = super().toDictionary(map)
+        sonDictionary = {
             "clase": "drone",
-            "x": x,
-            "y": y,
             "nombre": "Drone",
             "funcion": "muy tanke"
         }
+        sonDictionary.update(fatherDictionary)
+        return sonDictionary
