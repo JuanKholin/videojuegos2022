@@ -63,11 +63,12 @@ class TerranSupplyDepot(Structure):
     def toDictionary(self, map):
         #print("barracke x e y Ini ", self.xIni, self.yIni)
         #x, y = map.getTileIndex(self.originX, self.originY)
-        return {
+        fatherDictionary = super().toDictionary(map)
+        sonDictionary = {
             "clase": "terranSupplyDepot",
-            "x": self.xIni,
-            "y": self.yIni,
             "building": self.building,
             "nombre": "Deposito de suministros",
             "funcion": "aumenta la capacidad de suministros"
         }
+        sonDictionary.update(fatherDictionary)
+        return sonDictionary

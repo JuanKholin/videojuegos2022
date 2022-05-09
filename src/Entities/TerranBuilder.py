@@ -134,11 +134,12 @@ class TerranBuilder(Structure):
 
     def toDictionary(self, map):
         #x, y = map.getTileIndex(self.originX, self.originY)
-        return {
+        fatherDictionary = super().toDictionary(map)
+        sonDictionary = {
             "clase": "terranBuilder",
-            "x": self.xIni,
-            "y": self.yIni,
             "building": self.building,
             "nombre": "Base de comandos",
             "funcion": "Protege la base de comandos"
         }
+        sonDictionary.update(fatherDictionary)
+        return sonDictionary

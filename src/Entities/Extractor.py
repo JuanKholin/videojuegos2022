@@ -41,7 +41,7 @@ class Extractor(Structure):
         self.state = BuildingState.OPERATIVE
 
         self.building = building
-        
+
         self.count = 0
         self.training = []
         self.paths = []
@@ -60,11 +60,13 @@ class Extractor(Structure):
     def toDictionary(self, map):
         #print("barracke x e y Ini ", self.xIni, self.yIni)
         #x, y = map.getTileIndex(self.originX, self.originY)
-        return {
+        fatherDictionary = super().toDictionary(map)
+        sonDictionary = {
             "clase": "extractor",
-            "x": self.xIni,
-            "y": self.yIni,
             "building": self.building,
             "nombre": "Extractor de Zerg",
             "funcion": "extrae recursos"
         }
+        sonDictionary.update(fatherDictionary)
+        return sonDictionary
+        

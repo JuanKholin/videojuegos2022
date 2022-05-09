@@ -81,7 +81,7 @@ def setEntity(player, ai):
     player.addUnits(scv7)
     player.addUnits(scv8)
 
-    aiUnits = [] 
+    aiUnits = []
     #aiUnits.append(Drone(20, 10, ai))
     '''aiUnits.append(Drone(25, 11, ai))
     aiUnits.append(Zergling(27, 10, ai))
@@ -98,7 +98,7 @@ def setEntity(player, ai):
 
     for structure in aiStructures:
         ai.addStructures(structure)
-    
+
     #Recursos del mapa
     crystal = Crystal(2, 10, 34)
     crystal2 = Crystal(2, 18, 60)

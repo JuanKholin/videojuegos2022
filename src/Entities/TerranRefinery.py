@@ -93,11 +93,12 @@ class TerranRefinery(Structure):
     def toDictionary(self, map):
         #print("barracke x e y Ini ", self.xIni, self.yIni)
         #x, y = map.getTileIndex(self.originX, self.originY)
-        return {
+        fatherDictionary = super().toDictionary(map)
+        sonDictionary = {
             "clase": "terranRefinery",
-            "x": self.xIni,
-            "y": self.yIni,
             "building": self.building,
             "nombre": "Refineria",
             "funcion": "extrae gas geyser"
         }
+        sonDictionary.update(fatherDictionary)
+        return sonDictionary

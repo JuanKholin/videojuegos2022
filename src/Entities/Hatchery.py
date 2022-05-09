@@ -8,7 +8,7 @@ from ..Utils import *
 WHITE   = (255,255,255)
 GENERATION_TIME = 10
 MINERAL_COST = 50
-WIDTH = 6 
+WIDTH = 6
 HEIGHT = 4
 HP = 200
 
@@ -77,11 +77,12 @@ class Hatchery(Structure):
     def toDictionary(self, map):
         #print("x e y del zerg builder ", self.x, self.y)
         #x, y = map.getTileIndex(self.originX, self.originY)
-        return {
+        fatherDictionary = super().toDictionary(map)
+        sonDictionary = {
             "clase": "hatchery",
-            "x": self.xIni,
-            "y": self.yIni,
             "building": self.building,
             "nombre": "Criadera de Zerg",
             "funcion": "Base enemiga"
         }
+        sonDictionary.update(fatherDictionary)
+        return sonDictionary

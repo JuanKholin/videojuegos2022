@@ -327,3 +327,12 @@ class Structure(Entity.Entity):
 
     def getCords(self):
         return self.x / TILE_WIDTH, self.y / TILE_HEIGHT
+
+    def toDictionary(self, map):
+        return {
+            "x": self.xIni,
+            "y": self.yIni,
+            "hp": self.hp
+        }
+    def load(self, hp):
+        self.hp = hp
