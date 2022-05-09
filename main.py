@@ -118,12 +118,12 @@ def setEntity(player, ai):
 
 def update():
     clock_update()
-    raton.update(camera)
+    raton.update(escena.camera)
 
     if getGameState() == System_State.MAINMENU:
         playMusic(mainMenuBGM, pos = 5)
         #playSound(mainMenuBGM)
-        escena.interfaz.update(escena,raton, camera)
+        escena.interfaz.update(escena,raton, escena.camera)
     elif getGameState() == System_State.MAP1:
         #playMusic(map1BGM)
         #cargar mapa
@@ -136,9 +136,9 @@ def update():
         escena.update()
     elif getGameState() == System_State.GAMESELECT:
         #Cargar las partidas
-        escena.interfaz.update(escena,raton, camera)
+        escena.interfaz.update(escena,raton, escena.camera)
     elif getGameState() == System_State.NEWGAME:
-        escena.interfaz.update(escena,raton, camera)
+        escena.interfaz.update(escena,raton, escena.camera)
     else: #STATE == System_State.EXIT:
         pg.quit()
         sys.exit()
@@ -146,12 +146,12 @@ def update():
 def draw():
     screen.fill(WHITE)
     if Utils.state == System_State.MAINMENU:
-        escena.interfaz.draw(screen, camera)
+        escena.interfaz.draw(screen, escena.camera)
     elif Utils.state == System_State.ONGAME:
         escena.draw(screen)
     elif Utils.state == System_State.GAMESELECT or Utils.state == System_State.NEWGAME:
-        escena.interfaz.draw(screen, camera)
-    raton.draw(screen, camera)
+        escena.interfaz.draw(screen, escena.camera)
+    raton.draw(screen, escena.camera)
     #aux(screen)
     pg.display.flip()
 
