@@ -620,7 +620,26 @@ class Map():
                 if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
                     aux = self.mapa[row][col]
                     if (aux.type == UNIT) or (aux.type == STRUCTURE):
-                        #print("PLAYER2? ", aux.ocupante.player)
-                        if aux.ocupante.player != player1 and aux.ocupante in aux.ocupante.player.units:
+                        print("PLAYER2? ", aux.ocupante.player)
+                        if aux.ocupante.player != player1:
                             return aux.ocupante
         return None
+
+    # Devuelve las entidades enemigas (estructura o unidad) encontradas en un cuadrado de distance tiles
+    # que no sea del player player alrededor de la tile tile
+    def getNearbyRivals(self, tile, player, distance):
+        player1 = player
+        x = tile.x / 40
+        y = tile.y / 40
+        result = set()
+        for i in range(2 * distance + 1):
+            col = int(i - distance + x)
+            for j in range(2 * distance + 1):
+                row = int(j - distance + y)
+                if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
+                    aux = self.mapa[row][col]
+                    if (aux.type == UNIT) or (aux.type == STRUCTURE):
+                        print(aux.ocupante.type, " ", col, " ", row)
+                        if aux.ocupante.player != player1:
+                            result.add(aux.ocupante)
+        return result
