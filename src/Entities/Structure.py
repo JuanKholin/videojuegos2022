@@ -23,8 +23,8 @@ class Structure(Entity.Entity):
         self.player = player
         self.xIni = xini
         self.yIni = yini
-        originX = (xini - round(self.tileW/2))*self.mapa.tw
-        originY = (yini - round(self.tileH/2))*self.mapa.th
+        originX = (xini - self.CENTER_TILE[0])*self.mapa.tw
+        originY = (yini - self.CENTER_TILE[1])*self.mapa.th
         self.rectn = pygame.Rect(originX, originY + self.heightPad/2, self.tileW*self.mapa.tw - 1, self.tileH*self.mapa.th - self.heightPad/2 - 1)
         self.esEstructura = True
         self.state = BuildingState.BUILDING

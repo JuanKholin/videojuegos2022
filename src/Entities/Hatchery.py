@@ -4,6 +4,7 @@ from .Structure import *
 from .. import Player, Map
 from ..Command import *
 from ..Utils import *
+from .Entity import *
 
 WHITE   = (255,255,255)
 GENERATION_TIME = 10

@@ -60,8 +60,9 @@ def setEntity(player, ai):
     scv6 = TerranSoldier(9, 10, player)
     scv7 = TerranSoldier(10, 10, player)
     scv8 = TerranWorker(11, 10, player)
-    structure1 = TerranBuilder(6, 7, player, mapa, False, raton)
-    structure3 = TerranSupplyDepot(20, 7, player, mapa, True)
+    structure1 = TerranBuilder(2, 7, player, mapa, False, raton)
+    structure3 = TerranSupplyDepot(2, 2, player, mapa, True)
+    structure7 = Hatchery(30, 30, player, mapa, True)
 
     player.setBasePlayer(structure1)
     structure2 = TerranBarracks(15, 9, player, mapa, False)
@@ -74,6 +75,8 @@ def setEntity(player, ai):
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addStructures(structure3)
+    
+    player.addStructures(structure7)
     ai.addStructures(structure4)
     ai.addStructures(structure5)
     player.addUnits(scv)
