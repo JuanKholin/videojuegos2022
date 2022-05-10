@@ -29,6 +29,7 @@ class Structure(Entity.Entity):
         self.esEstructura = True
         self.state = BuildingState.BUILDING
         self.lastAttacker = None
+        self.capacity = 0
         
     def __del__(self):
         print("fin")

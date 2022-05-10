@@ -38,6 +38,7 @@ class Extractor(Structure):
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.sprites += deadSprites
+        self.capacity = 0
         
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2, 3]

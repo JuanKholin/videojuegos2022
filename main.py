@@ -106,6 +106,8 @@ def setEntity(player, ai):
 
     for structure in aiStructures:
         ai.addStructures(structure)
+        
+    ai.setBasePlayer(aiStructures[0])
 
     #Recursos del mapa
     crystal = Crystal(2, 10, 34)
