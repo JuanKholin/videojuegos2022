@@ -68,7 +68,10 @@ class TerranRefinery(Structure):
         return self.sprites[4]
 
     def getOrder(self):
-        return CommandId.EXTRACT_GAS
+        if self.state != BuildingState.BUILDING and self.state != BuildingState.COLLAPSING and self.state!= BuildingState.DESTROYED:
+            return CommandId.EXTRACT_GAS
+        else:
+            return CommandId.NULL
 
     def changeToDestroyed(self):
         #print("DESTROYED ", self.x, " ", self.y)

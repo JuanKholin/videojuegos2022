@@ -318,6 +318,7 @@ class Options(Enum):
     GENERATE_SOLDIER = auto()
     BUILD_REFINERY = auto()
     BUILD_HATCHERY = auto()
+    BUILD_SUPPLY_DEPOT = auto()
     DANYO_UPGRADE = auto()
     MINE_UPGRADE = auto()
     ARMOR_UPGRADE = auto()

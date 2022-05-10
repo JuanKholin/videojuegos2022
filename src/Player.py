@@ -59,6 +59,7 @@ class Player():
         self.unitsFree.append(unit)
 
     def addStructures(self,structures):
+        self.limitUnits += structures.capacity
         self.structures.append(structures)
 
     def execute(self, id, param, tileClicked):

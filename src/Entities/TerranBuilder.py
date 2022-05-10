@@ -33,6 +33,7 @@ class TerranBuilder(Structure):
     clicked = False
     frame = 8
     nSprites = 6
+    options = [Options.BUILD_SUPPLY_DEPOT, Options.BUILD_BARRACKS, Options.BUILD_REFINERY, Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE, Options.GENERATE_WORKER]
 
     def __init__(self, xini, yini, player, map, building, raton):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
@@ -79,7 +80,10 @@ class TerranBuilder(Structure):
     #    pass
 
     def getOrder(self):
-        return CommandId.TRANSPORTAR_ORE_STILL
+        if self.state != BuildingState.BUILDING and self.state != BuildingState.COLLAPSING and self.state!= BuildingState.DESTROYED: 
+            return CommandId.TRANSPORTAR_ORE_STILL
+        else:
+            return CommandId.NULL
 
     def execute(self, command_id):
         #if self.clicked:
@@ -130,12 +134,6 @@ class TerranBuilder(Structure):
 
     def getBuildSprite(self):
         return self.sprites[self.operativeIndex]
-
-    def getOptions(self):
-        if DEBBUG == True:
-            return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.BUILD_REFINERY, Options.BUILD_HATCHERY, Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE]
-        else:
-            return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.BUILD_REFINERY, Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE]
 
     def getTerranBarrack(self):
         return TerranBarracks(0, 0, None, self.mapa, True)
