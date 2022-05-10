@@ -83,6 +83,7 @@ class Player():
             if id == CommandId.GENERATE_UNIT or id == CommandId.GENERATE_WORKER or id == CommandId.GENERATE_SOLDIER:
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_BARRACKS:
+                print("EXECUCION")
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_REFINERY:
                 self.structureSelected.execute(id)

@@ -351,7 +351,7 @@ class Raton(pygame.sprite.Sprite):
                         for b in self.interface.button:
                             if collides(self.rel_pos[0], self.rel_pos[1], b.getRect()):
                                 command = b.getCommand()
-                                #print(command.id)
+                                print(command.id)
                                 break
 
                 elif not type[2]:

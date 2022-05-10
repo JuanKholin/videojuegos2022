@@ -230,6 +230,7 @@ class Interface():
                     self.player = escena.p1
                     self.enemy = escena.p2
                     escena.raton = raton
+                    escena.p1.base.raton = escena.raton
                     self.raton = escena.raton
                     raton.addInterface(self)
                     escena.interfaz = self

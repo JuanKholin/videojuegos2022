@@ -110,6 +110,7 @@ def loadStructures(structureDictionaries, player, map, raton):
             structure.mineMineralUpCost = s["mineMineralUpCost"]
             structure.mineGasUpCost = s["mineGasUpCost"]
             player.addStructures(structure)
+            player.setBasePlayer(structure)
 
         elif s["clase"] == "terranBarracks":
             player.addStructures(TerranBarracks(s["x"], s["y"], player, map, s["building"]))

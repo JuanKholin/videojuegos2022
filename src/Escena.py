@@ -37,10 +37,11 @@ class Escena():
         #Conseguir el comando
         if event.type == pg.MOUSEBUTTONDOWN or event.type == pg.MOUSEBUTTONUP:
             command = self.raton.processEvent(event, self.camera)
-            #print("ENABLE DE ESCENA: ", self.raton.enable, self.raton.id)
+            print(command.id)
         else:
             command = self.p1.processEvent(event)
         if getGameState() == System_State.ONGAME:
+            
             #ejecutar el comando
             if command.id == CommandId.UPGRADE_WORKER_MINING:
                 #print(command.id)
@@ -59,6 +60,7 @@ class Escena():
                 elif command.id == CommandId.UPGRADE_WORKER_MINING:
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.BUILD_BARRACKS:
+                    print("BARRACAS: ", command.id)
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.BUILD_HATCHERY:
                     self.p1.execute(command.id, [], None)
