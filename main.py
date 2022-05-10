@@ -217,14 +217,14 @@ mapa = Map.Map(40, 40, True)
 #mapa.setElevacion(5, 12)
 #mapa.setElevacion(32, 29)
 
-player1 = Player.Player([], [], 400, keyMap, commandMap, mapa, True)
+player1 = Player.Player([], [], 500, keyMap, commandMap, mapa, True)
 
 # Raton
 
 
 # Player 2 AKA IA
-player2 = Player.Player([], [], 400, {}, {}, mapa, False)
-aI = AI(player2, Race.TERRAN, EASY)
+player2 = Player.Player([], [], 500, {}, {}, mapa, False)
+aI = AI(player2, Race.TERRAN, HARD)
 
 # Camara
 # pre: mapa tan grande como ventana

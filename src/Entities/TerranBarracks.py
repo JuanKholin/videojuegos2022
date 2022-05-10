@@ -8,7 +8,7 @@ from ..Command import *
 from .Entity import *
 from ..Utils import *
 
-HP = 200
+HP = 1000
 GENERATION_TIME = 5
 CAPACITY = 5
 

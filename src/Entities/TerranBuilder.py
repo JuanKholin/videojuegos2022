@@ -12,9 +12,9 @@ from ..Command import *
 from .Entity import *
 from ..Utils import *
 
-HP = 200
-GENERATION_TIME = 40
-MINERAL_COST = 600
+HP = 1500
+GENERATION_TIME = 120
+MINERAL_COST = 400
 LIMIT_MINADO = 1600
 CAPACITY = 10
 

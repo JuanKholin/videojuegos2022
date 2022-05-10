@@ -416,7 +416,7 @@ class Map():
         broken = False
         while (nodosAbiertos.__len__() != 0) and not broken:
             jaja += 1
-            if jaja >= 200:
+            if jaja >= 400:
                 broken = True
             currentTile = Tile.Tile(nodosAbiertos[0].tileid, nodosAbiertos[0].centerx, nodosAbiertos[0].centery,
                     0, 0, 1, 0, nodosAbiertos[0].g, nodosAbiertos[0].padre)
