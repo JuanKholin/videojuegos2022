@@ -5,6 +5,7 @@ import pygame as pg
 from .Entity import *
 from ..Utils import *
 from .Worker import *
+from ..Lib import *
 
 # Constantes
 HP = 40
@@ -53,6 +54,9 @@ Y_PADDING =         30
 PADDING = 110
 
 class TerranWorker(Worker):
+    
+    generateSound = None
+    
     def __init__(self, player, xIni = -1, yIni = -1):
         Worker.__init__(self, HP, xIni * TILE_WIDTH + 20, yIni * TILE_HEIGHT, MINERAL_COST,
                 GENERATION_TIME, speed, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME,

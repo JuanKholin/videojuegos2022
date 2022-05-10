@@ -90,6 +90,8 @@ class Player():
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_REFINERY:
                 self.structureSelected.execute(id)
+            elif id == CommandId.BUILD_SUPPLY_DEPOT:
+                self.structureSelected.execute(id)
             elif id == CommandId.BUILD_HATCHERY:
                 self.structureSelected.execute(id)
             elif id == CommandId.UPGRADE_SOLDIER_DAMAGE:

@@ -71,11 +71,11 @@ def setEntity(player, ai):
     structure5 = TerranRefinery(13, 18, ai, mapa, True, gas2)
     
     player.addStructures(structure1)
-    player.addStructures(structure2)
-    player.addStructures(structure3)
+    #player.addStructures(structure2)
+    #player.addStructures(structure3)
     
-    player.addStructures(structure7)
-    player.addStructures(structure4)
+    #player.addStructures(structure7)
+    #player.addStructures(structure4)
     ai.addStructures(structure5)
     player.addUnits(scv)
     player.addUnits(scv2)
@@ -133,7 +133,7 @@ def update():
         #playSound(mainMenuBGM)
         escena.interfaz.update(escena,raton, escena.camera)
     elif getGameState() == System_State.MAP1:
-        #playMusic(map1BGM)
+        playMusic(map1BGM)
         #cargar mapa
         escena.mapa = mapa
         escena.mapa.load()

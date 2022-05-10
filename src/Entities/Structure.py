@@ -3,6 +3,8 @@ from . import Entity
 from .. import Player, Map
 from ..Command import *
 from ..Utils import *
+from ..Music import *
+from ..Lib import *
 
 class Structure(Entity.Entity):
     clicked = False
@@ -17,6 +19,7 @@ class Structure(Entity.Entity):
     count = 0
     indexCount = 0
     options = []
+    deadSound = terranStructureDead
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, mapa, player, capacity):
         Entity.Entity.__init__(self, hp, xini*mapa.tw, yini*mapa.th, mineralCost, generationTime, takeID(), player)
@@ -353,6 +356,7 @@ class Structure(Entity.Entity):
         self.lastAttacker = unit
         if self.hp <= damage:
             self.hp -= damage
+            playSound(self.deadSound)
             self.changeToCollapsing()
         else:
             self.hp -= damage

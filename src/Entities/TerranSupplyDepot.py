@@ -64,7 +64,7 @@ class TerranSupplyDepot(Structure):
         return Command(CommandId.NULL)
 
     def getBuildSprite(self):
-        return self.sprites[self.operativeIndex]
+        return self.sprites[self.operativeIndex[0]]
 
     def toDictionary(self, map):
         #print("barracke x e y Ini ", self.xIni, self.yIni)
