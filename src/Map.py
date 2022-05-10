@@ -624,14 +624,14 @@ class Map():
 
     # Devuelve la primera entidad enemiga (estructura o unidad) encontrada en un cuadrado de NEARBY_RANGE
     # que no sea del player player alrededor de la tile tile
-    def getNearbyRival(self, tile, player):
+    def getNearbyRival(self, tile, player, distance = NEARBY_RANGE):
         player1 = player
         x = tile.x / 40
         y = tile.y / 40
-        for i in range(2 * NEARBY_RANGE + 1):
-            col = int(i - NEARBY_RANGE + x)
-            for j in range(2 * NEARBY_RANGE + 1):
-                row = int(j - NEARBY_RANGE + y)
+        for i in range(2 * distance + 1):
+            col = int(i - distance + x)
+            for j in range(2 * distance + 1):
+                row = int(j - distance + y)
                 if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
                     aux = self.mapa[row][col]
                     if ((aux.type == UNIT) or (aux.type == STRUCTURE)) and (aux.ocupante.hp > 0):

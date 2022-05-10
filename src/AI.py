@@ -186,25 +186,22 @@ class AI():
     # Es un update de workers bastante cool, si no hace nada a minar, y si mina mina y ya
     def gatherResources(self, units, structures):
         workers = self.getWorkers(units)
-        print("gather")
         skipGasNeed = False
         if len(workers) > 0: # Si hay workers vivos y sin ser atacados
             for worker in workers:
-                if (worker.state != UnitState.EXTRACTING) and (worker.state != UnitState.GAS_TRANSPORTING):
+                if (worker.state == UnitState.EXTRACTING) or (worker.state == UnitState.GAS_TRANSPORTING):
                     skipGasNeed = True 
             if not skipGasNeed: # Si hay al menos un worker extrayendo gas no es necesario hacer nada de gas
                 gasMan = workers.pop()
-                if self.haveGeyserInUse(structures):
-                    pass
-                else:
+                geyser = self.getGeyserInUse(structures)
+                if (geyser != None) and (geyser.state == BuildingState.OPERATIVE):
+                    gasMan.extract(geyser.getTile())
+                elif geyser == None:
                     geyser = self.findFreeGeyser(units, structures)
                     if geyser != None:
                         self.buildGeyserBuilding(geyser)
             if len(workers) > 0: # Para el resto de workers
-                print("gather to work")
                 if len(self.crystalsSeen) > 0: # si hay cristales conocidos,
-                    print("crystals found")
-
                     crystalToMine = 0
                     for worker in workers: # todos a la mina
                         if worker.state == UnitState.STILL: # si les viene bien xd
@@ -213,10 +210,15 @@ class AI():
                             worker.mine(crystalsSeen[crystalToMine]) 
                             crystalToMine = (crystalToMine + 1) % len(crystalsSeen)
 
-    # Recorre las unidades invasoras para que vayan a atacar objetivos conocidos y si no hay explorar
-    # tiles no exploradas y atacar lo que se encuentren hasta la muerte o la victoria
+    # Recorre las unidades invasoras para que vayan a la guerra, evitan recorrer caminos opuestos
+    # pero si no hay de otra acaban haciendolo, no se estan quietas del todo hasta que ganan o mueren
     def updateInvaders(self):
-        pass
+        for invasor in self.invaders:
+            target = self.mapa.getNearbyRival(invasor.getTile(), self.data, 5)
+            if target != None: # Ha encontrado objetivo
+                invasor.attack(target) # ergo, ataca
+            else: # Nada por ahora, sigue buscando
+                actualDir = self.parseDir(invasor.getDir())
 
     # Actualiza los cristales visibles
     def updateVision(self, units, structures):
@@ -478,7 +480,24 @@ class AI():
 
     # Construye un edificio de explotacion de geiseres en el geiser geyser
     def buildGeyserBuilding(self, geyser):
-        pass
+        if (self.geyserBuilding == ZERG_GEYSER_STRUCTURE) and (self.data.resources >= ZERG_GEYSER_STRUCTURE_MINERAL_COST):
+            print("Construye zerggeyserstructure")
+            self.data.resources -= ZERG_GEYSER_STRUCTURE_MINERAL_COST
+            toBuild = ZergGeyserStructure(0, 0, self.data, self.mapa, True, geyser)
+            self.data.addStructures(toBuild)
+            toBuild.buildProcess()
+        elif (self.geyserBuilding == TERRAN_GEYSER_STRUCTURE) and (self.data.resources >= TERRAN_GEYSER_STRUCTURE_MINERAL_COST):
+            print("Construye terrangeyserstructure")
+            self.data.resources -= TERRAN_GEYSER_STRUCTURE_MINERAL_COST
+            toBuild = TerranRefinery(4, 4, self.data, self.mapa, True, geyser)
+            self.data.addStructures(toBuild)
+            toBuild.buildProcess()
+        elif (self.geyserBuilding == PROTOSS_GEYSER_STRUCTURE) and (self.data.resources >= PROTOSS_GEYSER_STRUCTURE_MINERAL_COST):
+            print("Construye protossgeyserstructure")
+            self.data.resources -= PROTOSS_GEYSER_STRUCTURE_MINERAL_COST
+            toBuild = ProtossGeyserStructure(0, 0, self.data, self.mapa, True, geyser)
+            self.data.addStructures(toBuild)
+            toBuild.buildProcess()
 
     # Devuelve una direccion por la que avanzar para probar construcciones
     def getDirection(self, direction):
@@ -562,11 +581,11 @@ class AI():
             self.buildProtossBarracks(structures)
 
     # Devuelve si hay un edificio explotando un geyser o no
-    def haveGeyserInUse(self, structures):
+    def getGeyserInUse(self, structures):
         for structure in structures:
             if structure.type == self.geyserBuilding:
-                return True
-        return False
+                return structure
+        return None
 
     def findFreeGeyser(self, units, structures):
         for unit in units:
