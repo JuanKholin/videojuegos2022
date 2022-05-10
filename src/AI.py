@@ -196,7 +196,7 @@ class AI():
                 gasMan = workers.pop()
                 geyser = self.getGeyserInUse(structures)
                 if (geyser != None) and (geyser.state == BuildingState.OPERATIVE):
-                    #print("crying", geyser.getTile().ocupante)
+                    print("crying", geyser.getTile().ocupante)
                     gasMan.extract(geyser.getTile())
                 elif geyser == None:
                     geyser = self.findFreeGeyser(units, structures)
@@ -208,24 +208,34 @@ class AI():
                     for worker in workers: # todos a la mina
                         if worker.state == UnitState.STILL: # si les viene bien xd
                             crystalsSeen = list(self.crystalsSeen)
-                            #print("go to work crystal at", crystalsSeen[crystalToMine].getPosition())
+                            print("go to work crystal at", crystalsSeen[crystalToMine].getPosition())
                             worker.mine(crystalsSeen[crystalToMine]) 
                             crystalToMine = (crystalToMine + 1) % len(crystalsSeen)
 
     # Recorre las unidades invasoras para que vayan a la guerra, evitan recorrer caminos opuestos
     # pero si no hay de otra acaban haciendolo, no se estan quietas del todo hasta que ganan o mueren
     def updateInvaders(self):
+        print("upInv")
         for invasor in self.invaders:
             target = self.mapa.getNearbyRival(invasor.getTile(), self.data, 5)
             if target != None: # Ha encontrado objetivo
                 invasor.attack(target) # ergo, ataca
             else: # Nada por ahora
+                print("toca moverse")
                 if invasor.state == UnitState.STILL: # Toca moverse
+                    print("hola")
                     x, y = self.getDirection(randint(0, 7))
                     tile = invasor.getTile()
-                    tile = self.mapa.getNextTileByOffset(tile.x, tile.y, x * 4, y * 4)
+                    tile = self.mapa.getNextTileByOffset(tile.x / 40, tile.y / 40, x * 4, y * 4)
                     if tile != None:
                         invasor.move(tile)
+                        print("try1")
+                        if invasor.state != UnitState.MOVING:
+                            tile = self.mapa.getNextTileByOffset(tile.x, tile.y, x * 3, y * 3)
+                            if tile != None:
+                                invasor.move(tile)
+                                print("try2")
+
 
                     '''actualDir = self.parseDir(invasor.getDir()) ESTO ES PARA LA BETA FINAL
                     offset = randint(7, 9)
@@ -240,13 +250,13 @@ class AI():
         for unit in units:
             tile = unit.getTile()
             if tile != None:
-                self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(tile, 5))
+                self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(tile, 6))
         for invader in self.invaders:
             tile = invader.getTile()
             if tile != None:
-                self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(tile, 5))
+                self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(tile, 6))
         for structure in structures:
-            self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(structure.getTile(), 5))
+            self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(structure.getTile(), 7))
 
     ##############################
     # DECISIONES TRASCENDENTALES #
@@ -302,9 +312,7 @@ class AI():
     def armyExpansion(self, structures):
         # Almacen extra
         if self.data.limitUnits <= len(self.data.units) + 3:
-            print("BEFORE",self.data.limitUnits)
             self.buildDepot(structures)
-            print("AFTER",self.data.limitUnits)
 
         # Barracks extra
         needExtraBarrack = True
@@ -343,6 +351,7 @@ class AI():
         for i in range(num):
             self.data.removeUnitFromFree(soldiers[i])
             self.invaders.append(soldiers[i])
+        print(len(self.invaders), "invasores")
 
     ##############
     # AUXILIARES #
@@ -636,6 +645,10 @@ class AI():
                 return geyser
         for structure in structures:
             geyser = self.mapa.findNearbyGeyser(structure.getTile(), 6)
+            if geyser != None:
+                return geyser
+        for invader in self.invaders:
+            geyser = self.mapa.findNearbyGeyser(invader.getTile(), 5)
             if geyser != None:
                 return geyser
         return None
