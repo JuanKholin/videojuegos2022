@@ -475,7 +475,7 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), self.selectedDif, WHITE, 40, (840,299))
             muestra_texto(screen, str('monotypecorsiva'), self.selectedRaza, WHITE, 40, (765,410))
 
-        elif Utils.state == System_State.ONGAME:
+        elif Utils.state == System_State.ONGAME or Utils.state == System_State.PAUSED:
             if DEBBUG == True:
                 muestra_texto(screen, str('monotypecorsiva'), str(round(Utils.SYSTEM_CLOCK / CLOCK_PER_SEC)), BLACK, 30, (20, 20))
                 muestra_texto(screen, times, str(self.player.resources), BLUE, 30, (SCREEN_WIDTH - 40, 60))
@@ -518,6 +518,12 @@ class Interface():
                     self.buttonX = BUTTON_X
                 if opcion == 9:
                     break
+                
+            if Utils.state == System_State.PAUSED:
+                pygame.draw.rect(screen, BLUE, pygame.Rect(200, 200, 500, 500))
+                pygame.draw.rect(screen, BLUE2, pygame.Rect(200, 200, 500, 500), 4)
+
+                
 
     def drawEntityInfo(self, screen, camera):
         if len(self.player.unitsSelected) == 1:

@@ -12,8 +12,12 @@ class System_State(Enum):
     NEWGAME = auto()
     MAP1 = auto()
     ONGAME = auto()
+    LOAD = auto()
+    PLAYING = auto()
+    PAUSED = auto()
     BUILDING_MODE = auto()
     EXIT = auto()
+    INTRO = auto()
 
 class Race(Enum):
     ZERG = auto()
@@ -21,15 +25,25 @@ class Race(Enum):
     PROTOSS = auto()
 
 state = System_State.MAINMENU
+state2 = System_State.PLAYING
 
 def getGameState():
     global state
     result = state
     return result
 
+def getGameState2():
+    global state2
+    result = state2
+    return result
+
 def setGameState(newState):
     global state
     state = newState
+    
+def setGameState2(newState):
+    global state2
+    state2 = newState
 
 # Para el struct de la info de combate
 DAMAGE_IND = 0

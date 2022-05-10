@@ -21,6 +21,7 @@ class Escena():
         self.interfaz = interfaz
         self.resources = resources
         self.nombre = nombre
+        self.count = 0
 
     def setSelf(self, escena):
         self.p1 = escena.p1
@@ -133,13 +134,16 @@ class Escena():
                 unit.dir = (unit.dir + 1)%16
 
     def update(self):
-        for structure in self.p1.structures + self.p2.structures:
-            self.updateStructure(structure)
-        for res in self.resources:
-            self.updateResource(res)
+        if getGameState2() == System_State.PLAYING or getGameState2() == System_State.LOAD:
+            for structure in self.p1.structures + self.p2.structures:
+                self.updateStructure(structure)
+            for res in self.resources:
+                self.updateResource(res)
 
-        self.p1.update()
-        self.p2.update()
+            self.p1.update()
+            self.p2.update()
+        else:
+            pass
         self.mapa.updateNiebla(self.camera, self.p1.getEntitesLocation(self.camera))
         self.interfaz.update(self, self.raton, self.camera)
         #self.raton.update(self.camera)

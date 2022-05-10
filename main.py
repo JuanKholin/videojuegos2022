@@ -130,7 +130,6 @@ def setEntity(player, ai):
 def update():
     clock_update()
     raton.update(escena.camera)
-
     if getGameState() == System_State.MAINMENU:
         playMusic(mainMenuBGM, pos = 5)
         #playSound(mainMenuBGM)
@@ -143,8 +142,18 @@ def update():
         escena.mapa.loadMinimap()
         setEntity(player1, player2)
         setGameState(System_State.ONGAME)
+        setGameState2(System_State.PLAYING)
     elif getGameState() == System_State.ONGAME:
-        escena.update()
+        if getGameState2() == System_State.PLAYING:
+            escena.update()
+        elif getGameState2() == System_State.LOAD:
+            escena.update()
+            escena.count += frame(30)
+            if escena.count == 3:
+                setGameState(System_State.PAUSED)
+        
+    elif getGameState() == System_State.PAUSED:
+        print(1)
     elif getGameState() == System_State.GAMESELECT:
         #Cargar las partidas
         escena.interfaz.update(escena,raton, escena.camera)
@@ -159,6 +168,8 @@ def draw():
     if Utils.state == System_State.MAINMENU:
         escena.interfaz.draw(screen, escena.camera)
     elif Utils.state == System_State.ONGAME:
+        escena.draw(screen)
+    elif Utils.state == System_State.PAUSED:
         escena.draw(screen)
     elif Utils.state == System_State.GAMESELECT or Utils.state == System_State.NEWGAME:
         escena.interfaz.draw(screen, escena.camera)

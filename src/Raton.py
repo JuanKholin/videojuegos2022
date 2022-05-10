@@ -257,102 +257,103 @@ class Raton(pygame.sprite.Sprite):
                     self.clicked = True
                     #print('click izq liberado', real_mouse_pos, event.type)
                     #print(self.enable)
-                    if self.enable:
-                        if self.building:
-                            if self.buildStructure.checkTiles() and self.player.resources >= self.buildStructure.mineralCost:
-                                self.player.resources -= self.buildStructure.mineralCost
-                                self.buildStructure.player = self.player
-                                self.player.addStructures(self.buildStructure)
-                                self.buildStructure.buildProcess()
-                                self.building = False
-                                self.buildStructure = None
-                        else:
-                            unitSel = False
-                            selectedUnit = self.player.unitsSelected
-                            selectedEnemy = self.player.enemySelected
-                            selectedStructures = self.player.structureSelected
-                            selectedEnemyStructures = self.player.enemyStructureSelected
-                            selectedResources = self.player.resourceSelected
-                            self.player.unitsSelected = []
-                            self.player.enemySelected = []
-                            self.player.structureSelected = None
-                            self.player.enemyStructureSelected = None
-                            self.player.selectedResources = None
+                    if Utils.state == System_State.ONGAME:
+                        if self.enable:
+                            if self.building:
+                                if self.buildStructure.checkTiles() and self.player.resources >= self.buildStructure.mineralCost:
+                                    self.player.resources -= self.buildStructure.mineralCost
+                                    self.buildStructure.player = self.player
+                                    self.player.addStructures(self.buildStructure)
+                                    self.buildStructure.buildProcess()
+                                    self.building = False
+                                    self.buildStructure = None
+                            else:
+                                unitSel = False
+                                selectedUnit = self.player.unitsSelected
+                                selectedEnemy = self.player.enemySelected
+                                selectedStructures = self.player.structureSelected
+                                selectedEnemyStructures = self.player.enemyStructureSelected
+                                selectedResources = self.player.resourceSelected
+                                self.player.unitsSelected = []
+                                self.player.enemySelected = []
+                                self.player.structureSelected = None
+                                self.player.enemyStructureSelected = None
+                                self.player.selectedResources = None
 
-                            mouseRect = createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
+                                mouseRect = createRect(self.initialX, self.initialY, real_mouse_pos[0], real_mouse_pos[1])
 
-                            for unit in self.player.units:
-                                if len(self.player.unitsSelected) < MAX_SELECTED_UNIT and collideRect(mouseRect, unit.getRect()):
-                                    unit.setClicked(True)
-                                    self.player.unitsSelected.append(unit)
-                                    unitSel = True
-                                    #print("CLICKADO" + str(terran.id))
-                                    self.player.resourceSelected = None
-
-                            if not unitSel:
-                                for unit in self.enemy.units:
-                                    #print(unit.getRect())
-                                    pos = unit.getPosition()
-                                    if (collideRect(mouseRect, unit.getRect()) and 
-                                            self.mapa.getTile(pos[0] - camera.x, pos[1] - camera.y).visible):
+                                for unit in self.player.units:
+                                    if len(self.player.unitsSelected) < MAX_SELECTED_UNIT and collideRect(mouseRect, unit.getRect()):
                                         unit.setClicked(True)
-                                        self.player.enemySelected.append(unit)
+                                        self.player.unitsSelected.append(unit)
                                         unitSel = True
                                         #print("CLICKADO" + str(terran.id))
                                         self.player.resourceSelected = None
-                                        break
 
-                            if not unitSel:
-                                for structure in self.player.structures:
-                                    if collideRect(mouseRect, structure.getRect()):
-                                        structure.setClicked(True)
-                                        unitSel = True
-                                        self.player.structureSelected = structure
-                                        #print("CLICKADO ")
-                                        self.player.resourceSelected = None
-                                        break
+                                if not unitSel:
+                                    for unit in self.enemy.units:
+                                        #print(unit.getRect())
+                                        pos = unit.getPosition()
+                                        if (collideRect(mouseRect, unit.getRect()) and 
+                                                self.mapa.getTile(pos[0] - camera.x, pos[1] - camera.y).visible):
+                                            unit.setClicked(True)
+                                            self.player.enemySelected.append(unit)
+                                            unitSel = True
+                                            #print("CLICKADO" + str(terran.id))
+                                            self.player.resourceSelected = None
+                                            break
 
-                            if not unitSel:
-                                for structure in self.enemy.structures:
-                                    pos = structure.getPosition()
-                                    if (collideRect(mouseRect, structure.getRect())
-                                            and self.mapa.getTile(pos[0], pos[1]).visible):
-                                        structure.setClicked(True)
-                                        unitSel = True
-                                        self.player.enemyStructureSelected = structure
-                                        print("CLICKADO ")
-                                        self.player.resourceSelected = None
-                                        break
+                                if not unitSel:
+                                    for structure in self.player.structures:
+                                        if collideRect(mouseRect, structure.getRect()):
+                                            structure.setClicked(True)
+                                            unitSel = True
+                                            self.player.structureSelected = structure
+                                            #print("CLICKADO ")
+                                            self.player.resourceSelected = None
+                                            break
 
-                            if not unitSel:
-                                for resource in self.escena.resources:
-                                    pos = resource.getPosition()
-                                    if (collideRect(mouseRect, resource.getRect())
-                                            and self.mapa.getTile(pos[0], pos[1]).visible):
-                                        resource.setClicked(True)
-                                        unitSel = True
-                                        self.player.resourceSelected = resource
-                                        print("CLICKADO aaaa")
-                                        break
+                                if not unitSel:
+                                    for structure in self.enemy.structures:
+                                        pos = structure.getPosition()
+                                        if (collideRect(mouseRect, structure.getRect())
+                                                and self.mapa.getTile(pos[0], pos[1]).visible):
+                                            structure.setClicked(True)
+                                            unitSel = True
+                                            self.player.enemyStructureSelected = structure
+                                            print("CLICKADO ")
+                                            self.player.resourceSelected = None
+                                            break
 
-                            if unitSel:
-                                for unit in (self.player.units + self.player.structures + self.enemy.units + self.enemy.structures + self.escena.resources):
-                                    if unit not in (self.player.unitsSelected + self.player.enemySelected + [self.player.structureSelected] + [self.player.enemyStructureSelected] + [self.player.resourceSelected]):
-                                        #print(unit)
-                                        unit.setClicked(False)
-                            else:
-                                self.player.unitsSelected = selectedUnit
-                                self.player.enemySelected = selectedEnemy
-                                self.player.structuresSelected = selectedStructures
-                                self.player.enemyStructuresSelected = selectedEnemyStructures
-                                self.player.resourceSelected = selectedResources
-                    else: #si estoy en GUI
-                        #comprobar colision con los botones
-                        for b in self.interface.button:
-                            if collides(self.rel_pos[0], self.rel_pos[1], b.getRect()):
-                                command = b.getCommand()
-                                print(command.id)
-                                break
+                                if not unitSel:
+                                    for resource in self.escena.resources:
+                                        pos = resource.getPosition()
+                                        if (collideRect(mouseRect, resource.getRect())
+                                                and self.mapa.getTile(pos[0], pos[1]).visible):
+                                            resource.setClicked(True)
+                                            unitSel = True
+                                            self.player.resourceSelected = resource
+                                            print("CLICKADO aaaa")
+                                            break
+
+                                if unitSel:
+                                    for unit in (self.player.units + self.player.structures + self.enemy.units + self.enemy.structures + self.escena.resources):
+                                        if unit not in (self.player.unitsSelected + self.player.enemySelected + [self.player.structureSelected] + [self.player.enemyStructureSelected] + [self.player.resourceSelected]):
+                                            #print(unit)
+                                            unit.setClicked(False)
+                                else:
+                                    self.player.unitsSelected = selectedUnit
+                                    self.player.enemySelected = selectedEnemy
+                                    self.player.structuresSelected = selectedStructures
+                                    self.player.enemyStructuresSelected = selectedEnemyStructures
+                                    self.player.resourceSelected = selectedResources
+                        else: #si estoy en GUI
+                            #comprobar colision con los botones
+                            for b in self.interface.button:
+                                if collides(self.rel_pos[0], self.rel_pos[1], b.getRect()):
+                                    command = b.getCommand()
+                                    print(command.id)
+                                    break
 
                 elif not type[2]:
                     if self.derPulsado:
