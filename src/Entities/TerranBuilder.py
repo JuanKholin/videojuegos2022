@@ -63,8 +63,8 @@ class TerranBuilder(Structure):
         self.paths = []
 
         #MEJORAR LAS UNIDADES
-        self.dañoMineralUpCost = 50
-        self.dañoGasUpCost = 50
+        self.damageMineralUpCost = 50
+        self.damageGasUpCost = 50
         self.armorMineralUpCost = 50
         self.armorGasUpCost = 50
         self.mineMineralUpCost = 50
@@ -86,12 +86,12 @@ class TerranBuilder(Structure):
             print("xd")
             self.generateUnit(terranWorker)
             self.state = BuildingState.SPAWNING
-        elif command_id == CommandId.UPGRADE_SOLDIER_DAMAGE and self.player.resources and self.player.resources >= self.dañoMineralUpCost and self.player.gas >= self.dañoGasUpCost:
-            self.player.resources -= self.dañoMineralUpCost
-            self.player.gas -= self.dañoGasUpCost
+        elif command_id == CommandId.UPGRADE_SOLDIER_DAMAGE and self.player.resources and self.player.resources >= self.damageMineralUpCost and self.player.gas >= self.damageGasUpCost:
+            self.player.resources -= self.damageMineralUpCost
+            self.player.gas -= self.damageGasUpCost
             self.player.dañoUpgrade += 1
-            self.dañoMineralUpCost += 25
-            self.dañoGasUpCost += 25
+            self.damageMineralUpCost += 25
+            self.damageGasUpCost += 25
         elif command_id == CommandId.UPGRADE_SOLDIER_ARMOR and self.player.resources and self.player.gas >= self.armorGasUpCost and self.player.resources >= self.armorMineralUpCost:
             self.player.resources -= self.armorMineralUpCost
             self.player.gas -= self.armorGasUpCost
@@ -150,8 +150,8 @@ class TerranBuilder(Structure):
             "building": self.building,
             "nombre": "Base de comandos",
             "funcion": "Protege la base de comandos",
-            "dañoMineralUpCost": self.dañoMineralUpCost,
-            "dañoGasUpCost": self.dañoGasUpCost,
+            "damageMineralUpCost": self.damageMineralUpCost,
+            "damageGasUpCost": self.damageGasUpCost,
             "armorMineralUpCost": self.armorMineralUpCost,
             "armorGasUpCost": self.armorGasUpCost,
             "mineMineralUpCost": self.mineMineralUpCost,

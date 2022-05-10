@@ -51,8 +51,8 @@ class AI():
         
         # La vision de la IA: 
         self.crystalsSeen = set()
-        self.geysersSeen = set()
-        self.structuresSeen = set()
+        #self.geysersSeen = set()
+        #self.structuresSeen = set()
 
         # Para las invasiones
         self.invaders = []
@@ -93,16 +93,15 @@ class AI():
             print("IA DECIDE ATACAR LO VISIBLE")
             self.attackVisible(units, structures)
         elif decission == 1:
-            #print("IA DECIDE HACER MEJORAS")
-            self.armyUpgrade()
+            print("IA DECIDE HACER MEJORAS")
+            self.armyUpgrade(structures)
         elif decission == 2:
             print("IA DECIDE EXPANDIR SU EJERCITO")
             self.armyExpansion(structures)
         elif decission == 3:
             print("IA DECIDE INVADIR")
             self.seekAndDestroy(units)
-
-        print(self.decissionsChance)
+        #print(self.decissionsChance)
 
     # Toma una decision y rebalancea el pool de decisiones, me ha quedado bastante original la verdad,
     # estoy orgulloso y no se ni si funciona xdxdxdxd
@@ -194,10 +193,11 @@ class AI():
                     skipGasNeed = True 
             if not skipGasNeed: # Si hay al menos un worker extrayendo gas no es necesario hacer nada de gas
                 gasMan = workers.pop()
-                if self.haveGeyserInUse():
+                if self.haveGeyserInUse(structures):
                     pass
                 else:
-                    if len(self.geysersSeen) > 0:
+                    geyser = self.findFreeGeyser(units, structures)
+                    if geyser != None:
                         pass
             if len(workers) > 0: # Para el resto de workers
                 if len(self.crystalsSeen) > 0: # si hay cristales conocidos,
@@ -243,8 +243,29 @@ class AI():
                 soldier.attack(targets[i])
                 i = (i + 1) % len(targets)
 
-    def armyUpgrade(self):
-        pass
+    # Se pone a lo chano pero ahi va, escoge una mejora y en caso de poder permitirsela
+    # la adquiere xdxd
+    def armyUpgrade(self, structures):
+        randUpgrade = randint(0, 2)
+        base = self.getBase(structures)
+        if randUpgrade == 0:
+            if self.data.resources > base.damageMineralUpCost * 3:
+                print("Try upgrading damage")
+                print(self.data.gas)
+                base.execute(CommandId.UPGRADE_SOLDIER_DAMAGE)
+                print(self.data.gas)
+        elif randUpgrade == 1:
+            if self.data.resources > base.armorMineralUpCost * 3:
+                print("Try upgrading armor")
+                print(self.data.gas)
+                base.execute(CommandId.UPGRADE_SOLDIER_ARMOR)
+                print(self.data.gas)
+        elif randUpgrade == 2:
+            if self.data.resources > base.mineMineralUpCost * 3:
+                print("Try upgrading mining")
+                print(self.data.gas)
+                base.execute(CommandId.UPGRADE_WORKER_MINING)
+                print(self.data.gas)
 
     # Aumenta los minimos del ejercito si se puede permitir al menos otro como el que tiene
     # Tambien construye un almacen si los recursos estan cerca del tope o construye otro
@@ -530,3 +551,14 @@ class AI():
             print("Construye protossbarracks")
             self.data.resources -= PROTOSS_BARRACKS_MINERAL_COST
             self.buildProtossBarracks(structures)
+
+    # Devuelve si hay un edificio explotando un geyser o no
+    def haveGeyserInUse(self, structures):
+        for structure in structures:
+            if structure.type == self.geyserBuilding:
+                return True
+        return False
+
+    def findFreeGeyser(self, units, structures):
+        for unit in units:
+            pass
