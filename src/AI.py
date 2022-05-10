@@ -399,9 +399,10 @@ class AI():
                     if self.mapa.checkIfEmptyZone(buildX, buildY, buildX + (width - 1), buildY + (height - 1)):
                         #print("buildea")
                         toBuild = TerranBarracks(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
-                        self.data.addStructures(toBuild)
-                        toBuild.buildProcess()
-                        builded = True
+                        if toBuild.checkTiles(False):
+                            self.data.addStructures(toBuild)
+                            toBuild.buildProcess()
+                            builded = True
             if tryNew and not builded:
                 directionsTried = directionsTried + 1
                 if directionsTried >= TOTAL_DIRECTIONS: # Se han probado todas las direcciones
@@ -458,9 +459,10 @@ class AI():
                     if self.mapa.checkIfEmptyZone(buildX, buildY, buildX + (width - 1), buildY + (height - 1)):
                         #print("buildea")
                         toBuild = TerranSupplyDepot(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
-                        self.data.addStructures(toBuild)
-                        toBuild.buildProcess()
-                        builded = True
+                        if toBuild.checkTiles(False):
+                            self.data.addStructures(toBuild)
+                            toBuild.buildProcess()
+                            builded = True
             if tryNew and not builded:
                 directionsTried = directionsTried + 1
                 if directionsTried >= TOTAL_DIRECTIONS: # Se han probado todas las direcciones

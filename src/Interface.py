@@ -626,7 +626,6 @@ class Interface():
             elif e != Options.NULO:
                 buttons.append(self.allButton[e])
 
-
         return buttons
 
     def getUpgrades(self, upgrades):
