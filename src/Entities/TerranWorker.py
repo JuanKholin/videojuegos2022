@@ -16,7 +16,7 @@ MINE_POWER = 8
 MINERAL_COST = 50
 TIME_TO_MINE = 2000
 GENERATION_TIME = 2
-speed = 5
+speed = 2
 FRAMES_TO_REFRESH = 10
 SPRITES = "scvJusto.bmp"
 SCALE = 1.5
@@ -53,7 +53,7 @@ Y_PADDING =         30
 PADDING = 110
 
 class TerranWorker(Worker):
-    def __init__(self, xIni, yIni, player):
+    def __init__(self, player, xIni = -1, yIni = -1):
         Worker.__init__(self, HP, xIni * TILE_WIDTH + 20, yIni * TILE_HEIGHT, MINERAL_COST,
                 GENERATION_TIME, speed, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME,
                 PADDING,  takeID(), player, MINE_POWER, TIME_TO_MINE, INVERSIBLE_FRAMES,
@@ -69,7 +69,8 @@ class TerranWorker(Worker):
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
-        self.updateOwnSpace()
+        if xIni != -1:
+            self.updateOwnSpace()
         #self.imageRect = rect(self.x, self.y, self.image.get_width() - WEIGHT_PADDING,
                 #self.image.get_height() - HEIGHT_PADDING)
         #self.imageRect = rect(self.x - self.image.get_width()/2, self.y -self.image.get_height() , self.image.get_width(), self.image.get_height())
@@ -77,6 +78,8 @@ class TerranWorker(Worker):
         self.render = pygame.transform.scale(pygame.image.load(WORKER_RENDER), UNIT_RENDER_SIZE)
 
         self.type = TERRAN_WORKER
+
+    
 
     def getUpgrades(self):
         upgrades = []

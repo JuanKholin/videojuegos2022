@@ -59,15 +59,16 @@ class AI():
 
     # Haz lo tuyo IA, es tu turno
     def make_commands(self):
-        units, structures = self.data.get_info()
-        self.miniCount += 1
-        if self.miniCount >= AI_LAPSE: # Acciones ligeras
-            self.miniCount = 0
-            self.alwaysToDoActions(units, structures)
-        self.count += 1
-        if self.count >= self.decissionRate: # Decisiones importantes
-            self.count = 0
-            self.makeDecission(units, structures)
+        if self.decissionRate != 0:
+            units, structures = self.data.get_info()
+            self.miniCount += 1
+            if self.miniCount >= AI_LAPSE: # Acciones ligeras
+                self.miniCount = 0
+                self.alwaysToDoActions(units, structures)
+            self.count += 1
+            if self.count >= self.decissionRate: # Decisiones importantes
+                self.count = 0
+                self.makeDecission(units, structures)
 
     # Acciones que debe hacer casi siempre la IA
     def alwaysToDoActions(self, units, structures):

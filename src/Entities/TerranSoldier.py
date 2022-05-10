@@ -53,7 +53,7 @@ Y_PADDING =         15
 PADDING = 110
 
 class TerranSoldier(Soldier):
-    def __init__(self, xIni, yIni, player):
+    def __init__(self, player, xIni = -1, yIni = -1):
         Soldier.__init__(self, HP, xIni * TILE_WIDTH + 20, yIni * TILE_HEIGHT, MINERAL_COST,
                 GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME,
                 PADDING,  takeID(), player, INVERSIBLE_FRAMES, FRAMES, DIR_OFFSET, ATTACK_FRAMES,
@@ -68,13 +68,16 @@ class TerranSoldier(Soldier):
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
-        self.updateOwnSpace()
+        if xIni != -1:
+            self.updateOwnSpace()
         #self.imageRect = rect(self.x, self.y, self.image.get_width() - WEIGHT_PADDING,
                 #self.image.get_height() - HEIGHT_PADDING)
         #self.imageRect = rect(self.x - self.image.get_width()/2, self.y -self.image.get_height() , self.image.get_width(), self.image.get_height())
         #self.imageRect = rect(self.x, self.y, self.image.get_width(), self.image.get_height())
         self.render = pygame.transform.scale(pygame.image.load(SOLDIER_RENDER), UNIT_RENDER_SIZE)
         self.type = TERRAN_SOLDIER
+    
+    
 
     def getUpgrades(self):
         upgrades = []

@@ -28,7 +28,7 @@ class TerranRefinery(Structure):
     frame = 8
     nSprites = 5
 
-    def __init__(self, xini, yini, player, map, building, gas):
+    def __init__(self, xini, yini, player, map, building, gas = None):
         Structure.__init__(self, HP, TERRAN_REFINERY_MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
         self.sprites = cargarSprites(TERRAN_REFINERY_PATH, self.nSprites, False, BLACK)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()

@@ -77,19 +77,19 @@ def loadPlayer(playerDictionary, map, isPlayer):
 def loadUnits(unitDictionaries, player):
     for u in unitDictionaries:
         if u["clase"] == "terranWorker":
-            unit = TerranWorker(u["x"], u["y"], player)
+            unit = TerranWorker(player, u["x"], u["y"])
             unit.load(u["hp"])
             player.addUnits(unit)
         elif u["clase"] == "terranSoldier":
-            unit = TerranSoldier(u["x"], u["y"], player)
+            unit = TerranSoldier(player, u["x"], u["y"])
             unit.load(u["hp"])
             player.addUnits(unit)
         elif u["clase"] == "zergling":
-            unit = Zergling(u["x"], u["y"], player)
+            unit = Zergling(player, u["x"], u["y"])
             unit.load(u["hp"])
             player.addUnits(unit)
         elif u["clase"] == "drone":
-            unit = Drone(u["x"], u["y"], player)
+            unit = Drone(player, u["x"], u["y"])
             unit.load(u["hp"])
             player.addUnits(unit)
 

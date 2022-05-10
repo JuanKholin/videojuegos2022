@@ -50,7 +50,7 @@ class Zergling(Soldier):
     # Pre: xIni e yIni marcan posiciones del mapa, (ej: (3, 2) se refiere a la posicion de
     # la cuarta columna y tercera fila del mapa)
     # Post: Crea un bichito mono que no hace practicamente nada pero tu dale tiempo
-    def __init__(self, xIni, yIni, player):
+    def __init__(self, player, xIni = -1, yIni = -1):
         Soldier.__init__(self, HP, xIni * TILE_WIDTH + 20, yIni * TILE_HEIGHT, MINERAL_COST,
                 GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, PADDING,
                 takeID(), player, INVERSIBLE_FRAMES,
@@ -62,11 +62,13 @@ class Zergling(Soldier):
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
-        self.updateOwnSpace()
+        if xIni != -1:
+            self.updateOwnSpace()
 
         self.render = pygame.transform.scale(pygame.image.load(ZERGLING_RENDER), UNIT_RENDER_SIZE)
 
         self.type = ZERG_SOLDIER
+    
 
     def toDictionary(self, map):
         fatherDictionary = super().toDictionary(map)

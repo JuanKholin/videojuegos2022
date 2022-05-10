@@ -59,6 +59,7 @@ TOTAL_DIRECTIONS = 8
 EASY = 900
 MEDIUM = 500
 HARD = 200
+NULA = 0
 
 # espera de la IA para tomar decisiones ligeras:
 AI_LAPSE = 30

@@ -82,7 +82,7 @@ class TerranBuilder(Structure):
         #if self.clicked:
         if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_WORKER) and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
             self.player.resources -= TERRAN_WORKER_MINERAL_COST
-            terranWorker = TerranWorker(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
+            terranWorker = TerranWorker(self.player)
             print("xd")
             self.generateUnit(terranWorker)
             self.state = BuildingState.SPAWNING

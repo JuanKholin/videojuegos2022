@@ -54,15 +54,19 @@ def procesarInput():
 def setEntity(player, ai):
 
     structure1 = TerranBuilder(10, 72, player, mapa, False, raton)
+    structure2 = TerranBarracks(17, 67, player, mapa, False)
     structure1z = Hatchery(70, 8, player, mapa, False, raton)
-    drone = Drone(67,11, ai)
-    scv = TerranWorker(13, 69, player)
+    drone = Drone(ai, 67,11)
+    scv = TerranWorker(player, 13, 69)
+    '''
     ai.addUnits(drone)
     ai.addStructures(structure1z)
+    ai.setBasePlayer(structure1z)'''
     player.addStructures(structure1)
+    player.addStructures(structure2)
     player.setBasePlayer(structure1)
     player.addUnits(scv)
-    ai.setBasePlayer(structure1z)
+    
     #Recursos del mapa
     resources = []
     

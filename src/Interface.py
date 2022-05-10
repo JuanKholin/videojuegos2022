@@ -220,7 +220,11 @@ class Interface():
                     #Hay que hacer uno generico, o que carge el mapa y pase a ONGAME aqui
                     _escena, _raton, _camera = loadFromSave(self.selectedPartida['nombre'])
                     escena.setSelf(_escena)
-                    aI = AI(escena.p2, Race.ZERG, EASY)
+                    if Utils.DEBBUG == False:
+                        aI = AI(escena.p2, Race.ZERG, EASY)
+                        
+                    else:
+                        aI = AI(escena.p2, Race.ZERG, NULA)
                     escena.aI = aI
                     raton.setSelf(_raton)
                     self.player = escena.p1

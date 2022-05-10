@@ -162,11 +162,9 @@ class Structure(Entity.Entity):
 
             libres = self.mapa.getEntityTilesVecinas(tile, unit.getTile())
             if len(libres) > 0:
-                unit.x = libres[0].centerx
-                unit.y = libres[0].centery
-
+                unit.spawn(libres[0].centerx, libres[0].centery)
                 self.player.addUnits(unit)
-                unit.updateOwnSpace()
+                
                 self.generationCount = 0
                 del self.training[0]
                 if len(self.training) == 0:

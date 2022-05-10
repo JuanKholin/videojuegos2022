@@ -52,7 +52,7 @@ class Drone(Worker):
     # Pre: xIni e yIni marcan posiciones del mapa, (ej: (3, 2) se refiere a la posicion de
     # la cuarta columna y tercera fila del mapa)
     # Post: Crea un bichito mono que no hace practicamente nada pero tu dale tiempo
-    def __init__(self, xIni, yIni, player):
+    def __init__(self, player, xIni = -1, yIni = -1):
         Worker.__init__(self, HP, xIni * TILE_WIDTH + 20, yIni * TILE_HEIGHT, MINERAL_COST, GENERATION_TIME,
                 SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, PADDING, takeID(), player,
                 MINE_POWER, TIME_TO_MINE, INVERSIBLE_FRAMES, FRAMES, DIR_OFFSET,
@@ -64,9 +64,12 @@ class Drone(Worker):
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
-        self.updateOwnSpace()
+        if xIni != -1:
+            self.updateOwnSpace()
         self.render = pygame.transform.scale(pygame.image.load(DRONE_RENDER), UNIT_RENDER_SIZE)
         self.type = ZERG_WORKER
+    
+
 
     def toDictionary(self, map):
         fatherDictionary = super().toDictionary(map)

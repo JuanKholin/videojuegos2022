@@ -50,6 +50,12 @@ class Unit(Entity):
         self.occupiedTile = None
 
         self.esEstructura = False
+    
+    def spawn(self, x, y):
+        self.x = x
+        self.y = y
+        self.updateOwnSpace()
+        self.changeToStill()
 
     ##########
     # ORDERS #
