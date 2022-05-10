@@ -146,16 +146,16 @@ def loadCamera(cameraDictionary):
 
 def loadResources(resourcesDictionary):
     resources = []
-    print("pero bueno", resourcesDictionary)
+    #print("pero bueno", resourcesDictionary)
 
     for r in resourcesDictionary:
         if r["clase"] == "cristal":
-            print(r["clase"], r["x"], r["y"], r["capacidad"])
+            #print(r["clase"], r["x"], r["y"], r["capacidad"])
             resources.append(Crystal(r["x"], r["y"], r["capacidad"]))
         if r["clase"] == "geyser":
-            print(r["clase"],r["capacidad"], r["x"], r["y"])
+            #print(r["clase"],r["capacidad"], r["x"], r["y"])
             resources.append(Geyser(r["x"], r["y"], r["capacidad"]))
     for r in resources:
-        print("hola")
-        print(r.x, r.y)
+        #print("hola")
+        #print(r.x, r.y)
     return resources

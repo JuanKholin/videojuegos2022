@@ -472,7 +472,7 @@ class Map():
         for tile in nodosAbiertos:
             tile.g = 0
         if (nodosAbiertos.__len__() == 0) or broken:
-            print("camino no encontrado", tileObj.tileid)
+            #print("camino no encontrado", tileObj.tileid)
             
             #input()
         else:
@@ -562,7 +562,7 @@ class Map():
         for tile in nodosAbiertos:
             tile.g = 0
         if (nodosAbiertos.__len__() == 0) or broken:
-            print("camino no encontrado", tileObj.tileid)
+            #print("camino no encontrado", tileObj.tileid)
             
             #input()
         else:

@@ -74,7 +74,8 @@ class TerranBuilder(Structure):
         self.mineGasUpCost = 50
 
         self.type = TERRAN_BASE
-        print("ESTOY SIENDO CREADO ", self.toDictionary(self.mapa)['clase'])
+       
+        ("ESTOY SIENDO CREADO ", self.toDictionary(self.mapa)['clase'])
 
 
     #def generateUnit(self, unit):
@@ -92,7 +93,7 @@ class TerranBuilder(Structure):
             if len(self.player.units) + 1 <= (self.player.limitUnits):
                 self.player.resources -= TERRAN_WORKER_MINERAL_COST
                 terranWorker = TerranWorker(self.player)
-                print("xd")
+                #print("xd")
                 self.generateUnit(terranWorker)
                 self.state = BuildingState.SPAWNING
         elif command_id == CommandId.UPGRADE_SOLDIER_DAMAGE and self.player.resources and self.player.resources >= self.damageMineralUpCost and self.player.gas >= self.damageGasUpCost:
@@ -115,7 +116,7 @@ class TerranBuilder(Structure):
             self.mineGasUpCost += 25
         elif command_id == CommandId.BUILD_BARRACKS and self.player.resources >= TERRAN_BARRACKS_MINERAL_COST:
             self.raton.building = True
-            print("mi raton: ", self.raton.id)
+            #print("mi raton: ", self.raton.id)
             self.raton.buildStructure = self.getTerranBarrack()
         elif command_id == CommandId.BUILD_HATCHERY and self.player.resources >= HATCHERY_MINERAL_COST:
             self.raton.building = True

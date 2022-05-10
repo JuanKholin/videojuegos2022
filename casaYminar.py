@@ -56,7 +56,8 @@
                     #sumar minerales al jugador
                     if self.cristal.capacidad < 0:
                         self.player.resources += self.cantidadMinada
-                        print("cambiamos a still")
+                       
+                        ("cambiamos a still")
                         self.changeToStill()
                         del self.cristal
                     else:

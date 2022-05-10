@@ -155,7 +155,7 @@ class AI():
                     self.data.resources -= ZERG_DEPOT_MINERAL_COST
                     self.buildZergDepot(structures) # Seria Zerg pero no hay edificio xd
                 elif (self.depot == TERRAN_DEPOT) and (self.data.resources >= TERRAN_DEPOT_MINERAL_COST):
-                    print("Construye terrandepot")
+                    #print("Construye terrandepot")
                     self.data.resources -= TERRAN_DEPOT_MINERAL_COST
                     self.buildTerranDepot(structures)
             
@@ -196,7 +196,7 @@ class AI():
                 gasMan = workers.pop()
                 geyser = self.getGeyserInUse(structures)
                 if (geyser != None) and (geyser.state == BuildingState.OPERATIVE):
-                    print("crying", geyser.getTile().ocupante)
+                    #print("crying", geyser.getTile().ocupante)
                     gasMan.extract(geyser.getTile())
                 elif geyser == None:
                     geyser = self.findFreeGeyser(units, structures)
@@ -208,33 +208,33 @@ class AI():
                     for worker in workers: # todos a la mina
                         if worker.state == UnitState.STILL: # si les viene bien xd
                             crystalsSeen = list(self.crystalsSeen)
-                            print("go to work crystal at", crystalsSeen[crystalToMine].getPosition())
+                            #print("go to work crystal at", crystalsSeen[crystalToMine].getPosition())
                             worker.mine(crystalsSeen[crystalToMine]) 
                             crystalToMine = (crystalToMine + 1) % len(crystalsSeen)
 
     # Recorre las unidades invasoras para que vayan a la guerra, evitan recorrer caminos opuestos
     # pero si no hay de otra acaban haciendolo, no se estan quietas del todo hasta que ganan o mueren
     def updateInvaders(self):
-        print("upInv")
+        #print("upInv")
         for invasor in self.invaders:
             target = self.mapa.getNearbyRival(invasor.getTile(), self.data, 5)
             if target != None: # Ha encontrado objetivo
                 invasor.attack(target) # ergo, ataca
             else: # Nada por ahora
-                print("toca moverse")
+                #print("toca moverse")
                 if invasor.state == UnitState.STILL: # Toca moverse
-                    print("hola")
+                    #print("hola")
                     x, y = self.getDirection(randint(0, 7))
                     tile = invasor.getTile()
                     tile = self.mapa.getNextTileByOffset(tile.x / 40, tile.y / 40, x * 4, y * 4)
                     if tile != None:
                         invasor.move(tile)
-                        print("try1")
+                        #print("try1")
                         if invasor.state != UnitState.MOVING:
                             tile = self.mapa.getNextTileByOffset(tile.x, tile.y, x * 3, y * 3)
                             if tile != None:
                                 invasor.move(tile)
-                                print("try2")
+                                #print("try2")
 
 
                     '''actualDir = self.parseDir(invasor.getDir()) ESTO ES PARA LA BETA FINAL
@@ -351,7 +351,7 @@ class AI():
         for i in range(num):
             self.data.removeUnitFromFree(soldiers[i])
             self.invaders.append(soldiers[i])
-        print(len(self.invaders), "invasores")
+        #print(len(self.invaders), "invasores")
 
     ##############
     # AUXILIARES #
@@ -503,7 +503,7 @@ class AI():
                     directionsTried = 0
                     buildingsTried = buildingsTried + 1
                     if buildingsTried >= len(structures): # No hay espacio en el mapa (  9 _9)
-                        print("Wrong map, full occupied?")
+                        #print("Wrong map, full occupied?")
                         exit()
                     else: # Quedan edificios por probar
                         randBuilding = (randBuilding + 1) % len(structures)

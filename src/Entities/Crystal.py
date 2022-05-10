@@ -32,7 +32,7 @@ class Crystal(Resource):
         return sprites
 
     def __del__(self):
-        print("destruction")
+        #print("destruction")
 
     # Devuelve el rectangulo que conforma su imagen, creo, esto lo hizo otro
     def getRect(self):

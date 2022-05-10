@@ -189,7 +189,7 @@ class Interface():
                 if not self.singlePress and press and Raton.collides(iniPos[0], iniPos[1], self.singleRect):
                     self.singlePress = True
                 elif self.mouse.getClick() and self.singlePress and Raton.collides(endPos[0], endPos[1], self.singleRect):
-                    print("Seleccionado single player")
+                    #print("Seleccionado single player")
                     Utils.state = System_State.MAP1
                     #self.loadPartidas()
                     #Utils.state = System_State.GAMESELECT
@@ -204,7 +204,7 @@ class Interface():
                 if not self.exitPress and press and Raton.collides(iniPos[0], iniPos[1], self.exitRect):
                     self.exitPress = True
                 elif self.mouse.getClick() and self.exitPress and Raton.collides(endPos[0], endPos[1], self.exitRect):
-                    print("Seleccionado exit")
+                    #print("Seleccionado exit")
                     Utils.state = System_State.EXIT
                     stopMusic()
                     self.exitPress = False
@@ -217,7 +217,7 @@ class Interface():
                 if not self.ajustesSonidoPress and press and Raton.collides(iniPos[0], iniPos[1], self.ajustesSonidoRect):
                     self.ajustesSonidoPress = True
                 elif self.mouse.getClick() and self.ajustesSonidoRectPress and Raton.collides(endPos[0], endPos[1], self.ajustesSonidoRect):
-                    print("Seleccionado exit")
+                    #print("Seleccionado exit")
                     Utils.state = System_State.SETTINGS
                     stopMusic()
                     self.ajustesSonidoPress = False
@@ -230,7 +230,7 @@ class Interface():
                 if not self.ajustesAtajosPress and press and Raton.collides(iniPos[0], iniPos[1], self.ajustesAtajosRect):
                     self.ajustesAtajosPress = True
                 elif self.mouse.getClick() and self.ajustesAtajosPress and Raton.collides(endPos[0], endPos[1], self.ajustesAtajosRect):
-                    print("Seleccionado exit")
+                    #print("Seleccionado exit")
                     Utils.state = System_State.SETTINGS
                     stopMusic()
                     self.ajustesAtajosPress = False
@@ -262,7 +262,7 @@ class Interface():
                 if not self.aceptarPress and press and Raton.collides(iniPos[0], iniPos[1], self.aceptarRect):
                     self.aceptarPress = True
                 elif self.mouse.getClick() and self.aceptarPress and Raton.collides(endPos[0], endPos[1], self.aceptarRect):
-                    print("Aceptar")
+                    #print("Aceptar")
                     #Hay que hacer uno generico, o que carge el mapa y pase a ONGAME aqui
                     _escena, _raton, _camera = loadFromSave(self.selectedPartida['nombre'])
                     escena.setSelf(_escena)
@@ -294,7 +294,7 @@ class Interface():
                 if not self.cancelarPress and press and Raton.collides(iniPos[0], iniPos[1], self.cancelarRect):
                     self.cancelarPress = True
                 elif self.mouse.getClick() and self.cancelarPress and Raton.collides(endPos[0], endPos[1], self.cancelarRect):
-                    print("Cancelar")
+                    #print("Cancelar")
                     Utils.state = System_State.MAINMENU
                     self.cancelarPress = False
                     self.selectedPartida = None
@@ -307,7 +307,7 @@ class Interface():
                 if not self.nuevaPartidaPress and press and Raton.collides(iniPos[0], iniPos[1], self.nuevaPartidaRect):
                     self.nuevaPartidaPress = True
                 elif self.mouse.getClick() and self.nuevaPartidaPress and Raton.collides(endPos[0], endPos[1], self.nuevaPartidaRect):
-                    print("Nueva partida")
+                    #print("Nueva partida")
                     #Pasar a menu de nueva partida
                     Utils.state = System_State.NEWGAME
                     stopMusic()
@@ -321,7 +321,7 @@ class Interface():
                     if not partida['pressed'] and press and Raton.collides(iniPos[0], iniPos[1], partida['rect']):
                         partida['pressed'] = True
                     elif self.mouse.getClick() and partida['pressed'] and Raton.collides(endPos[0], endPos[1], partida['rect']):
-                        print(partida['nombre'])
+                        #print(partida['nombre'])
                         #Pasar a menu de nueva partida
                         self.selectedPartida = partida
                         playSound(botonSound2)
@@ -349,7 +349,7 @@ class Interface():
                 if not self.aceptarPress and press and Raton.collides(iniPos[0], iniPos[1], self.aceptarRect):
                     self.aceptarPress = True
                 elif self.mouse.getClick() and self.aceptarPress and Raton.collides(endPos[0], endPos[1], self.aceptarRect):
-                    print("Aceptar")
+                    #print("Aceptar")
                     #Con self.selectedMap selectedDif selectedRaza se crea la partida
                     Utils.state = System_State.MAP1
                     stopMusic()
@@ -363,7 +363,7 @@ class Interface():
                 if not self.cancelarPress and press and Raton.collides(iniPos[0], iniPos[1], self.cancelarRect):
                     self.cancelarPress = True
                 elif self.mouse.getClick() and self.cancelarPress and Raton.collides(endPos[0], endPos[1], self.cancelarRect):
-                    print("Cancelar")
+                    #print("Cancelar")
                     Utils.state = System_State.GAMESELECT
                     self.cancelarPress = False
             else:
@@ -375,7 +375,7 @@ class Interface():
                     if not b['press'] and press and Raton.collides(iniPos[0], iniPos[1], b['rect']):
                         b['press'] = True
                     elif self.mouse.getClick() and b['press'] and Raton.collides(endPos[0], endPos[1], b['rect']):
-                        print(b['nombre'])
+                        #print(b['nombre'])
                         playSound(botonSound2)
                         b['press'] = False
                         if b['tipo'] == "mapa":

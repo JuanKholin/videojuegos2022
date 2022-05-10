@@ -36,7 +36,7 @@ class Geyser(Resource):
         return sprites
 
     def __del__(self):
-        print("destruction")
+        #print("destruction")
 
     def getMined(self, cantidad):
         if (self.capacity <= 0):

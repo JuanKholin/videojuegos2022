@@ -164,7 +164,7 @@ class Raton(pygame.sprite.Sprite):
 
         #if DEBBUG:
         #    if frame(360) == 1:
-        #        print(self.rel_pos[0], self.rel_pos[1])
+        #        #print(self.rel_pos[0], self.rel_pos[1])
         if Utils.state == System_State.ONGAME:
             if pygame.mouse.get_pressed()[0]:
                 mouse_pos = pygame.mouse.get_pos()
@@ -336,7 +336,7 @@ class Raton(pygame.sprite.Sprite):
                                             structure.setClicked(True)
                                             unitSel = True
                                             self.player.enemyStructureSelected = structure
-                                            print("CLICKADO ")
+                                            #print("CLICKADO ")
                                             self.player.resourceSelected = None
                                             break
 
@@ -348,7 +348,7 @@ class Raton(pygame.sprite.Sprite):
                                             resource.setClicked(True)
                                             unitSel = True
                                             self.player.resourceSelected = resource
-                                            print("CLICKADO aaaa")
+                                            #print("CLICKADO aaaa")
                                             break
 
                                 if unitSel:
@@ -367,7 +367,7 @@ class Raton(pygame.sprite.Sprite):
                             for b in self.interface.button:
                                 if collides(self.rel_pos[0], self.rel_pos[1], b.getRect()):
                                     command = b.getCommand()
-                                    print(command.id)
+                                    #print(command.id)
                                     break
 
                 elif not type[2]:
