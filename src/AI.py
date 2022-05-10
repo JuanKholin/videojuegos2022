@@ -435,7 +435,7 @@ class AI():
                         toBuild = TerranBarracks(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
                         if toBuild.checkTiles(False):
                             self.data.addStructures(toBuild)
-                            toBuild.buildProcess()
+                            #toBuild.buildProcess()
                             builded = True
             if tryNew and not builded:
                 directionsTried = directionsTried + 1
@@ -495,7 +495,7 @@ class AI():
                         toBuild = TerranSupplyDepot(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
                         if toBuild.checkTiles(False):
                             self.data.addStructures(toBuild)
-                            toBuild.buildProcess()
+                            #toBuild.buildProcess()
                             builded = True
             if tryNew and not builded:
                 directionsTried = directionsTried + 1
@@ -527,7 +527,7 @@ class AI():
             self.data.resources -= TERRAN_GEYSER_STRUCTURE_MINERAL_COST
             toBuild = TerranRefinery(4, 4, self.data, self.mapa, True, geyser)
             self.data.addStructures(toBuild)
-            toBuild.buildProcess()
+            #toBuild.buildProcess()
         elif (self.geyserBuilding == PROTOSS_GEYSER_STRUCTURE) and (self.data.resources >= PROTOSS_GEYSER_STRUCTURE_MINERAL_COST):
             #print("Construye protossgeyserstructure")
             self.data.resources -= PROTOSS_GEYSER_STRUCTURE_MINERAL_COST

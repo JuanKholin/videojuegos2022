@@ -141,11 +141,11 @@ def setEntity(player, ai):
     #Recursos del mapa
     resources = []
 
-    crystal = Crystal(5, 10, 800)
-    crystal3 = Crystal(9, 10, 800)
+    crystal = Crystal(5, 11, 800)
+    crystal3 = Crystal(9, 11, 800)
 
-    crystalz = Crystal(35, 10, 400)
-    crystalz3 = Crystal(31, 10, 400)
+    crystalz = Crystal(35, 11, 400)
+    crystalz3 = Crystal(31, 11, 400)
 
 
     crystal4 = Crystal(27, 10, 800)
