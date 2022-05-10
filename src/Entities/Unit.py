@@ -699,6 +699,8 @@ class Unit(Entity):
         else:
             lastPath = self.paths[len(self.paths) - 1]
             lastTile = self.mapa.getTile(lastPath.posFin[0], lastPath.posFin[1])
+            if(lastTile.type != 0):
+                lastTile = self.getTileVecinaCercana(self.getTile(), lastTile)
             self.mapa.setLibre(self.occupiedTile)
             self.paths = calcPath(self.getPosition(), self.getTile(), lastTile, self.mapa)
             self.mapa.setVecina(self.occupiedTile, self.id)
