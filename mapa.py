@@ -54,71 +54,71 @@ def procesarInput():
 def setEntity(player, ai):
 
     structure1 = TerranBuilder(10, 72, player, mapa, False, raton)
+    structure1z = Hatchery(70, 8, player, mapa, False, raton)
+    drone = Drone(67,11, ai)
     scv = TerranWorker(13, 69, player)
-    
-    '''
-    scv2 = TerranSoldier(5, 10, player)
-    scv3 = TerranSoldier(6, 10, player)
-    scv4 = TerranSoldier(7, 10, player)
-    scv5 = TerranSoldier(8, 10, player)
-    scv6 = TerranSoldier(9, 10, player)
-    scv7 = TerranSoldier(10, 10, player)
-    scv8 = TerranWorker(11, 10, player)'''
-    structure3 = TerranSupplyDepot(20, 7, player, mapa, True)
-
-    player.setBasePlayer(structure1)
-    structure2 = TerranBarracks(15, 9, player, mapa, False)
-    structure4 = Extractor(12, 27, player, mapa, True)
-    structure5 = TerranRefinery(13, 18, player, mapa, True)
-    
+    ai.addUnits(drone)
+    ai.addStructures(structure1z)
     player.addStructures(structure1)
-    '''player.addStructures(structure2)
-    player.addStructures(structure3)
-    
-    player.addStructures(structure5)'''
-    ai.addStructures(structure4)
+    player.setBasePlayer(structure1)
     player.addUnits(scv)
-
-    aiUnits = []
-    #aiUnits.append(Drone(20, 10, ai))
-    '''aiUnits.append(Drone(25, 11, ai))
-    aiUnits.append(Zergling(27, 10, ai))
-    aiUnits.append(Zergling(27, 11, ai))
-    aiUnits.append(Zergling(27, 12, ai))
-    aiUnits.append(Zergling(27, 13, ai))
-    aiUnits.append(Zergling(27, 14, ai))'''
-
-    for unit in aiUnits:
-        ai.addUnits(unit)
-
-    aiStructures = []
-    #aiStructures.append(Hatchery(20, 12, ai, mapa, False))
-    #aiStructures.append(TerranBuilder(20, 12, ai, mapa, False, raton))
-
-    #for structure in aiStructures:
-     #   ai.addStructures(structure)
-
+    ai.setBasePlayer(structure1z)
     #Recursos del mapa
     resources = []
-    crystal2 = Crystal(32, 74, 800)
-    crystal = Crystal(30, 70, 800)
-    crystal3 = Crystal(26, 66, 800)
-    crystal4 = Crystal(25, 74, 800)
-    crystal5 = Crystal(25, 70, 800)
-    crystal6 = Crystal(28, 78, 800)
+    
+    crystal = Crystal(30, 70, 400)
+    crystal3 = Crystal(30, 66, 400)
+
+    crystalz = Crystal(50, 10, 400)
+    crystalz3 = Crystal(50, 14, 400)
+    
+    
+    crystal4 = Crystal(36, 40, 800)
+    crystal5 = Crystal(36, 36, 800)
+    crystal6 = Crystal(41, 36, 800)
+    crystal2 = Crystal(41, 40, 800)
+
+    crystal7 = Crystal(60, 60, 400)
+    crystal8 = Crystal(60, 56, 400)
+    crystal9 = Crystal(20, 20, 400)
+    crystal10 = Crystal(20, 16, 400)
     
     
     resources.append(crystal3)
     resources.append(crystal)
+
+    resources.append(crystalz3)
+    resources.append(crystalz)
+
+
     resources.append(crystal2)
     resources.append(crystal4)
     resources.append(crystal5)
     resources.append(crystal6)
+
+    resources.append(crystal7)
+    resources.append(crystal8)
+    resources.append(crystal9)
+    resources.append(crystal10)
+
     
     
+    
+    gas = Geyser(65, 65, 500)
+    resources.append(gas)
+    gas = Geyser(70, 65, 500)
+    resources.append(gas)
+    gas = Geyser(15, 15, 500)
+    resources.append(gas)
+    gas = Geyser(10, 15, 500)
+    resources.append(gas)
     gas = Geyser(6, 61, 500)
     resources.append(gas)
     gas = Geyser(4, 64, 500)
+    resources.append(gas)
+    gas = Geyser(74, 19, 500)
+    resources.append(gas)
+    gas = Geyser(76, 16, 500)
     resources.append(gas)
     escena.resources = resources
 

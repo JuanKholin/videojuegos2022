@@ -26,8 +26,8 @@ class Crystal(Resource):
         sprites = []
         for i in range(int(totalRows / rows)):
             aux = pg.Surface.subsurface(spritesheet, (0, rows * i, maxCol, rows))
-            aux = pg.transform.scale2x(aux)
-
+            #aux = pg.transform.scale2x(aux)
+            aux = pg.transform.scale(aux, [aux.get_rect().w * 2.2, aux.get_rect().h * 2])
             sprites.append(aux)
         return sprites
 

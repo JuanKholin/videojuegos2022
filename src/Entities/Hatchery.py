@@ -28,14 +28,14 @@ class Hatchery(Structure):
     tileH = 4
     frame = 8
 
-    def __init__(self, xini, yini, player, map, building):
+    def __init__(self, xini, yini, player, map, building, raton):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
         self.sprites = cargarSprites(HATCHERY_PATH, 4, False, BLUE2, 1.8, 0)
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2, 3]
         self.spawningIndex = [0, 1, 2, 3]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
-
+        self.raton = raton
         self.render = pygame.transform.scale(pygame.image.load(HATCHERY_RENDER), RENDER_SIZE)
 
         self.building = building

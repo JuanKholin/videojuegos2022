@@ -114,7 +114,7 @@ def loadStructures(structureDictionaries, player, map, raton):
         elif s["clase"] == "terranBarracks":
             player.addStructures(TerranBarracks(s["x"], s["y"], player, map, s["building"]))
         elif s["clase"] == "hatchery":
-            player.addStructures(Hatchery(s["x"], s["y"], player, map, s["building"]))
+            player.addStructures(Hatchery(s["x"], s["y"], player, map, s["building"], raton))
         elif s["clase"] == "terranSupplyDepot":
             player.addStructures(TerranSupplyDepot(s["x"], s["y"], player, map, s["building"]))
         elif s["clase"] == "terranRefinery":
