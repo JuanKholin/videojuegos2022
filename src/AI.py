@@ -1,6 +1,7 @@
 from .Utils import *
 from .Entities.TerranBarracks import *
 from .Entities.TerranSupplyDepot import *
+from .Entities.TerranRefinery import *
 from .Command import *
 from random import *
 
