@@ -67,6 +67,8 @@ class Escena():
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.BUILD_REFINERY:
                     self.p1.execute(command.id, [], None)
+                elif command.id == CommandId.BUILD_SUPPLY_DEPOT:
+                    self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.SAVE_GAME:
                     self.saveScene()
                 elif command.id == CommandId.MOVE:

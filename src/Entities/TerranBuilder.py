@@ -4,6 +4,7 @@ from .TerranSoldier import *
 from .TerranWorker import *
 from .TerranBarracks import *
 from .TerranRefinery import *
+from .TerranSupplyDepot import *
 from .Hatchery import *
 from .Structure import *
 from .. import Player, Map
@@ -122,6 +123,9 @@ class TerranBuilder(Structure):
         elif command_id == CommandId.BUILD_REFINERY and self.player.resources >= TERRAN_REFINERY_MINERAL_COST:
             self.raton.building = True
             self.raton.buildStructure = self.getTerranRefinery()
+        elif command_id == CommandId.BUILD_SUPPLY_DEPOT and self.player.resources >= TERRAN_SUPPLY_MINERAL_COST:
+            self.raton.building = True
+            self.raton.buildStructure = self.getTerranSupply()
 
     def command(self, command):
         if (command == CommandId.BUILD_BARRACKS) or (command == CommandId.BUILD_REFINERY) or (command ==
@@ -143,6 +147,9 @@ class TerranBuilder(Structure):
 
     def getTerranRefinery(self):
         return TerranRefinery(0, 0, None, self.mapa, True)
+    
+    def getTerranSupply(self):
+        return TerranSupplyDepot(0, 0, None, self.mapa, True)
 
     def toDictionary(self, map):
         #x, y = map.getTileIndex(self.originX, self.originY)
