@@ -62,7 +62,7 @@ def setEntity(player, ai):
     scv8 = TerranWorker(11, 10, player)
     structure1 = TerranBuilder(2, 7, player, mapa, False, raton)
     structure3 = TerranSupplyDepot(4, 4, player, mapa, True)
-    structure7 = Hatchery(30, 30, player, mapa, True)
+    structure7 = Hatchery(30, 30, player, mapa, True, raton)
 
     player.setBasePlayer(structure1)
     structure2 = TerranBarracks(15, 9, player, mapa, False)
