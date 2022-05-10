@@ -589,4 +589,11 @@ class AI():
 
     def findFreeGeyser(self, units, structures):
         for unit in units:
-            pass
+            geyser = self.mapa.findNearbyGeyser(unit.getTile(), 5)
+            if geyser != None:
+                return geyser
+        for structure in structures:
+            geyser = self.mapa.findNearbyGeyser(structure.getTile(), 6)
+            if geyser != None:
+                return geyser
+        return None
