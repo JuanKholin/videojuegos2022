@@ -618,7 +618,7 @@ class Unit(Entity):
                     if tile.heur(tileActual) < tileObj.heur(tileActual):
                         tileObj = tile
                 self.mapa.setLibre(self.occupiedTile)
-                self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
+                self.paths = calcPathNoLimit(self.getPosition(), tileActual, tileObj, self.mapa)
                 self.mapa.setVecina(self.occupiedTile, self.id)
                 self.occupiedTile.setOcupante(self)
                 if len(self.paths) != 0:
@@ -636,7 +636,7 @@ class Unit(Entity):
                     if tile.heur(tileActual) < tileObj.heur(tileActual):
                         tileObj = tile
                 self.mapa.setLibre(self.occupiedTile)
-                self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
+                self.paths = calcPathNoLimit(self.getPosition(), tileActual, tileObj, self.mapa)
                 self.mapa.setVecina(self.occupiedTile, self.id)
                 self.occupiedTile.setOcupante(self)
                 if len(self.paths) != 0:

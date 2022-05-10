@@ -493,6 +493,96 @@ class Map():
 
         return pathReturn
 
+    def AstarNoLimit(self, tileIni, tileObj):
+        #print("VOY DE ", tileIni.tileid, "A ",  tileObj.tileid)
+#input()
+        if tileIni.tileid == tileObj.tileid:
+            return [tileIni]
+        #if(tileObj.type != 0):
+            #tileObj = self.getTileVecinaCercana(tileIni, tileObj)
+        nodosAbiertos = []
+        nodosCerrados = []
+        nodosAbiertos.append(tileIni)
+        nodosAbiertos[0].padre = nodosAbiertos[0]
+        jaja = 0
+        broken = False
+        while (nodosAbiertos.__len__() != 0) and not broken:
+            jaja += 1
+            if jaja >= 1000:
+                broken = True
+            currentTile = Tile.Tile(nodosAbiertos[0].tileid, nodosAbiertos[0].centerx, nodosAbiertos[0].centery,
+                    0, 0, 1, 0, nodosAbiertos[0].g, nodosAbiertos[0].padre)
+            #print("heur: ",currentTile.heur(tileObj))
+            currentF = currentTile.g + currentTile.heur(tileObj)
+            currentId = 0
+            for id, tile in enumerate(nodosAbiertos):
+                tileF = tile.g + tile.heur(tileObj)
+                #print(currentTile.tileid ,":", currentTile.g,currentTile.heur(tileObj) ,tile.tileid,":", tile.g,tile.heur(tileObj))
+                if float(currentF) > float(tileF):
+                    currentTile = Tile.Tile(tile.tileid, tile.centerx, tile.centery, 0, 0, 1, currentTile.type, tile.g, tile.padre)
+                    currentF = tileF
+                    currentId = id
+            #Tenemos la tile con menos f
+            #print("estamos en", currentTile.tileid , currentTile.padre.tileid )
+#input()
+
+            nodosCerrados.append(currentTile)
+            nodosAbiertos.pop(currentId)
+            if currentTile.tileid == tileObj.tileid:
+                break
+            for tile in self.getTileVecinas(currentTile, tileObj):
+                #if tile.tileid == 644:
+                    #print("miro tile: ", tile.tileid , tile.g, tile.type)
+                ##input()
+                if Tile.mismoId(nodosCerrados, tile).tileid == -1:# No esta
+                    #print("No esta en cerrados, miro en abiertos")
+                    tileEnAbiertos = Tile.mismoId(nodosAbiertos, tile)
+                    if  tileEnAbiertos.tileid == -1: #No esta
+                        #print("no esta en abiertos")
+                        #print(tile.g)
+                        tileMapa = self.getTile(tile.centerx, tile.centery)
+                        tileMapa.padre = currentTile
+                        tileAppend = Tile.Tile(tile.tileid, tile.centerx, tile.centery,
+                             0, 0, 1, currentTile.type, currentTile.g + currentTile.heur(tile), tileMapa.padre)
+                        nodosAbiertos.append(tileAppend)
+                        self.setTilePadre(tile, currentTile)
+                        tile.padre = currentTile
+                    else:
+                        #print("esta en abiertos", tileEnAbiertos.g,"y he encontrado",currentTile.g + currentTile.heur(tile) )
+                        if tileEnAbiertos.g > (currentTile.g + currentTile.heur(tile)):
+                            #print("CHANGE")
+                            nodosAbiertos.remove(tileEnAbiertos)
+                            self.setTilePadre(tile, currentTile)
+                            tileMapa = self.getTile(tile.centerx, tile.centery)
+                            tileMapa.padre = currentTile
+                            tileAppend = Tile.Tile(tile.tileid, tile.centerx, tile.centery,
+                             0, 0, 1, currentTile.type, currentTile.g + currentTile.heur(tile), tileMapa.padre)
+                            nodosAbiertos.append(tileAppend)
+
+        path = []
+        pathReturn = []
+        for tile in nodosAbiertos:
+            tile.g = 0
+        if (nodosAbiertos.__len__() == 0) or broken:
+            print("camino no encontrado", tileObj.tileid)
+            
+            #input()
+        else:
+            #print("camino encontrado")
+            currentTile = self.getTile(tileObj.centerx, tileObj.centery)
+            while currentTile != tileIni:
+                #print(currentTile.tileid, currentTile.type)
+                path.append(currentTile)
+                currentTile = currentTile.padre
+            #print(currentTile.tileid)
+            i = path.__len__() - 1
+            #print("AAAAAAAAAAAA")
+            while i >= 0:
+                pathReturn.append(path[i])
+                i = i - 1
+
+        return pathReturn
+
     #empieza a cargar el mapa
     def load(self):
         if self.codedMap == None:
@@ -504,8 +594,6 @@ class Map():
             self.mapa.insert(i,[])#Es una matriz que representa el mapa(0 es suelo, 1 es obstaculo, 2 vecino)
             for j in range(len(self.codedMap[0])):
                 tile_sprite, type = self.loadTile(str(self.codedMap[i][j]))
-                if type == 1:
-                    print("Elevacion", i*len(self.codedMap[0]) + j)
                 tile = Tile.Tile(i*len(self.codedMap[0]) + j, self.tw * j, self.th * i, self.tw, self.th, tile_sprite, type)
                 self.mapa[i].insert(j,tile)
 
@@ -597,8 +685,8 @@ class Map():
 
     # Devuelve si estan libres todas las tiles entre esquina sup izq y inf der
     def checkIfEmptyZone(self, xUpLeft, yUpLeft, xBotRight, yBotRight):
-        if (xUpLeft >= 0) and (xUpLeft < self.w) and (yUpLeft >= 0) and (yUpLeft < self.h):
-            if (xBotRight >= 0) and (xBotRight < self.w) and (yBotRight >= 0) and (yBotRight < self.h):
+        if (xUpLeft >= 0) and (xUpLeft < self.tilesW) and (yUpLeft >= 0) and (yUpLeft < self.tilesH):
+            if (xBotRight >= 0) and (xBotRight < self.tilesW) and (yBotRight >= 0) and (yBotRight < self.tilesH):
                 for x in range(int(xUpLeft), int(xBotRight)):
                     for y in range(int(yUpLeft), int(yBotRight)):
                         if self.mapa[y][x].type != EMPTY:

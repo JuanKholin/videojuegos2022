@@ -51,7 +51,7 @@ class Worker(Unit):
                 for tile in tiles:
                     if tile.heur(ownTile) < bestTile.heur(ownTile):
                         bestTile = tile
-                self.paths = calcPath(self.getPosition(), self.getTile(), bestTile, self.mapa)
+                self.paths = calcPathNoLimit(self.getPosition(), self.getTile(), bestTile, self.mapa)
                 if len(self.paths) > 0:
                     self.moveToMining()
                     self.changeObjectiveTile()
@@ -80,7 +80,7 @@ class Worker(Unit):
                     for tile in tiles:
                         if tile.heur(ownTile) < bestTile.heur(ownTile):
                             bestTile = tile
-                    self.paths = calcPath(self.getPosition(), self.getTile(), bestTile, self.mapa)
+                    self.paths = calcPathNoLimit(self.getPosition(), self.getTile(), bestTile, self.mapa)
                     if len(self.paths) > 0:
                         self.moveToMining()
                         self.changeObjectiveTile()
@@ -185,8 +185,12 @@ class Worker(Unit):
                 for tile in tilesCasa:
                     if tile.heur(tileActual) < tileObj.heur(tileActual):
                         tileObj = tile
-                self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
-                self.changeToOreTransporting()
+                self.paths = calcPathNoLimit(self.getPosition(), tileActual, tileObj, self.mapa)
+                if len(self.paths) != 0:
+                    self.changeObjectiveTile()
+                    self.changeToOreTransporting()
+                else:
+                    self.changeToStill()    
         elif self.count >= self.framesToRefresh:
             self.count = 0
             self.updateMiningImage()
@@ -210,8 +214,12 @@ class Worker(Unit):
                 for tile in tilesCasa:
                     if tile.heur(tileActual) < tileObj.heur(tileActual):
                         tileObj = tile
-                self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
-                self.changeToGasTransporting()
+                self.paths = calcPathNoLimit(self.getPosition(), tileActual, tileObj, self.mapa)
+                if len(self.paths) != 0:
+                    self.changeObjectiveTile()
+                    self.changeToGasTransporting()
+                else:
+                    self.changeToStill()
 
     # Pasa de frame en una animacion de minado
     def updateMiningImage(self):
@@ -290,8 +298,13 @@ class Worker(Unit):
                             if tile.heur(tileActual) < tileObj.heur(tileActual):
                                 tileObj = tile
 
-                        self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
-                        self.changeToMining(self.resource)
+                        self.paths = calcPathNoLimit(self.getPosition(), tileActual, tileObj, self.mapa)
+                        if len(self.paths) != 0:
+                            self.changeObjectiveTile()
+                            self.changeToMining(self.resource)
+                        else:
+                            self.changeToStill()
+                        
                                    
 
     def finishGasPath(self):
@@ -318,8 +331,13 @@ class Worker(Unit):
                         if tile.heur(tileActual) < tileObj.heur(tileActual):
                             tileObj = tile
 
-                    self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
-                    self.changeToExtracting(self.resource)     
+                    self.paths = calcPathNoLimit(self.getPosition(), tileActual, tileObj, self.mapa)
+                    if len(self.paths) != 0:
+                        self.changeObjectiveTile()
+                        self.changeToExtracting(self.resource)  
+                    else:
+                        self.changeToStill()
+                       
             
     
     # Pasa de frame en una animacion de minado

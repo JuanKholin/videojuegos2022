@@ -4,7 +4,7 @@ import math
 from re import T
 import pygame
 
-DEBBUG = True
+DEBBUG = False
 
 class System_State(Enum):
     MAINMENU = auto()
@@ -460,6 +460,19 @@ def aux(screen):
 
 def calcPath(posini, tileIni, tileObj, mapa):
         pathA = mapa.Astar(tileIni,tileObj)
+        if pathA.__len__() > 0:
+            pathA.pop(0)
+        posIni = (posini[0], posini[1])
+        path = []
+        for tile in pathA:
+            posFin = (tile.centerx, tile.centery)
+            path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
+            path.append(path1)
+            posIni = posFin
+        return path
+
+def calcPathNoLimit(posini, tileIni, tileObj, mapa):
+        pathA = mapa.AstarNoLimit(tileIni,tileObj)
         if pathA.__len__() > 0:
             pathA.pop(0)
         posIni = (posini[0], posini[1])

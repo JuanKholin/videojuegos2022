@@ -54,16 +54,14 @@ def procesarInput():
 def setEntity(player, ai):
 
     structure1 = TerranBuilder(10, 72, player, mapa, False, raton)
-    structure2 = TerranBarracks(17, 67, player, mapa, False)
-    structure1z = Hatchery(70, 8, ai, mapa, False, raton)
-    drone = Drone(ai, 67,11)
+    #structure2 = TerranBarracks(17, 67, player, mapa, False)
+    structure1z = TerranBuilder(70, 8, ai, mapa, False, raton)
+    drone = TerranWorker(ai, 67,11)
     scv = TerranWorker(player, 13, 69)
-    '''
     ai.addUnits(drone)
     ai.addStructures(structure1z)
-    ai.setBasePlayer(structure1z)'''
+    ai.setBasePlayer(structure1z)
     player.addStructures(structure1)
-    player.addStructures(structure2)
     player.setBasePlayer(structure1)
     player.addUnits(scv)
 
@@ -230,7 +228,7 @@ player1 = Player.Player([], [], 400, keyMap, commandMap, mapa, True)
 
 # Player 2 AKA IA
 player2 = Player.Player([], [], 4000, {}, {}, mapa, False)
-aI = AI(player2, Race.TERRAN, EASY)
+
 
 # Camara
 # pre: mapa tan grande como ventana
@@ -243,7 +241,11 @@ camera = Camera(0, 0, SCREEN_HEIGHT - 160, SCREEN_WIDTH)
 raton = Raton.Raton(player1, player2, mapa)
 p1Interface = Interface(player1, player2, raton)
 raton.addInterface(p1Interface)
+if Utils.DEBBUG == False:
+    aI = AI(player2, Race.TERRAN, EASY)
 
+else:
+    aI = AI(player2, Race.TERRAN, NULA)
 escena = Escena(player1, player2, aI, [], camera, raton, p1Interface, [])
 raton.setEscena(escena)
 
