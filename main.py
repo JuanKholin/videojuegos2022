@@ -52,7 +52,7 @@ def procesarInput():
 
 
 def setEntity(player, ai):
-    scv = TerranSoldier(4, 10, player)
+    scv = TerranSoldier(2, 2, player)
     scv2 = TerranSoldier(5, 10, player)
     scv3 = TerranSoldier(6, 10, player)
     scv4 = TerranSoldier(7, 10, player)
@@ -60,19 +60,25 @@ def setEntity(player, ai):
     scv6 = TerranSoldier(9, 10, player)
     scv7 = TerranSoldier(10, 10, player)
     scv8 = TerranWorker(11, 10, player)
-    print("ID del scv 4", scv4.id)
-    structure1 = TerranBuilder(6, 7, player, mapa, False, raton)
-    structure3 = TerranSupplyDepot(20, 7, player, mapa, True)
+    structure1 = TerranBuilder(2, 7, player, mapa, False, raton)
+    structure3 = TerranSupplyDepot(4, 4, player, mapa, True)
+    structure7 = Hatchery(30, 30, player, mapa, True)
 
     player.setBasePlayer(structure1)
     structure2 = TerranBarracks(15, 9, player, mapa, False)
+    gas2 = Geyser(13, 20, 50)
     structure4 = Extractor(12, 27, player, mapa, True)
-    structure5 = TerranRefinery(13, 18, player, mapa, True)
+    structure5 = TerranRefinery(13, 18, ai, mapa, True, gas2)
+
+    a = structure3.getPosition()
+    print(a[0] / 40, a[1] /40)
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addStructures(structure3)
+    
+    player.addStructures(structure7)
     ai.addStructures(structure4)
-    player.addStructures(structure5)
+    ai.addStructures(structure5)
     player.addUnits(scv)
     player.addUnits(scv2)
     player.addUnits(scv3)
@@ -91,11 +97,11 @@ def setEntity(player, ai):
     aiUnits.append(Zergling(27, 13, ai))
     aiUnits.append(Zergling(27, 14, ai))'''
 
-    for unit in aiUnits:
-        ai.addUnits(unit)
+    #for unit in aiUnits:
+    #    ai.addUnits(unit)
 
     aiStructures = []
-    #aiStructures.append(Hatchery(20, 12, ai, mapa, False))
+    aiStructures.append(TerranBarracks(12, 6, ai, mapa, False))
     aiStructures.append(TerranBuilder(20, 12, ai, mapa, False, raton))
 
     for structure in aiStructures:
@@ -114,6 +120,7 @@ def setEntity(player, ai):
     resources.append(crystal3)
     resources.append(crystal4)
     resources.append(gas)
+    resources.append(gas2)
     escena.resources = resources
 
 def update():
@@ -203,7 +210,7 @@ player1 = Player.Player([], [], 400, keyMap, commandMap, mapa, True)
 
 
 # Player 2 AKA IA
-player2 = Player.Player([], [], 4000, {}, {}, mapa, False)
+player2 = Player.Player([], [], 400, {}, {}, mapa, False)
 aI = AI(player2, Race.TERRAN, HARD)
 
 # Camara

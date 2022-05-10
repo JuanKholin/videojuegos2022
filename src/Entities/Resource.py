@@ -15,6 +15,9 @@ class Resource():
 
     def disable(self):
         self.enable = False
+        
+    def setEnable(self):
+        self.enable = True
 
     def setClicked(self, click):
         self.clicked = click

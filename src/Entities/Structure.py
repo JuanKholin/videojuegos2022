@@ -23,15 +23,19 @@ class Structure(Entity.Entity):
         self.player = player
         self.xIni = xini
         self.yIni = yini
-        originX = (xini - round(self.tileW/2))*self.mapa.tw
-        originY = (yini - round(self.tileH/2))*self.mapa.th
+        originX = (xini - self.CENTER_TILE[0])*self.mapa.tw
+        originY = (yini - self.CENTER_TILE[1])*self.mapa.th
         self.rectn = pygame.Rect(originX, originY + self.heightPad/2, self.tileW*self.mapa.tw - 1, self.tileH*self.mapa.th - self.heightPad/2 - 1)
         self.esEstructura = True
         self.state = BuildingState.BUILDING
         self.lastAttacker = None
+        
+    def __del__(self):
+        print("fin")
+        pass
 
     def getPosition(self):
-        return (self.x+self.rectn.w/2, self.y+self.rectn.h/2)
+        return (self.x, self.y)
 
     def update(self):
         if self.state == BuildingState.BUILDING:
@@ -73,22 +77,26 @@ class Structure(Entity.Entity):
         self.state = BuildingState.SPAWNING
         self.frame = 0
         self.count = 0
-        self.image = self.sprites[self.frames[self.spawningFrames[self.frame]]]
+        self.image = self.sprites[self.frame[self.spawningFrames[self.frame]]]
 
     # Pasa a empezar a derrumbarse, crashear, hp a 0 y esas cosas
     def changeToCollapsing(self):
-        #print("COLLAPSING ", self.x, " ", self.y)
         self.state = BuildingState.COLLAPSING
-        self.frame = 0
         self.count = 0
-        self.image = self.sprites[self.frames[self.collapsingFrames[self.frame]]]
+        self.index = 6
+        #self.image = self.sprites[self.frames[self.collapsingFrames[self.frame]]]
 
     # Pasa a destruido del todo, no quedan ni los restos
     def changeToDestroyed(self):
         #print("DESTROYED ", self.x, " ", self.y)
         self.state = BuildingState.DESTROYED
-        self.mapa.setLibre(self.getTile())
+        self.index = 0
+        tiles = self.mapa.getRectTiles(self.getRect())
+        for tile in tiles: 
+            self.mapa.setLibre(tile)
         self.clicked = False
+        self.player.structures.remove(self)
+        self.__del__()
 
     def getOptions(self):
         return []
@@ -165,7 +173,13 @@ class Structure(Entity.Entity):
                     self.state = BuildingState.OPERATIVE
 
     def updateCollapsing(self):
-        pass
+        print("hola", self.frame)
+        if frame(self.frame) == 1:
+            self.index += 1
+            if self.index == self.nSprites + 10:
+                self.changeToDestroyed()
+        
+
 
     def draw(self, screen, camera):
         r = self.getRect()
@@ -173,11 +187,15 @@ class Structure(Entity.Entity):
         if self.clicked:
             if self.player.isPlayer:
                 pygame.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
-                hp = pygame.transform.chop(pygame.transform.scale(HP, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
             else:
                 pygame.draw.ellipse(screen, RED, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
+        if self.hp < self.maxHp:
+            if self.player.isPlayer:
+                hp = pygame.transform.chop(pygame.transform.scale(HP, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
+            else:
                 hp = pygame.transform.chop(pygame.transform.scale(HP2, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
             screen.blit(hp, [r.x + r.w/2 - camera.x - hp.get_rect().w/2, r.y + r.h - camera.y])
+            
 
         #sombra
         aux = pygame.mask.from_surface(self.image, 0)
@@ -211,7 +229,7 @@ class Structure(Entity.Entity):
     def drawBuildTiles(self, screen, camera, tiles):
         for tile in tiles:
             r = tile.getRect()
-            if tile.type == EMPTY:
+            if tile.type == EMPTY and tile.visible:
                 pygame.draw.rect(screen, GREEN, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
             else:
                 pygame.draw.rect(screen, RED, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
@@ -275,7 +293,7 @@ class Structure(Entity.Entity):
         tiles_set = set(tiles)
         if len(tiles_set) == self.tileH*self.tileW:
             for tile in tiles_set:
-                if tile.type != EMPTY:
+                if tile.type != EMPTY or not tile.visible:
                     ok = False
                     break
         else:
@@ -286,7 +304,7 @@ class Structure(Entity.Entity):
         pass
 
     def generateUnit(self, unit):
-        print("genero unidad")
+        #print("genero unidad")
         if len(self.training) == 0:
             self.generationStartTime = getGlobalTime()
         self.training.append(unit)
@@ -320,6 +338,7 @@ class Structure(Entity.Entity):
     def beingAttacked(self, damage, unit):
         self.lastAttacker = unit
         if self.hp <= damage:
+            self.hp -= damage
             self.changeToCollapsing()
         else:
             self.hp -= damage
