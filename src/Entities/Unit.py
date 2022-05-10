@@ -3,6 +3,8 @@ import math
 from .Entity import *
 from ..Utils import *
 from ..Command import *
+from ..Lib import *
+from ..Camera import *
 
 # Representa a una unidad movil de cualquiera de las razas
 class Unit(Entity):
@@ -265,7 +267,7 @@ class Unit(Entity):
     def updateDying(self):
         #self.updateOwnSpace()
         self.count += 1
-        if self.count >= self.framesToRefresh:
+        if frame(10) == 1:
             self.count = 0
             if self.frame < (len(self.dieFrames) - 1):
                 self.updateDyingImage()
@@ -306,6 +308,8 @@ class Unit(Entity):
                     self.counter = 0
                     self.updateAttackingImage()
                     if self.frame == 0:
+                        if inCamera(self.getPosition()):
+                            playSound(self.attackSound)
                         self.makeAnAttack()
                         self.attackCD = self.cooldown
         else:
@@ -536,6 +540,8 @@ class Unit(Entity):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.dieFrames[self.frame]][self.dirOffset[self.dir]]]
+        if inCamera(self.getPosition()):
+            playSound(self.deadSound)
 
     # Pasa a estar muerto del todo (puf, a lo Thanos)
     def changeToDead(self):

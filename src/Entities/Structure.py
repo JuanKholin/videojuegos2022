@@ -2,6 +2,7 @@ import pygame
 from . import Entity
 from .. import Player, Map
 from ..Command import *
+from ..Camera import *
 from ..Utils import *
 from ..Music import *
 from ..Lib import *
@@ -20,6 +21,7 @@ class Structure(Entity.Entity):
     indexCount = 0
     options = []
     deadSound = terranStructureDead
+    selectedSound = structureSelectedSound
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, mapa, player, capacity):
         Entity.Entity.__init__(self, hp, xini*mapa.tw, yini*mapa.th, mineralCost, generationTime, takeID(), player)
@@ -184,6 +186,8 @@ class Structure(Entity.Entity):
                 if len(libres) > 0:
                     unit.spawn(libres[0].centerx, libres[0].centery)
                     self.player.addUnits(unit)
+                    if inCamera([libres[0].centerx, libres[0].centery]):
+                        playSound(unit.generateSound)
                     self.generationCount = 0
                     del self.training[0]
                     if len(self.training) == 0:
@@ -356,6 +360,7 @@ class Structure(Entity.Entity):
         self.lastAttacker = unit
         if self.hp <= damage:
             self.hp -= damage
+            #if inCamera(self.getPosition()):
             playSound(self.deadSound)
             self.changeToCollapsing()
         else:

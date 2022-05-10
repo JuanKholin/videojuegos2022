@@ -6,12 +6,13 @@ from .Entity import *
 from ..Utils import *
 from .Worker import *
 from ..Lib import *
+from ..Music import *
 
 # Constantes
-HP = 40
+HP = 60
 ATTACK_INFO = [0, 0, 0]
-ATTACK_INFO[DAMAGE_IND] = 1
-ATTACK_INFO[COOLDOWN_IND] = 7
+ATTACK_INFO[DAMAGE_IND] = 5
+ATTACK_INFO[COOLDOWN_IND] = 15
 ATTACK_INFO[RANGE_IND] = 67
 MINE_POWER = 8
 MINERAL_COST = 50
@@ -55,7 +56,9 @@ PADDING = 110
 
 class TerranWorker(Worker):
     
-    generateSound = None
+    generateSound = workerGenerateSound
+    deadSound = workerDeadSound
+    attackSound = workerAttackSound
     
     def __init__(self, player, xIni = -1, yIni = -1):
         Worker.__init__(self, HP, xIni * TILE_WIDTH + 20, yIni * TILE_HEIGHT, MINERAL_COST,
@@ -69,7 +72,7 @@ class TerranWorker(Worker):
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         self.sprites = Entity.divideSpritesheetByRows(spritesheet,
-                SPRITE_PIXEL_ROWS, SCALE) + Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
+                SPRITE_PIXEL_ROWS, SCALE) + Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200, (80, 80))
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
