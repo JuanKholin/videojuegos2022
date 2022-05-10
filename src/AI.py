@@ -608,7 +608,7 @@ class AI():
             self.buildProtossBarracks(structures)
 
     # Manda construir un depot en funcion de la raza
-    def buildBarracks(self, structures):
+    def buildDepot(self, structures):
         if (self.depot == ZERG_DEPOT) and (self.data.resources >= ZERG_DEPOT_MINERAL_COST):
             #print("Construye zergdepot")
             self.data.resources -= ZERG_DEPOT_MINERAL_COST
