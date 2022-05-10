@@ -18,6 +18,7 @@ class System_State(Enum):
     BUILDING_MODE = auto()
     EXIT = auto()
     INTRO = auto()
+    SETTINGS = auto()
 
 class Race(Enum):
     ZERG = auto()
@@ -40,7 +41,7 @@ def getGameState2():
 def setGameState(newState):
     global state
     state = newState
-    
+
 def setGameState2(newState):
     global state2
     state2 = newState
@@ -237,6 +238,11 @@ EXIT_POS = [650, 420]
 EXIT_FB = "SPRITE/mainMenu/Exit/Spanish/exitones"
 EXIT_FB_N = 30
 EXIT_FB_POS = [680, 420]
+
+AJUSTES_SONIDO_TEXT_POS = [140, 656]
+AJUSTES_ATAJOS_TEXT_POS = [137, 704]
+AJUSTES_SONIDO_POS = [35, 636]
+AJUSTES_ATAJOS_POS = [35, 686]
 
     #############
     #GAME SELECT#

@@ -17,7 +17,7 @@ class Structure(Entity.Entity):
     count = 0
     indexCount = 0
 
-    def __init__(self, hp, mineralCost, generationTime, xini, yini, mapa, player):
+    def __init__(self, hp, mineralCost, generationTime, xini, yini, mapa, player, capacity):
         Entity.Entity.__init__(self, hp, xini*mapa.tw, yini*mapa.th, mineralCost, generationTime, takeID(), player)
         self.mapa = mapa
         self.player = player
@@ -29,8 +29,11 @@ class Structure(Entity.Entity):
         self.esEstructura = True
         self.state = BuildingState.BUILDING
         self.lastAttacker = None
-        self.capacity = 0
-        
+        self.capacity = capacity
+        self.player.limitUnits += capacity
+        print("TENGO CAPACIDAD ", self.capacity, "Y SOY ", self.player, " Y ESTOY EN ", self.xIni, self.yIni)
+
+
     def __del__(self):
         print("fin")
         pass
@@ -93,9 +96,10 @@ class Structure(Entity.Entity):
         self.state = BuildingState.DESTROYED
         self.index = 0
         tiles = self.mapa.getRectTiles(self.getRect())
-        for tile in tiles: 
+        for tile in tiles:
             self.mapa.setLibre(tile)
         self.clicked = False
+        self.player.limitUnits -= self.capacity
         self.player.structures.remove(self)
         self.__del__()
 
@@ -161,10 +165,7 @@ class Structure(Entity.Entity):
             self.indexCount = (self.indexCount + 1) % len(self.spawningIndex)
             self.index = self.spawningIndex[self.indexCount]
         if self.generationCount >= CLOCK_PER_SEC * self.training[0].generationTime:
-            limit = 0
-            for structure in self.player.structures:
-                limit += structure.getUnitCapacity()
-            if len(self.player.units) + 1 <= (self.player.limitUnits + limit):
+            if len(self.player.units) + 1 <= self.player.limitUnits:
                 unit = self.training[0]
                 tile = self.mapa.getTile(self.x, self.y)
 
@@ -174,7 +175,7 @@ class Structure(Entity.Entity):
                     self.player.addUnits(unit)
                 self.generationCount = 0
                 del self.training[0]
-                
+
             else:
                 for unit in self.training:
                     self.training.remove(unit)
@@ -187,7 +188,7 @@ class Structure(Entity.Entity):
             self.index += 1
             if self.index == self.nSprites + 10:
                 self.changeToDestroyed()
-        
+
 
 
     def draw(self, screen, camera):
@@ -204,7 +205,7 @@ class Structure(Entity.Entity):
             else:
                 hp = pygame.transform.chop(pygame.transform.scale(HP2, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
             screen.blit(hp, [r.x + r.w/2 - camera.x - hp.get_rect().w/2, r.y + r.h - camera.y])
-            
+
 
         #sombra
         aux = pygame.mask.from_surface(self.image, 0)

@@ -10,6 +10,7 @@ from .Entity import *
 
 HP = 200
 GENERATION_TIME = 5
+CAPACITY = 0
 
 class Extractor(Structure):
     TILES_WIDTH = 4
@@ -31,15 +32,14 @@ class Extractor(Structure):
     nSprites = 4
 
     def __init__(self, xini, yini, player, map, building):
-        Structure.__init__(self, HP, EXTRACTOR_MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
+        Structure.__init__(self, HP, EXTRACTOR_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
         self.sprites = cargarSprites(EXTRACTOR_PATH, self.nSprites, False, BLUE2, 1.1)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.sprites += deadSprites
-        self.capacity = 0
-        
+
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2, 3]
         self.spawningIndex = [0, 1, 2, 3]
@@ -78,4 +78,3 @@ class Extractor(Structure):
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary
-        

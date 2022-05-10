@@ -12,6 +12,7 @@ MINERAL_COST = 50
 WIDTH = 6
 HEIGHT = 4
 HP = 200
+CAPACITY = 10
 
 class Hatchery(Structure):
     TILES_HEIGHT = 4
@@ -31,14 +32,13 @@ class Hatchery(Structure):
     nSprites = 4
 
     def __init__(self, xini, yini, player, map, building, raton):
-        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
+        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
         self.sprites = cargarSprites(HATCHERY_PATH, self.nSprites, False, BLUE2, 1.8, 0)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.sprites += deadSprites
-        self.capacity = 10
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2, 3]
         self.spawningIndex = [0, 1, 2, 3]

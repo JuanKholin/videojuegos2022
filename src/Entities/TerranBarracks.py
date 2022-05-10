@@ -10,7 +10,7 @@ from ..Utils import *
 
 HP = 200
 GENERATION_TIME = 5
-
+CAPACITY = 5
 
 class TerranBarracks(Structure):
     TILES_WIDTH = 4
@@ -32,22 +32,21 @@ class TerranBarracks(Structure):
     nSprites = 6
 
     def __init__(self, xini, yini, player, map, building):
-        Structure.__init__(self, HP, TERRAN_BARRACKS_MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
-        
+        Structure.__init__(self, HP, TERRAN_BARRACKS_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
+
         self.sprites = cargarSprites(TERRAN_BARRACKS_PATH, self.nSprites, False, WHITE, 1.1)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.sprites += deadSprites
-        
+
         self.image = self.sprites[self.index]
         self.operativeIndex = [4]
         self.spawningIndex = [4, 5]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
 
         self.render = pygame.transform.scale(pygame.image.load(BARRACKS_RENDER), RENDER_SIZE)
-        self.capacity = 5
 
         self.building = building
         if building:
@@ -59,6 +58,7 @@ class TerranBarracks(Structure):
         self.paths = []
 
         self.type = TERRAN_BARRACKS
+        print("SOY UNA BARRACA Y TENGO CAPACISAS ", self.capacity)
 
     def execute(self, command_id):
         #if self.clicked:

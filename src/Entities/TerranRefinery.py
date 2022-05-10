@@ -8,6 +8,7 @@ from ..Utils import *
 
 HP = 200
 GENERATION_TIME = 5
+CAPACITY = 0
 
 class TerranRefinery(Structure):
     TILES_WIDTH = 4
@@ -29,7 +30,7 @@ class TerranRefinery(Structure):
     nSprites = 5
 
     def __init__(self, xini, yini, player, map, building, gas = None):
-        Structure.__init__(self, HP, TERRAN_REFINERY_MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
+        Structure.__init__(self, HP, TERRAN_REFINERY_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
         self.sprites = cargarSprites(TERRAN_REFINERY_PATH, self.nSprites, False, BLACK)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
@@ -37,7 +38,7 @@ class TerranRefinery(Structure):
 
         self.sprites += deadSprites
         #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
-        
+
         self.type = TERRAN_GEYSER_STRUCTURE
 
         self.image = self.sprites[self.index]
@@ -68,7 +69,7 @@ class TerranRefinery(Structure):
 
     def getOrder(self):
         return CommandId.EXTRACT_GAS
-    
+
     def changeToDestroyed(self):
         #print("DESTROYED ", self.x, " ", self.y)
         self.state = BuildingState.DESTROYED

@@ -15,6 +15,7 @@ HP = 200
 GENERATION_TIME = 40
 MINERAL_COST = 600
 LIMIT_MINADO = 1600
+CAPACITY = 10
 
 class TerranBuilder(Structure):
     TILES_HEIGHT = 4
@@ -34,15 +35,14 @@ class TerranBuilder(Structure):
     nSprites = 6
 
     def __init__(self, xini, yini, player, map, building, raton):
-        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player)
+        Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
         self.sprites = cargarSprites(TERRAN_BUILDER_PATH, self.nSprites, False, WHITE, 1.5)
-        
+
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.sprites += deadSprites
-        self.capacity = 10
 
         #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
         self.raton = raton
@@ -72,6 +72,8 @@ class TerranBuilder(Structure):
         self.mineGasUpCost = 50
 
         self.type = TERRAN_BASE
+        print("ESTOY SIENDO CREADO ", self.toDictionary(self.mapa)['clase'])
+
 
     #def generateUnit(self, unit):
     #    pass
@@ -82,10 +84,7 @@ class TerranBuilder(Structure):
     def execute(self, command_id):
         #if self.clicked:
         if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_WORKER) and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
-            limit = 0
-            for structure in self.player.structures:
-                limit += structure.getUnitCapacity()
-            if len(self.player.units) + 1 <= (self.player.limitUnits + limit):
+            if len(self.player.units) + 1 <= (self.player.limitUnits):
                 self.player.resources -= TERRAN_WORKER_MINERAL_COST
                 terranWorker = TerranWorker(self.player)
                 print("xd")

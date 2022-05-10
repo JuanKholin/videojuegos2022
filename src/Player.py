@@ -153,7 +153,8 @@ class Player():
             "commandMap": self.commandMap,
             "dañoUpgrade": self.dañoUpgrade,
             "armorUpgrade": self.armorUpgrade,
-            "mineUpgrade": self.mineUpgrade
+            "mineUpgrade": self.mineUpgrade,
+            "limitUnits": self.limitUnits
         }
 
     def getMapa(self):

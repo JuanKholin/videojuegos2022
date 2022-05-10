@@ -55,7 +55,7 @@ def setEntity(player, ai):
 
     structure1 = TerranBuilder(10, 72, player, mapa, False, raton)
     structure2 = TerranBarracks(17, 67, player, mapa, False)
-    structure1z = Hatchery(70, 8, player, mapa, False, raton)
+    structure1z = Hatchery(70, 8, ai, mapa, False, raton)
     drone = Drone(ai, 67,11)
     scv = TerranWorker(player, 13, 69)
     '''
@@ -66,17 +66,17 @@ def setEntity(player, ai):
     player.addStructures(structure2)
     player.setBasePlayer(structure1)
     player.addUnits(scv)
-    
+
     #Recursos del mapa
     resources = []
-    
+
     crystal = Crystal(30, 70, 400)
     crystal3 = Crystal(30, 66, 400)
 
     crystalz = Crystal(50, 10, 400)
     crystalz3 = Crystal(50, 14, 400)
-    
-    
+
+
     crystal4 = Crystal(36, 40, 800)
     crystal5 = Crystal(36, 36, 800)
     crystal6 = Crystal(41, 36, 800)
@@ -86,8 +86,8 @@ def setEntity(player, ai):
     crystal8 = Crystal(60, 56, 400)
     crystal9 = Crystal(20, 20, 400)
     crystal10 = Crystal(20, 16, 400)
-    
-    
+
+
     resources.append(crystal3)
     resources.append(crystal)
 
@@ -105,9 +105,9 @@ def setEntity(player, ai):
     resources.append(crystal9)
     resources.append(crystal10)
 
-    
-    
-    
+
+
+
     gas = Geyser(65, 65, 500)
     resources.append(gas)
     gas = Geyser(70, 65, 500)

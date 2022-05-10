@@ -69,6 +69,7 @@ def loadPlayer(playerDictionary, map, isPlayer):
     p.dañoUpgrade = playerDictionary["dañoUpgrade"]
     p.armorUpgrade = playerDictionary["armorUpgrade"]
     p.mineUpgrade = playerDictionary["mineUpgrade"]
+    p.limitUnits = playerDictionary["limitUnits"]
     return p
 
 #pre: unitDictionaries: es una lista de diccionarios con la info de las unidades

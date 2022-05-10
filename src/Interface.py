@@ -74,8 +74,12 @@ class Interface():
 
         self.singleRect = pg.Rect(SINGLE_PLAYER_POS[0], SINGLE_PLAYER_POS[1], self.single[0].get_width(), self.single[0].get_height())
         self.exitRect = pg.Rect(EXIT_POS[0], EXIT_POS[1], self.exit[0].get_width(), self.exit[0].get_height())
+        self.ajustesSonidoRect = pg.Rect(AJUSTES_SONIDO_POS[0], AJUSTES_SONIDO_POS[1], 220, 40)
+        self.ajustesAtajosRect = pg.Rect(AJUSTES_ATAJOS_POS[0], AJUSTES_ATAJOS_POS[1], 200, 40)
         self.singlePress = False
         self.exitPress = False
+        self.ajustesAtajosPress = False
+        self.ajustesSonidoPress = False
 
         self.heroeSprites = cargarSprites(HEROE_PATH, HEROE_N, False, None, 1.3)
         self.heroeIndex = 0
@@ -177,7 +181,7 @@ class Interface():
                     #stopMusic()
                     self.singlePress = False
 
-            if self.mouse.isCollide(self.exitRect):
+            elif self.mouse.isCollide(self.exitRect):
                 if not self.soundPlayed:
                     playSound(botonSound)
                     self.soundPlayed = True
@@ -189,7 +193,34 @@ class Interface():
                     Utils.state = System_State.EXIT
                     stopMusic()
                     self.exitPress = False
-            elif not singleCollide:
+
+            elif self.mouse.isCollide(self.ajustesSonidoRect):
+                if not self.soundPlayed:
+                    playSound(botonSound)
+                    self.soundPlayed = True
+                endPos = self.mouse.getPosition()
+                if not self.ajustesSonidoPress and press and Raton.collides(iniPos[0], iniPos[1], self.ajustesSonidoRect):
+                    self.ajustesSonidoPress = True
+                elif self.mouse.getClick() and self.ajustesSonidoRectPress and Raton.collides(endPos[0], endPos[1], self.ajustesSonidoRect):
+                    print("Seleccionado exit")
+                    Utils.state = System_State.SETTINGS
+                    stopMusic()
+                    self.ajustesSonidoPress = False
+
+            elif self.mouse.isCollide(self.ajustesAtajosRect):
+                if not self.soundPlayed:
+                    playSound(botonSound)
+                    self.soundPlayed = True
+                endPos = self.mouse.getPosition()
+                if not self.ajustesAtajosPress and press and Raton.collides(iniPos[0], iniPos[1], self.ajustesAtajosRect):
+                    self.ajustesAtajosPress = True
+                elif self.mouse.getClick() and self.ajustesAtajosPress and Raton.collides(endPos[0], endPos[1], self.ajustesAtajosRect):
+                    print("Seleccionado exit")
+                    Utils.state = System_State.SETTINGS
+                    stopMusic()
+                    self.ajustesAtajosPress = False
+
+            else:
                 self.soundPlayed = False
 
             if self.mouse.getClick():
@@ -222,7 +253,7 @@ class Interface():
                     escena.setSelf(_escena)
                     if Utils.DEBBUG == False:
                         aI = AI(escena.p2, Race.ZERG, EASY)
-                        
+
                     else:
                         aI = AI(escena.p2, Race.ZERG, NULA)
                     escena.aI = aI
@@ -392,19 +423,31 @@ class Interface():
             if self.mouse.isCollide(self.singleRect):
                 screen.blit(self.singleSelected[self.idSingleSelected], SINGLE_PLAYER_FB_POS)
                 screen.blit(self.single[self.idSingle], SINGLE_PLAYER_POS)
-                muestra_texto(screen, 'monotypecorsiva', "single player", GREEN2, MAIN_MENU_TEXT_SIZE, SINGLE_TEXT_POS)
+                muestra_texto(screen, 'monotypecorsiva', "Un jugador", GREEN2, MAIN_MENU_TEXT_SIZE, SINGLE_TEXT_POS)
             else:
                 screen.blit(self.single[self.idSingle], SINGLE_PLAYER_POS)
-                muestra_texto(screen, 'monotypecorsiva', "single player", GREEN3, MAIN_MENU_TEXT_SIZE, SINGLE_TEXT_POS)
+                muestra_texto(screen, 'monotypecorsiva', "Un jugador", GREEN3, MAIN_MENU_TEXT_SIZE, SINGLE_TEXT_POS)
             #screen.blit(self.single[self.idSingle], SINGLE_PLAYER_POS)
 
             #Boton Exit
             screen.blit(self.exit[self.idExit], EXIT_POS)
             if self.mouse.isCollide(self.exitRect):
                 screen.blit(self.exitSelected[self.idExitSelected], EXIT_FB_POS)
-                muestra_texto(screen, str('monotypecorsiva'), "exit", GREEN2, MAIN_MENU_TEXT_SIZE, EXIT_TEXT_POS)
+                muestra_texto(screen, str('monotypecorsiva'), "Salir", GREEN2, MAIN_MENU_TEXT_SIZE, EXIT_TEXT_POS)
             else:
-                muestra_texto(screen, str('monotypecorsiva'), "exit", GREEN3, MAIN_MENU_TEXT_SIZE, EXIT_TEXT_POS)
+                muestra_texto(screen, str('monotypecorsiva'), "Salir", GREEN3, MAIN_MENU_TEXT_SIZE, EXIT_TEXT_POS)
+
+            #Boton ajustes
+            if self.mouse.isCollide(self.ajustesSonidoRect):
+                muestra_texto(screen, str('monotypecorsiva'), "Ajustes de sonido", GREEN2, MAIN_MENU_TEXT_SIZE + 5, AJUSTES_SONIDO_TEXT_POS)
+            else:
+                muestra_texto(screen, str('monotypecorsiva'), "Ajustes de sonido", GREEN3, MAIN_MENU_TEXT_SIZE + 5, AJUSTES_SONIDO_TEXT_POS)
+
+            if self.mouse.isCollide(self.ajustesAtajosRect):
+                muestra_texto(screen, str('monotypecorsiva'), "Atajos de teclado", GREEN2, MAIN_MENU_TEXT_SIZE + 5, AJUSTES_ATAJOS_TEXT_POS)
+            else:
+                muestra_texto(screen, str('monotypecorsiva'), "Atajos de teclado", GREEN3, MAIN_MENU_TEXT_SIZE + 5, AJUSTES_ATAJOS_TEXT_POS)
+
 
         elif Utils.state == System_State.GAMESELECT:
             screen.blit(self.gameSelect, [0, 0])
@@ -486,10 +529,8 @@ class Interface():
             screen.blit(self.resources[1], (RESOURCES_COUNT_X + 100, 3))
             muestra_texto(screen, times, str(self.player.gas), GREEN4, 30, (RESOURCES_COUNT_X + 160, 20))
             screen.blit(self.resources[2], (RESOURCES_COUNT_X + 200, 3))
-            limit = 0
-            for structure in self.player.structures:
-                limit += structure.getUnitCapacity()
-            muestra_texto(screen, times, str(self.player.units.__len__()) + "/" + str(self.player.limitUnits + limit), GREEN4, 28, (RESOURCES_COUNT_X + 260, 18))
+
+            muestra_texto(screen, times, str(self.player.units.__len__()) + "/" + str(self.player.limitUnits), GREEN4, 28, (RESOURCES_COUNT_X + 260, 18))
 
             screen.blit(self.gui, (0, 0))
 
