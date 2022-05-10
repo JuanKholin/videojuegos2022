@@ -24,7 +24,8 @@ class Upgrade():
         screen.blit(self.image, (x, y))
         muestra_texto(screen, 'monotypecorsiva', str(self.cantidad), GREEN2, 15, (self.x + 45, self.y + 45))
         if self.collide:
-            pygame.draw.rect(screen, BLUE, pygame.Rect(self.x, self.y-15, 50, 20))
+            pass
+            #pygame.draw.rect(screen, BLUE, pygame.Rect(self.x, self.y-15, 50, 20))
             #text = Utils.text[self.option] 
             #muestra_texto(screen, times, text, BLACK, 30, (self.x, self.y-20))
         if Utils.DEBBUG:

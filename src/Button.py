@@ -39,7 +39,8 @@ class Button():
                 muestra_texto(screen, 'monotypecorsiva', str(self.coste), GREEN2, 20, (self.x + 33 - self.cartelPad , self.y - 12))
                 muestra_texto(screen, 'monotypecorsiva', "1", GREEN2, 20, (self.x + 73 - self.cartelPad , self.y - 12))
             else:
-                pygame.draw.rect(screen, BLUE, pygame.Rect(self.x, self.y-15, 50, 20))
+                pass
+                #pygame.draw.rect(screen, BLUE, pygame.Rect(self.x, self.y-15, 50, 20))
             #text = Utils.text[self.option] 
             #muestra_texto(screen, times, text, BLACK, 30, (self.x, self.y-20))
         if Utils.DEBBUG:

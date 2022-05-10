@@ -295,14 +295,14 @@ class Structure(Entity.Entity):
 
 
 
-    def checkTiles(self):
+    def checkTiles(self, visible = True):
         r = self.getRect()
         tiles = self.mapa.getRectTiles(r)
         ok = True
         tiles_set = set(tiles)
         if len(tiles_set) == self.tileH*self.tileW:
             for tile in tiles_set:
-                if tile.type != EMPTY or not tile.visible:
+                if tile.type != EMPTY or (not tile.visible and visible):
                     ok = False
                     break
         else:
