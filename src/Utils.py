@@ -6,6 +6,10 @@ import pygame
 
 DEBBUG = True
 
+BGM_VOLUME = 0
+SOUND_VOLUME = 0.1
+haveBGM = False
+
 class System_State(Enum):
     MAINMENU = auto()
     GAMESELECT = auto()
@@ -151,9 +155,7 @@ HP.set_colorkey(WHITE)
 HP2 = pygame.image.load("SPRITE/EXTRA/vida2.png")
 HP.set_colorkey(WHITE)
 
-BGM_VOLUME = 0
-SOUND_VOLUME = 1
-haveBGM = False
+
 
 CAMERA_SPEED = 8
 

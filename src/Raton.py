@@ -2,6 +2,8 @@ import pygame, math
 from . import Command, Utils
 from . import Player
 from .Utils import *
+from .Lib import *
+from .Music import *
 
 def collides(x, y, rect2):
     return (x >= rect2.x and x <= rect2.x + rect2.w and y >= rect2.y and y <= rect2.y + rect2.h)
@@ -278,6 +280,7 @@ class Raton(pygame.sprite.Sprite):
                                     self.buildStructure.buildProcess()
                                     self.building = False
                                     self.buildStructure = None
+                                    playSound(construirSound)
                             else:
                                 unitSel = False
                                 selectedUnit = self.player.unitsSelected
@@ -317,6 +320,7 @@ class Raton(pygame.sprite.Sprite):
                                 if not unitSel:
                                     for structure in self.player.structures:
                                         if collideRect(mouseRect, structure.getRect()):
+                                            playSound(structure.selectedSound)
                                             structure.setClicked(True)
                                             unitSel = True
                                             self.player.structureSelected = structure

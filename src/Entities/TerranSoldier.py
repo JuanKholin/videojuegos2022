@@ -6,6 +6,7 @@ from .. import Command
 from .Entity import *
 from ..Utils import *
 from .Soldier import *
+from ..Music import *
 
 # Constantes
 HP = 40
@@ -53,6 +54,11 @@ Y_PADDING =         15
 PADDING = 110
 
 class TerranSoldier(Soldier):
+    
+    generateSound = soldierGenerateSound
+    deadSound = soldierDeadSound
+    attackSound = soldierAttackSound 
+    
     def __init__(self, player, xIni = -1, yIni = -1):
         Soldier.__init__(self, HP, xIni * TILE_WIDTH + 20, yIni * TILE_HEIGHT, MINERAL_COST,
                 GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME,
