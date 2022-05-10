@@ -56,7 +56,7 @@ class Map():
             i, j = self.getTileIndex(l[0], l[1])
             centers.append((i, j))
 
-        maxI, maxJ = self.getTileIndex(self.w, self.h)
+        maxJ, maxI = self.getTileIndex(self.w, self.h)
         for c in centers:
             for i in range(c[1] - VISION_RADIUS, c[1] + VISION_RADIUS):
                 for j in range(c[0] - VISION_RADIUS, c[0] + VISION_RADIUS):

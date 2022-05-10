@@ -143,35 +143,30 @@ def setEntity(player, ai):
 
     crystal = Crystal(5, 11, 800)
     crystal3 = Crystal(9, 11, 800)
+    crystala = Crystal(13, 11, 800)
+    crystalb = Crystal(17, 11, 800)
+    crystalc = Crystal(21, 11, 800)
 
     crystalz = Crystal(35, 11, 400)
     crystalz3 = Crystal(31, 11, 400)
 
 
-    crystal4 = Crystal(27, 10, 800)
-    crystal5 = Crystal(27, 5, 800)
-    crystal6 = Crystal(27, 15, 800)
-
-
-
     resources.append(crystal3)
     resources.append(crystal)
+    resources.append(crystala)
+    resources.append(crystalb)
+    resources.append(crystalc)
 
     resources.append(crystalz3)
     resources.append(crystalz)
 
 
-    resources.append(crystal4)
-    resources.append(crystal5)
-    resources.append(crystal6)
 
 
 
-
-
-    gas = Geyser(13, 5, 800)
+    gas = Geyser(15, 6, 800)
     resources.append(gas)
-    gas = Geyser(27, 5, 800)
+    gas = Geyser(25, 6, 800)
     resources.append(gas)
     escena.resources = resources
 

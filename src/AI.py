@@ -503,7 +503,7 @@ class AI():
                     directionsTried = 0
                     buildingsTried = buildingsTried + 1
                     if buildingsTried >= len(structures): # No hay espacio en el mapa (  9 _9)
-                        #print("Wrong map, full occupied?")
+                        print("Wrong map, full occupied?")
                         exit()
                     else: # Quedan edificios por probar
                         randBuilding = (randBuilding + 1) % len(structures)
@@ -525,7 +525,8 @@ class AI():
         elif (self.geyserBuilding == TERRAN_GEYSER_STRUCTURE) and (self.data.resources >= TERRAN_GEYSER_STRUCTURE_MINERAL_COST):
             #print("Construye terrangeyserstructure")
             self.data.resources -= TERRAN_GEYSER_STRUCTURE_MINERAL_COST
-            toBuild = TerranRefinery(4, 4, self.data, self.mapa, True, geyser)
+            pos = geyser.getPosition()
+            toBuild = TerranRefinery(pos[0] / 40, pos[1] / 40, self.data, self.mapa, True, geyser)
             self.data.addStructures(toBuild)
             #toBuild.buildProcess()
         elif (self.geyserBuilding == PROTOSS_GEYSER_STRUCTURE) and (self.data.resources >= PROTOSS_GEYSER_STRUCTURE_MINERAL_COST):
