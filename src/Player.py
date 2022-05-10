@@ -86,7 +86,7 @@ class Player():
             if id == CommandId.GENERATE_UNIT or id == CommandId.GENERATE_WORKER or id == CommandId.GENERATE_SOLDIER:
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_BARRACKS:
-                print("EXECUCION")
+                #print("EXECUCION")
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_REFINERY:
                 self.structureSelected.execute(id)
@@ -131,7 +131,7 @@ class Player():
             for unit in self.units:
                 if unit.state != UnitState.DEAD:
                     pos = unit.getPosition()
-                    if self.mapa.getTile(pos[0], pos[1]).visible:
+                    if (self.mapa.getTile(pos[0], pos[1]) != None) and self.mapa.getTile(pos[0], pos[1]).visible:
                         pygame.draw.rect(screen, RED, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
 
 

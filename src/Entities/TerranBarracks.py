@@ -59,7 +59,7 @@ class TerranBarracks(Structure):
         self.paths = []
 
         self.type = TERRAN_BARRACKS
-        print("SOY UNA BARRACA Y TENGO CAPACISAS ", self.capacity)
+        #print("SOY UNA BARRACA Y TENGO CAPACISAS ", self.capacity)
 
     def execute(self, command_id):
         #if self.clicked:

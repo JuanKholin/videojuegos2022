@@ -111,7 +111,7 @@ class Interface():
 
         self.allButton = self.loadAllButton()
         self.allUpgrades = self.loadAllUpgrades()
-        print("LOADEADOS")
+        #print("LOADEADOS")
 
     def loadAllButton(self):
         allButton = {}

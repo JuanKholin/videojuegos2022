@@ -60,7 +60,8 @@ class Worker(Unit):
 
 
             else:
-                print("No hay tiles libres weird")
+                pass
+                #print("No hay tiles libres weird")
                 #exit(1) te las pueden estar ocupando los mineros
     
     def changeToExtracting(self, resource):
@@ -86,8 +87,9 @@ class Worker(Unit):
                     else:
                         self.startExtracting()
                 else:
-                    print("No hay tiles libres weird")
+                    #print("No hay tiles libres weird")
                     #exit(1) 
+                    pass
 
     # Manda a la unidad hacia el recurso
     def moveToMining(self):

@@ -69,9 +69,7 @@ def setEntity(player, ai):
     gas2 = Geyser(13, 20, 50)
     structure4 = Extractor(12, 27, player, mapa, True)
     structure5 = TerranRefinery(13, 18, ai, mapa, True, gas2)
-
-    a = structure3.getPosition()
-    print(a[0] / 40, a[1] /40)
+    
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addStructures(structure3)

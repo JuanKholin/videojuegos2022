@@ -115,7 +115,9 @@ class Map():
         if int(y / self.th) >= len(self.mapa):
             yaux = len(self.mapa) - 1
         #print(xaux, yaux)
-        return self.mapa[yaux][xaux]
+        if (xaux >= 0) and (yaux >= 0):
+            return self.mapa[yaux][xaux]
+        return None
 
     def getRectRoundTiles(self, rect, tileActual):
         tiles = []

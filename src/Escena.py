@@ -38,7 +38,7 @@ class Escena():
         #Conseguir el comando
         if event.type == pg.MOUSEBUTTONDOWN or event.type == pg.MOUSEBUTTONUP:
             command = self.raton.processEvent(event, self.camera)
-            print(command.id)
+            #print(command.id)
         else:
             command = self.p1.processEvent(event)
         if getGameState() == System_State.ONGAME:
@@ -61,7 +61,7 @@ class Escena():
                 elif command.id == CommandId.UPGRADE_WORKER_MINING:
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.BUILD_BARRACKS:
-                    print("BARRACAS: ", command.id)
+                    #print("BARRACAS: ", command.id)
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.BUILD_HATCHERY:
                     self.p1.execute(command.id, [], None)
@@ -74,7 +74,7 @@ class Escena():
                     relative_mouse_pos = pg.mouse.get_pos()
                     real_mouse_pos = (relative_mouse_pos[0] + self.camera.x, relative_mouse_pos[1] + self.camera.y)
                     tileClicked = self.mapa.getTile(real_mouse_pos[0], real_mouse_pos[1])
-                    print("TILE CLICKED: ", tileClicked.tileid, tileClicked.type)
+                    #print("TILE CLICKED: ", tileClicked.tileid, tileClicked.type)
                     orderForPlayer = []
                     for param in command.params:
                         self.processParam(param, tileClicked, tileClicked, orderForPlayer)
@@ -92,19 +92,19 @@ class Escena():
         # COMPROBAR SI HA CLICKADO UN ORE
         order = {'order': CommandId.MOVE, 'angle': 0, 'path': path}
         if tileClicked.type == RESOURCE:
-            print("CLICKO UN RECURSO")
+            #print("CLICKO UN RECURSO")
             resource = tileClicked.getOcupante()
             order['order'] = CommandId.MINE
             order['resource'] = resource
         elif tileClicked.type == UNIT: # Ataque?
-            print("CLICKO UNA UNIDAD")
+            #print("CLICKO UNA UNIDAD")
             attacked = tileClicked.ocupante
 
             if attacked.getPlayer() != self.p1:
                 order['order'] = CommandId.ATTACK
                 order['attackedOne'] = attacked
         else:
-            print("CLICKO UNA ESTRUCTURA")
+            #print("CLICKO UNA ESTRUCTURA")
             if tileClicked.type == STRUCTURE and tileClicked.ocupante.player != self.p1:
                 order['order'] = CommandId.ATTACK
                 order['attackedOne'] = tileClicked.ocupante
@@ -233,7 +233,7 @@ class Escena():
         }
 
     def saveScene(self):
-        print(self.toDictionary())
+        #print(self.toDictionary())
         string = json.dumps(self.toDictionary(), indent = 2)
 
         textFile = open("games/" + self.nombre + ".json", "w")
