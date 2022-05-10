@@ -65,8 +65,6 @@ class Map():
                         self.mapa[i][j].visible = True
                         self.mapa[i][j].oscura = False
 
-
-
     #Pone a true las Tiles del rectangulo que forman x,y,w,h
     def addObstacle(self, x, y, w, h):
         for i in range(h): #Recorro el mapa  por las filas
@@ -418,7 +416,7 @@ class Map():
         broken = False
         while (nodosAbiertos.__len__() != 0) and not broken:
             jaja += 1
-            if jaja >= 100:
+            if jaja >= 200:
                 broken = True
             currentTile = Tile.Tile(nodosAbiertos[0].tileid, nodosAbiertos[0].centerx, nodosAbiertos[0].centery,
                     0, 0, 1, 0, nodosAbiertos[0].g, nodosAbiertos[0].padre)
@@ -639,7 +637,7 @@ class Map():
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
                 row = int(j - distance + y)
-                if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
+                if (col >= 0) and (col < self.tilesW) and (row >= 0) and (row < self.tilesH):
                     aux = self.mapa[row][col]
                     if ((aux.type == UNIT) or (aux.type == STRUCTURE)) and (aux.ocupante.hp > 0):
                         #print("PLAYER2? ", aux.ocupante.player)
@@ -658,7 +656,7 @@ class Map():
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
                 row = int(j - distance + y)
-                if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
+                if (col >= 0) and (col < self.tilesW) and (row >= 0) and (row < self.tilesH):
                     aux = self.mapa[row][col]
                     if (aux.type == UNIT) or (aux.type == STRUCTURE):
                         #print(aux.ocupante.type, " ", col, " ", row)
@@ -675,7 +673,7 @@ class Map():
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
                 row = int(j - distance + y)
-                if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
+                if (col >= 0) and (col < self.tilesW) and (row >= 0) and (row < self.tilesH):
                     aux = self.mapa[row][col]
                     if aux.type == GEYSER:
                         return aux.ocupante
@@ -691,7 +689,7 @@ class Map():
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
                 row = int(j - distance + y)
-                if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
+                if (col >= 0) and (col < self.tilesW) and (row >= 0) and (row < self.tilesH):
                     aux = self.mapa[row][col]
                     if aux.type == RESOURCE and aux.ocupante.capacity > 0:
                         crystalsFound.add(aux.ocupante)
