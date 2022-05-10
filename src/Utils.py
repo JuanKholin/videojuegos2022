@@ -4,7 +4,7 @@ import math
 from re import T
 import pygame
 
-DEBBUG = False
+DEBBUG = True
 
 class System_State(Enum):
     MAINMENU = auto()
@@ -109,6 +109,7 @@ CLOCK_PER_SEC = 60
 
 # Constantes para los colores
 WHITE   = (255, 255, 255)
+GREY    = (170, 170, 170)
 BLACK   = (0, 0, 0)
 GREEN   = (0, 255, 0)
 RED     = (255, 0, 0)
@@ -222,10 +223,12 @@ EXIT_FB_POS = [680, 420]
     #GAME SELECT#
     #############
 
-ACEPTAR_POS = [700, 585]
-CANCELAR_POS = [700, 700]
-NUEVA_PARTIDA_POS = [80, 650]
+ACEPTAR_POS = [705, 590]
+ACEPTAR_RECT = (250, 40)
+CANCELAR_POS = [705, 695]
+NUEVA_PARTIDA_POS = [88, 652]
 PARTIDA_DEFAULT_POS = [80, 300]
+
 
 
 GAME_SELECT = "SPRITE/gameSelect/"
@@ -234,20 +237,20 @@ GAME_SELECT_TEXT_SIZE = 30
     #############
     #GAME SELECT#
     #############
-PARTIDA_POS = [80, 205]
-YPARTIDA_PAD = 31
+PARTIDA_POS = [72, 205]
+YPARTIDA_PAD = 33
 
-MAPA1_POS = [80, 265]
-MAPA2_POS = [200, 265]
-MAPA3_POS = [310, 265]
-MAPA4_POS = [425, 265]
+MAPA1_POS = [80, 269]
+MAPA2_POS = [198, 269]
+MAPA3_POS = [311, 269]
+MAPA4_POS = [425, 269]
 
-FACIL_POS = [80, 370]
-NORMAL_POS = [240, 370]
-DIFICIL_POS = [390, 370]
+FACIL_POS = [84, 374]
+NORMAL_POS = [236, 374]
+DIFICIL_POS = [392, 374]
 
-TERRAN_POS = [80, 490]
-ZERG_POS = [320, 490]
+TERRAN_POS = [86, 493]
+ZERG_POS = [321, 493]
 
 NEW_GAME = "SPRITE/newGame/"
 NEW_GAME_TEXT_SIZE = 30
