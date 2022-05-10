@@ -89,11 +89,11 @@ class Unit(Entity):
         if (self.attackedOne != objective) or (self.state != UnitState.ATTACKING):
             self.mapa.setLibre(self.occupiedTile)
             if objective.esEstructura == False:
-                print("Atacamos a una unidad")
+                #print("Atacamos a una unidad")
                 self.tileAAtacar = objective.getTile()
                 self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
             else:
-                print("Atacamos a una estructura")
+                #print("Atacamos a una estructura")
                 tilesAAtacar = self.mapa.getAttackRoundTiles(objective.getRect())
                 self.tileAAtacar = tilesAAtacar[0]
                 for tile in tilesAAtacar:
@@ -102,7 +102,7 @@ class Unit(Entity):
                 self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
             self.mapa.setVecina(self.occupiedTile, self.id)
             self.occupiedTile.setOcupante(self)
-            print("CAMINOS:" ,len(self.paths))
+            #print("CAMINOS:" ,len(self.paths))
             self.changeToAttacking(objective)
             if len(self.paths) == 1:
                 #LO MEJOR ES MOVERSE AL CENTRO DE LA TILE, SINO NO ATOMICO
@@ -215,7 +215,7 @@ class Unit(Entity):
                 self.count = 0
                 self.updateMovingImage()
         else:
-            print("UPDATE MOVING")
+            #print("UPDATE MOVING")
             self.changeToStill()
 
 
@@ -233,12 +233,12 @@ class Unit(Entity):
         else: # Se murio el objetivo, pasa a estar quieto
             self.attackedOne = None
             enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
-            print(type(enemy))
+            #print(type(enemy))
             if enemy != None:
-                print("ataco a otro")
+                #print("ataco a otro")
                 self.attack(enemy)
             else:
-                print("no hay naide")
+                #print("no hay naide")
                 self.changeToStill()
 
     # Aplica un frame a la unidad que esta minando
@@ -521,7 +521,7 @@ class Unit(Entity):
 
     # Pasa a morirse (chof)
     def changeToDying(self):
-        print("DYING", self.x, self.y)
+        #print("DYING", self.x, self.y)
         self.state = UnitState.DYING
         self.attackedOne = None
         self.mapa.setLibre(self.getTile())
@@ -539,7 +539,7 @@ class Unit(Entity):
 
     # Pasa a estar muerto del todo (puf, a lo Thanos)
     def changeToDead(self):
-        print("DEAD", self.x, self.y)
+        #print("DEAD", self.x, self.y)
         self.state = UnitState.DEAD
         self.attackedOne = None
         self.player.units.remove(self)
@@ -577,7 +577,7 @@ class Unit(Entity):
     def makeAnAttack(self):
         hpLeft = self.attackedOne.beingAttacked(self.damage + self.player.dañoUpgrade, self)
         if hpLeft <= 0:
-            print("Se queda sin vida")
+            #print("Se queda sin vida")
             enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
             if enemy != None:
                 self.attack(enemy)
@@ -690,7 +690,7 @@ class Unit(Entity):
     def changeObjectiveTile(self):
         actualPath = self.paths[0]
         objectiveTile = self.mapa.getTile(actualPath.posFin[0], actualPath.posFin[1])
-        print(objectiveTile.id, self.id)
+        #print(objectiveTile.id, self.id)
         if objectiveTile.type == EMPTY or (objectiveTile.type == UNIT and objectiveTile.id == self.id):
             self.mapa.setVecina(objectiveTile, self.id)
             objectiveTile.setOcupante(self)
@@ -746,6 +746,9 @@ class Unit(Entity):
     # Getter del player que posee la unidad
     def getPlayer(self):
         return self.player
+
+    def getDir(self):
+        return self.dir
 
     def setCristal(self, cristal):
         self.cristal = cristal

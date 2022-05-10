@@ -69,9 +69,7 @@ def setEntity(player, ai):
     gas2 = Geyser(13, 20, 50)
     structure4 = Extractor(12, 27, player, mapa, True)
     structure5 = TerranRefinery(13, 18, ai, mapa, True, gas2)
-
-    a = structure3.getPosition()
-    print(a[0] / 40, a[1] /40)
+    
     player.addStructures(structure1)
     player.addStructures(structure2)
     player.addStructures(structure3)
@@ -226,7 +224,7 @@ player1 = Player.Player([], [], 400, keyMap, commandMap, mapa, True)
 
 # Player 2 AKA IA
 player2 = Player.Player([], [], 800, {}, {}, mapa, False)
-aI = AI(player2, Race.TERRAN, HARD)
+aI = AI(player2, Race.TERRAN, EASY)
 
 # Camara
 # pre: mapa tan grande como ventana
