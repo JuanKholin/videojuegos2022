@@ -42,6 +42,7 @@ class TerranBuilder(Structure):
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.sprites += deadSprites
+        self.capacity = 10
 
         #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
         self.raton = raton
@@ -81,11 +82,15 @@ class TerranBuilder(Structure):
     def execute(self, command_id):
         #if self.clicked:
         if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_WORKER) and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
-            self.player.resources -= TERRAN_WORKER_MINERAL_COST
-            terranWorker = TerranWorker(self.player)
-            print("xd")
-            self.generateUnit(terranWorker)
-            self.state = BuildingState.SPAWNING
+            limit = 0
+            for structure in self.player.structures:
+                limit += structure.getUnitCapacity()
+            if len(self.player.units) + 1 <= (self.player.limitUnits + limit):
+                self.player.resources -= TERRAN_WORKER_MINERAL_COST
+                terranWorker = TerranWorker(self.player)
+                print("xd")
+                self.generateUnit(terranWorker)
+                self.state = BuildingState.SPAWNING
         elif command_id == CommandId.UPGRADE_SOLDIER_DAMAGE and self.player.resources and self.player.resources >= self.damageMineralUpCost and self.player.gas >= self.damageGasUpCost:
             self.player.resources -= self.damageMineralUpCost
             self.player.gas -= self.damageGasUpCost

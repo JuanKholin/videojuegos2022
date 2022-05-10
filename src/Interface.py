@@ -486,7 +486,10 @@ class Interface():
             screen.blit(self.resources[1], (RESOURCES_COUNT_X + 100, 3))
             muestra_texto(screen, times, str(self.player.gas), GREEN4, 30, (RESOURCES_COUNT_X + 160, 20))
             screen.blit(self.resources[2], (RESOURCES_COUNT_X + 200, 3))
-            muestra_texto(screen, times, str(self.player.units.__len__() + 10) + "/18", GREEN4, 28, (RESOURCES_COUNT_X + 260, 18))
+            limit = 0
+            for structure in self.player.structures:
+                limit += structure.getUnitCapacity()
+            muestra_texto(screen, times, str(self.player.units.__len__()) + "/" + str(self.player.limitUnits + limit), GREEN4, 28, (RESOURCES_COUNT_X + 260, 18))
 
             screen.blit(self.gui, (0, 0))
 

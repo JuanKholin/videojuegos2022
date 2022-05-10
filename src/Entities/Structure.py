@@ -133,6 +133,9 @@ class Structure(Entity.Entity):
     def execute(self, command_id):
         pass
 
+    def getUnitCapacity(self):
+        return self.capacity
+
     def updateOperative(self):
         if frame(self.frame) == 1:
             self.indexCount = (self.indexCount + 1) % len(self.operativeIndex)
@@ -157,17 +160,24 @@ class Structure(Entity.Entity):
             self.indexCount = (self.indexCount + 1) % len(self.spawningIndex)
             self.index = self.spawningIndex[self.indexCount]
         if self.generationCount >= CLOCK_PER_SEC * self.training[0].generationTime:
-            unit = self.training[0]
-            tile = self.mapa.getTile(self.x, self.y)
+            limit = 0
+            for structure in self.player.structures:
+                limit += structure.getUnitCapacity()
+            if len(self.player.units) + 1 <= (self.player.limitUnits + limit):
+                unit = self.training[0]
+                tile = self.mapa.getTile(self.x, self.y)
 
-            libres = self.mapa.getEntityTilesVecinas(tile, unit.getTile())
-            if len(libres) > 0:
-                unit.spawn(libres[0].centerx, libres[0].centery)
-                self.player.addUnits(unit)
-                
+                libres = self.mapa.getEntityTilesVecinas(tile, unit.getTile())
+                if len(libres) > 0:
+                    unit.spawn(libres[0].centerx, libres[0].centery)
+                    self.player.addUnits(unit)
                 self.generationCount = 0
                 del self.training[0]
-                if len(self.training) == 0:
+                
+            else:
+                for unit in self.training:
+                    self.training.remove(unit)
+            if len(self.training) == 0:
                     self.state = BuildingState.OPERATIVE
 
     def updateCollapsing(self):

@@ -40,6 +40,7 @@ class TerranSupplyDepot(Structure):
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.sprites += deadSprites
+        self.capacity = 5
         
         self.image = self.sprites[self.index]
         self.operativeIndex = [4]

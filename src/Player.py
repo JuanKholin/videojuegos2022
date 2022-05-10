@@ -28,6 +28,8 @@ class Player():
         self.armorUpgrade = 0
         self.mineUpgrade = 0
 
+        self.limitUnits = 3
+
         # Para la IA
         self.unitsFree = []
 

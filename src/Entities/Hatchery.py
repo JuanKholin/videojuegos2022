@@ -38,7 +38,7 @@ class Hatchery(Structure):
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.sprites += deadSprites
-        
+        self.capacity = 10
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2, 3]
         self.spawningIndex = [0, 1, 2, 3]
