@@ -57,9 +57,6 @@ class Extractor(Structure):
 
         self.type = ZERG_GEYSER_STRUCTURE
 
-    def getOptions(self):
-        return []
-
     def command(self, command):
         return Command(CommandId.NULL)
 

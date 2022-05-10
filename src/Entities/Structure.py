@@ -16,6 +16,7 @@ class Structure(Entity.Entity):
     nBuildSprites = 1
     count = 0
     indexCount = 0
+    options = []
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, mapa, player, capacity):
         Entity.Entity.__init__(self, hp, xini*mapa.tw, yini*mapa.th, mineralCost, generationTime, takeID(), player)
@@ -30,7 +31,6 @@ class Structure(Entity.Entity):
         self.state = BuildingState.BUILDING
         self.lastAttacker = None
         self.capacity = capacity
-        self.player.limitUnits += capacity
         print("TENGO CAPACIDAD ", self.capacity, "Y SOY ", self.player, " Y ESTOY EN ", self.xIni, self.yIni)
 
 
@@ -40,6 +40,12 @@ class Structure(Entity.Entity):
 
     def getPosition(self):
         return (self.x, self.y)
+    
+    def getOptions(self):
+        if self.state != BuildingState.BUILDING and self.state != BuildingState.COLLAPSING and self.state!= BuildingState.DESTROYED:
+            return self.options
+        else:
+            return []
 
     def update(self):
         if self.state == BuildingState.BUILDING:
@@ -103,9 +109,6 @@ class Structure(Entity.Entity):
         self.player.structures.remove(self)
         self.__del__()
 
-    def getOptions(self):
-        return []
-
     def getRect(self):
         return self.rectn
 
@@ -165,7 +168,7 @@ class Structure(Entity.Entity):
             self.indexCount = (self.indexCount + 1) % len(self.spawningIndex)
             self.index = self.spawningIndex[self.indexCount]
         if self.generationCount >= CLOCK_PER_SEC * self.training[0].generationTime:
-            if len(self.player.units) + 1 <= self.player.limitUnits:
+            if len(self.player.units) < self.player.limitUnits:
                 unit = self.training[0]
                 tile = self.mapa.getTile(self.x, self.y)
 
@@ -173,14 +176,10 @@ class Structure(Entity.Entity):
                 if len(libres) > 0:
                     unit.spawn(libres[0].centerx, libres[0].centery)
                     self.player.addUnits(unit)
-                self.generationCount = 0
-                del self.training[0]
-
-            else:
-                for unit in self.training:
-                    self.training.remove(unit)
-            if len(self.training) == 0:
-                    self.state = BuildingState.OPERATIVE
+                    self.generationCount = 0
+                    del self.training[0]
+                    if len(self.training) == 0:
+                            self.state = BuildingState.OPERATIVE
 
     def updateCollapsing(self):
         #print("hola", self.frame)

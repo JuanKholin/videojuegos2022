@@ -15,6 +15,7 @@ class CommandId(IntEnum):
     TRANSPORTAR_ORE_STILL = auto()
     BUILD_BARRACKS = auto()
     BUILD_STRUCTURE = auto()
+    BUILD_SUPPLY_DEPOT = auto()
     BUILD_HATCHERY = auto()
     SAVE_GAME = auto()
     ATTACK = auto()

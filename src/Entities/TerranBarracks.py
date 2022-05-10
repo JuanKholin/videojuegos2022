@@ -30,6 +30,7 @@ class TerranBarracks(Structure):
     clicked = False
     frame = 8
     nSprites = 6
+    options = [Options.GENERATE_SOLDIER]
 
     def __init__(self, xini, yini, player, map, building):
         Structure.__init__(self, HP, TERRAN_BARRACKS_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
@@ -79,9 +80,6 @@ class TerranBarracks(Structure):
 
     def getBuildSprite(self):
         return self.sprites[4]
-
-    def getOptions(self):
-        return [Options.GENERATE_SOLDIER]
 
     def toDictionary(self, map):
         #print("barracke x e y Ini ", self.xIni, self.yIni)

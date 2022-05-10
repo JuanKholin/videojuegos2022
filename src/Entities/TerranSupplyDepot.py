@@ -66,9 +66,6 @@ class TerranSupplyDepot(Structure):
     def getBuildSprite(self):
         return self.sprites[self.operativeIndex]
 
-    def getOptions(self):
-        return []
-
     def toDictionary(self, map):
         #print("barracke x e y Ini ", self.xIni, self.yIni)
         #x, y = map.getTileIndex(self.originX, self.originY)

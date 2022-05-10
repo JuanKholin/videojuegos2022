@@ -30,6 +30,7 @@ class Hatchery(Structure):
     tileH = 4
     frame = 8
     nSprites = 4
+    options = [Options.GENERATE_WORKER, Options.BUILD_HATCHERY]
 
     def __init__(self, xini, yini, player, map, building, raton):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
@@ -66,10 +67,6 @@ class Hatchery(Structure):
                 self.player.resources -= ZERGLING_MINERAL_COST
                 zergling = Zergling(self.x / 40, (self.y + self.rectn.h) / 40, self.player)
                 self.generateUnit(zergling)
-
-    def getOptions(self):
-        #return [Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS, Options.GENERATE_WORKER, Options.BUILD_BARRACKS]
-        return [Options.GENERATE_WORKER, Options.BUILD_HATCHERY]
 
     def command(self, command):
         if command == CommandId.BUILD_STRUCTURE:
