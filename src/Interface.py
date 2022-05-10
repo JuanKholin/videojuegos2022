@@ -567,7 +567,7 @@ class Interface():
 
     def showInfo(self, screen, unit, color, renderX = 0, renderY = 0, hpX = 0, hpY = 0, upgrades = None):
         image = unit.getRender()
-        hpState = str(unit.getMaxHP()) + "/" + str(unit.getHP())
+        hpState = str(unit.getHP()) + "/" + str(unit.getMaxHP())
         x = self.upgradeX
         if upgrades != None: #Dibujar las upgrades
             for upgrade in upgrades:

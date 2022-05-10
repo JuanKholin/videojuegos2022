@@ -211,7 +211,8 @@ class Map():
         if tile.type == EMPTY:
             tile.setOcupada(id)
         else:
-            print("HI")
+            #print("HI")
+            pass
 
     #Pone la tile como recurso
     def setRecurso(self, tile):
@@ -224,10 +225,26 @@ class Map():
     def setLibre(self, tile):
         #print("CAGO EN DIOS")
         if self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type == EMPTY:
-            print("hi")
+            #print("hi")
+            pass
         else:
             self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = EMPTY
             self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].ocupante = None
+    
+    #Pone las tiles como libre dada la esquina inferior derecha de un rectangulo y su altura y su anchura
+    def setLibres(self, structure, tile, width, height):
+        #print("CAGO EN DIOS")
+        x = int(tile.centerx / self.tw)
+        y = int(tile.centery / self.th)
+        for xAux in range(x - height, x + width):
+            for yAux in range(y - height, y + height):
+                if (xAux >= 0) and (xAux < self.w) and (yAux >= 0) and (yAux < self.h):
+                    if self.mapa[yAux][xAux].type == EMPTY:
+                        #print("hi")
+                        pass
+                    elif (self.mapa[yAux][xAux].type == STRUCTURE) and (self.mapa[yAux][xAux].ocupante == structure):
+                        self.mapa[yAux][xAux].type = EMPTY
+                        self.mapa[yAux][xAux].ocupante = None
 
     #Devuelve una lista de tiles vecinas libres a la dada
     def getTileVecinas(self, tile, tileObj):
@@ -451,6 +468,7 @@ class Map():
             tile.g = 0
         if nodosAbiertos.__len__() == 0:
             print("camino no encontrado", tileObj.tileid)
+            
             #input()
         else:
             #print("camino encontrado")
@@ -593,13 +611,13 @@ class Map():
             tileDown = self.getTile(x, finy)
             tiles.append(tileUp)
             tiles.append(tileDown)
-            print(tileUp.tileid, tileDown.tileid)
+            #tileUp.tileid, tileDown.tileid)
             x += TILE_WIDTH
         x = self.getTile(rect.x, rect.y).centerx
         while y <= finy:
             tileUp = self.getTile(x, y)
             tileDown = self.getTile(finx, y)
-            print(tileUp.tileid, tileDown.tileid)
+            #print(tileUp.tileid, tileDown.tileid)
             y += TILE_HEIGHT
         #input()
         return tiles
@@ -617,7 +635,26 @@ class Map():
                 if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
                     aux = self.mapa[row][col]
                     if (aux.type == UNIT) or (aux.type == STRUCTURE):
-                        print("PLAYER2? ", aux.ocupante.player)
-                        if aux.ocupante.player != player1 and aux.ocupante in aux.ocupante.player.units:
+                        #print("PLAYER2? ", aux.ocupante.player)
+                        if aux.ocupante.player != player1:
                             return aux.ocupante
         return None
+
+    # Devuelve las entidades enemigas (estructura o unidad) encontradas en un cuadrado de distance tiles
+    # que no sea del player player alrededor de la tile tile
+    def getNearbyRivals(self, tile, player, distance):
+        player1 = player
+        x = tile.x / 40
+        y = tile.y / 40
+        result = set()
+        for i in range(2 * distance + 1):
+            col = int(i - distance + x)
+            for j in range(2 * distance + 1):
+                row = int(j - distance + y)
+                if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
+                    aux = self.mapa[row][col]
+                    if (aux.type == UNIT) or (aux.type == STRUCTURE):
+                        #print(aux.ocupante.type, " ", col, " ", row)
+                        if aux.ocupante.player != player1:
+                            result.add(aux.ocupante)
+        return result
