@@ -621,7 +621,8 @@ class Unit(Entity):
                 self.paths = calcPath(self.getPosition(), tileActual, tileObj, self.mapa)
                 self.mapa.setVecina(self.occupiedTile, self.id)
                 self.occupiedTile.setOcupante(self)
-                self.changeObjectiveTile()
+                if len(self.paths) != 0:
+                    self.changeObjectiveTile()
         elif self.state == UnitState.ORE_TRANSPORTING or self.state == UnitState.GAS_TRANSPORTING:
             tilesCasa = self.tilesCasa(self.getTile())
             if tilesCasa.__len__() == 0: # Me he quedado sin sitio
