@@ -324,6 +324,7 @@ class Unit(Entity):
                 #COMPROBAR QUE EL BICHO SIGUE EN SU SITIO
                 if(self.id == 8):
                     #print(int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)))
+                    pass
                 ownTile = self.getTile()
                 if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
                     #print(type(self), "estoy en rango")

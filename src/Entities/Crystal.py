@@ -33,6 +33,7 @@ class Crystal(Resource):
 
     def __del__(self):
         #print("destruction")
+        pass
 
     # Devuelve el rectangulo que conforma su imagen, creo, esto lo hizo otro
     def getRect(self):

@@ -158,4 +158,5 @@ def loadResources(resourcesDictionary):
     for r in resources:
         #print("hola")
         #print(r.x, r.y)
+        pass
     return resources

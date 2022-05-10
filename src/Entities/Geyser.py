@@ -37,6 +37,7 @@ class Geyser(Resource):
 
     def __del__(self):
         #print("destruction")
+        pass
 
     def getMined(self, cantidad):
         if (self.capacity <= 0):

@@ -164,9 +164,9 @@ def setEntity(player, ai):
 
 
 
-    gas = Geyser(15, 6, 800)
+    gas = Geyser(16, 7, 800)
     resources.append(gas)
-    gas = Geyser(25, 6, 800)
+    gas = Geyser(24, 7, 800)
     resources.append(gas)
     escena.resources = resources
 
