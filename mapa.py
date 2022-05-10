@@ -50,7 +50,7 @@ def procesarInput():
         escena.checkPressedButtons()
 
 
-
+'''
 def setEntity(player, ai):
 
     structure1 = TerranBuilder(10, 72, player, mapa, False, raton)
@@ -122,6 +122,57 @@ def setEntity(player, ai):
     resources.append(gas)
     gas = Geyser(76, 16, 500)
     resources.append(gas)
+    escena.resources = resources'''
+
+def setEntity(player, ai):
+
+    structure1 = TerranBuilder(5, 4, player, mapa, False, raton)
+    #structure2 = TerranBarracks(17, 67, player, mapa, False)
+    structure1z = TerranBuilder(35, 4, ai, mapa, False, raton)
+    drone = TerranWorker(ai, 35,6)
+    scv = TerranWorker(player, 5, 6)
+    ai.addUnits(drone)
+    ai.addStructures(structure1z)
+    ai.setBasePlayer(structure1z)
+    player.addStructures(structure1)
+    player.setBasePlayer(structure1)
+    player.addUnits(scv)
+
+    #Recursos del mapa
+    resources = []
+
+    crystal = Crystal(5, 10, 800)
+    crystal3 = Crystal(9, 10, 800)
+
+    crystalz = Crystal(35, 10, 400)
+    crystalz3 = Crystal(31, 10, 400)
+
+
+    crystal4 = Crystal(27, 10, 800)
+    crystal5 = Crystal(27, 5, 800)
+    crystal6 = Crystal(27, 15, 800)
+
+
+
+    resources.append(crystal3)
+    resources.append(crystal)
+
+    resources.append(crystalz3)
+    resources.append(crystalz)
+
+
+    resources.append(crystal4)
+    resources.append(crystal5)
+    resources.append(crystal6)
+
+
+
+
+
+    gas = Geyser(13, 5, 800)
+    resources.append(gas)
+    gas = Geyser(27, 5, 800)
+    resources.append(gas)
     escena.resources = resources
 
 def update():
@@ -138,8 +189,8 @@ def update():
         escena.mapa = mapa
         escena.mapa.load()
         escena.mapa.loadMinimap()
-        camera.x = 200
-        camera.y = 2400
+        camera.x = 0
+        camera.y = 0
         setEntity(player1, player2)
         setGameState(System_State.ONGAME)
     elif getGameState() == System_State.ONGAME:
@@ -198,8 +249,9 @@ commandMap ={
   CommandId.ROTATE: pg.K_r,
 }
 
-print(EMPTY_MAP.__len__(), EMPTY_MAP[0].__len__())
-mapa = Map.Map( EMPTY_MAP[0].__len__(),EMPTY_MAP.__len__(), True, EMPTY_MAP)
+print(MAPA_CHIKITO.__len__(), MAPA_CHIKITO[0].__len__())
+mapa = Map.Map( MAPA_CHIKITO[0].__len__(),MAPA_CHIKITO.__len__(), True, MAPA_CHIKITO)
+'''
 mapa.setElevacion(0, 55)
 mapa.setElevacion(8, 55)
 mapa.setElevacion(16, 55)
@@ -217,7 +269,7 @@ mapa.setElevacion(48, 20)
 mapa.setElevacion(40, 15)
 mapa.setElevacion(40, 10)
 mapa.setElevacion(40, 5)
-mapa.setElevacion(40, 0)
+mapa.setElevacion(40, 0)'''
 
 
 
