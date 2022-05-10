@@ -171,7 +171,7 @@ class Structure(Entity.Entity):
                     self.state = BuildingState.OPERATIVE
 
     def updateCollapsing(self):
-        print("hola", self.frame)
+        #print("hola", self.frame)
         if frame(self.frame) == 1:
             self.index += 1
             if self.index == self.nSprites + 10:

@@ -77,7 +77,7 @@ def setEntity(player, ai):
     player.addStructures(structure3)
     
     player.addStructures(structure7)
-    ai.addStructures(structure4)
+    player.addStructures(structure4)
     ai.addStructures(structure5)
     player.addUnits(scv)
     player.addUnits(scv2)
@@ -210,7 +210,7 @@ player1 = Player.Player([], [], 400, keyMap, commandMap, mapa, True)
 
 
 # Player 2 AKA IA
-player2 = Player.Player([], [], 400, {}, {}, mapa, False)
+player2 = Player.Player([], [], 800, {}, {}, mapa, False)
 aI = AI(player2, Race.TERRAN, HARD)
 
 # Camara

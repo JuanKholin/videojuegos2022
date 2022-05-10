@@ -103,8 +103,8 @@ def loadStructures(structureDictionaries, player, map, raton):
     for s in structureDictionaries:
         if s["clase"] == "terranBuilder":
             structure = TerranBuilder(s["x"], s["y"], player, map, s["building"], raton)
-            structure.dañoMineralUpCost = s["dañoMineralUpCost"]
-            structure.dañoGasUpCost = s["dañoGasUpCost"]
+            structure.damageMineralUpCost = s["damageMineralUpCost"]
+            structure.damageGasUpCost = s["damageGasUpCost"]
             structure.armorMineralUpCost = s["armorMineralUpCost"]
             structure.armorGasUpCost = s["armorGasUpCost"]
             structure.mineMineralUpCost = s["mineMineralUpCost"]

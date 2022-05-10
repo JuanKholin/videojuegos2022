@@ -634,7 +634,7 @@ class Map():
                 row = int(j - NEARBY_RANGE + y)
                 if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
                     aux = self.mapa[row][col]
-                    if (aux.type == UNIT) or (aux.type == STRUCTURE):
+                    if ((aux.type == UNIT) or (aux.type == STRUCTURE)) and (aux.ocupante.hp > 0):
                         #print("PLAYER2? ", aux.ocupante.player)
                         if aux.ocupante.player != player1:
                             return aux.ocupante
@@ -658,3 +658,20 @@ class Map():
                         if aux.ocupante.player != player1:
                             result.add(aux.ocupante)
         return result
+
+    # Devuelve el primer geyser encontrado libre en un cuadrado de distance tiles
+    # alrededor de la tile tile
+    def findNearbyGeyser(self, tile, distance):
+        x = tile.x / 40
+        y = tile.y / 40 
+        for i in range(2 * distance + 1):
+            col = int(i - distance + x)
+            for j in range(2 * distance + 1):
+                row = int(j - distance + y)
+                if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
+                    aux = self.mapa[row][col]
+                    if aux.type == GEYSER:
+                        #print(aux.ocupante.type, " ", col, " ", row)
+                        if aux.ocupante.player != player1:
+                            result.add(aux.ocupante)
+        return None
