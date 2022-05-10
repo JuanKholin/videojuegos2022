@@ -639,7 +639,7 @@ class Map():
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
                 row = int(j - distance + y)
-                if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
+                if (col >= 0) and (col < self.tilesW) and (row >= 0) and (row < self.tilesH):
                     aux = self.mapa[row][col]
                     if ((aux.type == UNIT) or (aux.type == STRUCTURE)) and (aux.ocupante.hp > 0):
                         #print("PLAYER2? ", aux.ocupante.player)
@@ -658,7 +658,7 @@ class Map():
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
                 row = int(j - distance + y)
-                if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
+                if (col >= 0) and (col < self.tilesW) and (row >= 0) and (row < self.tilesH):
                     aux = self.mapa[row][col]
                     if (aux.type == UNIT) or (aux.type == STRUCTURE):
                         #print(aux.ocupante.type, " ", col, " ", row)
@@ -675,7 +675,7 @@ class Map():
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
                 row = int(j - distance + y)
-                if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
+                if (col >= 0) and (col < self.tilesW) and (row >= 0) and (row < self.tilesH):
                     aux = self.mapa[row][col]
                     if aux.type == GEYSER:
                         return aux.ocupante
@@ -691,7 +691,7 @@ class Map():
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
                 row = int(j - distance + y)
-                if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
+                if (col >= 0) and (col < self.tilesW) and (row >= 0) and (row < self.tilesH):
                     aux = self.mapa[row][col]
                     if aux.type == RESOURCE and aux.ocupante.capacity > 0:
                         crystalsFound.add(aux.ocupante)

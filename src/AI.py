@@ -241,6 +241,10 @@ class AI():
             tile = unit.getTile()
             if tile != None:
                 self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(tile, 5))
+        for invader in self.invaders:
+            tile = invader.getTile()
+            if tile != None:
+                self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(tile, 5))
         for structure in structures:
             self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(structure.getTile(), 5))
 
@@ -301,7 +305,6 @@ class AI():
             print("BEFORE",self.data.limitUnits)
             self.buildDepot(structures)
             print("AFTER",self.data.limitUnits)
-
 
         # Barracks extra
         needExtraBarrack = True
