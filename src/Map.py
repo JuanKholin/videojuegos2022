@@ -414,7 +414,12 @@ class Map():
         nodosCerrados = []
         nodosAbiertos.append(tileIni)
         nodosAbiertos[0].padre = nodosAbiertos[0]
-        while nodosAbiertos.__len__() != 0:
+        jaja = 0
+        broken = False
+        while (nodosAbiertos.__len__() != 0) and not broken:
+            jaja += 1
+            if jaja >= 100:
+                broken = True
             currentTile = Tile.Tile(nodosAbiertos[0].tileid, nodosAbiertos[0].centerx, nodosAbiertos[0].centery,
                     0, 0, 1, 0, nodosAbiertos[0].g, nodosAbiertos[0].padre)
             #print("heur: ",currentTile.heur(tileObj))
@@ -468,7 +473,7 @@ class Map():
         pathReturn = []
         for tile in nodosAbiertos:
             tile.g = 0
-        if nodosAbiertos.__len__() == 0:
+        if (nodosAbiertos.__len__() == 0) or broken:
             print("camino no encontrado", tileObj.tileid)
             
             #input()

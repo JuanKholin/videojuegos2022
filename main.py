@@ -224,7 +224,7 @@ player1 = Player.Player([], [], 400, keyMap, commandMap, mapa, True)
 
 # Player 2 AKA IA
 player2 = Player.Player([], [], 800, {}, {}, mapa, False)
-aI = AI(player2, Race.TERRAN, HARD)
+aI = AI(player2, Race.TERRAN, EASY)
 
 # Camara
 # pre: mapa tan grande como ventana

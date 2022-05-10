@@ -72,8 +72,8 @@ TOTAL_DIRECTIONS = 8
 
 # dificultades IA (margen de decision en frames):
 EASY = 900
-MEDIUM = 500
-HARD = 200
+MEDIUM = 600
+HARD = 300
 NULA = 0
 
 # espera de la IA para tomar decisiones ligeras:
