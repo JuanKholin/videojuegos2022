@@ -671,7 +671,21 @@ class Map():
                 if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
                     aux = self.mapa[row][col]
                     if aux.type == GEYSER:
-                        #print(aux.ocupante.type, " ", col, " ", row)
-                        if aux.ocupante.player != player1:
-                            result.add(aux.ocupante)
+                        return aux.ocupante
         return None
+
+    # Devuelve los cristales encontrados en un cuadrado de distance tiles
+    # alrededor de la tile tile
+    def findCrystals(self, tile, distance):
+        crystalsFound = set()
+        x = tile.x / 40
+        y = tile.y / 40 
+        for i in range(2 * distance + 1):
+            col = int(i - distance + x)
+            for j in range(2 * distance + 1):
+                row = int(j - distance + y)
+                if (col >= 0) and (col < self.w) and (row >= 0) and (row < self.h):
+                    aux = self.mapa[row][col]
+                    if aux.type == RESOURCE and aux.ocupante.capacity > 0:
+                        crystalsFound.add(aux.ocupante)
+        return crystalsFound

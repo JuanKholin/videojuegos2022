@@ -186,6 +186,7 @@ class AI():
     # Es un update de workers bastante cool, si no hace nada a minar, y si mina mina y ya
     def gatherResources(self, units, structures):
         workers = self.getWorkers(units)
+        print("gather")
         skipGasNeed = False
         if len(workers) > 0: # Si hay workers vivos y sin ser atacados
             for worker in workers:
@@ -198,26 +199,31 @@ class AI():
                 else:
                     geyser = self.findFreeGeyser(units, structures)
                     if geyser != None:
-                        pass
+                        self.buildGeyserBuilding(geyser)
             if len(workers) > 0: # Para el resto de workers
+                print("gather to work")
                 if len(self.crystalsSeen) > 0: # si hay cristales conocidos,
+                    print("crystals found")
+
                     crystalToMine = 0
                     for worker in workers: # todos a la mina
                         if worker.state == UnitState.STILL: # si les viene bien xd
-                            worker.mine(self.crystalsSeen[crystalToMine]) 
-                            crystalToMine = (crystalToMine + 1) % len(self.crystalsSeen)
+                            crystalsSeen = list(self.crystalsSeen)
+                            print("go to work crystal at", crystalsSeen[crystalToMine].getPosition())
+                            worker.mine(crystalsSeen[crystalToMine]) 
+                            crystalToMine = (crystalToMine + 1) % len(crystalsSeen)
 
     # Recorre las unidades invasoras para que vayan a atacar objetivos conocidos y si no hay explorar
     # tiles no exploradas y atacar lo que se encuentren hasta la muerte o la victoria
     def updateInvaders(self):
         pass
 
-    # 
+    # Actualiza los cristales visibles
     def updateVision(self, units, structures):
         for unit in units:
-            pass
+            self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(unit.getTile(), 5))
         for structure in structures:
-            structure.getTile()
+            self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(structure.getTile(), 5))
 
     ##############################
     # DECISIONES TRASCENDENTALES #
@@ -236,7 +242,6 @@ class AI():
             targets = targets.union(self.mapa.getNearbyRivals(tile, self.data, 4))
         soldiers = self.getSoldiers(units)
         targets = list(targets)
-        print("Len de targets", len(targets))
         if len(targets) > 0:
             i = 0
             for soldier in soldiers:
@@ -250,22 +255,22 @@ class AI():
         base = self.getBase(structures)
         if randUpgrade == 0:
             if self.data.resources > base.damageMineralUpCost * 3:
-                print("Try upgrading damage")
-                print(self.data.gas)
+                #print("Try upgrading damage")
+                #print(self.data.gas)
                 base.execute(CommandId.UPGRADE_SOLDIER_DAMAGE)
-                print(self.data.gas)
+                #print(self.data.gas)
         elif randUpgrade == 1:
             if self.data.resources > base.armorMineralUpCost * 3:
-                print("Try upgrading armor")
-                print(self.data.gas)
+                #print("Try upgrading armor")
+                #print(self.data.gas)
                 base.execute(CommandId.UPGRADE_SOLDIER_ARMOR)
-                print(self.data.gas)
+                #print(self.data.gas)
         elif randUpgrade == 2:
             if self.data.resources > base.mineMineralUpCost * 3:
-                print("Try upgrading mining")
-                print(self.data.gas)
+                #print("Try upgrading mining")
+                #print(self.data.gas)
                 base.execute(CommandId.UPGRADE_WORKER_MINING)
-                print(self.data.gas)
+                #print(self.data.gas)
 
     # Aumenta los minimos del ejercito si se puede permitir al menos otro como el que tiene
     # Tambien construye un almacen si los recursos estan cerca del tope o construye otro
@@ -470,6 +475,10 @@ class AI():
                     x, y = self.getDirection(randDirection)
                     #print ("New x e y ", x, " ", y)
                     buildX, buildY = building.getCords()
+
+    # Construye un edificio de explotacion de geiseres en el geiser geyser
+    def buildGeyserBuilding(self, geyser):
+        pass
 
     # Devuelve una direccion por la que avanzar para probar construcciones
     def getDirection(self, direction):

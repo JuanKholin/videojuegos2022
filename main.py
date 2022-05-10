@@ -52,14 +52,14 @@ def procesarInput():
 
 
 def setEntity(player, ai):
-    scv = TerranSoldier(2, 2, player)
-    scv2 = TerranSoldier(5, 10, player)
-    scv3 = TerranSoldier(6, 10, player)
-    scv4 = TerranSoldier(7, 10, player)
-    scv5 = TerranSoldier(8, 10, player)
-    scv6 = TerranSoldier(9, 10, player)
-    scv7 = TerranSoldier(10, 10, player)
-    scv8 = TerranWorker(11, 10, player)
+    scv = TerranSoldier(player, 2, 2)
+    scv2 = TerranSoldier(player, 5, 10)
+    scv3 = TerranSoldier(player, 6, 10)
+    scv4 = TerranSoldier(player, 7, 10)
+    scv5 = TerranSoldier(player, 8, 10)
+    scv6 = TerranSoldier(player, 9, 10)
+    scv7 = TerranSoldier(player, 10, 10)
+    scv8 = TerranWorker(player, 11, 10)
     structure1 = TerranBuilder(2, 7, player, mapa, False, raton)
     structure3 = TerranSupplyDepot(4, 4, player, mapa, True)
     structure7 = Hatchery(30, 30, player, mapa, True, raton)
@@ -112,6 +112,7 @@ def setEntity(player, ai):
     crystal2 = Crystal(2, 18, 60)
     crystal3 = Crystal(2, 22, 60)
     crystal4 = Crystal(2, 26, 60)
+    crystal5 = Crystal(12, 12, 200)
     gas = Geyser(16, 13, 50)
 
     resources = []
@@ -119,6 +120,7 @@ def setEntity(player, ai):
     resources.append(crystal2)
     resources.append(crystal3)
     resources.append(crystal4)
+    resources.append(crystal5)
     resources.append(gas)
     resources.append(gas2)
     escena.resources = resources
