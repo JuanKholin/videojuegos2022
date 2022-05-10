@@ -15,6 +15,8 @@ class System_State(Enum):
     LOAD = auto()
     PLAYING = auto()
     PAUSED = auto()
+    GAMEOVER = auto()
+    WIN = auto()
     BUILDING_MODE = auto()
     EXIT = auto()
     INTRO = auto()
@@ -400,7 +402,7 @@ GEYSER_RENDER = "SPRITE/render/geyser.png"
 #carga n sprites con nombre path + 0 hasta path + (n-1)
 #color para eliminar color del fondo, puede ser None
 #numDigit inidca el numero de digitos para localizar el sprite
-def cargarSprites(path, n, twoDig, color = None, size = None, m = 0):
+def cargarSprites(path, n, twoDig, color = None, scale = None, m = 0, size = None):
     sprites = []
     for i in range(m, n):
         if twoDig and i < 10:
@@ -408,12 +410,16 @@ def cargarSprites(path, n, twoDig, color = None, size = None, m = 0):
         else:
             nPath = str(i)
         if size == None:
-            sprites.insert(i, pygame.image.load(path + nPath + ".png").convert_alpha())
-        elif size == 2:
-            sprites.insert(i, pygame.transform.scale2x(pygame.image.load(path + nPath + ".png").convert_alpha()))
+            if scale == None:
+                sprites.insert(i, pygame.image.load(path + nPath + ".png").convert_alpha())
+            elif scale == 2:
+                sprites.insert(i, pygame.transform.scale2x(pygame.image.load(path + nPath + ".png").convert_alpha()))
+            else:
+                image = pygame.image.load(path + nPath + ".png").convert_alpha()
+                sprites.insert(i, pygame.transform.scale(image, [image.get_rect().w * scale, image.get_rect().h * scale]))
         else:
             image = pygame.image.load(path + nPath + ".png").convert_alpha()
-            sprites.insert(i, pygame.transform.scale(image, [image.get_rect().w * size, image.get_rect().h * size]))
+            sprites.insert(i, pygame.transform.scale(image, [size[0], size[1]]))
         if color != None:
             sprites[i - m].set_colorkey(color)
     return sprites

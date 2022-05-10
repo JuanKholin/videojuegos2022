@@ -15,6 +15,7 @@ class Interface():
     buttonY = 0
     upgradeX = 400
     upgradeY = 705
+    index = 0
 
     def __init__(self, player, enemy, mouse):
         self.player = player
@@ -93,6 +94,18 @@ class Interface():
 
         self.entityOptions = []
         self.button = []
+        
+        #ANIMACION
+        deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
+        deadSpritesheet.set_colorkey(BLACK)
+        deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        for sprite in deadSprites:
+            sprite = pg.transform.scale(sprite, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.loseSprite = deadSprites + cargarSprites("./SPRITE/animacion/gameOver/tile0", 20, True, size = [SCREEN_WIDTH, SCREEN_HEIGHT])
+    
+        self.winSprite = deadSprites + cargarSprites("./SPRITE/animacion/win/tile0", 20, True, size = [SCREEN_WIDTH, SCREEN_HEIGHT])
+        
+        
 
     def loadGameGUI(self):
         self.gui = pg.image.load(BARRA_COMANDO + ".bmp")
@@ -565,8 +578,21 @@ class Interface():
             if Utils.state == System_State.PAUSED:
                 pygame.draw.rect(screen, BLUE, pygame.Rect(200, 200, 500, 500))
                 pygame.draw.rect(screen, BLUE2, pygame.Rect(200, 200, 500, 500), 4)
-
-                
+            if Utils.state2 == System_State.GAMEOVER:
+                screen.blit(self.loseSprite[self.index], (0, 0))
+                self.index += frame(5)
+                if self.index == 30:
+                    if self.index == 30:
+                        self.index = 10
+            if Utils.state2 == System_State.WIN:
+                screen.blit(self.winSprite[self.index], (0, 0))
+                self.index += frame(5)
+                if self.index == 30:
+                    self.index = 10
+                    #setGameState(System_State.MAINMENU)
+                    #setGameState2(System_State.PLAYING)
+                if self.index >= 10:
+                    muestra_texto(screen, str('monotypecorsiva'), "Victoria! tu tu tuu~ tu tu", YELLOW, 40, (SCREEN_WIDTH/2, SCREEN_HEIGHT - 200))
 
     def drawEntityInfo(self, screen, camera):
         if len(self.player.unitsSelected) == 1:

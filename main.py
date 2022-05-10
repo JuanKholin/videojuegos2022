@@ -101,8 +101,8 @@ def setEntity(player, ai):
     #    ai.addUnits(unit)
 
     aiStructures = []
+    aiStructures.append(TerranBuilder(6, 4, ai, mapa, False, raton))
     aiStructures.append(TerranBarracks(12, 6, ai, mapa, False))
-    aiStructures.append(TerranBuilder(20, 12, ai, mapa, False, raton))
 
     for structure in aiStructures:
         ai.addStructures(structure)
@@ -150,8 +150,8 @@ def update():
             escena.update()
             escena.count += frame(30)
             if escena.count == 3:
-                setGameState(System_State.PAUSED)
-        
+                escena.count =0
+                setGameState(System_State.PAUSED)      
     elif getGameState() == System_State.PAUSED:
         print(1)
     elif getGameState() == System_State.GAMESELECT:
