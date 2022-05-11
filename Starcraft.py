@@ -132,8 +132,8 @@ def setEntity(player, ai):
     structure1 = TerranBuilder(5, 4, player, mapa, False, raton)
     #structure2 = TerranBarracks(17, 67, player, mapa, False)
     structure1z = TerranBuilder(35, 4, ai, mapa, False, raton)
-    drone = TerranWorker(ai, 35,6)
-    scv = TerranWorker(player, 5, 6)
+    drone = TerranSoldier(ai, 35,6)
+    scv = TerranWorker(player, 30, 6)
     ai.addUnits(drone)
     ai.addStructures(structure1z)
     ai.setBasePlayer(structure1z)
@@ -237,7 +237,8 @@ keyMap ={
   pg.K_c: CommandId.BUILD_BARRACKS,
   pg.K_x: CommandId.BUILD_REFINERY,
   pg.K_d: CommandId.UPGRADE_SOLDIER_DAMAGE,
-  pg.K_a: CommandId.UPGRADE_SOLDIER_ARMOR,
+  pg.K_s: CommandId.UPGRADE_SOLDIER_ARMOR,
+  pg.K_a: CommandId.SEARCH_NEARBY_RIVAL,
   pg.K_m: CommandId.UPGRADE_WORKER_MINING,
   pg.K_g: CommandId.SAVE_GAME,
 }
@@ -297,7 +298,7 @@ if Utils.DEBBUG == False:
     aI = AI(player2, Race.TERRAN, EASY)
 
 else:
-    aI = AI(player2, Race.TERRAN, NULA)
+    aI = AI(player2, Race.TERRAN, EASY)
 escena = Escena(player1, player2, aI, [], camera, raton, p1Interface, [])
 raton.setEscena(escena)
 

@@ -91,8 +91,8 @@ class AI():
     def makeDecission(self, units, structures):
         decission = self.decide()
         if decission == 0:
-            #print("IA DECIDE ATACAR LO VISIBLE")
-            self.attackVisible(units, structures)
+            print("IA DECIDE ATACAR LO VISIBLE")
+            #self.attackVisible(units, structures)
         elif decission == 1:
             #print("IA DECIDE HACER MEJORAS")
             self.armyUpgrade(structures)
@@ -525,8 +525,7 @@ class AI():
         elif (self.geyserBuilding == TERRAN_GEYSER_STRUCTURE) and (self.data.resources >= TERRAN_GEYSER_STRUCTURE_MINERAL_COST):
             #print("Construye terrangeyserstructure")
             self.data.resources -= TERRAN_GEYSER_STRUCTURE_MINERAL_COST
-            pos = geyser.getPosition()
-            toBuild = TerranRefinery(pos[0] / 40, pos[1] / 40, self.data, self.mapa, True, geyser)
+            toBuild = TerranRefinery(int(geyser.x / 40) - 1, int(geyser.y / 40) + 1, self.data, self.mapa, True, geyser)
             self.data.addStructures(toBuild)
             #toBuild.buildProcess()
         elif (self.geyserBuilding == PROTOSS_GEYSER_STRUCTURE) and (self.data.resources >= PROTOSS_GEYSER_STRUCTURE_MINERAL_COST):

@@ -52,6 +52,8 @@ class Unit(Entity):
         self.occupiedTile = None
 
         self.esEstructura = False
+
+        self.siendoAtacado = False
     
     def spawn(self, x, y):
         self.x = x
@@ -67,6 +69,7 @@ class Unit(Entity):
     # obstaculo de camino lo esquivara y si la tile objetivo esta ocupada se detiene
     # lo mas cerca posible de esta
     def move(self, objectiveTile):
+        self.siendoAtacado = False
         if objectiveTile.type == OBSTACLE:
             objectiveTile = self.mapa.getTileCercana(self.getTile(), objectiveTile)
         elif objectiveTile.type != EMPTY and objectiveTile.type != UNIT:
@@ -287,6 +290,14 @@ class Unit(Entity):
 
     def updateAttackInRange(self):
         ownTile = self.getTile()
+        if self.attackedOne.esEstructura == False:
+            self.tileAAtacar = self.attackedOne.getTile()
+            if self.tileAAtacar == None:
+                enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
+                if enemy != None:
+                    self.attack(enemy)
+                else:
+                    self.changeToStill()
         if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
             if len(self.paths) != 0:
                 objectivePath = self.paths[0]
@@ -598,7 +609,11 @@ class Unit(Entity):
             self.changeToDying()
         else:
             self.hp -= (damage - self.player.armorUpgrade)
-            if self.state != UnitState.ATTACKING: # Cambiar a atacar si no esta haciendo nada
+            #if self.state != UnitState.ATTACKING and self.state != UnitState.STILL: # Cambiar a atacar si no esta haciendo nada ASI GUAY
+            if self.state != UnitState.ATTACKING and self.state != UnitState.STILL:
+                self.siendoAtacado = True
+                self.atacante = attacker
+            elif self.state == UnitState.STILL:
                 self.attack(attacker)
         return self.hp
 
@@ -659,10 +674,17 @@ class Unit(Entity):
         self.paths.pop(0)
         if len(self.paths) == 0:
             #print("ORDEN AL FINALIZAR CAMINO:" ,self.order['order'])
-            #print("FINISH PATH")
-            self.changeToStill()
+            #print("FINISH PATH"
+            if self.siendoAtacado == True:
+                self.attack(self.atacante)
+            else:
+                self.changeToStill()
         else:
-            self.changeObjectiveTile()
+            if self.siendoAtacado == True:
+                self.attack(self.atacante)
+            else:
+                self.changeObjectiveTile()
+        
 
 
     def recalcAttackPaths(self):
@@ -670,6 +692,12 @@ class Unit(Entity):
         if self.attackedOne.esEstructura == False:
             #print("Atacamos a una unidad")
             self.tileAAtacar = self.attackedOne.getTile()
+            if self.tileAAtacar == None:
+                enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
+                if enemy != None:
+                    self.attack(enemy)
+                else:
+                    self.changeToStill()
             self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
         else:
             #print("Atacamos a una estructura")

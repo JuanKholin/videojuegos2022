@@ -26,6 +26,7 @@ class CommandId(IntEnum):
     UPGRADE_WORKER_MINING = auto()
     BUILD_REFINERY = auto()
     EXTRACT_GAS = auto()
+    SEARCH_NEARBY_RIVAL = auto()
 
 class Command:
     def __init__(self, id):

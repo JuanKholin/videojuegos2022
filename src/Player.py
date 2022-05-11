@@ -1,3 +1,4 @@
+from click import command
 import pygame as pg
 import math
 from . import Utils
@@ -74,14 +75,30 @@ class Player():
                 #print(param[i]['order'])
                 #self.unitsSelected[i].paths = param[i]['path']
                 # En funcion de la orden cambiarle el estado a la unidad
-                if param[i]['order'] == CommandId.MINE:
-                    self.unitsSelected[i].mine(param[i]['resource'])
-                elif param[i]['order'] == CommandId.MOVE:
-                    self.unitsSelected[i].move(tileClicked)
-                elif param[i]['order'] == CommandId.EXTRACT_GAS:
-                    self.unitsSelected[i].extract(tileClicked)
-                elif param[i]['order'] == CommandId.ATTACK:
-                    self.unitsSelected[i].attack(param[i]['attackedOne'])
+                if self.unitsSelected[i].state != UnitState.DEAD and self.unitsSelected[i].state != UnitState.DYING:
+                    if param[i]['order'] == CommandId.MINE:
+                        self.unitsSelected[i].mine(param[i]['resource'])
+                    elif param[i]['order'] == CommandId.MOVE:
+                        self.unitsSelected[i].move(tileClicked)
+                    elif param[i]['order'] == CommandId.EXTRACT_GAS:
+                        self.unitsSelected[i].extract(tileClicked)
+                    elif param[i]['order'] == CommandId.ATTACK:
+                        if self.unitsSelected[i].state == UnitState.STILL or self.unitsSelected[i].state == UnitState.ATTACKING:
+                            self.unitsSelected[i].attack(param[i]['attackedOne'])
+                        else:
+                            self.unitsSelected[i].siendoAtacado = True
+                            self.unitsSelected[i].atacante = param[i]['attackedOne']
+        elif id == CommandId.SEARCH_NEARBY_RIVAL:
+            print("BUSCAR")
+            for unit in self.unitsSelected:
+                enemy = self.mapa.getNearbyRival(unit.occupiedTile, self)
+                #print(type(enemy))
+                if enemy != None:
+                    print("ataco a otro")
+                    unit.attack(enemy)
+                else:
+                    print("no hay naide")
+                    unit.changeToStill()
         elif self.structureSelected != None:
             if id == CommandId.GENERATE_UNIT or id == CommandId.GENERATE_WORKER or id == CommandId.GENERATE_SOLDIER:
                 self.structureSelected.execute(id)

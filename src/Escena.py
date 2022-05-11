@@ -50,6 +50,8 @@ class Escena():
             if not self.raton.building:
                 if command.id == CommandId.GENERATE_UNIT:
                     self.p1.execute(command.id, [], None)
+                if command.id == CommandId.SEARCH_NEARBY_RIVAL:
+                    self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.GENERATE_WORKER:
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.GENERATE_SOLDIER:
