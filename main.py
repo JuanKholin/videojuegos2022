@@ -151,6 +151,7 @@ def update():
                 escena.count =0
                 setGameState(System_State.PAUSED)      
     elif getGameState() == System_State.PAUSED:
+        pass
         #print(1)
     elif getGameState() == System_State.GAMESELECT:
         #Cargar las partidas

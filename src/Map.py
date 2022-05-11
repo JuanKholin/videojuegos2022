@@ -89,9 +89,9 @@ class Map():
 
     def getRectTiles(self, rect):
         tiles = []
-        x = self.getTile(rect.x, rect.y).centerx
+        x = (self.getTile(rect.x, rect.y)).centerx
         finx = rect.x + rect.w
-        y = self.getTile(rect.x, rect.y).centery
+        y = (self.getTile(rect.x, rect.y)).centery
         finy = rect.y + rect.h
         #print(rect.x, rect.y, rect.w, rect.h)
         while x <= finx:
@@ -110,8 +110,12 @@ class Map():
 
         if int(x / self.tw) >= len(self.mapa[0]):
             xaux = len(self.mapa[0]) - 1
+        elif int(x / self.tw) < 0:
+            xaux = 0
         if int(y / self.th) >= len(self.mapa):
             yaux = len(self.mapa) - 1
+        elif int(y / self.th) < 0:
+            yaux = 0
         #print(xaux, yaux)
         if (xaux >= 0) and (yaux >= 0):
             return self.mapa[yaux][xaux]

@@ -16,6 +16,9 @@ class Interface():
     upgradeX = 400
     upgradeY = 705
     index = 0
+    
+    heropadx = 0
+    heropady = 0
 
     def __init__(self, player, enemy, mouse):
         self.player = player
@@ -84,6 +87,9 @@ class Interface():
 
         self.heroeSprites = cargarSprites(HEROE_PATH, HEROE_N, False, None, 1.3)
         self.heroeIndex = 0
+        self.herow = self.heroeSprites[0].get_width()
+        self.heroh = self.heroeSprites[0].get_height()
+        self.count2 = 0
 
         self.idExit = 0
         self.idSingle = 0
@@ -579,12 +585,31 @@ class Interface():
                 pygame.draw.rect(screen, BLUE, pygame.Rect(200, 200, 500, 500))
                 pygame.draw.rect(screen, BLUE2, pygame.Rect(200, 200, 500, 500), 4)
             if Utils.state2 == System_State.GAMEOVER:
-                screen.blit(self.loseSprite[self.index], (0, 0))
-                self.index += frame(5)
-                if self.index == 30:
+                if self.count2 < 10:
+                    image = pg.transform.scale(self.heroeSprites[self.heroeIndex], [self.herow, self.heroh])
+                    screen.blit(image, (672 - self.heropadx, 667- self.heropady))
+                    self.heroeIndex = (self.heroeIndex+frame(8))%HEROE_N 
+                    self.count2 += frame(30)
+                    if self.heropadx < 670:
+                        self.heropadx += 5
+                    if self.heropady < 667:
+                        self.heropady += 5
+                    if self.herow < SCREEN_WIDTH:
+                        self.herow += 7
+                    if self.heroh < SCREEN_HEIGHT:
+                        self.heroh += 5
+                        if self.heroh >= SCREEN_HEIGHT:
+                            playSound(loserSound)
+                    else:
+                        muestra_texto(screen, str('monotypecorsiva'), "???", YELLOW, 80, [800, 200])
+                else:
+                    screen.blit(self.loseSprite[self.index], (0, 0))
+                    self.index += frame(5)
                     if self.index == 30:
-                        self.index = 10
+                        if self.index == 30:
+                            self.index = 10
             if Utils.state2 == System_State.WIN:
+                
                 screen.blit(self.winSprite[self.index], (0, 0))
                 self.index += frame(5)
                 if self.index == 30:
