@@ -1,0 +1,1 @@
+En dist/Starcraft esta el .exe para jugar :D
