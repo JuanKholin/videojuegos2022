@@ -185,7 +185,7 @@ class Structure(Entity.Entity):
 
                 libres = self.mapa.getEntityTilesVecinas(tile, tile)
                 if len(libres) > 0:
-                    unit.spawn(libres[0].centerx, libres[0].centery)
+                    unit.spawn(int(libres[0].centerx/TILE_WIDTH), int(libres[0].centery/TILE_HEIGHT))
                     self.player.addUnits(unit)
                     if inCamera([libres[0].centerx, libres[0].centery]):
                         playSound(unit.generateSound)

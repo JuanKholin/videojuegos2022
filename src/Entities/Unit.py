@@ -62,8 +62,8 @@ class Unit(Entity):
         self.siendoAtacado = False
     
     def spawn(self, x, y):
-        self.x = x
-        self.y = y
+        self.x = x * TILE_WIDTH + 20
+        self.y = y * TILE_HEIGHT
         self.updateOwnSpace()
         self.changeToStill()
 
