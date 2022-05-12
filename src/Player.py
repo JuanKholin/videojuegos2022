@@ -88,6 +88,8 @@ class Player():
                         else:
                             self.unitsSelected[i].siendoAtacado = True
                             self.unitsSelected[i].atacante = param[i]['attackedOne']
+                    else:
+                        self.unitsSelected[i].updateOwnSpace()
         elif id == CommandId.SEARCH_NEARBY_RIVAL:
             print("BUSCAR")
             for unit in self.unitsSelected:

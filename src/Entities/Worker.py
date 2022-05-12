@@ -56,6 +56,7 @@ class Worker(Unit):
                     self.moveToMining()
                     self.changeObjectiveTile()
                 else:
+                    self.updateOwnSpace()
                     self.startMining()
 
 
@@ -85,6 +86,7 @@ class Worker(Unit):
                         self.moveToMining()
                         self.changeObjectiveTile()
                     else:
+                        self.updateOwnSpace()
                         self.startExtracting()
                 else:
                     #print("No hay tiles libres weird")

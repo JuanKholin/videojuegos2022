@@ -70,6 +70,9 @@ class Map():
         for i in range(h): #Recorro el mapa  por las filas
             for j in range(w): #En la fila i recorro las columnas
                 self.mapa[i + int(y / self.th)][j + int(x / self.tw)].type = 1
+    
+    def setObstacle(self, tile):    
+        tile.type = 1
 
     def addOre(self, x, y):
         #print(int(y / self.th), int(x / self.tw))
@@ -212,11 +215,15 @@ class Map():
 
     #Pone la tile como vecina
     def setVecina(self, tile, id):
+        
         if tile.type == EMPTY:
             tile.setOcupada(id)
         else:
             #print("HI")
             pass
+        if tile.tileid == 290:
+            print("OCUPADA")
+            print(tile.type)
 
     #Pone la tile como recurso
     def setRecurso(self, tile):

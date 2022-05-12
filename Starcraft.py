@@ -146,14 +146,14 @@ def setEntity(player, ai):
     #Recursos del mapa
     resources = []
 
-    crystal = Crystal(5, 13, 800)
-    crystal3 = Crystal(9, 13, 800)
-    crystala = Crystal(13, 13, 800)
-    crystalb = Crystal(17, 13, 800)
-    crystalc = Crystal(21, 13, 800)
+    crystal = Crystal(5, 17, 800)
+    crystal3 = Crystal(9, 17, 800)
+    crystala = Crystal(13, 17, 800)
+    crystalb = Crystal(17, 17, 800)
+    crystalc = Crystal(21, 17, 800)
 
-    crystalz = Crystal(35, 13, 400)
-    crystalz3 = Crystal(31, 13, 400)
+    crystalz = Crystal(35, 17, 400)
+    crystalz3 = Crystal(31, 17, 400)
 
 
     resources.append(crystal3)
@@ -169,9 +169,9 @@ def setEntity(player, ai):
 
 
 
-    gas = Geyser(16, 7, 800)
+    gas = Geyser(16, 13, 800)
     resources.append(gas)
-    gas = Geyser(24, 7, 800)
+    gas = Geyser(24, 13, 800)
     resources.append(gas)
     escena.resources = resources
 
@@ -187,8 +187,14 @@ def update():
         #playMusic(map1BGM)
         #cargar mapa
         escena.mapa = mapa
+        
+       
         escena.mapa.load()
         escena.mapa.loadMinimap()
+        x, y = escena.addWall(20,280,1,1,30)
+        x, y = escena.addWall(x,y,1,-1,30)
+        x, y = escena.addWall(x,y,-1,-1, 30)
+        #x, y = escena.addWall(x,y,-1,1,30)
         camera.x = 0
         camera.y = 0
         setEntity(player1, player2)
@@ -302,6 +308,7 @@ if Utils.DEBBUG == False:
 else:
     aI = AI(player2, Race.TERRAN, NULA)
 escena = Escena(player1, player2, aI, [], camera, raton, p1Interface, [])
+
 raton.setEscena(escena)
 
 # Bucle principal

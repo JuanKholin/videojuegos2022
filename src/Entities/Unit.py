@@ -91,6 +91,10 @@ class Unit(Entity):
         self.occupiedTile.setOcupante(self)
         if len(self.paths) > 0 and (self.state != UnitState.ORE_TRANSPORTING and self.state != UnitState.GAS_TRANSPORTING) :
             self.changeToMoving(self.paths)
+        else:
+            
+            self.updateOwnSpace()
+            self.changeToStill()
 
     # Indica a la unidad que ataque al objetivo seleccionado, si se encuentra un
     # obstaculo de camino lo esquivara y si el objetivo se desplaza este le seguira
@@ -121,6 +125,8 @@ class Unit(Entity):
                 tilePos = (self.getTile().centerx,self.getTile().centery)
                 path = Path(math.atan2(tilePos[1] - unitPos[1], tilePos[0] - unitPos[0]), int(math.hypot(tilePos[0] - unitPos[0], tilePos[1] - unitPos[1])),tilePos)
                 self.paths = [path]
+            elif len(self.paths) == 0:
+                self.updateOwnSpace()
 
     # Indica a la unidad que se acerque lo mas posible a un recurso mineral
     def mine(self, resource):
