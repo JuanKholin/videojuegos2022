@@ -5,9 +5,15 @@ from ..Utils import *
 from ..Command import *
 from ..Lib import *
 from ..Camera import *
+from ..Music import *
 
 # Representa a una unidad movil de cualquiera de las razas
 class Unit(Entity):
+    
+    generateSound = soldierGenerateSound
+    deadSound = soldierDeadSound
+    attackSound = soldierAttackSound
+    
     def __init__(self, hp, xIni, yIni, mineral_cost, generation_time, speed, framesToRefresh,
                     sprites, face, frame, padding, id, player, inversibleFrames,
                         frames, dirOffset, attackFrames, stillFrames, moveFrames, dieFrames,  xPadding, yPadding, wPadding, hPadding, attackInfo):

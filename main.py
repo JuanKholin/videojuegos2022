@@ -26,6 +26,9 @@ from src.Entities.Zergling import *
 from src.Entities.TerranSupplyDepot import *
 from src.Entities.Extractor import *
 from src.Entities.TerranRefinery import *
+from src.Entities.Zerg1 import *
+from src.Entities.Zerg2 import *
+from src.Entities.Zerg3 import *
 
 
 # Auxiliar del bucle principal
@@ -62,7 +65,7 @@ def setEntity(player, ai):
     scv8 = TerranWorker(player, 11, 10)
     structure1 = TerranBuilder(2, 7, player, mapa, False, raton)
     structure3 = TerranSupplyDepot(4, 4, player, mapa, True)
-    structure7 = Hatchery(30, 30, player, mapa, True, raton)
+    structure7 = Hatchery(10, 23, player, mapa, True, raton)
 
     player.setBasePlayer(structure1)
     structure2 = TerranBarracks(15, 9, player, mapa, False)
@@ -70,11 +73,15 @@ def setEntity(player, ai):
     structure4 = Extractor(12, 27, player, mapa, True)
     structure5 = TerranRefinery(13, 18, ai, mapa, True, gas2)
     
-    player.addStructures(structure1)
-    #player.addStructures(structure2)
-    #player.addStructures(structure3)
+    structure6 = Zerg1(7, 16, ai, mapa, True)
+    structure8 = Zerg2(2, 14, ai, mapa, True)
+    structure9 = Zerg3(8, 20, ai, mapa, True)
     
-    #player.addStructures(structure7)
+    player.addStructures(structure1)
+    player.addStructures(structure6)
+    player.addStructures(structure8)
+    player.addStructures(structure9)
+    player.addStructures(structure7)
     #player.addStructures(structure4)
     ai.addStructures(structure5)
     player.addUnits(scv)

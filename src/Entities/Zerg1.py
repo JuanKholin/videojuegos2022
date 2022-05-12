@@ -1,7 +1,6 @@
 import pygame
 from .Zergling import *
 from .Structure import *
-from .. import Player, Map
 from ..Command import *
 from ..Utils import *
 from .Entity import *
@@ -14,66 +13,55 @@ HEIGHT = 4
 HP = 200
 CAPACITY = 10
 
-class Hatchery(Structure):
-    TILES_HEIGHT = 4
-    TILES_WIDTH = 6
-    CENTER_TILE = [2, 2]
+class Zerg1(Structure):
+    TILES_HEIGHT = 3
+    TILES_WIDTH = 4
+    CENTER_TILE = [1, 1]
     sprites = []
     training = []
     heightPad = 10
     generationTime = 0
     generationCount = 0
-    rectOffY = 90
-    tileW = 6
+    rectOffY = 20
+    tileW = 4
     clicked = False
-    tileH = 4
-    frame = 12
-    nSprites = 4
-    options = [Options.GENERATE_WORKER, Options.BUILD_HATCHERY]
+    tileH = 3
+    frame = 20
+    nSprites = 3
+    options = []
 
-    def __init__(self, xini, yini, player, map, building, raton):
+    def __init__(self, xini, yini, player, map, building):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
-        self.sprites = cargarSprites(HATCHERY_PATH, self.nSprites, False, BLUE2, 1.8, 0)
+        self.sprites = cargarSprites(S1_PATH, self.nSprites, False, BLUE2, 1.4, 0)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.sprites += deadSprites
         self.image = self.sprites[self.index]
-        self.operativeIndex = [0, 1, 2, 3]
-        self.spawningIndex = [0, 1, 2, 3]
+        self.operativeIndex = [0, 1, 2]
+        self.spawningIndex = [0, 1, 2]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
-        self.raton = raton
-        self.render = pygame.transform.scale(pygame.image.load(HATCHERY_RENDER), RENDER_SIZE)
+        #self.raton = raton
+        self.render = pygame.transform.scale(pygame.image.load(S1_RENDER), RENDER_SIZE)
 
         self.building = building
         if building:
             self.state = BuildingState.OPERATIVE
         self.count = 0
-
-        self.count = 0
+        
         self.training = []
         self.paths = []
         self.building = False
 
-        self.type = ZERG_BASE
+        self.type = ZERG_S1
 
     def execute(self, command_id):
         if self.clicked:
-            if command_id == CommandId.GENERATE_UNIT and self.player.resources >= ZERGLING_MINERAL_COST:
-                self.player.resources -= ZERGLING_MINERAL_COST
-                zergling = Zergling(self.player)
-                self.generateUnit(zergling)
-                self.frame = 4
-                self.state = BuildingState.SPAWNING
+            pass
 
     def command(self, command):
-        if command == CommandId.BUILD_STRUCTURE:
-            return Command(CommandId.BUILD_HATCHERY)
-        elif command == CommandId.GENERATE_UNIT:
-            return Command(CommandId.GENERATE_UNIT)
-        else:
-            return Command(CommandId.NULL)
+        return Command(CommandId.NULL)
 
     def getBuildSprite(self):
         return self.sprites[3]
@@ -83,7 +71,7 @@ class Hatchery(Structure):
         #x, y = map.getTileIndex(self.originX, self.originY)
         fatherDictionary = super().toDictionary(map)
         sonDictionary = {
-            "clase": "hatchery",
+            "clase": "s1",
             "building": self.building,
             "nombre": "Criadera de Zerg",
             "funcion": "Base enemiga"

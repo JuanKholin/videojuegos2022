@@ -20,6 +20,7 @@ class Structure(Entity.Entity):
     count = 0
     indexCount = 0
     options = []
+    generateSound = soldierGenerateSound
     deadSound = terranStructureDead
     selectedSound = structureSelectedSound
 
@@ -125,13 +126,13 @@ class Structure(Entity.Entity):
     def getImage(self):
         image = self.image.get_rect()
         r = self.getRect()
-        rectAux = pygame.Rect(r.x + r.w/2 - image.w/2, r.y - self.heightPad - self.rectOffY, image.w, image.h)
+        rectAux = pygame.Rect(r.x + r.w/2 - image.w/2 - self.widthPad, r.y - self.heightPad - self.rectOffY, image.w, image.h)
         return rectAux
 
     def getFinalImage(self):
         image = self.finalImage.get_rect()
         r = self.getRect()
-        rectAux = pygame.Rect(r.x + r.w/2 - image.w/2, r.y - self.heightPad - self.rectOffY, image.w, image.h)
+        rectAux = pygame.Rect(r.x + r.w/2 - image.w/2 - self.widthPad, r.y - self.heightPad - self.rectOffY, image.w, image.h)
         return rectAux
 
     def setClicked(self, click):
@@ -182,7 +183,7 @@ class Structure(Entity.Entity):
                 unit = self.training[0]
                 tile = self.mapa.getTile(self.x, self.y)
 
-                libres = self.mapa.getEntityTilesVecinas(tile, unit.getTile())
+                libres = self.mapa.getEntityTilesVecinas(tile, tile)
                 if len(libres) > 0:
                     unit.spawn(libres[0].centerx, libres[0].centery)
                     self.player.addUnits(unit)
@@ -232,10 +233,10 @@ class Structure(Entity.Entity):
             #pygame.draw.rect(screen, BLACK, pygame.Rect(image.x - camera.x, image.y - camera.y, image.w, image.h),1)
 
             tile = self.mapa.getTile(r.x + self.CENTER_TILE[0] * TILE_WIDTH, r.y + self.CENTER_TILE[1] * TILE_HEIGHT)
-            #libres = self.mapa.getEntityTilesVecinas(tile)
+            libres = self.mapa.getEntityTilesVecinas(tile, tile)
             pygame.draw.rect(screen, BLACK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, 40, 40), 5)
-            #for tile in libres:
-             #   pygame.draw.rect(screen, PINK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, tile.w, tile.h),1)
+            for tile in libres:
+               pygame.draw.rect(screen, PINK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, tile.w, tile.h),1)
 
     def drawBuildStructure(self, screen, camera):
         r = self.getRect()

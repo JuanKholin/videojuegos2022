@@ -111,6 +111,7 @@ ZERG_BARRACKS = None # Faltan
 ZERG_DEPOT = None
 ZERG_GEYSER_STRUCTURE = "Extractor"
 ZERG_WORKER = "Drone"
+ZERG_S1 = "s1"
 ZERG_SOLDIER = "Zergling"
 
 PROTOSS_BASE = None
@@ -391,6 +392,21 @@ HATCHERY_MINERAL_COST = 100
 EXTRACTOR_PATH = "SPRITE/structure/extractor/tile00"
 EXTRACTOR_RENDER = "SPRITE/render/extractor.png"
 EXTRACTOR_MINERAL_COST = 60
+
+#-----------S1-------------
+S1_PATH = "SPRITE/structure/Zerg_1/tile00"
+S1_RENDER = "SPRITE/render/extractor.png"
+S1_MINERAL_COST = 60
+
+#-----------S2-------------
+S2_PATH = "SPRITE/structure/Zerg_2/tile00"
+S2_RENDER = "SPRITE/render/extractor.png"
+S2_MINERAL_COST = 60
+
+#-----------S3-------------
+S3_PATH = "SPRITE/structure/Zerg_3/tile00"
+S3_RENDER = "SPRITE/render/extractor.png"
+S3_MINERAL_COST = 60
 
 ##---------SUPPLY------------------
 TERRAN_SUPPLY_PATH = "SPRITE/structure/supply_depot/tile00"
