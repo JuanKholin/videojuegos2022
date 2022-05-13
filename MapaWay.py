@@ -375,7 +375,7 @@ raton = Raton.Raton(player1, player2, mapa)
 p1Interface = Interface(player1, player2, raton)
 raton.addInterface(p1Interface)
 if Utils.DEBBUG == False:
-    aI = AI(player2, Race.TERRAN, EASY)
+    aI = AI(player2, Race.TERRAN, HARD)
 
 else:
     aI = AI(player2, Race.TERRAN, NULA)

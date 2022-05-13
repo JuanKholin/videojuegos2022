@@ -36,6 +36,8 @@ class Worker(Unit):
         resource = resource.ocupante.resource
         self.changeToExtracting(resource)
 
+    def getType(self):
+        return 1
     def changeToMining(self, resource):
         if resource.getCapacity() != 0: # Si hay recurso, si es gas agotado es -algo
             self.state = UnitState.MINING
