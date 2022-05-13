@@ -128,12 +128,73 @@ def setEntity(player, ai):
     escena.resources = resources'''
 
 def setEntity(player, ai):
+    scv = TerranWorker(player, 20, 20)
+    player.addUnits(scv)
+    scv = TerranWorker(player, 34, 6)
+    player.addUnits(scv)
+    structure1 = TerranBuilder(20, 35, player, mapa, False, raton)
+    player.addStructures(structure1)
+    player.setBasePlayer(structure1)
 
+    #Recursos del mapa
+    resources = []
+    crystal = Crystal(33, 32, 800)
+    resources.append(crystal)
+    crystal = Crystal(29, 30, 800)
+    resources.append(crystal)
+    crystal = Crystal(25, 28, 800)
+    resources.append(crystal)
+
+
+    gas = Geyser(30, 5, 800)
+    resources.append(gas)
+
+    scv = TerranWorker(player, 12, 5)
+    ai.addUnits(scv)
+    structure1 = TerranBuilder(20, 5, player, mapa, False, raton)
+    ai.addStructures(structure1)
+    ai.setBasePlayer(structure1)
+
+    #Recursos del mapa
+
+    crystal = Crystal(7, 8, 800)
+    resources.append(crystal)
+    crystal = Crystal(11, 10, 800)
+    resources.append(crystal)
+    crystal = Crystal(15, 12, 800)
+    resources.append(crystal)
+
+
+    gas = Geyser(30, 5, 800)
+    resources.append(gas)
+
+
+    crystal = Crystal(22, 23, 800)
+    resources.append(crystal)
+
+    crystal = Crystal(27, 20, 800)
+    resources.append(crystal)
+
+    crystal = Crystal(18, 16, 800)
+    resources.append(crystal)
+
+    crystal = Crystal(12, 19, 800)
+    resources.append(crystal)
+
+    gas = Geyser(6, 13, 800)
+    resources.append(gas)
+
+    gas = Geyser(35, 25, 800)
+    resources.append(gas)
+    escena.resources = resources
+
+
+    '''
     structure1 = TerranBuilder(5, 4, player, mapa, False, raton)
     #structure2 = TerranBarracks(17, 67, player, mapa, False)
     structure1z = TerranBuilder(35, 4, ai, mapa, False, raton)
     drone = TerranSoldier(ai, 35,6)
-    scv = TerranWorker(player, 7, 6)
+    
     sold = TerranSoldier(ai, 9, 4)
     ai.addUnits(drone)
     ai.addUnits(sold)
@@ -173,7 +234,7 @@ def setEntity(player, ai):
     resources.append(gas)
     gas = Geyser(24, 13, 800)
     resources.append(gas)
-    escena.resources = resources
+    escena.resources = resources'''
 
 def update():
     clock_update()
@@ -191,14 +252,23 @@ def update():
        
         escena.mapa.load()
         escena.mapa.loadMinimap()
-        #x, y = escena.addWall(20,280,1,1,30)
-        #x, y = escena.addWall(x,y,1,-1,30, 0, 20)
+        x, y = escena.addWall(20,1400,1,1,30)
+        x, y = escena.addWall(x,y,1,-1,40)
         #print(x,y)
-        #x, y = escena.addWall(x,y,-1,-1, 30, 10, 30)
+        x, y = escena.addWall(x,y,-1,-1, 40)
         #print(x,y)
+        x, y = escena.addWall(x,y,-1,-1, 70, 10)
         #x, y = escena.addWall(x,y,-1,1,30)
-        camera.x = 0
-        camera.y = 0
+
+        x, y = escena.addWall(1540,200,-1,-1,30)
+        x, y = escena.addWall(x,y,-1,1,40)
+        #print(x,y)
+        x, y = escena.addWall(x,y,1,1, 40)
+        #print(x,y)
+        x, y = escena.addWall(x,y,1,1, 70, 10)
+
+        camera.x = 400
+        camera.y = 1000
         setEntity(player1, player2)
         setGameState(System_State.ONGAME)
     elif getGameState() == System_State.ONGAME:
@@ -260,8 +330,8 @@ commandMap ={
   CommandId.ROTATE: pg.K_r,
 }
 
-#print(MAPA_CHIKITO.__len__(), MAPA_CHIKITO[0].__len__())
-mapa = Map.Map( MAPA_CHIKITO[0].__len__(),MAPA_CHIKITO.__len__(), True, MAPA_CHIKITO)
+print(MAPA_GRANDITO.__len__(), MAPA_GRANDITO[0].__len__())
+mapa = Map.Map( MAPA_GRANDITO[0].__len__(),MAPA_GRANDITO.__len__(), True, MAPA_GRANDITO)
 '''
 mapa.setElevacion(0, 55)
 mapa.setElevacion(8, 55)
