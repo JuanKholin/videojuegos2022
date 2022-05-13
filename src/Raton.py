@@ -278,18 +278,19 @@ class Raton(pygame.sprite.Sprite):
                                 tileClicked = self.mapa.getTile(real_mouse_pos[0],real_mouse_pos[1] + 40)
                             if tileClicked.ocupante != None:
                                 unidadClickada = tileClicked.ocupante
-                                if unidadClickada.clicked: # Seleccionar todos los del mismo tipo
-                                    reClick = True
-                                    self.player.unitsSelected = []
-                                    self.player.unitsSelected.append(unidadClickada) 
-                                    left = 7
-                                    for unit in self.player.units:
-                                        if left == 0:
-                                            break
-                                        elif unidadClickada != unit:
-                                            if unidadClickada.getType() == unit.getType() :
-                                                unit.setClicked(True)
-                                                self.player.unitsSelected.append(unit)
+                                if unidadClickada.getType() != -1:
+                                    if unidadClickada.clicked: # Seleccionar todos los del mismo tipo
+                                        reClick = True
+                                        self.player.unitsSelected = []
+                                        self.player.unitsSelected.append(unidadClickada) 
+                                        left = 7
+                                        for unit in self.player.units:
+                                            if left == 0:
+                                                break
+                                            elif unidadClickada != unit:
+                                                if unidadClickada.getType() == unit.getType() :
+                                                    unit.setClicked(True)
+                                                    self.player.unitsSelected.append(unit)
                                         left -= 1
                             if reClick == False:
                                 if self.building:

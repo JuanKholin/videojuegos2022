@@ -46,6 +46,9 @@ class Structure(Entity.Entity):
 
     def getPosition(self):
         return (self.x, self.y)
+
+    def getType(self):
+        return -1
     
     def getOptions(self):
         if self.state != BuildingState.BUILDING and self.state != BuildingState.COLLAPSING and self.state!= BuildingState.DESTROYED:

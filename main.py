@@ -26,9 +26,9 @@ from src.Entities.Zergling import *
 from src.Entities.TerranSupplyDepot import *
 from src.Entities.Extractor import *
 from src.Entities.TerranRefinery import *
-from src.Entities.Zerg1 import *
+from Entities.ZergBarracks import *
 from src.Entities.Zerg2 import *
-from src.Entities.Zerg3 import *
+from Entities.ZergSupply import *
 
 
 # Auxiliar del bucle principal

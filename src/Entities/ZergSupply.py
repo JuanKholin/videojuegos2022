@@ -13,26 +13,27 @@ HEIGHT = 4
 HP = 200
 CAPACITY = 10
 
-class Zerg1(Structure):
-    TILES_HEIGHT = 3
-    TILES_WIDTH = 4
+class ZergSupply(Structure):
+    TILES_WIDTH = 3
+    TILES_HEIGHT = 2
     CENTER_TILE = [1, 1]
     sprites = []
     training = []
     heightPad = 10
     generationTime = 0
     generationCount = 0
-    rectOffY = 20
-    tileW = 4
+    widthPad = -15
+    rectOffY = 30
+    tileW = 3
     clicked = False
-    tileH = 3
-    frame = 20
+    tileH = 2
+    frame = 10
     nSprites = 3
     options = []
 
     def __init__(self, xini, yini, player, map, building):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
-        self.sprites = cargarSprites(S1_PATH, self.nSprites, False, BLUE2, 1.4, 0)
+        self.sprites = cargarSprites(SUPPLY_ZERG_PATH, self.nSprites, False, BLUE2, 1.2, 0)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
@@ -43,7 +44,7 @@ class Zerg1(Structure):
         self.spawningIndex = [0, 1, 2]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
         #self.raton = raton
-        self.render = pygame.transform.scale(pygame.image.load(S1_RENDER), RENDER_SIZE)
+        self.render = pygame.transform.scale(pygame.image.load(SUPPLY_ZERG_RENDER), RENDER_SIZE)
 
         self.building = building
         if building:
@@ -73,8 +74,8 @@ class Zerg1(Structure):
         sonDictionary = {
             "clase": "s1",
             "building": self.building,
-            "nombre": "Criadera de Zerg",
-            "funcion": "Base enemiga"
+            "nombre": "Refugio de zergs",
+            "funcion": "Aumentar poblacion"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

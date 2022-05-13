@@ -320,7 +320,9 @@ HEROE_N = 10
 class Options(Enum):
     BUILD_BARRACKS = auto()
     GENERATE_WORKER = auto()
+    GENERATE_WORKER_ZERG = auto()
     GENERATE_SOLDIER = auto()
+    GENERATE_SOLDIER_ZERG = auto()
     BUILD_REFINERY = auto()
     BUILD_HATCHERY = auto()
     BUILD_SUPPLY_DEPOT = auto()
@@ -328,6 +330,9 @@ class Options(Enum):
     MINE_UPGRADE = auto()
     ARMOR_UPGRADE = auto()
     NULO = auto()
+    BUILD_REFINERY_ZERG = auto()
+    BUILD_BARRACKS_ZERG = auto()
+    BUILD_SUPPLY_DEPOT_ZERG = auto()
 
 
 class Upgrades(Enum):
@@ -393,20 +398,20 @@ EXTRACTOR_PATH = "SPRITE/structure/extractor/tile00"
 EXTRACTOR_RENDER = "SPRITE/render/extractor.png"
 EXTRACTOR_MINERAL_COST = 60
 
-#-----------S1-------------
-S1_PATH = "SPRITE/structure/Zerg_1/tile00"
-S1_RENDER = "SPRITE/render/extractor.png"
-S1_MINERAL_COST = 60
+#-----------BARRACKS_ZERG-------------
+BARRACKS_ZERG_PATH = "SPRITE/structure/Zerg_1/tile00"
+BARRACKS_ZERG_RENDER = "SPRITE/render/zergBarracks.png"
+BARRACKS_ZERG_MINERAL_COST = 60
 
 #-----------S2-------------
 S2_PATH = "SPRITE/structure/Zerg_2/tile00"
 S2_RENDER = "SPRITE/render/extractor.png"
 S2_MINERAL_COST = 60
 
-#-----------S3-------------
-S3_PATH = "SPRITE/structure/Zerg_3/tile00"
-S3_RENDER = "SPRITE/render/extractor.png"
-S3_MINERAL_COST = 60
+#-----------SUPPLY_ZERG-------------
+SUPPLY_ZERG_PATH = "SPRITE/structure/Zerg_3/tile00"
+SUPPLY_ZERG_RENDER = "SPRITE/render/zergSupply.png"
+SUPPLY_ZERG_MINERAL_COST = 60
 
 ##---------SUPPLY------------------
 TERRAN_SUPPLY_PATH = "SPRITE/structure/supply_depot/tile00"
