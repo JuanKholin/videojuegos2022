@@ -149,9 +149,9 @@ def setEntity(player, ai):
     gas = Geyser(30, 5, 800)
     resources.append(gas)
 
-    scv = TerranWorker(player, 12, 5)
+    scv = TerranWorker(ai, 12, 5)
     ai.addUnits(scv)
-    structure1 = TerranBuilder(20, 5, player, mapa, False, raton)
+    structure1 = TerranBuilder(20, 5, ai, mapa, False, raton)
     ai.addStructures(structure1)
     ai.setBasePlayer(structure1)
 
@@ -165,7 +165,7 @@ def setEntity(player, ai):
     resources.append(crystal)
 
 
-    gas = Geyser(30, 5, 800)
+    gas = Geyser(10, 35, 800)
     resources.append(gas)
 
 

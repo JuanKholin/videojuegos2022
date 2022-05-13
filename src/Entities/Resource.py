@@ -12,9 +12,11 @@ class Resource():
         self.type = resourceType
         self.interval = capacity / 4
         self.enable = True
+        self.id = takeID()
 
     def disable(self):
         self.enable = False
+        print("Diableado", self.id)
         
     def setEnable(self):
         self.enable = True
@@ -26,21 +28,22 @@ class Resource():
         return self.capacity
 
     def draw(self, screen, camera):
-        r = self.getRect()
-        pg.draw.rect(screen, BLACK, pg.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h),1)
-        if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
-        r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
-            drawPos = self.getDrawPosition()
-            if self.clicked:
-                pg.draw.ellipse(screen, YELLOW, [r.x - camera.x - 10, r.y - camera.y, r.w + 20, r.h], 2)
-            #screen.blit(unit.image, [r.x - self.camera.x, r.y - self.camera.y])
-            aux = pygame.mask.from_surface(self.image, 0)
-            mask = aux.to_surface(setcolor=(1, 0, 0))
-            mask.set_colorkey(BLACK)
-            mask.set_alpha(150)
-            screen.blit(mask, [drawPos[0] - camera.x - 5, drawPos[1] - camera.y - 10])
+        if self.enable:
+            r = self.getRect()
+            pg.draw.rect(screen, BLACK, pg.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h),1)
+            if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
+            r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
+                drawPos = self.getDrawPosition()
+                if self.clicked:
+                    pg.draw.ellipse(screen, YELLOW, [r.x - camera.x - 10, r.y - camera.y, r.w + 20, r.h], 2)
+                #screen.blit(unit.image, [r.x - self.camera.x, r.y - self.camera.y])
+                aux = pygame.mask.from_surface(self.image, 0)
+                mask = aux.to_surface(setcolor=(1, 0, 0))
+                mask.set_colorkey(BLACK)
+                mask.set_alpha(150)
+                screen.blit(mask, [drawPos[0] - camera.x - 5, drawPos[1] - camera.y - 10])
 
-            screen.blit(self.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
+                screen.blit(self.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
 
     def drawInfo(self, screen, color):
         dic = self.toDictionary()

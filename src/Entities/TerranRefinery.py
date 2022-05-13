@@ -53,12 +53,11 @@ class TerranRefinery(Structure):
             self.state = BuildingState.BUILDING
         else:
             self.state = BuildingState.OPERATIVE
-
         self.resource = gas
-        if gas != None:
-            gas.x = self.x
-            gas.y = self.y
-            gas.disable()
+        if self.resource != None:
+            self.resource.x = self.x
+            self.resource.y = self.y
+            self.resource.disable()
         self.training = []
         self.paths = []
 
