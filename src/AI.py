@@ -2,6 +2,8 @@ from .Utils import *
 from .Entities.TerranBarracks import *
 from .Entities.TerranSupplyDepot import *
 from .Entities.TerranRefinery import *
+from .Entities.ZergBarracks import *
+from .Entities.Extractor import *
 from .Command import *
 from random import *
 
@@ -91,8 +93,8 @@ class AI():
     def makeDecission(self, units, structures):
         decission = self.decide()
         if decission == 0:
-            print("IA DECIDE ATACAR LO VISIBLE")
-            #self.attackVisible(units, structures)
+            #print("IA DECIDE ATACAR LO VISIBLE")
+            self.attackVisible(units, structures)
         elif decission == 1:
             #print("IA DECIDE HACER MEJORAS")
             self.armyUpgrade(structures)
@@ -394,6 +396,66 @@ class AI():
                 return True
         return False
 
+    # Construye un barracks de los Zerg cerca de una estructura aliada aleatoria
+    def buildZergBarracks(self, structures):
+        width = ZergBarracks.TILES_WIDTH
+        height = ZergBarracks.TILES_HEIGHT
+        centerTile = ZergBarracks.CENTER_TILE
+        randBuilding = randint(0, len(structures) - 1)
+        randBuilding = 0
+        building = structures[randBuilding]
+        randDirection = randint(0, 7)
+        buildingsTried = 0
+        directionsTried = 0
+        x, y = self.getDirection(randDirection)
+        buildX, buildY = building.getCords()
+
+        builded = False
+        while not builded:
+            tryNew = True
+            tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
+            if (tile != None) and (tile.type == STRUCTURE) and (tile.ocupante == building):
+                buildX = buildX + x
+                buildY = buildY + y
+                #print(buildX," ", buildY, " STRUCTURE")
+                tryNew = False
+            elif (tile != None) and (tile.type == EMPTY): # Hueco tras edificio
+                #Ahora checkear que haya hueco para el edificio a construir
+                buildX = buildX + x
+                buildY = buildY + y
+                #print("first ", buildX, " ", buildY, " EMPTY")
+                tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
+                if (tile != None) and (tile.type == EMPTY): # #primera tile libre para plantar edificio
+                    buildX = buildX + x
+                    buildY = buildY + y
+                    #print("second ", buildX," ", buildY, " EMPTY")
+                    buildX, buildY = self.getTopLeft(buildX, buildY, randDirection, width, height, centerTile)
+                    #print("topLeft ", buildX," ", buildY)
+
+                    if self.mapa.checkIfEmptyZone(buildX, buildY, buildX + (width - 1), buildY + (height - 1)):
+                        #print("buildea")
+                        toBuild = ZergBarracks(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
+                        if toBuild.checkTiles(False):
+                            self.data.addStructures(toBuild)
+                            #toBuild.buildProcess()
+                            builded = True
+            if tryNew and not builded:
+                directionsTried = directionsTried + 1
+                if directionsTried >= TOTAL_DIRECTIONS: # Se han probado todas las direcciones
+                    directionsTried = 0
+                    buildingsTried = buildingsTried + 1
+                    if buildingsTried >= len(structures): # No hay espacio en el mapa (  9 _9)
+                        #print("Wrong map, full occupied?")
+                        exit()
+                    else: # Quedan edificios por probar
+                        randBuilding = (randBuilding + 1) % len(structures)
+                        building = structures[randBuilding]
+                else: # Quedan direcciones por probar
+                    randDirection = (randDirection + 1) % TOTAL_DIRECTIONS
+                    x, y = self.getDirection(randDirection)
+                    #print ("New x e y ", x, " ", y)
+                    buildX, buildY = building.getCords()
+
     # Construye un barracks de los Terran cerca de una estructura aliada aleatoria
     def buildTerranBarracks(self, structures):
         width = TerranBarracks.TILES_WIDTH
@@ -519,7 +581,7 @@ class AI():
         if (self.geyserBuilding == ZERG_GEYSER_STRUCTURE) and (self.data.resources >= ZERG_GEYSER_STRUCTURE_MINERAL_COST):
             #print("Construye zerggeyserstructure")
             self.data.resources -= ZERG_GEYSER_STRUCTURE_MINERAL_COST
-            toBuild = ZergGeyserStructure(0, 0, self.data, self.mapa, True, geyser)
+            toBuild = Extractor(int(geyser.x / 40) - 1, int(geyser.y / 40), self.data, self.mapa, True, geyser)
             self.data.addStructures(toBuild)
             toBuild.buildProcess()
         elif (self.geyserBuilding == TERRAN_GEYSER_STRUCTURE) and (self.data.resources >= TERRAN_GEYSER_STRUCTURE_MINERAL_COST):

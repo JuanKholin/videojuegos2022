@@ -127,9 +127,9 @@ def setEntity(player, ai):
 def setEntity(player, ai):
 
     structure1 = TerranBuilder(5, 4, player, mapa, False, raton)
-    #structure2 = TerranBarracks(17, 67, player, mapa, False)
-    structure1z = TerranBuilder(35, 4, ai, mapa, False, raton)
-    drone = TerranWorker(ai, 35,6)
+
+    structure1z = Hatchery(35, 4, ai, mapa, False, raton)
+    drone = Drone(ai, 35,6)
     scv = TerranWorker(player, 5, 6)
     ai.addUnits(drone)
     ai.addStructures(structure1z)
@@ -292,7 +292,7 @@ if Utils.DEBBUG == False:
     aI = AI(player2, Race.TERRAN, EASY)
 
 else:
-    aI = AI(player2, Race.TERRAN, NULA)
+    aI = AI(player2, Race.ZERG, EASY)
 escena = Escena(player1, player2, aI, [], camera, raton, p1Interface, [])
 raton.setEscena(escena)
 

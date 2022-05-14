@@ -87,6 +87,7 @@ class Worker(Unit):
         if resource != None:
             if resource.getCapacity() != 0: # Si hay recurso, si es gas agotado es -algo
                 self.state = UnitState.EXTRACTING
+                self.runningAway = False
                 self.attackedOne = None
                 self.isMining = False
                 self.resource = resource
@@ -248,6 +249,7 @@ class Worker(Unit):
 
     def changeToOreTransporting(self):
         self.state = UnitState.ORE_TRANSPORTING
+        self.runningAway = False
         self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
         self.count = 0
         self.frame = 0
@@ -255,6 +257,7 @@ class Worker(Unit):
 
     def changeToGasTransporting(self):
         self.state = UnitState.GAS_TRANSPORTING
+        self.runningAway = False
         self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
         self.count = 0
         self.frame = 0
