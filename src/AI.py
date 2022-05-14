@@ -224,28 +224,34 @@ class AI():
                 invasor.attack(target) # ergo, ataca
             else: # Nada por ahora
                 #print("toca moverse")
-                if invasor.state == UnitState.STILL: # Toca moverse
-                    #print("hola")
-                    x, y = self.getDirection(randint(0, 7))
-                    tile = invasor.getTile()
-                    tile = self.mapa.getNextTileByOffset(tile.x / 40, tile.y / 40, x * 4, y * 4)
-                    if tile != None:
-                        invasor.move(tile)
-                        #print("try1")
-                        if invasor.state != UnitState.MOVING:
-                            tile = self.mapa.getNextTileByOffset(tile.x, tile.y, x * 3, y * 3)
-                            if tile != None:
-                                invasor.move(tile)
-                                #print("try2")
-
-
-                    '''actualDir = self.parseDir(invasor.getDir()) ESTO ES PARA LA BETA FINAL
-                    offset = randint(7, 9)
-                    x, y = self.getDirection((actualDir + offset) % 8)
-                    tile = invasor.getTile()
-                    tile = self.mapa.getNextTileByOffset(tile.x, tile.y, x * 3, y * 3)
-                    if tile != None:
-                        invasor.move(tile)'''
+                if invasor.state == UnitState.STILL: # The best move you will see in your entire life ahead:
+                    randOffset = randint(-1, 1)
+                    dirToCalc = invasor.getRealDir()
+                    origTile = invasor.getTile()
+                    aNiceDestinyFound = False
+                    bestTile = None
+                    j = 0
+                    while (not aNiceDestinyFound) and (j < 8):
+                        dirToCalc = (dirToCalc + randOffset) % TOTAL_DIRECTIONS
+                        while (randOffset == 0):
+                            j = -1
+                            randOffset = randint(-1, 1) # He dicho
+                        x, y = self.getDirection(dirToCalc)
+                        destTile = None
+                        for i in range(1, 5):
+                            destTile = self.mapa.getNextTileByOffset(origTile.x / 40, 
+                                    origTile.y / 40, x * i, y * i)                
+                            if destTile != None and destTile.type == EMPTY:
+                                bestTile = destTile
+                            else:
+                                j = j + 1
+                                break
+                        if bestTile != None:
+                            aNiceDestinyFound = True
+                    if aNiceDestinyFound:
+                        invasor.move(bestTile)
+                    #else:
+                        #print("No hay destino?")
 
     # Actualiza los cristales visibles
     def updateVision(self, units, structures):
@@ -327,6 +333,7 @@ class AI():
         # Minimos aumentados
         soldiersCost = self.minSoldiers * self.soldierCost
         if self.data.resources > soldiersCost:
+            #print("upgrade soldiers")
             self.minSoldiers = self.minSoldiers + 1
         else:
             if self.minSoldiers > self.minWorkers * 2:
@@ -335,6 +342,7 @@ class AI():
                 self.minWorkers -= 1
         workersCost = self.minWorkers * self.workerCost
         if self.data.resources > workersCost + (soldiersCost / 2):
+            #print("upgrade workers")
             self.minWorkers = self.minWorkers + 1
 
     # Apunta a ciertos soldados libres en funcion del ejercito disponible 

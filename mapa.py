@@ -128,7 +128,7 @@ def setEntity(player, ai):
 
     structure1 = TerranBuilder(5, 4, player, mapa, False, raton)
 
-    structure1z = Hatchery(35, 4, ai, mapa, False, raton)
+    structure1z = Hatchery(33, 4, ai, mapa, False, raton)
     drone = Drone(ai, 35,6)
     scv = TerranWorker(player, 5, 6)
     ai.addUnits(drone)
@@ -166,7 +166,7 @@ def setEntity(player, ai):
 
     gas = Geyser(16, 7, 800)
     resources.append(gas)
-    gas = Geyser(24, 7, 800)
+    gas = Geyser(22, 7, 800)
     resources.append(gas)
     escena.resources = resources
 

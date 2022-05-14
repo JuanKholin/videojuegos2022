@@ -77,42 +77,42 @@ class Hatchery(Structure):
         self.type = ZERG_BASE
 
     def execute(self, command_id):
-        if self.clicked:
-            if command_id == CommandId.GENERATE_WORKER and self.player.resources >= ZERGLING_MINERAL_COST:
-                print("Haciendo un zerg")
-                self.player.resources -= ZERGLING_MINERAL_COST
-                zergling = Drone(self.player)
-                self.generateUnit(zergling)
-                self.frame = 4
-                self.state = BuildingState.SPAWNING
-            elif command_id == CommandId.UPGRADE_SOLDIER_DAMAGE and self.player.resources and self.player.resources >= self.damageMineralUpCost and self.player.gas >= self.damageGasUpCost:
-                self.player.resources -= self.damageMineralUpCost
-                self.player.gas -= self.damageGasUpCost
-                self.player.dañoUpgrade += 1
-                self.damageMineralUpCost += 25
-                self.damageGasUpCost += 25
-            elif command_id == CommandId.UPGRADE_SOLDIER_ARMOR and self.player.resources and self.player.gas >= self.armorGasUpCost and self.player.resources >= self.armorMineralUpCost:
-                self.player.resources -= self.armorMineralUpCost
-                self.player.gas -= self.armorGasUpCost
-                self.player.armorUpgrade += 1
-                self.armorMineralUpCost += 25
-                self.armorGasUpCost += 25
-            elif command_id == CommandId.UPGRADE_WORKER_MINING and self.player.resources and self.player.resources >= self.mineMineralUpCost and self.player.gas >= self.mineGasUpCost and self.player.mineUpgrade != LIMIT_MINADO:
-                self.player.resources -= self.mineMineralUpCost
-                self.player.gas -= self.mineGasUpCost
-                self.player.mineUpgrade += 200
-                self.mineMineralUpCost += 25
-                self.mineGasUpCost += 25
-            elif command_id == CommandId.BUILD_REFINERY and self.player.resources >= EXTRACTOR_MINERAL_COST:
-                self.raton.building = True
-                self.raton.buildStructure = self.getZergRefinery()
-            elif command_id == CommandId.BUILD_SUPPLY_DEPOT and self.player.resources >= SUPPLY_ZERG_MINERAL_COST:
-                self.raton.building = True
-                self.raton.buildStructure = self.getZergSupply()
-            elif command_id == CommandId.BUILD_BARRACKS and self.player.resources >= BARRACKS_ZERG_MINERAL_COST:
-                self.raton.building = True
-                #print("mi raton: ", self.raton.id)
-                self.raton.buildStructure = self.getZergBarrack()
+        #if self.clicked:
+        if command_id == CommandId.GENERATE_WORKER and self.player.resources >= ZERGLING_MINERAL_COST:
+            print("Haciendo un zerg")
+            self.player.resources -= ZERGLING_MINERAL_COST
+            zergling = Drone(self.player)
+            self.generateUnit(zergling)
+            self.frame = 4
+            self.state = BuildingState.SPAWNING
+        elif command_id == CommandId.UPGRADE_SOLDIER_DAMAGE and self.player.resources and self.player.resources >= self.damageMineralUpCost and self.player.gas >= self.damageGasUpCost:
+            self.player.resources -= self.damageMineralUpCost
+            self.player.gas -= self.damageGasUpCost
+            self.player.dañoUpgrade += 1
+            self.damageMineralUpCost += 25
+            self.damageGasUpCost += 25
+        elif command_id == CommandId.UPGRADE_SOLDIER_ARMOR and self.player.resources and self.player.gas >= self.armorGasUpCost and self.player.resources >= self.armorMineralUpCost:
+            self.player.resources -= self.armorMineralUpCost
+            self.player.gas -= self.armorGasUpCost
+            self.player.armorUpgrade += 1
+            self.armorMineralUpCost += 25
+            self.armorGasUpCost += 25
+        elif command_id == CommandId.UPGRADE_WORKER_MINING and self.player.resources and self.player.resources >= self.mineMineralUpCost and self.player.gas >= self.mineGasUpCost and self.player.mineUpgrade != LIMIT_MINADO:
+            self.player.resources -= self.mineMineralUpCost
+            self.player.gas -= self.mineGasUpCost
+            self.player.mineUpgrade += 200
+            self.mineMineralUpCost += 25
+            self.mineGasUpCost += 25
+        elif command_id == CommandId.BUILD_REFINERY and self.player.resources >= EXTRACTOR_MINERAL_COST:
+            self.raton.building = True
+            self.raton.buildStructure = self.getZergRefinery()
+        elif command_id == CommandId.BUILD_SUPPLY_DEPOT and self.player.resources >= SUPPLY_ZERG_MINERAL_COST:
+            self.raton.building = True
+            self.raton.buildStructure = self.getZergSupply()
+        elif command_id == CommandId.BUILD_BARRACKS and self.player.resources >= BARRACKS_ZERG_MINERAL_COST:
+            self.raton.building = True
+            #print("mi raton: ", self.raton.id)
+            self.raton.buildStructure = self.getZergBarrack()
 
     def command(self, command):
         if command == CommandId.BUILD_STRUCTURE:

@@ -707,6 +707,11 @@ class Unit(Entity):
     def getDir(self):
         return self.dir
 
+    def getRealDir(self):
+        if (self.dir % 2) == 1:
+            return (self.dir - 1) / 2
+        return self.dir / 2
+
     def setCristal(self, cristal):
         self.cristal = cristal
 
