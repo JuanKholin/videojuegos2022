@@ -100,8 +100,6 @@ class Unit(Entity):
     # Indica a la unidad que ataque al objetivo seleccionado, si se encuentra un
     # obstaculo de camino lo esquivara y si el objetivo se desplaza este le seguira
     def attack(self, objective):
-        if self.occupiedTile != None:
-            self.mapa.setLibre(self.occupiedTile)
         if (self.attackedOne != objective) or (self.state != UnitState.ATTACKING):
             self.mapa.setLibre(self.occupiedTile)
             if objective.esEstructura == False:
