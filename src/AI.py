@@ -109,6 +109,7 @@ class AI():
     # Toma una decision y rebalancea el pool de decisiones, me ha quedado bastante original la verdad,
     # estoy orgulloso y no se ni si funciona xdxdxdxd
     def decide(self):
+        print(self.data.gas)
         randPick = randint(0, 99)
         for i in range(len(self.decissionsChance)):
             if randPick < self.decissionsChance[i]:
@@ -297,20 +298,20 @@ class AI():
         base = self.getBase(structures)
         if randUpgrade == 0:
             if self.data.resources > base.damageMineralUpCost * 3:
-                #print("Try upgrading damage")
-                #print(self.data.gas)
+                print("Try upgrading damage")
+                print(self.data.gas)
                 base.execute(CommandId.UPGRADE_SOLDIER_DAMAGE)
                 #print(self.data.gas)
         elif randUpgrade == 1:
             if self.data.resources > base.armorMineralUpCost * 3:
-                #print("Try upgrading armor")
-                #print(self.data.gas)
+                print("Try upgrading armor")
+                print(self.data.gas)
                 base.execute(CommandId.UPGRADE_SOLDIER_ARMOR)
                 #print(self.data.gas)
         elif randUpgrade == 2:
             if self.data.resources > base.mineMineralUpCost * 3:
-                #print("Try upgrading mining")
-                #print(self.data.gas)
+                print("Try upgrading mining")
+                print(self.data.gas)
                 base.execute(CommandId.UPGRADE_WORKER_MINING)
                 #print(self.data.gas)
 

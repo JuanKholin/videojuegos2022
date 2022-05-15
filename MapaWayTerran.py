@@ -128,13 +128,13 @@ def setEntity(player, ai):
     escena.resources = resources'''
 
 def setEntity(player, ai):
-    scv = TerranWorker(player, 20, 20)
+    scv = TerranWorker(ai, 20, 20)
     #player.addUnits(scv)
-    scv = Drone(player, 24, 32)
-    player.addUnits(scv)
-    structure1 = Hatchery(20, 35, player, mapa, False, raton)
-    player.addStructures(structure1)
-    player.setBasePlayer(structure1)
+    scv = Drone(ai, 24, 32)
+    ai.addUnits(scv)
+    structure1 = Hatchery(20, 35, ai, mapa, False, raton)
+    ai.addStructures(structure1)
+    ai.setBasePlayer(structure1)
 
     #Recursos del mapa
     resources = []
@@ -149,11 +149,11 @@ def setEntity(player, ai):
     gas = Geyser(30, 5, 800)
     resources.append(gas)
 
-    scv = TerranWorker(ai, 12, 5)
-    ai.addUnits(scv)
-    structure1 = TerranBuilder(20, 5, ai, mapa, False, raton)
-    ai.addStructures(structure1)
-    ai.setBasePlayer(structure1)
+    scv = TerranWorker(player, 12, 5)
+    player.addUnits(scv)
+    structure1 = TerranBuilder(20, 5, player, mapa, False, raton)
+    player.addStructures(structure1)
+    player.setBasePlayer(structure1)
 
     #Recursos del mapa
 
@@ -268,7 +268,7 @@ def update():
         x, y = escena.addWall(1,x,y,1,1, 70, 10)
 
         camera.x = 400
-        camera.y = 1000
+        camera.y = 0
         setEntity(player1, player2)
         setGameState(System_State.ONGAME)
     elif getGameState() == System_State.ONGAME:
