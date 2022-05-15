@@ -77,13 +77,14 @@ TILE_HEIGHT = 40
 TOTAL_DIRECTIONS = 8
 
 # dificultades IA (margen de decision en frames):
-EASY = 900
-MEDIUM = 600
-HARD = 300
-NULA = 0
+EASY = 0
+MEDIUM = 1
+HARD = 2
+NULL = 3
+DECISSION_RATE = [900, 600, 300, 10000]
 
 # espera de la IA para tomar decisiones ligeras:
-AI_LAPSE = 30
+AI_LAPSE = [50, 40, 30, 10000]
 
 # FALTAN POR DEFINIR PERO LAS TENGO QUE PONER:
 ZERG_BARRACKS_MINERAL_COST = 50

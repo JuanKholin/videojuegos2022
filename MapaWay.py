@@ -378,7 +378,7 @@ if Utils.DEBBUG == False:
     aI = AI(player2, Race.TERRAN, HARD)
 
 else:
-    aI = AI(player2, Race.TERRAN, NULA)
+    aI = AI(player2, Race.TERRAN, NULL)
 escena = Escena(player1, player2, aI, [], camera, raton, p1Interface, [])
 
 raton.setEscena(escena)

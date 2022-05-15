@@ -286,7 +286,7 @@ class Interface():
                         aI = AI(escena.p2, Race.ZERG, EASY)
 
                     else:
-                        aI = AI(escena.p2, Race.ZERG, NULA)
+                        aI = AI(escena.p2, Race.ZERG, NULL)
                     escena.aI = aI
                     raton.setSelf(_raton)
                     self.player = escena.p1

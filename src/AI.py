@@ -11,9 +11,9 @@ from random import *
 class AI():
     def __init__(self, artificialPlayer, race, difficult):
         self.data = artificialPlayer
-        self.reactionTime = AI_LAPSE
+        self.reactionTime = AI_LAPSE[difficult]
+        self.decissionRate = DECISSION_RATE[difficult]
         self.rotativeReaction = 0
-        self.decissionRate = difficult
         self.count = 0
         self.decissionsChance = [ 25, 25, 25, 25 ]
         self.decissionsPool = sum(self.decissionsChance)
