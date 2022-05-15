@@ -129,9 +129,9 @@ def setEntity(player, ai):
 
 def setEntity(player, ai):
     scv = TerranWorker(player, 20, 20)
-    player.addUnits(scv)
+    #player.addUnits(scv)
     scv = TerranWorker(player, 34, 6)
-    player.addUnits(scv)
+    #player.addUnits(scv)
     structure1 = Hatchery(20, 35, player, mapa, False, raton)
     player.addStructures(structure1)
     player.setBasePlayer(structure1)
@@ -150,7 +150,7 @@ def setEntity(player, ai):
     resources.append(gas)
 
     scv = TerranWorker(ai, 12, 5)
-    ai.addUnits(scv)
+    #ai.addUnits(scv)
     structure1 = TerranBuilder(20, 5, ai, mapa, False, raton)
     ai.addStructures(structure1)
     ai.setBasePlayer(structure1)

@@ -75,7 +75,12 @@ class Worker(Unit):
                     self.changeObjectiveTile()
                 else:
                     self.updateOwnSpace()
-                    self.startMining()
+                    tilesCasa = self.tilesResource(self.getTile())
+                    if self.getTile() in tilesCasa: # PONERSE A MINAR
+                        print("Hay que ponerse a minar")
+                        self.startMining()
+                    else:
+                        self.changeToStill()
 
 
             else:
@@ -106,7 +111,12 @@ class Worker(Unit):
                         self.changeObjectiveTile()
                     else:
                         self.updateOwnSpace()
-                        self.startExtracting()
+                        tilesCasa = self.tilesResource(self.getTile())
+                        if self.getTile() in tilesCasa: # PONERSE A MINAR
+                            print("Hay que ponerse a minar")
+                            self.startExtracting()
+                        else:
+                            self.changeToStill()
                 else:
                     #print("No hay tiles libres weird")
                     #exit(1) 
@@ -398,19 +408,24 @@ class Worker(Unit):
 
     def finishMiningPath(self):
         self.paths.pop(0)
-        if len(self.paths) == 0: #Hay que ponerse a minar
-            #print("Hay que ponerse a minar")
-            self.startTimeMining = getGlobalTime()
-            xCristal, yCristal = self.cristal.getCenter()
-            posicionActual = self.getPosition()
-            self.angle = math.atan2(yCristal - posicionActual[1], xCristal - posicionActual[0])
-            if self.angle < 0:
-                self.angle = -self.angle
+        if len(self.paths) == 0: #PUEDE QUE NO
+            tilesCasa = self.tilesResource(self.getTile())
+            if self.getTile() in tilesCasa: # PONERSE A MINAR
+                print("Hay que ponerse a minar")
+                self.startTimeMining = getGlobalTime()
+                xCristal, yCristal = self.cristal.getCenter()
+                posicionActual = self.getPosition()
+                self.angle = math.atan2(yCristal - posicionActual[1], xCristal - posicionActual[0])
+                if self.angle < 0:
+                    self.angle = -self.angle
+                else:
+                    self.angle = 2 * math.pi - self.angle
+                self.miningAngle = self.angle
+                self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
+                self.changeToMining()
             else:
-                self.angle = 2 * math.pi - self.angle
-            self.miningAngle = self.angle
-            self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
-            self.changeToMining()
+                self.changeToStill()
+                
         else:
             self.changeObjectiveTile()
 
