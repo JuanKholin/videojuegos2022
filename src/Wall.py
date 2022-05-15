@@ -48,9 +48,12 @@ PADDING = 110
 class Wall():
     
     
-    def __init__(self, xIni, yIni, mapa):
+    def __init__(self, type , xIni, yIni, mapa):
         #print(self.speed)
-        spritesheet = pg.image.load("./sprites/Muro/" + SPRITES).convert()
+        if type == 1:
+            spritesheet = pg.image.load("./sprites/Muro/wallTerran.png").convert()
+        else:
+            spritesheet = pg.image.load("./sprites/Muro/wallZerg.png").convert()
         spritesheet.set_colorkey(BLACK)
         self.image = pg.transform.scale(spritesheet, [spritesheet.get_rect().w * 1.4, spritesheet.get_rect().h * 1.1])
         self.x = xIni 

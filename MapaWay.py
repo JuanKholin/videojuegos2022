@@ -130,7 +130,7 @@ def setEntity(player, ai):
 def setEntity(player, ai):
     scv = TerranWorker(player, 20, 20)
     #player.addUnits(scv)
-    scv = TerranSoldier(player, 34, 6)
+    scv = Drone(player, 7, 22)
     player.addUnits(scv)
     structure1 = Hatchery(20, 35, player, mapa, False, raton)
     player.addStructures(structure1)
@@ -252,23 +252,23 @@ def update():
        
         escena.mapa.load()
         escena.mapa.loadMinimap()
-        x, y = escena.addWall(20,1400,1,1,30)
-        x, y = escena.addWall(x,y,1,-1,40)
+        x, y = escena.addWall(0,20,1400,1,1,30)
+        x, y = escena.addWall(0,x,y,1,-1,40)
         #print(x,y)
-        x, y = escena.addWall(x,y,-1,-1, 40)
+        x, y = escena.addWall(0,x,y,-1,-1, 40)
         #print(x,y)
-        x, y = escena.addWall(x,y,-1,-1, 70, 10)
+        x, y = escena.addWall(0,x,y,-1,-1, 70, 10)
         #x, y = escena.addWall(x,y,-1,1,30)
 
-        x, y = escena.addWall(1540,200,-1,-1,30)
-        x, y = escena.addWall(x,y,-1,1,40)
+        x, y = escena.addWall(1,1540,200,-1,-1,30)
+        x, y = escena.addWall(1,x,y,-1,1,40)
         #print(x,y)
-        x, y = escena.addWall(x,y,1,1, 40)
+        x, y = escena.addWall(1,x,y,1,1, 40)
         #print(x,y)
-        x, y = escena.addWall(x,y,1,1, 70, 10)
+        x, y = escena.addWall(1,x,y,1,1, 70, 10)
 
-        camera.x = 400
-        camera.y = 1000
+        camera.x = 100
+        camera.y = 600
         setEntity(player1, player2)
         setGameState(System_State.ONGAME)
     elif getGameState() == System_State.ONGAME:

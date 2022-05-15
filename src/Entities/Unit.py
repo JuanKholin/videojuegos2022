@@ -192,8 +192,6 @@ class Unit(Entity):
 
     # Aplica un frame a la unidad en funcion de su estado
     def update(self):
-        if self.id == 21:
-            print(self.state, self.id)
         if self.state == UnitState.STILL: # Esta quieto
             self.updateStill()
         elif self.state == UnitState.MOVING: # Esta moviendose

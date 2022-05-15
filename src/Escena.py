@@ -240,12 +240,12 @@ class Escena():
     def getTerranRefinery(self):
         return TerranRefinery(0, 0, None, self.mapa, True)
     
-    def addWall(self, x, y, dirx, diry, leng, min = 0, max = 1110):
+    def addWall(self, type,x, y, dirx, diry, leng, min = 0, max = 1110):
         padx = 0
         pady = 0
         for i in range(leng):
             if i <= max and min <= i:
-                self.walls.append(Wall(x + (padx * dirx), y + (pady * diry), self.mapa))
+                self.walls.append(Wall(type ,x + (padx * dirx), y + (pady * diry), self.mapa))
             padx += 23
             pady += 9
         return x + (padx * dirx), y + (pady * diry)
