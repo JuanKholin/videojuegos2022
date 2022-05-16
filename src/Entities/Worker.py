@@ -28,7 +28,8 @@ class Worker(Unit):
     # Indica a la unidad que recolecte mineral del objetivo, si se encuentra
     # un obstaculo de camino lo esquivara. Recolecta desde la tile libre mas cercana
     def mine(self, resource):
-        self.changeToMining(resource)
+        if self.state != UnitState.DYING and self.state != UnitState.DEAD:
+            self.changeToMining(resource)
 
     # Indica a la unidad que recolecte mineral o gas del objetivo, si se encuentra
     # un obstaculo de camino lo esquivara. Recolecta desde la tile libre mas cercana
