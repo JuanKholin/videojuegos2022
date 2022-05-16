@@ -8,6 +8,7 @@ from .Entities import TerranBarracks
 from .Entities.TerranRefinery import *
 from .Entities import TerranWorker
 from datetime import datetime
+from .Wall import * 
 
 
 class Escena():
@@ -22,6 +23,7 @@ class Escena():
         self.resources = resources
         self.nombre = nombre
         self.count = 0
+        self.walls = []
 
     def setSelf(self, escena):
         self.p1 = escena.p1
@@ -51,6 +53,8 @@ class Escena():
                 if command.id == CommandId.GENERATE_UNIT:
                     self.p1.execute(command.id, [], None)
                 if command.id == CommandId.SEARCH_NEARBY_RIVAL:
+                    for unit in self.p1.unitsSelected:
+                        self.mapa.setLibre(unit.getTile())
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.GENERATE_WORKER:
                     self.p1.execute(command.id, [], None)
@@ -74,11 +78,13 @@ class Escena():
                 elif command.id == CommandId.SAVE_GAME:
                     self.saveScene()
                 elif command.id == CommandId.MOVE:
+                    for unit in self.p1.unitsSelected:
+                        self.mapa.setLibre(unit.getTile())
                     #path = [] ## !!!!
                     relative_mouse_pos = pg.mouse.get_pos()
                     real_mouse_pos = (relative_mouse_pos[0] + self.camera.x, relative_mouse_pos[1] + self.camera.y)
                     tileClicked = self.mapa.getTile(real_mouse_pos[0], real_mouse_pos[1])
-                    #print("TILE CLICKED: ", tileClicked.tileid, tileClicked.type)
+                    print("TILE CLICKED: ", tileClicked.tileid, tileClicked.type, tileClicked.ocupante)
                     orderForPlayer = []
                     for param in command.params:
                         self.processParam(param, tileClicked, tileClicked, orderForPlayer)
@@ -208,15 +214,22 @@ class Escena():
     def draw(self, screen):
         #importa el orden porfavor
         self.mapa.drawMap(screen, self.camera)
-
+        all = self.resources + self.p1.units +  self.p1.structures + self.p2.units +  self.p2.structures + self.walls
+        all.sort(key=lambda x: x.y)
+        for d in all:
+            d.draw(screen, self.camera)
+        '''
         for res in self.resources:
             res.draw(screen, self.camera)
 
         self.p1.draw(screen, self.camera)
         self.p2.draw(screen, self.camera)
+        for wall in self.walls:
+            wall.draw(screen, self.camera)'''
         self.mapa.drawNiebla(screen, self.camera)
         self.raton.drawBuildStructure(screen, self.camera)
         self.interfaz.draw(screen, self.camera)
+        
 
     def getTerranBarrack(self):
         return TerranBarracks(0, 0, None, self.mapa, True)
@@ -226,6 +239,17 @@ class Escena():
 
     def getTerranRefinery(self):
         return TerranRefinery(0, 0, None, self.mapa, True)
+    
+    def addWall(self, type,x, y, dirx, diry, leng, min = 0, max = 1110):
+        padx = 0
+        pady = 0
+        for i in range(leng):
+            if i <= max and min <= i:
+                self.walls.append(Wall(type ,x + (padx * dirx), y + (pady * diry), self.mapa))
+            padx += 23
+            pady += 9
+        return x + (padx * dirx), y + (pady * diry)
+        
 
     def toDictionary(self):
         return{

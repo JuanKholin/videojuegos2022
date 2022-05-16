@@ -1,4 +1,4 @@
-from click import command
+
 import pygame as pg
 import math
 from . import Utils
@@ -18,7 +18,7 @@ class Player():
         self.resourceSelected = None
         self.structures = structures
         self.resources = resources
-        self.gas = 400
+        self.gas = 0
         self.keyMap = keyMap
         self.commandMap = commandMap #keyMap pero las claves son los valores y los valores las claves (solo necesario para las teclas de la camara)
         self.pulsado = False
@@ -88,6 +88,8 @@ class Player():
                         else:
                             self.unitsSelected[i].siendoAtacado = True
                             self.unitsSelected[i].atacante = param[i]['attackedOne']
+                    else:
+                        self.unitsSelected[i].updateOwnSpace()
         elif id == CommandId.SEARCH_NEARBY_RIVAL:
             print("BUSCAR")
             for unit in self.unitsSelected:

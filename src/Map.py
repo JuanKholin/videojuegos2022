@@ -20,6 +20,7 @@ class Map():
         self.tiles = [[], []]
         self.tiles.insert(0, cargarSprites(TERRENO_PATH, 8, False))
         self.tiles.insert(1, cargarSprites(ELEVACION_PATH, 40, True))
+        self.tiles.insert(2, cargarSprites(CREEP_PATH, 8, False))
         if load:
             if codedMap == None:
                 self.generateRandomMap()
@@ -70,6 +71,9 @@ class Map():
         for i in range(h): #Recorro el mapa  por las filas
             for j in range(w): #En la fila i recorro las columnas
                 self.mapa[i + int(y / self.th)][j + int(x / self.tw)].type = 1
+    
+    def setObstacle(self, tile):    
+        tile.type = 1
 
     def addOre(self, x, y):
         #print(int(y / self.th), int(x / self.tw))
@@ -212,11 +216,15 @@ class Map():
 
     #Pone la tile como vecina
     def setVecina(self, tile, id):
+        
         if tile.type == EMPTY:
             tile.setOcupada(id)
         else:
             #print("HI")
             pass
+        if tile.tileid == 290:
+            print("OCUPADA")
+            print(tile.type)
 
     #Pone la tile como recurso
     def setRecurso(self, tile):
@@ -608,7 +616,9 @@ class Map():
         elif code[0] == '2': #elevacion
             index = int(code[1:])
             return self.tiles[1][index], 1
-
+        else: #creep
+            index = int(code[1:])
+            return self.tiles[2][index], 0
     #genera mapa con suelos aleatorios
     def generateRandomMap(self):
         random.seed(datetime.datetime.now())

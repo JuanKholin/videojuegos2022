@@ -28,7 +28,8 @@ class Worker(Unit):
     # Indica a la unidad que recolecte mineral del objetivo, si se encuentra
     # un obstaculo de camino lo esquivara. Recolecta desde la tile libre mas cercana
     def mine(self, resource):
-        self.changeToMining(resource)
+        if self.state != UnitState.DYING and self.state != UnitState.DEAD:
+            self.changeToMining(resource)
 
     # Indica a la unidad que recolecte mineral o gas del objetivo, si se encuentra
     # un obstaculo de camino lo esquivara. Recolecta desde la tile libre mas cercana
@@ -36,6 +37,24 @@ class Worker(Unit):
         resource = resource.ocupante.resource
         self.changeToExtracting(resource)
 
+    def getUpgrades(self):
+        upgrades = []
+        if self.player.mineUpgrade == 0:
+            upgrades.append({'upgrade': Upgrades.NO_MINE, 'cantidad': 0})
+        else:
+            upgrades.append({'upgrade': Upgrades.MINE, 'cantidad': int(self.player.mineUpgrade/200)})
+        if self.player.armorUpgrade == 0:
+            upgrades.append({'upgrade': Upgrades.NO_ARMOR, 'cantidad': 0})
+        else:
+            upgrades.append({'upgrade': Upgrades.ARMOR, 'cantidad': self.player.armorUpgrade})
+        if self.player.dañoUpgrade == 0:
+            upgrades.append({'upgrade': Upgrades.NO_DANYO, 'cantidad': 0})
+        else:
+            upgrades.append({'upgrade': Upgrades.DANYO, 'cantidad': self.player.dañoUpgrade})
+        return upgrades
+
+    def getType(self):
+        return 1
     def changeToMining(self, resource):
         if resource.getCapacity() != 0: # Si hay recurso, si es gas agotado es -algo
             self.state = UnitState.MINING
@@ -56,7 +75,13 @@ class Worker(Unit):
                     self.moveToMining()
                     self.changeObjectiveTile()
                 else:
-                    self.startMining()
+                    self.updateOwnSpace()
+                    tilesCasa = self.tilesResource(self.getTile())
+                    if self.getTile() in tilesCasa: # PONERSE A MINAR
+                        print("Hay que ponerse a minar")
+                        self.startMining()
+                    else:
+                        self.changeToStill()
 
 
             else:
@@ -68,6 +93,7 @@ class Worker(Unit):
         if resource != None:
             if resource.getCapacity() != 0: # Si hay recurso, si es gas agotado es -algo
                 self.state = UnitState.EXTRACTING
+                self.runningAway = False
                 self.attackedOne = None
                 self.isMining = False
                 self.resource = resource
@@ -85,7 +111,13 @@ class Worker(Unit):
                         self.moveToMining()
                         self.changeObjectiveTile()
                     else:
-                        self.startExtracting()
+                        self.updateOwnSpace()
+                        tilesCasa = self.tilesResource(self.getTile())
+                        if self.getTile() in tilesCasa: # PONERSE A MINAR
+                            print("Hay que ponerse a minar")
+                            self.startExtracting()
+                        else:
+                            self.changeToStill()
                 else:
                     #print("No hay tiles libres weird")
                     #exit(1) 
@@ -228,6 +260,7 @@ class Worker(Unit):
 
     def changeToOreTransporting(self):
         self.state = UnitState.ORE_TRANSPORTING
+        self.runningAway = False
         self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
         self.count = 0
         self.frame = 0
@@ -235,6 +268,7 @@ class Worker(Unit):
 
     def changeToGasTransporting(self):
         self.state = UnitState.GAS_TRANSPORTING
+        self.runningAway = False
         self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
         self.count = 0
         self.frame = 0
@@ -375,19 +409,24 @@ class Worker(Unit):
 
     def finishMiningPath(self):
         self.paths.pop(0)
-        if len(self.paths) == 0: #Hay que ponerse a minar
-            #print("Hay que ponerse a minar")
-            self.startTimeMining = getGlobalTime()
-            xCristal, yCristal = self.cristal.getCenter()
-            posicionActual = self.getPosition()
-            self.angle = math.atan2(yCristal - posicionActual[1], xCristal - posicionActual[0])
-            if self.angle < 0:
-                self.angle = -self.angle
+        if len(self.paths) == 0: #PUEDE QUE NO
+            tilesCasa = self.tilesResource(self.getTile())
+            if self.getTile() in tilesCasa: # PONERSE A MINAR
+                print("Hay que ponerse a minar")
+                self.startTimeMining = getGlobalTime()
+                xCristal, yCristal = self.cristal.getCenter()
+                posicionActual = self.getPosition()
+                self.angle = math.atan2(yCristal - posicionActual[1], xCristal - posicionActual[0])
+                if self.angle < 0:
+                    self.angle = -self.angle
+                else:
+                    self.angle = 2 * math.pi - self.angle
+                self.miningAngle = self.angle
+                self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
+                self.changeToMining()
             else:
-                self.angle = 2 * math.pi - self.angle
-            self.miningAngle = self.angle
-            self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
-            self.changeToMining()
+                self.changeToStill()
+                
         else:
             self.changeObjectiveTile()
 

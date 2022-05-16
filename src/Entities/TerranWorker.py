@@ -88,21 +88,7 @@ class TerranWorker(Worker):
 
     
 
-    def getUpgrades(self):
-        upgrades = []
-        if self.player.mineUpgrade == 0:
-            upgrades.append({'upgrade': Upgrades.NO_MINE, 'cantidad': 0})
-        else:
-            upgrades.append({'upgrade': Upgrades.MINE, 'cantidad': int(self.player.mineUpgrade/200)})
-        if self.player.armorUpgrade == 0:
-            upgrades.append({'upgrade': Upgrades.NO_ARMOR, 'cantidad': 0})
-        else:
-            upgrades.append({'upgrade': Upgrades.ARMOR, 'cantidad': self.player.armorUpgrade})
-        if self.player.dañoUpgrade == 0:
-            upgrades.append({'upgrade': Upgrades.NO_DANYO, 'cantidad': 0})
-        else:
-            upgrades.append({'upgrade': Upgrades.DANYO, 'cantidad': self.player.dañoUpgrade})
-        return upgrades
+    
 
     def toDictionary(self, map):
         fatherDictionary = super().toDictionary(map)
