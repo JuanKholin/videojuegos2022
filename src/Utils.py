@@ -128,6 +128,11 @@ PROTOSS_SOLDIER = None
 # Rango de autoataque (al matar a un objetivo que ataque a otro)
 NEARBY_RANGE = 4
 
+# Para los stats de los entities
+RANGE_UNIT = TILE_WIDTH
+RANGE_BASIC = 27
+ARMOR_EXTRA = 1.1
+
 #CLOCK = pygame.time.Clock()
 
 #contador del sistema
@@ -483,7 +488,7 @@ def muestra_texto(pantalla,fuente,texto,color, dimensiones, pos):
     tipo_letra = pygame.font.Font(pygame.font.match_font(fuente), dimensiones)
     superficie = tipo_letra.render(texto, True, color)
     rectangulo = superficie.get_rect()
-    print(rectangulo)
+    #print(rectangulo)
     rectangulo.x = pos[0]
     rectangulo.y = pos[1]
     pantalla.blit(superficie, rectangulo)

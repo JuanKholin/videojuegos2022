@@ -28,6 +28,11 @@ from src.Entities.Zergling import *
 from src.Entities.TerranSupplyDepot import *
 from src.Entities.Extractor import *
 from src.Entities.TerranRefinery import *
+from src.Entities.Firebat import *
+from src.Entities.Guardian import *
+from src.Entities.Goliath import *
+from src.Entities.Hydralisk import *
+
 
 
 
@@ -53,80 +58,6 @@ def procesarInput():
         escena.checkPressedButtons()
 
 
-'''
-def setEntity(player, ai):
-
-    structure1 = TerranBuilder(10, 72, player, mapa, False, raton)
-    #structure2 = TerranBarracks(17, 67, player, mapa, False)
-    structure1z = TerranBuilder(70, 8, ai, mapa, False, raton)
-    drone = TerranWorker(ai, 67,11)
-    scv = TerranWorker(player, 13, 69)
-    ai.addUnits(drone)
-    ai.addStructures(structure1z)
-    ai.setBasePlayer(structure1z)
-    player.addStructures(structure1)
-    player.setBasePlayer(structure1)
-    player.addUnits(scv)
-
-    #Recursos del mapa
-    resources = []
-
-    crystal = Crystal(30, 70, 400)
-    crystal3 = Crystal(30, 66, 400)
-
-    crystalz = Crystal(50, 10, 400)
-    crystalz3 = Crystal(50, 14, 400)
-
-
-    crystal4 = Crystal(36, 40, 800)
-    crystal5 = Crystal(36, 36, 800)
-    crystal6 = Crystal(41, 36, 800)
-    crystal2 = Crystal(41, 40, 800)
-
-    crystal7 = Crystal(60, 60, 400)
-    crystal8 = Crystal(60, 56, 400)
-    crystal9 = Crystal(20, 20, 400)
-    crystal10 = Crystal(20, 16, 400)
-
-
-    resources.append(crystal3)
-    resources.append(crystal)
-
-    resources.append(crystalz3)
-    resources.append(crystalz)
-
-
-    resources.append(crystal2)
-    resources.append(crystal4)
-    resources.append(crystal5)
-    resources.append(crystal6)
-
-    resources.append(crystal7)
-    resources.append(crystal8)
-    resources.append(crystal9)
-    resources.append(crystal10)
-
-
-
-
-    gas = Geyser(65, 65, 500)
-    resources.append(gas)
-    gas = Geyser(70, 65, 500)
-    resources.append(gas)
-    gas = Geyser(15, 15, 500)
-    resources.append(gas)
-    gas = Geyser(10, 15, 500)
-    resources.append(gas)
-    gas = Geyser(6, 61, 500)
-    resources.append(gas)
-    gas = Geyser(4, 64, 500)
-    resources.append(gas)
-    gas = Geyser(74, 19, 500)
-    resources.append(gas)
-    gas = Geyser(76, 16, 500)
-    resources.append(gas)
-    escena.resources = resources'''
-
 def setEntity(player, ai):
     #scv = TerranWorker(player, 20, 20)
     #player.addUnits(scv)
@@ -144,6 +75,16 @@ def setEntity(player, ai):
     resources.append(crystal)
     crystal = Crystal(25, 28, 800)
     resources.append(crystal)
+
+    units = []
+    units.append(Firebat(player, 25, 30))
+    units.append(Goliath(player, 27, 30))
+    units.append(Hydralisk(player, 29, 30))
+    units.append(Guardian(player, 31, 30))
+
+
+    for unit in units:
+        player.addUnits(unit)
 
 
     gas = Geyser(30, 5, 800)

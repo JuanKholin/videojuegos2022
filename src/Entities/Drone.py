@@ -5,16 +5,16 @@ from ..Utils import *
 from .Worker import *
 
 # Constantes del Drone
-HP = 400
+HP = 40
 DAMAGE = 5
 COOLDOWN = 22
-RANGE = 67
+RANGE = 1 * RANGE_UNIT + RANGE_BASIC
 ATTACK_INFO = [DAMAGE, COOLDOWN, RANGE]
 MINE_POWER = 8
 MINERAL_COST = 20
 TIME_TO_MINE = 1000
-GENERATION_TIME = 2
-SPEED = 2
+GENERATION_TIME = 20
+SPEED = 5 / 2
 FRAMES_TO_REFRESH = 5
 SPRITES = "drone.bmp"
 SPRITE_PIXEL_ROWS = 128
@@ -68,6 +68,7 @@ class Drone(Worker):
             self.updateOwnSpace()
         self.render = pygame.transform.scale(pygame.image.load(DRONE_RENDER), UNIT_RENDER_SIZE)
         self.type = ZERG_WORKER
+        print(" AHSDASJLDASI" , self.speed)
     
 
 
