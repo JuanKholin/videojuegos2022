@@ -4,6 +4,7 @@ from .Entities.TerranSupplyDepot import *
 from .Entities.TerranRefinery import *
 from .Entities.ZergBarracks import *
 from .Entities.Extractor import *
+from .Entities.ZergSupply import *
 from .Command import *
 from random import *
 
@@ -299,20 +300,20 @@ class AI():
         base = self.getBase(structures)
         if randUpgrade == 0:
             if self.data.resources > base.damageMineralUpCost * 3:
-                print("Try upgrading damage")
-                print(self.data.gas)
+                #print("Try upgrading damage")
+                #print(self.data.gas)
                 base.execute(CommandId.UPGRADE_SOLDIER_DAMAGE)
                 #print(self.data.gas)
         elif randUpgrade == 1:
             if self.data.resources > base.armorMineralUpCost * 3:
-                print("Try upgrading armor")
-                print(self.data.gas)
+                #print("Try upgrading armor")
+                #print(self.data.gas)
                 base.execute(CommandId.UPGRADE_SOLDIER_ARMOR)
                 #print(self.data.gas)
         elif randUpgrade == 2:
             if self.data.resources > base.mineMineralUpCost * 3:
-                print("Try upgrading mining")
-                print(self.data.gas)
+                #print("Try upgrading mining")
+                #print(self.data.gas)
                 base.execute(CommandId.UPGRADE_WORKER_MINING)
                 #print(self.data.gas)
 
@@ -499,9 +500,7 @@ class AI():
                 if (tile != None) and (tile.type == EMPTY): # #primera tile libre para plantar edificio
                     buildX = buildX + x
                     buildY = buildY + y
-                    #print("second ", buildX," ", buildY, " EMPTY")
                     buildX, buildY = self.getTopLeft(buildX, buildY, randDirection, width, height, centerTile)
-                    #print("topLeft ", buildX," ", buildY)
 
                     if self.mapa.checkIfEmptyZone(buildX, buildY, buildX + (width - 1), buildY + (height - 1)):
                         #print("buildea")
@@ -599,36 +598,27 @@ class AI():
         directionsTried = 0
         x, y = self.getDirection(randDirection)
         buildX, buildY = building.getCords()
-        #print("HAOSDHAS")
         builded = False
         while not builded:
             tryNew = True
             tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
-            #print("hasdjkasd")
             if (tile != None) and (tile.type == STRUCTURE) and (tile.ocupante == building):
                 buildX = buildX + x
                 buildY = buildY + y
-                #print(buildX," ", buildY, " STRUCTURE")
                 tryNew = False
             elif (tile != None) and (tile.type == EMPTY): # Hueco tras edificio
                 #Ahora checkear que haya hueco para el edificio a construir
                 buildX = buildX + x
                 buildY = buildY + y
-                #print("first ", buildX, " ", buildY, " EMPTY")
                 tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
                 if (tile != None) and (tile.type == EMPTY): # #primera tile libre para plantar edificio
                     buildX = buildX + x
                     buildY = buildY + y
-                    #print("second ", buildX," ", buildY, " EMPTY")
                     buildX, buildY = self.getTopLeft(buildX, buildY, randDirection, width, height, centerTile)
-                    #print("topLeft ", buildX," ", buildY)
-
                     if self.mapa.checkIfEmptyZone(buildX, buildY, buildX + (width - 1), buildY + (height - 1)):
-                        #print("buildea")
                         toBuild = TerranSupplyDepot(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
                         if toBuild.checkTiles(False):
                             self.data.addStructures(toBuild)
-                            #toBuild.buildProcess()
                             builded = True
             if tryNew and not builded:
                 directionsTried = directionsTried + 1
@@ -636,7 +626,6 @@ class AI():
                     directionsTried = 0
                     buildingsTried = buildingsTried + 1
                     if buildingsTried >= len(structures): # No hay espacio en el mapa (  9 _9)
-                        #print("Wrong map, full occupied?")
                         exit()
                     else: # Quedan edificios por probar
                         randBuilding = (randBuilding + 1) % len(structures)
@@ -644,7 +633,6 @@ class AI():
                 else: # Quedan direcciones por probar
                     randDirection = (randDirection + 1) % TOTAL_DIRECTIONS
                     x, y = self.getDirection(randDirection)
-                    #print ("New x e y ", x, " ", y)
                     buildX, buildY = building.getCords()
 
     # Construye un edificio de explotacion de geiseres en el geiser geyser

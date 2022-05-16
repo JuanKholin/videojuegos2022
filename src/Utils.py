@@ -6,8 +6,8 @@ import pygame
 
 DEBBUG = False    
 
-BGM_VOLUME = 0.1
-SOUND_VOLUME = 0.1
+BGM_VOLUME = 0.2
+SOUND_VOLUME = 0.5
 haveBGM = False
 
 class System_State(Enum):
@@ -16,6 +16,7 @@ class System_State(Enum):
     NEWGAME = auto()
     MAP1 = auto()
     ONGAME = auto()
+    
     LOAD = auto()
     PLAYING = auto()
     PAUSED = auto()
@@ -25,6 +26,7 @@ class System_State(Enum):
     EXIT = auto()
     INTRO = auto()
     SETTINGS = auto()
+    HELP = auto()
 
 class Race(Enum):
     ZERG = auto()
@@ -109,7 +111,7 @@ TERRAN_SOLDIER = "TerranSoldier"
 
 ZERG_BASE = "Hatchery"
 ZERG_BARRACKS = None # Faltan
-ZERG_DEPOT = None
+ZERG_DEPOT = "ZergSupply"
 ZERG_GEYSER_STRUCTURE = "Extractor"
 ZERG_WORKER = "Drone"
 ZERG_S1 = "s1"
@@ -334,6 +336,9 @@ class Options(Enum):
     BUILD_REFINERY_ZERG = auto()
     BUILD_BARRACKS_ZERG = auto()
     BUILD_SUPPLY_DEPOT_ZERG = auto()
+    NEXT_PAGE = auto()
+    PREVIOUS_PAGE = auto()
+    CLOSE = auto()
 
 
 class Upgrades(Enum):

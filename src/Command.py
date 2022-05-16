@@ -27,6 +27,9 @@ class CommandId(IntEnum):
     BUILD_REFINERY = auto()
     EXTRACT_GAS = auto()
     SEARCH_NEARBY_RIVAL = auto()
+    NEXT_PAGE = auto()
+    PREVIOUS_PAGE = auto()
+    RETURN_GAME = auto()
 
 class Command:
     def __init__(self, id):

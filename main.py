@@ -26,9 +26,9 @@ from src.Entities.Zergling import *
 from src.Entities.TerranSupplyDepot import *
 from src.Entities.Extractor import *
 from src.Entities.TerranRefinery import *
-from Entities.ZergBarracks import *
-from src.Entities.Zerg2 import *
-from Entities.ZergSupply import *
+from src.Entities.ZergBarracks import *
+#from src.Entities.Zerg2 import *
+from src.Entities.ZergSupply import *
 
 
 # Auxiliar del bucle principal
@@ -68,20 +68,20 @@ def setEntity(player, ai):
     structure7 = Hatchery(10, 23, player, mapa, True, raton)
 
     player.setBasePlayer(structure1)
-    structure2 = TerranBarracks(15, 9, player, mapa, False)
+    structure2 = ZergBarracks(15, 9, player, mapa, False)
     gas2 = Geyser(13, 20, 50)
     structure4 = Extractor(12, 27, player, mapa, True)
     structure5 = TerranRefinery(13, 18, ai, mapa, True, gas2)
     
-    structure6 = Zerg1(7, 16, ai, mapa, True)
-    structure8 = Zerg2(2, 14, ai, mapa, True)
-    structure9 = Zerg3(8, 20, ai, mapa, True)
+    structure6 = ZergBarracks(7, 16, ai, mapa, True)
+    #structure8 = Zerg2(2, 14, ai, mapa, True)
+    #structure9 = Zerg3(8, 20, ai, mapa, True)
     
     player.addStructures(structure1)
     player.addStructures(structure6)
-    player.addStructures(structure8)
-    player.addStructures(structure9)
-    player.addStructures(structure7)
+    #player.addStructures(structure8)
+    #player.addStructures(structure9)
+    player.addStructures(structure2)
     #player.addStructures(structure4)
     ai.addStructures(structure5)
     player.addUnits(scv)
@@ -140,6 +140,7 @@ def update():
         #playSound(mainMenuBGM)
         escena.interfaz.update(escena,raton, escena.camera)
     elif getGameState() == System_State.MAP1:
+        stopMusic()
         playMusic(map1BGM)
         #cargar mapa
         escena.mapa = mapa
@@ -147,19 +148,9 @@ def update():
         escena.mapa.loadMinimap()
         setEntity(player1, player2)
         setGameState(System_State.ONGAME)
-        setGameState2(System_State.PLAYING)
+        setGameState2(System_State.LOAD)
     elif getGameState() == System_State.ONGAME:
-        if getGameState2() == System_State.PLAYING:
-            escena.update()
-        elif getGameState2() == System_State.LOAD:
-            escena.update()
-            escena.count += frame(30)
-            if escena.count == 3:
-                escena.count =0
-                setGameState(System_State.PAUSED)      
-    elif getGameState() == System_State.PAUSED:
-        pass
-        #print(1)
+        escena.update()
     elif getGameState() == System_State.GAMESELECT:
         #Cargar las partidas
         escena.interfaz.update(escena,raton, escena.camera)
