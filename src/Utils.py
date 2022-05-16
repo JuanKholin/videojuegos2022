@@ -481,10 +481,12 @@ courier = pygame.font.match_font('courier')
 
 def muestra_texto(pantalla,fuente,texto,color, dimensiones, pos):
     tipo_letra = pygame.font.Font(pygame.font.match_font(fuente), dimensiones)
-    superficie = tipo_letra.render(texto,True, color)
+    superficie = tipo_letra.render(texto, True, color)
     rectangulo = superficie.get_rect()
-    rectangulo.center = pos
-    pantalla.blit(superficie,rectangulo)
+    print(rectangulo)
+    rectangulo.x = pos[0]
+    rectangulo.y = pos[1]
+    pantalla.blit(superficie, rectangulo)
 
 def aux(screen):
     muestra_texto(screen, str('monotypecorsiva'), "single player", (210, 255, 124), 25, [270, 150])

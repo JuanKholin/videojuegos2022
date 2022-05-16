@@ -734,8 +734,7 @@ class Interface():
         
         if self.helpPage == 1:
             self.helpButtons[1].draw(screen, 604, 95)
-            muestra_texto(screen, str('monotypecorsiva'), "INSTRUCCIONES", WHITE, 30, (490, 110))
-            muestra_texto(screen, str('monotypecorsiva'), "ESTRUCUTURAS", WHITE, 30, (490, 140))
+            muestra_texto(screen, str('monotypecorsiva'), "INSTRUCCIONES", WHITE, 30, (490, 120))
             
             screen.blit(getSprite(MOUSE_PATH + "tile002.png", WHITE, (70, 70)), (310, 200))
             muestra_texto(screen, str('monotypecorsiva'), "Click Izquierdo", GREEN, 26, (480, 210))
@@ -778,15 +777,34 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), "tendras que contruirlo si quieres conseguir", ORANGE, 20, (555, 645))
             muestra_texto(screen, str('monotypecorsiva'), "recurso geyser", ORANGE, 20, (457, 660))
             
-        elif self.helpPage == 2:
-            self.helpButtons[0].draw(screen, 304, 95)
-            self.helpButtons[1].draw(screen, 604, 95)
-            pass
         elif self.helpPage == 3:
             self.helpButtons[0].draw(screen, 304, 95)
             self.helpButtons[1].draw(screen, 604, 95)
-            pass
+            muestra_texto(screen, str('monotypecorsiva'), "TERRAN", WHITE, 30, (480, 110))
+            muestra_texto(screen, str('monotypecorsiva'), "UNIDADES", WHITE, 30, (480, 140))
+            
+            spritesheet = pg.image.load("./sprites/scvJusto.bmp").convert()
+            spritesheet.set_colorkey(BLACK)
+            sprites = Entity.divideSpritesheetByRows(spritesheet, 72, 1.5)
+            screen.blit(sprites[13], (280, 200))
+            muestra_texto(screen, str('monotypecorsiva'), "Terran Worker", GREEN, 30, (470, 210))
+            muestra_texto(screen, str('monotypecorsiva'), "Unidad obrera de los terran, se encargan", ORANGE, 20, (550, 240))
+            muestra_texto(screen, str('monotypecorsiva'), "de la extracción de recursos, son débiles", ORANGE, 20, (545, 255))
+            muestra_texto(screen, str('monotypecorsiva'), "poca vida y poco daño", ORANGE, 20, (485, 270))
+            
+            spritesheet = pg.image.load("./sprites/terran_soldier_sheet.bmp").convert()
+            spritesheet.set_colorkey(WHITE)
+            sprites = Entity.divideSpritesheetByRows(spritesheet, 64, 1.5)
+            screen.blit(sprites[13], (290, 330))
+            muestra_texto(screen, str('monotypecorsiva'), "Terran Soldier", GREEN, 30, (470, 340))
+            muestra_texto(screen, str('monotypecorsiva'), "Unidad ofensiva basica de los terran, ", ORANGE, 20, (535, 370))
+            muestra_texto(screen, str('monotypecorsiva'), "tienen bastante daño y atacan a distancia", ORANGE, 20, (550, 385))
+            
         elif self.helpPage == 4:
+            self.helpButtons[0].draw(screen, 304, 95)
+            self.helpButtons[1].draw(screen, 604, 95)
+            pass
+        elif self.helpPage == 5:
             self.helpButtons[0].draw(screen, 304, 95)
             pass
         
