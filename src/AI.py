@@ -140,7 +140,10 @@ class AI():
             if unit.attackedOne != None:
                 objectivesSet.add(unit.attackedOne)
         objectivesList = list(objectivesSet) # Lo pasa a lista por comodi<padre_en_ingles>
-        defenses = self.getSoldiers(units)
+        if self.getBase().lastAttacker != None:
+            defenses = self.getFreeUnits(units)
+        else:
+            defenses = self.getSoldiers(units)
         if len(objectivesList) > 0: # Si hay amenazas reparte las tropas libres a por ellas
             i = 0
             for soldier in defenses:
@@ -378,6 +381,14 @@ class AI():
             if unit.type == self.soldier and unit.isReadyToFight():
                 soldiers.append(unit)
         return soldiers
+
+    # Devuelve todas las unidades que no esten ya luchando
+    def getFreeUnits(self, units):
+        free = []
+        for unit in units:
+            if (unit.state != UnitState.ATTACKING) and (unit.state != UnitState.DYING) and (unit.state != UnitState.DEAD):
+                free.append(unit)
+        return free
 
     # De las unidades devuelve a todos los workers libres
     def getWorkers(self, units):

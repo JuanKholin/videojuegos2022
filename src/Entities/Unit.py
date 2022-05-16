@@ -437,6 +437,9 @@ class Unit(Entity):
         if(len(self.paths) > 1):
             #print("changeToAttacking objetiveTile")
             self.changeObjectiveTile()
+        if self.attackedOne != None:
+            if self.attackedOne.esEstructura:
+                self.attackedOne.lastAttacker = None
         self.attackedOne = attackedOne
         self.attackCD = self.cooldown
         self.frame = 0
