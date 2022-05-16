@@ -46,9 +46,9 @@ INVERSIBLE_FRAMES = len(FRAMES) - len(DIE_FRAMES) # los die frames no se inviert
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
 # horario y empezando desde el norte, el mapeo dir-flist(range(289, 296))rame es:
 DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
-WEIGHT_PADDING =    0
-HEIGHT_PADDING =    0
-X_PADDING =         15
+WEIGHT_PADDING =    10
+HEIGHT_PADDING =    10
+X_PADDING =         20
 Y_PADDING =         15
 PADDING = 0
 
@@ -81,6 +81,19 @@ class Firebat(Soldier):
         #self.imageRect = rect(self.x, self.y, self.image.get_width(), self.image.get_height())
         self.render = pygame.transform.scale(pygame.image.load(SOLDIER_RENDER), UNIT_RENDER_SIZE)
         self.type = TERRAN_SOLDIER
+
+    def makeAnAttack(self):
+        for tile in self.mapa.getAllTileVecinas(self.attackedOne.getTile()):
+            if tile.type == UNIT and tile.ocupante.player != self.player:
+                tile.ocupante.beingAttacked(self.damage + self.player.dañoUpgrade, self)
+        hpLeft = self.attackedOne.beingAttacked(self.damage + self.player.dañoUpgrade, self)
+        if hpLeft <= 0:
+            #print("Se queda sin vida")
+            enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
+            if enemy != None:
+                self.attack(enemy)
+            else:
+                self.changeToStill()
     
 
     def toDictionary(self, map):
