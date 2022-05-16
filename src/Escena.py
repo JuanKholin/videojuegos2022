@@ -35,6 +35,7 @@ class Escena():
         self.interfaz = escena.interfaz
         self.resources = escena.resources
         self.nombre = escena.nombre
+        self.walls = escena.walls
 
     def procesarEvent(self, event):
         #Conseguir el comando
@@ -214,6 +215,7 @@ class Escena():
     def draw(self, screen):
         #importa el orden porfavor
         self.mapa.drawMap(screen, self.camera)
+        #print(self.walls.__len__())
         all = self.resources + self.p1.units +  self.p1.structures + self.p2.units +  self.p2.structures + self.walls
         all.sort(key=lambda x: x.y)
         for d in all:
@@ -259,6 +261,7 @@ class Escena():
             "mapa": self.mapa.toDictionary(),
             "camera": self.camera.toDictionary(),
             "resources": [r.toDictionary() for r in self.resources],
+            "muros": [r.toDictionary() for r in self.walls]
         }
 
     def saveScene(self):

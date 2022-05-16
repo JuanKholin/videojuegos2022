@@ -4,11 +4,11 @@ import math
 from re import T
 import pygame
 
-DEBBUG = True    
+DEBBUG = False    
 
 BGM_VOLUME = 0.1
 SOUND_VOLUME = 0.1
-haveBGM = True
+haveBGM = False
 
 class System_State(Enum):
     MAINMENU = auto()

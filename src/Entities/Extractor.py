@@ -54,8 +54,6 @@ class Extractor(Structure):
             self.state = BuildingState.OPERATIVE
         self.resource = gas
         if self.resource != None:
-            self.resource.x = self.x
-            self.resource.y = self.y
             self.resource.disable()
 
         self.count = 0

@@ -54,6 +54,7 @@ class Wall():
             spritesheet = pg.image.load("./sprites/Muro/wallTerran.png").convert()
         else:
             spritesheet = pg.image.load("./sprites/Muro/wallZerg.png").convert()
+        self.type = type
         spritesheet.set_colorkey(BLACK)
         self.image = pg.transform.scale(spritesheet, [spritesheet.get_rect().w * 1.4, spritesheet.get_rect().h * 1.1])
         self.x = xIni 
@@ -95,12 +96,11 @@ class Wall():
         r = self.getRect()
         return (r.x + r.w/2, r.y + r.h)
 
-    def toDictionary(self, map):
-        fatherDictionary = super().toDictionary(map)
+    def toDictionary(self):
         sonDictionary = {
-            "clase": "terranWorker",
-            "nombre": "Terran Worker",
-            "funcion": "Unidad obrera"
+            "clase": "Muro",
+            "xIni": self.x,
+            "yIni": self.y,
+            "type": self.type
         }
-        sonDictionary.update(fatherDictionary)
         return sonDictionary

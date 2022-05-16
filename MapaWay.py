@@ -131,7 +131,6 @@ def setEntity(player, ai):
     #scv = TerranWorker(player, 20, 20)
     #player.addUnits(scv)
     scv = Drone(player, 24, 32)
-    print(scv.id)
     player.addUnits(scv)
     structure1 = Hatchery(20, 35, player, mapa, False, raton)
     player.addStructures(structure1)

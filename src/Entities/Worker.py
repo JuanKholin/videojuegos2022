@@ -198,6 +198,22 @@ class Worker(Unit):
                 self.paths.pop(0)
                 if len(self.paths) != 0:
                     self.changeObjectiveTile()
+    
+    def updateExtractingRoute(self):
+        if len(self.paths) > 0:
+            actualPath = self.paths[0]
+            if actualPath.dist > 0: # Aun queda trecho
+                self.updatePath(actualPath)
+                self.count += 1
+                if self.count >= self.framesToRefresh:
+                    self.count = 0
+                    self.updateMovingImage()
+            else: # Se acaba este camino
+                self.paths.pop(0)
+                if self.resource.ocupante == GEYSER: # Me han destruido la refineria
+                    self.changeToStill()
+                elif len(self.paths) != 0:
+                    self.changeObjectiveTile()
 
     def updateMiningAct(self):
         self.count += 1

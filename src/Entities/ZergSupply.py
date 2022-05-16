@@ -72,7 +72,7 @@ class ZergSupply(Structure):
         #x, y = map.getTileIndex(self.originX, self.originY)
         fatherDictionary = super().toDictionary(map)
         sonDictionary = {
-            "clase": "s1",
+            "clase": "zergSupply",
             "building": self.building,
             "nombre": "Refugio de zergs",
             "funcion": "Aumentar poblacion"

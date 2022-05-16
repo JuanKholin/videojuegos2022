@@ -1,4 +1,5 @@
 
+from operator import truediv
 import pygame as pg
 import math
 from . import Utils
@@ -60,7 +61,9 @@ class Player():
         self.unitsFree.append(unit)
 
     def addStructures(self,structures):
-        self.limitUnits += structures.capacity
+        print(self.limitUnits)
+        self.limitUnits += structures.getUnitCapacity()
+        
         self.structures.append(structures)
 
     def execute(self, id, param, tileClicked):
@@ -97,10 +100,12 @@ class Player():
                 #print(type(enemy))
                 if enemy != None:
                     print("ataco a otro")
-                    unit.attack(enemy)
+                    unit.siendoAtacado = True
+                    unit.atacante = enemy
                 else:
+                    if unit.state == UnitState.STILL:
+                        unit.updateOwnSpace()
                     print("no hay naide")
-                    unit.changeToStill()
         elif self.structureSelected != None:
             if id == CommandId.GENERATE_UNIT or id == CommandId.GENERATE_WORKER or id == CommandId.GENERATE_SOLDIER:
                 self.structureSelected.execute(id)

@@ -150,11 +150,12 @@ def setEntity(player, ai):
     gas = Geyser(30, 5, 800)
     resources.append(gas)
 
-    scv = Firebat(player, 12, 5)
+    scv = TerranWorker(player, 12, 5)
     player.addUnits(scv)
     structure1 = TerranBuilder(20, 5, player, mapa, False, raton)
     player.addStructures(structure1)
     player.setBasePlayer(structure1)
+
     #Recursos del mapa
 
     crystal = Crystal(7, 8, 800)

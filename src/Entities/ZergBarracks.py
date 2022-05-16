@@ -83,7 +83,7 @@ class ZergBarracks(Structure):
         #x, y = map.getTileIndex(self.originX, self.originY)
         fatherDictionary = super().toDictionary(map)
         sonDictionary = {
-            "clase": "s1",
+            "clase": "zergBarracks",
             "building": self.building,
             "nombre": "Criadera de Zerling",
             "funcion": "Crear zerling"

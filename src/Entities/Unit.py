@@ -115,8 +115,6 @@ class Unit(Entity):
                     if tile.heur(self.getTile()) < self.tileAAtacar.heur(self.getTile()):
                         self.tileAAtacar = tile
                 self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
-            self.mapa.setVecina(self.occupiedTile, self.id)
-            self.occupiedTile.setOcupante(self)
             #print("CAMINOS:" ,len(self.paths))
             self.changeToAttacking(objective)
             if len(self.paths) == 1:
@@ -127,6 +125,8 @@ class Unit(Entity):
                 self.paths = [path]
             elif len(self.paths) == 0:
                 self.updateOwnSpace()
+            else:
+                self.changeObjectiveTile()
 
     # Indica a la unidad que se acerque lo mas posible a un recurso mineral
     def mine(self, resource):

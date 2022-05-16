@@ -1,4 +1,5 @@
 
+from tkinter.font import NORMAL
 import pygame as pg
 from os import listdir
 from os.path import isfile, join
@@ -53,16 +54,16 @@ class Interface():
             {"nombre": "2", "tipo": "mapa", "rect": pg.Rect(MAPA2_POS[0], MAPA2_POS[1], 90, 35), "press": False},
             {"nombre": "3", "tipo": "mapa", "rect": pg.Rect(MAPA3_POS[0], MAPA3_POS[1], 90, 35), "press": False},
             {"nombre": "4", "tipo": "mapa", "rect": pg.Rect(MAPA4_POS[0], MAPA4_POS[1], 90, 35), "press": False},
-            {"nombre": "Facil", "tipo": "dificultad", "rect": pg.Rect(FACIL_POS[0], FACIL_POS[1], 125, 35), "press": False},
-            {"nombre": "Normal", "tipo": "dificultad", "rect": pg.Rect(NORMAL_POS[0], NORMAL_POS[1], 125, 35), "press": False},
-            {"nombre": "Dificil", "tipo": "dificultad", "rect": pg.Rect(DIFICIL_POS[0], DIFICIL_POS[1], 125, 35), "press": False},
-            {"nombre": "Terran", "tipo": "raza", "rect": pg.Rect(TERRAN_POS[0], TERRAN_POS[1], 185, 35), "press": False},
-            {"nombre": "Zerg","tipo": "raza", "rect": pg.Rect(ZERG_POS[0], ZERG_POS[1], 185, 35), "press": False},
+            {"nombre": "Facil", "tipo": "dificultad", "rect": pg.Rect(FACIL_POS[0], FACIL_POS[1], 125, 35), "press": False, "dif": EASY},
+            {"nombre": "Normal", "tipo": "dificultad", "rect": pg.Rect(NORMAL_POS[0], NORMAL_POS[1], 125, 35), "press": False, "dif": MEDIUM},
+            {"nombre": "Dificil", "tipo": "dificultad", "rect": pg.Rect(DIFICIL_POS[0], DIFICIL_POS[1], 125, 35), "press": False, "dif": HARD},
+            {"nombre": "Terran", "tipo": "raza", "rect": pg.Rect(TERRAN_POS[0], TERRAN_POS[1], 185, 35), "press": False, "raza": Race.TERRAN},
+            {"nombre": "Zerg","tipo": "raza", "rect": pg.Rect(ZERG_POS[0], ZERG_POS[1], 185, 35), "press": False, "raza": Race.ZERG},
         ]
 
         self.selectedMap = "1"
-        self.selectedDif = "Facil"
-        self.selectedRaza = "Terran"
+        self.selectedDif = {"nombre":"Facil", "dif": EASY}
+        self.selectedRaza = {"nombre":"Terran", "raza": Race.TERRAN}
 
 
 
@@ -188,6 +189,14 @@ class Interface():
                 'rect': pg.Rect(PARTIDA_POS[0], PARTIDA_POS[1] + YPARTIDA_PAD*pad, 455, YPARTIDA_PAD-1),
                 'pressed': False})
             pad += 1
+    
+    def getNumPartidas(self):
+        onlyfiles = [f for f in listdir("./games") if isfile(join("./games", f))]
+        pad = 0
+        for file in onlyfiles:
+            pad += 1
+        return pad
+
 
     def update(self, escena, raton, camera):
         if Utils.state == System_State.MAINMENU:
@@ -207,8 +216,8 @@ class Interface():
                 elif self.mouse.getClick() and self.singlePress and Raton.collides(endPos[0], endPos[1], self.singleRect):
                     #print("Seleccionado single player")
                     Utils.state = System_State.MAP1
-                    #self.loadPartidas()
-                    #Utils.state = System_State.GAMESELECT
+                    self.loadPartidas()
+                    Utils.state = System_State.GAMESELECT
                     #stopMusic()
                     self.singlePress = False
 
@@ -282,11 +291,29 @@ class Interface():
                     #Hay que hacer uno generico, o que carge el mapa y pase a ONGAME aqui
                     _escena, _raton, _camera = loadFromSave(self.selectedPartida['nombre'])
                     escena.setSelf(_escena)
-                    if Utils.DEBBUG == False:
-                        aI = AI(escena.p2, Race.ZERG, EASY)
-
+                    options = self.selectedPartida['nombre'].split("_")
+                    print(options)
+                    raza = None
+                    dif = None
+                    if options[1] == "Zerg":
+                        print("Contra terran")
+                        raza = Race.TERRAN
                     else:
-                        aI = AI(escena.p2, Race.ZERG, NULL)
+                        print("Contra zerg")
+                        raza = Race.ZERG
+                    if options[2] == "Dificil":
+                        print("DIFICIL")
+                        dif = HARD
+                    elif options[2] == "Normal":
+                        print("NORMAL")
+                        dif = NORMAL
+                    else:
+                        print("EASY")
+                        dif = EASY
+                    if Utils.DEBBUG == False:
+                        aI = AI(escena.p2, raza, dif)
+                    else:
+                        aI = AI(escena.p2, raza, dif)
                     escena.aI = aI
                     raton.setSelf(_raton)
                     self.player = escena.p1
@@ -297,6 +324,7 @@ class Interface():
                     raton.addInterface(self)
                     escena.interfaz = self
                     camera.setSelf(_camera)
+                    escena.camera = camera
                     Utils.state = System_State.ONGAME
                     stopMusic()
                     self.singlePress = False
@@ -365,9 +393,34 @@ class Interface():
                 if not self.aceptarPress and press and Raton.collides(iniPos[0], iniPos[1], self.aceptarRect):
                     self.aceptarPress = True
                 elif self.mouse.getClick() and self.aceptarPress and Raton.collides(endPos[0], endPos[1], self.aceptarRect):
-                    #print("Aceptar")
+                    print("Aceptar")
                     #Con self.selectedMap selectedDif selectedRaza se crea la partida
-                    Utils.state = System_State.MAP1
+                    _escena, _raton, _camera = loadHardcodedMap(self.selectedMap + "_" + self.selectedRaza["nombre"])
+                    escena.setSelf(_escena)
+                    raza = None
+                    if self.selectedRaza['raza'] == Race.TERRAN:
+                        raza = Race.ZERG
+                    else:
+                        raza = Race.TERRAN
+                    if Utils.DEBBUG == False:
+                        aI = AI(escena.p2, raza, self.selectedDif['dif'])
+                    else:
+                        aI = AI(escena.p2, raza, self.selectedDif['dif'])
+                    escena.aI = aI
+                    raton.setSelf(_raton)
+                    self.player = escena.p1
+                    print(self.player.limitUnits)
+                    self.enemy = escena.p2
+                    escena.raton = raton
+                    escena.p1.base.raton = escena.raton
+                    self.raton = escena.raton
+                    raton.addInterface(self)
+                    escena.interfaz = self
+                    camera.setSelf(_camera)
+                    escena.camera = camera
+                    id = self.getNumPartidas()
+                    escena.nombre = self.selectedMap + "_" + self.selectedRaza["nombre"] + "_" + self.selectedDif['nombre'] + "_" + str(id)
+                    Utils.state = System_State.ONGAME
                     stopMusic()
                     self.singlePress = False
 
@@ -397,9 +450,11 @@ class Interface():
                         if b['tipo'] == "mapa":
                             self.selectedMap = b['nombre']
                         elif b['tipo'] == "dificultad":
-                            self.selectedDif = b['nombre']
+                            self.selectedDif['nombre'] = b['nombre']
+                            self.selectedDif['dif'] = b['dif']
                         elif b['tipo'] == "raza":
-                            self.selectedRaza = b['nombre']
+                            self.selectedRaza['nombre'] = b['nombre']
+                            self.selectedRaza['raza'] = b['raza']
 
 
 
@@ -541,13 +596,13 @@ class Interface():
 
             for b in self.botonesNewGame:
                 if (self.mouse.isCollide(b['rect']) or b['nombre'] == self.selectedMap
-                or b['nombre'] == self.selectedDif or b['nombre'] == self.selectedRaza):
+                or b['nombre'] == self.selectedDif['nombre'] or b['nombre'] == self.selectedRaza['nombre']):
                     pygame.draw.rect(screen, GREEN3, b['rect'], 1)
 
 
             muestra_texto(screen, str('monotypecorsiva'), str(self.selectedMap), WHITE, 40, (740,193))
-            muestra_texto(screen, str('monotypecorsiva'), self.selectedDif, WHITE, 40, (840,299))
-            muestra_texto(screen, str('monotypecorsiva'), self.selectedRaza, WHITE, 40, (765,410))
+            muestra_texto(screen, str('monotypecorsiva'), self.selectedDif['nombre'], WHITE, 40, (840,299))
+            muestra_texto(screen, str('monotypecorsiva'), self.selectedRaza['nombre'], WHITE, 40, (765,410))
 
         elif Utils.state == System_State.ONGAME or Utils.state == System_State.PAUSED:
             if DEBBUG == True:

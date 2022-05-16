@@ -23,7 +23,6 @@ class AI():
 
         self.minWorkers = 2
         self.minSoldiers = 2
-
         if race == Race.ZERG:
             self.base = ZERG_BASE
             self.barracks = ZERG_BARRACKS
@@ -82,6 +81,7 @@ class AI():
         elif self.rotativeReaction == 2:
             self.restoreArmy(units, structures)
         elif self.rotativeReaction == 3:
+            print("GATHER")
             self.gatherResources(units, structures)
         elif self.rotativeReaction == 4:
             self.updateInvaders()
@@ -93,23 +93,23 @@ class AI():
     def makeDecission(self, units, structures):
         decission = self.decide()
         if decission == 0:
-            #print("IA DECIDE ATACAR LO VISIBLE")
+            print("IA DECIDE ATACAR LO VISIBLE")
             self.attackVisible(units, structures)
         elif decission == 1:
-            #print("IA DECIDE HACER MEJORAS")
+            print("IA DECIDE HACER MEJORAS")
             self.armyUpgrade(structures)
         elif decission == 2:
-            #print("IA DECIDE EXPANDIR SU EJERCITO")
+            print("IA DECIDE EXPANDIR SU EJERCITO")
             self.armyExpansion(structures)
         elif decission == 3:
-            #print("IA DECIDE INVADIR")
+            print("IA DECIDE INVADIR")
             self.seekAndDestroy(units)
         #print(self.decissionsChance)
 
     # Toma una decision y rebalancea el pool de decisiones, me ha quedado bastante original la verdad,
     # estoy orgulloso y no se ni si funciona xdxdxdxd
     def decide(self):
-        print(self.data.gas)
+        #print(self.data.gas)
         randPick = randint(0, 99)
         for i in range(len(self.decissionsChance)):
             if randPick < self.decissionsChance[i]:
@@ -195,11 +195,11 @@ class AI():
             for worker in workers:
                 if (worker.state == UnitState.EXTRACTING) or (worker.state == UnitState.GAS_TRANSPORTING):
                     skipGasNeed = True 
-            if not skipGasNeed: # Si hay al menos un worker extrayendo gas no es necesario hacer nada de gas
+            if not skipGasNeed and self.data.resources >= TERRAN_REFINERY_MINERAL_COST: # Si hay al menos un worker extrayendo gas no es necesario hacer nada de gas
                 gasMan = workers.pop()
                 geyser = self.getGeyserInUse(structures)
                 if (geyser != None) and (geyser.state == BuildingState.OPERATIVE):
-                    #print("crying", geyser.getTile().ocupante)
+                    print("crying", geyser.getTile().ocupante)
                     gasMan.extract(geyser.getTile())
                 elif geyser == None:
                     geyser = self.findFreeGeyser(units, structures)
@@ -209,6 +209,7 @@ class AI():
                 if len(self.crystalsSeen) > 0: # si hay cristales conocidos,
                     crystalToMine = 0
                     for worker in workers: # todos a la mina
+                        print("A la mina")
                         if worker.state == UnitState.STILL: # si les viene bien xd
                             crystalsSeen = list(self.crystalsSeen)
                             #print("go to work crystal at", crystalsSeen[crystalToMine].getPosition())
@@ -333,8 +334,9 @@ class AI():
 
         # Minimos aumentados
         soldiersCost = self.minSoldiers * self.soldierCost
+        print(soldiersCost, self.data.resources)
         if self.data.resources > soldiersCost:
-            #print("upgrade soldiers")
+            print("upgrade soldiers")
             self.minSoldiers = self.minSoldiers + 1
         else:
             if self.minSoldiers > self.minWorkers * 2:
