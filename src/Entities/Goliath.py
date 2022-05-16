@@ -19,8 +19,8 @@ MINERAL_COST = 50
 GAS_COST = 25
 TIME_TO_MINE = 1000
 GENERATION_TIME = 24
-SPEED = 1
-FRAMES_TO_REFRESH = 10
+SPEED = 2
+FRAMES_TO_REFRESH = 5
 SPRITES = "goliath.bmp"
 DEATH_SPRITES = "explosion2.bmp"
 SPRITE_PIXEL_ROWS = 76
@@ -28,17 +28,13 @@ FACES = 8
 FRAME = 0
 SCALE = 2
 TOTAL_FRAMES = 179
-                    # 0-2     ATACAR
-                    # 3-4   ATACAR
-                    # 5-13  MOVE
-                    # 14    DIE
 FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
           list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
           list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
           list(range(154, 170)), [170] * 16, [171] * 16, [172] * 16, [173] * 16,
           [174] * 16, [175] * 16, [176] * 16, [177] * 16, [178] * 16]
 STILL_FRAMES = [0]
-ATTACK_FRAMES = [8, 9]
+ATTACK_FRAMES = [5, 6, 7, 8, 9]
 MOVE_FRAMES = [0, 1, 2, 4, 5, 6, 7]
 DIE_FRAMES = [10, 11, 12, 13, 14, 15, 16, 17, 18]
 

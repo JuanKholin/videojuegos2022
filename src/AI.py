@@ -408,232 +408,95 @@ class AI():
                 return True
         return False
 
+    def getBuildPosition(self, structures, width, height, HEIGHT_PAD, centerTile):
+        nStructures = len(structures)
+        initialI = randint(0, nStructures - 1)
+        initialDir = randint(0, 7)
+        for i in range(nStructures):
+            structure = structures[(initialI + i) % nStructures]
+            for j in range(TOTAL_DIRECTIONS):
+                aBadTry = False
+                actualDir = (initialDir + j) % TOTAL_DIRECTIONS
+                buildX, buildY = structure.getCords()
+                x, y = self.getDirection(actualDir)
+                tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
+                while (tile != None) and (tile.type == STRUCTURE) and (tile.ocupante == structure):
+                    buildX = buildX + x
+                    buildY = buildY + y
+                    tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
+                if (tile != None) and (tile.type == EMPTY):
+                    for k in range(3):
+                        buildX = buildX + x
+                        buildY = buildY + y
+                        tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
+                        if (tile == None) or ((tile != None) and (tile.type != EMPTY)):
+                            aBadTry = True
+                else:
+                    aBadTry = True
+                if not aBadTry:
+                    buildX, buildY = self.getTopLeft(buildX, buildY, actualDir, width, height, centerTile)
+                    if self.mapa.checkIfEmptyZone(buildX, buildY, buildX + (width - 1), buildY + (height - 1)):
+                        originX = buildX*self.mapa.tw
+                        originY = buildY*self.mapa.th
+                        rect = pygame.Rect(originX, originY + HEIGHT_PAD / 2, width * self.mapa.tw - 1, 
+                                height * self.mapa.th - HEIGHT_PAD / 2 - 1)
+                        tiles = self.mapa.getRectTiles(rect)
+                        ok = True
+                        tiles_set = set(tiles)
+                        if len(tiles_set) == height * width:
+                            for tile in tiles_set:
+                                if tile.type != EMPTY:
+                                    ok = False
+                                    break
+                        else:
+                            ok = False
+                        if ok:
+                            return buildX, buildY
+        return None, None
+
     # Construye un barracks de los Zerg cerca de una estructura aliada aleatoria
     def buildZergBarracks(self, structures):
         width = ZergBarracks.TILES_WIDTH
         height = ZergBarracks.TILES_HEIGHT
         centerTile = ZergBarracks.CENTER_TILE
-        randBuilding = randint(0, len(structures) - 1)
-        randBuilding = 0
-        building = structures[randBuilding]
-        randDirection = randint(0, 7)
-        buildingsTried = 0
-        directionsTried = 0
-        x, y = self.getDirection(randDirection)
-        buildX, buildY = building.getCords()
-
-        builded = False
-        while not builded:
-            tryNew = True
-            tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
-            if (tile != None) and (tile.type == STRUCTURE) and (tile.ocupante == building):
-                buildX = buildX + x
-                buildY = buildY + y
-                #print(buildX," ", buildY, " STRUCTURE")
-                tryNew = False
-            elif (tile != None) and (tile.type == EMPTY): # Hueco tras edificio
-                #Ahora checkear que haya hueco para el edificio a construir
-                buildX = buildX + x
-                buildY = buildY + y
-                #print("first ", buildX, " ", buildY, " EMPTY")
-                tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
-                if (tile != None) and (tile.type == EMPTY): # #primera tile libre para plantar edificio
-                    buildX = buildX + x
-                    buildY = buildY + y
-                    #print("second ", buildX," ", buildY, " EMPTY")
-                    buildX, buildY = self.getTopLeft(buildX, buildY, randDirection, width, height, centerTile)
-                    #print("topLeft ", buildX," ", buildY)
-
-                    if self.mapa.checkIfEmptyZone(buildX, buildY, buildX + (width - 1), buildY + (height - 1)):
-                        #print("buildea")
-                        toBuild = ZergBarracks(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
-                        if toBuild.checkTiles(False):
-                            self.data.addStructures(toBuild)
-                            #toBuild.buildProcess()
-                            builded = True
-            if tryNew and not builded:
-                directionsTried = directionsTried + 1
-                if directionsTried >= TOTAL_DIRECTIONS: # Se han probado todas las direcciones
-                    directionsTried = 0
-                    buildingsTried = buildingsTried + 1
-                    if buildingsTried >= len(structures): # No hay espacio en el mapa (  9 _9)
-                        #print("Wrong map, full occupied?")
-                        exit()
-                    else: # Quedan edificios por probar
-                        randBuilding = (randBuilding + 1) % len(structures)
-                        building = structures[randBuilding]
-                else: # Quedan direcciones por probar
-                    randDirection = (randDirection + 1) % TOTAL_DIRECTIONS
-                    x, y = self.getDirection(randDirection)
-                    #print ("New x e y ", x, " ", y)
-                    buildX, buildY = building.getCords()
+        heightPad = ZergBarracks.HEIGHT_PAD
+        buildX, buildY = self.getBuildPosition(structures, width, height, heightPad, centerTile)
+        if (buildX != None) and (buildY != None):
+            toBuild = ZergBarracks(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
+            self.data.addStructures(toBuild)
 
     # Construye un barracks de los Terran cerca de una estructura aliada aleatoria
     def buildTerranBarracks(self, structures):
         width = TerranBarracks.TILES_WIDTH
         height = TerranBarracks.TILES_HEIGHT
         centerTile = TerranBarracks.CENTER_TILE
-        randBuilding = randint(0, len(structures) - 1)
-        randBuilding = 0
-        building = structures[randBuilding]
-        randDirection = randint(0, 7)
-        buildingsTried = 0
-        directionsTried = 0
-        x, y = self.getDirection(randDirection)
-        buildX, buildY = building.getCords()
-
-        builded = False
-        while not builded:
-            tryNew = True
-            tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
-            if (tile != None) and (tile.type == STRUCTURE) and (tile.ocupante == building):
-                buildX = buildX + x
-                buildY = buildY + y
-                #print(buildX," ", buildY, " STRUCTURE")
-                tryNew = False
-            elif (tile != None) and (tile.type == EMPTY): # Hueco tras edificio
-                #Ahora checkear que haya hueco para el edificio a construir
-                buildX = buildX + x
-                buildY = buildY + y
-                #print("first ", buildX, " ", buildY, " EMPTY")
-                tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
-                if (tile != None) and (tile.type == EMPTY): # #primera tile libre para plantar edificio
-                    buildX = buildX + x
-                    buildY = buildY + y
-                    buildX, buildY = self.getTopLeft(buildX, buildY, randDirection, width, height, centerTile)
-
-                    if self.mapa.checkIfEmptyZone(buildX, buildY, buildX + (width - 1), buildY + (height - 1)):
-                        #print("buildea")
-                        toBuild = TerranBarracks(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
-                        if toBuild.checkTiles(False):
-                            self.data.addStructures(toBuild)
-                            #toBuild.buildProcess()
-                            builded = True
-            if tryNew and not builded:
-                directionsTried = directionsTried + 1
-                if directionsTried >= TOTAL_DIRECTIONS: # Se han probado todas las direcciones
-                    directionsTried = 0
-                    buildingsTried = buildingsTried + 1
-                    if buildingsTried >= len(structures): # No hay espacio en el mapa (  9 _9)
-                        #print("Wrong map, full occupied?")
-                        exit()
-                    else: # Quedan edificios por probar
-                        randBuilding = (randBuilding + 1) % len(structures)
-                        building = structures[randBuilding]
-                else: # Quedan direcciones por probar
-                    randDirection = (randDirection + 1) % TOTAL_DIRECTIONS
-                    x, y = self.getDirection(randDirection)
-                    #print ("New x e y ", x, " ", y)
-                    buildX, buildY = building.getCords()
+        heightPad = TerranBarracks.HEIGHT_PAD
+        buildX, buildY = self.getBuildPosition(structures, width, height, heightPad, centerTile)
+        if (buildX != None) and (buildY != None):
+            toBuild = TerranBarracks(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
+            self.data.addStructures(toBuild)
 
     # Construye un depot de los Zerg cerca de una estructura aliada aleatoria
     def buildZergDepot(self, structures):
         width = ZergSupply.TILES_WIDTH
         height = ZergSupply.TILES_HEIGHT
         centerTile = ZergSupply.CENTER_TILE
-        randBuilding = randint(0, len(structures) - 1)
-        randBuilding = 0
-        building = structures[randBuilding]
-        randDirection = randint(0, 7)
-        buildingsTried = 0
-        directionsTried = 0
-        x, y = self.getDirection(randDirection)
-        buildX, buildY = building.getCords()
-
-        builded = False
-        while not builded:
-            tryNew = True
-            tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
-            if (tile != None) and (tile.type == STRUCTURE) and (tile.ocupante == building):
-                buildX = buildX + x
-                buildY = buildY + y
-                #print(buildX," ", buildY, " STRUCTURE")
-                tryNew = False
-            elif (tile != None) and (tile.type == EMPTY): # Hueco tras edificio
-                #Ahora checkear que haya hueco para el edificio a construir
-                buildX = buildX + x
-                buildY = buildY + y
-                #print("first ", buildX, " ", buildY, " EMPTY")
-                tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
-                if (tile != None) and (tile.type == EMPTY): # #primera tile libre para plantar edificio
-                    buildX = buildX + x
-                    buildY = buildY + y
-                    #print("second ", buildX," ", buildY, " EMPTY")
-                    buildX, buildY = self.getTopLeft(buildX, buildY, randDirection, width, height, centerTile)
-                    #print("topLeft ", buildX," ", buildY)
-
-                    if self.mapa.checkIfEmptyZone(buildX, buildY, buildX + (width - 1), buildY + (height - 1)):
-                        #print("buildea")
-                        toBuild = ZergSupply(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
-                        if toBuild.checkTiles(False):
-                            self.data.addStructures(toBuild)
-                            #toBuild.buildProcess()
-                            builded = True
-            if tryNew and not builded:
-                directionsTried = directionsTried + 1
-                if directionsTried >= TOTAL_DIRECTIONS: # Se han probado todas las direcciones
-                    directionsTried = 0
-                    buildingsTried = buildingsTried + 1
-                    if buildingsTried >= len(structures): # No hay espacio en el mapa (  9 _9)
-                        #print("Wrong map, full occupied?")
-                        exit()
-                    else: # Quedan edificios por probar
-                        randBuilding = (randBuilding + 1) % len(structures)
-                        building = structures[randBuilding]
-                else: # Quedan direcciones por probar
-                    randDirection = (randDirection + 1) % TOTAL_DIRECTIONS
-                    x, y = self.getDirection(randDirection)
-                    #print ("New x e y ", x, " ", y)
-                    buildX, buildY = building.getCords()
+        heightPad = ZergSupply.HEIGHT_PAD
+        buildX, buildY = self.getBuildPosition(structures, width, height, heightPad, centerTile)
+        if (buildX != None) and (buildY != None):
+            toBuild = ZergSupply(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
+            self.data.addStructures(toBuild)
 
     # Construye un depot de los Terran cerca de una estructura aliada aleatoria
     def buildTerranDepot(self, structures):
         width = TerranSupplyDepot.TILES_WIDTH
         height = TerranSupplyDepot.TILES_HEIGHT
         centerTile = TerranSupplyDepot.CENTER_TILE
-        randBuilding = randint(0, len(structures) - 1)
-        building = structures[randBuilding]
-        randDirection = randint(0, 7)
-        buildingsTried = 0
-        directionsTried = 0
-        x, y = self.getDirection(randDirection)
-        buildX, buildY = building.getCords()
-        builded = False
-        while not builded:
-            tryNew = True
-            tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
-            if (tile != None) and (tile.type == STRUCTURE) and (tile.ocupante == building):
-                buildX = buildX + x
-                buildY = buildY + y
-                tryNew = False
-            elif (tile != None) and (tile.type == EMPTY): # Hueco tras edificio
-                #Ahora checkear que haya hueco para el edificio a construir
-                buildX = buildX + x
-                buildY = buildY + y
-                tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
-                if (tile != None) and (tile.type == EMPTY): # #primera tile libre para plantar edificio
-                    buildX = buildX + x
-                    buildY = buildY + y
-                    buildX, buildY = self.getTopLeft(buildX, buildY, randDirection, width, height, centerTile)
-                    if self.mapa.checkIfEmptyZone(buildX, buildY, buildX + (width - 1), buildY + (height - 1)):
-                        toBuild = TerranSupplyDepot(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
-                        if toBuild.checkTiles(False):
-                            self.data.addStructures(toBuild)
-                            builded = True
-            if tryNew and not builded:
-                directionsTried = directionsTried + 1
-                if directionsTried >= TOTAL_DIRECTIONS: # Se han probado todas las direcciones
-                    directionsTried = 0
-                    buildingsTried = buildingsTried + 1
-                    if buildingsTried >= len(structures): # No hay espacio en el mapa (  9 _9)
-                        exit()
-                    else: # Quedan edificios por probar
-                        randBuilding = (randBuilding + 1) % len(structures)
-                        building = structures[randBuilding]
-                else: # Quedan direcciones por probar
-                    randDirection = (randDirection + 1) % TOTAL_DIRECTIONS
-                    x, y = self.getDirection(randDirection)
-                    buildX, buildY = building.getCords()
+        heightPad = TerranSupplyDepot.HEIGHT_PAD
+        buildX, buildY = self.getBuildPosition(structures, width, height, heightPad, centerTile)
+        if (buildX != None) and (buildY != None):
+            toBuild = TerranSupplyDepot(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)            
+            self.data.addStructures(toBuild)
 
     # Construye un edificio de explotacion de geiseres en el geiser geyser
     def buildGeyserBuilding(self, geyser):

@@ -11,10 +11,8 @@ class Structure(Entity.Entity):
     clicked = False
     index = 0
     rectOffY = 0
-    heightPad = 0
+    HEIGHT_PAD = 0
     widthPad = 0
-    tileW = 0
-    tileH = 0
     training = []
     nBuildSprites = 1
     count = 0
@@ -32,7 +30,7 @@ class Structure(Entity.Entity):
         self.yIni = yini
         originX = (xini - self.CENTER_TILE[0])*self.mapa.tw
         originY = (yini - self.CENTER_TILE[1])*self.mapa.th
-        self.rectn = pygame.Rect(originX, originY + self.heightPad/2, self.tileW*self.mapa.tw - 1, self.tileH*self.mapa.th - self.heightPad/2 - 1)
+        self.rectn = pygame.Rect(originX, originY + self.HEIGHT_PAD/2, self.TILES_WIDTH*self.mapa.tw - 1, self.TILES_HEIGHT*self.mapa.th - self.HEIGHT_PAD/2 - 1)
         self.esEstructura = True
         self.state = BuildingState.BUILDING
         self.lastAttacker = None
@@ -129,13 +127,13 @@ class Structure(Entity.Entity):
     def getImage(self):
         image = self.image.get_rect()
         r = self.getRect()
-        rectAux = pygame.Rect(r.x + r.w/2 - image.w/2 - self.widthPad, r.y - self.heightPad - self.rectOffY, image.w, image.h)
+        rectAux = pygame.Rect(r.x + r.w/2 - image.w/2 - self.widthPad, r.y - self.HEIGHT_PAD - self.rectOffY, image.w, image.h)
         return rectAux
 
     def getFinalImage(self):
         image = self.finalImage.get_rect()
         r = self.getRect()
-        rectAux = pygame.Rect(r.x + r.w/2 - image.w/2 - self.widthPad, r.y - self.heightPad - self.rectOffY, image.w, image.h)
+        rectAux = pygame.Rect(r.x + r.w/2 - image.w/2 - self.widthPad, r.y - self.HEIGHT_PAD - self.rectOffY, image.w, image.h)
         return rectAux
 
     def setClicked(self, click):
@@ -143,14 +141,14 @@ class Structure(Entity.Entity):
 
     def setPosition(self, x, y):
         xTile, yTile = self.mapa.getTileIndex(x, y)
-        originX = (xTile - round(self.tileW/2))*self.mapa.tw
-        originY = (yTile - round(self.tileH/2))*self.mapa.th
+        originX = (xTile - round(self.TILES_WIDTH/2))*self.mapa.tw
+        originY = (yTile - round(self.TILES_HEIGHT/2))*self.mapa.th
         self.x = xTile * self.mapa.tw
         self.y = yTile * self.mapa.th
         self.rectn.x = originX
-        self.rectn.y = originY + self.heightPad/2
-        self.rectn.w = self.tileW*self.mapa.tw - 1
-        self.rectn.h = self.tileH*self.mapa.th - self.heightPad/2 - 1
+        self.rectn.y = originY + self.HEIGHT_PAD/2
+        self.rectn.w = self.TILES_WIDTH*self.mapa.tw - 1
+        self.rectn.h = self.TILES_HEIGHT*self.mapa.th - self.HEIGHT_PAD/2 - 1
 
     def execute(self, command_id):
         pass
@@ -316,7 +314,7 @@ class Structure(Entity.Entity):
         tiles = self.mapa.getRectTiles(r)
         ok = True
         tiles_set = set(tiles)
-        if len(tiles_set) == self.tileH*self.tileW:
+        if len(tiles_set) == self.TILES_HEIGHT*self.TILES_WIDTH:
             for tile in tiles_set:
                 if tile.type != EMPTY or (not tile.visible and visible):
                     ok = False

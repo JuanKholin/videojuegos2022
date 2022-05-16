@@ -25,10 +25,8 @@ class TerranSupplyDepot(Structure):
     nBuildSprites = 4
     deafault_index = 4
     generationStartTime = 0
-    heightPad = 15
+    HEIGHT_PAD = 15
     rectOffY = 8
-    tileW = 4
-    tileH = 3
     clicked = False
     frame = 8
     nSprites = 5

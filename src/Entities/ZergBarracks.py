@@ -19,13 +19,11 @@ class ZergBarracks(Structure):
     CENTER_TILE = [1, 1]
     sprites = []
     training = []
-    heightPad = 10
+    HEIGHT_PAD = 10
     generationTime = 0
     generationCount = 0
     rectOffY = 20
-    tileW = 4
     clicked = False
-    tileH = 3
     frame = 20
     nSprites = 3
     options = [Options.GENERATE_SOLDIER_ZERG]

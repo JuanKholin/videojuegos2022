@@ -27,10 +27,8 @@ class TerranBuilder(Structure):
     rectOffY = 3
     generationTime = 0
     generationCount = 0
-    heightPad = 25
+    HEIGHT_PAD = 25
     nBuildSprites = 4
-    tileW = 5
-    tileH = 4
     clicked = False
     frame = 8
     nSprites = 6

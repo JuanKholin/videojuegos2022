@@ -21,7 +21,7 @@ SPRITES = "hydralisk.bmp"
 SPRITE_PIXEL_ROWS = 128
 FACES = 8
 FRAME = 0
-SCALE = 1.5
+SCALE = 2
 TOTAL_FRAMES = 204 + 8  # [0:203] MOVICION
                     # [204:211] MORICION
 FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
@@ -31,7 +31,7 @@ FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
           [204] * 16, [205] * 16, [206] * 16, [207] * 16, [208] * 16, [209] * 16,
           [210] * 16, [211] * 16]
 STILL_FRAMES = [0]
-ATTACK_FRAMES = [1, 2, 3, 4]
+ATTACK_FRAMES = [1, 2, 3, 4, 1]
 MOVE_FRAMES = [5, 6, 7, 8, 9, 10, 11]
 DIE_FRAMES = [12, 13, 14, 15, 16, 17, 18, 19]
 INVERSIBLE_FRAMES = len(FRAMES) - len(DIE_FRAMES) # los die frames no se invierten
@@ -41,8 +41,8 @@ DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
 PADDING = 110
 WEIGHT_PADDING = 165
 HEIGHT_PADDING = 155
-X_PADDING = 13
-Y_PADDING = 15
+X_PADDING = 20 * SCALE
+Y_PADDING = 20 * SCALE
 
 
 class Hydralisk(Soldier):

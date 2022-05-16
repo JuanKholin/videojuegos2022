@@ -26,8 +26,8 @@ class Map():
                 self.generateRandomMap()
             self.load()
             #self.loadMinimap()
-        self.tilesW = w
-        self.tilesH = h
+        self.TILES_WIDTH = w
+        self.TILES_HEIGHT = h
 
     #Dibuja el mapa
     def drawMap(self, screen, camera):
@@ -692,14 +692,14 @@ class Map():
     def getNextTileByOffset(self, x, y, xOffset, yOffset):
         xAux = x + xOffset
         yAux = y + yOffset
-        if (xAux >= 0) and (xAux < self.tilesW) and (yAux >= 0) and (yAux < self.tilesH):
+        if (xAux >= 0) and (xAux < self.TILES_WIDTH) and (yAux >= 0) and (yAux < self.TILES_HEIGHT):
             return self.mapa[int(yAux)][int(xAux)]
         return None
 
     # Devuelve si estan libres todas las tiles entre esquina sup izq y inf der
     def checkIfEmptyZone(self, xUpLeft, yUpLeft, xBotRight, yBotRight):
-        if (xUpLeft >= 0) and (xUpLeft < self.tilesW) and (yUpLeft >= 0) and (yUpLeft < self.tilesH):
-            if (xBotRight >= 0) and (xBotRight < self.tilesW) and (yBotRight >= 0) and (yBotRight < self.tilesH):
+        if (xUpLeft >= 0) and (xUpLeft < self.TILES_WIDTH) and (yUpLeft >= 0) and (yUpLeft < self.TILES_HEIGHT):
+            if (xBotRight >= 0) and (xBotRight < self.TILES_WIDTH) and (yBotRight >= 0) and (yBotRight < self.TILES_HEIGHT):
                 for x in range(int(xUpLeft), int(xBotRight)):
                     for y in range(int(yUpLeft), int(yBotRight)):
                         if self.mapa[y][x].type != EMPTY:
@@ -740,7 +740,7 @@ class Map():
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
                 row = int(j - distance + y)
-                if (col >= 0) and (col < self.tilesW) and (row >= 0) and (row < self.tilesH):
+                if (col >= 0) and (col < self.TILES_WIDTH) and (row >= 0) and (row < self.TILES_HEIGHT):
                     aux = self.mapa[row][col]
                     if ((aux.type == UNIT) or (aux.type == STRUCTURE)) and (aux.ocupante.hp > 0):
                         #print("PLAYER2? ", aux.ocupante.player)
@@ -759,7 +759,7 @@ class Map():
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
                 row = int(j - distance + y)
-                if (col >= 0) and (col < self.tilesW) and (row >= 0) and (row < self.tilesH):
+                if (col >= 0) and (col < self.TILES_WIDTH) and (row >= 0) and (row < self.TILES_HEIGHT):
                     aux = self.mapa[row][col]
                     if (aux.type == UNIT) or (aux.type == STRUCTURE):
                         #print(aux.ocupante.type, " ", col, " ", row)
@@ -776,7 +776,7 @@ class Map():
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
                 row = int(j - distance + y)
-                if (col >= 0) and (col < self.tilesW) and (row >= 0) and (row < self.tilesH):
+                if (col >= 0) and (col < self.TILES_WIDTH) and (row >= 0) and (row < self.TILES_HEIGHT):
                     aux = self.mapa[row][col]
                     if aux.type == GEYSER:
                         return aux.ocupante
@@ -792,7 +792,7 @@ class Map():
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
                 row = int(j - distance + y)
-                if (col >= 0) and (col < self.tilesW) and (row >= 0) and (row < self.tilesH):
+                if (col >= 0) and (col < self.TILES_WIDTH) and (row >= 0) and (row < self.TILES_HEIGHT):
                     aux = self.mapa[row][col]
                     if aux.type == RESOURCE and aux.ocupante.capacity > 0:
                         crystalsFound.add(aux.ocupante)

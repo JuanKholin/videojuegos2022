@@ -23,10 +23,8 @@ class Extractor(Structure):
     nBuildSprites = 3
     deafault_index = 3
     generationStartTime = 0
-    heightPad = 80
+    HEIGHT_PAD = 80
     rectOffY = -10
-    tileW = 4
-    tileH = 3
     clicked = False
     frame = 8
     nSprites = 4
@@ -85,7 +83,7 @@ class Extractor(Structure):
         tiles = self.mapa.getRectTiles(r)
         ok = True
         tiles_set = set(tiles)
-        if len(tiles_set) == (self.tileH -1)*self.tileW:
+        if len(tiles_set) == (self.TILES_HEIGHT -1)*self.TILES_WIDTH:
             for tile in tiles_set:
                 print(tile.tileid)
                 if tile.type != GEYSER:

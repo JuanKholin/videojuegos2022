@@ -27,13 +27,11 @@ class Hatchery(Structure):
     CENTER_TILE = [2, 2]
     sprites = []
     training = []
-    heightPad = 10
+    HEIGHT_PAD = 10
     generationTime = 0
     generationCount = 0
     rectOffY = 90
-    tileW = 6
     clicked = False
-    tileH = 4
     frame = 12
     nSprites = 4
     options = [Options.BUILD_SUPPLY_DEPOT_ZERG, Options.BUILD_BARRACKS_ZERG, Options.BUILD_REFINERY_ZERG, Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE, Options.GENERATE_WORKER_ZERG]

@@ -21,10 +21,8 @@ class TerranRefinery(Structure):
     nBuildSprites = 4
     deafault_index = 5
     generationStartTime = 0
-    heightPad = 5
+    HEIGHT_PAD = 5
     rectOffY = 57
-    tileW = 4
-    tileH = 2
     clicked = False
     frame = 8
     nSprites = 5
@@ -97,7 +95,7 @@ class TerranRefinery(Structure):
         tiles = self.mapa.getRectTiles(r)
         ok = True
         tiles_set = set(tiles)
-        if len(tiles_set) == self.tileH*self.tileW:
+        if len(tiles_set) == self.TILES_HEIGHT * self.TILES_WIDTH:
             for tile in tiles_set:
                 if tile.type != GEYSER:
                     ok = False

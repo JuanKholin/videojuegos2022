@@ -19,14 +19,12 @@ class ZergSupply(Structure):
     CENTER_TILE = [1, 1]
     sprites = []
     training = []
-    heightPad = 10
+    HEIGHT_PAD = 10
     generationTime = 0
     generationCount = 0
     widthPad = -15
     rectOffY = 30
-    tileW = 3
     clicked = False
-    tileH = 2
     frame = 10
     nSprites = 3
     options = []
