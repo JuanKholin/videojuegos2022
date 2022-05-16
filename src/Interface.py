@@ -160,10 +160,13 @@ class Interface():
         aux = Button.Button(BUTTON_PATH + "zergBarracks" + ".png", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineral.png", "Construir Barracas", 55, 50)
         allButton[Options.BUILD_BARRACKS_ZERG] = aux
         aux = Button.Button(BUTTON_PATH + "next" + ".png", CommandId.NEXT_PAGE)
+        aux.image.set_colorkey(BLACK)
         allButton[Options.NEXT_PAGE] = aux
         aux = Button.Button(BUTTON_PATH + "previous" + ".png", CommandId.PREVIOUS_PAGE)
+        aux.image.set_colorkey(BLACK)
         allButton[Options.PREVIOUS_PAGE] = aux
         aux = Button.Button(BUTTON_PATH + "close" + ".png", CommandId.RETURN_GAME)
+        aux.image.set_colorkey(BLACK)
         allButton[Options.CLOSE] = aux
         
         aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "danyoUpgrade" + ".png", CommandId.UPGRADE_SOLDIER_DAMAGE,BUTTON_PATH + "cartelUpgrade.bmp", "Mejorar daño;de las unidades", 90, 50)
@@ -348,6 +351,7 @@ class Interface():
                 camera.setSelf(_camera)
                 escena.camera = camera
                 Utils.state = System_State.ONGAME
+                setGameState2(System_State.LOAD)
                 stopMusic()
                 self.singlePress = False
 
@@ -439,6 +443,7 @@ class Interface():
                 id = self.getNumPartidas()
                 escena.nombre = self.selectedMap + "_" + self.selectedRaza["nombre"] + "_" + self.selectedDif['nombre'] + "_" + str(id)
                 Utils.state = System_State.ONGAME
+                setGameState2(System_State.LOAD)
                 stopMusic()
                 self.singlePress = False
 
@@ -725,9 +730,26 @@ class Interface():
     def drawHELP(self, screen):
         pygame.draw.rect(screen, BLACK, pygame.Rect(SCREEN_WIDTH/4, SCREEN_HEIGHT/9, SCREEN_WIDTH/2, SCREEN_HEIGHT/1.2))
         pygame.draw.rect(screen, BLUE2, pygame.Rect(SCREEN_WIDTH/4, SCREEN_HEIGHT/9, SCREEN_WIDTH/2, SCREEN_HEIGHT/1.2), 4)
-        self.helpButtons[2].draw(screen, 704, 88)
+        self.helpButtons[2].draw(screen, 706, 86)
         
         if self.helpPage == 1:
+            self.helpButtons[1].draw(screen, 604, 95)
+            muestra_texto(screen, str('monotypecorsiva'), "INSTRUCCIONES", WHITE, 30, (490, 110))
+            muestra_texto(screen, str('monotypecorsiva'), "ESTRUCUTURAS", WHITE, 30, (490, 140))
+            
+            screen.blit(getSprite(MOUSE_PATH + "tile002.png", WHITE, (70, 70)), (310, 200))
+            muestra_texto(screen, str('monotypecorsiva'), "Click Izquierdo", GREEN, 26, (480, 210))
+            muestra_texto(screen, str('monotypecorsiva'), "Para seleccionar unidades o realizar acciones", ORANGE, 20, (570, 230))
+            muestra_texto(screen, str('monotypecorsiva'), "Click Derecho ", GREEN, 26, (475, 255))
+            muestra_texto(screen, str('monotypecorsiva'), "Para desplazar tropas", ORANGE, 20, (490, 275))
+            
+            screen.blit(getSprite(KEY_PATH , WHITE, (150, 100)), (260, 320))
+            muestra_texto(screen, str('monotypecorsiva'), "Movimiento de camara", GREEN, 26, (510, 340))
+            muestra_texto(screen, str('monotypecorsiva'), "Utiliza las teclas para controlar la camara", ORANGE, 20, (560, 370))
+            muestra_texto(screen, str('monotypecorsiva'), "o desde el minimapa usando el ratón", ORANGE, 20, (540, 385))
+            
+        elif self.helpPage == 2:
+            self.helpButtons[0].draw(screen, 304, 95)
             self.helpButtons[1].draw(screen, 604, 95)
             muestra_texto(screen, str('monotypecorsiva'), "TERRAN", WHITE, 30, (480, 110))
             muestra_texto(screen, str('monotypecorsiva'), "ESTRUCUTURAS", WHITE, 30, (480, 140))

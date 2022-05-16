@@ -140,6 +140,7 @@ CLOCK_PER_SEC = 60
 # Constantes para los colores
 WHITE   = (255, 255, 255)
 GREY    = (170, 170, 170)
+GREY2   = (83, 81, 83)
 BLACK   = (0, 0, 0)
 GREEN   = (0, 255, 0)
 RED     = (255, 0, 0)
@@ -221,6 +222,7 @@ def takeID():
 # INTERFAZ
 #----------------------------------------------------------------
 MOUSE_PATH = "./SPRITE/raton/"
+KEY_PATH = "./SPRITE/EXTRA/key.png"
 
 MAIN_MENU = "SPRITE/mainMenu/fondo"
 MAIN_MENU_TEXT_SIZE = 30

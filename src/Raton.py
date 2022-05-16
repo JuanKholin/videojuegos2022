@@ -268,10 +268,10 @@ class Raton(pygame.sprite.Sprite):
                 if self.pulsado:
                     self.pulsado = False
                     self.clicked = True
-                    #print('click izq liberado', real_mouse_pos, event.type)
+                    print('click izq liberado', real_mouse_pos, event.type)
                     #print(self.enable)
                     if Utils.state == System_State.ONGAME:
-                        if getGameState2 == System_State.PLAYING:
+                        if getGameState2() == System_State.PLAYING:
                             reClick = False
                             if self.enable:
                                 tileClicked = self.mapa.getTile(real_mouse_pos[0],real_mouse_pos[1])
