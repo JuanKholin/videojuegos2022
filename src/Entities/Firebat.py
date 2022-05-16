@@ -19,7 +19,7 @@ MINERAL_COST = 50
 GAS_COST = 25
 TIME_TO_MINE = 1000
 GENERATION_TIME = 24
-SPEED = 1
+SPEED = 2
 FRAMES_TO_REFRESH = 5
 SPRITES = "firebat.bmp"
 DEATH_SPRITES = "explosion2.bmp"
@@ -27,7 +27,7 @@ SPRITE_PIXEL_ROWS = 32
 FACES = 8
 FRAME = 0
 SCALE = 1.5
-TOTAL_FRAMES = (10 + 9) * 17
+TOTAL_FRAMES = 179
                     # 0-2     ATACAR
                     # 3-4   ATACAR
                     # 5-13  MOVE
@@ -46,11 +46,11 @@ INVERSIBLE_FRAMES = len(FRAMES) - len(DIE_FRAMES) # los die frames no se inviert
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
 # horario y empezando desde el norte, el mapeo dir-flist(range(289, 296))rame es:
 DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
-WEIGHT_PADDING =    0
-HEIGHT_PADDING =    0
-X_PADDING =         15
+WEIGHT_PADDING =    10
+HEIGHT_PADDING =    10
+X_PADDING =         20
 Y_PADDING =         15
-PADDING = 0
+PADDING = 20
 
 class Firebat(Soldier):
     generateSound = soldierGenerateSound
@@ -69,7 +69,7 @@ class Firebat(Soldier):
         deadSpritesheet = pg.image.load("./sprites/" + DEATH_SPRITES).convert()
         deadSpritesheet.set_colorkey(BLACK)
         self.sprites = Entity.divideSpritesheetByRows(spritesheet,
-                SPRITE_PIXEL_ROWS, SCALE) + Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200, (128, 128))
+                SPRITE_PIXEL_ROWS, SCALE) + Entity.divideSpritesheetByRows(deadSpritesheet, 128, SCALE)
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
@@ -81,6 +81,19 @@ class Firebat(Soldier):
         #self.imageRect = rect(self.x, self.y, self.image.get_width(), self.image.get_height())
         self.render = pygame.transform.scale(pygame.image.load(SOLDIER_RENDER), UNIT_RENDER_SIZE)
         self.type = TERRAN_SOLDIER
+
+    def makeAnAttack(self):
+        for tile in self.mapa.getAllTileVecinas(self.attackedOne.getTile()):
+            if tile.type == UNIT and tile.ocupante.player != self.player:
+                tile.ocupante.beingAttacked(self.damage + self.player.dañoUpgrade, self)
+        hpLeft = self.attackedOne.beingAttacked(self.damage + self.player.dañoUpgrade, self)
+        if hpLeft <= 0:
+            #print("Se queda sin vida")
+            enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
+            if enemy != None:
+                self.attack(enemy)
+            else:
+                self.changeToStill()
     
 
     def toDictionary(self, map):

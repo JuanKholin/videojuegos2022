@@ -9,52 +9,50 @@ from .Soldier import *
 from ..Music import *
 
 # Constantes
-HP = 40
+HP = 50
 ATTACK_INFO = [0, 0, 0]
-ATTACK_INFO[DAMAGE_IND] = 6
-ATTACK_INFO[COOLDOWN_IND] = 15
-ATTACK_INFO[RANGE_IND] = 180
+ATTACK_INFO[DAMAGE_IND] = 16
+ATTACK_INFO[COOLDOWN_IND] = 11
+ATTACK_INFO[RANGE_IND] = 100
 MINE_POWER = 0
 MINERAL_COST = 50
+GAS_COST = 25
 TIME_TO_MINE = 1000
-GENERATION_TIME = 2
-SPEED = 2
-FRAMES_TO_REFRESH = 5
-SPRITES = "terran_soldier_sheet.bmp"
-SPRITE_PIXEL_ROWS = 64
+GENERATION_TIME = 24
+SPEED = 1
+FRAMES_TO_REFRESH = 10
+SPRITES = "goliath.bmp"
+DEATH_SPRITES = "explosion2.bmp"
+SPRITE_PIXEL_ROWS = 76
 FACES = 8
 FRAME = 0
-SCALE = 1.5
-#Esto es mentira, salen 220 frames no 296
-TOTAL_FRAMES = 13*17# 1     STILL
-                    # 2     GUARDIA
+SCALE = 2
+TOTAL_FRAMES = 179
+                    # 0-2     ATACAR
                     # 3-4   ATACAR
                     # 5-13  MOVE
                     # 14    DIE
 FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
           list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
           list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
-          list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
-          list(range(205, 221)), [221] * 16, [222] * 16, [223] * 16, [224] * 16,
-          [225] * 16, [226] * 16, [227] * 16, [228] * 16]
+          list(range(154, 170)), [170] * 16, [171] * 16, [172] * 16, [173] * 16,
+          [174] * 16, [175] * 16, [176] * 16, [177] * 16, [178] * 16]
 STILL_FRAMES = [0]
-GUARD_FRAMES = [1]
-ATTACK_FRAMES = [2, 3]
-MOVE_FRAMES = [4, 5, 6, 7, 8, 9, 10, 11, 12]
-DIE_FRAMES = [13, 14, 15, 16, 17, 18, 19, 20]
+ATTACK_FRAMES = [8, 9]
+MOVE_FRAMES = [0, 1, 2, 4, 5, 6, 7]
+DIE_FRAMES = [10, 11, 12, 13, 14, 15, 16, 17, 18]
 
 INVERSIBLE_FRAMES = len(FRAMES) - len(DIE_FRAMES) # los die frames no se invierten
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
 # horario y empezando desde el norte, el mapeo dir-flist(range(289, 296))rame es:
 DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
-WEIGHT_PADDING =    65
-HEIGHT_PADDING =    65
+WEIGHT_PADDING =    100
+HEIGHT_PADDING =    100
 X_PADDING =         15
 Y_PADDING =         15
-PADDING = 110
+PADDING = 20
 
-class TerranSoldier(Soldier):
-    
+class Goliath(Soldier):
     generateSound = soldierGenerateSound
     deadSound = soldierDeadSound
     attackSound = soldierAttackSound 
@@ -66,11 +64,12 @@ class TerranSoldier(Soldier):
                 STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, X_PADDING,
                 Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ATTACK_INFO)
 
-
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
-        spritesheet.set_colorkey((WHITE))
+        spritesheet.set_colorkey(BLACK)
+        deadSpritesheet = pg.image.load("./sprites/" + DEATH_SPRITES).convert()
+        deadSpritesheet.set_colorkey(BLACK)
         self.sprites = Entity.divideSpritesheetByRows(spritesheet,
-                SPRITE_PIXEL_ROWS, SCALE)
+                SPRITE_PIXEL_ROWS, SCALE) + Entity.divideSpritesheetByRows(deadSpritesheet, 128, SCALE)
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
@@ -83,16 +82,13 @@ class TerranSoldier(Soldier):
         self.render = pygame.transform.scale(pygame.image.load(SOLDIER_RENDER), UNIT_RENDER_SIZE)
         self.type = TERRAN_SOLDIER
     
-    
-
-    
 
     def toDictionary(self, map):
         fatherDictionary = super().toDictionary(map)
         sonDictionary = {
-            "clase": "terranSoldier",
-            "nombre": "Soldado Terran",
-            "funcion": "unidad de infanteria"
+            "clase": "Firebat",
+            "nombre": "Firebat",
+            "funcion": "Unidad avanzada Terran"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary
