@@ -4,7 +4,7 @@ import math
 from re import T
 import pygame
 
-DEBBUG = False    
+DEBBUG = True    
 
 BGM_VOLUME = 0.1
 SOUND_VOLUME = 0.1

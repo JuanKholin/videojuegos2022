@@ -26,6 +26,7 @@ from src.Entities.Zergling import *
 from src.Entities.TerranSupplyDepot import *
 from src.Entities.Extractor import *
 from src.Entities.TerranRefinery import *
+from src.Entities.Firebat import *
 
 
 # Auxiliar del bucle principal
@@ -131,12 +132,17 @@ def setEntity(player, ai):
     structure1z = Hatchery(33, 4, ai, mapa, False, raton)
     drone = Drone(ai, 35,6)
     scv = TerranWorker(player, 5, 6)
+    pUnits = []
+    pUnits.append(Firebat(player, 7, 8))
+
     ai.addUnits(drone)
     ai.addStructures(structure1z)
     ai.setBasePlayer(structure1z)
     player.addStructures(structure1)
     player.setBasePlayer(structure1)
     player.addUnits(scv)
+    for unit in pUnits:
+        player.addUnits(unit)
 
     #Recursos del mapa
     resources = []

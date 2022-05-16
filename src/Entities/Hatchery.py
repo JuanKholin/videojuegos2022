@@ -4,7 +4,6 @@ import pygame
 from .Zergling import *
 from .Drone import *
 from .ZergBarracks import *
-from .Zerg2 import *
 from .ZergSupply import *
 from .Extractor import *
 from .Structure import *
