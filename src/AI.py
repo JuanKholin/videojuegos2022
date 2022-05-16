@@ -65,7 +65,7 @@ class AI():
         if self.decissionRate != 0:
             units, structures = self.data.get_info()
             self.miniCount += 1
-            if self.miniCount >= AI_LAPSE: # Acciones ligeras
+            if self.miniCount >= self.reactionTime: # Acciones ligeras
                 self.miniCount = 0
                 self.alwaysToDoActions(units, structures)
             self.count += 1
