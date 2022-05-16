@@ -4,38 +4,37 @@ from . import Entity, Worker
 from ..Utils import *
 from .Soldier import *
 
-# Constantes del Zergling
-HP = 35
+# Constantes del Hydralisk
+HP = 80
 ATTACK_INFO = [0, 0, 0]
-ATTACK_INFO[DAMAGE_IND] = 5
-ATTACK_INFO[COOLDOWN_IND] = 8
-ATTACK_INFO[RANGE_IND] = 67
+ATTACK_INFO[DAMAGE_IND] = 10
+ATTACK_INFO[COOLDOWN_IND] = 15
+ATTACK_INFO[RANGE_IND] = 190
 MINE_POWER = 8
-MINERAL_COST = 20
+MINERAL_COST = 75
+GAS_COST = 25
 TIME_TO_MINE = 1000
 GENERATION_TIME = 2
-SPEED = 4
+SPEED = 3
 FRAMES_TO_REFRESH = 5
-SPRITES = "zergling.bmp"
+SPRITES = "hydralisk.bmp"
 SPRITE_PIXEL_ROWS = 128
 FACES = 8
 FRAME = 0
 SCALE = 1.5
-TOTAL_FRAMES = 296  # [0:203] MOVICION (13 ciclos de 17 frames con solo 16 utiles)
-                    # ciclo 0 estar quieto, ciclos 1 2 y 3 atacacion, el resto moverse
-                    # [204:288] ENTERRACION
-                    # [289:295] MORICION
+TOTAL_FRAMES = 204 + 8  # [0:203] MOVICION
+                    # [204:211] MORICION
 FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
           list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
           list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
           list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
-          [289] * 16, [290] * 16, [291] * 16, [292] * 16, [293] * 16, [294] * 16,
-          [295] * 16]
+          [204] * 16, [205] * 16, [206] * 16, [207] * 16, [208] * 16, [209] * 16,
+          [210] * 16, [211] * 16]
 STILL_FRAMES = [0]
-ATTACK_FRAMES = [1, 2, 3]
-MOVE_FRAMES = [4, 5, 6, 7, 8, 9, 10, 11]
-DIE_FRAMES = [12, 13, 14, 15, 16, 17, 18]
-INVERSIBLE_FRAMES = len(FRAMES) - 1 # los die frames no se invierten
+ATTACK_FRAMES = [1, 2, 3, 4]
+MOVE_FRAMES = [5, 6, 7, 8, 9, 10, 11]
+DIE_FRAMES = [12, 13, 14, 15, 16, 17, 18, 19]
+INVERSIBLE_FRAMES = len(FRAMES) - len(DIE_FRAMES) # los die frames no se invierten
 # Cada ristra de frames es un frame en todas las direcciones, por lo que en sentido
 # horario y empezando desde el norte, el mapeo dir-frame es:
 DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
@@ -46,7 +45,7 @@ X_PADDING = 13
 Y_PADDING = 15
 
 
-class Zergling(Soldier):
+class Hydralisk(Soldier):
     # Pre: xIni e yIni marcan posiciones del mapa, (ej: (3, 2) se refiere a la posicion de
     # la cuarta columna y tercera fila del mapa)
     # Post: Crea un bichito mono que no hace practicamente nada pero tu dale tiempo
