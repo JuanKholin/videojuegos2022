@@ -128,9 +128,10 @@ def setEntity(player, ai):
     escena.resources = resources'''
 
 def setEntity(player, ai):
-    scv = TerranWorker(player, 20, 20)
+    #scv = TerranWorker(player, 20, 20)
     #player.addUnits(scv)
     scv = Drone(player, 24, 32)
+    print(scv.id)
     player.addUnits(scv)
     structure1 = Hatchery(20, 35, player, mapa, False, raton)
     player.addStructures(structure1)
@@ -378,7 +379,7 @@ if Utils.DEBBUG == False:
     aI = AI(player2, Race.TERRAN, HARD)
 
 else:
-    aI = AI(player2, Race.TERRAN, NULL)
+    aI = AI(player2, Race.TERRAN, HARD)
 escena = Escena(player1, player2, aI, [], camera, raton, p1Interface, [])
 
 raton.setEscena(escena)
