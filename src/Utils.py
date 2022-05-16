@@ -109,7 +109,7 @@ TERRAN_SOLDIER = "TerranSoldier"
 
 ZERG_BASE = "Hatchery"
 ZERG_BARRACKS = None # Faltan
-ZERG_DEPOT = None
+ZERG_DEPOT = "ZergSupply"
 ZERG_GEYSER_STRUCTURE = "Extractor"
 ZERG_WORKER = "Drone"
 ZERG_S1 = "s1"
