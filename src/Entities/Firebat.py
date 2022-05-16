@@ -27,7 +27,7 @@ SPRITE_PIXEL_ROWS = 32
 FACES = 8
 FRAME = 0
 SCALE = 1.5
-TOTAL_FRAMES = (10 + 9) * 17
+TOTAL_FRAMES = 179
                     # 0-2     ATACAR
                     # 3-4   ATACAR
                     # 5-13  MOVE
@@ -50,7 +50,7 @@ WEIGHT_PADDING =    0
 HEIGHT_PADDING =    0
 X_PADDING =         15
 Y_PADDING =         15
-PADDING = 0
+PADDING = 20
 
 class Firebat(Soldier):
     generateSound = soldierGenerateSound
@@ -69,7 +69,7 @@ class Firebat(Soldier):
         deadSpritesheet = pg.image.load("./sprites/" + DEATH_SPRITES).convert()
         deadSpritesheet.set_colorkey(BLACK)
         self.sprites = Entity.divideSpritesheetByRows(spritesheet,
-                SPRITE_PIXEL_ROWS, SCALE) + Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200, (128, 128))
+                SPRITE_PIXEL_ROWS, SCALE) + Entity.divideSpritesheetByRows(deadSpritesheet, 128, SCALE)
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
