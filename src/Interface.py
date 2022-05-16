@@ -1,4 +1,5 @@
 
+from token import OP
 import pygame as pg
 from os import listdir
 from os.path import isfile, join
@@ -100,6 +101,7 @@ class Interface():
 
         self.entityOptions = []
         self.button = []
+        self.helpButtons = []
         
         #ANIMACION
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
@@ -111,7 +113,8 @@ class Interface():
     
         self.winSprite = deadSprites + cargarSprites("./SPRITE/animacion/win/tile0", 20, True, size = [SCREEN_WIDTH, SCREEN_HEIGHT])
         
-        
+        #HELP
+        self.helpPage = 1
 
     def loadGameGUI(self):
         self.gui = pg.image.load(BARRA_COMANDO + ".bmp")
@@ -156,6 +159,13 @@ class Interface():
         allButton[Options.BUILD_SUPPLY_DEPOT_ZERG] = aux
         aux = Button.Button(BUTTON_PATH + "zergBarracks" + ".png", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineral.png", "Construir Barracas", 55, 50)
         allButton[Options.BUILD_BARRACKS_ZERG] = aux
+        aux = Button.Button(BUTTON_PATH + "next" + ".png", CommandId.NEXT_PAGE)
+        allButton[Options.NEXT_PAGE] = aux
+        aux = Button.Button(BUTTON_PATH + "previous" + ".png", CommandId.PREVIOUS_PAGE)
+        allButton[Options.PREVIOUS_PAGE] = aux
+        aux = Button.Button(BUTTON_PATH + "close" + ".png", CommandId.RETURN_GAME)
+        allButton[Options.CLOSE] = aux
+        
         aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "danyoUpgrade" + ".png", CommandId.UPGRADE_SOLDIER_DAMAGE,BUTTON_PATH + "cartelUpgrade.bmp", "Mejorar daño;de las unidades", 90, 50)
         allButton[Options.DANYO_UPGRADE] = aux
         aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "mineUpgrade" + ".png", CommandId.UPGRADE_WORKER_MINING,BUTTON_PATH + "cartelUpgrade.bmp", "Reducir tiempo de minado;de los VCE", 90, 50)
@@ -191,260 +201,282 @@ class Interface():
 
     def update(self, escena, raton, camera):
         if Utils.state == System_State.MAINMENU:
+            
+            self.updateMainMenu()
 
-            singleCollide = False
-
-            press, iniPos = self.mouse.getPressed()
-            #Boton single player
-            if self.mouse.isCollide(self.singleRect):
-                singleCollide = True
-                if not self.soundPlayed:
-                    playSound(botonSound)
-                    self.soundPlayed = True
-                endPos = self.mouse.getPosition()
-                if not self.singlePress and press and Raton.collides(iniPos[0], iniPos[1], self.singleRect):
-                    self.singlePress = True
-                elif self.mouse.getClick() and self.singlePress and Raton.collides(endPos[0], endPos[1], self.singleRect):
-                    #print("Seleccionado single player")
-                    Utils.state = System_State.MAP1
-                    #self.loadPartidas()
-                    #Utils.state = System_State.GAMESELECT
-                    #stopMusic()
-                    self.singlePress = False
-
-            elif self.mouse.isCollide(self.exitRect):
-                if not self.soundPlayed:
-                    playSound(botonSound)
-                    self.soundPlayed = True
-                endPos = self.mouse.getPosition()
-                if not self.exitPress and press and Raton.collides(iniPos[0], iniPos[1], self.exitRect):
-                    self.exitPress = True
-                elif self.mouse.getClick() and self.exitPress and Raton.collides(endPos[0], endPos[1], self.exitRect):
-                    #print("Seleccionado exit")
-                    Utils.state = System_State.EXIT
-                    stopMusic()
-                    self.exitPress = False
-
-            elif self.mouse.isCollide(self.ajustesSonidoRect):
-                if not self.soundPlayed:
-                    playSound(botonSound)
-                    self.soundPlayed = True
-                endPos = self.mouse.getPosition()
-                if not self.ajustesSonidoPress and press and Raton.collides(iniPos[0], iniPos[1], self.ajustesSonidoRect):
-                    self.ajustesSonidoPress = True
-                elif self.mouse.getClick() and self.ajustesSonidoRectPress and Raton.collides(endPos[0], endPos[1], self.ajustesSonidoRect):
-                    #print("Seleccionado exit")
-                    Utils.state = System_State.SETTINGS
-                    stopMusic()
-                    self.ajustesSonidoPress = False
-
-            elif self.mouse.isCollide(self.ajustesAtajosRect):
-                if not self.soundPlayed:
-                    playSound(botonSound)
-                    self.soundPlayed = True
-                endPos = self.mouse.getPosition()
-                if not self.ajustesAtajosPress and press and Raton.collides(iniPos[0], iniPos[1], self.ajustesAtajosRect):
-                    self.ajustesAtajosPress = True
-                elif self.mouse.getClick() and self.ajustesAtajosPress and Raton.collides(endPos[0], endPos[1], self.ajustesAtajosRect):
-                    #print("Seleccionado exit")
-                    Utils.state = System_State.SETTINGS
-                    stopMusic()
-                    self.ajustesAtajosPress = False
-
-            else:
-                self.soundPlayed = False
-
-            if self.mouse.getClick():
-                self.exitPress = False
-                self.singlePress = False
-
-            self.idSingle = (self.idSingle + frame(5)) % SINGLE_PLAYER_N
-            self.idExit = (self.idExit + frame(5)) % EXIT_N
-            self.idSingleSelected = (self.idSingleSelected + frame(5)) % SINGLE_PLAYER_FB_N
-            self.idExitSelected = (self.idExitSelected + frame(5)) % EXIT_FB_N
         elif Utils.state == System_State.GAMESELECT:
-            aceptarCollide = False
-
-            press, iniPos = self.mouse.getPressed()
-            #Boton aceptar
-            #print(self.mouse.isCollide(self.nuevaPartidaRect), self.mouse.real_pos, self.aceptarRect.x, self.aceptarRect.y, self.aceptarRect.w, self.aceptarRect.h )
-            if self.mouse.isCollide(self.aceptarRect) and self.selectedPartida != None:
-                #print("acepar")
-                aceptarCollide = True
-                if not self.soundPlayed:
-                    playSound(botonSound)
-                    self.soundPlayed = True
-                endPos = self.mouse.getPosition()
-                if not self.aceptarPress and press and Raton.collides(iniPos[0], iniPos[1], self.aceptarRect):
-                    self.aceptarPress = True
-                elif self.mouse.getClick() and self.aceptarPress and Raton.collides(endPos[0], endPos[1], self.aceptarRect):
-                    #print("Aceptar")
-                    #Hay que hacer uno generico, o que carge el mapa y pase a ONGAME aqui
-                    _escena, _raton, _camera = loadFromSave(self.selectedPartida['nombre'])
-                    escena.setSelf(_escena)
-                    if Utils.DEBBUG == False:
-                        aI = AI(escena.p2, Race.ZERG, EASY)
-
-                    else:
-                        aI = AI(escena.p2, Race.ZERG, NULL)
-                    escena.aI = aI
-                    raton.setSelf(_raton)
-                    self.player = escena.p1
-                    self.enemy = escena.p2
-                    escena.raton = raton
-                    escena.p1.base.raton = escena.raton
-                    self.raton = escena.raton
-                    raton.addInterface(self)
-                    escena.interfaz = self
-                    camera.setSelf(_camera)
-                    Utils.state = System_State.ONGAME
-                    stopMusic()
-                    self.singlePress = False
-
-            elif self.mouse.isCollide(self.cancelarRect):
-                #print("cancelar")
-                if not self.soundPlayed:
-                    playSound(botonSound)
-                    self.soundPlayed = True
-                endPos = self.mouse.getPosition()
-                if not self.cancelarPress and press and Raton.collides(iniPos[0], iniPos[1], self.cancelarRect):
-                    self.cancelarPress = True
-                elif self.mouse.getClick() and self.cancelarPress and Raton.collides(endPos[0], endPos[1], self.cancelarRect):
-                    #print("Cancelar")
-                    Utils.state = System_State.MAINMENU
-                    self.cancelarPress = False
-                    self.selectedPartida = None
-            elif self.mouse.isCollide(self.nuevaPartidaRect):
-                #print("newgame")
-                if not self.soundPlayed:
-                    playSound(botonSound)
-                    self.soundPlayed = True
-                endPos = self.mouse.getPosition()
-                if not self.nuevaPartidaPress and press and Raton.collides(iniPos[0], iniPos[1], self.nuevaPartidaRect):
-                    self.nuevaPartidaPress = True
-                elif self.mouse.getClick() and self.nuevaPartidaPress and Raton.collides(endPos[0], endPos[1], self.nuevaPartidaRect):
-                    #print("Nueva partida")
-                    #Pasar a menu de nueva partida
-                    Utils.state = System_State.NEWGAME
-                    stopMusic()
-                    self.nuevaPartidaPress = False
-            else:
-                self.soundPlayed = False
-
-            for partida in self.partidas:
-                if self.mouse.isCollide(partida['rect']):
-                    endPos = self.mouse.getPosition()
-                    if not partida['pressed'] and press and Raton.collides(iniPos[0], iniPos[1], partida['rect']):
-                        partida['pressed'] = True
-                    elif self.mouse.getClick() and partida['pressed'] and Raton.collides(endPos[0], endPos[1], partida['rect']):
-                        #print(partida['nombre'])
-                        #Pasar a menu de nueva partida
-                        self.selectedPartida = partida
-                        playSound(botonSound2)
-                        partida['pressed'] = False
-
-
-            if self.mouse.getClick():
-                self.aceptarPress = False
-                self.cancelarPress = False
-                self.nuevaPartidaPress = False
-
-
+            
+            self.updateGameMenu(escena, raton, camera)
 
         elif Utils.state == System_State.NEWGAME:
-            aceptarCollide = False
 
-            press, iniPos = self.mouse.getPressed()
-            #Boton aceptar
-            if self.mouse.isCollide(self.aceptarRect):
-                aceptarCollide = True
-                if not self.soundPlayed:
-                    playSound(botonSound)
-                    self.soundPlayed = True
-                endPos = self.mouse.getPosition()
-                if not self.aceptarPress and press and Raton.collides(iniPos[0], iniPos[1], self.aceptarRect):
-                    self.aceptarPress = True
-                elif self.mouse.getClick() and self.aceptarPress and Raton.collides(endPos[0], endPos[1], self.aceptarRect):
-                    #print("Aceptar")
-                    #Con self.selectedMap selectedDif selectedRaza se crea la partida
-                    Utils.state = System_State.MAP1
-                    stopMusic()
-                    self.singlePress = False
-
-            elif self.mouse.isCollide(self.cancelarRect):
-                if not self.soundPlayed:
-                    playSound(botonSound)
-                    self.soundPlayed = True
-                endPos = self.mouse.getPosition()
-                if not self.cancelarPress and press and Raton.collides(iniPos[0], iniPos[1], self.cancelarRect):
-                    self.cancelarPress = True
-                elif self.mouse.getClick() and self.cancelarPress and Raton.collides(endPos[0], endPos[1], self.cancelarRect):
-                    #print("Cancelar")
-                    Utils.state = System_State.GAMESELECT
-                    self.cancelarPress = False
-            else:
-                self.soundPlayed = False
-
-            for b in self.botonesNewGame:
-                if self.mouse.isCollide(b['rect']):
-                    endPos = self.mouse.getPosition()
-                    if not b['press'] and press and Raton.collides(iniPos[0], iniPos[1], b['rect']):
-                        b['press'] = True
-                    elif self.mouse.getClick() and b['press'] and Raton.collides(endPos[0], endPos[1], b['rect']):
-                        #print(b['nombre'])
-                        playSound(botonSound2)
-                        b['press'] = False
-                        if b['tipo'] == "mapa":
-                            self.selectedMap = b['nombre']
-                        elif b['tipo'] == "dificultad":
-                            self.selectedDif = b['nombre']
-                        elif b['tipo'] == "raza":
-                            self.selectedRaza = b['nombre']
-
-
-
-            if self.mouse.getClick():
-                self.aceptarPress = False
-                self.cancelarPress = False
+            self.updateNewGame()
 
         elif Utils.state == System_State.ONGAME:
-            #si esta en GUI desactivar funciones de raton
-            if self.checkInGUIPosition():
-                self.mouse.setEnable(False)
+            
+            self.updateOnGame()
+            
+    def updateMainMenu(self):
+        press, iniPos = self.mouse.getPressed()
+        #Boton single player
+        if self.mouse.isCollide(self.singleRect):
+            if not self.soundPlayed:
+                playSound(botonSound)
+                self.soundPlayed = True
+            endPos = self.mouse.getPosition()
+            if not self.singlePress and press and Raton.collides(iniPos[0], iniPos[1], self.singleRect):
+                self.singlePress = True
+            elif self.mouse.getClick() and self.singlePress and Raton.collides(endPos[0], endPos[1], self.singleRect):
+                #print("Seleccionado single player")
+                Utils.state = System_State.MAP1
+                #self.loadPartidas()
+                #Utils.state = System_State.GAMESELECT
+                #stopMusic()
+                self.singlePress = False
+
+        elif self.mouse.isCollide(self.exitRect):
+            if not self.soundPlayed:
+                playSound(botonSound)
+                self.soundPlayed = True
+            endPos = self.mouse.getPosition()
+            if not self.exitPress and press and Raton.collides(iniPos[0], iniPos[1], self.exitRect):
+                self.exitPress = True
+            elif self.mouse.getClick() and self.exitPress and Raton.collides(endPos[0], endPos[1], self.exitRect):
+                #print("Seleccionado exit")
+                Utils.state = System_State.EXIT
+                stopMusic()
+                self.exitPress = False
+
+        elif self.mouse.isCollide(self.ajustesSonidoRect):
+            if not self.soundPlayed:
+                playSound(botonSound)
+                self.soundPlayed = True
+            endPos = self.mouse.getPosition()
+            if not self.ajustesSonidoPress and press and Raton.collides(iniPos[0], iniPos[1], self.ajustesSonidoRect):
+                self.ajustesSonidoPress = True
+            elif self.mouse.getClick() and self.ajustesSonidoRectPress and Raton.collides(endPos[0], endPos[1], self.ajustesSonidoRect):
+                #print("Seleccionado exit")
+                Utils.state = System_State.SETTINGS
+                stopMusic()
+                self.ajustesSonidoPress = False
+
+        elif self.mouse.isCollide(self.ajustesAtajosRect):
+            if not self.soundPlayed:
+                playSound(botonSound)
+                self.soundPlayed = True
+            endPos = self.mouse.getPosition()
+            if not self.ajustesAtajosPress and press and Raton.collides(iniPos[0], iniPos[1], self.ajustesAtajosRect):
+                self.ajustesAtajosPress = True
+            elif self.mouse.getClick() and self.ajustesAtajosPress and Raton.collides(endPos[0], endPos[1], self.ajustesAtajosRect):
+                #print("Seleccionado exit")
+                Utils.state = System_State.SETTINGS
+                stopMusic()
+                self.ajustesAtajosPress = False
+
+        else:
+            self.soundPlayed = False
+
+        if self.mouse.getClick():
+            self.exitPress = False
+            self.singlePress = False
+
+        self.idSingle = (self.idSingle + frame(5)) % SINGLE_PLAYER_N
+        self.idExit = (self.idExit + frame(5)) % EXIT_N
+        self.idSingleSelected = (self.idSingleSelected + frame(5)) % SINGLE_PLAYER_FB_N
+        self.idExitSelected = (self.idExitSelected + frame(5)) % EXIT_FB_N
+        
+    def updateGameMenu(self, escena, raton, camera):
+        press, iniPos = self.mouse.getPressed()
+        #Boton aceptar
+        #print(self.mouse.isCollide(self.nuevaPartidaRect), self.mouse.real_pos, self.aceptarRect.x, self.aceptarRect.y, self.aceptarRect.w, self.aceptarRect.h )
+        if self.mouse.isCollide(self.aceptarRect) and self.selectedPartida != None:
+            #print("acepar")
+            
+            if not self.soundPlayed:
+                playSound(botonSound)
+                self.soundPlayed = True
+            endPos = self.mouse.getPosition()
+            if not self.aceptarPress and press and Raton.collides(iniPos[0], iniPos[1], self.aceptarRect):
+                self.aceptarPress = True
+            elif self.mouse.getClick() and self.aceptarPress and Raton.collides(endPos[0], endPos[1], self.aceptarRect):
+                #print("Aceptar")
+                #Hay que hacer uno generico, o que carge el mapa y pase a ONGAME aqui
+                _escena, _raton, _camera = loadFromSave(self.selectedPartida['nombre'])
+                escena.setSelf(_escena)
+                if Utils.DEBBUG == False:
+                    aI = AI(escena.p2, Race.ZERG, EASY)
+
+                else:
+                    aI = AI(escena.p2, Race.ZERG, NULL)
+                escena.aI = aI
+                raton.setSelf(_raton)
+                self.player = escena.p1
+                self.enemy = escena.p2
+                escena.raton = raton
+                escena.p1.base.raton = escena.raton
+                self.raton = escena.raton
+                raton.addInterface(self)
+                escena.interfaz = self
+                camera.setSelf(_camera)
+                Utils.state = System_State.ONGAME
+                stopMusic()
+                self.singlePress = False
+
+        elif self.mouse.isCollide(self.cancelarRect):
+            #print("cancelar")
+            if not self.soundPlayed:
+                playSound(botonSound)
+                self.soundPlayed = True
+            endPos = self.mouse.getPosition()
+            if not self.cancelarPress and press and Raton.collides(iniPos[0], iniPos[1], self.cancelarRect):
+                self.cancelarPress = True
+            elif self.mouse.getClick() and self.cancelarPress and Raton.collides(endPos[0], endPos[1], self.cancelarRect):
+                #print("Cancelar")
+                Utils.state = System_State.MAINMENU
+                self.cancelarPress = False
+                self.selectedPartida = None
+        elif self.mouse.isCollide(self.nuevaPartidaRect):
+            #print("newgame")
+            if not self.soundPlayed:
+                playSound(botonSound)
+                self.soundPlayed = True
+            endPos = self.mouse.getPosition()
+            if not self.nuevaPartidaPress and press and Raton.collides(iniPos[0], iniPos[1], self.nuevaPartidaRect):
+                self.nuevaPartidaPress = True
+            elif self.mouse.getClick() and self.nuevaPartidaPress and Raton.collides(endPos[0], endPos[1], self.nuevaPartidaRect):
+                #print("Nueva partida")
+                #Pasar a menu de nueva partida
+                Utils.state = System_State.NEWGAME
+                stopMusic()
+                self.nuevaPartidaPress = False
+        else:
+            self.soundPlayed = False
+
+        for partida in self.partidas:
+            if self.mouse.isCollide(partida['rect']):
+                endPos = self.mouse.getPosition()
+                if not partida['pressed'] and press and Raton.collides(iniPos[0], iniPos[1], partida['rect']):
+                    partida['pressed'] = True
+                elif self.mouse.getClick() and partida['pressed'] and Raton.collides(endPos[0], endPos[1], partida['rect']):
+                    #print(partida['nombre'])
+                    #Pasar a menu de nueva partida
+                    self.selectedPartida = partida
+                    playSound(botonSound2)
+                    partida['pressed'] = False
+
+
+        if self.mouse.getClick():
+            self.aceptarPress = False
+            self.cancelarPress = False
+            self.nuevaPartidaPress = False
+            
+    def updateNewGame(self):
+        press, iniPos = self.mouse.getPressed()
+        #Boton aceptar
+        if self.mouse.isCollide(self.aceptarRect):
+            if not self.soundPlayed:
+                playSound(botonSound)
+                self.soundPlayed = True
+            endPos = self.mouse.getPosition()
+            if not self.aceptarPress and press and Raton.collides(iniPos[0], iniPos[1], self.aceptarRect):
+                self.aceptarPress = True
+            elif self.mouse.getClick() and self.aceptarPress and Raton.collides(endPos[0], endPos[1], self.aceptarRect):
+                #print("Aceptar")
+                #Con self.selectedMap selectedDif selectedRaza se crea la partida
+                Utils.state = System_State.MAP1
+                stopMusic()
+                self.singlePress = False
+
+        elif self.mouse.isCollide(self.cancelarRect):
+            if not self.soundPlayed:
+                playSound(botonSound)
+                self.soundPlayed = True
+            endPos = self.mouse.getPosition()
+            if not self.cancelarPress and press and Raton.collides(iniPos[0], iniPos[1], self.cancelarRect):
+                self.cancelarPress = True
+            elif self.mouse.getClick() and self.cancelarPress and Raton.collides(endPos[0], endPos[1], self.cancelarRect):
+                #print("Cancelar")
+                Utils.state = System_State.GAMESELECT
+                self.cancelarPress = False
+        else:
+            self.soundPlayed = False
+
+        for b in self.botonesNewGame:
+            if self.mouse.isCollide(b['rect']):
+                endPos = self.mouse.getPosition()
+                if not b['press'] and press and Raton.collides(iniPos[0], iniPos[1], b['rect']):
+                    b['press'] = True
+                elif self.mouse.getClick() and b['press'] and Raton.collides(endPos[0], endPos[1], b['rect']):
+                    #print(b['nombre'])
+                    playSound(botonSound2)
+                    b['press'] = False
+                    if b['tipo'] == "mapa":
+                        self.selectedMap = b['nombre']
+                    elif b['tipo'] == "dificultad":
+                        self.selectedDif = b['nombre']
+                    elif b['tipo'] == "raza":
+                        self.selectedRaza = b['nombre']
+        if self.mouse.getClick():
+            self.aceptarPress = False
+            self.cancelarPress = False
+            
+    def updateOnGame(self):
+        #si esta en GUI desactivar funciones de raton
+        
+        if getGameState2() == System_State.PLAYING or getGameState2() == System_State.LOAD:
+            
+            self.updatePLAY()
+        
+        elif getGameState2() == System_State.HELP:
+            
+            self.updateHELP()
+            
+        elif getGameState2() == System_State.PAUSED:
+        
+            self.updatePAUSED()
+            
+        if frame(10):
+            self.heroeIndex = (self.heroeIndex+1)%HEROE_N
+            
+    def updatePLAY(self):
+        
+        if self.checkInGUIPosition():
+            self.mouse.setEnable(False)
+        else:
+            self.mouse.setEnable(True)
+
+        self.button = []
+        #obtener opciones de la unidad seleccionada
+        if self.player.structureSelected != None:
+            self.entityOptions = self.player.structureSelected.getOptions()
+            self.button = self.getButton(self.entityOptions)
+            self.buttonX = BUTTON_X
+            self.buttonY = BUTTON_Y
+
+        #comprobar colision del raton
+        for b in self.button:
+            if Raton.collides(self.mouse.rel_pos[0], self.mouse.rel_pos[1], b.getRect()):
+                b.setCollide(True)
             else:
-                self.mouse.setEnable(True)
+                b.setCollide(False)
 
-            self.button = []
-            #obtener opciones de la unidad seleccionada
-            if self.player.structureSelected != None:
-                self.entityOptions = self.player.structureSelected.getOptions()
-                self.button = self.getButton(self.entityOptions)
-                self.buttonX = BUTTON_X
-                self.buttonY = BUTTON_Y
-
-            #comprobar colision del raton
-            for b in self.button:
-                if Raton.collides(self.mouse.rel_pos[0], self.mouse.rel_pos[1], b.getRect()):
-                    b.setCollide(True)
-                else:
-                    b.setCollide(False)
-
-            #Comprobar collisiones con las mejoras
-            self.upgrades = []
-            if self.player.unitsSelected.__len__() == 1:
-                self.upgrades = self.getUpgrades(self.player.unitsSelected[0].getUpgrades())
+        #Comprobar collisiones con las mejoras
+        self.upgrades = []
+        if self.player.unitsSelected.__len__() == 1:
+            self.upgrades = self.getUpgrades(self.player.unitsSelected[0].getUpgrades())
 
 
-            #comprobar colision del raton
-            for up in self.upgrades:
-                if Raton.collides(self.mouse.rel_pos[0], self.mouse.rel_pos[1], up.getRect()):
-                    up.setCollide(True)
-                else:
-                    up.setCollide(False)
-
-            if frame(10):
-                self.heroeIndex = (self.heroeIndex+1)%HEROE_N
-
+        #comprobar colision del raton
+        for up in self.upgrades:
+            if Raton.collides(self.mouse.rel_pos[0], self.mouse.rel_pos[1], up.getRect()):
+                up.setCollide(True)
+            else:
+                up.setCollide(False)
+                
+    def updateHELP(self):
+        self.mouse.setEnable(False)
+        self.helpButtons =  self.getHelpButton()
+                
     def draw(self, screen, camera):
         if Utils.state == System_State.MAINMENU:
             screen.blit(self.mainMenu, [0, 0])
@@ -549,7 +581,7 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), self.selectedDif, WHITE, 40, (840,299))
             muestra_texto(screen, str('monotypecorsiva'), self.selectedRaza, WHITE, 40, (765,410))
 
-        elif Utils.state == System_State.ONGAME or Utils.state == System_State.PAUSED:
+        elif Utils.state == System_State.ONGAME:
             if DEBBUG == True:
                 muestra_texto(screen, str('monotypecorsiva'), str(round(Utils.SYSTEM_CLOCK / CLOCK_PER_SEC)), BLACK, 30, (20, 20))
                 muestra_texto(screen, times, str(self.player.resources), BLUE, 30, (SCREEN_WIDTH - 40, 60))
@@ -591,10 +623,11 @@ class Interface():
                 if opcion == 9:
                     break
                 
-            if Utils.state == System_State.PAUSED:
-                pygame.draw.rect(screen, BLUE, pygame.Rect(200, 200, 500, 500))
-                pygame.draw.rect(screen, BLUE2, pygame.Rect(200, 200, 500, 500), 4)
-            if Utils.state2 == System_State.GAMEOVER:
+            if getGameState2() == System_State.HELP:
+                
+                self.drawHELP(screen)
+                
+            if getGameState2() == System_State.GAMEOVER:
                 if self.count2 < 10:
                     image = pg.transform.scale(self.heroeSprites[self.heroeIndex], [self.herow, self.heroh])
                     screen.blit(image, (672 - self.heropadx, 667- self.heropady))
@@ -629,6 +662,53 @@ class Interface():
                 if self.index >= 10:
                     muestra_texto(screen, str('monotypecorsiva'), "Victoria! tu tu tuu~ tu tu", YELLOW, 40, (SCREEN_WIDTH/2, SCREEN_HEIGHT - 200))
 
+    def drawHELP(self, screen):
+        pygame.draw.rect(screen, BLACK, pygame.Rect(SCREEN_WIDTH/4, SCREEN_HEIGHT/9, SCREEN_WIDTH/2, SCREEN_HEIGHT/1.2))
+        pygame.draw.rect(screen, BLUE2, pygame.Rect(SCREEN_WIDTH/4, SCREEN_HEIGHT/9, SCREEN_WIDTH/2, SCREEN_HEIGHT/1.2), 4)
+        self.helpButtons[2].draw(screen, 704, 88)
+        
+        if self.helpPage == 1:
+            self.helpButtons[1].draw(screen, 604, 95)
+            muestra_texto(screen, str('monotypecorsiva'), "TERRAN", WHITE, 30, (480, 110))
+            muestra_texto(screen, str('monotypecorsiva'), "ESTRUCUTURAS", WHITE, 30, (480, 140))
+            
+            screen.blit(getSprite(TERRAN_BUILDER_PATH + "4.png", WHITE, (100, 100)), (SCREEN_WIDTH/3.5, 200))
+            muestra_texto(screen, str('monotypecorsiva'), "Centro de comandos", GREEN, 30, (500, 210))
+            muestra_texto(screen, str('monotypecorsiva'), "Es el edificio mas importante, protegelo con", ORANGE, 20, (560, 240))
+            muestra_texto(screen, str('monotypecorsiva'), "todo, puede contruir otras estructuras y ", ORANGE, 20, (545, 255))
+            muestra_texto(screen, str('monotypecorsiva'), "entrenar tropas obreras", ORANGE, 20, (490, 270))
+            
+            screen.blit(getSprite(TERRAN_BARRACKS_PATH + "4.png", WHITE, (100, 100)), (SCREEN_WIDTH/3.5, 330))
+            muestra_texto(screen, str('monotypecorsiva'), "Cuartel Terran", GREEN, 30, (480, 340))
+            muestra_texto(screen, str('monotypecorsiva'), "Con el cuartel puedes entrenar las tropas", ORANGE, 20, (550, 370))
+            muestra_texto(screen, str('monotypecorsiva'), "ofensivas, construye mas cuarteles para", ORANGE, 20, (545, 385))
+            muestra_texto(screen, str('monotypecorsiva'), "entrenar varias tropas a la vez!", ORANGE, 20, (517, 400))
+            
+            screen.blit(getSprite(TERRAN_SUPPLY_PATH + "4.png", WHITE, (100, 100)), (SCREEN_WIDTH/3.5, 460))
+            muestra_texto(screen, str('monotypecorsiva'), "Deposito de suministros", GREEN, 30, (480, 470))
+            muestra_texto(screen, str('monotypecorsiva'), "Con el cuartel puedes entrenar las tropas", ORANGE, 20, (550, 500))
+            muestra_texto(screen, str('monotypecorsiva'), "ofensivas, construye mas cuarteles para", ORANGE, 20, (545, 515))
+            muestra_texto(screen, str('monotypecorsiva'), "entrenar varios tropas a la vez!", ORANGE, 20, (517, 530))
+            
+            screen.blit(getSprite(TERRAN_REFINERY_PATH + "4.png", BLACK, (150, 150)), (SCREEN_WIDTH/3.5 - 20, 570))
+            muestra_texto(screen, str('monotypecorsiva'), "Refineria", GREEN, 30, (450, 600))
+            muestra_texto(screen, str('monotypecorsiva'), "Solo se puede contruir sobre un geyser,", ORANGE, 20, (540, 630))
+            muestra_texto(screen, str('monotypecorsiva'), "tendras que contruirlo si quieres conseguir", ORANGE, 20, (555, 645))
+            muestra_texto(screen, str('monotypecorsiva'), "recurso geyser", ORANGE, 20, (457, 660))
+            
+        elif self.helpPage == 2:
+            self.helpButtons[0].draw(screen, 304, 95)
+            self.helpButtons[1].draw(screen, 604, 95)
+            pass
+        elif self.helpPage == 3:
+            self.helpButtons[0].draw(screen, 304, 95)
+            self.helpButtons[1].draw(screen, 604, 95)
+            pass
+        elif self.helpPage == 4:
+            self.helpButtons[0].draw(screen, 304, 95)
+            pass
+        
+    
     def drawEntityInfo(self, screen, camera):
         if len(self.player.unitsSelected) == 1:
             upgrades = self.getUpgrades( self.player.unitsSelected[0].getUpgrades())
@@ -736,6 +816,15 @@ class Interface():
             elif e != Options.NULO:
                 buttons.append(self.allButton[e])
 
+        return buttons
+    
+    def getHelpButton(self):
+        buttons = [None, None, None]
+        if self.helpPage != 1:
+            buttons[0] = self.allButton[Options.PREVIOUS_PAGE]
+        if self.helpPage != 4:
+            buttons[1] = self.allButton[Options.NEXT_PAGE]
+        buttons[2] = self.allButton[Options.CLOSE]
         return buttons
 
     def getUpgrades(self, upgrades):

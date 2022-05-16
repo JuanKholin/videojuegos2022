@@ -1,5 +1,6 @@
 import pygame
 from . import Utils
+from .Utils import *
 
 pygame.mixer.init()
 
@@ -26,3 +27,9 @@ def stopMusic():
     
 def stopAllSound():
     pygame.mixer.stop()
+    
+def getSprite(path, color, size):
+    image = pygame.image.load(path)
+    image.set_colorkey(color)
+    image = pygame.transform.scale(image, size)
+    return image

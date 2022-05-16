@@ -6,9 +6,9 @@ import pygame
 
 DEBBUG = True    
 
-BGM_VOLUME = 0.1
-SOUND_VOLUME = 0.1
-haveBGM = True
+BGM_VOLUME = 0.2
+SOUND_VOLUME = 0.5
+haveBGM = False
 
 class System_State(Enum):
     MAINMENU = auto()
@@ -16,6 +16,7 @@ class System_State(Enum):
     NEWGAME = auto()
     MAP1 = auto()
     ONGAME = auto()
+    
     LOAD = auto()
     PLAYING = auto()
     PAUSED = auto()
@@ -25,6 +26,7 @@ class System_State(Enum):
     EXIT = auto()
     INTRO = auto()
     SETTINGS = auto()
+    HELP = auto()
 
 class Race(Enum):
     ZERG = auto()
@@ -334,6 +336,9 @@ class Options(Enum):
     BUILD_REFINERY_ZERG = auto()
     BUILD_BARRACKS_ZERG = auto()
     BUILD_SUPPLY_DEPOT_ZERG = auto()
+    NEXT_PAGE = auto()
+    PREVIOUS_PAGE = auto()
+    CLOSE = auto()
 
 
 class Upgrades(Enum):

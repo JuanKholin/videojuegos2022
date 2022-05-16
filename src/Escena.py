@@ -67,7 +67,6 @@ class Escena():
                 elif command.id == CommandId.UPGRADE_WORKER_MINING:
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.BUILD_BARRACKS:
-                    #print("BARRACAS: ", command.id)
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.BUILD_HATCHERY:
                     self.p1.execute(command.id, [], None)
@@ -77,6 +76,13 @@ class Escena():
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.SAVE_GAME:
                     self.saveScene()
+                elif command.id == CommandId.NEXT_PAGE:
+                    self.interfaz.helpPage += 1
+                elif command.id == CommandId.PREVIOUS_PAGE:
+                    self.interfaz.helpPage -= 1
+                elif command.id == CommandId.RETURN_GAME:
+                    self.interfaz.helpPage = 0
+                    setGameState2(System_State.PLAYING)
                 elif command.id == CommandId.MOVE:
                     for unit in self.p1.unitsSelected:
                         self.mapa.setLibre(unit.getTile())
@@ -144,7 +150,7 @@ class Escena():
                 unit.dir = (unit.dir + 1)%16
 
     def update(self):
-        if getGameState2() == System_State.PLAYING or getGameState2() == System_State.LOAD:
+        if getGameState2() == System_State.PLAYING:
             for structure in self.p1.structures + self.p2.structures:
                 self.updateStructure(structure)
             for res in self.resources:
@@ -152,7 +158,21 @@ class Escena():
 
             self.p1.update()
             self.p2.update()
-        else:
+        elif getGameState2() == System_State.LOAD:
+            for structure in self.p1.structures + self.p2.structures:
+                self.updateStructure(structure)
+            for res in self.resources:
+                self.updateResource(res)
+
+            self.p1.update()
+            self.p2.update()
+            self.count += frame(30)
+            if self.count >= 1:
+                setGameState2(System_State.HELP)
+                self.count = 0
+        elif getGameState2() == System_State.PAUSED:
+            pass
+        elif getGameState2() == System_State.HELP:
             pass
         self.mapa.updateNiebla(self.camera, self.p1.getEntitesLocation(self.camera))
         self.interfaz.update(self, self.raton, self.camera)
