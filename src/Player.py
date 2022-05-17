@@ -61,7 +61,7 @@ class Player():
         self.unitsFree.append(unit)
 
     def addStructures(self,structures):
-        print(self.limitUnits)
+        #print(self.limitUnits)
         self.limitUnits += structures.getUnitCapacity()
         
         self.structures.append(structures)
@@ -94,7 +94,7 @@ class Player():
                     else:
                         self.unitsSelected[i].updateOwnSpace()
         elif id == CommandId.SEARCH_NEARBY_RIVAL:
-            print("BUSCAR")
+            #print("BUSCAR")
             for unit in self.unitsSelected:
                 enemy = self.mapa.getNearbyRival(unit.occupiedTile, self)
                 #print(type(enemy))
@@ -102,14 +102,14 @@ class Player():
                     if unit.state == UnitState.STILL:
                         unit.attack(enemy)
                     else:
-                        print("ataco a otro")
+                        #print("ataco a otro")
                         unit.siendoAtacado = True
                         unit.atacante = enemy
-                        print(unit.atacante)
+                        #print(unit.atacante)
                 else:
                     if unit.state == UnitState.STILL:
                         unit.updateOwnSpace()
-                    print("no hay naide")
+                    #print("no hay naide")
         elif self.structureSelected != None:
             if id == CommandId.GENERATE_UNIT or id == CommandId.GENERATE_WORKER or id == CommandId.GENERATE_T1:
                 self.structureSelected.execute(id)

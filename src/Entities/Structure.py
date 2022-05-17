@@ -35,7 +35,7 @@ class Structure(Entity.Entity):
         self.state = BuildingState.BUILDING
         self.lastAttacker = None
         self.capacity = capacity
-        print("TENGO CAPACIDAD ", self.capacity, "Y SOY ", self.player, " Y ESTOY EN ", self.xIni, self.yIni)
+        #print("TENGO CAPACIDAD ", self.capacity, "Y SOY ", self.player, " Y ESTOY EN ", self.xIni, self.yIni)
 
 
     def __del__(self):

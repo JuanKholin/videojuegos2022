@@ -223,8 +223,8 @@ class Map():
             #print("HI")
             pass
         if tile.tileid == 290:
-            print("OCUPADA")
-            print(tile.type)
+            #print("OCUPADA")
+            #print(tile.type)
 
     #Pone la tile como recurso
     def setRecurso(self, tile):
@@ -499,7 +499,7 @@ class Map():
             while i >= 0:
                 pathReturn.append(path[i])
                 i = i - 1
-        print("nodos: ", jaja)
+        #print("nodos: ", jaja)
         return pathReturn
 
     def AstarNoLimit(self, tileIni, tileObj):

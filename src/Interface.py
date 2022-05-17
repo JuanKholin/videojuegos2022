@@ -387,19 +387,19 @@ class Interface():
                     raza = Race.ZERG
                 else:
                     if options[1] == "Zerg":
-                        print("Contra terran")
+                        #print("Contra terran")
                         raza = Race.TERRAN
                     else:
-                        print("Contra zerg")
+                        #print("Contra zerg")
                         raza = Race.ZERG
                 if options[2] == "Dificil":
-                    print("DIFICIL")
+                    #print("DIFICIL")
                     dif = HARD
                 elif options[2] == "Normal":
-                    print("NORMAL")
+                    #print("NORMAL")
                     dif = MEDIUM
                 else:
-                    print("EASY")
+                    #print("EASY")
                     dif = EASY
                 if Utils.DEBBUG == False:
                     aI = AI(escena.p2, raza, dif)
@@ -521,7 +521,7 @@ class Interface():
                 escena.aI = aI
                 raton.setSelf(_raton)
                 self.player = escena.p1
-                print(self.player.limitUnits)
+                #print(self.player.limitUnits)
                 self.enemy = escena.p2
                 escena.raton = raton
                 escena.p1.base.raton = escena.raton

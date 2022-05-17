@@ -61,7 +61,7 @@ class ZergBarracks(Structure):
     def execute(self, command_id):
         #if self.clicked:
         #print("soy clickeado?")
-        print(command_id)
+        #print(command_id)
         if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_T1) and self.player.resources >= TERRAN_T1_MINERAL_COST:
             self.player.resources -= TERRAN_T1_MINERAL_COST
             terranSoldier = Zergling(self.player)

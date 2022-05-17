@@ -555,7 +555,7 @@ def calcPath(posini, tileIni, tileObj, mapa):
         return path
 
 def calcPathNoLimit(posini, tileIni, tileObj, mapa):
-        pathA = mapa.AstarNoLimit(tileIni,tileObj)
+        pathA = mapa.Astar(tileIni,tileObj)
         if pathA.__len__() > 0:
             pathA.pop(0)
         posIni = (posini[0], posini[1])
@@ -564,7 +564,7 @@ def calcPathNoLimit(posini, tileIni, tileObj, mapa):
             posFin = (tile.centerx, tile.centery)
             path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
             path.append(path1)
-            print(path1.angle)
+            #print(path1.angle)
             posIni = posFin
         return path
 

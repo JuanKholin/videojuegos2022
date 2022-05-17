@@ -350,7 +350,7 @@ class Unit(Entity):
                 self.updatePath(actualPath)
             else: # Se acaba este camino
                 ownTile = self.getTile()
-                print(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery), self.range)
+                #print(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery), self.range)
                 if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
                     #print(type(self), "estoy en rango")
                     self.updateAttackInRange()
@@ -444,7 +444,7 @@ class Unit(Entity):
                 self.attackedOne.lastAttacker = None
         if self.state == UnitState.STILL:
             ownTile = self.getTile()
-            print(int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)), self.range, "estoy en rango")
+            #print(int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)), self.range, "estoy en rango")
             if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
             #print(type(self), "estoy en rango")
                 self.updateAttackInRange()
@@ -467,7 +467,7 @@ class Unit(Entity):
 
     # Pasa a morirse (chof)
     def changeToDying(self):
-        print("DYING", self.x, self.y)
+        #print("DYING", self.x, self.y)
         self.state = UnitState.DYING
         self.attackedOne = None
         self.runningAway = False
@@ -544,7 +544,7 @@ class Unit(Entity):
                 self.siendoAtacado = True
                 self.atacante = attacker
             elif self.state == UnitState.STILL:
-                print("AL <TAKE")
+                #print("AL <TAKE")
                 self.attack(attacker)
         return self.hp
 

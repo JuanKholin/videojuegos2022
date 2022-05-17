@@ -91,7 +91,7 @@ class Extractor(Structure):
                     break
         else:
             ok = False
-        print(ok)
+        #print(ok)
         return ok
 
     def buildProcess(self):

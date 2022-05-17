@@ -48,7 +48,7 @@ def loadFromSave(nombre):
 
     escena.p1.setBasePlayer(escena.p1.structures[0])
     escena.p2.setBasePlayer(escena.p2.structures[0])
-    print(escena.p2.limitUnits)
+    #print(escena.p2.limitUnits)
     return escena, raton, camera
 
 def loadHardcodedMap(nombre):
@@ -83,7 +83,7 @@ def loadHardcodedMap(nombre):
 
     escena.p1.setBasePlayer(escena.p1.structures[0])
     escena.p2.setBasePlayer(escena.p2.structures[0])
-    print(escena.p2.limitUnits)
+    #print(escena.p2.limitUnits)
     return escena, raton, camera
 
 

@@ -45,7 +45,7 @@ class TerranSupplyDepot(Structure):
         self.spawningIndex = [4]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
 
-        self.render = pygame.transform.scale(pygame.image.load(SUPPLY_RENDER), RENDER_SIZE)
+        self.render = pygame.transform.scale(pygame.image.load(TERRAN_DEPOT_RENDER), RENDER_SIZE)
 
         self.training = []
         self.paths = []

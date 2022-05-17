@@ -84,7 +84,7 @@ class AI():
         elif self.rotativeReaction == 2:
             self.restoreArmy(units, structures)
         elif self.rotativeReaction == 3:
-            print("gather")
+            #print("gather")
             self.gatherResources(units, structures)
         elif self.rotativeReaction == 4:
             self.updateInvaders()
@@ -96,16 +96,16 @@ class AI():
     def makeDecission(self, units, structures):
         decission = self.decide()
         if decission == 0:
-            print("IA DECIDE ATACAR LO VISIBLE")
+            #print("IA DECIDE ATACAR LO VISIBLE")
             self.attackVisible(units, structures)
         elif decission == 1:
-            print("IA DECIDE HACER MEJORAS")
+            #print("IA DECIDE HACER MEJORAS")
             self.armyUpgrade(structures)
         elif decission == 2:
-            print("IA DECIDE EXPANDIR SU EJERCITO")
+            #print("IA DECIDE EXPANDIR SU EJERCITO")
             self.armyExpansion(structures)
         elif decission == 3:
-            print("IA DECIDE INVADIR")
+            #print("IA DECIDE INVADIR")
             self.seekAndDestroy(units)
         #print(self.decissionsChance)
 
@@ -196,7 +196,7 @@ class AI():
                 if (worker.state == UnitState.EXTRACTING) or (worker.state == UnitState.GAS_TRANSPORTING):
                     skipGasNeed = True 
                     gassers.append(worker)
-                    print(self.data.gas, "GASS")
+                    #print(self.data.gas, "GASS")
             if not skipGasNeed and self.data.gas >= TERRAN_REFINERY_MINERAL_COST: # Si hay al menos un worker extrayendo gas no es necesario hacer nada de gas
                 gasMan = workers.pop()
                 geyser = self.getGeyserInUse(structures)
@@ -213,7 +213,7 @@ class AI():
                     crystalToMine = 0
                     geyser = self.getGeyserInUse(structures)
                     for worker in workers: # todos a la mina
-                        print("A la mina")
+                        #print("A la mina")
                         if (worker.state == UnitState.STILL) or (worker.state == UnitState.EXTRACTING): # si les viene bien xd
                             crystalsSeen = list(self.crystalsSeen)
                             #print("go to work crystal at", crystalsSeen[crystalToMine].getPosition())
@@ -377,9 +377,9 @@ class AI():
 
     def genSoldier(self, structure):
         if (self.data.resources > 3 * self.t3Cost[0]) and (self.data.gas > 3 * self.t3Cost[1]):
-            structure.execute(CommandId.GENERATE_T3))
+            structure.execute(CommandId.GENERATE_T3)
         elif (self.data.resources > 2 * self.t2Cost[0]) and (self.data.gas > 2 * self.t2Cost[1]):
-            structure.execute(CommandId.GENERATE_T2))
+            structure.execute(CommandId.GENERATE_T2)
         elif (self.data.resources > self.t1Cost[0]) and (self.data.gas > self.t1Cost[1]):
             structure.execute(CommandId.GENERATE_T1)
 

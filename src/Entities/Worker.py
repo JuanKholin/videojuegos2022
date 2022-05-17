@@ -78,7 +78,7 @@ class Worker(Unit):
                     self.updateOwnSpace()
                     tilesCasa = self.tilesResource(self.getTile())
                     if self.getTile() in tilesCasa: # PONERSE A MINAR
-                        print("Hay que ponerse a minar")
+                        #print("Hay que ponerse a minar")
                         self.startMining()
                     else:
                         self.changeToStill()
@@ -113,7 +113,7 @@ class Worker(Unit):
                     self.updateOwnSpace()
                     tilesCasa = self.tilesResource(self.getTile())
                     if self.getTile() in tilesCasa: # PONERSE A MINAR
-                        print("Hay que ponerse a minar")
+                        #print("Hay que ponerse a minar")
                         self.startExtracting()
                     else:
                         self.changeToStill()
@@ -325,10 +325,10 @@ class Worker(Unit):
         else: # PUEDE QUE NO 
             tilesCasa = self.tilesCasa(self.getTile())
             if self.getTile() in tilesCasa: # He entregado sino me quedo en el sitio
-                print(self.resource.capacity)
+                #print(self.resource.capacity)
                 if self.resource.capacity <= 0:
                     self.player.resources += self.cantidadMinada
-                    print("cambiamos a still")
+                    #print("cambiamos a still")
                     self.changeToStill()
                 else:
                     #Tengo que volver, calculo el camino a minar
@@ -345,7 +345,7 @@ class Worker(Unit):
         else: # PUEDE QUE NO
             tilesCasa = self.tilesCasa(self.getTile())
             if self.getTile() in tilesCasa: # He entregado sino me quedo en el sitio
-                print("Tengo que volver siempre, TRABAJO DE POR VIDA :D")
+                #print("Tengo que volver siempre, TRABAJO DE POR VIDA :D")
                 self.player.gas += self.cantidadMinada
                 self.paths = []
 
@@ -391,7 +391,7 @@ class Worker(Unit):
         if len(self.paths) == 0: #PUEDE QUE NO
             tilesCasa = self.tilesResource(self.getTile())
             if self.getTile() in tilesCasa: # PONERSE A MINAR
-                print("Hay que ponerse a minar")
+                #print("Hay que ponerse a minar")
                 self.startTimeMining = getGlobalTime()
                 xCristal, yCristal = self.cristal.getCenter()
                 posicionActual = self.getPosition()

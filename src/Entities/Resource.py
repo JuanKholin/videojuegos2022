@@ -17,7 +17,7 @@ class Resource():
 
     def disable(self):
         self.enable = False
-        print("Diableado", self.id)
+        #print("Diableado", self.id)
         
     def setEnable(self):
         self.enable = True

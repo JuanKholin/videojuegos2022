@@ -76,7 +76,7 @@ class Hatchery(Structure):
     def execute(self, command_id):
         #if self.clicked:
         if command_id == CommandId.GENERATE_WORKER and self.player.resources >= ZERG_T1_MINERAL_COST:
-            print("Haciendo un zerg")
+            #print("Haciendo un zerg")
             self.player.resources -= ZERG_T1_MINERAL_COST
             zergling = Drone(self.player)
             self.generateUnit(zergling)
