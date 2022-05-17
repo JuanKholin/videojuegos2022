@@ -39,11 +39,8 @@ def procesarInput():
             pg.quit()
             sys.exit()
         elif event.type == pg.VIDEORESIZE:
-            SCREEN_HEIGHT = event.h
-            SCREEN_WIDTH = event.w
-            escena.camera.h = SCREEN_HEIGHT - 160
-            escena.camera.w = SCREEN_WIDTH
-            screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pg.RESIZABLE)
+            Utils.ScreenWidth = event.h
+            Utils.ScreenHeight = event.w
         elif event.type == pg.KEYUP:
             escena.procesarEvent(event)
             escena.checkUnHoldButton(event.key)
@@ -133,6 +130,8 @@ def setEntity(player, ai):
     escena.resources = resources
 
 def update():
+    updateScreen(screen)
+    camera.update()
     clock_update()
     raton.update(escena.camera)
     if getGameState() == System_State.MAINMENU:
@@ -161,7 +160,7 @@ def update():
         sys.exit()
 
 def draw():
-    screen.fill(WHITE)
+    screen.fill(BLACK)
     if Utils.state == System_State.MAINMENU:
         escena.interfaz.draw(screen, escena.camera)
     elif Utils.state == System_State.ONGAME:
@@ -178,8 +177,8 @@ def draw():
 pg.init()
 
 flags = pg.FULLSCREEN | pg.DOUBLEBUF
-size = (SCREEN_WIDTH, SCREEN_HEIGHT)
-screen =  pg.display.set_mode(size) #, pygame.RESIZABLE)
+size = (MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT)
+screen =  pg.display.set_mode(size, pygame.RESIZABLE) #, pygame.RESIZABLE)
 
 #Controlar frames por segundo
 clock = pg.time.Clock()
@@ -227,7 +226,7 @@ aI = AI(player2, Race.TERRAN, HARD)
 
 # Camara
 # pre: mapa tan grande como ventana
-camera = Camera(0, 0, SCREEN_HEIGHT - 160, SCREEN_WIDTH)
+camera = Camera(0, 0, Utils.ScreenWidth - 160, Utils.ScreenHeight)
 
 # Escena
 

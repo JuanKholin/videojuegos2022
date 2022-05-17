@@ -72,7 +72,7 @@ class TerranBuilder(Structure):
         self.mineMineralUpCost = 25
         self.mineGasUpCost = 5
 
-        self.type = TERRAN_BASE
+        self.type = BASE
        
         ("ESTOY SIENDO CREADO ", self.toDictionary(self.mapa)['clase'])
 

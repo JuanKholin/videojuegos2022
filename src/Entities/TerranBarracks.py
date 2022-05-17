@@ -58,7 +58,7 @@ class TerranBarracks(Structure):
         self.training = []
         self.paths = []
 
-        self.type = TERRAN_BARRACKS
+        self.type = BARRACKS
         #print("SOY UNA BARRACA Y TENGO CAPACISAS ", self.capacity)
 
     def execute(self, command_id):
