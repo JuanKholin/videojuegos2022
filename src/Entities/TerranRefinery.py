@@ -37,7 +37,7 @@ class TerranRefinery(Structure):
         self.sprites += deadSprites
         #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
-        self.type = TERRAN_GEYSER_STRUCTURE
+        self.type = TERRAN_REFINERY
 
         self.image = self.sprites[self.index]
         self.operativeIndex = [4]
@@ -57,7 +57,7 @@ class TerranRefinery(Structure):
         self.training = []
         self.paths = []
 
-        self.type = TERRAN_GEYSER_STRUCTURE
+        self.type = TERRAN_REFINERY
 
     def getBuildSprite(self):
         return self.sprites[4]

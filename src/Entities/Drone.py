@@ -11,8 +11,8 @@ COOLDOWN = 17
 RANGE = 1 * RANGE_UNIT + RANGE_BASIC
 ATTACK_INFO = [DAMAGE, COOLDOWN, RANGE]
 MINE_POWER = 8
-MINERAL_COST = 20
-GAS_COST = 0
+MINERAL_COST = ZERG_WORKER_MINERAL_COST
+GAS_COST = ZERG_WORKER_GAS_COST
 TIME_TO_MINE = 1000
 GENERATION_TIME = 20
 SPEED = 2.5
@@ -67,8 +67,8 @@ class Drone(Worker):
         self.changeToStill()
         if xIni != -1:
             self.updateOwnSpace()
-        self.render = pygame.transform.scale(pygame.image.load(DRONE_RENDER), UNIT_RENDER_SIZE)
-        self.type = ZERG_WORKER
+        self.render = pygame.transform.scale(pygame.image.load(ZERG_WORKER_RENDER), UNIT_RENDER_SIZE)
+        self.type = WORKER
         print(" AHSDASJLDASI" , self.speed)
     
 

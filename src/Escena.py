@@ -58,11 +58,11 @@ class Escena():
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.GENERATE_WORKER:
                     self.p1.execute(command.id, [], None)
-                elif command.id == CommandId.GENERATE_SOLDIER:
+                elif command.id == CommandId.GENERATE_T1:
                     self.p1.execute(command.id, [], None)
-                elif command.id == CommandId.GENERATE_2NDUNIT:
+                elif command.id == CommandId.GENERATE_T2:
                     self.p1.execute(command.id, [], None)
-                elif command.id == CommandId.GENERATE_3RDUNIT:
+                elif command.id == CommandId.GENERATE_T3:
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.UPGRADE_SOLDIER_DAMAGE:
                     self.p1.execute(command.id, [], None)
@@ -76,7 +76,7 @@ class Escena():
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.BUILD_REFINERY:
                     self.p1.execute(command.id, [], None)
-                elif command.id == CommandId.BUILD_SUPPLY_DEPOT:
+                elif command.id == CommandId.BUILD_DEPOT:
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.SAVE_GAME:
                     self.saveScene()

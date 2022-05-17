@@ -34,7 +34,7 @@ class Hatchery(Structure):
     clicked = False
     frame = 12
     nSprites = 4
-    options = [Options.BUILD_SUPPLY_DEPOT_ZERG, Options.BUILD_BARRACKS_ZERG, Options.BUILD_REFINERY_ZERG, Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE, Options.GENERATE_WORKER_ZERG]
+    options = [Options.BUILD_DEPOT_ZERG, Options.BUILD_BARRACKS_ZERG, Options.BUILD_REFINERY_ZERG, Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE, Options.GENERATE_WORKER_ZERG]
 
     def __init__(self, xini, yini, player, map, building, raton):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
@@ -71,13 +71,13 @@ class Hatchery(Structure):
         self.mineGasUpCost = 5
 
 
-        self.type = ZERG_BASE
+        self.type = BASE
 
     def execute(self, command_id):
         #if self.clicked:
-        if command_id == CommandId.GENERATE_WORKER and self.player.resources >= ZERGLING_MINERAL_COST:
+        if command_id == CommandId.GENERATE_WORKER and self.player.resources >= ZERG_T1_MINERAL_COST:
             print("Haciendo un zerg")
-            self.player.resources -= ZERGLING_MINERAL_COST
+            self.player.resources -= ZERG_T1_MINERAL_COST
             zergling = Drone(self.player)
             self.generateUnit(zergling)
             self.frame = 4

@@ -111,16 +111,16 @@ class Player():
                         unit.updateOwnSpace()
                     print("no hay naide")
         elif self.structureSelected != None:
-            if id == CommandId.GENERATE_UNIT or id == CommandId.GENERATE_WORKER or id == CommandId.GENERATE_SOLDIER:
+            if id == CommandId.GENERATE_UNIT or id == CommandId.GENERATE_WORKER or id == CommandId.GENERATE_T1:
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_BARRACKS:
                 #print("EXECUCION")
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_REFINERY:
                 self.structureSelected.execute(id)
-            elif id == CommandId.GENERATE_2NDUNIT:
+            elif id == CommandId.GENERATE_T2:
                 self.structureSelected.execute(id)
-            elif id == CommandId.GENERATE_3RDUNIT:
+            elif id == CommandId.GENERATE_T3:
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_SUPPLY_DEPOT:
                 self.structureSelected.execute(id)

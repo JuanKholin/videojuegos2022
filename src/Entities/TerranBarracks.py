@@ -30,7 +30,7 @@ class TerranBarracks(Structure):
     clicked = False
     frame = 8
     nSprites = 6
-    options = [Options.GENERATE_SOLDIER, Options.GENERATE_FIREBAT, Options.GENERATE_GOLIATH]
+    options = [Options.GENERATE_T1_TERRAN, Options.GENERATE_T2_TERRAN, Options.GENERATE_T3_TERRAN]
 
     def __init__(self, xini, yini, player, map, building):
         Structure.__init__(self, HP, TERRAN_BARRACKS_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
@@ -64,20 +64,20 @@ class TerranBarracks(Structure):
     def execute(self, command_id):
         #if self.clicked:
         #print("soy clickeado?")
-        if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_SOLDIER) and self.player.resources >= TERRAN_SOLDIER_MINERAL_COST:
-            self.player.resources -= TERRAN_SOLDIER_MINERAL_COST
+        if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_T1) and self.player.resources >= TERRAN_T1_MINERAL_COST:
+            self.player.resources -= TERRAN_T1_MINERAL_COST
             terranSoldier = TerranSoldier(self.player)
             self.generateUnit(terranSoldier)
             self.state = BuildingState.SPAWNING
-        elif (command_id == CommandId.GENERATE_2NDUNIT) and self.player.resources >= FIREBAT_MINERAL_COST and self.player.gas >= FIREBAT_GAS_COST:
-            self.player.resources -= BROODLING_MINERAL_COST
-            self.player.gas -= FIREBAT_GAS_COST
+        elif (command_id == CommandId.GENERATE_T2) and self.player.resources >= TERRAN_T2_MINERAL_COST and self.player.gas >= TERRAN_T2_GAS_COST:
+            self.player.resources -= TERRAN_T2_MINERAL_COST
+            self.player.gas -= TERRAN_T2_GAS_COST
             terranSoldier = Firebat(self.player)
             self.generateUnit(terranSoldier)
             self.state = BuildingState.SPAWNING
-        elif (command_id == CommandId.GENERATE_3RDUNIT) and self.player.resources >= GOLIATH_MINERAL_COST and self.player.gas >= GOLIATH_GAS_COST:
-            self.player.resources -= BROODLING_MINERAL_COST
-            self.player.gas -= GOLIATH_GAS_COST
+        elif (command_id == CommandId.GENERATE_T3) and self.player.resources >= TERRAN_T3_MINERAL_COST and self.player.gas >= TERRAN_T3_GAS_COST:
+            self.player.resources -= ZERG_T2_MINERAL_COST
+            self.player.gas -= TERRAN_T3_GAS_COST
             terranSoldier = Goliath(self.player)
             self.generateUnit(terranSoldier)
             self.state = BuildingState.SPAWNING
@@ -85,11 +85,11 @@ class TerranBarracks(Structure):
     def command(self, command):
         if self.state != BuildingState.BUILDING:
             if command == CommandId.GENERATE_UNIT:
-                return Command(CommandId.GENERATE_SOLDIER)
-            elif command == CommandId.GENERATE_2NDUNIT:
-                return Command(CommandId.GENERATE_2NDUNIT)
-            elif command == CommandId.GENERATE_3RDUNIT:
-                return Command(CommandId.GENERATE_3RDUNIT)
+                return Command(CommandId.GENERATE_T1)
+            elif command == CommandId.GENERATE_T2:
+                return Command(CommandId.GENERATE_T2)
+            elif command == CommandId.GENERATE_T3:
+                return Command(CommandId.GENERATE_T3)
             return Command(CommandId.NULL)
         else:
             return Command(CommandId.NULL)

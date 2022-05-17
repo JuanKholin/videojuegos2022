@@ -64,6 +64,12 @@ DANYO_MEJORA = 0.2
 ARMOR_MEJORA = 0.05
 MINE_MEJORA = 1
 
+# Tipos de clase (Para la IA):
+SOLDIER = "SOLDIER"
+WORKER = "WORKER"
+REFINERY = "REFINERY"
+BASE = "BASE"
+
 # Tiles types:
 EMPTY = 0
 OBSTACLE = 1
@@ -93,39 +99,30 @@ DECISSION_RATE = [900, 600, 300, 10000]
 # espera de la IA para tomar decisiones ligeras:
 AI_LAPSE = [50, 40, 30, 10000]
 
-# FALTAN POR DEFINIR PERO LAS TENGO QUE PONER:
-ZERG_BARRACKS_MINERAL_COST = 50
-PROTOSS_BARRACKS_MINERAL_COST = 50
-ZERG_DEPOT_MINERAL_COST = 50
-TERRAN_DEPOT_MINERAL_COST = 50
-ZERG_SOLDIER_MINERAL_COST = 20
-ZERG_WORKER_MINERAL_COST = 20
-PROTOSS_SOLDIER_MINERAL_COST = 20
-PROTOSS_WORKER_MINERAL_COST = 20
-ZERG_GEYSER_STRUCTURE_MINERAL_COST = 50
-TERRAN_GEYSER_STRUCTURE_MINERAL_COST = 50
-PROTOSS_GEYSER_STRUCTURE_MINERAL_COST = 50
-
 # Edificios de las razas:
 TERRAN_BASE = "TerranBuilder"
 TERRAN_BARRACKS = "TerranBarracks"
 TERRAN_DEPOT = "TerranSuplyDepot"
-TERRAN_GEYSER_STRUCTURE = "TerranRefinery"
+TERRAN_REFINERY = "TerranRefinery"
 TERRAN_WORKER = "TerranWorker"
-TERRAN_SOLDIER = "TerranSoldier"
+TERRAN_T1 = "TerranSoldier"
+TERRAN_T2 = "Firebat"
+TERRAN_T3 = "Goliath"
 
 ZERG_BASE = "Hatchery"
-ZERG_BARRACKS = None # Faltan
+ZERG_BARRACKS = "ZergBarracks"
 ZERG_DEPOT = "ZergSupply"
-ZERG_GEYSER_STRUCTURE = "Extractor"
+ZERG_REFINERY = "Extractor"
 ZERG_WORKER = "Drone"
-ZERG_S1 = "s1"
-ZERG_SOLDIER = "Zergling"
+ZERG_T1 = "Zergling"
+ZERG_T2 = "Broodling"
+ZERG_T3 = "Hydralisk"
+
 
 PROTOSS_BASE = None
 PROTOSS_BARRACKS = None
 PROTOSS_DEPOT = None
-PROTOSS_GEYSER_STRUCTURE = None
+PROTOSS_REFINERY = None
 PROTOSS_WORKER = None
 PROTOSS_SOLDIER = None
 
@@ -333,25 +330,25 @@ HEROE_N = 10
 
 
 class Options(Enum):
-    BUILD_BARRACKS = auto()
-    GENERATE_WORKER = auto()
+    GENERATE_WORKER_TERRAN = auto()
     GENERATE_WORKER_ZERG = auto()
-    GENERATE_SOLDIER = auto()
-    GENERATE_SOLDIER_ZERG = auto()
-    GENERATE_BROODLING = auto()
-    GENERATE_FIREBAT = auto()
-    GENERATE_GOLIATH = auto()
-    GENERATE_HYDRALISK = auto()
-    BUILD_REFINERY = auto()
+    GENERATE_T1_TERRAN = auto()
+    GENERATE_T1_ZERG = auto()
+    GENERATE_T2_TERRAN = auto()
+    GENERATE_T2_ZERG = auto()
+    GENERATE_T3_TERRAN = auto()
+    GENERATE_T3_ZERG = auto()
+    BUILD_REFINERY_TERRAN = auto()
+    BUILD_REFINERY_ZERG = auto()
+    BUILD_DEPOT_TERRAN = auto()
+    BUILD_DEPOT_ZERG = auto()
+    BUILD_BARRACKS_TERRAN = auto()
+    BUILD_BARRACKS_ZERG = auto()
     BUILD_HATCHERY = auto()
-    BUILD_SUPPLY_DEPOT = auto()
     DANYO_UPGRADE = auto()
     MINE_UPGRADE = auto()
     ARMOR_UPGRADE = auto()
     NULO = auto()
-    BUILD_REFINERY_ZERG = auto()
-    BUILD_BARRACKS_ZERG = auto()
-    BUILD_SUPPLY_DEPOT_ZERG = auto()
     NEXT_PAGE = auto()
     PREVIOUS_PAGE = auto()
     CLOSE = auto()
@@ -375,41 +372,47 @@ UNIT_RENDER_SIZE = [85*1.4, 97*1.4]
 SPAW_UNIT_RENDER_SIZE = [85 * 0.8, 97 * 0.8]
 WAIT_UNIT_RENDER_SIZE = [85 * 0.7, 97 * 0.7]
 
-##---------TERRAN_WORKER------------------
+##---------TerranWorker------------------
 TERRAN_WORKER_MINERAL_COST = 20
-WORKER_RENDER = "SPRITE/render/terranWorker.png"
+TERRAN_WORKER_GAS_COST = 0
+TERRAN_WORKER_RENDER = "SPRITE/render/terranWorker.png"
 
-##---------FIREBAT-----------------------
-FIREBAT_MINERAL_COST = 50
-FIREBAT_GAS_COST = 25
-FIREBAT_RENDER = "SPRITE/render/firebat.png"
+##---------Drone-------------------------
+ZERG_WORKER_MINERAL_COST = 20
+ZERG_WORKER_GAS_COST = 0
+ZERG_WORKER_RENDER = "SPRITE/render/drone.png"
 
-##---------GOLIATH-----------------------
-GOLIATH_MINERAL_COST = 100
-GOLIATH_GAS_COST = 100
-GOLIATH_RENDER = "SPRITE/render/goliath.png"
+##---------TerranSoldier-----------------------
+TERRAN_T1_MINERAL_COST = 20
+TERRAN_T1_GAS_COST = 0
+TERRAN_T1_RENDER = "SPRITE/render/terranSoldier.png"
 
-TERRAN_SOLDIER_MINERAL_COST = 20
-SOLDIER_RENDER = "SPRITE/render/terranSoldier.png"
+##---------Zergling-----------------------
+ZERG_T1_MINERAL_COST = 20
+ZERG_T1_GAS_COST = 0
+ZERG_T1_RENDER = "SPRITE/render/zergling.png"
 
-##---------ZERGLING-----------------------
-ZERGLING_MINERAL_COST = 20
-ZERGLING_RENDER = "SPRITE/render/zergling.png"
+##---------Firebat-----------------------
+TERRAN_T2_MINERAL_COST = 50
+TERRAN_T2_GAS_COST = 25
+TERRAN_T2_RENDER = "SPRITE/render/firebat.png"
 
-##---------BROODLING-----------------------
-BROODLING_MINERAL_COST = 50
-BROODLING_GAS_COST = 25
-BROODLING_RENDER = "SPRITE/render/broodling.png"
+##---------Broodling-----------------------
+ZERG_T2_MINERAL_COST = 50
+ZERG_T2_GAS_COST = 25
+ZERG_T2_RENDER = "SPRITE/render/broodling.png"
 
-##---------HYDRALISK-----------------------
-HYDRALISK_MINERAL_COST = 100
-HYDRALISK_GAS_COST = 100
-HYDRALISK_REDNER = "SPRITE/render/hydralisk.png"
+##---------Goliath-----------------------
+TERRAN_T3_MINERAL_COST = 100
+TERRAN_T3_GAS_COST = 100
+TERRAN_T3_RENDER = "SPRITE/render/goliath.png"
+
+##---------Hydralisk-----------------------
+ZERG_T3_MINERAL_COST = 100
+ZERG_T3_GAS_COST = 100
+ZERG_T3_RENDER = "SPRITE/render/hydralisk.png"
 
 
-##---------DRONE--------------------------
-DRONE_MINERAL_COST = 20
-DRONE_RENDER = "SPRITE/render/drone.png"
 
 #----------------------------------------------------------------
 # ESTRUCTURAS
@@ -456,10 +459,10 @@ SUPPLY_ZERG_PATH = "SPRITE/structure/Zerg_3/tile00"
 SUPPLY_ZERG_RENDER = "SPRITE/render/zergSupply.png"
 SUPPLY_ZERG_MINERAL_COST = 60
 
-##---------SUPPLY------------------
-TERRAN_SUPPLY_PATH = "SPRITE/structure/supply_depot/tile00"
+##---------DEPOT------------------
+TERRAN_DEPOT_PATH = "SPRITE/structure/supply_depot/tile00"
 SUPPLY_RENDER = "SPRITE/render/terranSupply.png"
-TERRAN_SUPPLY_MINERAL_COST = 50
+TERRAN_DEPOT_MINERAL_COST = 50
 
 CRYSTAL_RENDER = "SPRITE/render/mineral.png"
 GEYSER_RENDER = "SPRITE/render/geyser.png"

@@ -75,8 +75,8 @@ class Goliath(Soldier):
                 #self.image.get_height() - HEIGHT_PADDING)
         #self.imageRect = rect(self.x - self.image.get_width()/2, self.y -self.image.get_height() , self.image.get_width(), self.image.get_height())
         #self.imageRect = rect(self.x, self.y, self.image.get_width(), self.image.get_height())
-        self.render = pygame.transform.scale(pygame.image.load(GOLIATH_RENDER), UNIT_RENDER_SIZE)
-        self.type = TERRAN_SOLDIER
+        self.render = pygame.transform.scale(pygame.image.load(TERRAN_T3_RENDER), UNIT_RENDER_SIZE)
+        self.type = SOLDIER
     
 
     def toDictionary(self, map):

@@ -28,25 +28,27 @@ class AI():
             self.base = ZERG_BASE
             self.barracks = ZERG_BARRACKS
             self.depot = ZERG_DEPOT
-            self.geyserBuilding = ZERG_GEYSER_STRUCTURE
+            self.geyserBuilding = ZERG_REFINERY
             self.worker = ZERG_WORKER
-            self.soldier = ZERG_SOLDIER
-            self.workerCost = ZERG_WORKER_MINERAL_COST
-            self.soldierCost = ZERG_SOLDIER_MINERAL_COST
+            self.workerCost = [ZERG_WORKER_MINERAL_COST, ZERG_WORKER_GAS_COST]
+            self.t1Cost = [ZERG_T1_MINERAL_COST, ZERG_T1_GAS_COST]
+            self.t2Cost = [ZERG_T2_MINERAL_COST, ZERG_T2_GAS_COST]
+            self.t3Cost = [ZERG_T3_MINERAL_COST, ZERG_T3_GAS_COST]
         elif race == Race.TERRAN:
             self.base = TERRAN_BASE
             self.barracks = TERRAN_BARRACKS
             self.depot = TERRAN_DEPOT
-            self.geyserBuilding = TERRAN_GEYSER_STRUCTURE
+            self.geyserBuilding = TERRAN_REFINERY
             self.worker = TERRAN_WORKER
-            self.soldier = TERRAN_SOLDIER
-            self.workerCost = TERRAN_WORKER_MINERAL_COST
-            self.soldierCost = TERRAN_SOLDIER_MINERAL_COST
+            self.workerCost = [TERRAN_WORKER_MINERAL_COST, TERRAN_WORKER_GAS_COST]
+            self.t1Cost = [TERRAN_T1_MINERAL_COST, TERRAN_T1_GAS_COST]
+            self.t2Cost = [TERRAN_T2_MINERAL_COST, TERRAN_T2_GAS_COST]
+            self.t3Cost = [TERRAN_T3_MINERAL_COST, TERRAN_T3_GAS_COST]
         elif race == Race.PROTOSS:
             self.base = PROTOSS_BASE
             self.barracks = PROTOSS_BARRACKS
             self.depot = PROTOSS_DEPOT
-            self.geyserBuilding = PROTOSS_GEYSER_STRUCTURE
+            self.geyserBuilding = PROTOSS_REFINERY
             self.worker = PROTOSS_WORKER
             self.soldier = PROTOSS_SOLDIER
             self.workerCost = PROTOSS_WORKER_MINERAL_COST
@@ -165,9 +167,9 @@ class AI():
         nWorkers = 0
         nSoldiers = 0
         for unit in units:
-            if unit.type == self.worker:
+            if unit.type == WORKER:
                 nWorkers += 1
-            elif unit.type == self.soldier:
+            elif unit.type == SOLDIER:
                 nSoldiers += 1
         workersToCreate = self.minWorkers - nWorkers
         base = self.getBase(structures)
@@ -183,7 +185,7 @@ class AI():
                     if (structure.state == BuildingState.OPERATIVE) and (soldiersToCreate > 0):
                         soldiersToCreate = soldiersToCreate - 1
                         #print("gensoldier")
-                        structure.execute(CommandId.GENERATE_SOLDIER)
+                        structure.execute(CommandId.GENERATE_T1)
 
     # Es un update de workers bastante cool, si no hace nada a minar, y si mina mina y ya
     def gatherResources(self, units, structures):
@@ -193,6 +195,7 @@ class AI():
             for worker in workers:
                 if (worker.state == UnitState.EXTRACTING) or (worker.state == UnitState.GAS_TRANSPORTING):
                     skipGasNeed = True 
+                    print(self.data.gas, "GASS")
             if not skipGasNeed: # Si hay al menos un worker extrayendo gas no es necesario hacer nada de gas
                 gasMan = workers.pop()
                 geyser = self.getGeyserInUse(structures)
@@ -254,6 +257,7 @@ class AI():
 
     # Actualiza los cristales visibles
     def updateVision(self, units, structures):
+        print("UPDATEVIS")
         for unit in units:
             tile = unit.getTile()
             if tile != None:
@@ -264,6 +268,7 @@ class AI():
                 self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(tile, 6))
         for structure in structures:
             self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(structure.getTile(), 7))
+        print("Criscris", len(self.crystalsSeen))
 
     ##############################
     # DECISIONES TRASCENDENTALES #
@@ -326,7 +331,7 @@ class AI():
            self.buildBarracks(structures)
 
         # Minimos aumentados
-        soldiersCost = self.minSoldiers * self.soldierCost
+        soldiersCost = self.minSoldiers * self.t1Cost[0]
         print(soldiersCost, self.data.resources)
         if self.data.resources > soldiersCost:
             print("upgrade soldiers")
@@ -336,7 +341,7 @@ class AI():
                 self.minSoldiers -= 1
             elif self.minWorkers > 3:
                 self.minWorkers -= 1
-        workersCost = self.minWorkers * self.workerCost
+        workersCost = self.minWorkers * self.workerCost[0]
         if self.data.resources > workersCost + (soldiersCost / 2):
             #print("upgrade workers")
             self.minWorkers = self.minWorkers + 1
@@ -367,7 +372,7 @@ class AI():
     def getSoldiers(self, units):
         soldiers = []
         for unit in units:
-            if unit.type == self.soldier and unit.isReadyToFight():
+            if (unit.type == SOLDIER) and unit.isReadyToFight():
                 soldiers.append(unit)
         return soldiers
 
@@ -383,7 +388,7 @@ class AI():
     def getWorkers(self, units):
         workers = []
         for unit in units:
-            if unit.type == self.worker and unit.isReadyToWork():
+            if (unit.type == WORKER) and unit.isReadyToWork():
                 workers.append(unit)
         return workers
 
@@ -506,21 +511,21 @@ class AI():
 
     # Construye un edificio de explotacion de geiseres en el geiser geyser
     def buildGeyserBuilding(self, geyser):
-        if (self.geyserBuilding == ZERG_GEYSER_STRUCTURE) and (self.data.resources >= ZERG_GEYSER_STRUCTURE_MINERAL_COST):
+        if (self.geyserBuilding == ZERG_REFINERY) and (self.data.resources >= ZERG_REFINERY_MINERAL_COST):
             #print("Construye zerggeyserstructure")
-            self.data.resources -= ZERG_GEYSER_STRUCTURE_MINERAL_COST
+            self.data.resources -= ZERG_REFINERY_MINERAL_COST
             toBuild = Extractor(int(geyser.x / 40) - 1, int(geyser.y / 40), self.data, self.mapa, True, geyser)
             self.data.addStructures(toBuild)
             #toBuild.buildProcess()
-        elif (self.geyserBuilding == TERRAN_GEYSER_STRUCTURE) and (self.data.resources >= TERRAN_GEYSER_STRUCTURE_MINERAL_COST):
+        elif (self.geyserBuilding == TERRAN_REFINERY) and (self.data.resources >= TERRAN_REFINERY_MINERAL_COST):
             #print("Construye terrangeyserstructure")
-            self.data.resources -= TERRAN_GEYSER_STRUCTURE_MINERAL_COST
+            self.data.resources -= TERRAN_REFINERY_MINERAL_COST
             toBuild = TerranRefinery(int(geyser.x / 40) - 1, int(geyser.y / 40) + 1, self.data, self.mapa, True, geyser)
             self.data.addStructures(toBuild)
             #toBuild.buildProcess()
-        elif (self.geyserBuilding == PROTOSS_GEYSER_STRUCTURE) and (self.data.resources >= PROTOSS_GEYSER_STRUCTURE_MINERAL_COST):
+        elif (self.geyserBuilding == PROTOSS_REFINERY) and (self.data.resources >= PROTOSS_REFINERY_MINERAL_COST):
             #print("Construye protossgeyserstructure")
-            self.data.resources -= PROTOSS_GEYSER_STRUCTURE_MINERAL_COST
+            self.data.resources -= PROTOSS_REFINERY_MINERAL_COST
             toBuild = ProtossGeyserStructure(0, 0, self.data, self.mapa, True, geyser)
             self.data.addStructures(toBuild)
             #toBuild.buildProcess()

@@ -137,34 +137,34 @@ class Interface():
 
     def loadAllButton(self):
         allButton = {}
-        aux = Button.Button(BUTTON_PATH + "barracks" + ".bmp", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineral.png", "Construir Barracas", 55, BARRACKS_ZERG_MINERAL_COST)
-        allButton[Options.BUILD_BARRACKS] = aux
-        aux = Button.Button(BUTTON_PATH + "drone" + ".png", CommandId.GENERATE_WORKER,BUTTON_PATH + "construirConMineral.png", "Engendrar Drone", 55, DRONE_MINERAL_COST)
+        aux = Button.Button(BUTTON_PATH + "barracks" + ".bmp", CommandId.BUILD_BARRACKS, BUTTON_PATH + "construirConMineral.png", "Construir Barracas", 55, TERRAN_BARRACKS_MINERAL_COST)
+        allButton[Options.BUILD_BARRACKS_TERRAN] = aux
+        aux = Button.Button(BUTTON_PATH + "drone" + ".png", CommandId.GENERATE_WORKER,BUTTON_PATH + "construirConMineral.png", "Engendrar Drone", 55, ZERG_WORKER_MINERAL_COST)
         allButton[Options.GENERATE_WORKER_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "zergling" + ".png", CommandId.GENERATE_SOLDIER,BUTTON_PATH + "construirConMineral.png", "Engendrar Zergling", 55, ZERGLING_MINERAL_COST)
-        allButton[Options.GENERATE_SOLDIER_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "broodling" + ".png", CommandId.GENERATE_2NDUNIT,BUTTON_PATH + "construirConMineral.png", "Engendrar Broodling", 55, BROODLING_MINERAL_COST)
-        allButton[Options.GENERATE_BROODLING] = aux
-        aux = Button.Button(BUTTON_PATH + "firebat" + ".png", CommandId.GENERATE_2NDUNIT,BUTTON_PATH + "construirConMineral.png", "Entrenar Firebat", 55, FIREBAT_MINERAL_COST)
-        allButton[Options.GENERATE_FIREBAT] = aux
-        aux = Button.Button(BUTTON_PATH + "goliath" + ".png", CommandId.GENERATE_3RDUNIT,BUTTON_PATH + "construirConMineral.png", "Contruir Goliath", 55, GOLIATH_MINERAL_COST)
-        allButton[Options.GENERATE_GOLIATH] = aux
-        aux = Button.Button(BUTTON_PATH + "hydralisk" + ".png", CommandId.GENERATE_3RDUNIT,BUTTON_PATH + "construirConMineral.png", "Engendrar Hydralisk", 55, HYDRALISK_MINERAL_COST)
-        allButton[Options.GENERATE_HYDRALISK] = aux
-        aux = Button.Button(BUTTON_PATH + "worker" + ".bmp", CommandId.GENERATE_WORKER, BUTTON_PATH + "construirConMineral.png", "Construir VCE", 45, DRONE_MINERAL_COST)
-        allButton[Options.GENERATE_WORKER] = aux
-        aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.GENERATE_SOLDIER, BUTTON_PATH + "construirConMineral.png", "Entrenar Soldado", 55, ZERGLING_MINERAL_COST)
-        allButton[Options.GENERATE_SOLDIER] = aux
+        aux = Button.Button(BUTTON_PATH + "zergling" + ".png", CommandId.GENERATE_T1,BUTTON_PATH + "construirConMineral.png", "Engendrar Zergling", 55, ZERG_T1_MINERAL_COST)
+        allButton[Options.GENERATE_T1_ZERG] = aux
+        aux = Button.Button(BUTTON_PATH + "broodling" + ".png", CommandId.GENERATE_T2,BUTTON_PATH + "construirConMineral.png", "Engendrar Broodling", 55, ZERG_T2_MINERAL_COST)
+        allButton[Options.GENERATE_T2_ZERG] = aux
+        aux = Button.Button(BUTTON_PATH + "firebat" + ".png", CommandId.GENERATE_T2,BUTTON_PATH + "construirConMineral.png", "Entrenar Firebat", 55, TERRAN_T2_MINERAL_COST)
+        allButton[Options.GENERATE_T2_TERRAN] = aux
+        aux = Button.Button(BUTTON_PATH + "goliath" + ".png", CommandId.GENERATE_T3,BUTTON_PATH + "construirConMineral.png", "Contruir Goliath", 55, TERRAN_T3_MINERAL_COST)
+        allButton[Options.GENERATE_T3_TERRAN] = aux
+        aux = Button.Button(BUTTON_PATH + "hydralisk" + ".png", CommandId.GENERATE_T3,BUTTON_PATH + "construirConMineral.png", "Engendrar Hydralisk", 55, ZERG_T3_MINERAL_COST)
+        allButton[Options.GENERATE_T3_ZERG] = aux
+        aux = Button.Button(BUTTON_PATH + "worker" + ".bmp", CommandId.GENERATE_WORKER, BUTTON_PATH + "construirConMineral.png", "Construir VCE", 45, ZERG_WORKER_MINERAL_COST)
+        allButton[Options.GENERATE_WORKER_TERRAN] = aux
+        aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.GENERATE_T1, BUTTON_PATH + "construirConMineral.png", "Entrenar Soldado", 55, ZERG_T1_MINERAL_COST)
+        allButton[Options.GENERATE_T1_TERRAN] = aux
         aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.BUILD_HATCHERY)
         allButton[Options.BUILD_HATCHERY] = aux
         aux = Button.Button(BUTTON_PATH + "refinery" + ".bmp", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineral.png", "Construir Refineria", 50, EXTRACTOR_MINERAL_COST, 45)
-        allButton[Options.BUILD_REFINERY] = aux
-        aux = Button.Button(BUTTON_PATH + "depot" + ".bmp", CommandId.BUILD_SUPPLY_DEPOT, BUTTON_PATH + "construirConMineral.png", "Construir Deposito", 55, SUPPLY_ZERG_MINERAL_COST, 45)
-        allButton[Options.BUILD_SUPPLY_DEPOT] = aux
+        allButton[Options.BUILD_REFINERY_TERRAN] = aux
+        aux = Button.Button(BUTTON_PATH + "depot" + ".bmp", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineral.png", "Construir Deposito", 55, TERRAN_DEPOT_MINERAL_COST, 45)
+        allButton[Options.BUILD_DEPOT_TERRAN] = aux
         aux = Button.Button(BUTTON_PATH + "zergRefinery" + ".png", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineral.png", "Construir Extractor", 50, EXTRACTOR_MINERAL_COST, 45)
         allButton[Options.BUILD_REFINERY_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "zergSupply" + ".png", CommandId.BUILD_SUPPLY_DEPOT, BUTTON_PATH + "construirConMineral.png", "Construir Deposito", 55, SUPPLY_ZERG_MINERAL_COST, 45)
-        allButton[Options.BUILD_SUPPLY_DEPOT_ZERG] = aux
+        aux = Button.Button(BUTTON_PATH + "zergSupply" + ".png", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineral.png", "Construir Deposito", 55, SUPPLY_ZERG_MINERAL_COST, 45)
+        allButton[Options.BUILD_DEPOT_ZERG] = aux
         aux = Button.Button(BUTTON_PATH + "zergBarracks" + ".png", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineral.png", "Construir Barracas", 55, BARRACKS_ZERG_MINERAL_COST)
         allButton[Options.BUILD_BARRACKS_ZERG] = aux
         aux = Button.Button(BUTTON_PATH + "next" + ".png", CommandId.NEXT_PAGE)
@@ -773,7 +773,7 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), "ofensivas, construye mas cuarteles para", ORANGE, 20, (545, 385))
             muestra_texto(screen, str('monotypecorsiva'), "entrenar varias tropas a la vez!", ORANGE, 20, (517, 400))
             
-            screen.blit(getSprite(TERRAN_SUPPLY_PATH + "4.png", WHITE, (100, 100)), (SCREEN_WIDTH/3.5, 460))
+            screen.blit(getSprite(TERRAN_DEPOT_PATH + "4.png", WHITE, (100, 100)), (SCREEN_WIDTH/3.5, 460))
             muestra_texto(screen, str('monotypecorsiva'), "Deposito de suministros", GREEN, 30, (480, 470))
             muestra_texto(screen, str('monotypecorsiva'), "Con el cuartel puedes entrenar las tropas", ORANGE, 20, (550, 500))
             muestra_texto(screen, str('monotypecorsiva'), "ofensivas, construye mas cuarteles para", ORANGE, 20, (545, 515))

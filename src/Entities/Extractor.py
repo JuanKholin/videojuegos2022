@@ -58,7 +58,7 @@ class Extractor(Structure):
         self.training = []
         self.paths = []
 
-        self.type = ZERG_GEYSER_STRUCTURE
+        self.type = REFINERY
 
     def command(self, command):
         return Command(CommandId.NULL)

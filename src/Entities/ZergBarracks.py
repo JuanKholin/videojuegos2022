@@ -28,7 +28,7 @@ class ZergBarracks(Structure):
     clicked = False
     frame = 20
     nSprites = 3
-    options = [Options.GENERATE_SOLDIER_ZERG, Options.GENERATE_BROODLING,Options.GENERATE_HYDRALISK]
+    options = [Options.GENERATE_T1_ZERG, Options.GENERATE_T2_ZERG, Options.GENERATE_T3_ZERG]
 
     def __init__(self, xini, yini, player, map, building):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
@@ -62,20 +62,20 @@ class ZergBarracks(Structure):
         #if self.clicked:
         #print("soy clickeado?")
         print(command_id)
-        if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_SOLDIER) and self.player.resources >= TERRAN_SOLDIER_MINERAL_COST:
-            self.player.resources -= TERRAN_SOLDIER_MINERAL_COST
+        if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_T1) and self.player.resources >= TERRAN_T1_MINERAL_COST:
+            self.player.resources -= TERRAN_T1_MINERAL_COST
             terranSoldier = Zergling(self.player)
             self.generateUnit(terranSoldier)
             self.state = BuildingState.SPAWNING
-        elif (command_id == CommandId.GENERATE_2NDUNIT) and self.player.resources >= BROODLING_MINERAL_COST and self.player.gas >= BROODLING_GAS_COST:
-            self.player.resources -= BROODLING_MINERAL_COST
-            self.player.gas -= BROODLING_GAS_COST
+        elif (command_id == CommandId.GENERATE_T2) and self.player.resources >= ZERG_T2_MINERAL_COST and self.player.gas >= ZERG_T2_GAS_COST:
+            self.player.resources -= ZERG_T2_MINERAL_COST
+            self.player.gas -= ZERG_T2_GAS_COST
             terranSoldier = Broodling(self.player)
             self.generateUnit(terranSoldier)
             self.state = BuildingState.SPAWNING
-        elif (command_id == CommandId.GENERATE_3RDUNIT) and self.player.resources >= HYDRALISK_MINERAL_COST and self.player.gas >= HYDRALISK_GAS_COST:
-            self.player.resources -= HYDRALISK_MINERAL_COST
-            self.player.gas -= HYDRALISK_GAS_COST
+        elif (command_id == CommandId.GENERATE_T3) and self.player.resources >= ZERG_T3_MINERAL_COST and self.player.gas >= ZERG_T3_GAS_COST:
+            self.player.resources -= ZERG_T3_MINERAL_COST
+            self.player.gas -= ZERG_T3_GAS_COST
             terranSoldier = Hydralisk(self.player)
             self.generateUnit(terranSoldier)
             self.state = BuildingState.SPAWNING
@@ -83,11 +83,11 @@ class ZergBarracks(Structure):
     def command(self, command):
         if self.state != BuildingState.BUILDING:
             if command == CommandId.GENERATE_UNIT:
-                return Command(CommandId.GENERATE_SOLDIER)
-            elif command == CommandId.GENERATE_2NDUNIT:
-                return Command(CommandId.GENERATE_2NDUNIT)
-            elif command == CommandId.GENERATE_3RDUNIT:
-                return Command(CommandId.GENERATE_3RDUNIT)
+                return Command(CommandId.GENERATE_T1)
+            elif command == CommandId.GENERATE_T2:
+                return Command(CommandId.GENERATE_T2)
+            elif command == CommandId.GENERATE_T3:
+                return Command(CommandId.GENERATE_T3)
             return Command(CommandId.NULL)
         else:
             return Command(CommandId.NULL)

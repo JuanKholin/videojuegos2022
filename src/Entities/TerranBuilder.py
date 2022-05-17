@@ -32,7 +32,8 @@ class TerranBuilder(Structure):
     clicked = False
     frame = 8
     nSprites = 6
-    options = [Options.BUILD_SUPPLY_DEPOT, Options.BUILD_BARRACKS, Options.BUILD_REFINERY, Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE, Options.GENERATE_WORKER]
+    options = [Options.BUILD_DEPOT_TERRAN, Options.BUILD_BARRACKS_TERRAN, Options.BUILD_REFINERY_TERRAN, 
+            Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE, Options.GENERATE_WORKER_TERRAN]
 
     def __init__(self, xini, yini, player, map, building, raton):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
@@ -122,7 +123,7 @@ class TerranBuilder(Structure):
         elif command_id == CommandId.BUILD_REFINERY and self.player.resources >= TERRAN_REFINERY_MINERAL_COST:
             self.raton.building = True
             self.raton.buildStructure = self.getTerranRefinery()
-        elif command_id == CommandId.BUILD_SUPPLY_DEPOT and self.player.resources >= TERRAN_SUPPLY_MINERAL_COST:
+        elif command_id == CommandId.BUILD_SUPPLY_DEPOT and self.player.resources >= TERRAN_DEPOT_MINERAL_COST:
             self.raton.building = True
             self.raton.buildStructure = self.getTerranSupply()
 
