@@ -412,8 +412,8 @@ class Map():
             tileCercana = self.getTileOcupadaCercana(tileIni, tileCercana)
         return tileCercana
 
-        
-
+    #def tochaHeur(self, tile):
+        #return 0
 
     def Astar(self, tileIni, tileObj):
         #print("VOY DE ", tileIni.tileid, "A ",  tileObj.tileid)

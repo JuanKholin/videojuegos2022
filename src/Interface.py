@@ -704,6 +704,11 @@ class Interface():
                 if partida == self.selectedPartida:
                     pygame.draw.rect(screen, GREEN, partida['rect'], 2)
                 muestra_texto(screen, str('monotypecorsiva'), partida['nombre'], WHITE, 28, (partida['rect'].x + 100, partida['rect'].y))
+            if self.selectedPartida != None:
+                info = self.selectedPartida['nombre'].split("_")
+                muestra_texto(screen, str('monotypecorsiva'), info[0], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-740), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-170)))
+                muestra_texto(screen, str('monotypecorsiva'), info[2], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-810), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-275)))
+                muestra_texto(screen, str('monotypecorsiva'), info[1], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-745), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-390)))
 
         elif Utils.state == System_State.NEWGAME:
             screen.blit(self.newGame, [Utils.ScreenWidth/2 - self.newGame.get_width()/2, Utils.ScreenHeight/2 - self.newGame.get_height()/2])
