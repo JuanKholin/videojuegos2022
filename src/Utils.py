@@ -5,7 +5,7 @@ from re import T
 from turtle import Screen
 import pygame
 
-DEBBUG = True
+DEBBUG = False
 
 BGM_VOLUME = 0.2
 SOUND_VOLUME = 0.5

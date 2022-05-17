@@ -175,9 +175,8 @@ class AI():
         workersToCreate = self.minWorkers - nWorkers
         base = self.getBase(structures)
         if base != None:
-            if workersToCreate > 0:
+            if (workersToCreate > 0) and (nSoldiers > nWorkers):
                 if base.state == BuildingState.OPERATIVE:
-                    #print("genworker")
                     base.execute(CommandId.GENERATE_WORKER)
             soldiersToCreate = self.minSoldiers - nSoldiers
             if soldiersToCreate > 0:
@@ -185,17 +184,18 @@ class AI():
                 for structure in barracks:
                     if (structure.state == BuildingState.OPERATIVE) and (soldiersToCreate > 0):
                         soldiersToCreate = soldiersToCreate - 1
-                        #print("gensoldier")
-                        structure.execute(CommandId.GENERATE_T1)
+                        self.genSoldier(structure)
 
     # Es un update de workers bastante cool, si no hace nada a minar, y si mina mina y ya
     def gatherResources(self, units, structures):
         workers = self.getWorkers(units)
         skipGasNeed = False
+        gassers = []
         if len(workers) > 0: # Si hay workers vivos y sin ser atacados
             for worker in workers:
                 if (worker.state == UnitState.EXTRACTING) or (worker.state == UnitState.GAS_TRANSPORTING):
                     skipGasNeed = True 
+                    gassers.append(worker)
                     print(self.data.gas, "GASS")
             if not skipGasNeed and self.data.gas >= TERRAN_REFINERY_MINERAL_COST: # Si hay al menos un worker extrayendo gas no es necesario hacer nada de gas
                 gasMan = workers.pop()
@@ -206,16 +206,23 @@ class AI():
                     geyser = self.findFreeGeyser(units, structures)
                     if geyser != None:
                         self.buildGeyserBuilding(geyser)
+            if len(gassers) > 0:
+                gassers.pop()
             if len(workers) > 0: # Para el resto de workers
                 if len(self.crystalsSeen) > 0: # si hay cristales conocidos,
                     crystalToMine = 0
+                    geyser = self.getGeyserInUse(structures)
                     for worker in workers: # todos a la mina
                         print("A la mina")
-                        if worker.state == UnitState.STILL: # si les viene bien xd
+                        if (worker.state == UnitState.STILL) or (worker.state == UnitState.EXTRACTING): # si les viene bien xd
                             crystalsSeen = list(self.crystalsSeen)
                             #print("go to work crystal at", crystalsSeen[crystalToMine].getPosition())
-                            worker.mine(crystalsSeen[crystalToMine]) 
-                            crystalToMine = (crystalToMine + 1) % len(crystalsSeen)
+                            if len(crystalsSeen) > 0:
+                                worker.mine(crystalsSeen[crystalToMine]) 
+                                crystalToMine = (crystalToMine + 1) % len(crystalsSeen)
+                            elif (geyser != None) and gassers.count(worker) and (geyser != None) and (geyser.state == BuildingState.OPERATIVE):
+                                worker.extract(geyser.getTile())
+
 
     # Recorre las unidades invasoras para que vayan a la guerra, evitan recorrer caminos opuestos
     # pero si no hay de otra acaban haciendolo, no se estan quietas del todo hasta que ganan o mueren
@@ -258,7 +265,6 @@ class AI():
 
     # Actualiza los cristales visibles
     def updateVision(self, units, structures):
-        print("UPDATEVIS")
         for unit in units:
             tile = unit.getTile()
             if tile != None:
@@ -269,7 +275,6 @@ class AI():
                 self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(tile, 6))
         for structure in structures:
             self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(structure.getTile(), 7))
-        print("Criscris", len(self.crystalsSeen))
 
     ##############################
     # DECISIONES TRASCENDENTALES #
@@ -301,19 +306,19 @@ class AI():
         randUpgrade = randint(0, 2)
         base = self.getBase(structures)
         if randUpgrade == 0:
-            if self.data.resources > base.damageMineralUpCost * 3:
+            if (self.data.resources > base.damageMineralUpCost * 2) and (self.data.gas > base.damageGasUpCost * 2):
                 #print("Try upgrading damage")
                 #print(self.data.gas)
                 base.execute(CommandId.UPGRADE_SOLDIER_DAMAGE)
                 #print(self.data.gas)
         elif randUpgrade == 1:
-            if self.data.resources > base.armorMineralUpCost * 3:
+            if (self.data.resources > base.armorMineralUpCost * 3) and (self.data.gas > base.armorGasUpCost * 3):
                 #print("Try upgrading armor")
                 #print(self.data.gas)
                 base.execute(CommandId.UPGRADE_SOLDIER_ARMOR)
                 #print(self.data.gas)
         elif randUpgrade == 2:
-            if self.data.resources > base.mineMineralUpCost * 3:
+            if (self.data.resources > base.mineMineralUpCost) and (self.data.gas > base.mineGasUpCost):
                 #print("Try upgrading mining")
                 #print(self.data.gas)
                 base.execute(CommandId.UPGRADE_WORKER_MINING)
@@ -332,20 +337,21 @@ class AI():
            self.buildBarracks(structures)
 
         # Minimos aumentados
-        soldiersCost = self.minSoldiers * self.t1Cost[0]
-        print(soldiersCost, self.data.resources)
+        soldiersCost = self.minSoldiers * self.t2Cost[0]
         if self.data.resources > soldiersCost:
-            print("upgrade soldiers")
             self.minSoldiers = self.minSoldiers + 1
         else:
             if self.minSoldiers > self.minWorkers * 2:
                 self.minSoldiers -= 1
             elif self.minWorkers > 3:
                 self.minWorkers -= 1
+
         workersCost = self.minWorkers * self.workerCost[0]
         if self.data.resources > workersCost + (soldiersCost / 2):
-            #print("upgrade workers")
             self.minWorkers = self.minWorkers + 1
+        if (self.minWorkers >= self.minSoldiers) and (self.minWorkers > 3):
+            self.minSoldiers = self.minSoldiers + 1
+            self.minWorkers = self.minWorkers - 1
 
     # Apunta a ciertos soldados libres en funcion del ejercito disponible 
     # para invadir hasta su muerte o la victoria
@@ -368,6 +374,14 @@ class AI():
     ##############
     # AUXILIARES #
     ##############
+
+    def genSoldier(self, structure):
+        if (self.data.resources > 3 * self.t3Cost[0]) and (self.data.gas > 3 * self.t3Cost[1]):
+            structure.execute(CommandId.GENERATE_T3))
+        elif (self.data.resources > 2 * self.t2Cost[0]) and (self.data.gas > 2 * self.t2Cost[1]):
+            structure.execute(CommandId.GENERATE_T2))
+        elif (self.data.resources > self.t1Cost[0]) and (self.data.gas > self.t1Cost[1]):
+            structure.execute(CommandId.GENERATE_T1)
 
     # De las unidades devuelve a todos los soldados libres
     def getSoldiers(self, units):
