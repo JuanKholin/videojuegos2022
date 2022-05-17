@@ -22,7 +22,7 @@ class Upgrade():
         self.x = x
         self.y = y
         screen.blit(self.image, (x, y))
-        muestra_texto(screen, 'monotypecorsiva', str(self.cantidad), GREEN2, 15, (self.x + 45, self.y + 45))
+        muestra_texto(screen, 'monotypecorsiva', str(self.cantidad), GREEN2, 15, (self.x + 40, self.y + 40))
         if self.collide:
             pass
             #pygame.draw.rect(screen, BLUE, pygame.Rect(self.x, self.y-15, 50, 20))

@@ -195,7 +195,7 @@ class Escena():
         elif getGameState2() == System_State.HELP:
             pass
         self.mapa.updateNiebla(self.camera, self.p1.getEntitesLocation(self.camera))
-        #self.interfaz.update(self, self.raton, self.camera)
+        self.interfaz.update(self, self.raton, self.camera)
         #self.raton.update(self.camera)
         if getGameState2() == System_State.PLAYING or getGameState2() == System_State.LOAD:
             self.aI.make_commands()

@@ -185,8 +185,8 @@ class Unit(Entity):
 
     def drawInfo(self, screen, color):
         dic = self.toDictionary(self.mapa)
-        muestra_texto(screen, str('monotypecorsiva'), dic['nombre'], color, 25, [Utils.ScreenWidth/2 - GUI_INFO_X2, Utils.ScreenHeight - GUI_INFO_Y2])
-        muestra_texto(screen, str('monotypecorsiva'), dic['funcion'], color, 20, [Utils.ScreenWidth/2 - GUI_INFO_X2 + 10, Utils.ScreenHeight - GUI_INFO_Y2 + 25])
+        muestra_texto(screen, str('monotypecorsiva'), dic['nombre'], color, 25, [Utils.ScreenWidth/2 - GUI_INFO_X2, Utils.ScreenHeight - GUI_INFO_Y2 + 5])
+        muestra_texto(screen, str('monotypecorsiva'), dic['funcion'], color, 20, [Utils.ScreenWidth/2 - GUI_INFO_X2 + 10, Utils.ScreenHeight - GUI_INFO_Y2 + 30])
 
     ###########
     # UPDATES #
