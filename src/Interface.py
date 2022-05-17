@@ -49,6 +49,7 @@ class Interface():
         #ya estan en game select
         #self.aceptarRect = pg.Rect(ACEPTAR_POS[0], ACEPTAR_POS[1], 260, 40)
         #self.cancelarRect = pg.Rect(CANCELAR_POS[0], CANCELAR_POS[1], 260, 40)
+        self.botonRazaTerran = {"nombre": "Terran", "tipo": "raza", "rect": pg.Rect(TERRAN_POS[0], TERRAN_POS[1], 185, 35), "press": False, "raza": Race.TERRAN}
         self.botonesNewGame = [
             {"nombre": "1", "tipo": "mapa", "rect": pg.Rect(MAPA1_POS[0], MAPA1_POS[1], 90, 35), "press": False},
             {"nombre": "2", "tipo": "mapa", "rect": pg.Rect(MAPA2_POS[0], MAPA2_POS[1], 90, 35), "press": False},
@@ -57,7 +58,7 @@ class Interface():
             {"nombre": "Facil", "tipo": "dificultad", "rect": pg.Rect(FACIL_POS[0], FACIL_POS[1], 125, 35), "press": False, "dif": EASY},
             {"nombre": "Normal", "tipo": "dificultad", "rect": pg.Rect(NORMAL_POS[0], NORMAL_POS[1], 125, 35), "press": False, "dif": MEDIUM},
             {"nombre": "Dificil", "tipo": "dificultad", "rect": pg.Rect(DIFICIL_POS[0], DIFICIL_POS[1], 125, 35), "press": False, "dif": HARD},
-            {"nombre": "Terran", "tipo": "raza", "rect": pg.Rect(TERRAN_POS[0], TERRAN_POS[1], 185, 35), "press": False, "raza": Race.TERRAN},
+            self.botonRazaTerran,
             {"nombre": "Zerg","tipo": "raza", "rect": pg.Rect(ZERG_POS[0], ZERG_POS[1], 185, 35), "press": False, "raza": Race.ZERG},
         ]
 
@@ -320,12 +321,15 @@ class Interface():
                 print(options)
                 raza = None
                 dif = None
-                if options[1] == "Zerg":
-                    print("Contra terran")
-                    raza = Race.TERRAN
-                else:
-                    print("Contra zerg")
+                if options[0] == "4":
                     raza = Race.ZERG
+                else:
+                    if options[1] == "Zerg":
+                        print("Contra terran")
+                        raza = Race.TERRAN
+                    else:
+                        print("Contra zerg")
+                        raza = Race.ZERG
                 if options[2] == "Dificil":
                     print("DIFICIL")
                     dif = HARD
@@ -420,10 +424,13 @@ class Interface():
                 _escena, _raton, _camera = loadHardcodedMap(self.selectedMap + "_" + self.selectedRaza["nombre"])
                 escena.setSelf(_escena)
                 raza = None
-                if self.selectedRaza['raza'] == Race.TERRAN:
+                if self.selectedMap == "4":
                     raza = Race.ZERG
                 else:
-                    raza = Race.TERRAN
+                    if self.selectedRaza['raza'] == Race.TERRAN:
+                        raza = Race.ZERG
+                    else:
+                        raza = Race.TERRAN
                 if Utils.DEBBUG == False:
                     aI = AI(escena.p2, raza, self.selectedDif['dif'])
                 else:
@@ -461,6 +468,12 @@ class Interface():
         else:
             self.soundPlayed = False
 
+        
+        if self.botonRazaTerran in self.botonesNewGame and self.selectedMap == "4":
+            self.botonesNewGame.remove(self.botonRazaTerran)
+            self.selectedRaza = {"nombre":"Zerg", "raza": Race.ZERG}
+        elif self.botonRazaTerran not in self.botonesNewGame and self.selectedMap != "4":
+            self.botonesNewGame.append(self.botonRazaTerran)
         for b in self.botonesNewGame:
             if self.mouse.isCollide(b['rect']):
                 endPos = self.mouse.getPosition()

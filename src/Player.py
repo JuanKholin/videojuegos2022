@@ -99,9 +99,13 @@ class Player():
                 enemy = self.mapa.getNearbyRival(unit.occupiedTile, self)
                 #print(type(enemy))
                 if enemy != None:
-                    print("ataco a otro")
-                    unit.siendoAtacado = True
-                    unit.atacante = enemy
+                    if unit.state == UnitState.STILL:
+                        unit.attack(enemy)
+                    else:
+                        print("ataco a otro")
+                        unit.siendoAtacado = True
+                        unit.atacante = enemy
+                        print(unit.atacante)
                 else:
                     if unit.state == UnitState.STILL:
                         unit.updateOwnSpace()

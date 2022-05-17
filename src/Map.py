@@ -587,7 +587,7 @@ class Map():
                 currentTile = currentTile.padre
             #print(currentTile.tileid)
             i = path.__len__() - 1
-            #print("AAAAAAAAAAAA")
+            #print("--------------------")
             while i >= 0:
                 pathReturn.append(path[i])
                 i = i - 1

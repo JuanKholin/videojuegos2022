@@ -15,7 +15,7 @@ from ..Utils import *
 HP = 1500
 GENERATION_TIME = 120
 MINERAL_COST = 400
-LIMIT_MINADO = 1600
+LIMIT_MEJORA = 10
 CAPACITY = 10
 
 class TerranBuilder(Structure):
@@ -64,12 +64,12 @@ class TerranBuilder(Structure):
         self.paths = []
 
         #MEJORAR LAS UNIDADES
-        self.damageMineralUpCost = 50
-        self.damageGasUpCost = 50
-        self.armorMineralUpCost = 50
-        self.armorGasUpCost = 50
-        self.mineMineralUpCost = 50
-        self.mineGasUpCost = 50
+        self.damageMineralUpCost = 25
+        self.damageGasUpCost = 5
+        self.armorMineralUpCost = 25
+        self.armorGasUpCost = 5
+        self.mineMineralUpCost = 25
+        self.mineGasUpCost = 5
 
         self.type = TERRAN_BASE
        
@@ -94,24 +94,24 @@ class TerranBuilder(Structure):
                 #print("xd")
                 self.generateUnit(terranWorker)
                 self.state = BuildingState.SPAWNING
-        elif command_id == CommandId.UPGRADE_SOLDIER_DAMAGE and self.player.resources and self.player.resources >= self.damageMineralUpCost and self.player.gas >= self.damageGasUpCost:
+        elif command_id == CommandId.UPGRADE_SOLDIER_DAMAGE and self.player.resources and self.player.resources >= self.damageMineralUpCost and self.player.gas >= self.damageGasUpCost and self.player.dañoUpgrade <= LIMIT_MEJORA:
             self.player.resources -= self.damageMineralUpCost
             self.player.gas -= self.damageGasUpCost
             self.player.dañoUpgrade += 1
             self.damageMineralUpCost += 25
-            self.damageGasUpCost += 25
-        elif command_id == CommandId.UPGRADE_SOLDIER_ARMOR and self.player.resources and self.player.gas >= self.armorGasUpCost and self.player.resources >= self.armorMineralUpCost:
+            self.damageGasUpCost += 5
+        elif command_id == CommandId.UPGRADE_SOLDIER_ARMOR and self.player.resources and self.player.gas >= self.armorGasUpCost and self.player.resources >= self.armorMineralUpCost and self.player.armorUpgrade <= LIMIT_MEJORA:
             self.player.resources -= self.armorMineralUpCost
             self.player.gas -= self.armorGasUpCost
             self.player.armorUpgrade += 1
             self.armorMineralUpCost += 25
-            self.armorGasUpCost += 25
-        elif command_id == CommandId.UPGRADE_WORKER_MINING and self.player.resources and self.player.resources >= self.mineMineralUpCost and self.player.gas >= self.mineGasUpCost and self.player.mineUpgrade != LIMIT_MINADO:
+            self.armorGasUpCost += 5
+        elif command_id == CommandId.UPGRADE_WORKER_MINING and self.player.resources and self.player.resources >= self.mineMineralUpCost and self.player.gas >= self.mineGasUpCost and self.player.mineUpgrade <= LIMIT_MEJORA:
             self.player.resources -= self.mineMineralUpCost
             self.player.gas -= self.mineGasUpCost
-            self.player.mineUpgrade += 200
+            self.player.mineUpgrade += 1
             self.mineMineralUpCost += 25
-            self.mineGasUpCost += 25
+            self.mineGasUpCost += 5
         elif command_id == CommandId.BUILD_BARRACKS and self.player.resources >= TERRAN_BARRACKS_MINERAL_COST:
             self.raton.building = True
             #print("mi raton: ", self.raton.id)

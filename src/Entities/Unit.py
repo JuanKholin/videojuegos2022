@@ -101,7 +101,7 @@ class Unit(Entity):
     # Indica a la unidad que ataque al objetivo seleccionado, si se encuentra un
     # obstaculo de camino lo esquivara y si el objetivo se desplaza este le seguira
     def attack(self, objective):
-        if (self.attackedOne != objective) or (self.state != UnitState.ATTACKING) and self.state != UnitState.DYING and self.state != UnitState.DEAD:
+        if ((self.attackedOne != objective) or (self.state != UnitState.ATTACKING)) and self.state != UnitState.DYING and self.state != UnitState.DEAD:
             self.mapa.setLibre(self.occupiedTile)
             if objective.esEstructura == False:
                 #print("Atacamos a una unidad")
@@ -239,28 +239,29 @@ class Unit(Entity):
 
     # Aplica un frame a la unidad que esta atacando
     def updateAttacking(self):
-        if(self.id == 2):
-            #print("ATACANDO")
-            pass
-        if self.attackedOne.getHP() > 0:
-            '''tileActual = self.getTile()
-            enemyTile = self.attackedOne.getTile()'''
-            #print("Estoy en: ", tileActual.tileid, "y el enemigo en: ", enemyTile.tileid)
-            #print(int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) )
-            if len(self.paths) > 0:
-                self.updateAttackingRoute()
-            else:
-                self.updateAttackInRange()
-        else: # Se murio el objetivo, pasa a estar quieto
-            self.attackedOne = None
-            enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
-            #print(type(enemy))
-            if enemy != None:
-                #print("ataco a otro")
-                self.attack(enemy)
-            else:
-                #print("no hay naide")
-                self.changeToStill()
+        if self.state != UnitState.DEAD and self.state != UnitState.DYING:
+            if(self.id == 2):
+                #print("ATACANDO")
+                pass
+            if self.attackedOne.getHP() > 0:
+                '''tileActual = self.getTile()
+                enemyTile = self.attackedOne.getTile()'''
+                #print("Estoy en: ", tileActual.tileid, "y el enemigo en: ", enemyTile.tileid)
+                #print(int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) )
+                if len(self.paths) > 0:
+                    self.updateAttackingRoute()
+                else:
+                    self.updateAttackInRange()
+            else: # Se murio el objetivo, pasa a estar quieto
+                self.attackedOne = None
+                enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
+                #print(type(enemy))
+                if enemy != None:
+                    #print("ataco a otro")
+                    self.attack(enemy)
+                else:
+                    #print("no hay naide")
+                    self.changeToStill()
 
     # Aplica un frame a la unidad que esta minando
     # El minado es especifico de worker por lo que lo implementa worker
@@ -515,7 +516,7 @@ class Unit(Entity):
 
     # Para inflingir un ataque a una unidad
     def makeAnAttack(self):
-        hpLeft = self.attackedOne.beingAttacked(self.damage + self.player.dañoUpgrade, self)
+        hpLeft = self.attackedOne.beingAttacked(self.damage* (1 + self.player.dañoUpgrade*DANYO_MEJORA), self)
         if hpLeft <= 0:
             #print("Se queda sin vida")
             enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
@@ -526,7 +527,7 @@ class Unit(Entity):
 
     # Para reflejar sobre una unidad que recibe un ataque
     def beingAttacked(self, damage, attacker):
-        if self.hp <= (damage - self.player.armorUpgrade):
+        if self.hp <= (damage - (damage * self.player.armorUpgrade*ARMOR_MEJORA)):
             self.attackedOne = None
             self.changeToDying()
         else:
