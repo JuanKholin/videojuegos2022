@@ -25,6 +25,7 @@ class System_State(Enum):
     EXIT = auto()
     INTRO = auto()
     SETTINGS = auto()
+    KEY_BINDING = auto()
 
 class Race(Enum):
     ZERG = auto()
@@ -243,10 +244,7 @@ EXIT_FB = "SPRITE/mainMenu/Exit/Spanish/exitones"
 EXIT_FB_N = 30
 EXIT_FB_POS = [680, 420]
 
-AJUSTES_SONIDO_TEXT_POS = [140, 656]
-AJUSTES_ATAJOS_TEXT_POS = [137, 704]
-AJUSTES_SONIDO_POS = [35, 636]
-AJUSTES_ATAJOS_POS = [35, 686]
+AJUSTES_POS = [60, 680]
 
     #############
     #GAME SELECT#
@@ -285,6 +283,38 @@ NEW_GAME = "SPRITE/newGame/"
 NEW_GAME_TEXT_SIZE = 30
 
 BARRA_COMANDO = "SPRITE/EXTRA/gui_frame"
+
+###############
+#GAME SETTINGS#
+###############
+
+SETTINGS = "SPRITE/settings/settings_bg"
+
+KEY_TO_TEXT = {
+     pygame.K_UP: "UP",
+     pygame.K_DOWN: "DOWN",
+     pygame.K_RIGHT: "RIGHT",
+     pygame.K_LEFT: "LEFT",
+     pygame.K_r: "R",
+     pygame.K_v: "V",
+     pygame.K_c: "C",
+     pygame.K_x: "X",
+     pygame.K_d: "D",
+     pygame.K_a: "A",
+     pygame.K_m: "M",
+     pygame.K_g: "G",
+}
+
+ATAJOS_TITLE_POS = [115, 25]
+ATAJOS_TITLE_TEXT_SIZE = 50
+COMANDO_COLUMN_POS = [150, 110]
+TECLA_COLUMN_POS = [800, 110]
+COLUMN_TEXT_SIZE = 35
+COMANDO_POS = [150, 170]
+TECLA_POS = [800, 170]
+ATAJO_TEXT_SIZE = 30
+Y_ATAJOS_OFFSET = 40;
+
 
 #----------------------------------------------------------------
 # GUI
@@ -454,7 +484,8 @@ def muestra_texto(pantalla,fuente,texto,color, dimensiones, pos):
     tipo_letra = pygame.font.Font(pygame.font.match_font(fuente), dimensiones)
     superficie = tipo_letra.render(texto,True, color)
     rectangulo = superficie.get_rect()
-    rectangulo.center = pos
+    rectangulo.x = pos[0]
+    rectangulo.y = pos[1]
     pantalla.blit(superficie,rectangulo)
 
 def aux(screen):

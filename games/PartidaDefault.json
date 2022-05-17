@@ -61,7 +61,8 @@
     },
     "da\u00f1oUpgrade": 0,
     "armorUpgrade": 0,
-    "mineUpgrade": 0
+    "mineUpgrade": 0,
+    "limitUnits": 9
   },
   "p2": {
     "units": [],
@@ -71,7 +72,8 @@
     "commandMap": {},
     "da\u00f1oUpgrade": 0,
     "armorUpgrade": 0,
-    "mineUpgrade": 0
+    "mineUpgrade": 0,
+    "limitUnits": 13
   },
   "mapa": {
     "w": 80,
