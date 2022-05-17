@@ -1,6 +1,7 @@
 import pygame as pg
 
 from ..Utils import *
+from .. import Utils
 
 class Resource():
     def __init__(self, x, y, resourceType, capacity):
@@ -47,8 +48,8 @@ class Resource():
 
     def drawInfo(self, screen, color):
         dic = self.toDictionary()
-        muestra_texto(screen, str('monotypecorsiva'), dic['nombre'], color, 25, [GUI_INFO_X2, GUI_INFO_Y2])
-        muestra_texto(screen, str('monotypecorsiva'), dic['funcion'], color, 20, [GUI_INFO_X2, GUI_INFO_Y2 + 50])
+        muestra_texto(screen, str('monotypecorsiva'), dic['nombre'], color, 25, [Utils.ScreenWidth/2 - GUI_INFO_X2 + 30, Utils.ScreenHeight - GUI_INFO_Y2 + 10])
+        muestra_texto(screen, str('monotypecorsiva'), dic['funcion'], color, 20, [Utils.ScreenWidth/2 - GUI_INFO_X2 + 10, Utils.ScreenHeight - GUI_INFO_Y2 + 60])
 
     def getMined(self, cantidad):
         if (self.capacity <= 0):

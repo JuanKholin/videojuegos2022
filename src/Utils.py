@@ -5,7 +5,7 @@ from re import T
 from turtle import Screen
 import pygame
 
-DEBBUG = True
+DEBBUG = False
 
 BGM_VOLUME = 0.2
 SOUND_VOLUME = 0.5
@@ -310,12 +310,15 @@ BARRA_COMANDO = "SPRITE/EXTRA/gui_frame"
 #----------------------------------------------------------------
 # GUI
 #----------------------------------------------------------------
-BUTTON_X = MIN_SCREEN_WIDTH/2- 810
+BUTTON_X = MIN_SCREEN_WIDTH/2 - 810
 BUTTON_Y = MIN_SCREEN_HEIGHT - 575
 BUTTON_W = 60
 BUTTON_H = 55
-BUTTONPADY = 64
-BUTTONPADX = 74
+BUTTONPADY = -64
+BUTTONPADX = -74
+
+UPGRADEX = MIN_SCREEN_WIDTH/2 - 400
+UPGRADEY = MIN_SCREEN_HEIGHT - 705
 
 UPGRADEPADX = 80
 
@@ -324,10 +327,10 @@ MINIMAP_Y = MIN_SCREEN_HEIGHT - 560
 MINIMAP_W = 205
 MINIMAP_H = 205
 
-GUI_INFO_X = MIN_SCREEN_WIDTH/2 - 280
+GUI_INFO_X = MIN_SCREEN_WIDTH/2 - 270
 GUI_INFO_Y = MIN_SCREEN_HEIGHT - 610
 GUI_INFO_X2 = MIN_SCREEN_WIDTH/2 - 420
-GUI_INFO_Y2 = MIN_SCREEN_HEIGHT - 630
+GUI_INFO_Y2 = MIN_SCREEN_HEIGHT - 620
 
 RESOURCES_COUNT_X = 300
 
@@ -442,15 +445,21 @@ TERRAN_REFINERY_PATH = "SPRITE/structure/refinery/refinery000"
 TERRAN_REFINERY_MINERAL_COST = 50
 REFINERY_RENDER = "SPRITE/render/terranRefinery.png"
 
+##---------TERRAN_DEPOT------------------
+##---------DEPOT------------------
+TERRAN_DEPOT_PATH = "SPRITE/structure/supply_depot/tile00"
+TERRAN_DEPOT_RENDER = "SPRITE/render/terranSupply.png"
+TERRAN_DEPOT_MINERAL_COST = 50
+
 ##---------HATCHERY------------------
 HATCHERY_PATH = "SPRITE/structure/Hatchery/tile00"
 HATCHERY_RENDER = "SPRITE/render/hatchery.png"
 HATCHERY_MINERAL_COST = 100
 
 #-------------EXTRACTOR---------------
-EXTRACTOR_PATH = "SPRITE/structure/extractor/tile00"
-EXTRACTOR_RENDER = "SPRITE/render/extractor.png"
-EXTRACTOR_MINERAL_COST = 60
+ZERG_REFINERY_PATH = "SPRITE/structure/extractor/tile00"
+ZERG_REFINERY_RENDER = "SPRITE/render/extractor.png"
+ZERG_REFINERY_MINERAL_COST = 60
 
 #-----------BARRACKS_ZERG-------------
 ZERG_BARRACKS_PATH = "SPRITE/structure/zergBarracks/tile00"
@@ -463,14 +472,9 @@ S2_RENDER = "SPRITE/render/extractor.png"
 S2_MINERAL_COST = 60
 
 #-----------SUPPLY_ZERG-------------
-SUPPLY_ZERG_PATH = "SPRITE/structure/zergSupply/tile00"
-SUPPLY_ZERG_RENDER = "SPRITE/render/zergSupply.png"
-SUPPLY_ZERG_MINERAL_COST = 60
-
-##---------DEPOT------------------
-TERRAN_DEPOT_PATH = "SPRITE/structure/supply_depot/tile00"
-SUPPLY_RENDER = "SPRITE/render/terranSupply.png"
-TERRAN_DEPOT_MINERAL_COST = 50
+ZERG_DEPOT_PATH = "SPRITE/structure/zergSupply/tile00"
+ZERG_DEPOT_RENDER = "SPRITE/render/zergSupply.png"
+ZERG_DEPOT_MINERAL_COST = 60
 
 CRYSTAL_RENDER = "SPRITE/render/mineral.png"
 GEYSER_RENDER = "SPRITE/render/geyser.png"

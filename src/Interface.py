@@ -14,8 +14,6 @@ from src.AI import *
 class Interface():
     buttonX = 0
     buttonY = 0
-    upgradeX = 400
-    upgradeY = 705
     index = 0
     
     heropadx = 0
@@ -152,6 +150,8 @@ class Interface():
         allButton[Options.GENERATE_WORKER_TERRAN] = aux
         aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.GENERATE_T1, BUTTON_PATH + "construirConMineral.png", "Construir Soldado", 55, TERRAN_T1_MINERAL_COST)
         allButton[Options.GENERATE_T1_TERRAN] = aux
+        aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.GENERATE_T2, BUTTON_PATH + "construirConMineral.png", "Construir Soldado", 55, TERRAN_T2_MINERAL_COST)
+        allButton[Options.GENERATE_T2_TERRAN] = aux
         
         #Terran estructuras
         aux = Button.Button(BUTTON_PATH + "barracks" + ".bmp", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineral.png", "Construir Barracas", 55, TERRAN_BARRACKS_MINERAL_COST)
@@ -174,9 +174,9 @@ class Interface():
         #Zerg estructuras
         aux = Button.Button(BUTTON_PATH + "zergBarracks" + ".png", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineral.png", "Construir Colmena", 55, ZERG_BARRACKS_MINERAL_COST)
         allButton[Options.BUILD_BARRACKS_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "zergSupply" + ".png", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineral.png", "Construir Guarida", 55, SUPPLY_ZERG_MINERAL_COST, 45)
+        aux = Button.Button(BUTTON_PATH + "zergSupply" + ".png", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineral.png", "Construir Guarida", 55, ZERG_DEPOT_MINERAL_COST, 45)
         allButton[Options.BUILD_DEPOT_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "zergRefinery" + ".png", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineral.png", "Construir Extractor", 50, EXTRACTOR_MINERAL_COST, 45)
+        aux = Button.Button(BUTTON_PATH + "zergRefinery" + ".png", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineral.png", "Construir Extractor", 50, ZERG_REFINERY_MINERAL_COST, 45)
         allButton[Options.BUILD_REFINERY_ZERG] = aux
         #aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.BUILD_HATCHERY)
         #allButton[Options.BUILD_HATCHERY] = aux
@@ -583,7 +583,6 @@ class Interface():
             
     def updateOnGame(self):
         #si esta en GUI desactivar funciones de raton
-        self.escena.update()
         if getGameState2() == System_State.PLAYING or getGameState2() == System_State.LOAD:
             
             self.updatePLAY()
@@ -599,13 +598,9 @@ class Interface():
         if frame(10):
             self.heroeIndex = (self.heroeIndex+1)%HEROE_N
     
-    def updateHELP(self):
-        self.mouse.setEnable(False)
-        self.helpButtons =  self.getHelpButton()
-    
     def updatePAUSED(self):
         pass
-            
+    
     def updatePLAY(self):
         
         if self.checkInGUIPosition():
@@ -735,8 +730,7 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), self.selectedRaza['nombre'], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-745), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-390)))
 
         elif Utils.state == System_State.ONGAME:
-            screen.blit(self.pauseButton.image, (0, 0))
-            pygame.draw.rect(screen, BLUE, self.pauseRect, 1)
+            self.pauseButton.draw(screen, 0, 0)
             if DEBBUG == True:
                 muestra_texto(screen, str('monotypecorsiva'), str(round(Utils.SYSTEM_CLOCK / CLOCK_PER_SEC)), BLACK, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  20), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 20)))
                 muestra_texto(screen, times, str(self.player.resources), BLUE, 30, (ScreenWidth - 40, 60))
@@ -769,7 +763,7 @@ class Interface():
             opcion = 0
             for b in self.button:
                 opcion += 1
-                b.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - self.buttonX), Utils.ScreenHeight - (MIN_SCREEN_HEIGHT - self.buttonY))
+                b.draw(screen, Utils.ScreenWidth/2 - self.buttonX, Utils.ScreenHeight - self.buttonY)
                 self.buttonX += BUTTONPADX
                 if opcion % 3 == 0:
                     self.buttonY += BUTTONPADY
@@ -780,6 +774,7 @@ class Interface():
             if getGameState2() == System_State.HELP:
                 
                 self.drawHELP(screen)
+                
             elif getGameState2() == System_State.PAUSED:
                 
                 self.drawPause(screen)
@@ -821,7 +816,7 @@ class Interface():
 
     def drawHELP(self, screen):
         screen.blit(self.helpPageSprites[self.helpPage], (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80)))
-         
+
         self.helpButtons[2].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 703), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 84))
         if self.helpPage > 0:
             self.helpButtons[0].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 304), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 95))
@@ -997,23 +992,24 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), "ataca a distancia", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 660)))
         '''    
     def drawPause(self, screen):
-        pygame.draw.rect(screen, BLACK, pygame.Rect(Utils.ScreenWidth/4, Utils.ScreenHeight/9, Utils.ScreenWidth/2, Utils.ScreenHeight/1.9))
-        pygame.draw.rect(screen, BLUE2, pygame.Rect(Utils.ScreenWidth/4, Utils.ScreenHeight/9, Utils.ScreenWidth/2, Utils.ScreenHeight/1.9), 4)
-        pygame.draw.rect(screen, BLUE2, self.helpPauseRect, 1)
-        screen.blit(self.exitPauseButton.image, (self.exitPauseRect.x, self.exitPauseRect.y))
-        screen.blit(self.helpPauseButton.image, (self.helpPauseRect.x, self.helpPauseRect.y))
-        self.saveButton.draw(screen, 400,200)
-        self.saveAndExitButton.draw(screen, 400, 290)
-        self.exitButton.draw(screen, 400, 380)
-        muestra_texto(screen, str('monotypecorsiva'), "MENU DE PAUSA", WHITE, 30, (490, 120))
-        muestra_texto(screen, str('monotypecorsiva'), "Guardar", GREEN, 26, (480, 210))
-        muestra_texto(screen, str('monotypecorsiva'), "Guardar y Salir", GREEN, 26, (480, 300))
-        muestra_texto(screen, str('monotypecorsiva'), "Salir sin guardar", GREEN, 26, (480, 390))
+        pygame.draw.rect(screen, BLACK, pygame.Rect(Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80), 512, 500))
+        pygame.draw.rect(screen, BLUE2, pygame.Rect(Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80), 512, 500), 4)
+        
+        self.helpPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 245), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
+        self.exitPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 688), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
+        self.saveButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 380), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 -200))
+        self.saveAndExitButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 380), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 -290))
+        self.exitButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 380), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 -380))
+        
+        muestra_texto(screen, str('monotypecorsiva'), "MENU DE PAUSA", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 385), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 120)))
+        muestra_texto(screen, str('monotypecorsiva'), "Guardar", GREEN, 26, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 460), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 210)))
+        muestra_texto(screen, str('monotypecorsiva'), "Guardar y Salir", GREEN, 26, ((Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 460), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 300))))
+        muestra_texto(screen, str('monotypecorsiva'), "Salir sin guardar", GREEN, 26, ((Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 460), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 390))))
     
     def drawEntityInfo(self, screen, camera):
         if len(self.player.unitsSelected) == 1:
             upgrades = self.getUpgrades(self.player.unitsSelected[0].getUpgrades())
-            self.showInfo(screen, self.player.unitsSelected[0], GREEN3, 10, 10, 60, 135, upgrades)
+            self.showInfo(screen, self.player.unitsSelected[0], GREEN3, 10, 10, 25, 125, upgrades)
         elif len(self.player.unitsSelected) > 1:
             images = []
             for unit in self.player.unitsSelected:
@@ -1033,7 +1029,7 @@ class Interface():
                 if n == 8:
                     break
         if len(self.player.enemySelected) == 1:
-            self.showInfo(screen, self.player.enemySelected[0], RED, 10, 10, 60, 135)
+            self.showInfo(screen, self.player.enemySelected[0], RED, 10, 10, 25, 125)
         elif len(self.player.enemySelected) > 1:
             images = []
             for unit in self.player.enemySelected:
@@ -1053,24 +1049,24 @@ class Interface():
                 if n == 8:
                     break
         elif self.player.structureSelected != None:
-            self.showInfo(screen, self.player.structureSelected, GREEN3, 0, 5, 60, 135)
+            self.showInfo(screen, self.player.structureSelected, GREEN3, 0, 5, 20, 120)
         elif self.player.enemyStructureSelected != None:
-            self.showInfo(screen, self.player.enemyStructureSelected, RED, 0, 5, 60, 135)
+            self.showInfo(screen, self.player.enemyStructureSelected, RED, 0, 5, 20, 120)
         elif self.player.resourceSelected != None:
             image = self.player.resourceSelected.getRender()
             capacity = str(self.player.resourceSelected.getCapacity())
 
             screen.blit(image, (Utils.ScreenWidth/2 - GUI_INFO_X, Utils.ScreenHeight - GUI_INFO_Y))
-            muestra_texto(screen, 'monotypecorsiva', capacity, YELLOW, 20, [Utils.ScreenWidth/2 - GUI_INFO_X + 60, Utils.ScreenHeight - GUI_INFO_Y + 135])
+            muestra_texto(screen, 'monotypecorsiva', capacity, YELLOW, 20, [Utils.ScreenWidth/2 - GUI_INFO_X + 40, Utils.ScreenHeight - GUI_INFO_Y + 125])
             self.player.resourceSelected.drawInfo(screen, YELLOW)
 
     def showInfo(self, screen, unit, color, renderX = 0, renderY = 0, hpX = 0, hpY = 0, upgrades = None):
         image = unit.getRender()
         hpState = str(unit.getHP()) + "/" + str(unit.getMaxHP())
-        x = self.upgradeX
+        x = Utils.ScreenWidth/2 - UPGRADEX
         if upgrades != None: #Dibujar las upgrades
             for upgrade in upgrades:
-                upgrade.draw(screen, x, self.upgradeY)
+                upgrade.draw(screen, x, Utils.ScreenHeight - UPGRADEY)
                 x += UPGRADEPADX
         screen.blit(image, (Utils.ScreenWidth/2 - GUI_INFO_X + renderX, Utils.ScreenHeight - GUI_INFO_Y + renderY))
         muestra_texto(screen, 'monotypecorsiva', hpState, color, 20, [Utils.ScreenWidth/2 - GUI_INFO_X + hpX, Utils.ScreenHeight -  GUI_INFO_Y + hpY])

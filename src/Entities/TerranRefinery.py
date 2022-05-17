@@ -80,7 +80,7 @@ class TerranRefinery(Structure):
     def drawBuildTiles(self, screen, camera, tiles):
         for tile in tiles:
             r = tile.getRect()
-            if tile.type == GEYSER:
+            if tile.type == GEYSER and tile.visible:
                 pygame.draw.rect(screen, GREEN, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
             else:
                 pygame.draw.rect(screen, RED, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
@@ -90,14 +90,14 @@ class TerranRefinery(Structure):
         if self.resource != None:
             muestra_texto(screen, str('monotypecorsiva'), str(self.resource.capacity), BLUE, 20, [60, 10])
 
-    def checkTiles(self):
+    def checkTiles(self, visible = True):
         r = self.getRect()
         tiles = self.mapa.getRectTiles(r)
         ok = True
         tiles_set = set(tiles)
         if len(tiles_set) == self.TILES_HEIGHT * self.TILES_WIDTH:
             for tile in tiles_set:
-                if tile.type != GEYSER:
+                if tile.type != GEYSER or (not tile.visible and visible):
                     ok = False
                     break
         else:
