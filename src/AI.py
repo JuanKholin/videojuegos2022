@@ -82,7 +82,6 @@ class AI():
         elif self.rotativeReaction == 2:
             self.restoreArmy(units, structures)
         elif self.rotativeReaction == 3:
-            print("GATHER")
             self.gatherResources(units, structures)
         elif self.rotativeReaction == 4:
             self.updateInvaders()
@@ -140,8 +139,10 @@ class AI():
             if unit.attackedOne != None:
                 objectivesSet.add(unit.attackedOne)
         objectivesList = list(objectivesSet) # Lo pasa a lista por comodi<padre_en_ingles>
-        if self.getBase(structures).lastAttacker != None:
+        base = self.getBase(structures)
+        if (base != None) and (base.lastAttacker != None):
             defenses = self.getFreeUnits(units)
+            base.lastAttacker = None
         else:
             defenses = self.getSoldiers(units)
         if len(objectivesList) > 0: # Si hay amenazas reparte las tropas libres a por ellas
@@ -151,21 +152,14 @@ class AI():
                 i = (i + 1) % len(objectivesList)
 
     # Si la IA tiene al menos una estructura puede construir mas, se considera build minima
-    # un edificio de cada
+    # un edificio de cada y los suficientes para albergar tropas actuales + 1
     def minimalBuild(self, structures):
         if self.haveBase(structures):
             if not self.haveBarracks(structures):
                 self.buildBarracks(structures)
-            elif not self.haveDepot(structures):
-                if (self.depot == ZERG_DEPOT) and (self.data.resources >= ZERG_DEPOT_MINERAL_COST):
-                    #print("Construye zergdepot")
-                    self.data.resources -= ZERG_DEPOT_MINERAL_COST
-                    self.buildZergDepot(structures) # Seria Zerg pero no hay edificio xd
-                elif (self.depot == TERRAN_DEPOT) and (self.data.resources >= TERRAN_DEPOT_MINERAL_COST):
-                    #print("Construye terrandepot")
-                    self.data.resources -= TERRAN_DEPOT_MINERAL_COST
-                    self.buildTerranDepot(structures)
-            
+            elif (not self.haveDepot(structures)) or (self.data.limitUnits <= len(self.data.units) + 1):
+                self.buildDepot(structures)
+
     # Si faltan workers o soldados los genera, si tiene recursos y hay edificios libres para ello
     def restoreArmy(self, units, structures):
         nWorkers = 0
@@ -199,11 +193,10 @@ class AI():
             for worker in workers:
                 if (worker.state == UnitState.EXTRACTING) or (worker.state == UnitState.GAS_TRANSPORTING):
                     skipGasNeed = True 
-            if not skipGasNeed and self.data.resources >= TERRAN_REFINERY_MINERAL_COST: # Si hay al menos un worker extrayendo gas no es necesario hacer nada de gas
+            if not skipGasNeed: # Si hay al menos un worker extrayendo gas no es necesario hacer nada de gas
                 gasMan = workers.pop()
                 geyser = self.getGeyserInUse(structures)
                 if (geyser != None) and (geyser.state == BuildingState.OPERATIVE):
-                    print("crying", geyser.getTile().ocupante)
                     gasMan.extract(geyser.getTile())
                 elif geyser == None:
                     geyser = self.findFreeGeyser(units, structures)
@@ -324,10 +317,6 @@ class AI():
     # Tambien construye un almacen si los recursos estan cerca del tope o construye otro
     # barracks si estan todos los edificios trabajando
     def armyExpansion(self, structures):
-        # Almacen extra
-        if self.data.limitUnits <= len(self.data.units) + 3:
-            self.buildDepot(structures)
-
         # Barracks extra
         needExtraBarrack = True
         for structure in structures:
@@ -475,6 +464,8 @@ class AI():
         if (buildX != None) and (buildY != None):
             toBuild = ZergBarracks(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
             self.data.addStructures(toBuild)
+            return True
+        return False
 
     # Construye un barracks de los Terran cerca de una estructura aliada aleatoria
     def buildTerranBarracks(self, structures):
@@ -497,6 +488,8 @@ class AI():
         if (buildX != None) and (buildY != None):
             toBuild = ZergSupply(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
             self.data.addStructures(toBuild)
+            return True
+        return False
 
     # Construye un depot de los Terran cerca de una estructura aliada aleatoria
     def buildTerranDepot(self, structures):
@@ -508,6 +501,8 @@ class AI():
         if (buildX != None) and (buildY != None):
             toBuild = TerranSupplyDepot(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)            
             self.data.addStructures(toBuild)
+            return True
+        return False
 
     # Construye un edificio de explotacion de geiseres en el geiser geyser
     def buildGeyserBuilding(self, geyser):
@@ -516,7 +511,7 @@ class AI():
             self.data.resources -= ZERG_GEYSER_STRUCTURE_MINERAL_COST
             toBuild = Extractor(int(geyser.x / 40) - 1, int(geyser.y / 40), self.data, self.mapa, True, geyser)
             self.data.addStructures(toBuild)
-            toBuild.buildProcess()
+            #toBuild.buildProcess()
         elif (self.geyserBuilding == TERRAN_GEYSER_STRUCTURE) and (self.data.resources >= TERRAN_GEYSER_STRUCTURE_MINERAL_COST):
             #print("Construye terrangeyserstructure")
             self.data.resources -= TERRAN_GEYSER_STRUCTURE_MINERAL_COST
@@ -528,7 +523,7 @@ class AI():
             self.data.resources -= PROTOSS_GEYSER_STRUCTURE_MINERAL_COST
             toBuild = ProtossGeyserStructure(0, 0, self.data, self.mapa, True, geyser)
             self.data.addStructures(toBuild)
-            toBuild.buildProcess()
+            #toBuild.buildProcess()
 
     # Devuelve una direccion por la que avanzar para probar construcciones
     def getDirection(self, direction):
@@ -601,30 +596,42 @@ class AI():
         if (self.barracks == ZERG_BARRACKS) and (self.data.resources >= ZERG_BARRACKS_MINERAL_COST):
             #print("Construye zergbarracks")
             self.data.resources -= ZERG_BARRACKS_MINERAL_COST
-            self.buildZergBarracks(structures)
+            builded = self.buildZergBarracks(structures)
+            if not builded:
+                self.data.resources += ZERG_BARRACKS_MINERAL_COST
         elif (self.barracks == TERRAN_BARRACKS) and (self.data.resources >= TERRAN_BARRACKS_MINERAL_COST):
             #print("Construye terranbarracks")
             self.data.resources -= TERRAN_BARRACKS_MINERAL_COST
-            self.buildTerranBarracks(structures)
+            builded = self.buildTerranBarracks(structures)
+            if not builded:
+                self.data.resources += TERRAN_BARRACKS_MINERAL_COST
         elif (self.barracks == PROTOSS_BARRACKS) and (self.data.resources >= PROTOSS_BARRACKS_MINERAL_COST):
             #print("Construye protossbarracks")
             self.data.resources -= PROTOSS_BARRACKS_MINERAL_COST
-            self.buildProtossBarracks(structures)
+            builded = self.buildProtossBarracks(structures)
+            if not builded:
+                self.data.resources += PROTOSS_BARRACKS_MINERAL_COST
 
     # Manda construir un depot en funcion de la raza
     def buildDepot(self, structures):
         if (self.depot == ZERG_DEPOT) and (self.data.resources >= ZERG_DEPOT_MINERAL_COST):
             #print("Construye zergdepot")
             self.data.resources -= ZERG_DEPOT_MINERAL_COST
-            self.buildZergDepot(structures)
+            builded = self.buildZergDepot(structures)
+            if not builded:
+                self.data.resources += ZERG_DEPOT_MINERAL_COST
         elif (self.depot == TERRAN_DEPOT) and (self.data.resources >= TERRAN_DEPOT_MINERAL_COST):
             #print("Construye terrandepot")
             self.data.resources -= TERRAN_DEPOT_MINERAL_COST
-            self.buildTerranDepot(structures)
+            builded = self.buildTerranDepot(structures)
+            if not builded:
+                self.data.resources += TERRAN_DEPOT_MINERAL_COST
         elif (self.depot == PROTOSS_DEPOT) and (self.data.resources >= PROTOSS_DEPOT_MINERAL_COST):
             #print("Construye protossdepot")
             self.data.resources -= PROTOSS_DEPOT_MINERAL_COST
-            self.buildProtossDepot(structures)
+            builded = self.buildProtossDepot(structures)
+            if not builded:
+                self.data.resources += PROTOSS_DEPOT_MINERAL_COST
 
     # Devuelve si hay un edificio explotando un geyser o no
     def getGeyserInUse(self, structures):
