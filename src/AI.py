@@ -84,6 +84,7 @@ class AI():
         elif self.rotativeReaction == 2:
             self.restoreArmy(units, structures)
         elif self.rotativeReaction == 3:
+            print("gather")
             self.gatherResources(units, structures)
         elif self.rotativeReaction == 4:
             self.updateInvaders()
@@ -196,7 +197,7 @@ class AI():
                 if (worker.state == UnitState.EXTRACTING) or (worker.state == UnitState.GAS_TRANSPORTING):
                     skipGasNeed = True 
                     print(self.data.gas, "GASS")
-            if not skipGasNeed: # Si hay al menos un worker extrayendo gas no es necesario hacer nada de gas
+            if not skipGasNeed and self.data.gas >= TERRAN_REFINERY_MINERAL_COST: # Si hay al menos un worker extrayendo gas no es necesario hacer nada de gas
                 gasMan = workers.pop()
                 geyser = self.getGeyserInUse(structures)
                 if (geyser != None) and (geyser.state == BuildingState.OPERATIVE):

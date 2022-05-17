@@ -49,6 +49,7 @@ class Interface():
         #ya estan en game select
         #self.aceptarRect = pg.Rect(ACEPTAR_POS[0], ACEPTAR_POS[1], 260, 40)
         #self.cancelarRect = pg.Rect(CANCELAR_POS[0], CANCELAR_POS[1], 260, 40)
+        self.botonRazaTerran = {"nombre": "Terran", "tipo": "raza", "rect": pg.Rect(TERRAN_POS[0], TERRAN_POS[1], 185, 35), "press": False, "raza": Race.TERRAN}
         self.botonesNewGame = [
             {"nombre": "1", "tipo": "mapa", "rect": pg.Rect(MAPA1_POS[0], MAPA1_POS[1], 90, 35), "press": False},
             {"nombre": "2", "tipo": "mapa", "rect": pg.Rect(MAPA2_POS[0], MAPA2_POS[1], 90, 35), "press": False},
@@ -57,7 +58,7 @@ class Interface():
             {"nombre": "Facil", "tipo": "dificultad", "rect": pg.Rect(FACIL_POS[0], FACIL_POS[1], 125, 35), "press": False, "dif": EASY},
             {"nombre": "Normal", "tipo": "dificultad", "rect": pg.Rect(NORMAL_POS[0], NORMAL_POS[1], 125, 35), "press": False, "dif": MEDIUM},
             {"nombre": "Dificil", "tipo": "dificultad", "rect": pg.Rect(DIFICIL_POS[0], DIFICIL_POS[1], 125, 35), "press": False, "dif": HARD},
-            {"nombre": "Terran", "tipo": "raza", "rect": pg.Rect(TERRAN_POS[0], TERRAN_POS[1], 185, 35), "press": False, "raza": Race.TERRAN},
+            self.botonRazaTerran,
             {"nombre": "Zerg","tipo": "raza", "rect": pg.Rect(ZERG_POS[0], ZERG_POS[1], 185, 35), "press": False, "raza": Race.ZERG},
         ]
 
@@ -74,6 +75,12 @@ class Interface():
         self.exit = cargarSprites(EXIT, EXIT_N, True, BLACK, EXIT_SIZE)
         self.singleSelected = cargarSprites(SINGLE_PLAYER_FB, SINGLE_PLAYER_FB_N, True, BLACK, SINGLE_SIZE)
         self.exitSelected = cargarSprites(EXIT_FB, EXIT_FB_N, True, BLACK, EXIT_SIZE)
+
+        #PAUSE
+        self.pauseRect = pg.Rect(0, 0, 50, 50)
+        self.continueRect = pg.Rect(710,90,50,50)
+        self.helpPauseRect = pg.Rect(265,90,50,50)
+        self.exitPauseRect = pg.Rect(700,90,50,50)
 
         self.loadGameGUI()
 
@@ -116,6 +123,8 @@ class Interface():
         #HELP
         self.helpPage = 1
 
+        
+
     def loadGameGUI(self):
         self.gui = pg.image.load(BARRA_COMANDO + ".bmp")
         self.gui = pg.transform.scale(self.gui, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -130,60 +139,75 @@ class Interface():
 
         self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unit.png"), (25, 25)))
         self.resources[2].set_colorkey(BLACK)
-
+        self.allButton = []
         self.allButton = self.loadAllButton()
         self.allUpgrades = self.loadAllUpgrades()
         #print("LOADEADOS")
 
     def loadAllButton(self):
-        allButton = {}
-        aux = Button.Button(BUTTON_PATH + "barracks" + ".bmp", CommandId.BUILD_BARRACKS, BUTTON_PATH + "construirConMineral.png", "Construir Barracas", 55, TERRAN_BARRACKS_MINERAL_COST)
-        allButton[Options.BUILD_BARRACKS_TERRAN] = aux
-        aux = Button.Button(BUTTON_PATH + "drone" + ".png", CommandId.GENERATE_WORKER,BUTTON_PATH + "construirConMineral.png", "Engendrar Drone", 55, ZERG_WORKER_MINERAL_COST)
-        allButton[Options.GENERATE_WORKER_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "zergling" + ".png", CommandId.GENERATE_T1,BUTTON_PATH + "construirConMineral.png", "Engendrar Zergling", 55, ZERG_T1_MINERAL_COST)
-        allButton[Options.GENERATE_T1_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "broodling" + ".png", CommandId.GENERATE_T2,BUTTON_PATH + "construirConMineral.png", "Engendrar Broodling", 55, ZERG_T2_MINERAL_COST)
-        allButton[Options.GENERATE_T2_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "firebat" + ".png", CommandId.GENERATE_T2,BUTTON_PATH + "construirConMineral.png", "Entrenar Firebat", 55, TERRAN_T2_MINERAL_COST)
-        allButton[Options.GENERATE_T2_TERRAN] = aux
-        aux = Button.Button(BUTTON_PATH + "goliath" + ".png", CommandId.GENERATE_T3,BUTTON_PATH + "construirConMineral.png", "Contruir Goliath", 55, TERRAN_T3_MINERAL_COST)
-        allButton[Options.GENERATE_T3_TERRAN] = aux
-        aux = Button.Button(BUTTON_PATH + "hydralisk" + ".png", CommandId.GENERATE_T3,BUTTON_PATH + "construirConMineral.png", "Engendrar Hydralisk", 55, ZERG_T3_MINERAL_COST)
-        allButton[Options.GENERATE_T3_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "worker" + ".bmp", CommandId.GENERATE_WORKER, BUTTON_PATH + "construirConMineral.png", "Construir VCE", 45, ZERG_WORKER_MINERAL_COST)
-        allButton[Options.GENERATE_WORKER_TERRAN] = aux
-        aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.GENERATE_T1, BUTTON_PATH + "construirConMineral.png", "Entrenar Soldado", 55, ZERG_T1_MINERAL_COST)
-        allButton[Options.GENERATE_T1_TERRAN] = aux
-        aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.BUILD_HATCHERY)
-        allButton[Options.BUILD_HATCHERY] = aux
-        aux = Button.Button(BUTTON_PATH + "refinery" + ".bmp", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineral.png", "Construir Refineria", 50, EXTRACTOR_MINERAL_COST, 45)
-        allButton[Options.BUILD_REFINERY_TERRAN] = aux
-        aux = Button.Button(BUTTON_PATH + "depot" + ".bmp", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineral.png", "Construir Deposito", 55, TERRAN_DEPOT_MINERAL_COST, 45)
-        allButton[Options.BUILD_DEPOT_TERRAN] = aux
-        aux = Button.Button(BUTTON_PATH + "zergRefinery" + ".png", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineral.png", "Construir Extractor", 50, EXTRACTOR_MINERAL_COST, 45)
-        allButton[Options.BUILD_REFINERY_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "zergSupply" + ".png", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineral.png", "Construir Deposito", 55, SUPPLY_ZERG_MINERAL_COST, 45)
-        allButton[Options.BUILD_DEPOT_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "zergBarracks" + ".png", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineral.png", "Construir Barracas", 55, BARRACKS_ZERG_MINERAL_COST)
-        allButton[Options.BUILD_BARRACKS_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "next" + ".png", CommandId.NEXT_PAGE)
-        aux.image.set_colorkey(BLACK)
-        allButton[Options.NEXT_PAGE] = aux
-        aux = Button.Button(BUTTON_PATH + "previous" + ".png", CommandId.PREVIOUS_PAGE)
-        aux.image.set_colorkey(BLACK)
-        allButton[Options.PREVIOUS_PAGE] = aux
-        aux = Button.Button(BUTTON_PATH + "close" + ".png", CommandId.RETURN_GAME)
-        aux.image.set_colorkey(BLACK)
-        allButton[Options.CLOSE] = aux
-        
-        aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "danyoUpgrade" + ".png", CommandId.UPGRADE_SOLDIER_DAMAGE,BUTTON_PATH + "cartelUpgrade.bmp", "Mejorar daño;de las unidades", 90, 50)
-        allButton[Options.DANYO_UPGRADE] = aux
-        aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "mineUpgrade" + ".png", CommandId.UPGRADE_WORKER_MINING,BUTTON_PATH + "cartelUpgrade.bmp", "Reducir tiempo de minado;de los VCE", 90, 50)
-        allButton[Options.MINE_UPGRADE] = aux
-        aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "armorUpgrade" + ".png", CommandId.UPGRADE_SOLDIER_ARMOR,BUTTON_PATH + "cartelUpgrade.bmp", "Mejorar blindaje;de las unidades", 90, 120)
-        allButton[Options.ARMOR_UPGRADE] = aux
-        return allButton
+        if self.allButton.__len__() == 0:
+            allButton = {}
+            aux = Button.Button(BUTTON_PATH + "barracks" + ".bmp", CommandId.BUILD_BARRACKS, BUTTON_PATH + "construirConMineral.png", "Construir Barracas", 55, TERRAN_BARRACKS_MINERAL_COST)
+            allButton[Options.BUILD_BARRACKS_TERRAN] = aux
+            aux = Button.Button(BUTTON_PATH + "drone" + ".png", CommandId.GENERATE_WORKER,BUTTON_PATH + "construirConMineral.png", "Engendrar Drone", 55, ZERG_WORKER_MINERAL_COST)
+            allButton[Options.GENERATE_WORKER_ZERG] = aux
+            aux = Button.Button(BUTTON_PATH + "zergling" + ".png", CommandId.GENERATE_T1,BUTTON_PATH + "construirConMineral.png", "Engendrar Zergling", 55, ZERG_T1_MINERAL_COST)
+            allButton[Options.GENERATE_T1_ZERG] = aux
+            aux = Button.Button(BUTTON_PATH + "broodling" + ".png", CommandId.GENERATE_T2,BUTTON_PATH + "construirConMineral.png", "Engendrar Broodling", 55, ZERG_T2_MINERAL_COST)
+            allButton[Options.GENERATE_T2_ZERG] = aux
+            aux = Button.Button(BUTTON_PATH + "firebat" + ".png", CommandId.GENERATE_T2,BUTTON_PATH + "construirConMineral.png", "Entrenar Firebat", 55, TERRAN_T2_MINERAL_COST)
+            allButton[Options.GENERATE_T2_TERRAN] = aux
+            aux = Button.Button(BUTTON_PATH + "goliath" + ".png", CommandId.GENERATE_T3,BUTTON_PATH + "construirConMineral.png", "Contruir Goliath", 55, TERRAN_T3_MINERAL_COST)
+            allButton[Options.GENERATE_T3_TERRAN] = aux
+            aux = Button.Button(BUTTON_PATH + "hydralisk" + ".png", CommandId.GENERATE_T3,BUTTON_PATH + "construirConMineral.png", "Engendrar Hydralisk", 55, ZERG_T3_MINERAL_COST)
+            allButton[Options.GENERATE_T3_ZERG] = aux
+            aux = Button.Button(BUTTON_PATH + "worker" + ".bmp", CommandId.GENERATE_WORKER, BUTTON_PATH + "construirConMineral.png", "Construir VCE", 45, ZERG_WORKER_MINERAL_COST)
+            allButton[Options.GENERATE_WORKER_TERRAN] = aux
+            aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.GENERATE_T1, BUTTON_PATH + "construirConMineral.png", "Entrenar Soldado", 55, ZERG_T1_MINERAL_COST)
+            allButton[Options.GENERATE_T1_TERRAN] = aux
+            aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.BUILD_HATCHERY)
+            allButton[Options.BUILD_HATCHERY] = aux
+            aux = Button.Button(BUTTON_PATH + "refinery" + ".bmp", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineral.png", "Construir Refineria", 50, EXTRACTOR_MINERAL_COST, 45)
+            allButton[Options.BUILD_REFINERY_TERRAN] = aux
+            aux = Button.Button(BUTTON_PATH + "depot" + ".bmp", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineral.png", "Construir Deposito", 55, TERRAN_DEPOT_MINERAL_COST, 45)
+            allButton[Options.BUILD_DEPOT_TERRAN] = aux
+            aux = Button.Button(BUTTON_PATH + "zergRefinery" + ".png", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineral.png", "Construir Extractor", 50, EXTRACTOR_MINERAL_COST, 45)
+            allButton[Options.BUILD_REFINERY_ZERG] = aux
+            aux = Button.Button(BUTTON_PATH + "zergSupply" + ".png", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineral.png", "Construir Deposito", 55, SUPPLY_ZERG_MINERAL_COST, 45)
+            allButton[Options.BUILD_DEPOT_ZERG] = aux
+            aux = Button.Button(BUTTON_PATH + "zergBarracks" + ".png", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineral.png", "Construir Barracas", 55, BARRACKS_ZERG_MINERAL_COST)
+            allButton[Options.BUILD_BARRACKS_ZERG] = aux
+            aux = Button.Button(BUTTON_PATH + "next" + ".png", CommandId.NEXT_PAGE)
+            aux.image.set_colorkey(BLACK)
+            allButton[Options.NEXT_PAGE] = aux
+            aux = Button.Button(BUTTON_PATH + "previous" + ".png", CommandId.PREVIOUS_PAGE)
+            aux.image.set_colorkey(BLACK)
+            allButton[Options.PREVIOUS_PAGE] = aux
+            aux = Button.Button(BUTTON_PATH + "close" + ".png", CommandId.RETURN_GAME)
+            aux.image.set_colorkey(BLACK)
+            allButton[Options.CLOSE] = aux
+            
+            aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "danyoUpgrade" + ".png", CommandId.UPGRADE_SOLDIER_DAMAGE,BUTTON_PATH + "cartelUpgrade.bmp", "Mejorar daño;de las unidades", 90, 50)
+            allButton[Options.DANYO_UPGRADE] = aux
+            aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "mineUpgrade" + ".png", CommandId.UPGRADE_WORKER_MINING,BUTTON_PATH + "cartelUpgrade.bmp", "Reducir tiempo de minado;de los VCE", 90, 50)
+            allButton[Options.MINE_UPGRADE] = aux
+            aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "armorUpgrade" + ".png", CommandId.UPGRADE_SOLDIER_ARMOR,BUTTON_PATH + "cartelUpgrade.bmp", "Mejorar blindaje;de las unidades", 90, 120)
+            allButton[Options.ARMOR_UPGRADE] = aux
+
+            self.pauseButton = Button.Button(BUTTON_PATH + "pause" + ".png", CommandId.PAUSE_GAME)
+            #self.continueButton = Button.Button(BUTTON_PATH + "continue" + ".png", CommandId.PAUSE_GAME)
+            self.helpPauseButton = Button.Button(BUTTON_PATH + "ayuda" + ".png", CommandId.HELP)
+            self.exitPauseButton = Button.Button(BUTTON_PATH + "close" + ".png", CommandId.RETURN_GAME)
+            self.saveButton = Button.Button(BUTTON_PATH + "save" + ".png", CommandId.SAVE_GAME)
+            self.saveAndExitButton = Button.Button(BUTTON_PATH + "guardarYSalir" + ".png", CommandId.SAVE_EXIT_GAME)
+            self.exitButton = Button.Button(BUTTON_PATH + "salir" + ".png", CommandId.EXIT_GAME)
+            self.helpPauseButton.x = self.helpPauseRect.x
+            self.helpPauseButton.y = self.helpPauseRect.y
+            self.exitPauseButton.x = self.exitPauseRect.x
+            self.exitPauseButton.y = self.exitPauseRect.y
+            self.pauseButtons = [self.exitPauseButton, self.helpPauseButton, self.saveButton, self.saveAndExitButton, self.exitButton]
+            return allButton
+        return self.allButton
 
     def loadAllUpgrades(self):
         allUpgrades = {}
@@ -219,6 +243,7 @@ class Interface():
 
 
     def update(self, escena, raton, camera):
+        #print(getGameState2())
         if Utils.state == System_State.MAINMENU:
             
             self.updateMainMenu()
@@ -248,9 +273,9 @@ class Interface():
             elif self.mouse.getClick() and self.singlePress and Raton.collides(endPos[0], endPos[1], self.singleRect):
                 #print("Seleccionado single player")
                 Utils.state = System_State.MAP1
-                #self.loadPartidas()
-                #Utils.state = System_State.GAMESELECT
-                stopMusic()
+                self.loadPartidas()
+                Utils.state = System_State.GAMESELECT
+                #stopMusic()
                 self.singlePress = False
 
         elif self.mouse.isCollide(self.exitRect):
@@ -328,12 +353,15 @@ class Interface():
                 print(options)
                 raza = None
                 dif = None
-                if options[1] == "Zerg":
-                    print("Contra terran")
-                    raza = Race.TERRAN
-                else:
-                    print("Contra zerg")
+                if options[0] == "4":
                     raza = Race.ZERG
+                else:
+                    if options[1] == "Zerg":
+                        print("Contra terran")
+                        raza = Race.TERRAN
+                    else:
+                        print("Contra zerg")
+                        raza = Race.ZERG
                 if options[2] == "Dificil":
                     print("DIFICIL")
                     dif = HARD
@@ -360,6 +388,9 @@ class Interface():
                 escena.camera = camera
                 Utils.state = System_State.ONGAME
                 setGameState2(System_State.LOAD)
+                self.escena = escena
+                escena.nombre = self.selectedPartida['nombre']
+                self.selectedPartida = None
                 stopMusic()
                 self.singlePress = False
 
@@ -428,10 +459,13 @@ class Interface():
                 _escena, _raton, _camera = loadHardcodedMap(self.selectedMap + "_" + self.selectedRaza["nombre"])
                 escena.setSelf(_escena)
                 raza = None
-                if self.selectedRaza['raza'] == Race.TERRAN:
+                if self.selectedMap == "4":
                     raza = Race.ZERG
                 else:
-                    raza = Race.TERRAN
+                    if self.selectedRaza['raza'] == Race.TERRAN:
+                        raza = Race.ZERG
+                    else:
+                        raza = Race.TERRAN
                 if Utils.DEBBUG == False:
                     aI = AI(escena.p2, raza, self.selectedDif['dif'])
                 else:
@@ -469,6 +503,12 @@ class Interface():
         else:
             self.soundPlayed = False
 
+        
+        if self.botonRazaTerran in self.botonesNewGame and self.selectedMap == "4":
+            self.botonesNewGame.remove(self.botonRazaTerran)
+            self.selectedRaza = {"nombre":"Zerg", "raza": Race.ZERG}
+        elif self.botonRazaTerran not in self.botonesNewGame and self.selectedMap != "4":
+            self.botonesNewGame.append(self.botonRazaTerran)
         for b in self.botonesNewGame:
             if self.mouse.isCollide(b['rect']):
                 endPos = self.mouse.getPosition()
@@ -495,7 +535,7 @@ class Interface():
             
     def updateOnGame(self):
         #si esta en GUI desactivar funciones de raton
-        
+        self.escena.update()
         if getGameState2() == System_State.PLAYING or getGameState2() == System_State.LOAD:
             
             self.updatePLAY()
@@ -510,6 +550,13 @@ class Interface():
             
         if frame(10):
             self.heroeIndex = (self.heroeIndex+1)%HEROE_N
+    
+    def updateHELP(self):
+        self.mouse.setEnable(False)
+        self.helpButtons =  self.getHelpButton()
+    
+    def updatePAUSED(self):
+        pass
             
     def updatePLAY(self):
         
@@ -655,6 +702,8 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), self.selectedRaza['nombre'], WHITE, 40, (765,410))
 
         elif Utils.state == System_State.ONGAME:
+            screen.blit(self.pauseButton.image, (0, 0))
+            pygame.draw.rect(screen, BLUE, self.pauseRect, 1)
             if DEBBUG == True:
                 muestra_texto(screen, str('monotypecorsiva'), str(round(Utils.SYSTEM_CLOCK / CLOCK_PER_SEC)), BLACK, 30, (20, 20))
                 muestra_texto(screen, times, str(self.player.resources), BLUE, 30, (SCREEN_WIDTH - 40, 60))
@@ -699,8 +748,11 @@ class Interface():
             if getGameState2() == System_State.HELP:
                 
                 self.drawHELP(screen)
+            elif getGameState2() == System_State.PAUSED:
                 
-            if getGameState2() == System_State.GAMEOVER:
+                self.drawPause(screen)
+                
+            elif getGameState2() == System_State.GAMEOVER:
                 if self.count2 < 10:
                     image = pg.transform.scale(self.heroeSprites[self.heroeIndex], [self.herow, self.heroh])
                     screen.blit(image, (672 - self.heropadx, 667- self.heropady))
@@ -724,7 +776,7 @@ class Interface():
                     if self.index == 30:
                         if self.index == 30:
                             self.index = 10
-            if Utils.state2 == System_State.WIN:
+            elif Utils.state2 == System_State.WIN:
                 
                 screen.blit(self.winSprite[self.index], (0, 0))
                 self.index += frame(5)
@@ -815,6 +867,20 @@ class Interface():
         elif self.helpPage == 5:
             self.helpButtons[0].draw(screen, 304, 95)
             pass
+
+    def drawPause(self, screen):
+        pygame.draw.rect(screen, BLACK, pygame.Rect(SCREEN_WIDTH/4, SCREEN_HEIGHT/9, SCREEN_WIDTH/2, SCREEN_HEIGHT/1.9))
+        pygame.draw.rect(screen, BLUE2, pygame.Rect(SCREEN_WIDTH/4, SCREEN_HEIGHT/9, SCREEN_WIDTH/2, SCREEN_HEIGHT/1.9), 4)
+        pygame.draw.rect(screen, BLUE2, self.helpPauseRect, 1)
+        screen.blit(self.exitPauseButton.image, (self.exitPauseRect.x, self.exitPauseRect.y))
+        screen.blit(self.helpPauseButton.image, (self.helpPauseRect.x, self.helpPauseRect.y))
+        self.saveButton.draw(screen, 400,200)
+        self.saveAndExitButton.draw(screen, 400, 290)
+        self.exitButton.draw(screen, 400, 380)
+        muestra_texto(screen, str('monotypecorsiva'), "MENU DE PAUSA", WHITE, 30, (490, 120))
+        muestra_texto(screen, str('monotypecorsiva'), "Guardar", GREEN, 26, (480, 210))
+        muestra_texto(screen, str('monotypecorsiva'), "Guardar y Salir", GREEN, 26, (480, 300))
+        muestra_texto(screen, str('monotypecorsiva'), "Salir sin guardar", GREEN, 26, (480, 390))
         
     
     def drawEntityInfo(self, screen, camera):

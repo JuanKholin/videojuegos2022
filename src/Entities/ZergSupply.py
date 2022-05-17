@@ -53,7 +53,7 @@ class ZergSupply(Structure):
         self.paths = []
         self.building = False
 
-        self.type = ZERG_S1
+        self.type = ZERG_DEPOT
 
     def execute(self, command_id):
         if self.clicked:

@@ -129,6 +129,22 @@ def loadUnits(unitDictionaries, player):
             unit = Drone(player, u["x"], u["y"])
             unit.load(u["hp"])
             player.addUnits(unit)
+        elif u["clase"] == "hydralisk":
+            unit = Hydralisk(player, u["x"], u["y"])
+            unit.load(u["hp"])
+            player.addUnits(unit)
+        elif u["clase"] == "broodling":
+            unit = Broodling(player, u["x"], u["y"])
+            unit.load(u["hp"])
+            player.addUnits(unit)
+        elif u["clase"] == "firebat":
+            unit = Firebat(player, u["x"], u["y"])
+            unit.load(u["hp"])
+            player.addUnits(unit)
+        elif u["clase"] == "goliath":
+            unit = Goliath(player, u["x"], u["y"])
+            unit.load(u["hp"])
+            player.addUnits(unit)
 
 def loadMuros(wallDict, mapa):
     muros = []

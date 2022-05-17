@@ -123,7 +123,7 @@ class TerranBuilder(Structure):
         elif command_id == CommandId.BUILD_REFINERY and self.player.resources >= TERRAN_REFINERY_MINERAL_COST:
             self.raton.building = True
             self.raton.buildStructure = self.getTerranRefinery()
-        elif command_id == CommandId.BUILD_SUPPLY_DEPOT and self.player.resources >= TERRAN_DEPOT_MINERAL_COST:
+        elif command_id == CommandId.BUILD_DEPOT and self.player.resources >= TERRAN_DEPOT_MINERAL_COST:
             self.raton.building = True
             self.raton.buildStructure = self.getTerranSupply()
 

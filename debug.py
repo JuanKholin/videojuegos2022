@@ -6,6 +6,11 @@ import sys
 import math
 import json
 from datetime import datetime
+'''
+import win32gui, win32con
+
+hide = win32gui.GetForegroundWindow()
+win32gui.ShowWindow(hide , win32con.SW_HIDE)'''
 
 
 from src.Entities.TerranSoldier import *
@@ -64,7 +69,7 @@ def setEntity(player, ai):
     structure1 = TerranBuilder(3, 3, player, mapa, False, raton)
     player.addStructures(structure1)
     player.setBasePlayer(structure1)
-    scv = Goliath(ai, 30, 3)
+    scv = Goliath(ai, 12, 3)
     ai.addUnits(scv)
     structure1 = TerranBuilder(37, 3, ai, mapa, False, raton)
     ai.addStructures(structure1)
@@ -189,7 +194,7 @@ def update():
         setEntity(player1, player2)
         setGameState(System_State.ONGAME)
     elif getGameState() == System_State.ONGAME:
-        escena.update()
+        escena.interfaz.update(escena,raton, camera)
     elif getGameState() == System_State.GAMESELECT:
         #Cargar las partidas
         escena.interfaz.update(escena,raton, camera)

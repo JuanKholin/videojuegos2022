@@ -350,6 +350,7 @@ class Unit(Entity):
                 self.updatePath(actualPath)
             else: # Se acaba este camino
                 ownTile = self.getTile()
+                print(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery), self.range)
                 if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
                     #print(type(self), "estoy en rango")
                     self.updateAttackInRange()
@@ -441,6 +442,12 @@ class Unit(Entity):
         if self.attackedOne != None:
             if self.attackedOne.esEstructura:
                 self.attackedOne.lastAttacker = None
+        if self.state == UnitState.STILL:
+            ownTile = self.getTile()
+            print(int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)), self.range, "estoy en rango")
+            if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
+            #print(type(self), "estoy en rango")
+                self.updateAttackInRange()
         self.attackedOne = attackedOne
         self.attackCD = self.cooldown
         self.frame = 0

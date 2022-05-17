@@ -122,7 +122,7 @@ class Player():
                 self.structureSelected.execute(id)
             elif id == CommandId.GENERATE_T3:
                 self.structureSelected.execute(id)
-            elif id == CommandId.BUILD_SUPPLY_DEPOT:
+            elif id == CommandId.BUILD_DEPOT:
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_HATCHERY:
                 self.structureSelected.execute(id)

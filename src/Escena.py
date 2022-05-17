@@ -80,6 +80,22 @@ class Escena():
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.SAVE_GAME:
                     self.saveScene()
+                elif command.id == CommandId.EXIT_GAME:
+                    setGameState(System_State.MAINMENU)
+                    self.interfaz.helpPage = 1
+                    self.camera.x = 0
+                    self.camera.y = 0
+                elif command.id == CommandId.SAVE_EXIT_GAME:
+                    self.saveScene()
+                    setGameState(System_State.MAINMENU)
+                    self.interfaz.helpPage = 1
+                    self.camera.x = 0
+                    self.camera.y = 0
+                elif command.id == CommandId.PAUSE_GAME:
+                    setGameState2(System_State.PAUSED)
+                elif command.id == CommandId.HELP:
+                    setGameState2(System_State.HELP)
+                    self.interfaz.helpPage = 1
                 elif command.id == CommandId.NEXT_PAGE:
                     self.interfaz.helpPage += 1
                 elif command.id == CommandId.PREVIOUS_PAGE:
@@ -179,7 +195,7 @@ class Escena():
         elif getGameState2() == System_State.HELP:
             pass
         self.mapa.updateNiebla(self.camera, self.p1.getEntitesLocation(self.camera))
-        self.interfaz.update(self, self.raton, self.camera)
+        #self.interfaz.update(self, self.raton, self.camera)
         #self.raton.update(self.camera)
         if getGameState2() == System_State.PLAYING or getGameState2() == System_State.LOAD:
             self.aI.make_commands()
@@ -288,7 +304,7 @@ class Escena():
         }
 
     def saveScene(self):
-        #print(self.toDictionary())
+        print(self.toDictionary())
         string = json.dumps(self.toDictionary(), indent = 2)
 
         textFile = open("games/" + self.nombre + ".json", "w")

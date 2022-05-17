@@ -274,6 +274,9 @@ class Raton(pygame.sprite.Sprite):
                         if getGameState2() == System_State.PLAYING:
                             reClick = False
                             if self.enable:
+                                if collides(self.rel_pos[0], self.rel_pos[1], self.interface.pauseButton.getRect()):
+                                    command = self.interface.pauseButton.getCommand()
+                                    return command
                                 tileClicked = self.mapa.getTile(real_mouse_pos[0],real_mouse_pos[1])
                                 if tileClicked.ocupante == None:
                                     tileClicked = self.mapa.getTile(real_mouse_pos[0],real_mouse_pos[1] + 40)
@@ -393,6 +396,12 @@ class Raton(pygame.sprite.Sprite):
                                         break
                         elif getGameState2() == System_State.HELP:
                             for b in self.interface.helpButtons:
+                                if b != None and collides(self.rel_pos[0], self.rel_pos[1], b.getRect()):
+                                    command = b.getCommand()
+                                    #print(command.id)
+                                    break
+                        elif getGameState2() == System_State.PAUSED:
+                            for b in self.interface.pauseButtons:
                                 if b != None and collides(self.rel_pos[0], self.rel_pos[1], b.getRect()):
                                     command = b.getCommand()
                                     #print(command.id)
