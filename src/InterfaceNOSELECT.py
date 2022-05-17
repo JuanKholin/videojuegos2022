@@ -30,7 +30,7 @@ class Interface():
         self.selectedPartida = None
 
         self.gameSelect = pg.image.load(GAME_SELECT + "gameSelect.png")
-        self.gameSelect = pg.transform.scale(self.gameSelect, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.gameSelect = pg.transform.scale(self.gameSelect, (Utils.ScreenWidth, Utils.ScreenHeight))
 
         self.aceptarRect = pg.Rect(ACEPTAR_POS[0], ACEPTAR_POS[1], ACEPTAR_RECT[0], ACEPTAR_RECT[1])
         self.aceptarNoPulsabeSurf = pygame.Surface(ACEPTAR_RECT, pygame.SRCALPHA)
@@ -44,7 +44,7 @@ class Interface():
 
         # NEW GAME
         self.newGame = pg.image.load(NEW_GAME + "newGame.png")
-        self.newGame = pg.transform.scale(self.newGame, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.newGame = pg.transform.scale(self.newGame, (Utils.ScreenWidth, Utils.ScreenHeight))
 
         #ya estan en game select
         #self.aceptarRect = pg.Rect(ACEPTAR_POS[0], ACEPTAR_POS[1], 260, 40)
@@ -69,7 +69,7 @@ class Interface():
 
         #MAIN MENU
         self.mainMenu = pg.image.load(MAIN_MENU + ".png")
-        self.mainMenu = pg.transform.scale(self.mainMenu, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.mainMenu = pg.transform.scale(self.mainMenu, (Utils.ScreenWidth, Utils.ScreenHeight))
         self.single = cargarSprites(SINGLE_PLAYER, SINGLE_PLAYER_N, True, BLACK, SINGLE_SIZE)
         self.exit = cargarSprites(EXIT, EXIT_N, True, BLACK, EXIT_SIZE)
         self.singleSelected = cargarSprites(SINGLE_PLAYER_FB, SINGLE_PLAYER_FB_N, True, BLACK, SINGLE_SIZE)
@@ -106,19 +106,19 @@ class Interface():
         #ANIMACION
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
-        deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200, (Utils.ScreenWidth, Utils.ScreenHeight))
         for sprite in deadSprites:
-            sprite = pg.transform.scale(sprite, (SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.loseSprite = deadSprites + cargarSprites("./SPRITE/animacion/gameOver/tile0", 20, True, size = [SCREEN_WIDTH, SCREEN_HEIGHT])
+            sprite = pg.transform.scale(sprite, (Utils.ScreenWidth, Utils.ScreenHeight))
+        self.loseSprite = deadSprites + cargarSprites("./SPRITE/animacion/gameOver/tile0", 20, True, size = [Utils.ScreenWidth, Utils.ScreenHeight])
     
-        self.winSprite = deadSprites + cargarSprites("./SPRITE/animacion/win/tile0", 20, True, size = [SCREEN_WIDTH, SCREEN_HEIGHT])
+        self.winSprite = deadSprites + cargarSprites("./SPRITE/animacion/win/tile0", 20, True, size = [Utils.ScreenWidth, Utils.ScreenHeight])
         
         #HELP
         self.helpPage = 1
 
     def loadGameGUI(self):
         self.gui = pg.image.load(BARRA_COMANDO + ".bmp")
-        self.gui = pg.transform.scale(self.gui, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.gui = pg.transform.scale(self.gui, (Utils.ScreenWidth, Utils.ScreenHeight))
         self.gui.set_colorkey(BLACK)
 
         self.resources = []
@@ -165,7 +165,7 @@ class Interface():
         allButton[Options.BUILD_REFINERY_ZERG] = aux
         aux = Button.Button(BUTTON_PATH + "zergSupply" + ".png", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineral.png", "Construir Deposito", 55, SUPPLY_ZERG_MINERAL_COST, 45)
         allButton[Options.BUILD_DEPOT_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "zergBarracks" + ".png", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineral.png", "Construir Barracas", 55, BARRACKS_ZERG_MINERAL_COST)
+        aux = Button.Button(BUTTON_PATH + "zergBarracks" + ".png", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineral.png", "Construir Barracas", 55, ZERG_BARRACKS_MINERAL_COST)
         allButton[Options.BUILD_BARRACKS_ZERG] = aux
         aux = Button.Button(BUTTON_PATH + "next" + ".png", CommandId.NEXT_PAGE)
         aux.image.set_colorkey(BLACK)
@@ -657,8 +657,8 @@ class Interface():
         elif Utils.state == System_State.ONGAME:
             if DEBBUG == True:
                 muestra_texto(screen, str('monotypecorsiva'), str(round(Utils.SYSTEM_CLOCK / CLOCK_PER_SEC)), BLACK, 30, (20, 20))
-                muestra_texto(screen, times, str(self.player.resources), BLUE, 30, (SCREEN_WIDTH - 40, 60))
-                muestra_texto(screen, times, str(self.enemy.resources), RED, 30, (SCREEN_WIDTH - 40, 100))
+                muestra_texto(screen, times, str(self.player.resources), BLUE, 30, (Utils.ScreenWidth - 40, 60))
+                muestra_texto(screen, times, str(self.enemy.resources), RED, 30, (Utils.ScreenWidth - 40, 100))
 
             screen.blit(self.resources[0], (RESOURCES_COUNT_X, 3))
             muestra_texto(screen, times, str(self.player.resources), GREEN4, 30, (RESOURCES_COUNT_X + 60, 20))

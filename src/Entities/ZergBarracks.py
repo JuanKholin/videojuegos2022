@@ -56,7 +56,7 @@ class ZergBarracks(Structure):
         self.paths = []
         self.building = False
 
-        self.type = ZERG_BARRACKS
+        self.type = BARRACKS
 
     def execute(self, command_id):
         #if self.clicked:

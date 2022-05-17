@@ -584,7 +584,7 @@ class AI():
     # Devuelve la base de la IA
     def getBase(self, structures):
         for structure in structures:
-            if structure.type == self.base:
+            if structure.type == BASE:
                 return structure
         return None
 
@@ -592,7 +592,7 @@ class AI():
     def getBarracks(self, structures):
         result = []
         for structure in structures:
-            if structure.type == self.barracks:
+            if structure.type == BARRACKS:
                 result.append(structure)
         return result
 
@@ -641,7 +641,7 @@ class AI():
     # Devuelve si hay un edificio explotando un geyser o no
     def getGeyserInUse(self, structures):
         for structure in structures:
-            if structure.type == self.geyserBuilding:
+            if structure.type == REFINERY:
                 return structure
         return None
 
