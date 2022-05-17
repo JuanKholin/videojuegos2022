@@ -38,10 +38,10 @@ INVERSIBLE_FRAMES = len(FRAMES) - len(DIE_FRAMES) # los die frames no se inviert
 # horario y empezando desde el norte, el mapeo dir-frame es:
 DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
 PADDING = 10
-WEIGHT_PADDING = 10
-HEIGHT_PADDING = 10
-X_PADDING = 20 * SCALE
-Y_PADDING = 20 * SCALE
+WEIGHT_PADDING = 50
+HEIGHT_PADDING = 50
+X_PADDING = 20 * SCALE - 20
+Y_PADDING = 20 * SCALE - 10
 
 class Broodling(Soldier):
     # Pre: xIni e yIni marcan posiciones del mapa, ej: 3 y 2
@@ -60,7 +60,7 @@ class Broodling(Soldier):
         if xIni != -1:
             self.updateOwnSpace()
 
-        self.render = pygame.transform.scale(pygame.image.load(ZERGLING_RENDER), UNIT_RENDER_SIZE)
+        self.render = pygame.transform.scale(pygame.image.load(BROODLING_RENDER), UNIT_RENDER_SIZE)
 
         self.type = ZERG_SOLDIER
     
@@ -68,9 +68,9 @@ class Broodling(Soldier):
     def toDictionary(self, map):
         fatherDictionary = super().toDictionary(map)
         sonDictionary = {
-            "clase": "Guardian",
-            "nombre": "Guardian",
-            "funcion": "Unidad Zerg avanzada"
+            "clase": "broodling",
+            "nombre": "Broodling",
+            "funcion": "Unidad Zerg de ataque rapido"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

@@ -76,7 +76,7 @@ class Zergling(Soldier):
         sonDictionary = {
             "clase": "zergling",
             "nombre": "Zerling",
-            "funcion": "unidad de infanteria"
+            "funcion": "unidad Zerg basica"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

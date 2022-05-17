@@ -1,5 +1,7 @@
 import pygame
 from .Zergling import *
+from .Broodling import *
+from .Hydralisk import *
 from .Structure import *
 from ..Command import *
 from ..Utils import *
@@ -26,7 +28,7 @@ class ZergBarracks(Structure):
     clicked = False
     frame = 20
     nSprites = 3
-    options = [Options.GENERATE_SOLDIER_ZERG]
+    options = [Options.GENERATE_SOLDIER_ZERG, Options.GENERATE_BROODLING,Options.GENERATE_HYDRALISK]
 
     def __init__(self, xini, yini, player, map, building):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
@@ -59,9 +61,22 @@ class ZergBarracks(Structure):
     def execute(self, command_id):
         #if self.clicked:
         #print("soy clickeado?")
+        print(command_id)
         if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_SOLDIER) and self.player.resources >= TERRAN_SOLDIER_MINERAL_COST:
             self.player.resources -= TERRAN_SOLDIER_MINERAL_COST
             terranSoldier = Zergling(self.player)
+            self.generateUnit(terranSoldier)
+            self.state = BuildingState.SPAWNING
+        elif (command_id == CommandId.GENERATE_2NDUNIT) and self.player.resources >= BROODLING_MINERAL_COST and self.player.gas >= BROODLING_GAS_COST:
+            self.player.resources -= BROODLING_MINERAL_COST
+            self.player.gas -= BROODLING_GAS_COST
+            terranSoldier = Broodling(self.player)
+            self.generateUnit(terranSoldier)
+            self.state = BuildingState.SPAWNING
+        elif (command_id == CommandId.GENERATE_3RDUNIT) and self.player.resources >= HYDRALISK_MINERAL_COST and self.player.gas >= HYDRALISK_GAS_COST:
+            self.player.resources -= HYDRALISK_MINERAL_COST
+            self.player.gas -= HYDRALISK_GAS_COST
+            terranSoldier = Hydralisk(self.player)
             self.generateUnit(terranSoldier)
             self.state = BuildingState.SPAWNING
 
@@ -69,6 +84,10 @@ class ZergBarracks(Structure):
         if self.state != BuildingState.BUILDING:
             if command == CommandId.GENERATE_UNIT:
                 return Command(CommandId.GENERATE_SOLDIER)
+            elif command == CommandId.GENERATE_2NDUNIT:
+                return Command(CommandId.GENERATE_2NDUNIT)
+            elif command == CommandId.GENERATE_3RDUNIT:
+                return Command(CommandId.GENERATE_3RDUNIT)
             return Command(CommandId.NULL)
         else:
             return Command(CommandId.NULL)

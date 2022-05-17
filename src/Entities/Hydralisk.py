@@ -39,10 +39,10 @@ INVERSIBLE_FRAMES = len(FRAMES) - len(DIE_FRAMES) # los die frames no se inviert
 # horario y empezando desde el norte, el mapeo dir-frame es:
 DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
 PADDING = 110
-WEIGHT_PADDING = 165
-HEIGHT_PADDING = 155
-X_PADDING = 20 * SCALE
-Y_PADDING = 20 * SCALE
+WEIGHT_PADDING = 195
+HEIGHT_PADDING = 170
+X_PADDING = 20 * SCALE - 10
+Y_PADDING = 20 * SCALE + 15
 
 class Hydralisk(Soldier):
     # Pre: xIni e yIni marcan posiciones del mapa, (ej: (3, 2) se refiere a la posicion de
@@ -62,7 +62,7 @@ class Hydralisk(Soldier):
         if xIni != -1:
             self.updateOwnSpace()
 
-        self.render = pygame.transform.scale(pygame.image.load(ZERGLING_RENDER), UNIT_RENDER_SIZE)
+        self.render = pygame.transform.scale(pygame.image.load(HYDRALISK_REDNER), UNIT_RENDER_SIZE)
 
         self.type = ZERG_SOLDIER
     
@@ -70,9 +70,9 @@ class Hydralisk(Soldier):
     def toDictionary(self, map):
         fatherDictionary = super().toDictionary(map)
         sonDictionary = {
-            "clase": "zergling",
-            "nombre": "Zerling",
-            "funcion": "unidad de infanteria"
+            "clase": "hydralisk",
+            "nombre": "Hydralisk",
+            "funcion": "Unidad Zerg de rango"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

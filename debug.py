@@ -29,9 +29,9 @@ from src.Entities.TerranSupplyDepot import *
 from src.Entities.Extractor import *
 from src.Entities.TerranRefinery import *
 from src.Entities.Firebat import *
-from src.Entities.Guardian import *
 from src.Entities.Goliath import *
 from src.Entities.Hydralisk import *
+from src.Entities.Broodling import *
 
 
 
@@ -59,9 +59,9 @@ def procesarInput():
 
 
 def setEntity(player, ai):
-    scv = Drone(player, 10, 3)
+    scv = Firebat(player, 10, 3)
     player.addUnits(scv)
-    structure1 = Hatchery(3, 3, player, mapa, False, raton)
+    structure1 = TerranBuilder(3, 3, player, mapa, False, raton)
     player.addStructures(structure1)
     player.setBasePlayer(structure1)
     scv = Goliath(ai, 30, 3)
@@ -271,8 +271,8 @@ mapa.setElevacion(40, 0)'''
 
 
 
-player1 = Player.Player([], [], 100, keyMap, commandMap, mapa, True)
-
+player1 = Player.Player([], [], 600, keyMap, commandMap, mapa, True)
+player1.gas = 100
 # Raton
 
 

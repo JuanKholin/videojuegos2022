@@ -45,7 +45,6 @@ class Escena():
         else:
             command = self.p1.processEvent(event)
         if getGameState() == System_State.ONGAME:
-            
             #ejecutar el comando
             if command.id == CommandId.UPGRADE_WORKER_MINING:
                 #print(command.id)
@@ -60,6 +59,10 @@ class Escena():
                 elif command.id == CommandId.GENERATE_WORKER:
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.GENERATE_SOLDIER:
+                    self.p1.execute(command.id, [], None)
+                elif command.id == CommandId.GENERATE_2NDUNIT:
+                    self.p1.execute(command.id, [], None)
+                elif command.id == CommandId.GENERATE_3RDUNIT:
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.UPGRADE_SOLDIER_DAMAGE:
                     self.p1.execute(command.id, [], None)

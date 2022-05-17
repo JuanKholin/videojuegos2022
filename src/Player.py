@@ -118,6 +118,10 @@ class Player():
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_REFINERY:
                 self.structureSelected.execute(id)
+            elif id == CommandId.GENERATE_2NDUNIT:
+                self.structureSelected.execute(id)
+            elif id == CommandId.GENERATE_3RDUNIT:
+                self.structureSelected.execute(id)
             elif id == CommandId.BUILD_SUPPLY_DEPOT:
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_HATCHERY:

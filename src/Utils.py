@@ -338,6 +338,10 @@ class Options(Enum):
     GENERATE_WORKER_ZERG = auto()
     GENERATE_SOLDIER = auto()
     GENERATE_SOLDIER_ZERG = auto()
+    GENERATE_BROODLING = auto()
+    GENERATE_FIREBAT = auto()
+    GENERATE_GOLIATH = auto()
+    GENERATE_HYDRALISK = auto()
     BUILD_REFINERY = auto()
     BUILD_HATCHERY = auto()
     BUILD_SUPPLY_DEPOT = auto()
@@ -375,12 +379,33 @@ WAIT_UNIT_RENDER_SIZE = [85 * 0.7, 97 * 0.7]
 TERRAN_WORKER_MINERAL_COST = 20
 WORKER_RENDER = "SPRITE/render/terranWorker.png"
 
+##---------FIREBAT-----------------------
+FIREBAT_MINERAL_COST = 50
+FIREBAT_GAS_COST = 25
+FIREBAT_RENDER = "SPRITE/render/firebat.png"
+
+##---------GOLIATH-----------------------
+GOLIATH_MINERAL_COST = 100
+GOLIATH_GAS_COST = 100
+GOLIATH_RENDER = "SPRITE/render/goliath.png"
+
 TERRAN_SOLDIER_MINERAL_COST = 20
 SOLDIER_RENDER = "SPRITE/render/terranSoldier.png"
 
 ##---------ZERGLING-----------------------
 ZERGLING_MINERAL_COST = 20
 ZERGLING_RENDER = "SPRITE/render/zergling.png"
+
+##---------BROODLING-----------------------
+BROODLING_MINERAL_COST = 50
+BROODLING_GAS_COST = 25
+BROODLING_RENDER = "SPRITE/render/broodling.png"
+
+##---------HYDRALISK-----------------------
+HYDRALISK_MINERAL_COST = 100
+HYDRALISK_GAS_COST = 100
+HYDRALISK_REDNER = "SPRITE/render/hydralisk.png"
+
 
 ##---------DRONE--------------------------
 DRONE_MINERAL_COST = 20

@@ -1,6 +1,8 @@
 import pygame
 
 from .TerranSoldier import *
+from .Firebat import *
+from .Goliath import *
 from .TerranWorker import *
 from .Structure import *
 from .. import Player, Map
@@ -28,7 +30,7 @@ class TerranBarracks(Structure):
     clicked = False
     frame = 8
     nSprites = 6
-    options = [Options.GENERATE_SOLDIER]
+    options = [Options.GENERATE_SOLDIER, Options.GENERATE_FIREBAT, Options.GENERATE_GOLIATH]
 
     def __init__(self, xini, yini, player, map, building):
         Structure.__init__(self, HP, TERRAN_BARRACKS_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
@@ -67,11 +69,27 @@ class TerranBarracks(Structure):
             terranSoldier = TerranSoldier(self.player)
             self.generateUnit(terranSoldier)
             self.state = BuildingState.SPAWNING
+        elif (command_id == CommandId.GENERATE_2NDUNIT) and self.player.resources >= FIREBAT_MINERAL_COST and self.player.gas >= FIREBAT_GAS_COST:
+            self.player.resources -= BROODLING_MINERAL_COST
+            self.player.gas -= FIREBAT_GAS_COST
+            terranSoldier = Firebat(self.player)
+            self.generateUnit(terranSoldier)
+            self.state = BuildingState.SPAWNING
+        elif (command_id == CommandId.GENERATE_3RDUNIT) and self.player.resources >= GOLIATH_MINERAL_COST and self.player.gas >= GOLIATH_GAS_COST:
+            self.player.resources -= BROODLING_MINERAL_COST
+            self.player.gas -= GOLIATH_GAS_COST
+            terranSoldier = Goliath(self.player)
+            self.generateUnit(terranSoldier)
+            self.state = BuildingState.SPAWNING
 
     def command(self, command):
         if self.state != BuildingState.BUILDING:
             if command == CommandId.GENERATE_UNIT:
                 return Command(CommandId.GENERATE_SOLDIER)
+            elif command == CommandId.GENERATE_2NDUNIT:
+                return Command(CommandId.GENERATE_2NDUNIT)
+            elif command == CommandId.GENERATE_3RDUNIT:
+                return Command(CommandId.GENERATE_3RDUNIT)
             return Command(CommandId.NULL)
         else:
             return Command(CommandId.NULL)

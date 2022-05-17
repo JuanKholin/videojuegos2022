@@ -21,6 +21,8 @@ class CommandId(IntEnum):
     ATTACK = auto()
     GENERATE_WORKER = auto()
     GENERATE_SOLDIER = auto()
+    GENERATE_2NDUNIT = auto()
+    GENERATE_3RDUNIT = auto()
     UPGRADE_SOLDIER_DAMAGE = auto()
     UPGRADE_SOLDIER_ARMOR = auto()
     UPGRADE_WORKER_MINING = auto()
