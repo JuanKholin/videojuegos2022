@@ -29,7 +29,7 @@ from src.Entities.TerranSupplyDepot import *
 from src.Entities.Extractor import *
 from src.Entities.TerranRefinery import *
 from src.Entities.Firebat import *
-from src.Entities.Guardian import *
+from src.Entities.Broodling import *
 from src.Entities.Goliath import *
 from src.Entities.Hydralisk import *
 
@@ -77,10 +77,10 @@ def setEntity(player, ai):
     resources.append(crystal)
 
     units = []
-    units.append(Firebat(player, 25, 30))
-    units.append(Goliath(player, 27, 30))
-    units.append(Hydralisk(player, 29, 30))
-    units.append(Guardian(player, 31, 30))
+    units.append(Firebat(player, 23, 32))
+    units.append(Goliath(player, 25, 32))
+    units.append(Hydralisk(player, 27, 32))
+    units.append(Broodling(player, 29, 32))
 
 
     for unit in units:

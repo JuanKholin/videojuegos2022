@@ -140,7 +140,7 @@ class AI():
             if unit.attackedOne != None:
                 objectivesSet.add(unit.attackedOne)
         objectivesList = list(objectivesSet) # Lo pasa a lista por comodi<padre_en_ingles>
-        if self.getBase().lastAttacker != None:
+        if self.getBase(structures).lastAttacker != None:
             defenses = self.getFreeUnits(units)
         else:
             defenses = self.getSoldiers(units)
