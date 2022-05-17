@@ -94,7 +94,6 @@ class Firebat(Soldier):
                 self.attack(enemy)
             else:
                 self.changeToStill()
-    
 
     def toDictionary(self, map):
         fatherDictionary = super().toDictionary(map)

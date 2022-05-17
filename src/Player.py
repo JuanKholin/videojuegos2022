@@ -152,21 +152,21 @@ class Player():
         if isMe:
             for structure in self.structures:
                 pos = structure.getPosition()
-                pygame.draw.rect(screen, BLUE, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
+                pygame.draw.rect(screen, BLUE, pygame.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
             for unit in self.units:
                 if unit.state != UnitState.DEAD:
                     pos = unit.getPosition()
-                    pygame.draw.rect(screen, GREEN, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
+                    pygame.draw.rect(screen, GREEN, pygame.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
         else:
             for structure in self.structures:
                 pos = structure.getPosition()
                 if self.mapa.getTile(pos[0], pos[1]).visible:
-                    pygame.draw.rect(screen, ORANGE, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
+                    pygame.draw.rect(screen, ORANGE, pygame.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
             for unit in self.units:
                 if unit.state != UnitState.DEAD:
                     pos = unit.getPosition()
                     if (self.mapa.getTile(pos[0], pos[1]) != None) and self.mapa.getTile(pos[0], pos[1]).visible:
-                        pygame.draw.rect(screen, RED, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
+                        pygame.draw.rect(screen, RED, pygame.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
 
 
     def removeUnit(self, unit):
