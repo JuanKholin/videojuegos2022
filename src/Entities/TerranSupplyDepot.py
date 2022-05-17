@@ -25,17 +25,15 @@ class TerranSupplyDepot(Structure):
     nBuildSprites = 4
     deafault_index = 4
     generationStartTime = 0
-    heightPad = 15
+    HEIGHT_PAD = 15
     rectOffY = 8
-    tileW = 4
-    tileH = 3
     clicked = False
     frame = 8
     nSprites = 5
 
     def __init__(self, xini, yini, player, map, building):
-        Structure.__init__(self, HP, TERRAN_SUPPLY_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
-        self.sprites = cargarSprites(TERRAN_SUPPLY_PATH, self.nSprites, False, WHITE, 1.5)
+        Structure.__init__(self, HP, TERRAN_DEPOT_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
+        self.sprites = cargarSprites(TERRAN_DEPOT_PATH, self.nSprites, False, WHITE, 1.5)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)

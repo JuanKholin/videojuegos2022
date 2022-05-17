@@ -5,17 +5,18 @@ from ..Utils import *
 from .Worker import *
 
 # Constantes del Drone
-HP = 10000
+HP = 60
 DAMAGE = 5
-COOLDOWN = 22
-RANGE = 67
+COOLDOWN = 17
+RANGE = 1 * RANGE_UNIT + RANGE_BASIC
 ATTACK_INFO = [DAMAGE, COOLDOWN, RANGE]
 MINE_POWER = 8
-MINERAL_COST = 20
+MINERAL_COST = ZERG_WORKER_MINERAL_COST
+GAS_COST = ZERG_WORKER_GAS_COST
 TIME_TO_MINE = 1000
-GENERATION_TIME = 200
-SPEED = 2
-FRAMES_TO_REFRESH = 5
+GENERATION_TIME = 20
+SPEED = 2.5
+FRAMES_TO_REFRESH = 3
 SPRITES = "drone.bmp"
 SPRITE_PIXEL_ROWS = 128
 SCALE = 1.5
@@ -57,7 +58,7 @@ class Drone(Worker):
                 SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME, PADDING, takeID(), player,
                 MINE_POWER, TIME_TO_MINE, INVERSIBLE_FRAMES, FRAMES, DIR_OFFSET,
                 ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, X_PADDING, Y_PADDING,
-                WEIGHT_PADDING, HEIGHT_PADDING, MOVE_FRAMES,[], ATTACK_INFO)
+                WEIGHT_PADDING, HEIGHT_PADDING, MOVE_FRAMES,MOVE_FRAMES, ATTACK_INFO)
         spritesheet = pg.image.load("./sprites/" + self.spritesName).convert()
         spritesheet.set_colorkey(BLACK)
         self.sprites = Entity.divideSpritesheetByRows(spritesheet, SPRITE_PIXEL_ROWS, SCALE)
@@ -66,8 +67,9 @@ class Drone(Worker):
         self.changeToStill()
         if xIni != -1:
             self.updateOwnSpace()
-        self.render = pygame.transform.scale(pygame.image.load(DRONE_RENDER), UNIT_RENDER_SIZE)
-        self.type = ZERG_WORKER
+        self.render = pygame.transform.scale(pygame.image.load(ZERG_WORKER_RENDER), UNIT_RENDER_SIZE)
+        self.type = WORKER
+        print(" AHSDASJLDASI" , self.speed)
     
 
 

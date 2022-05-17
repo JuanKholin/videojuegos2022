@@ -1,3 +1,5 @@
+
+from operator import truediv
 import pygame as pg
 import math
 from . import Utils
@@ -17,7 +19,7 @@ class Player():
         self.resourceSelected = None
         self.structures = structures
         self.resources = resources
-        self.gas = 400
+        self.gas = 0
         self.keyMap = keyMap
         self.commandMap = commandMap #keyMap pero las claves son los valores y los valores las claves (solo necesario para las teclas de la camara)
         self.pulsado = False
@@ -59,7 +61,9 @@ class Player():
         self.unitsFree.append(unit)
 
     def addStructures(self,structures):
-        self.limitUnits += structures.capacity
+        print(self.limitUnits)
+        self.limitUnits += structures.getUnitCapacity()
+        
         self.structures.append(structures)
 
     def execute(self, id, param, tileClicked):
@@ -74,21 +78,49 @@ class Player():
                 #print(param[i]['order'])
                 #self.unitsSelected[i].paths = param[i]['path']
                 # En funcion de la orden cambiarle el estado a la unidad
-                if param[i]['order'] == CommandId.MINE:
-                    self.unitsSelected[i].mine(param[i]['resource'])
-                elif param[i]['order'] == CommandId.MOVE:
-                    self.unitsSelected[i].move(tileClicked)
-                elif param[i]['order'] == CommandId.EXTRACT_GAS:
-                    self.unitsSelected[i].extract(tileClicked)
-                elif param[i]['order'] == CommandId.ATTACK:
-                    self.unitsSelected[i].attack(param[i]['attackedOne'])
+                if self.unitsSelected[i].state != UnitState.DEAD and self.unitsSelected[i].state != UnitState.DYING:
+                    if param[i]['order'] == CommandId.MINE:
+                        self.unitsSelected[i].mine(param[i]['resource'])
+                    elif param[i]['order'] == CommandId.MOVE:
+                        self.unitsSelected[i].move(tileClicked)
+                    elif param[i]['order'] == CommandId.EXTRACT_GAS:
+                        self.unitsSelected[i].extract(tileClicked)
+                    elif param[i]['order'] == CommandId.ATTACK:
+                        if self.unitsSelected[i].state == UnitState.STILL or self.unitsSelected[i].state == UnitState.ATTACKING:
+                            self.unitsSelected[i].attack(param[i]['attackedOne'])
+                        else:
+                            self.unitsSelected[i].siendoAtacado = True
+                            self.unitsSelected[i].atacante = param[i]['attackedOne']
+                    else:
+                        self.unitsSelected[i].updateOwnSpace()
+        elif id == CommandId.SEARCH_NEARBY_RIVAL:
+            print("BUSCAR")
+            for unit in self.unitsSelected:
+                enemy = self.mapa.getNearbyRival(unit.occupiedTile, self)
+                #print(type(enemy))
+                if enemy != None:
+                    if unit.state == UnitState.STILL:
+                        unit.attack(enemy)
+                    else:
+                        print("ataco a otro")
+                        unit.siendoAtacado = True
+                        unit.atacante = enemy
+                        print(unit.atacante)
+                else:
+                    if unit.state == UnitState.STILL:
+                        unit.updateOwnSpace()
+                    print("no hay naide")
         elif self.structureSelected != None:
-            if id == CommandId.GENERATE_UNIT or id == CommandId.GENERATE_WORKER or id == CommandId.GENERATE_SOLDIER:
+            if id == CommandId.GENERATE_UNIT or id == CommandId.GENERATE_WORKER or id == CommandId.GENERATE_T1:
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_BARRACKS:
                 #print("EXECUCION")
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_REFINERY:
+                self.structureSelected.execute(id)
+            elif id == CommandId.GENERATE_T2:
+                self.structureSelected.execute(id)
+            elif id == CommandId.GENERATE_T3:
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_SUPPLY_DEPOT:
                 self.structureSelected.execute(id)

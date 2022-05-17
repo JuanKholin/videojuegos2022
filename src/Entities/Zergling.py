@@ -5,17 +5,18 @@ from ..Utils import *
 from .Soldier import *
 
 # Constantes del Zergling
-HP = 35
+HP = 40
 ATTACK_INFO = [0, 0, 0]
-ATTACK_INFO[DAMAGE_IND] = 5
-ATTACK_INFO[COOLDOWN_IND] = 8
-ATTACK_INFO[RANGE_IND] = 67
+ATTACK_INFO[DAMAGE_IND] = 11
+ATTACK_INFO[COOLDOWN_IND] = 4
+ATTACK_INFO[RANGE_IND] = 1 * RANGE_UNIT + RANGE_BASIC
 MINE_POWER = 8
 MINERAL_COST = 20
+GAS_COST = 0
 TIME_TO_MINE = 1000
-GENERATION_TIME = 200
-SPEED = 4
-FRAMES_TO_REFRESH = 5
+GENERATION_TIME = 20
+SPEED = 3
+FRAMES_TO_REFRESH = 2
 SPRITES = "zergling.bmp"
 SPRITE_PIXEL_ROWS = 128
 FACES = 8
@@ -65,9 +66,9 @@ class Zergling(Soldier):
         if xIni != -1:
             self.updateOwnSpace()
 
-        self.render = pygame.transform.scale(pygame.image.load(ZERGLING_RENDER), UNIT_RENDER_SIZE)
+        self.render = pygame.transform.scale(pygame.image.load(ZERG_T1_RENDER), UNIT_RENDER_SIZE)
 
-        self.type = ZERG_SOLDIER
+        self.type = SOLDIER
     
 
     def toDictionary(self, map):
@@ -75,7 +76,7 @@ class Zergling(Soldier):
         sonDictionary = {
             "clase": "zergling",
             "nombre": "Zerling",
-            "funcion": "unidad de infanteria"
+            "funcion": "unidad Zerg basica"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

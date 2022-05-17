@@ -20,13 +20,14 @@ class Map():
         self.tiles = [[], []]
         self.tiles.insert(0, cargarSprites(TERRENO_PATH, 8, False))
         self.tiles.insert(1, cargarSprites(ELEVACION_PATH, 40, True))
+        self.tiles.insert(2, cargarSprites(CREEP_PATH, 8, False))
         if load:
             if codedMap == None:
                 self.generateRandomMap()
             self.load()
             #self.loadMinimap()
-        self.tilesW = w
-        self.tilesH = h
+        self.TILES_WIDTH = w
+        self.TILES_HEIGHT = h
 
     #Dibuja el mapa
     def drawMap(self, screen, camera):
@@ -56,7 +57,7 @@ class Map():
             i, j = self.getTileIndex(l[0], l[1])
             centers.append((i, j))
 
-        maxI, maxJ = self.getTileIndex(self.w, self.h)
+        maxJ, maxI = self.getTileIndex(self.w, self.h)
         for c in centers:
             for i in range(c[1] - VISION_RADIUS, c[1] + VISION_RADIUS):
                 for j in range(c[0] - VISION_RADIUS, c[0] + VISION_RADIUS):
@@ -70,6 +71,9 @@ class Map():
         for i in range(h): #Recorro el mapa  por las filas
             for j in range(w): #En la fila i recorro las columnas
                 self.mapa[i + int(y / self.th)][j + int(x / self.tw)].type = 1
+    
+    def setObstacle(self, tile):    
+        tile.type = 1
 
     def addOre(self, x, y):
         #print(int(y / self.th), int(x / self.tw))
@@ -89,9 +93,9 @@ class Map():
 
     def getRectTiles(self, rect):
         tiles = []
-        x = self.getTile(rect.x, rect.y).centerx
+        x = (self.getTile(rect.x, rect.y)).centerx
         finx = rect.x + rect.w
-        y = self.getTile(rect.x, rect.y).centery
+        y = (self.getTile(rect.x, rect.y)).centery
         finy = rect.y + rect.h
         #print(rect.x, rect.y, rect.w, rect.h)
         while x <= finx:
@@ -110,8 +114,12 @@ class Map():
 
         if int(x / self.tw) >= len(self.mapa[0]):
             xaux = len(self.mapa[0]) - 1
+        elif int(x / self.tw) < 0:
+            xaux = 0
         if int(y / self.th) >= len(self.mapa):
             yaux = len(self.mapa) - 1
+        elif int(y / self.th) < 0:
+            yaux = 0
         #print(xaux, yaux)
         if (xaux >= 0) and (yaux >= 0):
             return self.mapa[yaux][xaux]
@@ -208,11 +216,15 @@ class Map():
 
     #Pone la tile como vecina
     def setVecina(self, tile, id):
+        
         if tile.type == EMPTY:
             tile.setOcupada(id)
         else:
             #print("HI")
             pass
+        if tile.tileid == 290:
+            print("OCUPADA")
+            print(tile.type)
 
     #Pone la tile como recurso
     def setRecurso(self, tile):
@@ -416,7 +428,7 @@ class Map():
         broken = False
         while (nodosAbiertos.__len__() != 0) and not broken:
             jaja += 1
-            if jaja >= 200:
+            if jaja >= 400:
                 broken = True
             currentTile = Tile.Tile(nodosAbiertos[0].tileid, nodosAbiertos[0].centerx, nodosAbiertos[0].centery,
                     0, 0, 1, 0, nodosAbiertos[0].g, nodosAbiertos[0].padre)
@@ -472,9 +484,10 @@ class Map():
         for tile in nodosAbiertos:
             tile.g = 0
         if (nodosAbiertos.__len__() == 0) or broken:
-            print("camino no encontrado", tileObj.tileid)
+            #print("camino no encontrado", tileObj.tileid)
             
             #input()
+            pass
         else:
             #print("camino encontrado")
             currentTile = self.getTile(tileObj.centerx, tileObj.centery)
@@ -562,8 +575,8 @@ class Map():
         for tile in nodosAbiertos:
             tile.g = 0
         if (nodosAbiertos.__len__() == 0) or broken:
-            print("camino no encontrado", tileObj.tileid)
-            
+            #print("camino no encontrado", tileObj.tileid)
+            pass
             #input()
         else:
             #print("camino encontrado")
@@ -574,7 +587,7 @@ class Map():
                 currentTile = currentTile.padre
             #print(currentTile.tileid)
             i = path.__len__() - 1
-            #print("AAAAAAAAAAAA")
+            #print("--------------------")
             while i >= 0:
                 pathReturn.append(path[i])
                 i = i - 1
@@ -603,7 +616,9 @@ class Map():
         elif code[0] == '2': #elevacion
             index = int(code[1:])
             return self.tiles[1][index], 1
-
+        else: #creep
+            index = int(code[1:])
+            return self.tiles[2][index], 0
     #genera mapa con suelos aleatorios
     def generateRandomMap(self):
         random.seed(datetime.datetime.now())
@@ -677,14 +692,14 @@ class Map():
     def getNextTileByOffset(self, x, y, xOffset, yOffset):
         xAux = x + xOffset
         yAux = y + yOffset
-        if (xAux >= 0) and (xAux < self.tilesW) and (yAux >= 0) and (yAux < self.tilesH):
+        if (xAux >= 0) and (xAux < self.TILES_WIDTH) and (yAux >= 0) and (yAux < self.TILES_HEIGHT):
             return self.mapa[int(yAux)][int(xAux)]
         return None
 
     # Devuelve si estan libres todas las tiles entre esquina sup izq y inf der
     def checkIfEmptyZone(self, xUpLeft, yUpLeft, xBotRight, yBotRight):
-        if (xUpLeft >= 0) and (xUpLeft < self.tilesW) and (yUpLeft >= 0) and (yUpLeft < self.tilesH):
-            if (xBotRight >= 0) and (xBotRight < self.tilesW) and (yBotRight >= 0) and (yBotRight < self.tilesH):
+        if (xUpLeft >= 0) and (xUpLeft < self.TILES_WIDTH) and (yUpLeft >= 0) and (yUpLeft < self.TILES_HEIGHT):
+            if (xBotRight >= 0) and (xBotRight < self.TILES_WIDTH) and (yBotRight >= 0) and (yBotRight < self.TILES_HEIGHT):
                 for x in range(int(xUpLeft), int(xBotRight)):
                     for y in range(int(yUpLeft), int(yBotRight)):
                         if self.mapa[y][x].type != EMPTY:
@@ -725,7 +740,7 @@ class Map():
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
                 row = int(j - distance + y)
-                if (col >= 0) and (col < self.tilesW) and (row >= 0) and (row < self.tilesH):
+                if (col >= 0) and (col < self.TILES_WIDTH) and (row >= 0) and (row < self.TILES_HEIGHT):
                     aux = self.mapa[row][col]
                     if ((aux.type == UNIT) or (aux.type == STRUCTURE)) and (aux.ocupante.hp > 0):
                         #print("PLAYER2? ", aux.ocupante.player)
@@ -744,7 +759,7 @@ class Map():
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
                 row = int(j - distance + y)
-                if (col >= 0) and (col < self.tilesW) and (row >= 0) and (row < self.tilesH):
+                if (col >= 0) and (col < self.TILES_WIDTH) and (row >= 0) and (row < self.TILES_HEIGHT):
                     aux = self.mapa[row][col]
                     if (aux.type == UNIT) or (aux.type == STRUCTURE):
                         #print(aux.ocupante.type, " ", col, " ", row)
@@ -761,7 +776,7 @@ class Map():
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
                 row = int(j - distance + y)
-                if (col >= 0) and (col < self.tilesW) and (row >= 0) and (row < self.tilesH):
+                if (col >= 0) and (col < self.TILES_WIDTH) and (row >= 0) and (row < self.TILES_HEIGHT):
                     aux = self.mapa[row][col]
                     if aux.type == GEYSER:
                         return aux.ocupante
@@ -777,7 +792,7 @@ class Map():
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
                 row = int(j - distance + y)
-                if (col >= 0) and (col < self.tilesW) and (row >= 0) and (row < self.tilesH):
+                if (col >= 0) and (col < self.TILES_WIDTH) and (row >= 0) and (row < self.TILES_HEIGHT):
                     aux = self.mapa[row][col]
                     if aux.type == RESOURCE and aux.ocupante.capacity > 0:
                         crystalsFound.add(aux.ocupante)

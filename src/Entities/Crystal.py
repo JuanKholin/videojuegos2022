@@ -1,6 +1,7 @@
 import pygame as pg
 from ..Utils import *
 from .Resource import *
+from random import randint
 
 SPRITE_PIXEL_ROWS = 96
 WEIGHT_PADDING =    0
@@ -11,7 +12,8 @@ Y_PADDING =         55
 class Crystal(Resource):
     def __init__(self, x, y, capacidad):
         Resource.__init__(self, x, y, CRYSTAL, capacidad)
-        spritesheet = pg.image.load("./SPRITE/Cristal/min0" + str(self.type) + ".bmp").convert()
+        crystalType = randint(1,3) # Mete un cristal aleatorio de los 3 que tenemos
+        spritesheet = pg.image.load("./SPRITE/Cristal/min0" + str(crystalType) + ".bmp").convert()
         spritesheet.set_colorkey((BLACK))
         self.sprites = self.divideSpritesheetByRows(spritesheet, SPRITE_PIXEL_ROWS)
         #self.image = self.sprites[4 - int(float(capacidad)/float(self.interval) + 0.5)]
@@ -32,7 +34,8 @@ class Crystal(Resource):
         return sprites
 
     def __del__(self):
-        print("destruction")
+        #print("destruction")
+        pass
 
     # Devuelve el rectangulo que conforma su imagen, creo, esto lo hizo otro
     def getRect(self):

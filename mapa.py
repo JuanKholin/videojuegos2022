@@ -26,6 +26,9 @@ from src.Entities.Zergling import *
 from src.Entities.TerranSupplyDepot import *
 from src.Entities.Extractor import *
 from src.Entities.TerranRefinery import *
+from src.Entities.Firebat import *
+from src.Entities.Hydralisk import *
+from src.Entities.Goliath import *
 
 
 # Auxiliar del bucle principal
@@ -50,7 +53,7 @@ def procesarInput():
         escena.checkPressedButtons()
 
 
-
+'''
 def setEntity(player, ai):
 
     structure1 = TerranBuilder(10, 72, player, mapa, False, raton)
@@ -122,6 +125,59 @@ def setEntity(player, ai):
     resources.append(gas)
     gas = Geyser(76, 16, 500)
     resources.append(gas)
+    escena.resources = resources'''
+
+def setEntity(player, ai):
+
+    structure1 = TerranBuilder(5, 4, player, mapa, False, raton)
+
+    structure1z = Hatchery(33, 4, ai, mapa, False, raton)
+    drone = Drone(ai, 35,6)
+    scv = TerranWorker(player, 5, 6)
+    pUnits = []
+    pUnits.append(Hydralisk(player, 5, 8))
+    pUnits.append(Firebat(player, 7, 8))
+    pUnits.append(Goliath(player, 6, 7))
+
+    ai.addUnits(drone)
+    ai.addStructures(structure1z)
+    ai.setBasePlayer(structure1z)
+    player.addStructures(structure1)
+    player.setBasePlayer(structure1)
+    player.addUnits(scv)
+    for unit in pUnits:
+        player.addUnits(unit)
+
+    #Recursos del mapa
+    resources = []
+
+    crystal = Crystal(5, 13, 800)
+    crystal3 = Crystal(9, 13, 800)
+    crystala = Crystal(13, 13, 800)
+    crystalb = Crystal(17, 13, 800)
+    crystalc = Crystal(21, 13, 800)
+
+    crystalz = Crystal(35, 13, 400)
+    crystalz3 = Crystal(31, 13, 400)
+
+
+    resources.append(crystal3)
+    resources.append(crystal)
+    resources.append(crystala)
+    resources.append(crystalb)
+    resources.append(crystalc)
+
+    resources.append(crystalz3)
+    resources.append(crystalz)
+
+
+
+
+
+    gas = Geyser(16, 7, 800)
+    resources.append(gas)
+    gas = Geyser(22, 7, 800)
+    resources.append(gas)
     escena.resources = resources
 
 def update():
@@ -138,8 +194,8 @@ def update():
         escena.mapa = mapa
         escena.mapa.load()
         escena.mapa.loadMinimap()
-        camera.x = 200
-        camera.y = 2400
+        camera.x = 0
+        camera.y = 0
         setEntity(player1, player2)
         setGameState(System_State.ONGAME)
     elif getGameState() == System_State.ONGAME:
@@ -198,8 +254,9 @@ commandMap ={
   CommandId.ROTATE: pg.K_r,
 }
 
-print(EMPTY_MAP.__len__(), EMPTY_MAP[0].__len__())
-mapa = Map.Map( EMPTY_MAP[0].__len__(),EMPTY_MAP.__len__(), True, EMPTY_MAP)
+print(MAPA_CHIKITO.__len__(), MAPA_CHIKITO[0].__len__())
+mapa = Map.Map( MAPA_CHIKITO[0].__len__(),MAPA_CHIKITO.__len__(), True, MAPA_CHIKITO)
+'''
 mapa.setElevacion(0, 55)
 mapa.setElevacion(8, 55)
 mapa.setElevacion(16, 55)
@@ -217,7 +274,7 @@ mapa.setElevacion(48, 20)
 mapa.setElevacion(40, 15)
 mapa.setElevacion(40, 10)
 mapa.setElevacion(40, 5)
-mapa.setElevacion(40, 0)
+mapa.setElevacion(40, 0)'''
 
 
 
@@ -242,10 +299,10 @@ raton = Raton.Raton(player1, player2, mapa)
 p1Interface = Interface(player1, player2, raton)
 raton.addInterface(p1Interface)
 if Utils.DEBBUG == False:
-    aI = AI(player2, Race.TERRAN, EASY)
+    aI = AI(player2, Race.ZERG, EASY)
 
 else:
-    aI = AI(player2, Race.TERRAN, NULA)
+    aI = AI(player2, Race.ZERG, EASY)
 escena = Escena(player1, player2, aI, [], camera, raton, p1Interface, [])
 raton.setEscena(escena)
 

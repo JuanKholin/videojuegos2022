@@ -11,15 +11,16 @@ from ..Music import *
 # Constantes
 HP = 60
 ATTACK_INFO = [0, 0, 0]
-ATTACK_INFO[DAMAGE_IND] = 5
-ATTACK_INFO[COOLDOWN_IND] = 15
-ATTACK_INFO[RANGE_IND] = 67
+ATTACK_INFO[DAMAGE_IND] = 6
+ATTACK_INFO[COOLDOWN_IND] = 5
+ATTACK_INFO[RANGE_IND] = 1 * RANGE_UNIT + RANGE_BASIC
 MINE_POWER = 8
-MINERAL_COST = 50
+MINERAL_COST = 20
+GAS_COST = 0
 TIME_TO_MINE = 2000
-GENERATION_TIME = 2
-speed = 2
-FRAMES_TO_REFRESH = 10
+GENERATION_TIME = 20
+SPEED = 2.5
+FRAMES_TO_REFRESH = 3
 SPRITES = "scvJusto.bmp"
 SCALE = 1.5
 SPRITE_PIXEL_ROWS = 72
@@ -62,7 +63,7 @@ class TerranWorker(Worker):
     
     def __init__(self, player, xIni = -1, yIni = -1):
         Worker.__init__(self, HP, xIni * TILE_WIDTH + 20, yIni * TILE_HEIGHT, MINERAL_COST,
-                GENERATION_TIME, speed, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME,
+                GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, SPRITES, FACES, FRAME,
                 PADDING,  takeID(), player, MINE_POWER, TIME_TO_MINE, INVERSIBLE_FRAMES,
                 FRAMES, DIR_OFFSET, ATTACK_FRAMES, STILL_FRAMES, MOVE_FRAMES, DIE_FRAMES, X_PADDING,
                 Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ORE_TRANSPORTING_FRAMES,BARREL_TRANSPORTING_FRAMES, ATTACK_INFO)
@@ -82,27 +83,13 @@ class TerranWorker(Worker):
                 #self.image.get_height() - HEIGHT_PADDING)
         #self.imageRect = rect(self.x - self.image.get_width()/2, self.y -self.image.get_height() , self.image.get_width(), self.image.get_height())
         #self.imageRect = rect(self.x, self.y, self.image.get_width(), self.image.get_height())
-        self.render = pygame.transform.scale(pygame.image.load(WORKER_RENDER), UNIT_RENDER_SIZE)
+        self.render = pygame.transform.scale(pygame.image.load(TERRAN_WORKER_RENDER), UNIT_RENDER_SIZE)
 
-        self.type = TERRAN_WORKER
+        self.type = WORKER
 
     
 
-    def getUpgrades(self):
-        upgrades = []
-        if self.player.mineUpgrade == 0:
-            upgrades.append({'upgrade': Upgrades.NO_MINE, 'cantidad': 0})
-        else:
-            upgrades.append({'upgrade': Upgrades.MINE, 'cantidad': int(self.player.mineUpgrade/200)})
-        if self.player.armorUpgrade == 0:
-            upgrades.append({'upgrade': Upgrades.NO_ARMOR, 'cantidad': 0})
-        else:
-            upgrades.append({'upgrade': Upgrades.ARMOR, 'cantidad': self.player.armorUpgrade})
-        if self.player.dañoUpgrade == 0:
-            upgrades.append({'upgrade': Upgrades.NO_DANYO, 'cantidad': 0})
-        else:
-            upgrades.append({'upgrade': Upgrades.DANYO, 'cantidad': self.player.dañoUpgrade})
-        return upgrades
+    
 
     def toDictionary(self, map):
         fatherDictionary = super().toDictionary(map)

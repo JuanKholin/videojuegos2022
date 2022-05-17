@@ -2,6 +2,9 @@ from .Utils import *
 from .Entities.TerranBarracks import *
 from .Entities.TerranSupplyDepot import *
 from .Entities.TerranRefinery import *
+from .Entities.ZergBarracks import *
+from .Entities.Extractor import *
+from .Entities.ZergSupply import *
 from .Command import *
 from random import *
 
@@ -9,9 +12,9 @@ from random import *
 class AI():
     def __init__(self, artificialPlayer, race, difficult):
         self.data = artificialPlayer
-        self.reactionTime = AI_LAPSE
+        self.reactionTime = AI_LAPSE[difficult]
+        self.decissionRate = DECISSION_RATE[difficult]
         self.rotativeReaction = 0
-        self.decissionRate = difficult
         self.count = 0
         self.decissionsChance = [ 25, 25, 25, 25 ]
         self.decissionsPool = sum(self.decissionsChance)
@@ -21,30 +24,31 @@ class AI():
 
         self.minWorkers = 2
         self.minSoldiers = 2
-
         if race == Race.ZERG:
             self.base = ZERG_BASE
             self.barracks = ZERG_BARRACKS
             self.depot = ZERG_DEPOT
-            self.geyserBuilding = ZERG_GEYSER_STRUCTURE
+            self.geyserBuilding = ZERG_REFINERY
             self.worker = ZERG_WORKER
-            self.soldier = ZERG_SOLDIER
-            self.workerCost = ZERG_WORKER_MINERAL_COST
-            self.soldierCost = ZERG_SOLDIER_MINERAL_COST
+            self.workerCost = [ZERG_WORKER_MINERAL_COST, ZERG_WORKER_GAS_COST]
+            self.t1Cost = [ZERG_T1_MINERAL_COST, ZERG_T1_GAS_COST]
+            self.t2Cost = [ZERG_T2_MINERAL_COST, ZERG_T2_GAS_COST]
+            self.t3Cost = [ZERG_T3_MINERAL_COST, ZERG_T3_GAS_COST]
         elif race == Race.TERRAN:
             self.base = TERRAN_BASE
             self.barracks = TERRAN_BARRACKS
             self.depot = TERRAN_DEPOT
-            self.geyserBuilding = TERRAN_GEYSER_STRUCTURE
+            self.geyserBuilding = TERRAN_REFINERY
             self.worker = TERRAN_WORKER
-            self.soldier = TERRAN_SOLDIER
-            self.workerCost = TERRAN_WORKER_MINERAL_COST
-            self.soldierCost = TERRAN_SOLDIER_MINERAL_COST
+            self.workerCost = [TERRAN_WORKER_MINERAL_COST, TERRAN_WORKER_GAS_COST]
+            self.t1Cost = [TERRAN_T1_MINERAL_COST, TERRAN_T1_GAS_COST]
+            self.t2Cost = [TERRAN_T2_MINERAL_COST, TERRAN_T2_GAS_COST]
+            self.t3Cost = [TERRAN_T3_MINERAL_COST, TERRAN_T3_GAS_COST]
         elif race == Race.PROTOSS:
             self.base = PROTOSS_BASE
             self.barracks = PROTOSS_BARRACKS
             self.depot = PROTOSS_DEPOT
-            self.geyserBuilding = PROTOSS_GEYSER_STRUCTURE
+            self.geyserBuilding = PROTOSS_REFINERY
             self.worker = PROTOSS_WORKER
             self.soldier = PROTOSS_SOLDIER
             self.workerCost = PROTOSS_WORKER_MINERAL_COST
@@ -63,7 +67,7 @@ class AI():
         if self.decissionRate != 0:
             units, structures = self.data.get_info()
             self.miniCount += 1
-            if self.miniCount >= AI_LAPSE: # Acciones ligeras
+            if self.miniCount >= self.reactionTime: # Acciones ligeras
                 self.miniCount = 0
                 self.alwaysToDoActions(units, structures)
             self.count += 1
@@ -91,22 +95,23 @@ class AI():
     def makeDecission(self, units, structures):
         decission = self.decide()
         if decission == 0:
-            #print("IA DECIDE ATACAR LO VISIBLE")
+            print("IA DECIDE ATACAR LO VISIBLE")
             self.attackVisible(units, structures)
         elif decission == 1:
-            #print("IA DECIDE HACER MEJORAS")
+            print("IA DECIDE HACER MEJORAS")
             self.armyUpgrade(structures)
         elif decission == 2:
-            #print("IA DECIDE EXPANDIR SU EJERCITO")
+            print("IA DECIDE EXPANDIR SU EJERCITO")
             self.armyExpansion(structures)
         elif decission == 3:
-            #print("IA DECIDE INVADIR")
+            print("IA DECIDE INVADIR")
             self.seekAndDestroy(units)
         #print(self.decissionsChance)
 
     # Toma una decision y rebalancea el pool de decisiones, me ha quedado bastante original la verdad,
     # estoy orgulloso y no se ni si funciona xdxdxdxd
     def decide(self):
+        #print(self.data.gas)
         randPick = randint(0, 99)
         for i in range(len(self.decissionsChance)):
             if randPick < self.decissionsChance[i]:
@@ -136,7 +141,12 @@ class AI():
             if unit.attackedOne != None:
                 objectivesSet.add(unit.attackedOne)
         objectivesList = list(objectivesSet) # Lo pasa a lista por comodi<padre_en_ingles>
-        defenses = self.getSoldiers(units)
+        base = self.getBase(structures)
+        if (base != None) and (base.lastAttacker != None):
+            defenses = self.getFreeUnits(units)
+            base.lastAttacker = None
+        else:
+            defenses = self.getSoldiers(units)
         if len(objectivesList) > 0: # Si hay amenazas reparte las tropas libres a por ellas
             i = 0
             for soldier in defenses:
@@ -144,29 +154,22 @@ class AI():
                 i = (i + 1) % len(objectivesList)
 
     # Si la IA tiene al menos una estructura puede construir mas, se considera build minima
-    # un edificio de cada
+    # un edificio de cada y los suficientes para albergar tropas actuales + 1
     def minimalBuild(self, structures):
         if self.haveBase(structures):
             if not self.haveBarracks(structures):
                 self.buildBarracks(structures)
-            elif not self.haveDepot(structures):
-                if (self.depot == ZERG_DEPOT) and (self.data.resources >= ZERG_DEPOT_MINERAL_COST):
-                    #print("Construye zergdepot")
-                    self.data.resources -= ZERG_DEPOT_MINERAL_COST
-                    self.buildZergDepot(structures) # Seria Zerg pero no hay edificio xd
-                elif (self.depot == TERRAN_DEPOT) and (self.data.resources >= TERRAN_DEPOT_MINERAL_COST):
-                    print("Construye terrandepot")
-                    self.data.resources -= TERRAN_DEPOT_MINERAL_COST
-                    self.buildTerranDepot(structures)
-            
+            elif (not self.haveDepot(structures)) or (self.data.limitUnits <= len(self.data.units) + 1):
+                self.buildDepot(structures)
+
     # Si faltan workers o soldados los genera, si tiene recursos y hay edificios libres para ello
     def restoreArmy(self, units, structures):
         nWorkers = 0
         nSoldiers = 0
         for unit in units:
-            if unit.type == self.worker:
+            if unit.type == WORKER:
                 nWorkers += 1
-            elif unit.type == self.soldier:
+            elif unit.type == SOLDIER:
                 nSoldiers += 1
         workersToCreate = self.minWorkers - nWorkers
         base = self.getBase(structures)
@@ -182,7 +185,7 @@ class AI():
                     if (structure.state == BuildingState.OPERATIVE) and (soldiersToCreate > 0):
                         soldiersToCreate = soldiersToCreate - 1
                         #print("gensoldier")
-                        structure.execute(CommandId.GENERATE_SOLDIER)
+                        structure.execute(CommandId.GENERATE_T1)
 
     # Es un update de workers bastante cool, si no hace nada a minar, y si mina mina y ya
     def gatherResources(self, units, structures):
@@ -192,11 +195,11 @@ class AI():
             for worker in workers:
                 if (worker.state == UnitState.EXTRACTING) or (worker.state == UnitState.GAS_TRANSPORTING):
                     skipGasNeed = True 
+                    print(self.data.gas, "GASS")
             if not skipGasNeed: # Si hay al menos un worker extrayendo gas no es necesario hacer nada de gas
                 gasMan = workers.pop()
                 geyser = self.getGeyserInUse(structures)
                 if (geyser != None) and (geyser.state == BuildingState.OPERATIVE):
-                    #print("crying", geyser.getTile().ocupante)
                     gasMan.extract(geyser.getTile())
                 elif geyser == None:
                     geyser = self.findFreeGeyser(units, structures)
@@ -206,6 +209,7 @@ class AI():
                 if len(self.crystalsSeen) > 0: # si hay cristales conocidos,
                     crystalToMine = 0
                     for worker in workers: # todos a la mina
+                        print("A la mina")
                         if worker.state == UnitState.STILL: # si les viene bien xd
                             crystalsSeen = list(self.crystalsSeen)
                             #print("go to work crystal at", crystalsSeen[crystalToMine].getPosition())
@@ -215,38 +219,56 @@ class AI():
     # Recorre las unidades invasoras para que vayan a la guerra, evitan recorrer caminos opuestos
     # pero si no hay de otra acaban haciendolo, no se estan quietas del todo hasta que ganan o mueren
     def updateInvaders(self):
+        #print("upInv")
         for invasor in self.invaders:
             target = self.mapa.getNearbyRival(invasor.getTile(), self.data, 5)
             if target != None: # Ha encontrado objetivo
                 invasor.attack(target) # ergo, ataca
             else: # Nada por ahora
-                if invasor.state == UnitState.STILL: # Toca moverse
-                    x, y = self.getDirection(randint(0, 7))
-                    tile = invasor.getTile()
-                    tile = self.mapa.getNextTileByOffset(tile.x, tile.y, x * 4, y * 4)
-                    if tile != None:
-                        invasor.move(tile)
-
-                    '''actualDir = self.parseDir(invasor.getDir()) ESTO ES PARA LA BETA FINAL
-                    offset = randint(7, 9)
-                    x, y = self.getDirection((actualDir + offset) % 8)
-                    tile = invasor.getTile()
-                    tile = self.mapa.getNextTileByOffset(tile.x, tile.y, x * 3, y * 3)
-                    if tile != None:
-                        invasor.move(tile)'''
+                #print("toca moverse")
+                if invasor.state == UnitState.STILL: # The best move you will see in your entire life ahead:
+                    randOffset = randint(-1, 1)
+                    dirToCalc = invasor.getRealDir()
+                    origTile = invasor.getTile()
+                    aNiceDestinyFound = False
+                    bestTile = None
+                    j = 0
+                    while (not aNiceDestinyFound) and (j < 8):
+                        dirToCalc = (dirToCalc + randOffset) % TOTAL_DIRECTIONS
+                        while (randOffset == 0):
+                            j = -1
+                            randOffset = randint(-1, 1) # He dicho
+                        x, y = self.getDirection(dirToCalc)
+                        destTile = None
+                        for i in range(1, 5):
+                            destTile = self.mapa.getNextTileByOffset(origTile.x / 40, 
+                                    origTile.y / 40, x * i, y * i)                
+                            if destTile != None and destTile.type == EMPTY:
+                                bestTile = destTile
+                            else:
+                                j = j + 1
+                                break
+                        if bestTile != None:
+                            aNiceDestinyFound = True
+                    if aNiceDestinyFound:
+                        invasor.move(bestTile)
+                    #else:
+                        #print("No hay destino?")
 
     # Actualiza los cristales visibles
     def updateVision(self, units, structures):
+        print("UPDATEVIS")
         for unit in units:
             tile = unit.getTile()
             if tile != None:
-                self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(tile, 5))
+                self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(tile, 6))
         for invader in self.invaders:
             tile = invader.getTile()
             if tile != None:
-                self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(tile, 5))
+                self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(tile, 6))
         for structure in structures:
-            self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(structure.getTile(), 5))
+            self.crystalsSeen = self.crystalsSeen.union(self.mapa.findCrystals(structure.getTile(), 7))
+        print("Criscris", len(self.crystalsSeen))
 
     ##############################
     # DECISIONES TRASCENDENTALES #
@@ -300,12 +322,6 @@ class AI():
     # Tambien construye un almacen si los recursos estan cerca del tope o construye otro
     # barracks si estan todos los edificios trabajando
     def armyExpansion(self, structures):
-        # Almacen extra
-        if self.data.limitUnits <= len(self.data.units) + 3:
-            print("BEFORE",self.data.limitUnits)
-            self.buildDepot(structures)
-            print("AFTER",self.data.limitUnits)
-
         # Barracks extra
         needExtraBarrack = True
         for structure in structures:
@@ -315,16 +331,19 @@ class AI():
            self.buildBarracks(structures)
 
         # Minimos aumentados
-        soldiersCost = self.minSoldiers * self.soldierCost
+        soldiersCost = self.minSoldiers * self.t1Cost[0]
+        print(soldiersCost, self.data.resources)
         if self.data.resources > soldiersCost:
+            print("upgrade soldiers")
             self.minSoldiers = self.minSoldiers + 1
         else:
             if self.minSoldiers > self.minWorkers * 2:
                 self.minSoldiers -= 1
             elif self.minWorkers > 3:
                 self.minWorkers -= 1
-        workersCost = self.minWorkers * self.workerCost
+        workersCost = self.minWorkers * self.workerCost[0]
         if self.data.resources > workersCost + (soldiersCost / 2):
+            #print("upgrade workers")
             self.minWorkers = self.minWorkers + 1
 
     # Apunta a ciertos soldados libres en funcion del ejercito disponible 
@@ -343,6 +362,7 @@ class AI():
         for i in range(num):
             self.data.removeUnitFromFree(soldiers[i])
             self.invaders.append(soldiers[i])
+        #print(len(self.invaders), "invasores")
 
     ##############
     # AUXILIARES #
@@ -352,15 +372,23 @@ class AI():
     def getSoldiers(self, units):
         soldiers = []
         for unit in units:
-            if unit.type == self.soldier and unit.isReadyToFight():
+            if (unit.type == SOLDIER) and unit.isReadyToFight():
                 soldiers.append(unit)
         return soldiers
+
+    # Devuelve todas las unidades que no esten ya luchando
+    def getFreeUnits(self, units):
+        free = []
+        for unit in units:
+            if (unit.state != UnitState.ATTACKING) and (unit.state != UnitState.DYING) and (unit.state != UnitState.DEAD):
+                free.append(unit)
+        return free
 
     # De las unidades devuelve a todos los workers libres
     def getWorkers(self, units):
         workers = []
         for unit in units:
-            if unit.type == self.worker and unit.isReadyToWork():
+            if (unit.type == WORKER) and unit.isReadyToWork():
                 workers.append(unit)
         return workers
 
@@ -385,146 +413,122 @@ class AI():
                 return True
         return False
 
+    def getBuildPosition(self, structures, width, height, HEIGHT_PAD, centerTile):
+        nStructures = len(structures)
+        initialI = randint(0, nStructures - 1)
+        initialDir = randint(0, 7)
+        for i in range(nStructures):
+            structure = structures[(initialI + i) % nStructures]
+            for j in range(TOTAL_DIRECTIONS):
+                aBadTry = False
+                actualDir = (initialDir + j) % TOTAL_DIRECTIONS
+                buildX, buildY = structure.getCords()
+                x, y = self.getDirection(actualDir)
+                tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
+                while (tile != None) and (tile.type == STRUCTURE) and (tile.ocupante == structure):
+                    buildX = buildX + x
+                    buildY = buildY + y
+                    tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
+                if (tile != None) and (tile.type == EMPTY):
+                    for k in range(3):
+                        buildX = buildX + x
+                        buildY = buildY + y
+                        tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
+                        if (tile == None) or ((tile != None) and (tile.type != EMPTY)):
+                            aBadTry = True
+                else:
+                    aBadTry = True
+                if not aBadTry:
+                    buildX, buildY = self.getTopLeft(buildX, buildY, actualDir, width, height, centerTile)
+                    if self.mapa.checkIfEmptyZone(buildX, buildY, buildX + (width - 1), buildY + (height - 1)):
+                        originX = buildX*self.mapa.tw
+                        originY = buildY*self.mapa.th
+                        rect = pygame.Rect(originX, originY + HEIGHT_PAD / 2, width * self.mapa.tw - 1, 
+                                height * self.mapa.th - HEIGHT_PAD / 2 - 1)
+                        tiles = self.mapa.getRectTiles(rect)
+                        ok = True
+                        tiles_set = set(tiles)
+                        if len(tiles_set) == height * width:
+                            for tile in tiles_set:
+                                if tile.type != EMPTY:
+                                    ok = False
+                                    break
+                        else:
+                            ok = False
+                        if ok:
+                            return buildX, buildY
+        return None, None
+
+    # Construye un barracks de los Zerg cerca de una estructura aliada aleatoria
+    def buildZergBarracks(self, structures):
+        width = ZergBarracks.TILES_WIDTH
+        height = ZergBarracks.TILES_HEIGHT
+        centerTile = ZergBarracks.CENTER_TILE
+        heightPad = ZergBarracks.HEIGHT_PAD
+        buildX, buildY = self.getBuildPosition(structures, width, height, heightPad, centerTile)
+        if (buildX != None) and (buildY != None):
+            toBuild = ZergBarracks(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
+            self.data.addStructures(toBuild)
+            return True
+        return False
+
     # Construye un barracks de los Terran cerca de una estructura aliada aleatoria
     def buildTerranBarracks(self, structures):
         width = TerranBarracks.TILES_WIDTH
         height = TerranBarracks.TILES_HEIGHT
         centerTile = TerranBarracks.CENTER_TILE
-        randBuilding = randint(0, len(structures) - 1)
-        randBuilding = 0
-        building = structures[randBuilding]
-        randDirection = randint(0, 7)
-        buildingsTried = 0
-        directionsTried = 0
-        x, y = self.getDirection(randDirection)
-        buildX, buildY = building.getCords()
+        heightPad = TerranBarracks.HEIGHT_PAD
+        buildX, buildY = self.getBuildPosition(structures, width, height, heightPad, centerTile)
+        if (buildX != None) and (buildY != None):
+            toBuild = TerranBarracks(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
+            self.data.addStructures(toBuild)
 
-        builded = False
-        while not builded:
-            tryNew = True
-            tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
-            if (tile != None) and (tile.type == STRUCTURE) and (tile.ocupante == building):
-                buildX = buildX + x
-                buildY = buildY + y
-                #print(buildX," ", buildY, " STRUCTURE")
-                tryNew = False
-            elif (tile != None) and (tile.type == EMPTY): # Hueco tras edificio
-                #Ahora checkear que haya hueco para el edificio a construir
-                buildX = buildX + x
-                buildY = buildY + y
-                #print("first ", buildX, " ", buildY, " EMPTY")
-                tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
-                if (tile != None) and (tile.type == EMPTY): # #primera tile libre para plantar edificio
-                    buildX = buildX + x
-                    buildY = buildY + y
-                    #print("second ", buildX," ", buildY, " EMPTY")
-                    buildX, buildY = self.getTopLeft(buildX, buildY, randDirection, width, height, centerTile)
-                    #print("topLeft ", buildX," ", buildY)
-
-                    if self.mapa.checkIfEmptyZone(buildX, buildY, buildX + (width - 1), buildY + (height - 1)):
-                        #print("buildea")
-                        toBuild = TerranBarracks(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
-                        if toBuild.checkTiles(False):
-                            self.data.addStructures(toBuild)
-                            toBuild.buildProcess()
-                            builded = True
-            if tryNew and not builded:
-                directionsTried = directionsTried + 1
-                if directionsTried >= TOTAL_DIRECTIONS: # Se han probado todas las direcciones
-                    directionsTried = 0
-                    buildingsTried = buildingsTried + 1
-                    if buildingsTried >= len(structures): # No hay espacio en el mapa (  9 _9)
-                        #print("Wrong map, full occupied?")
-                        exit()
-                    else: # Quedan edificios por probar
-                        randBuilding = (randBuilding + 1) % len(structures)
-                        building = structures[randBuilding]
-                else: # Quedan direcciones por probar
-                    randDirection = (randDirection + 1) % TOTAL_DIRECTIONS
-                    x, y = self.getDirection(randDirection)
-                    #print ("New x e y ", x, " ", y)
-                    buildX, buildY = building.getCords()
+    # Construye un depot de los Zerg cerca de una estructura aliada aleatoria
+    def buildZergDepot(self, structures):
+        width = ZergSupply.TILES_WIDTH
+        height = ZergSupply.TILES_HEIGHT
+        centerTile = ZergSupply.CENTER_TILE
+        heightPad = ZergSupply.HEIGHT_PAD
+        buildX, buildY = self.getBuildPosition(structures, width, height, heightPad, centerTile)
+        if (buildX != None) and (buildY != None):
+            toBuild = ZergSupply(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
+            self.data.addStructures(toBuild)
+            return True
+        return False
 
     # Construye un depot de los Terran cerca de una estructura aliada aleatoria
     def buildTerranDepot(self, structures):
         width = TerranSupplyDepot.TILES_WIDTH
         height = TerranSupplyDepot.TILES_HEIGHT
         centerTile = TerranSupplyDepot.CENTER_TILE
-        randBuilding = randint(0, len(structures) - 1)
-        building = structures[randBuilding]
-        randDirection = randint(0, 7)
-        buildingsTried = 0
-        directionsTried = 0
-        x, y = self.getDirection(randDirection)
-        buildX, buildY = building.getCords()
-        #print("HAOSDHAS")
-        builded = False
-        while not builded:
-            tryNew = True
-            tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
-            #print("hasdjkasd")
-            if (tile != None) and (tile.type == STRUCTURE) and (tile.ocupante == building):
-                buildX = buildX + x
-                buildY = buildY + y
-                #print(buildX," ", buildY, " STRUCTURE")
-                tryNew = False
-            elif (tile != None) and (tile.type == EMPTY): # Hueco tras edificio
-                #Ahora checkear que haya hueco para el edificio a construir
-                buildX = buildX + x
-                buildY = buildY + y
-                #print("first ", buildX, " ", buildY, " EMPTY")
-                tile = self.mapa.getNextTileByOffset(buildX, buildY, x, y)
-                if (tile != None) and (tile.type == EMPTY): # #primera tile libre para plantar edificio
-                    buildX = buildX + x
-                    buildY = buildY + y
-                    #print("second ", buildX," ", buildY, " EMPTY")
-                    buildX, buildY = self.getTopLeft(buildX, buildY, randDirection, width, height, centerTile)
-                    #print("topLeft ", buildX," ", buildY)
-
-                    if self.mapa.checkIfEmptyZone(buildX, buildY, buildX + (width - 1), buildY + (height - 1)):
-                        #print("buildea")
-                        toBuild = TerranSupplyDepot(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)
-                        if toBuild.checkTiles(False):
-                            self.data.addStructures(toBuild)
-                            toBuild.buildProcess()
-                            builded = True
-            if tryNew and not builded:
-                directionsTried = directionsTried + 1
-                if directionsTried >= TOTAL_DIRECTIONS: # Se han probado todas las direcciones
-                    directionsTried = 0
-                    buildingsTried = buildingsTried + 1
-                    if buildingsTried >= len(structures): # No hay espacio en el mapa (  9 _9)
-                        #print("Wrong map, full occupied?")
-                        exit()
-                    else: # Quedan edificios por probar
-                        randBuilding = (randBuilding + 1) % len(structures)
-                        building = structures[randBuilding]
-                else: # Quedan direcciones por probar
-                    randDirection = (randDirection + 1) % TOTAL_DIRECTIONS
-                    x, y = self.getDirection(randDirection)
-                    #print ("New x e y ", x, " ", y)
-                    buildX, buildY = building.getCords()
+        heightPad = TerranSupplyDepot.HEIGHT_PAD
+        buildX, buildY = self.getBuildPosition(structures, width, height, heightPad, centerTile)
+        if (buildX != None) and (buildY != None):
+            toBuild = TerranSupplyDepot(buildX + centerTile[0], buildY + centerTile[1], self.data, self.mapa, False)            
+            self.data.addStructures(toBuild)
+            return True
+        return False
 
     # Construye un edificio de explotacion de geiseres en el geiser geyser
     def buildGeyserBuilding(self, geyser):
-        if (self.geyserBuilding == ZERG_GEYSER_STRUCTURE) and (self.data.resources >= ZERG_GEYSER_STRUCTURE_MINERAL_COST):
+        if (self.geyserBuilding == ZERG_REFINERY) and (self.data.resources >= ZERG_REFINERY_MINERAL_COST):
             #print("Construye zerggeyserstructure")
-            self.data.resources -= ZERG_GEYSER_STRUCTURE_MINERAL_COST
-            toBuild = ZergGeyserStructure(0, 0, self.data, self.mapa, True, geyser)
+            self.data.resources -= ZERG_REFINERY_MINERAL_COST
+            toBuild = Extractor(int(geyser.x / 40) - 1, int(geyser.y / 40), self.data, self.mapa, True, geyser)
             self.data.addStructures(toBuild)
-            toBuild.buildProcess()
-        elif (self.geyserBuilding == TERRAN_GEYSER_STRUCTURE) and (self.data.resources >= TERRAN_GEYSER_STRUCTURE_MINERAL_COST):
+            #toBuild.buildProcess()
+        elif (self.geyserBuilding == TERRAN_REFINERY) and (self.data.resources >= TERRAN_REFINERY_MINERAL_COST):
             #print("Construye terrangeyserstructure")
-            self.data.resources -= TERRAN_GEYSER_STRUCTURE_MINERAL_COST
-            toBuild = TerranRefinery(4, 4, self.data, self.mapa, True, geyser)
+            self.data.resources -= TERRAN_REFINERY_MINERAL_COST
+            toBuild = TerranRefinery(int(geyser.x / 40) - 1, int(geyser.y / 40) + 1, self.data, self.mapa, True, geyser)
             self.data.addStructures(toBuild)
-            toBuild.buildProcess()
-        elif (self.geyserBuilding == PROTOSS_GEYSER_STRUCTURE) and (self.data.resources >= PROTOSS_GEYSER_STRUCTURE_MINERAL_COST):
+            #toBuild.buildProcess()
+        elif (self.geyserBuilding == PROTOSS_REFINERY) and (self.data.resources >= PROTOSS_REFINERY_MINERAL_COST):
             #print("Construye protossgeyserstructure")
-            self.data.resources -= PROTOSS_GEYSER_STRUCTURE_MINERAL_COST
+            self.data.resources -= PROTOSS_REFINERY_MINERAL_COST
             toBuild = ProtossGeyserStructure(0, 0, self.data, self.mapa, True, geyser)
             self.data.addStructures(toBuild)
-            toBuild.buildProcess()
+            #toBuild.buildProcess()
 
     # Devuelve una direccion por la que avanzar para probar construcciones
     def getDirection(self, direction):
@@ -597,30 +601,42 @@ class AI():
         if (self.barracks == ZERG_BARRACKS) and (self.data.resources >= ZERG_BARRACKS_MINERAL_COST):
             #print("Construye zergbarracks")
             self.data.resources -= ZERG_BARRACKS_MINERAL_COST
-            self.buildZergBarracks(structures)
+            builded = self.buildZergBarracks(structures)
+            if not builded:
+                self.data.resources += ZERG_BARRACKS_MINERAL_COST
         elif (self.barracks == TERRAN_BARRACKS) and (self.data.resources >= TERRAN_BARRACKS_MINERAL_COST):
             #print("Construye terranbarracks")
             self.data.resources -= TERRAN_BARRACKS_MINERAL_COST
-            self.buildTerranBarracks(structures)
+            builded = self.buildTerranBarracks(structures)
+            if not builded:
+                self.data.resources += TERRAN_BARRACKS_MINERAL_COST
         elif (self.barracks == PROTOSS_BARRACKS) and (self.data.resources >= PROTOSS_BARRACKS_MINERAL_COST):
             #print("Construye protossbarracks")
             self.data.resources -= PROTOSS_BARRACKS_MINERAL_COST
-            self.buildProtossBarracks(structures)
+            builded = self.buildProtossBarracks(structures)
+            if not builded:
+                self.data.resources += PROTOSS_BARRACKS_MINERAL_COST
 
     # Manda construir un depot en funcion de la raza
     def buildDepot(self, structures):
         if (self.depot == ZERG_DEPOT) and (self.data.resources >= ZERG_DEPOT_MINERAL_COST):
             #print("Construye zergdepot")
             self.data.resources -= ZERG_DEPOT_MINERAL_COST
-            self.buildZergDepot(structures)
+            builded = self.buildZergDepot(structures)
+            if not builded:
+                self.data.resources += ZERG_DEPOT_MINERAL_COST
         elif (self.depot == TERRAN_DEPOT) and (self.data.resources >= TERRAN_DEPOT_MINERAL_COST):
             #print("Construye terrandepot")
             self.data.resources -= TERRAN_DEPOT_MINERAL_COST
-            self.buildTerranDepot(structures)
+            builded = self.buildTerranDepot(structures)
+            if not builded:
+                self.data.resources += TERRAN_DEPOT_MINERAL_COST
         elif (self.depot == PROTOSS_DEPOT) and (self.data.resources >= PROTOSS_DEPOT_MINERAL_COST):
             #print("Construye protossdepot")
             self.data.resources -= PROTOSS_DEPOT_MINERAL_COST
-            self.buildProtossDepot(structures)
+            builded = self.buildProtossDepot(structures)
+            if not builded:
+                self.data.resources += PROTOSS_DEPOT_MINERAL_COST
 
     # Devuelve si hay un edificio explotando un geyser o no
     def getGeyserInUse(self, structures):
@@ -636,6 +652,10 @@ class AI():
                 return geyser
         for structure in structures:
             geyser = self.mapa.findNearbyGeyser(structure.getTile(), 6)
+            if geyser != None:
+                return geyser
+        for invader in self.invaders:
+            geyser = self.mapa.findNearbyGeyser(invader.getTile(), 5)
             if geyser != None:
                 return geyser
         return None

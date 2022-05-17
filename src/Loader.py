@@ -27,7 +27,7 @@ def loadFromSave(nombre):
     #players
     escena.p1 = loadPlayer(data["p1"], escena.mapa, True)
     escena.p2 = loadPlayer(data["p2"], escena.mapa, False)
-
+    escena.walls = loadMuros(data["muros"], escena.mapa)
     # Raton
     raton = Raton.Raton(escena.p1, escena.p2, escena.mapa)
 
@@ -47,7 +47,43 @@ def loadFromSave(nombre):
     escena.resources = loadResources(data["resources"])
 
     escena.p1.setBasePlayer(escena.p1.structures[0])
+    escena.p2.setBasePlayer(escena.p2.structures[0])
+    print(escena.p2.limitUnits)
+    return escena, raton, camera
 
+def loadHardcodedMap(nombre):
+    escena = Escena(None, None, None, None, None, None, None, None)
+
+    textFile = open("maps/" + nombre + ".json", "r")
+    data = json.load(textFile)
+
+    #mapa
+    escena.mapa = loadMap(data["mapa"])
+    #players
+    escena.p1 = loadPlayer(data["p1"], escena.mapa, True)
+    escena.p2 = loadPlayer(data["p2"], escena.mapa, False)
+    escena.walls = loadMuros(data["muros"], escena.mapa)
+    # Raton
+    raton = Raton.Raton(escena.p1, escena.p2, escena.mapa)
+
+
+    raton.setEscena(escena)
+    escena.raton = raton
+
+
+    loadUnits(data["p1"]["units"], escena.p1)
+    loadStructures(data["p1"]["structures"], escena.p1, escena.mapa, escena.raton)
+    loadUnits(data["p2"]["units"], escena.p2)
+    loadStructures(data["p2"]["structures"], escena.p2, escena.mapa, escena.raton)
+
+    camera = loadCamera(data["camera"])
+    escena.camera = camera
+
+    escena.resources = loadResources(data["resources"])
+
+    escena.p1.setBasePlayer(escena.p1.structures[0])
+    escena.p2.setBasePlayer(escena.p2.structures[0])
+    print(escena.p2.limitUnits)
     return escena, raton, camera
 
 
@@ -69,7 +105,7 @@ def loadPlayer(playerDictionary, map, isPlayer):
     p.dañoUpgrade = playerDictionary["dañoUpgrade"]
     p.armorUpgrade = playerDictionary["armorUpgrade"]
     p.mineUpgrade = playerDictionary["mineUpgrade"]
-    p.limitUnits = playerDictionary["limitUnits"]
+    #p.limitUnits = playerDictionary["limitUnits"]
     return p
 
 #pre: unitDictionaries: es una lista de diccionarios con la info de las unidades
@@ -93,6 +129,12 @@ def loadUnits(unitDictionaries, player):
             unit = Drone(player, u["x"], u["y"])
             unit.load(u["hp"])
             player.addUnits(unit)
+
+def loadMuros(wallDict, mapa):
+    muros = []
+    for u in wallDict:
+        muros.append(Wall(u["type"] ,u["xIni"], u["yIni"], mapa))
+    return muros
 
 
 
@@ -123,6 +165,10 @@ def loadStructures(structureDictionaries, player, map, raton):
             player.addStructures(TerranRefinery(s["x"], s["y"], player, map, s["building"]))
         elif s["clase"] == "extractor":
             player.addStructures(Extractor(s["x"], s["y"], player, map, s["building"]))
+        elif s["clase"] == "zergBarracks":
+            player.addStructures(ZergBarracks(s["x"], s["y"], player, map, s["building"]))
+        elif s["clase"] == "zergSupply":
+            player.addStructures(ZergSupply(s["x"], s["y"], player, map, s["building"]))
 
 #en el fichero la clave es una string, hay que hacer uno nuevo con clave numerica
 def loadKeyMap(stringKeyKeyMap, p):
@@ -146,16 +192,17 @@ def loadCamera(cameraDictionary):
 
 def loadResources(resourcesDictionary):
     resources = []
-    print("pero bueno", resourcesDictionary)
+    #print("pero bueno", resourcesDictionary)
 
     for r in resourcesDictionary:
         if r["clase"] == "cristal":
-            print(r["clase"], r["x"], r["y"], r["capacidad"])
+            #print(r["clase"], r["x"], r["y"], r["capacidad"])
             resources.append(Crystal(r["x"], r["y"], r["capacidad"]))
         if r["clase"] == "geyser":
-            print(r["clase"],r["capacidad"], r["x"], r["y"])
+            #print(r["clase"],r["capacidad"], r["x"], r["y"])
             resources.append(Geyser(r["x"], r["y"], r["capacidad"]))
     for r in resources:
-        print("hola")
-        print(r.x, r.y)
+        #print("hola")
+        #print(r.x, r.y)
+        pass
     return resources

@@ -12,14 +12,15 @@ from ..Music import *
 HP = 40
 ATTACK_INFO = [0, 0, 0]
 ATTACK_INFO[DAMAGE_IND] = 6
-ATTACK_INFO[COOLDOWN_IND] = 15
-ATTACK_INFO[RANGE_IND] = 180
+ATTACK_INFO[COOLDOWN_IND] = 6
+ATTACK_INFO[RANGE_IND] = 4 * RANGE_UNIT + RANGE_BASIC
 MINE_POWER = 0
-MINERAL_COST = 50
+MINERAL_COST = 20
+GAS_COST = 0
 TIME_TO_MINE = 1000
-GENERATION_TIME = 2
+GENERATION_TIME = 20
 SPEED = 2
-FRAMES_TO_REFRESH = 5
+FRAMES_TO_REFRESH = 4
 SPRITES = "terran_soldier_sheet.bmp"
 SPRITE_PIXEL_ROWS = 64
 FACES = 8
@@ -80,22 +81,12 @@ class TerranSoldier(Soldier):
                 #self.image.get_height() - HEIGHT_PADDING)
         #self.imageRect = rect(self.x - self.image.get_width()/2, self.y -self.image.get_height() , self.image.get_width(), self.image.get_height())
         #self.imageRect = rect(self.x, self.y, self.image.get_width(), self.image.get_height())
-        self.render = pygame.transform.scale(pygame.image.load(SOLDIER_RENDER), UNIT_RENDER_SIZE)
-        self.type = TERRAN_SOLDIER
+        self.render = pygame.transform.scale(pygame.image.load(TERRAN_T1_RENDER), UNIT_RENDER_SIZE)
+        self.type = SOLDIER
     
     
 
-    def getUpgrades(self):
-        upgrades = []
-        if self.player.armorUpgrade == 0:
-            upgrades.append({'upgrade': Upgrades.NO_ARMOR, 'cantidad': 0})
-        else:
-            upgrades.append({'upgrade': Upgrades.ARMOR, 'cantidad': self.player.armorUpgrade})
-        if self.player.dañoUpgrade == 0:
-            upgrades.append({'upgrade': Upgrades.NO_DANYO, 'cantidad': 0})
-        else:
-            upgrades.append({'upgrade': Upgrades.DANYO, 'cantidad': self.player.dañoUpgrade})
-        return upgrades
+    
 
     def toDictionary(self, map):
         fatherDictionary = super().toDictionary(map)

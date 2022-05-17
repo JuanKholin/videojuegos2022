@@ -1,6 +1,8 @@
 import pygame
 
 from .TerranSoldier import *
+from .Firebat import *
+from .Goliath import *
 from .TerranWorker import *
 from .Structure import *
 from .. import Player, Map
@@ -8,7 +10,7 @@ from ..Command import *
 from .Entity import *
 from ..Utils import *
 
-HP = 200
+HP = 1000
 GENERATION_TIME = 5
 CAPACITY = 5
 
@@ -23,14 +25,12 @@ class TerranBarracks(Structure):
     nBuildSprites = 4
     deafault_index = 4
     generationStartTime = 0
-    heightPad = 15
+    HEIGHT_PAD = 15
     rectOffY = 8
-    tileW = 4
-    tileH = 3
     clicked = False
     frame = 8
     nSprites = 6
-    options = [Options.GENERATE_SOLDIER]
+    options = [Options.GENERATE_T1_TERRAN, Options.GENERATE_T2_TERRAN, Options.GENERATE_T3_TERRAN]
 
     def __init__(self, xini, yini, player, map, building):
         Structure.__init__(self, HP, TERRAN_BARRACKS_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
@@ -64,16 +64,32 @@ class TerranBarracks(Structure):
     def execute(self, command_id):
         #if self.clicked:
         #print("soy clickeado?")
-        if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_SOLDIER) and self.player.resources >= TERRAN_SOLDIER_MINERAL_COST:
-            self.player.resources -= TERRAN_SOLDIER_MINERAL_COST
+        if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_T1) and self.player.resources >= TERRAN_T1_MINERAL_COST:
+            self.player.resources -= TERRAN_T1_MINERAL_COST
             terranSoldier = TerranSoldier(self.player)
+            self.generateUnit(terranSoldier)
+            self.state = BuildingState.SPAWNING
+        elif (command_id == CommandId.GENERATE_T2) and self.player.resources >= TERRAN_T2_MINERAL_COST and self.player.gas >= TERRAN_T2_GAS_COST:
+            self.player.resources -= TERRAN_T2_MINERAL_COST
+            self.player.gas -= TERRAN_T2_GAS_COST
+            terranSoldier = Firebat(self.player)
+            self.generateUnit(terranSoldier)
+            self.state = BuildingState.SPAWNING
+        elif (command_id == CommandId.GENERATE_T3) and self.player.resources >= TERRAN_T3_MINERAL_COST and self.player.gas >= TERRAN_T3_GAS_COST:
+            self.player.resources -= ZERG_T2_MINERAL_COST
+            self.player.gas -= TERRAN_T3_GAS_COST
+            terranSoldier = Goliath(self.player)
             self.generateUnit(terranSoldier)
             self.state = BuildingState.SPAWNING
 
     def command(self, command):
         if self.state != BuildingState.BUILDING:
             if command == CommandId.GENERATE_UNIT:
-                return Command(CommandId.GENERATE_SOLDIER)
+                return Command(CommandId.GENERATE_T1)
+            elif command == CommandId.GENERATE_T2:
+                return Command(CommandId.GENERATE_T2)
+            elif command == CommandId.GENERATE_T3:
+                return Command(CommandId.GENERATE_T3)
             return Command(CommandId.NULL)
         else:
             return Command(CommandId.NULL)
