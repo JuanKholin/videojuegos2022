@@ -300,7 +300,7 @@ pg.display.set_caption('Starcraft')
 icon = pg.image.load('icon.png')
 pg.display.set_icon(icon)
 flags = pg.FULLSCREEN | pg.DOUBLEBUF
-size = (SCREEN_WIDTH, SCREEN_HEIGHT)
+size = (Utils.ScreenWidth, Utils.ScreenHeight)
 screen =  pg.display.set_mode(size)
 
 #Controlar frames por segundo
@@ -365,7 +365,7 @@ player2 = Player.Player([], [], 100, {}, {}, mapa, False)
 
 # Camara
 # pre: mapa tan grande como ventana
-camera = Camera(0, 0, SCREEN_HEIGHT - 160, SCREEN_WIDTH)
+camera = Camera(0, 0, Utils.ScreenHeight - 160, Utils.ScreenWidth)
 
 # Escena
 

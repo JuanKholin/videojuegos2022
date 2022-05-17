@@ -76,11 +76,7 @@ class Interface():
         self.singleSelected = cargarSprites(SINGLE_PLAYER_FB, SINGLE_PLAYER_FB_N, True, BLACK, SINGLE_SIZE)
         self.exitSelected = cargarSprites(EXIT_FB, EXIT_FB_N, True, BLACK, EXIT_SIZE)
 
-        #PAUSE
-        self.pauseRect = pg.Rect(0, 0, 50, 50)
-        self.continueRect = pg.Rect(710,90,50,50)
-        self.helpPauseRect = pg.Rect(265,90,50,50)
-        self.exitPauseRect = pg.Rect(700,90,50,50)
+        
 
         self.loadGameGUI()
 

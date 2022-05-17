@@ -1,12 +1,12 @@
 {
-  "nombre": "1_Terran_Dificil_4",
+  "nombre": "PartidaDefault",
   "p1": {
     "units": [
       {
         "clase": "terranWorker",
         "nombre": "Terran Worker",
         "funcion": "Unidad obrera",
-        "x": 17,
+        "x": 15,
         "y": 5,
         "hp": 60
       }

@@ -42,6 +42,12 @@ class Interface():
         self.cancelarPress = False
         self.nuevaPartidaPress = False
 
+        #PAUSE
+        self.pauseRect = pg.Rect(0, 0, 50, 50)
+        self.continueRect = pg.Rect(710,90,50,50)
+        self.helpPauseRect = pg.Rect(265,90,50,50)
+        self.exitPauseRect = pg.Rect(700,90,50,50)
+
         # NEW GAME
         self.newGame = pg.image.load(NEW_GAME + "newGame.png")
         self.newGame = pg.transform.scale(self.newGame, (ScreenWidth, ScreenHeight))
@@ -119,11 +125,6 @@ class Interface():
         self.helpButtons = []
         self.helpPageSprites = cargarSprites("./SPRITE/EXTRA/help", 6, False, size = (526, 660))
 
-        #PAUSE
-        self.pauseRect = pg.Rect(0, 0, 50, 50)
-        self.continueRect = pg.Rect(710,90,50,50)
-        self.helpPauseRect = pg.Rect(265,90,50,50)
-        self.exitPauseRect = pg.Rect(700,90,50,50)
 
     def loadGameGUI(self):
         self.gui = pg.image.load(BARRA_COMANDO + ".bmp")
@@ -417,6 +418,8 @@ class Interface():
                 escena.camera = camera
                 Utils.state = System_State.ONGAME
                 setGameState2(System_State.LOAD)
+                escena.nombre = self.selectedPartida['nombre']
+                self.selectedPartida = None
                 self.escena = escena
                 stopMusic()
                 self.singlePress = False
