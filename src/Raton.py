@@ -237,6 +237,8 @@ class Raton(pygame.sprite.Sprite):
                 if not self.pulsado:
                     self.pulsado = True
                     if Utils.state2 == System_State.WIN or Utils.state2 == System_State.GAMEOVER:
+                        camera.x = 0
+                        camera.y = 0
                         setGameState(System_State.MAINMENU)
                         setGameState2(System_State.PLAYING)
                     else:
