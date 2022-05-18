@@ -1095,12 +1095,13 @@ class Interface():
         x = self.mouse.rel_pos[0]
         y = self.mouse.rel_pos[1]
         yes = False
-        if y > Utils.ScreenHeight - (MIN_SCREEN_HEIGHT - 600):
-            yes = True
-        elif x < Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 265) and y > Utils.ScreenHeight - (MIN_SCREEN_HEIGHT - 510):
-            yes = True
-        elif x > Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 750) and y > Utils.ScreenHeight - (MIN_SCREEN_HEIGHT - 535):
-            yes = True
+        if x > Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2) and x < Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 1024):
+            if y > Utils.ScreenHeight - (MIN_SCREEN_HEIGHT - 600):
+                yes = True
+            elif x < Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 265) and y > Utils.ScreenHeight - (MIN_SCREEN_HEIGHT - 510):
+                yes = True
+            elif x > Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 750) and y > Utils.ScreenHeight - (MIN_SCREEN_HEIGHT - 535):
+                yes = True
         return yes
 
     def getButton(self, entityOptions):

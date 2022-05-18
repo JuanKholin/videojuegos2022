@@ -79,7 +79,7 @@ class Wall():
         r = self.getRect()
 
         if DEBBUG:
-            pg.draw.rect(screen, BLACK, pygame.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h), 1)
+            pg.draw.rect(screen, BLACK, pg.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h), 1)
         if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
             r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
             drawPos = self.getDrawPosition()

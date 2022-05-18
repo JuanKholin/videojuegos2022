@@ -5,7 +5,6 @@ from ..Utils import *
 from .Worker import *
 from ..Lib import *
 from ..Music import *
-from ..Sprites import *
 
 # Constantes
 HP = 6000
