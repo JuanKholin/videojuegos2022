@@ -356,6 +356,8 @@ def init():
     loadGoliath()
     loadHydralisk()
 
+    loadTerranBuilder()
+
 # TerranWorker
 TERRAN_WORKER_SCALE = 1.5
 TERRAN_WORKER_SPRITE_ROWS = 72
@@ -653,6 +655,30 @@ def loadHydralisk():
         mask.set_alpha(150)
         shadows.append(mask)
     HYDRALISK_SPRITES = [sprites, shadows]
+
+
+# TerranBuilder
+TERRAN_BUILDER_TOTAL_FRAMES = 6
+TERRAN_BUILDER_SPRITES = [None, None]
+def loadTerranBuilder():
+    global TERRAN_BUILDER_SPRITES
+    sprites = cargarSprites(TERRAN_BUILDER_PATH, TERRAN_BUILDER_TOTAL_FRAMES, False, WHITE, 1.5)
+
+    deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
+    deadSpritesheet.set_colorkey(BLACK)
+    deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
+
+    sprites += deadSprites
+    
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+
+    TERRAN_BUILDER_SPRITES = [sprites, shadows]
 
 #-------------------------------------------------------------------------
 #-------------------------------------------------------------------------

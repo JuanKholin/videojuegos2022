@@ -42,7 +42,7 @@ class Hatchery(Structure):
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
-
+        self.shadows = []
         self.sprites += deadSprites
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2, 3]

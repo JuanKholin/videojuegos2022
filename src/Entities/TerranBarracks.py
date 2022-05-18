@@ -41,7 +41,7 @@ class TerranBarracks(Structure):
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.sprites += deadSprites
-
+        self.shadows = []
         self.image = self.sprites[self.index]
         self.operativeIndex = [4]
         self.spawningIndex = [4, 5]

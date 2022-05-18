@@ -66,6 +66,9 @@ class Structure(Entity.Entity):
         elif self.state == BuildingState.DESTROYED:
             pass
         self.image = self.sprites[self.index]
+        if len(self.shadows) > 0:
+            self.shadow = self.shadows[self.index]
+
 
 
     ################
@@ -79,6 +82,7 @@ class Structure(Entity.Entity):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.buildingFrames[self.frame]]]
+        self.shadow = self.shadows[self.frames[self.buildingFrames[self.frame]]]
 
     # Pasa a estado operative, es decir, disponible, on, preparado, etc.
     def changeToOperative(self):
@@ -87,6 +91,7 @@ class Structure(Entity.Entity):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.operativeFrames[self.frame]]]
+        self.shadow = self.shadows[self.frames[self.operativeFrames[self.frame]]]
 
     # Pasa a estado lucecitas, para sacar unidades, si lo tiene claro
     def changeToSpawning(self):
@@ -95,6 +100,7 @@ class Structure(Entity.Entity):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frame[self.spawningFrames[self.frame]]]
+        self.shadow = self.shadows[self.frame[self.spawningFrames[self.frame]]]
 
     # Pasa a empezar a derrumbarse, crashear, hp a 0 y esas cosas
     def changeToCollapsing(self):
@@ -225,6 +231,8 @@ class Structure(Entity.Entity):
         #sombra
 
             #self.image.blit(dark, (0, 0), special_flags=pg.BLEND_RGBA_SUB)
+            if len(self.shadows) > 0:
+                screen.blit(self.shadow, [image.x - camera.x - 10, image.y - camera.y - 10])
             screen.blit(self.image, [image.x - camera.x, image.y - camera.y])
             if DEBBUG:
                 pg.draw.rect(screen, BLACK, pg.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
