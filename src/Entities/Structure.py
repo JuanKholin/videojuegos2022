@@ -228,7 +228,7 @@ class Structure(Entity.Entity):
                 screen.blit(hp, [r.x + r.w/2 - camera.x - hp.get_rect().w/2, r.y + r.h - camera.y])
 
 
-        #sombra
+            #sombra
 
             #self.image.blit(dark, (0, 0), special_flags=pg.BLEND_RGBA_SUB)
             if len(self.shadows) > 0:

@@ -84,7 +84,6 @@ class AI():
         elif self.rotativeReaction == 2:
             self.restoreArmy(units, structures)
         elif self.rotativeReaction == 3:
-            #print("gather")
             self.gatherResources(units, structures)
         elif self.rotativeReaction == 4:
             self.updateInvaders()
@@ -376,11 +375,11 @@ class AI():
     ##############
 
     def genSoldier(self, structure):
-        if (self.data.resources > 3 * self.t3Cost[0]) and (self.data.gas > 3 * self.t3Cost[1]):
+        if (self.data.resources >= 3 * self.t3Cost[0]) and (self.data.gas >= 3 * self.t3Cost[1]):
             structure.execute(CommandId.GENERATE_T3)
-        elif (self.data.resources > 2 * self.t2Cost[0]) and (self.data.gas > 2 * self.t2Cost[1]):
+        elif (self.data.resources >= 2 * self.t2Cost[0]) and (self.data.gas >= 2 * self.t2Cost[1]):
             structure.execute(CommandId.GENERATE_T2)
-        elif (self.data.resources > self.t1Cost[0]) and (self.data.gas > self.t1Cost[1]):
+        elif (self.data.resources >= self.t1Cost[0]) and (self.data.gas >= self.t1Cost[1]):
             structure.execute(CommandId.GENERATE_T1)
 
     # De las unidades devuelve a todos los soldados libres
@@ -410,21 +409,21 @@ class AI():
     # Devuelve si hay una base
     def haveBase(self, structures):
         for structure in structures:
-            if structure.type == self.base:
+            if structure.type == BASE:
                 return True
         return False
 
     # Devuelve si hay un barracks
     def haveBarracks(self, structures):
         for structure in structures:
-            if structure.type == self.barracks:
+            if structure.type == BARRACKS:
                 return True
         return False
 
     # Devuelve si hay un depot
     def haveDepot(self, structures):
         for structure in structures:
-            if structure.type == self.depot:
+            if structure.type == DEPOT:
                 return True
         return False
 

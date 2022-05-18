@@ -1,6 +1,7 @@
 
 from tkinter import W
 from token import OP
+from turtle import xcor
 import pygame as pg
 from os import listdir
 from os.path import isfile, join
@@ -124,7 +125,9 @@ class Interface():
         self.helpPage = 0
         self.helpButtons = []
         self.helpPageSprites = cargarSprites("./SPRITE/EXTRA/help", 6, False, size = (526, 660))
-
+        
+        #SETTINGS
+        self.settingButtons = [self.exitPauseButton, self.helpPauseButton, self.allButton[Options.MINUS_BGM], self.allButton[Options.PLUS_BGM], self.allButton[Options.MINUS_SOUND], self.allButton[Options.PLUS_SOUND]]
 
     def loadGameGUI(self):
         self.gui = pg.image.load(BARRA_COMANDO + ".bmp")
@@ -198,6 +201,18 @@ class Interface():
         aux = Button.Button(BUTTON_PATH + "previous" + ".png", CommandId.PREVIOUS_PAGE)
         aux.image.set_colorkey(BLACK)
         allButton[Options.PREVIOUS_PAGE] = aux
+        aux = Button.Button(BUTTON_PATH + "plus" + ".png", CommandId.PLUS_BGM)
+        aux.image.set_colorkey(BLACK)
+        allButton[Options.PLUS_BGM] = aux
+        aux = Button.Button(BUTTON_PATH + "minus" + ".png", CommandId.MINUS_BGM)
+        aux.image.set_colorkey(BLACK)
+        allButton[Options.MINUS_BGM] = aux
+        aux = Button.Button(BUTTON_PATH + "plus" + ".png", CommandId.PLUS_SOUND)
+        aux.image.set_colorkey(BLACK)
+        allButton[Options.PLUS_SOUND] = aux
+        aux = Button.Button(BUTTON_PATH + "minus" + ".png", CommandId.MINUS_SOUND)
+        aux.image.set_colorkey(BLACK)
+        allButton[Options.MINUS_SOUND] = aux
         
         #mejoras
         aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "danyoUpgrade" + ".png", CommandId.UPGRADE_SOLDIER_DAMAGE,BUTTON_PATH + "cartelUpgrade.bmp", "Mejorar daño;de las unidades", 5, 5)
@@ -219,6 +234,7 @@ class Interface():
         self.exitPauseButton.x = self.exitPauseRect.x
         self.exitPauseButton.y = self.exitPauseRect.y
         self.pauseButtons = [self.exitPauseButton, self.helpPauseButton, self.saveButton, self.saveAndExitButton, self.exitButton]
+        
         return allButton
 
     def loadAllUpgrades(self):
@@ -879,15 +895,26 @@ class Interface():
         
         self.helpPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 245), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
         self.exitPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 688), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
-        self.saveButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 380), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 -200))
-        self.saveAndExitButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 380), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 -290))
-        self.exitButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 380), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 -380))
         
-        muestra_texto(screen, str('monotypecorsiva'), "Ajustes de Sonido", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 370), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 120)))
-        muestra_texto(screen, str('monotypecorsiva'), "Guardar", GREEN, 26, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 460), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 210)))
-        muestra_texto(screen, str('monotypecorsiva'), "Guardar y Salir", GREEN, 26, ((Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 460), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 300))))
-        muestra_texto(screen, str('monotypecorsiva'), "Salir sin guardar", GREEN, 26, ((Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 460), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 390))))
-
+        self.settingButtons[2].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 330), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 260))
+        self.settingButtons[3].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 600), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 260))
+        self.settingButtons[4].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 330), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 400))
+        self.settingButtons[5].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 600), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 400))
+        
+        size = 180
+        x = 405
+        bgm = pg.transform.chop(pg.transform.scale(BARRA_SOUND, (size, 20)), ((Utils.BGM_VOLUME / 1.0) * 160, 0, size, 0))
+        screen.blit(bgm, [Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - x), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 275)])
+        pg.draw.rect(screen, ORANGE2, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - x), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 275), size, 20), 4)
+        
+        sound = pg.transform.chop(pg.transform.scale(BARRA_SOUND, (size, 20)), ((Utils.SOUND_VOLUME / 1.0) * 200, 0, size, 0))
+        screen.blit(sound, [Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - x), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 415)])
+        pg.draw.rect(screen, ORANGE2, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - x), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 415), size, 20), 4)
+        
+        muestra_texto(screen, str('monotypecorsiva'), "Ajustes de Sonido", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 390), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 120)))
+        muestra_texto(screen, str('monotypecorsiva'), "Musica de fondo", GREEN, 26, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 220)))
+        muestra_texto(screen, str('monotypecorsiva'), "Efectos de sonido", GREEN, 26, ((Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 360))))
+        
     def drawHELP(self, screen):
         screen.blit(self.helpPageSprites[self.helpPage], (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80)))
 

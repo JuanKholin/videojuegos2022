@@ -45,18 +45,30 @@ class Escena():
         else:
             command = self.p1.processEvent(event)
         if getGameState() == System_State.MAINMENU:
-            if command.id == CommandId.RETURN_GAME:
-                if getGameState2() == System_State.HELP:
+            if getGameState2() == System_State.HELP:
+                if command.id == CommandId.RETURN_GAME:
                     self.interfaz.helpPage = 0
                     setGameState2(System_State.SETTINGS)
-                else:
+                elif command.id == CommandId.NEXT_PAGE:
+                    self.interfaz.helpPage += 1
+                elif command.id == CommandId.PREVIOUS_PAGE:
+                    self.interfaz.helpPage -= 1       
+            elif getGameState2() == System_State.SETTINGS:
+                if command.id == CommandId.RETURN_GAME:    
                     setGameState2(System_State.PLAYING)
-            if command.id == CommandId.HELP:
-                setGameState2(System_State.HELP)
-            elif command.id == CommandId.NEXT_PAGE:
-                self.interfaz.helpPage += 1
-            elif command.id == CommandId.PREVIOUS_PAGE:
-                self.interfaz.helpPage -= 1
+                elif command.id == CommandId.HELP:
+                    setGameState2(System_State.HELP)
+                elif command.id == CommandId.MINUS_BGM:
+                    minusMusic()
+                elif command.id == CommandId.PLUS_BGM:
+                    plusMusic()
+                elif command.id == CommandId.MINUS_SOUND:
+                    minusSound()
+                    playSound(soldierAttackSound)
+                elif command.id == CommandId.PLUS_SOUND:
+                    plusSound() 
+                    playSound(soldierAttackSound)
+            
         elif getGameState() == System_State.ONGAME:
             #ejecutar el comando
             if command.id == CommandId.UPGRADE_WORKER_MINING:

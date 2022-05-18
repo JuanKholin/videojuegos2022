@@ -408,7 +408,7 @@ class Raton(pygame.sprite.Sprite):
                                     break
                     elif getGameState() == System_State.MAINMENU:
                         if getGameState2() == System_State.SETTINGS:
-                            for b in self.interface.pauseButtons:
+                            for b in self.interface.settingButtons:
                                 if b != None and collides(self.rel_pos[0], self.rel_pos[1], b.getRect()):
                                     command = b.getCommand()
                                     break
