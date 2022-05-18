@@ -100,13 +100,13 @@ class Hatchery(Structure):
             self.player.mineUpgrade += 1
             self.mineMineralUpCost += 25
             self.mineGasUpCost += 5
-        elif command_id == CommandId.BUILD_REFINERY and self.player.resources >= EXTRACTOR_MINERAL_COST:
+        elif command_id == CommandId.BUILD_REFINERY and self.player.resources >= ZERG_REFINERY_MINERAL_COST:
             self.raton.building = True
             self.raton.buildStructure = self.getZergRefinery()
-        elif command_id == CommandId.BUILD_DEPOT and self.player.resources >= SUPPLY_ZERG_MINERAL_COST:
+        elif command_id == CommandId.BUILD_DEPOT and self.player.resources >= ZERG_DEPOT_MINERAL_COST:
             self.raton.building = True
             self.raton.buildStructure = self.getZergSupply()
-        elif command_id == CommandId.BUILD_BARRACKS and self.player.resources >= BARRACKS_ZERG_MINERAL_COST:
+        elif command_id == CommandId.BUILD_BARRACKS and self.player.resources >= ZERG_BARRACKS_MINERAL_COST:
             self.raton.building = True
             #print("mi raton: ", self.raton.id)
             self.raton.buildStructure = self.getZergBarrack()

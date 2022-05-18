@@ -30,8 +30,8 @@ class Extractor(Structure):
     nSprites = 4
 
     def __init__(self, xini, yini, player, map, building, gas = None):
-        Structure.__init__(self, HP, EXTRACTOR_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
-        self.sprites = cargarSprites(EXTRACTOR_PATH, self.nSprites, False, BLUE2, 1,0)
+        Structure.__init__(self, HP, ZERG_REFINERY_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
+        self.sprites = cargarSprites(ZERG_REFINERY_PATH, self.nSprites, False, BLUE2, 1,0)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
@@ -43,7 +43,7 @@ class Extractor(Structure):
         self.spawningIndex = [0, 1, 2, 3]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
 
-        self.render = pygame.transform.scale(pygame.image.load(EXTRACTOR_RENDER), RENDER_SIZE)
+        self.render = pygame.transform.scale(pygame.image.load(ZERG_REFINERY_RENDER), RENDER_SIZE)
 
         self.building = building
         if building:

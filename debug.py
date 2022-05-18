@@ -66,7 +66,9 @@ def procesarInput():
 def setEntity(player, ai):
     scv = TerranWorker(player, 10, 3)
     player.addUnits(scv)
-    structure1 = TerranBuilder(3, 3, player, mapa, False, raton)
+    structure1 = Hatchery(3, 3, player, mapa, False, raton)
+    player.addStructures(structure1)
+    structure1 = ZergBarracks(7, 7, player, mapa, False)
     player.addStructures(structure1)
     player.setBasePlayer(structure1)
     scv = Goliath(ai, 20, 3)

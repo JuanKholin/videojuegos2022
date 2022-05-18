@@ -43,7 +43,7 @@ class Worker(Unit):
         if self.player.mineUpgrade == 0:
             upgrades.append({'upgrade': Upgrades.NO_MINE, 'cantidad': 0})
         else:
-            upgrades.append({'upgrade': Upgrades.MINE, 'cantidad': int(self.player.mineUpgrade/200)})
+            upgrades.append({'upgrade': Upgrades.MINE, 'cantidad': int(self.player.mineUpgrade)})
         if self.player.armorUpgrade == 0:
             upgrades.append({'upgrade': Upgrades.NO_ARMOR, 'cantidad': 0})
         else:
