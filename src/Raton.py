@@ -282,7 +282,7 @@ class Raton(pygame.sprite.Sprite):
                                     tileClicked = self.mapa.getTile(real_mouse_pos[0],real_mouse_pos[1] + 40)
                                 if tileClicked.ocupante != None:
                                     unidadClickada = tileClicked.ocupante
-                                    if unidadClickada.getType() != -1:
+                                    if unidadClickada.getType() != -1 and unidadClickada.getType() != RESOURCE:
                                         if unidadClickada.clicked: # Seleccionar todos los del mismo tipo
                                             reClick = True
                                             self.player.unitsSelected = []
@@ -405,6 +405,17 @@ class Raton(pygame.sprite.Sprite):
                                 if b != None and collides(self.rel_pos[0], self.rel_pos[1], b.getRect()):
                                     command = b.getCommand()
                                     #print(command.id)
+                                    break
+                    elif getGameState() == System_State.MAINMENU:
+                        if getGameState2() == System_State.SETTINGS:
+                            for b in self.interface.pauseButtons:
+                                if b != None and collides(self.rel_pos[0], self.rel_pos[1], b.getRect()):
+                                    command = b.getCommand()
+                                    break
+                        elif getGameState2() == System_State.HELP:
+                            for b in self.interface.helpButtons:
+                                if b != None and collides(self.rel_pos[0], self.rel_pos[1], b.getRect()):
+                                    command = b.getCommand()
                                     break
 
                 elif not type[2]:

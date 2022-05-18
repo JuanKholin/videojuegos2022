@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 
 from .TerranSoldier import *
 from .Firebat import *
@@ -41,13 +41,13 @@ class TerranBarracks(Structure):
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.sprites += deadSprites
-
+        self.shadows = []
         self.image = self.sprites[self.index]
         self.operativeIndex = [4]
         self.spawningIndex = [4, 5]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
 
-        self.render = pygame.transform.scale(pygame.image.load(BARRACKS_RENDER), RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(BARRACKS_RENDER), RENDER_SIZE)
 
         self.building = building
         if building:
@@ -64,23 +64,24 @@ class TerranBarracks(Structure):
     def execute(self, command_id):
         #if self.clicked:
         #print("soy clickeado?")
-        if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_T1) and self.player.resources >= TERRAN_T1_MINERAL_COST:
-            self.player.resources -= TERRAN_T1_MINERAL_COST
-            terranSoldier = TerranSoldier(self.player)
-            self.generateUnit(terranSoldier)
-            self.state = BuildingState.SPAWNING
-        elif (command_id == CommandId.GENERATE_T2) and self.player.resources >= TERRAN_T2_MINERAL_COST and self.player.gas >= TERRAN_T2_GAS_COST:
-            self.player.resources -= TERRAN_T2_MINERAL_COST
-            self.player.gas -= TERRAN_T2_GAS_COST
-            terranSoldier = Firebat(self.player)
-            self.generateUnit(terranSoldier)
-            self.state = BuildingState.SPAWNING
-        elif (command_id == CommandId.GENERATE_T3) and self.player.resources >= TERRAN_T3_MINERAL_COST and self.player.gas >= TERRAN_T3_GAS_COST:
-            self.player.resources -= ZERG_T2_MINERAL_COST
-            self.player.gas -= TERRAN_T3_GAS_COST
-            terranSoldier = Goliath(self.player)
-            self.generateUnit(terranSoldier)
-            self.state = BuildingState.SPAWNING
+        if self.state != BuildingState.BUILDING and self.state != BuildingState.COLLAPSING and self.state != BuildingState.DESTROYED:
+            if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_T1) and self.player.resources >= TERRAN_T1_MINERAL_COST:
+                self.player.resources -= TERRAN_T1_MINERAL_COST
+                terranSoldier = TerranSoldier(self.player)
+                self.generateUnit(terranSoldier)
+                self.state = BuildingState.SPAWNING
+            elif (command_id == CommandId.GENERATE_T2) and self.player.resources >= TERRAN_T2_MINERAL_COST and self.player.gas >= TERRAN_T2_GAS_COST:
+                self.player.resources -= TERRAN_T2_MINERAL_COST
+                self.player.gas -= TERRAN_T2_GAS_COST
+                terranSoldier = Firebat(self.player)
+                self.generateUnit(terranSoldier)
+                self.state = BuildingState.SPAWNING
+            elif (command_id == CommandId.GENERATE_T3) and self.player.resources >= TERRAN_T3_MINERAL_COST and self.player.gas >= TERRAN_T3_GAS_COST:
+                self.player.resources -= ZERG_T2_MINERAL_COST
+                self.player.gas -= TERRAN_T3_GAS_COST
+                terranSoldier = Goliath(self.player)
+                self.generateUnit(terranSoldier)
+                self.state = BuildingState.SPAWNING
 
     def command(self, command):
         if self.state != BuildingState.BUILDING:

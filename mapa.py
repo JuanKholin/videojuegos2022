@@ -225,7 +225,7 @@ def draw():
 pg.init()
 
 flags = pg.FULLSCREEN | pg.DOUBLEBUF
-size = (SCREEN_WIDTH, SCREEN_HEIGHT)
+size = (MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT)
 screen =  pg.display.set_mode(size)
 
 #Controlar frames por segundo
@@ -289,7 +289,7 @@ player2 = Player.Player([], [], 4000, {}, {}, mapa, False)
 
 # Camara
 # pre: mapa tan grande como ventana
-camera = Camera(0, 0, SCREEN_HEIGHT - 160, SCREEN_WIDTH)
+camera = Camera(0, 0, MIN_SCREEN_HEIGHT - 160, MIN_SCREEN_WIDTH)
 
 # Escena
 

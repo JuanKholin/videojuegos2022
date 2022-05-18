@@ -14,9 +14,10 @@ class Unit(Entity):
     deadSound = soldierDeadSound
     attackSound = soldierAttackSound
     
-    def __init__(self, hp, xIni, yIni, mineral_cost, generation_time, speed, framesToRefresh,
-                    sprites, face, frame, padding, id, player, inversibleFrames,
-                        frames, dirOffset, attackFrames, stillFrames, moveFrames, dieFrames,  xPadding, yPadding, wPadding, hPadding, attackInfo):
+    def __init__(self, hp, xIni, yIni, mineral_cost, generation_time, speed, framesToRefresh, 
+                face, frame, padding, id, player, inversibleFrames,
+                frames, dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, 
+                xPadding, yPadding, wPadding, hPadding, attackInfo, isExplosive):
         Entity.__init__(self, hp, xIni, yIni, mineral_cost, generation_time, id, player)
         # Relativo al movimiento de la unidad
         self.paths = []
@@ -35,7 +36,6 @@ class Unit(Entity):
         # Relativo a los frames
         self.inversibleFrames = inversibleFrames
         self.framesToRefresh = framesToRefresh
-        self.spritesName = sprites
         self.sprites = []
         self.frames = frames
         self.dirOffset = dirOffset
@@ -47,6 +47,7 @@ class Unit(Entity):
         self.yPadding = yPadding
         self.wPadding = wPadding
         self.hPadding = hPadding
+        self.isExplosive = isExplosive
         #self.distanceToPoint = 0
 
         # Info ataque
@@ -64,6 +65,7 @@ class Unit(Entity):
         self.runningAway = False
 
         self.enable = True
+
     def spawn(self, x, y):
         self.x = x * TILE_WIDTH + 20
         self.y = y * TILE_HEIGHT
@@ -163,21 +165,21 @@ class Unit(Entity):
         if self.state != UnitState.DEAD:
             r = self.getRect()
             if DEBBUG:
-                pg.draw.rect(screen, BLACK, pygame.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h), 1)
+                pg.draw.rect(screen, BLACK, pg.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h), 1)
             drawPos = self.getDrawPosition()
             if self.clicked:
                 pg.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y + (0.7*r.h)- camera.y,r.w , 0.3*r.h], 2)
 
-            if len(self.shadow) > 0:
-                screen.blit(self.shadow[2], [drawPos[0] - camera.x - 5, drawPos[1] - camera.y - 5])
+            if len(self.shadows) > 0:
+                screen.blit(self.shadow, [drawPos[0] - camera.x - 5, drawPos[1] - camera.y - 5])
             #screen.blit(unit.image, [r.x - camera.x, r.y - camera.y])
             screen.blit(self.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
             if self.clicked or self.hp < self.maxHp:
                 if self.player.isPlayer:
-                    hp = pygame.transform.chop(pg.transform.scale(HP, (50, 8)), ((self.hp / self.maxHp) * 50, 0, 50, 0))
+                    hp = pg.transform.chop(pg.transform.scale(HP, (50, 8)), ((self.hp / self.maxHp) * 50, 0, 50, 0))
                     screen.blit(hp, [self.x - camera.x - hp.get_rect().w / 2, self.y + r.h / 2 - camera.y])
                 else:
-                    hp = pygame.transform.chop(pg.transform.scale(HP2, (50, 8)), ((self.hp / self.maxHp) * 50, 0, 50, 0))
+                    hp = pg.transform.chop(pg.transform.scale(HP2, (50, 8)), ((self.hp / self.maxHp) * 50, 0, 50, 0))
                     screen.blit(hp, [self.x - camera.x - hp.get_rect().w / 2, self.y + r.h / 2 - camera.y])
 
     def drawInfo(self, screen, color):
@@ -373,26 +375,32 @@ class Unit(Entity):
     def updateStillImage(self):
         self.frame = (self.frame + 1) % len(self.stillFrames)
         self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
 
     # Pasa de frame en animaciones de movimiento
     def updateMovingImage(self):
         self.frame = (self.frame + 1) % len(self.moveFrames)
         self.image = self.sprites[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
 
     # Pasa de frame en una animacion de ataque
     def updateAttackingImage(self):
         self.frame = (self.frame + 1) % len(self.attackFrames)
         self.image = self.sprites[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
 
     # Pasa de frame en una animacion de ataque
     def updateMiningImage(self):
         self.frame = (self.frame + 1) % len(self.attackFrames)
         self.image = self.sprites[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
+
 
     # Pasa de frame en una animacion de muerte
     def updateDyingImage(self):
         self.frame = (self.frame + 1)
         self.image = self.sprites[self.frames[self.dieFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.dieFrames[self.frame]][self.dirOffset[self.dir]]]
 
     ################
     # TRANSICIONES #
@@ -407,6 +415,8 @@ class Unit(Entity):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
+
 
     # Pasa a estado moverse
     def changeToMoving(self, paths):
@@ -427,6 +437,7 @@ class Unit(Entity):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
 
     # Pasa al ataque HYAAAA!! >:c
     def changeToAttacking(self, attackedOne):
@@ -480,6 +491,8 @@ class Unit(Entity):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.dieFrames[self.frame]][self.dirOffset[self.dir]]]
+        if not self.isExplosive:
+            self.shadow = self.shadows[self.frames[self.dieFrames[self.frame]][self.dirOffset[self.dir]]]
         if inCamera(self.getPosition()):
             playSound(self.deadSound)
 

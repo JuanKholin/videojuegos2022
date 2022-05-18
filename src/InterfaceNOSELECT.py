@@ -33,7 +33,7 @@ class Interface():
         self.gameSelect = pg.transform.scale(self.gameSelect, (ScreenWidth, ScreenHeight))
 
         self.aceptarRect = pg.Rect(ACEPTAR_POS[0], ACEPTAR_POS[1], ACEPTAR_RECT[0], ACEPTAR_RECT[1])
-        self.aceptarNoPulsabeSurf = pygame.Surface(ACEPTAR_RECT, pygame.SRCALPHA)
+        self.aceptarNoPulsabeSurf = pg.Surface(ACEPTAR_RECT, pg.SRCALPHA)
         self.aceptarNoPulsabeSurf.fill((0,0,0,128))
         self.cancelarRect = pg.Rect(CANCELAR_POS[0], CANCELAR_POS[1], 250, 40)
         self.nuevaPartidaRect = pg.Rect(NUEVA_PARTIDA_POS[0], NUEVA_PARTIDA_POS[1], 250, 40)
@@ -351,7 +351,7 @@ class Interface():
     def updateGameMenuPos(self):
         #self.gameSelect = pg.transform.scale(self.gameSelect, (Utils.ScreenHeight*SCREEN_SCALE, Utils.ScreenHeight))
         self.aceptarRect = pg.Rect(Utils.ScreenWidth/2 - ACEPTAR_POS[0], Utils.ScreenHeight/2 - ACEPTAR_POS[1], ACEPTAR_RECT[0], ACEPTAR_RECT[1])
-        self.aceptarNoPulsabeSurf = pygame.Surface((self.aceptarRect.w, self.aceptarRect.h), pygame.SRCALPHA)
+        self.aceptarNoPulsabeSurf = pg.Surface((self.aceptarRect.w, self.aceptarRect.h), pg.SRCALPHA)
         self.aceptarNoPulsabeSurf.fill((0,0,0,128))
         self.cancelarRect = pg.Rect(Utils.ScreenWidth/2 - CANCELAR_POS[0], Utils.ScreenHeight/2 - CANCELAR_POS[1], 250, 40)
         self.nuevaPartidaRect = pg.Rect(Utils.ScreenWidth/2 - NUEVA_PARTIDA_POS[0], Utils.ScreenHeight/2 - NUEVA_PARTIDA_POS[1], 250, 40)
@@ -482,7 +482,7 @@ class Interface():
     def updateNewGamePos(self):
         #self.gameSelect = pg.transform.scale(self.gameSelect, (Utils.ScreenHeight*SCREEN_SCALE, Utils.ScreenHeight))
         self.aceptarRect = pg.Rect(Utils.ScreenWidth/2 - ACEPTAR_POS[0], Utils.ScreenHeight/2 - ACEPTAR_POS[1], ACEPTAR_RECT[0], ACEPTAR_RECT[1])
-        self.aceptarNoPulsabeSurf = pygame.Surface((self.aceptarRect.w, self.aceptarRect.h), pygame.SRCALPHA)
+        self.aceptarNoPulsabeSurf = pg.Surface((self.aceptarRect.w, self.aceptarRect.h), pg.SRCALPHA)
         self.aceptarNoPulsabeSurf.fill((0,0,0,128))
         self.cancelarRect = pg.Rect(Utils.ScreenWidth/2 - CANCELAR_POS[0], Utils.ScreenHeight/2 - CANCELAR_POS[1], 250, 40)
 
@@ -694,19 +694,19 @@ class Interface():
             screen.blit(self.gameSelect, [Utils.ScreenWidth/2 - self.gameSelect.get_width()/2, Utils.ScreenHeight/2 - self.gameSelect.get_height()/2])
 
             if self.mouse.isCollide(self.aceptarRect) and self.selectedPartida != None:
-                pygame.draw.rect(screen, GREEN3, self.aceptarRect, 2)
+                pg.draw.rect(screen, GREEN3, self.aceptarRect, 2)
             elif self.selectedPartida == None:
                 screen.blit(self.aceptarNoPulsabeSurf, [self.aceptarRect.x, self.aceptarRect.y])
             if self.mouse.isCollide(self.cancelarRect):
-                pygame.draw.rect(screen, GREEN3, self.cancelarRect, 2)
+                pg.draw.rect(screen, GREEN3, self.cancelarRect, 2)
             if self.mouse.isCollide(self.nuevaPartidaRect):
-                pygame.draw.rect(screen, GREEN3, self.nuevaPartidaRect, 2)
+                pg.draw.rect(screen, GREEN3, self.nuevaPartidaRect, 2)
 
             for partida in self.partidas:
                 if self.mouse.isCollide(partida['rect']):
-                    pygame.draw.rect(screen, GREEN2, partida['rect'], 1)
+                    pg.draw.rect(screen, GREEN2, partida['rect'], 1)
                 if partida == self.selectedPartida:
-                    pygame.draw.rect(screen, GREEN, partida['rect'], 2)
+                    pg.draw.rect(screen, GREEN, partida['rect'], 2)
                 muestra_texto(screen, str('monotypecorsiva'), partida['nombre'], WHITE, 28, (partida['rect'].x + 100, partida['rect'].y))
             if self.selectedPartida != None:
                 info = self.selectedPartida['nombre'].split("_")
@@ -719,19 +719,19 @@ class Interface():
 
             if (self.mouse.isCollide(self.aceptarRect) and
             (self.selectedMap != None or self.selectedDif != None or self.selectedRaza != None)):
-                pygame.draw.rect(screen, GREEN3, self.aceptarRect, 2)
+                pg.draw.rect(screen, GREEN3, self.aceptarRect, 2)
             elif self.selectedMap == None or self.selectedDif == None or self.selectedRaza == None:
                 screen.blit(self.aceptarNoPulsabeSurf, ACEPTAR_POS)
             if self.mouse.isCollide(self.cancelarRect):
-                pygame.draw.rect(screen, GREEN3, self.cancelarRect, 2)
+                pg.draw.rect(screen, GREEN3, self.cancelarRect, 2)
 
             for b in self.botonesNewGame:
                 if self.mouse.isCollide(b['rect']):
-                    pygame.draw.rect(screen, GREEN2, b['rect'], 2)
+                    pg.draw.rect(screen, GREEN2, b['rect'], 2)
                 
                 if (b['nombre'] == self.selectedMap or b['nombre'] == self.selectedDif['nombre'] 
                     or b['nombre'] == self.selectedRaza['nombre']):
-                    pygame.draw.rect(screen, GREEN, b['rect'], 3)
+                    pg.draw.rect(screen, GREEN, b['rect'], 3)
 
 
             muestra_texto(screen, str('monotypecorsiva'), str(self.selectedMap), WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-740), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-170)))
@@ -756,7 +756,7 @@ class Interface():
 
             #draw minimapa
             
-            pygame.draw.rect(screen, BLUE, pygame.Rect(Utils.ScreenWidth/2 - MINIMAP_X, Utils.ScreenHeight - MINIMAP_Y, MINIMAP_W, MINIMAP_H), 1)
+            pg.draw.rect(screen, BLUE, pg.Rect(Utils.ScreenWidth/2 - MINIMAP_X, Utils.ScreenHeight - MINIMAP_Y, MINIMAP_W, MINIMAP_H), 1)
             #self.player.mapa.drawMinimap(screen)
             self.player.drawEntity(screen, camera, True)
             self.enemy.drawEntity(screen, camera, False)
@@ -766,7 +766,7 @@ class Interface():
             y = Utils.ScreenHeight - MINIMAP_Y + (camera.y/self.player.mapa.h * MINIMAP_H)
             w = camera.w/self.player.mapa.w * MINIMAP_W
             h = camera.h/self.player.mapa.h * MINIMAP_H
-            pygame.draw.rect(screen, WHITE, pygame.Rect(x, y, w, h), 2)
+            pg.draw.rect(screen, WHITE, pg.Rect(x, y, w, h), 2)
 
             #informacion de entidades seleccionadas
             #now = datetime.now()
@@ -1009,8 +1009,8 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), "ataca a distancia", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 660)))
         '''    
     def drawPause(self, screen):
-        pygame.draw.rect(screen, BLACK, pygame.Rect(Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80), 512, 500))
-        pygame.draw.rect(screen, BLUE2, pygame.Rect(Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80), 512, 500), 4)
+        pg.draw.rect(screen, BLACK, pg.Rect(Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80), 512, 500))
+        pg.draw.rect(screen, BLUE2, pg.Rect(Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80), 512, 500), 4)
         
         self.helpPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 245), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
         self.exitPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 688), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
@@ -1031,7 +1031,7 @@ class Interface():
             images = []
             for unit in self.player.unitsSelected:
                 image = unit.getRender()
-                image = pygame.transform.scale(image, [image.get_rect().w * 0.7, image.get_rect().h * 0.7])
+                image = pg.transform.scale(image, [image.get_rect().w * 0.7, image.get_rect().h * 0.7])
                 images.append(image)
             x = 0
             y = 0
@@ -1051,7 +1051,7 @@ class Interface():
             images = []
             for unit in self.player.enemySelected:
                 image = unit.getRender()
-                image = pygame.transform.scale(image, [image.get_rect().w * 0.7, image.get_rect().h * 0.7])
+                image = pg.transform.scale(image, [image.get_rect().w * 0.7, image.get_rect().h * 0.7])
                 images.append(image)
             x = 0
             y = 0

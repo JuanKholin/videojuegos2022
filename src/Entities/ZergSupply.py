@@ -37,12 +37,13 @@ class ZergSupply(Structure):
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.sprites += deadSprites
+        self.shadows = []
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2]
         self.spawningIndex = [0, 1, 2]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
         #self.raton = raton
-        self.render = pygame.transform.scale(pygame.image.load(ZERG_DEPOT_RENDER), RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(ZERG_DEPOT_RENDER), RENDER_SIZE)
 
         self.building = building
         if building:

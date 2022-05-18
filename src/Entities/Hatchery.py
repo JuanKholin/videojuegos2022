@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 
 
 from .Zergling import *
@@ -42,14 +42,14 @@ class Hatchery(Structure):
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
-
+        self.shadows = []
         self.sprites += deadSprites
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2, 3]
         self.spawningIndex = [0, 1, 2, 3]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
         self.raton = raton
-        self.render = pygame.transform.scale(pygame.image.load(HATCHERY_RENDER), RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(HATCHERY_RENDER), RENDER_SIZE)
 
         self.building = building
         if building:

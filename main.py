@@ -181,7 +181,9 @@ pg.init()
 
 flags = pg.FULLSCREEN | pg.DOUBLEBUF
 size = (MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT)
-screen =  pg.display.set_mode(size, pygame.RESIZABLE) #, pygame.RESIZABLE)
+screen =  pg.display.set_mode(size, pg.RESIZABLE) #, pg.RESIZABLE)
+
+Utils.init()
 
 #Controlar frames por segundo
 clock = pg.time.Clock()
@@ -229,7 +231,7 @@ aI = AI(player2, Race.TERRAN, HARD)
 
 # Camara
 # pre: mapa tan grande como ventana
-camera = Camera(0, 0, Utils.ScreenWidth - 160, Utils.ScreenHeight)
+camera = Camera(0, 0, Utils.ScreenWidth, Utils.ScreenHeight)
 
 # Escena
 
@@ -256,5 +258,5 @@ while True:
     #Dibujar
     now = datetime.now()
     draw()
-    print((datetime.now() - now).microseconds)
+    #print((datetime.now() - now).microseconds)
     updateGlobalTime(clock)

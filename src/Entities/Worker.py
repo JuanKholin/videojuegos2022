@@ -5,14 +5,14 @@ from ..Command import *
 import math
 
 class Worker(Unit):
-    def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, 
+    def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, 
                     faces, frame, padding, id,player, minePower, timeToMine, inersibleFrames, frames,
                         dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, xPadding, yPadding, wPadding, hPadding,
-                            oreTransportingFrames, gasTransportingFrames, attackInfo):
-        Unit.__init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, 
+                            oreTransportingFrames, gasTransportingFrames, attackInfo, isExplosive):
+        Unit.__init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, 
                                 faces, frame, padding, id, player, inersibleFrames, frames,
                                     dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, xPadding, yPadding, wPadding, hPadding, 
-                                    attackInfo)
+                                    attackInfo, isExplosive)
         # Info minado
         self.startTimeMining = 0
         self.minePower = minePower
@@ -138,6 +138,7 @@ class Worker(Unit):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
         
     # Ya esta al lado del recurso y prepara el minado
     def startMining(self):
@@ -278,6 +279,7 @@ class Worker(Unit):
     def updateMiningImage(self):
         self.frame = (self.frame + 1) % len(self.attackFrames)
         self.image = self.sprites[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
 
     def changeToOreTransporting(self):
         self.state = UnitState.ORE_TRANSPORTING
@@ -286,6 +288,7 @@ class Worker(Unit):
         self.count = 0
         self.frame = 0
         self.image = self.sprites[self.frames[self.oreTransportingFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.oreTransportingFrames[self.frame]][self.dirOffset[self.dir]]]
 
     def changeToGasTransporting(self):
         self.state = UnitState.GAS_TRANSPORTING
@@ -294,6 +297,7 @@ class Worker(Unit):
         self.count = 0
         self.frame = 0
         self.image = self.sprites[self.frames[self.gasTransportingFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.gasTransportingFrames[self.frame]][self.dirOffset[self.dir]]]
 
     def updateOreTransporting(self):
         self.count += 1
@@ -363,11 +367,13 @@ class Worker(Unit):
     def updateOreTransportingImage(self):
         self.frame = (self.frame + 1) % len(self.oreTransportingFrames)
         self.image = self.sprites[self.frames[self.oreTransportingFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.oreTransportingFrames[self.frame]][self.dirOffset[self.dir]]]
     
     # Pasa de frame la animacion de transportar gas
     def updateGasTransportingImage(self):
         self.frame = (self.frame + 1) % len(self.oreTransportingFrames)
         self.image = self.sprites[self.frames[self.gasTransportingFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.gasTransportingFrames[self.frame]][self.dirOffset[self.dir]]]
 
     def setCristal(self, cristal):
         self.cristal = cristal
@@ -379,6 +385,7 @@ class Worker(Unit):
         self.count = 0
         self.frame = 0
         self.image = self.sprites[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
 
     def updateMovingToMining(self):
         self.count += 1

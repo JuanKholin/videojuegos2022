@@ -458,7 +458,7 @@ class AI():
                     if self.mapa.checkIfEmptyZone(buildX, buildY, buildX + (width - 1), buildY + (height - 1)):
                         originX = buildX*self.mapa.tw
                         originY = buildY*self.mapa.th
-                        rect = pygame.Rect(originX, originY + HEIGHT_PAD / 2, width * self.mapa.tw - 1, 
+                        rect = pg.Rect(originX, originY + HEIGHT_PAD / 2, width * self.mapa.tw - 1, 
                                 height * self.mapa.th - HEIGHT_PAD / 2 - 1)
                         tiles = self.mapa.getRectTiles(rect)
                         ok = True

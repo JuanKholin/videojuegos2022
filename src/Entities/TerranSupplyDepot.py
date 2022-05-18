@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 
 from .TerranSoldier import *
 from .TerranWorker import *
@@ -39,13 +39,14 @@ class TerranSupplyDepot(Structure):
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.sprites += deadSprites
+        self.shadows = []
 
         self.image = self.sprites[self.index]
         self.operativeIndex = [4]
         self.spawningIndex = [4]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
 
-        self.render = pygame.transform.scale(pygame.image.load(TERRAN_DEPOT_RENDER), RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(TERRAN_DEPOT_RENDER), RENDER_SIZE)
 
         self.training = []
         self.paths = []

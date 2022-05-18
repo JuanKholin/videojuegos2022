@@ -44,7 +44,20 @@ class Escena():
             #print(command.id)
         else:
             command = self.p1.processEvent(event)
-        if getGameState() == System_State.ONGAME:
+        if getGameState() == System_State.MAINMENU:
+            if command.id == CommandId.RETURN_GAME:
+                if getGameState2() == System_State.HELP:
+                    self.interfaz.helpPage = 0
+                    setGameState2(System_State.SETTINGS)
+                else:
+                    setGameState2(System_State.PLAYING)
+            if command.id == CommandId.HELP:
+                setGameState2(System_State.HELP)
+            elif command.id == CommandId.NEXT_PAGE:
+                self.interfaz.helpPage += 1
+            elif command.id == CommandId.PREVIOUS_PAGE:
+                self.interfaz.helpPage -= 1
+        elif getGameState() == System_State.ONGAME:
             #ejecutar el comando
             if command.id == CommandId.UPGRADE_WORKER_MINING:
                 #print(command.id)
@@ -89,20 +102,20 @@ class Escena():
                     self.saveScene()
                 elif command.id == CommandId.EXIT_GAME:
                     setGameState(System_State.MAINMENU)
-                    self.interfaz.helpPage = 1
+                    self.interfaz.helpPage = 0
                     self.camera.x = 0
                     self.camera.y = 0
                 elif command.id == CommandId.SAVE_EXIT_GAME:
                     self.saveScene()
                     setGameState(System_State.MAINMENU)
-                    self.interfaz.helpPage = 1
+                    self.interfaz.helpPage = 0
                     self.camera.x = 0
                     self.camera.y = 0
                 elif command.id == CommandId.PAUSE_GAME:
                     setGameState2(System_State.PAUSED)
                 elif command.id == CommandId.HELP:
                     setGameState2(System_State.HELP)
-                    self.interfaz.helpPage = 1
+                    self.interfaz.helpPage = 0
                 elif command.id == CommandId.NEXT_PAGE:
                     self.interfaz.helpPage += 1
                 elif command.id == CommandId.PREVIOUS_PAGE:
