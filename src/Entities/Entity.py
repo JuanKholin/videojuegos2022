@@ -12,6 +12,8 @@ class Entity():
         self.player = player
         if player != None:
             self.mapa = player.getMapa()
+            
+        self.shadow = []
 
     def update():
         pass

@@ -1,4 +1,5 @@
 
+from tkinter import W
 from token import OP
 import pygame as pg
 from os import listdir
@@ -751,7 +752,11 @@ class Interface():
             self.player.drawEntity(screen, True)
             self.enemy.drawEntity(screen, False)
 
-            pygame.draw.rect(screen, WHITE, pygame.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (camera.x/self.player.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (camera.y/self.player.mapa.h * MINIMAP_H), camera.w/self.player.mapa.w * MINIMAP_W, camera.h/self.player.mapa.h * MINIMAP_H), 2)
+            x = Utils.ScreenWidth/2 - MINIMAP_X + (camera.x/self.player.mapa.w * MINIMAP_W)
+            y = Utils.ScreenHeight - MINIMAP_Y + (camera.y/self.player.mapa.h * MINIMAP_H)
+            w = camera.w/self.player.mapa.w * MINIMAP_W
+            h = camera.h/self.player.mapa.h * MINIMAP_H
+            pygame.draw.rect(screen, WHITE, pygame.Rect(x, y, w, h), 2)
 
             #informacion de entidades seleccionadas
             self.drawEntityInfo(screen, camera)

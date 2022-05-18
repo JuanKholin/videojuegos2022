@@ -221,11 +221,6 @@ class Structure(Entity.Entity):
 
 
         #sombra
-        aux = pygame.mask.from_surface(self.image, 0)
-        mask = aux.to_surface(setcolor=(1, 0, 0))
-        mask.set_colorkey(BLACK)
-        mask.set_alpha(150)
-        screen.blit(mask, [image.x - camera.x - 8, image.y - camera.y - 5])
 
         #self.image.blit(dark, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
         screen.blit(self.image, [image.x - camera.x, image.y - camera.y])

@@ -74,6 +74,15 @@ class TerranWorker(Worker):
         deadSpritesheet.set_colorkey(BLACK)
         self.sprites = Entity.divideSpritesheetByRows(spritesheet,
                 SPRITE_PIXEL_ROWS, SCALE) + Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200, (80, 80))
+        
+        self.shadow = []
+        for i in range(INVERSIBLE_FRAMES):
+            aux = pygame.mask.from_surface(self.sprites[i], 0)
+            mask = aux.to_surface(setcolor=(1, 0, 0))
+            mask.set_colorkey(BLACK)
+            mask.set_alpha(150)
+            self.shadow.append(mask)
+        
         self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
