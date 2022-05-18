@@ -29,6 +29,8 @@ X_PADDING =         15
 Y_PADDING =         15
 PADDING = 20
 
+IS_EXPLOSIVE = True
+
 class Goliath(Soldier):
     generateSound = soldierGenerateSound
     deadSound = soldierDeadSound
@@ -39,7 +41,7 @@ class Goliath(Soldier):
                 GENERATION_TIME, SPEED, FRAMES_TO_REFRESH, FACES, FRAME,
                 PADDING,  takeID(), player, GOLIATH_INVERSIBLE_FRAMES, GOLIATH_FRAMES, 
                 DIR_OFFSET, GOLIATH_ATTACK_FRAMES, GOLIATH_STILL_FRAMES, GOLIATH_MOVE_FRAMES, 
-                GOLIATH_DIE_FRAMES, X_PADDING, Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ATTACK_INFO, True)
+                GOLIATH_DIE_FRAMES, X_PADDING, Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ATTACK_INFO, IS_EXPLOSIVE)
 
         sprites = Utils.GOLIATH_SPRITES
         self.sprites = sprites[0]

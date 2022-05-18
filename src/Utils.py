@@ -534,7 +534,7 @@ def loadFirebat():
     spritesheet.set_colorkey(BLACK)
     deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
-    sprites = divideSpritesheetByRows(spritesheet, FIREBAT_SPRITE_ROWS, FIREBAT_SCALE) + divideSpritesheetByRowsNoScale(deadSpritesheet, 200, (80, 80))
+    sprites = divideSpritesheetByRows(spritesheet, FIREBAT_SPRITE_ROWS, FIREBAT_SCALE) + divideSpritesheetByRowsNoScale(deadSpritesheet, 128, (80, 80))
   
     for i in range(FIREBAT_INVERSIBLE_FRAMES):
         for j in range(9, 16):
@@ -605,9 +605,9 @@ def loadGoliath():
     spritesheet.set_colorkey(BLACK)
     deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
-    sprites = divideSpritesheetByRows(spritesheet, GOLIATH_SPRITE_ROWS, GOLIATH_SCALE) + divideSpritesheetByRowsNoScale(deadSpritesheet, 200, (80, 80))
+    sprites = divideSpritesheetByRows(spritesheet, GOLIATH_SPRITE_ROWS, GOLIATH_SCALE) + divideSpritesheetByRowsNoScale(deadSpritesheet, 128, (80, 80))
   
-    for i in range(GOLIATH_INVERSIBLE_FRAMES):
+    for i in range(len(GOLIATH_FRAMES)):
         for j in range(9, 16):
             sprites[GOLIATH_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[GOLIATH_FRAMES[i][DIR_OFFSET[j]]], True, False)
     
