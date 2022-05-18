@@ -625,19 +625,25 @@ class Unit(Entity):
 
     def recalcAttackPaths(self):
         self.mapa.setLibre(self.occupiedTile)
+        seguir = True
         if self.attackedOne.esEstructura == False:
-            #print("Atacamos a una unidad")
+            #print("Atacamos a una unidad",self.attackedOne.enable )
             if self.attackedOne.enable:
                 self.tileAAtacar = self.attackedOne.getTile()
                 if self.tileAAtacar == None:
                     enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
                     if enemy != None:
                         self.attack(enemy)
-                        self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
                     else:
                         self.changeToStill()
+                else:
+                    self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
             else:
+                self.pahts = []
+                self.updateOwnSpace()
+                seguir = False
                 self.changeToStill()
+                #input()
         else:
             #print("Atacamos a una estructura")
             tilesAAtacar = self.mapa.getAttackRoundTiles(self.attackedOne.getRect())
@@ -646,16 +652,17 @@ class Unit(Entity):
                 if tile.heur(self.getTile()) < self.tileAAtacar.heur(self.getTile()):
                     self.tileAAtacar = tile
             self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
-        self.mapa.setVecina(self.occupiedTile, self.id)
-        self.occupiedTile.setOcupante(self)
-        if len(self.paths) > 0:
-            self.changeObjectiveTile()
-            ownTile = self.getTile()
-            if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
-                self.updateAttackInRange()
-            else:
-                #self.updatePath(self.paths[len(self.paths) - 1])
-                self.updateMovingImage()
+        if seguir:
+            self.mapa.setVecina(self.occupiedTile, self.id)
+            self.occupiedTile.setOcupante(self)
+            if len(self.paths) > 0:
+                self.changeObjectiveTile()
+                ownTile = self.getTile()
+                if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
+                    self.updateAttackInRange()
+                else:
+                    #self.updatePath(self.paths[len(self.paths) - 1])
+                    self.updateMovingImage()
 
     # Indica a la IA si es soldado o worker
     def isSoldier(self):

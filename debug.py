@@ -17,7 +17,7 @@ from src.Entities.TerranSoldier import *
 
 from src.Utils import *
 from src.Command import *
-from src import Player, Raton, MapAstarNEW
+from src import Player, Raton, Map
 from src.InterfaceNOSELECT import *
 from src.AI import *
 from src.Camera import *
@@ -64,12 +64,12 @@ def procesarInput():
 
 
 def setEntity(player, ai):
-    scv = Firebat(player, 10, 3)
+    scv = TerranWorker(player, 10, 3)
     player.addUnits(scv)
     structure1 = TerranBuilder(3, 3, player, mapa, False, raton)
     player.addStructures(structure1)
     player.setBasePlayer(structure1)
-    scv = Goliath(ai, 12, 3)
+    scv = Goliath(ai, 20, 3)
     ai.addUnits(scv)
     structure1 = TerranBuilder(37, 3, ai, mapa, False, raton)
     ai.addStructures(structure1)
@@ -158,61 +158,47 @@ def setEntity(player, ai):
    '''
 
 def update():
+    if Utils.resized:
+        Utils.resized = False
+        updateScreen(screen)
+        camera.update()
     clock_update()
-    raton.update(camera)
-
+    raton.update(escena.camera)
     if getGameState() == System_State.MAINMENU:
         playMusic(mainMenuBGM, pos = 5)
         #playSound(mainMenuBGM)
-        escena.interfaz.update(escena,raton, camera)
+        escena.interfaz.update(escena,raton, escena.camera)
     elif getGameState() == System_State.MAP1:
-        #playMusic(map1BGM)
+        stopMusic()
+        playMusic(map1BGM)
         #cargar mapa
         escena.mapa = mapa
-        
-       
         escena.mapa.load()
         escena.mapa.loadMinimap()
-        '''
-        x, y = escena.addWall(0,20,1400,1,1,30)
-        x, y = escena.addWall(0,x,y,1,-1,40)
-        #print(x,y)
-        x, y = escena.addWall(0,x,y,-1,-1, 40)
-        #print(x,y)
-        x, y = escena.addWall(0,x,y,-1,-1, 70, 10)
-        #x, y = escena.addWall(x,y,-1,1,30)
-
-        x, y = escena.addWall(1,1540,200,-1,-1,30)
-        x, y = escena.addWall(1,x,y,-1,1,40)
-        #print(x,y)
-        x, y = escena.addWall(1,x,y,1,1, 40)
-        #print(x,y)
-        x, y = escena.addWall(1,x,y,1,1, 70, 10)'''
-
-        camera.x = 0
-        camera.y = 0
         setEntity(player1, player2)
         setGameState(System_State.ONGAME)
+        setGameState2(System_State.LOAD)
     elif getGameState() == System_State.ONGAME:
-        escena.interfaz.update(escena,raton, camera)
+        escena.update()
     elif getGameState() == System_State.GAMESELECT:
         #Cargar las partidas
-        escena.interfaz.update(escena,raton, camera)
+        escena.interfaz.update(escena,raton, escena.camera)
     elif getGameState() == System_State.NEWGAME:
-        escena.interfaz.update(escena,raton, camera)
+        escena.interfaz.update(escena,raton, escena.camera)
     else: #STATE == System_State.EXIT:
         pg.quit()
         sys.exit()
-
 def draw():
-    screen.fill(WHITE)
+    screen.fill(BLACK)
     if Utils.state == System_State.MAINMENU:
-        escena.interfaz.draw(screen, camera)
+        escena.interfaz.draw(screen, escena.camera)
     elif Utils.state == System_State.ONGAME:
         escena.draw(screen)
+    elif Utils.state == System_State.PAUSED:
+        escena.draw(screen)
     elif Utils.state == System_State.GAMESELECT or Utils.state == System_State.NEWGAME:
-        escena.interfaz.draw(screen, camera)
-    raton.draw(screen, camera)
+        escena.interfaz.draw(screen, escena.camera)
+    raton.draw(screen, escena.camera)
     #aux(screen)
     pg.display.flip()
 
@@ -253,7 +239,7 @@ commandMap ={
 }
 
 print(MAPA_CHIKITO.__len__(), MAPA_CHIKITO[0].__len__())
-mapa = MapAstarNEW.Map( MAPA_CHIKITO[0].__len__(),MAPA_CHIKITO.__len__(), True, MAPA_CHIKITO)
+mapa = Map.Map( MAPA_CHIKITO[0].__len__(),MAPA_CHIKITO.__len__(), True, MAPA_CHIKITO)
 '''
 mapa.setElevacion(0, 55)
 mapa.setElevacion(8, 55)
@@ -300,7 +286,7 @@ if Utils.DEBBUG == False:
     aI = AI(player2, Race.TERRAN, HARD)
 
 else:
-    aI = AI(player2, Race.TERRAN, NULL)
+    aI = AI(player2, Race.TERRAN, HARD)
 escena = Escena(player1, player2, aI, [], camera, raton, p1Interface, [])
 
 raton.setEscena(escena)

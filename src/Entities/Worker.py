@@ -92,36 +92,39 @@ class Worker(Unit):
     
     def changeToExtracting(self, resource):
         if resource != None:
-            self.state = UnitState.EXTRACTING
-            self.runningAway = False
-            self.attackedOne = None
-            self.isMining = False
-            self.resource = resource
-            pos = self.resource.getPosition()
-            tile = self.mapa.getTile(pos[0], pos[1])
-            tiles = self.mapa.getEntityTilesVecinas(tile, self.getTile())
-            if len(tiles) > 0:
-                ownTile = self.getTile()
-                bestTile = tiles[0]
-                for tile in tiles:
-                    if tile.heur(ownTile) < bestTile.heur(ownTile):
-                        bestTile = tile
-                self.paths = calcPathNoLimit(self.getPosition(), self.getTile(), bestTile, self.mapa)
-                if len(self.paths) > 0:
-                    self.moveToMining()
-                    self.changeObjectiveTile()
-                else:
-                    self.updateOwnSpace()
-                    tilesCasa = self.tilesResource(self.getTile())
-                    if self.getTile() in tilesCasa: # PONERSE A MINAR
-                        #print("Hay que ponerse a minar")
-                        self.startExtracting()
+            if self.mapa.getTile(resource.x, resource.y).type != GEYSER:
+                self.state = UnitState.EXTRACTING
+                self.runningAway = False
+                self.attackedOne = None
+                self.isMining = False
+                self.resource = resource
+                pos = self.resource.getPosition()
+                tile = self.mapa.getTile(pos[0], pos[1])
+                tiles = self.mapa.getEntityTilesVecinas(tile, self.getTile())
+                if len(tiles) > 0:
+                    ownTile = self.getTile()
+                    bestTile = tiles[0]
+                    for tile in tiles:
+                        if tile.heur(ownTile) < bestTile.heur(ownTile):
+                            bestTile = tile
+                    self.paths = calcPathNoLimit(self.getPosition(), self.getTile(), bestTile, self.mapa)
+                    if len(self.paths) > 0:
+                        self.moveToMining()
+                        self.changeObjectiveTile()
                     else:
-                        self.changeToStill()
+                        self.updateOwnSpace()
+                        tilesCasa = self.tilesResource(self.getTile())
+                        if self.getTile() in tilesCasa: # PONERSE A MINAR
+                            #print("Hay que ponerse a minar")
+                            self.startExtracting()
+                        else:
+                            self.changeToStill()
+                else:
+                    #print("No hay tiles libres weird")
+                    #exit(1) 
+                    pass
             else:
-                #print("No hay tiles libres weird")
-                #exit(1) 
-                pass
+                self.changeToStill()
 
     # Manda a la unidad hacia el recurso
     def moveToMining(self):
