@@ -31,23 +31,22 @@ class TerranBuilder(Structure):
     nBuildSprites = 4
     clicked = False
     frame = 8
-    nSprites = 6
     options = [Options.BUILD_DEPOT_TERRAN, Options.BUILD_BARRACKS_TERRAN, Options.BUILD_REFINERY_TERRAN, 
             Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE, Options.GENERATE_WORKER_TERRAN]
 
     def __init__(self, xini, yini, player, map, building, raton):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
-        self.sprites = cargarSprites(TERRAN_BUILDER_PATH, self.nSprites, False, WHITE, 1.5)
 
-        deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
-        deadSpritesheet.set_colorkey(BLACK)
-        deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
-        self.sprites += deadSprites
+        sprites = Utils.TERRAN_BUILDER_SPRITES
+        self.sprites = sprites[0]
+        self.shadows = sprites[1]
+
 
         #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
         self.raton = raton
         self.image = self.sprites[self.index]
+        self.shadow = self.shadows[self.index]
         self.operativeIndex = [4]
         self.spawningIndex = [4, 5]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]

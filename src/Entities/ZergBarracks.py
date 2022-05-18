@@ -38,6 +38,7 @@ class ZergBarracks(Structure):
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.sprites += deadSprites
+        self.shadows = []
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2]
         self.spawningIndex = [0, 1, 2]

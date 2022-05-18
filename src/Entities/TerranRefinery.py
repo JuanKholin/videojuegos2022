@@ -40,6 +40,7 @@ class TerranRefinery(Structure):
         self.type = TERRAN_REFINERY
 
         self.image = self.sprites[self.index]
+        self.shadows = []
         self.operativeIndex = [4]
         self.spawningIndex = [4]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
