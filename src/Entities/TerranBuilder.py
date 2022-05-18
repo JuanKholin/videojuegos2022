@@ -88,44 +88,46 @@ class TerranBuilder(Structure):
 
     def execute(self, command_id):
         #if self.clicked:
-        if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_WORKER) and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
-            if len(self.player.units) + 1 <= (self.player.limitUnits):
-                self.player.resources -= TERRAN_WORKER_MINERAL_COST
-                terranWorker = TerranWorker(self.player)
-                #print("xd")
-                self.generateUnit(terranWorker)
-                self.state = BuildingState.SPAWNING
-        elif command_id == CommandId.UPGRADE_SOLDIER_DAMAGE and self.player.resources and self.player.resources >= self.damageMineralUpCost and self.player.gas >= self.damageGasUpCost and self.player.dañoUpgrade <= LIMIT_MEJORA:
-            self.player.resources -= self.damageMineralUpCost
-            self.player.gas -= self.damageGasUpCost
-            self.player.dañoUpgrade += 1
-            self.damageMineralUpCost += 25
-            self.damageGasUpCost += 5
-        elif command_id == CommandId.UPGRADE_SOLDIER_ARMOR and self.player.resources and self.player.gas >= self.armorGasUpCost and self.player.resources >= self.armorMineralUpCost and self.player.armorUpgrade <= LIMIT_MEJORA:
-            self.player.resources -= self.armorMineralUpCost
-            self.player.gas -= self.armorGasUpCost
-            self.player.armorUpgrade += 1
-            self.armorMineralUpCost += 25
-            self.armorGasUpCost += 5
-        elif command_id == CommandId.UPGRADE_WORKER_MINING and self.player.resources and self.player.resources >= self.mineMineralUpCost and self.player.gas >= self.mineGasUpCost and self.player.mineUpgrade <= LIMIT_MEJORA:
-            self.player.resources -= self.mineMineralUpCost
-            self.player.gas -= self.mineGasUpCost
-            self.player.mineUpgrade += 1
-            self.mineMineralUpCost += 25
-            self.mineGasUpCost += 5
-        elif command_id == CommandId.BUILD_BARRACKS and self.player.resources >= TERRAN_BARRACKS_MINERAL_COST:
-            self.raton.building = True
-            #print("mi raton: ", self.raton.id)
-            self.raton.buildStructure = self.getTerranBarrack()
-        elif command_id == CommandId.BUILD_HATCHERY and self.player.resources >= HATCHERY_MINERAL_COST:
-            self.raton.building = True
-            self.raton.buildStructure = self.getHatchery()
-        elif command_id == CommandId.BUILD_REFINERY and self.player.resources >= TERRAN_REFINERY_MINERAL_COST:
-            self.raton.building = True
-            self.raton.buildStructure = self.getTerranRefinery()
-        elif command_id == CommandId.BUILD_DEPOT and self.player.resources >= TERRAN_DEPOT_MINERAL_COST:
-            self.raton.building = True
-            self.raton.buildStructure = self.getTerranSupply()
+        if self.state != BuildingState.BUILDING and self.state != BuildingState.COLLAPSING and self.state != BuildingState.DESTROYED:
+            
+            if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_WORKER) and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
+                if len(self.player.units) + 1 <= (self.player.limitUnits):
+                    self.player.resources -= TERRAN_WORKER_MINERAL_COST
+                    terranWorker = TerranWorker(self.player)
+                    #print("xd")
+                    self.generateUnit(terranWorker)
+                    self.state = BuildingState.SPAWNING
+            elif command_id == CommandId.UPGRADE_SOLDIER_DAMAGE and self.player.resources and self.player.resources >= self.damageMineralUpCost and self.player.gas >= self.damageGasUpCost and self.player.dañoUpgrade <= LIMIT_MEJORA:
+                self.player.resources -= self.damageMineralUpCost
+                self.player.gas -= self.damageGasUpCost
+                self.player.dañoUpgrade += 1
+                self.damageMineralUpCost += 25
+                self.damageGasUpCost += 5
+            elif command_id == CommandId.UPGRADE_SOLDIER_ARMOR and self.player.resources and self.player.gas >= self.armorGasUpCost and self.player.resources >= self.armorMineralUpCost and self.player.armorUpgrade <= LIMIT_MEJORA:
+                self.player.resources -= self.armorMineralUpCost
+                self.player.gas -= self.armorGasUpCost
+                self.player.armorUpgrade += 1
+                self.armorMineralUpCost += 25
+                self.armorGasUpCost += 5
+            elif command_id == CommandId.UPGRADE_WORKER_MINING and self.player.resources and self.player.resources >= self.mineMineralUpCost and self.player.gas >= self.mineGasUpCost and self.player.mineUpgrade <= LIMIT_MEJORA:
+                self.player.resources -= self.mineMineralUpCost
+                self.player.gas -= self.mineGasUpCost
+                self.player.mineUpgrade += 1
+                self.mineMineralUpCost += 25
+                self.mineGasUpCost += 5
+            elif command_id == CommandId.BUILD_BARRACKS and self.player.resources >= TERRAN_BARRACKS_MINERAL_COST:
+                self.raton.building = True
+                #print("mi raton: ", self.raton.id)
+                self.raton.buildStructure = self.getTerranBarrack()
+            elif command_id == CommandId.BUILD_HATCHERY and self.player.resources >= HATCHERY_MINERAL_COST:
+                self.raton.building = True
+                self.raton.buildStructure = self.getHatchery()
+            elif command_id == CommandId.BUILD_REFINERY and self.player.resources >= TERRAN_REFINERY_MINERAL_COST:
+                self.raton.building = True
+                self.raton.buildStructure = self.getTerranRefinery()
+            elif command_id == CommandId.BUILD_DEPOT and self.player.resources >= TERRAN_DEPOT_MINERAL_COST:
+                self.raton.building = True
+                self.raton.buildStructure = self.getTerranSupply()
 
     def command(self, command):
         if (command == CommandId.BUILD_BARRACKS) or (command == CommandId.BUILD_REFINERY) or (command ==

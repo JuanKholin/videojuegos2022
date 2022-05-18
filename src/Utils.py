@@ -530,12 +530,15 @@ times = pygame.font.match_font('times')
 arial = pygame.font.match_font('arial')
 courier = pygame.font.match_font('courier')
 
-def muestra_texto(pantalla,fuente,texto,color, dimensiones, pos):
+def muestra_texto(pantalla,fuente,texto,color, dimensiones, pos, center = False):
     tipo_letra = pygame.font.Font(pygame.font.match_font(fuente), dimensiones)
     superficie = tipo_letra.render(texto, True, color)
     rectangulo = superficie.get_rect()
     #print(rectangulo)
-    rectangulo.x = pos[0]
+    if not center:
+        rectangulo.x = pos[0]
+    else:
+        rectangulo.x = pos[0] - rectangulo.w/2
     rectangulo.y = pos[1]
     pantalla.blit(superficie, rectangulo)
 

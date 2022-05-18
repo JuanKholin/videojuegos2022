@@ -256,7 +256,7 @@ class Structure(Entity.Entity):
 
     def drawInfo(self, screen, color):
         dic = self.toDictionary(self.mapa)
-        muestra_texto(screen, str('monotypecorsiva'), dic['nombre'], color, 25, [Utils.ScreenWidth/2 - GUI_INFO_X2, Utils.ScreenHeight - GUI_INFO_Y2 + 5])
+        muestra_texto(screen, str('monotypecorsiva'), dic['nombre'], color, 25, [Utils.ScreenWidth/2 - GUI_INFO_X2 + 80, Utils.ScreenHeight - GUI_INFO_Y2 + 10], True)
         if self.state == BuildingState.BUILDING:
             self.drawInfoBuilding(screen, color)
         elif self.state == BuildingState.OPERATIVE:
@@ -265,13 +265,13 @@ class Structure(Entity.Entity):
             self.drawInfoSpawning(screen, color)
 
     def drawInfoBuilding(self, screen, color):
-        muestra_texto(screen, str('monotypecorsiva'), "Construyendo...", color, 20, [Utils.ScreenWidth/2 - GUI_INFO_X2, Utils.ScreenHeight - GUI_INFO_Y2 + 30])
+        muestra_texto(screen, str('monotypecorsiva'), "Construyendo...", color, 20, [Utils.ScreenWidth/2 - GUI_INFO_X2, Utils.ScreenHeight - GUI_INFO_Y2 + 50])
 
         progreso = self.count / (self.generationTime * CLOCK_PER_SEC)
         if progreso > 1:
             progreso = 1
-        pygame.draw.rect(screen, BLUE2, pygame.Rect(Utils.ScreenWidth/2 - GUI_INFO_X2 - 75, Utils.ScreenHeight - GUI_INFO_Y2 + 55, 150*(progreso), 15))
-        pygame.draw.rect(screen, BLUE, pygame.Rect(Utils.ScreenWidth/2 - GUI_INFO_X2 - 75, Utils.ScreenHeight - GUI_INFO_Y2 + 55, 150, 15), 2)
+        pygame.draw.rect(screen, BLUE2, pygame.Rect(Utils.ScreenWidth/2 - GUI_INFO_X2, Utils.ScreenHeight - GUI_INFO_Y2 + 85, 150*(progreso), 15))
+        pygame.draw.rect(screen, BLUE, pygame.Rect(Utils.ScreenWidth/2 - GUI_INFO_X2, Utils.ScreenHeight - GUI_INFO_Y2 + 85, 150, 15), 2)
 
     def drawInfoOperative(self, screen, color):
         dic = self.toDictionary(self.mapa)

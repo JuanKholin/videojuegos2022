@@ -58,6 +58,14 @@ class TerranRefinery(Structure):
         self.paths = []
 
         self.type = TERRAN_REFINERY
+        
+    def drawInfoOperative(self, screen, color):
+        dic = self.toDictionary(self.mapa)
+        muestra_texto(screen, str('monotypecorsiva'), dic['funcion'], color, 20, [Utils.ScreenWidth/2 - GUI_INFO_X2, Utils.ScreenHeight - GUI_INFO_Y2 + 50])
+        if self.resource.capacity > 0:
+            muestra_texto(screen, str('monotypecorsiva'), str(self.resource.capacity), YELLOW, 20, [Utils.ScreenWidth/2 - GUI_INFO_X2 + 60, Utils.ScreenHeight - GUI_INFO_Y2 + 90], True)
+        else:
+            muestra_texto(screen, str('monotypecorsiva'), "0", YELLOW, 20, [Utils.ScreenWidth/2 - GUI_INFO_X2 + 60, Utils.ScreenHeight - GUI_INFO_Y2 + 90], True)
 
     def getBuildSprite(self):
         return self.sprites[4]
