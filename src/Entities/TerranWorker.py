@@ -103,7 +103,7 @@ class TerranWorker(Worker):
     def toDictionary(self, map):
         fatherDictionary = super().toDictionary(map)
         sonDictionary = {
-            "clase": "terranWorker",
+            "clase": "SCV",
             "nombre": "Terran Worker",
             "funcion": "Unidad obrera"
         }

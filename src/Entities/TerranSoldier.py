@@ -92,8 +92,8 @@ class TerranSoldier(Soldier):
         fatherDictionary = super().toDictionary(map)
         sonDictionary = {
             "clase": "terranSoldier",
-            "nombre": "Soldado Terran",
-            "funcion": "unidad de infanteria"
+            "nombre": "Terran Marine",
+            "funcion": "Unidad ofensiva a rango"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

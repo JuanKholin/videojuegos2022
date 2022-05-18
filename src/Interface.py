@@ -11,6 +11,7 @@ from src.Lib import *
 from src.Utils import *
 from src.Loader import *
 from src.AI import *
+from datetime import datetime
 
 class Interface():
     buttonX = 0
@@ -747,10 +748,12 @@ class Interface():
             screen.blit(self.gui, (Utils.ScreenWidth/2 - self.gui.get_width()/2, Utils.ScreenHeight - self.gui.get_height()))
 
             #draw minimapa
+            
             pygame.draw.rect(screen, BLUE, pygame.Rect(Utils.ScreenWidth/2 - MINIMAP_X, Utils.ScreenHeight - MINIMAP_Y, MINIMAP_W, MINIMAP_H), 1)
             #self.player.mapa.drawMinimap(screen)
-            self.player.drawEntity(screen, True)
-            self.enemy.drawEntity(screen, False)
+            self.player.drawEntity(screen, camera, True)
+            self.enemy.drawEntity(screen, camera, False)
+            
 
             x = Utils.ScreenWidth/2 - MINIMAP_X + (camera.x/self.player.mapa.w * MINIMAP_W)
             y = Utils.ScreenHeight - MINIMAP_Y + (camera.y/self.player.mapa.h * MINIMAP_H)
@@ -759,7 +762,9 @@ class Interface():
             pygame.draw.rect(screen, WHITE, pygame.Rect(x, y, w, h), 2)
 
             #informacion de entidades seleccionadas
+            #now = datetime.now()
             self.drawEntityInfo(screen, camera)
+            #print("tiempo de dibujar la info: ",(datetime.now() - now).microseconds)
 
             #draw cara del heroe
             screen.blit(self.heroeSprites[self.heroeIndex], (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 672), Utils.ScreenHeight - (MIN_SCREEN_HEIGHT - 667)))

@@ -142,8 +142,8 @@ class Hatchery(Structure):
         sonDictionary = {
             "clase": "hatchery",
             "building": self.building,
-            "nombre": "Criadera de Zerg",
-            "funcion": "Base enemiga"
+            "nombre": "Criadero de Zerg",
+            "funcion": "Construir y engendrar Drone"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

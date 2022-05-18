@@ -79,7 +79,7 @@ class Drone(Worker):
         sonDictionary = {
             "clase": "drone",
             "nombre": "Drone",
-            "funcion": "muy tanke"
+            "funcion": "Unidad obrera"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

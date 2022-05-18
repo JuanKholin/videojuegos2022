@@ -102,8 +102,8 @@ class ZergBarracks(Structure):
         sonDictionary = {
             "clase": "zergBarracks",
             "building": self.building,
-            "nombre": "Criadera de Zerling",
-            "funcion": "Crear zerling"
+            "nombre": "Colmena",
+            "funcion": "Engendrar unidades ofensivas"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

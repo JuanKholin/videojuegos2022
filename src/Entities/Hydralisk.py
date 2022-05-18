@@ -72,7 +72,7 @@ class Hydralisk(Soldier):
         sonDictionary = {
             "clase": "hydralisk",
             "nombre": "Hydralisk",
-            "funcion": "Unidad Zerg de rango"
+            "funcion": "Unidad ofesniva de rango"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

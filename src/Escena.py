@@ -253,23 +253,43 @@ class Escena():
 
     def draw(self, screen):
         #importa el orden porfavor
+        now = datetime.now()
         self.mapa.drawMap(screen, self.camera)
+        #print("tiempo de dibujar el mapa: ",(datetime.now() - now).microseconds)
+        now = datetime.now()
         #print(self.walls.__len__())
+        
         all = self.resources + self.p1.units +  self.p1.structures + self.p2.units +  self.p2.structures + self.walls
         all.sort(key=lambda x: x.y)
+        now = datetime.now()
         for d in all:
             d.draw(screen, self.camera)
+        #print("tiempo en deibujar las entidades: ",(datetime.now() - now).microseconds)
         '''
+        now = datetime.now()
         for res in self.resources:
             res.draw(screen, self.camera)
-
+        print("tiempo en dib los recursos: ",(datetime.now() - now).microseconds)
+        now = datetime.now()
         self.p1.draw(screen, self.camera)
+        print("tiempo en dib el p1: ",(datetime.now() - now).microseconds)
+        now = datetime.now()
         self.p2.draw(screen, self.camera)
+        print("tiempo en dib el p2: ",(datetime.now() - now).microseconds)
+        now = datetime.now()
         for wall in self.walls:
-            wall.draw(screen, self.camera)'''
+            wall.draw(screen, self.camera)
+        print("tiempo en dib los muros: ",(datetime.now() - now).microseconds)
+        now = datetime.now()'''
         self.mapa.drawNiebla(screen, self.camera)
+        #print("tiempo en la niebla: ",(datetime.now() - now).microseconds)
+        now = datetime.now()
         self.raton.drawBuildStructure(screen, self.camera)
+        #print("tiempo en la buildraton: ",(datetime.now() - now).microseconds)
+        now = datetime.now()
         self.interfaz.draw(screen, self.camera)
+        print("tiempo en la interfaz: ",(datetime.now() - now).microseconds)
+        
         
 
     def getTerranBarrack(self):

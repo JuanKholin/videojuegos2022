@@ -112,8 +112,8 @@ class Extractor(Structure):
         sonDictionary = {
             "clase": "extractor",
             "building": self.building,
-            "nombre": "Extractor de Zerg",
-            "funcion": "extrae recursos"
+            "nombre": "Extractor",
+            "funcion": "Extrae gas de un geyser"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

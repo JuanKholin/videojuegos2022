@@ -157,8 +157,8 @@ class TerranBuilder(Structure):
         sonDictionary = {
             "clase": "terranBuilder",
             "building": self.building,
-            "nombre": "Base de comandos",
-            "funcion": "Protege la base de comandos",
+            "nombre": "Centro de comandos",
+            "funcion": "Construir y construir SCV",
             "damageMineralUpCost": self.damageMineralUpCost,
             "damageGasUpCost": self.damageGasUpCost,
             "armorMineralUpCost": self.armorMineralUpCost,

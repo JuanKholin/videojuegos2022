@@ -6,7 +6,7 @@
         "clase": "terranWorker",
         "nombre": "Terran Worker",
         "funcion": "Unidad obrera",
-        "x": 17,
+        "x": 13,
         "y": 5,
         "hp": 60
       }
@@ -17,12 +17,12 @@
         "building": false,
         "nombre": "Base de comandos",
         "funcion": "Protege la base de comandos",
-        "damageMineralUpCost": 50,
-        "damageGasUpCost": 50,
-        "armorMineralUpCost": 50,
-        "armorGasUpCost": 50,
-        "mineMineralUpCost": 50,
-        "mineGasUpCost": 50,
+        "damageMineralUpCost": 25,
+        "damageGasUpCost": 5,
+        "armorMineralUpCost": 25,
+        "armorGasUpCost": 5,
+        "mineMineralUpCost": 25,
+        "mineGasUpCost": 5,
         "x": 20,
         "y": 5,
         "hp": 1500
@@ -3500,8 +3500,8 @@
   "camera": {
     "x": 400,
     "y": 0,
-    "h": 610,
-    "w": 1025
+    "h": 770,
+    "w": 1024
   },
   "resources": [
     {

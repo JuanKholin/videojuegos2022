@@ -148,15 +148,21 @@ class Player():
             r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
                 unit.draw(screen, camera)
 
-    def drawEntity(self, screen, isMe):
+    def drawEntity(self, screen, camera,  isMe):
         if isMe:
             for structure in self.structures:
-                pos = structure.getPosition()
-                pygame.draw.rect(screen, BLUE, pygame.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
+                r = structure.getRect()
+                if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
+                    r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
+                    pos = structure.getPosition()
+                    pygame.draw.rect(screen, BLUE, pygame.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
             for unit in self.units:
                 if unit.state != UnitState.DEAD:
-                    pos = unit.getPosition()
-                    pygame.draw.rect(screen, GREEN, pygame.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
+                    r = structure.getRect()
+                    if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
+                        r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
+                        pos = unit.getPosition()
+                        pygame.draw.rect(screen, GREEN, pygame.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
         else:
             for structure in self.structures:
                 pos = structure.getPosition()
