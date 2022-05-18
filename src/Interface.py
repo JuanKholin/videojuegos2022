@@ -138,7 +138,10 @@ class Interface():
         self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/gastank.png"), (25, 25)))
         self.resources[1].set_colorkey(BLACK)
 
-        self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unit.png"), (25, 25)))
+        if self.selectedRaza["nombre"] == "Terran":
+            self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unit.png"), (25, 25)))
+        else:
+            self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unitZerg.png"), (25, 25)))
         self.resources[2].set_colorkey(BLACK)
 
         self.allButton = self.loadAllButton()
@@ -166,21 +169,21 @@ class Interface():
         allButton[Options.BUILD_REFINERY_TERRAN] = aux
         
         #Zerg unidades
-        aux = Button.Button(BUTTON_PATH + "drone" + ".png", CommandId.GENERATE_WORKER,BUTTON_PATH + "construirConMineral.png", "Engendrar Drone", 5, ZERG_WORKER_MINERAL_COST)
+        aux = Button.Button(BUTTON_PATH + "drone" + ".png", CommandId.GENERATE_WORKER,BUTTON_PATH + "construirConMineralZerg.png", "Engendrar Drone", 5, ZERG_WORKER_MINERAL_COST)
         allButton[Options.GENERATE_WORKER_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "zergling" + ".png", CommandId.GENERATE_T1,BUTTON_PATH + "construirConMineral.png", "Engendrar Zergling", 5, ZERG_T1_MINERAL_COST)
+        aux = Button.Button(BUTTON_PATH + "zergling" + ".png", CommandId.GENERATE_T1,BUTTON_PATH + "construirConMineralZerg.png", "Engendrar Zergling", 5, ZERG_T1_MINERAL_COST)
         allButton[Options.GENERATE_T1_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "broodling" + ".png", CommandId.GENERATE_T2,BUTTON_PATH + "construirConMineralYGas.png", "Engendrar Broodling", 5, ZERG_T2_MINERAL_COST, 5, 25)
+        aux = Button.Button(BUTTON_PATH + "broodling" + ".png", CommandId.GENERATE_T2,BUTTON_PATH + "construirConMineralYGasZerg.png", "Engendrar Broodling", 5, ZERG_T2_MINERAL_COST, 5, 25)
         allButton[Options.GENERATE_T2_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "hydralisk" + ".png", CommandId.GENERATE_T3,BUTTON_PATH + "construirConMineralYGas.png", "Engendrar Hydralisk",  5, ZERG_T3_MINERAL_COST, 25, 95)
+        aux = Button.Button(BUTTON_PATH + "hydralisk" + ".png", CommandId.GENERATE_T3,BUTTON_PATH + "construirConMineralYGasZerg.png", "Engendrar Hydralisk",  5, ZERG_T3_MINERAL_COST, 25, 95)
         allButton[Options.GENERATE_T3_ZERG] = aux
         
         #Zerg estructuras
-        aux = Button.Button(BUTTON_PATH + "zergBarracks" + ".png", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineral.png", "Construir Colmena", 5, ZERG_BARRACKS_MINERAL_COST)
+        aux = Button.Button(BUTTON_PATH + "zergBarracks" + ".png", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineralZerg.png", "Construir Colmena", 5, ZERG_BARRACKS_MINERAL_COST)
         allButton[Options.BUILD_BARRACKS_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "zergSupply" + ".png", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineral.png", "Construir Guarida", 5, ZERG_DEPOT_MINERAL_COST, 0, 45)
+        aux = Button.Button(BUTTON_PATH + "zergSupply" + ".png", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineralZerg.png", "Construir Guarida", 5, ZERG_DEPOT_MINERAL_COST, 0, 45)
         allButton[Options.BUILD_DEPOT_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "zergRefinery" + ".png", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineral.png", "Construir Extractor", 5, ZERG_REFINERY_MINERAL_COST, 0, 45)
+        aux = Button.Button(BUTTON_PATH + "zergRefinery" + ".png", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineralZerg.png", "Construir Extractor", 5, ZERG_REFINERY_MINERAL_COST, 0, 45)
         allButton[Options.BUILD_REFINERY_ZERG] = aux
         #aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.BUILD_HATCHERY)
         #allButton[Options.BUILD_HATCHERY] = aux
@@ -389,12 +392,21 @@ class Interface():
                 dif = None
                 if options[0] == "4":
                     raza = Race.ZERG
+                    self.resources.pop(2)
+                    self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unitZerg.png"), (25, 25)))
+                    self.resources[2].set_colorkey(BLACK)
                 else:
                     if options[1] == "Zerg":
                         #print("Contra terran")
+                        self.resources.pop(2)
+                        self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unitZerg.png"), (25, 25)))
+                        self.resources[2].set_colorkey(BLACK)
                         raza = Race.TERRAN
                     else:
                         #print("Contra zerg")
+                        self.resources.pop(2)
+                        self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unit.png"), (25, 25)))
+                        self.resources[2].set_colorkey(BLACK)
                         raza = Race.ZERG
                 if options[2] == "Dificil":
                     #print("DIFICIL")
@@ -513,11 +525,20 @@ class Interface():
                 raza = None
                 if self.selectedMap == "4":
                     raza = Race.ZERG
+                    self.resources.pop(2)
+                    self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unitZerg.png"), (25, 25)))
+                    self.resources[2].set_colorkey(BLACK)
                 else:
                     if self.selectedRaza['raza'] == Race.TERRAN:
                         raza = Race.ZERG
+                        self.resources.pop(2)
+                        self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unit.png"), (25, 25)))
+                        self.resources[2].set_colorkey(BLACK)
                     else:
                         raza = Race.TERRAN
+                        self.resources.pop(2)
+                        self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unitZerg.png"), (25, 25)))
+                        self.resources[2].set_colorkey(BLACK)
                 if Utils.DEBBUG == False:
                     aI = AI(escena.p2, raza, self.selectedDif['dif'])
                 else:
