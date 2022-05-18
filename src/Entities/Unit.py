@@ -169,11 +169,8 @@ class Unit(Entity):
             if self.clicked:
                 pg.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y + (0.7*r.h)- camera.y,r.w , 0.3*r.h], 2)
 
-            aux = pygame.mask.from_surface(self.image, 0)
-            mask = aux.to_surface(setcolor=(1, 0, 0))
-            mask.set_colorkey(BLACK)
-            mask.set_alpha(150)
-            screen.blit(mask, [drawPos[0] - camera.x - 5, drawPos[1] - camera.y - 5])
+            if len(self.shadow) > 0:
+                screen.blit(self.shadow[2], [drawPos[0] - camera.x - 5, drawPos[1] - camera.y - 5])
             #screen.blit(unit.image, [r.x - camera.x, r.y - camera.y])
             screen.blit(self.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
             if self.clicked or self.hp < self.maxHp:

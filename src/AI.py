@@ -538,12 +538,12 @@ class AI():
             toBuild = TerranRefinery(int(geyser.x / 40) - 1, int(geyser.y / 40) + 1, self.data, self.mapa, True, geyser)
             self.data.addStructures(toBuild)
             #toBuild.buildProcess()
-        elif (self.geyserBuilding == PROTOSS_REFINERY) and (self.data.resources >= PROTOSS_REFINERY_MINERAL_COST):
+        '''elif (self.geyserBuilding == PROTOSS_REFINERY) and (self.data.resources >= PROTOSS_REFINERY_MINERAL_COST):
             #print("Construye protossgeyserstructure")
             self.data.resources -= PROTOSS_REFINERY_MINERAL_COST
             toBuild = ProtossGeyserStructure(0, 0, self.data, self.mapa, True, geyser)
             self.data.addStructures(toBuild)
-            #toBuild.buildProcess()
+            #toBuild.buildProcess()'''
 
     # Devuelve una direccion por la que avanzar para probar construcciones
     def getDirection(self, direction):
@@ -625,12 +625,12 @@ class AI():
             builded = self.buildTerranBarracks(structures)
             if not builded:
                 self.data.resources += TERRAN_BARRACKS_MINERAL_COST
-        elif (self.barracks == PROTOSS_BARRACKS) and (self.data.resources >= PROTOSS_BARRACKS_MINERAL_COST):
+        '''elif (self.barracks == PROTOSS_BARRACKS) and (self.data.resources >= PROTOSS_BARRACKS_MINERAL_COST):
             #print("Construye protossbarracks")
             self.data.resources -= PROTOSS_BARRACKS_MINERAL_COST
             builded = self.buildProtossBarracks(structures)
             if not builded:
-                self.data.resources += PROTOSS_BARRACKS_MINERAL_COST
+                self.data.resources += PROTOSS_BARRACKS_MINERAL_COST'''
 
     # Manda construir un depot en funcion de la raza
     def buildDepot(self, structures):
@@ -646,12 +646,12 @@ class AI():
             builded = self.buildTerranDepot(structures)
             if not builded:
                 self.data.resources += TERRAN_DEPOT_MINERAL_COST
-        elif (self.depot == PROTOSS_DEPOT) and (self.data.resources >= PROTOSS_DEPOT_MINERAL_COST):
+        '''elif (self.depot == PROTOSS_DEPOT) and (self.data.resources >= PROTOSS_DEPOT_MINERAL_COST):
             #print("Construye protossdepot")
             self.data.resources -= PROTOSS_DEPOT_MINERAL_COST
             builded = self.buildProtossDepot(structures)
             if not builded:
-                self.data.resources += PROTOSS_DEPOT_MINERAL_COST
+                self.data.resources += PROTOSS_DEPOT_MINERAL_COST'''
 
     # Devuelve si hay un edificio explotando un geyser o no
     def getGeyserInUse(self, structures):

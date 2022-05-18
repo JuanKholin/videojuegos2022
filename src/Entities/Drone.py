@@ -70,6 +70,7 @@ class Drone(Worker):
         self.render = pygame.transform.scale(pygame.image.load(ZERG_WORKER_RENDER), UNIT_RENDER_SIZE)
         self.type = WORKER
         #print(" AHSDASJLDASI" , self.speed)
+        
     
 
 

@@ -8,6 +8,7 @@ from datetime import datetime
 
 from src.Entities.TerranSoldier import *
 
+from src import Utils
 from src.Utils import *
 from src.Command import *
 from src import Player, Raton, Map
@@ -39,8 +40,8 @@ def procesarInput():
             pg.quit()
             sys.exit()
         elif event.type == pg.VIDEORESIZE:
-            Utils.ScreenWidth = event.h
-            Utils.ScreenHeight = event.w
+            print("resize")
+            Utils.resized = True
         elif event.type == pg.KEYUP:
             escena.procesarEvent(event)
             escena.checkUnHoldButton(event.key)
@@ -130,8 +131,10 @@ def setEntity(player, ai):
     escena.resources = resources
 
 def update():
-    updateScreen(screen)
-    camera.update()
+    if Utils.resized:
+        Utils.resized = False
+        updateScreen(screen)
+        camera.update()
     clock_update()
     raton.update(escena.camera)
     if getGameState() == System_State.MAINMENU:

@@ -171,8 +171,9 @@ HP2 = pygame.image.load("SPRITE/EXTRA/vida2.png")
 HP.set_colorkey(WHITE)
 
 
-
+#CAMERA
 CAMERA_SPEED = 8
+resized = False
 
 MAX_SELECTED_UNIT = 8
 
