@@ -137,6 +137,7 @@ class Interface():
 
         self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/gastank.png"), (25, 25)))
         self.resources[1].set_colorkey(BLACK)
+
         if self.selectedRaza["nombre"] == "Terran":
             self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unit.png"), (25, 25)))
         else:
@@ -154,9 +155,9 @@ class Interface():
         allButton[Options.GENERATE_WORKER_TERRAN] = aux
         aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.GENERATE_T1, BUTTON_PATH + "construirConMineral.png", "Entrenar Marine", 5, TERRAN_T1_MINERAL_COST)
         allButton[Options.GENERATE_T1_TERRAN] = aux
-        aux = Button.Button(BUTTON_PATH + "firebat" + ".png", CommandId.GENERATE_T2, BUTTON_PATH + "construirConMineralYGas.png", "Entrenar Firebat", 5, TERRAN_T2_MINERAL_COST, 5, 25)
+        aux = Button.Button(BUTTON_PATH + "firebat" + ".bmp", CommandId.GENERATE_T2, BUTTON_PATH + "construirConMineralYGas.png", "Entrenar Firebat", 5, TERRAN_T2_MINERAL_COST, 5, 25)
         allButton[Options.GENERATE_T2_TERRAN] = aux
-        aux = Button.Button(BUTTON_PATH + "goliath" + ".png", CommandId.GENERATE_T3, BUTTON_PATH + "construirConMineralYGas.png", "Construir Goliath", 5, TERRAN_T3_MINERAL_COST, 25, 95)
+        aux = Button.Button(BUTTON_PATH + "goliath" + ".bmp", CommandId.GENERATE_T3, BUTTON_PATH + "construirConMineralYGas.png", "Construir Goliath", 5, TERRAN_T3_MINERAL_COST, 25, 95)
         allButton[Options.GENERATE_T3_TERRAN] = aux
         
         #Terran estructuras
@@ -168,21 +169,21 @@ class Interface():
         allButton[Options.BUILD_REFINERY_TERRAN] = aux
         
         #Zerg unidades
-        aux = Button.Button(BUTTON_PATH + "drone" + ".png", CommandId.GENERATE_WORKER,BUTTON_PATH + "construirConMineralZerg.png", "Engendrar Drone", 5, ZERG_WORKER_MINERAL_COST)
+        aux = Button.Button(BUTTON_PATH + "drone" + ".bmp", CommandId.GENERATE_WORKER,BUTTON_PATH + "construirConMineralZerg.png", "Engendrar Drone", 5, ZERG_WORKER_MINERAL_COST)
         allButton[Options.GENERATE_WORKER_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "zergling" + ".png", CommandId.GENERATE_T1,BUTTON_PATH + "construirConMineralZerg.png", "Engendrar Zergling", 5, ZERG_T1_MINERAL_COST)
+        aux = Button.Button(BUTTON_PATH + "zergling" + ".bmp", CommandId.GENERATE_T1,BUTTON_PATH + "construirConMineralZerg.png", "Engendrar Zergling", 5, ZERG_T1_MINERAL_COST)
         allButton[Options.GENERATE_T1_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "broodling" + ".png", CommandId.GENERATE_T2,BUTTON_PATH + "construirConMineralYGasZerg.png", "Engendrar Broodling", 5, ZERG_T2_MINERAL_COST, 5, 25)
+        aux = Button.Button(BUTTON_PATH + "broodling" + ".bmp", CommandId.GENERATE_T2,BUTTON_PATH + "construirConMineralYGasZerg.png", "Engendrar Broodling", 5, ZERG_T2_MINERAL_COST, 5, 25)
         allButton[Options.GENERATE_T2_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "hydralisk" + ".png", CommandId.GENERATE_T3,BUTTON_PATH + "construirConMineralYGasZerg.png", "Engendrar Hydralisk",  5, ZERG_T3_MINERAL_COST, 25, 95)
+        aux = Button.Button(BUTTON_PATH + "hydralisk" + ".bmp", CommandId.GENERATE_T3,BUTTON_PATH + "construirConMineralYGasZerg.png", "Engendrar Hydralisk",  5, ZERG_T3_MINERAL_COST, 25, 95)
         allButton[Options.GENERATE_T3_ZERG] = aux
         
         #Zerg estructuras
-        aux = Button.Button(BUTTON_PATH + "zergBarracks" + ".png", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineralZerg.png", "Construir Colmena", 5, ZERG_BARRACKS_MINERAL_COST)
+        aux = Button.Button(BUTTON_PATH + "zerg_barracks" + ".bmp", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineralZerg.png", "Construir Colmena", 5, ZERG_BARRACKS_MINERAL_COST)
         allButton[Options.BUILD_BARRACKS_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "zergSupply" + ".png", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineralZerg.png", "Construir Guarida", 5, ZERG_DEPOT_MINERAL_COST, 0, 45)
+        aux = Button.Button(BUTTON_PATH + "zerg_supply" + ".bmp", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineralZerg.png", "Construir Guarida", 5, ZERG_DEPOT_MINERAL_COST, 0, 45)
         allButton[Options.BUILD_DEPOT_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "zergRefinery" + ".png", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineralZerg.png", "Construir Extractor", 5, ZERG_REFINERY_MINERAL_COST, 0, 45)
+        aux = Button.Button(BUTTON_PATH + "zerg_refinery" + ".bmp", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineralZerg.png", "Construir Extractor", 5, ZERG_REFINERY_MINERAL_COST, 0, 45)
         allButton[Options.BUILD_REFINERY_ZERG] = aux
         #aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.BUILD_HATCHERY)
         #allButton[Options.BUILD_HATCHERY] = aux
@@ -280,73 +281,85 @@ class Interface():
             
     def updateMainMenu(self):
         self.updateMainMenuPos()
-        press, iniPos = self.mouse.getPressed()
+        
         #Boton single player
-        if self.mouse.isCollide(self.singleRect):
-            if not self.soundPlayed:
-                playSound(botonSound)
-                self.soundPlayed = True
-            endPos = self.mouse.getPosition()
-            if not self.singlePress and press and Raton.collides(iniPos[0], iniPos[1], self.singleRect):
-                self.singlePress = True
-            elif self.mouse.getClick() and self.singlePress and Raton.collides(endPos[0], endPos[1], self.singleRect):
-                #print("Seleccionado single player")
-                Utils.state = System_State.MAP1
-                self.loadPartidas()
-                #Utils.state = System_State.GAMESELECT
-                #stopMusic()
-                self.singlePress = False
+        if getGameState2() == System_State.SETTINGS:
+            
+            self.updateMainMenuSetting()
+            
+        elif getGameState2() == System_State.HELP:
+            
+            self.updateHELP()
+            
+        else:    
+            press, iniPos = self.mouse.getPressed()
+            if self.mouse.isCollide(self.singleRect):
+                if not self.soundPlayed:
+                    playSound(botonSound)
+                    self.soundPlayed = True
+                endPos = self.mouse.getPosition()
+                if not self.singlePress and press and Raton.collides(iniPos[0], iniPos[1], self.singleRect):
+                    self.singlePress = True
+                elif self.mouse.getClick() and self.singlePress and Raton.collides(endPos[0], endPos[1], self.singleRect):
+                    #print("Seleccionado single player")
+                    Utils.state = System_State.MAP1
+                    self.loadPartidas()
+                    #Utils.state = System_State.GAMESELECT
+                    #stopMusic()
+                    self.singlePress = False
 
-        elif self.mouse.isCollide(self.exitRect):
-            if not self.soundPlayed:
-                playSound(botonSound)
-                self.soundPlayed = True
-            endPos = self.mouse.getPosition()
-            if not self.exitPress and press and Raton.collides(iniPos[0], iniPos[1], self.exitRect):
-                self.exitPress = True
-            elif self.mouse.getClick() and self.exitPress and Raton.collides(endPos[0], endPos[1], self.exitRect):
-                #print("Seleccionado exit")
-                Utils.state = System_State.EXIT
-                stopMusic()
+            elif self.mouse.isCollide(self.exitRect):
+                if not self.soundPlayed:
+                    playSound(botonSound)
+                    self.soundPlayed = True
+                endPos = self.mouse.getPosition()
+                if not self.exitPress and press and Raton.collides(iniPos[0], iniPos[1], self.exitRect):
+                    self.exitPress = True
+                elif self.mouse.getClick() and self.exitPress and Raton.collides(endPos[0], endPos[1], self.exitRect):
+                    #print("Seleccionado exit")
+                    Utils.state = System_State.EXIT
+                    stopMusic()
+                    self.exitPress = False
+
+            elif self.mouse.isCollide(self.ajustesSonidoRect):
+                if not self.soundPlayed:
+                    playSound(botonSound)
+                    self.soundPlayed = True
+                endPos = self.mouse.getPosition()
+                if not self.ajustesSonidoPress and press and Raton.collides(iniPos[0], iniPos[1], self.ajustesSonidoRect):
+                    self.ajustesSonidoPress = True
+                elif self.mouse.getClick() and self.ajustesSonidoPress and Raton.collides(endPos[0], endPos[1], self.ajustesSonidoRect):
+                    #print("Seleccionado exit")
+                    Utils.state2 = System_State.SETTINGS
+                    #stopMusic()
+                    self.ajustesSonidoPress = False
+
+            elif self.mouse.isCollide(self.ajustesAtajosRect):
+                if not self.soundPlayed:
+                    playSound(botonSound)
+                    self.soundPlayed = True
+                endPos = self.mouse.getPosition()
+                if not self.ajustesAtajosPress and press and Raton.collides(iniPos[0], iniPos[1], self.ajustesAtajosRect):
+                    self.ajustesAtajosPress = True
+                elif self.mouse.getClick() and self.ajustesAtajosPress and Raton.collides(endPos[0], endPos[1], self.ajustesAtajosRect):
+                    #print("Seleccionado exit")
+                    Utils.state = System_State.SETTINGS
+                    stopMusic()
+                    self.ajustesAtajosPress = False
+            else:
+                self.soundPlayed = False
+
+            if self.mouse.getClick():
                 self.exitPress = False
-
-        elif self.mouse.isCollide(self.ajustesSonidoRect):
-            if not self.soundPlayed:
-                playSound(botonSound)
-                self.soundPlayed = True
-            endPos = self.mouse.getPosition()
-            if not self.ajustesSonidoPress and press and Raton.collides(iniPos[0], iniPos[1], self.ajustesSonidoRect):
-                self.ajustesSonidoPress = True
-            elif self.mouse.getClick() and self.ajustesSonidoPress and Raton.collides(endPos[0], endPos[1], self.ajustesSonidoRect):
-                #print("Seleccionado exit")
-                Utils.state = System_State.SETTINGS
-                stopMusic()
-                self.ajustesSonidoPress = False
-
-        elif self.mouse.isCollide(self.ajustesAtajosRect):
-            if not self.soundPlayed:
-                playSound(botonSound)
-                self.soundPlayed = True
-            endPos = self.mouse.getPosition()
-            if not self.ajustesAtajosPress and press and Raton.collides(iniPos[0], iniPos[1], self.ajustesAtajosRect):
-                self.ajustesAtajosPress = True
-            elif self.mouse.getClick() and self.ajustesAtajosPress and Raton.collides(endPos[0], endPos[1], self.ajustesAtajosRect):
-                #print("Seleccionado exit")
-                Utils.state = System_State.SETTINGS
-                stopMusic()
-                self.ajustesAtajosPress = False
-
-        else:
-            self.soundPlayed = False
-
-        if self.mouse.getClick():
-            self.exitPress = False
-            self.singlePress = False
+                self.singlePress = False
 
         self.idSingle = (self.idSingle + frame(5)) % SINGLE_PLAYER_N
         self.idExit = (self.idExit + frame(5)) % EXIT_N
         self.idSingleSelected = (self.idSingleSelected + frame(5)) % SINGLE_PLAYER_FB_N
         self.idExitSelected = (self.idExitSelected + frame(5)) % EXIT_FB_N
+        
+    def updateMainMenuSetting(self):
+        pass
         
     def updateGameMenuPos(self):
         #self.gameSelect = pg.transform.scale(self.gameSelect, (Utils.ScreenHeight*SCREEN_SCALE, Utils.ScreenHeight))
@@ -391,15 +404,21 @@ class Interface():
                 dif = None
                 if options[0] == "4":
                     raza = Race.ZERG
-                    self.selectedRaza = {"nombre": "Zerg", "raza": Race.ZERG}
+                    self.resources.pop(2)
+                    self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unitZerg.png"), (25, 25)))
+                    self.resources[2].set_colorkey(BLACK)
                 else:
                     if options[1] == "Zerg":
                         #print("Contra terran")
-                        self.selectedRaza = {"nombre": "Zerg", "raza": Race.ZERG}
+                        self.resources.pop(2)
+                        self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unitZerg.png"), (25, 25)))
+                        self.resources[2].set_colorkey(BLACK)
                         raza = Race.TERRAN
                     else:
                         #print("Contra zerg")
-                        self.selectedRaza = {"nombre": "Terran", "raza": Race.TERRAN}
+                        self.resources.pop(2)
+                        self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unit.png"), (25, 25)))
+                        self.resources[2].set_colorkey(BLACK)
                         raza = Race.ZERG
                 if options[2] == "Dificil":
                     #print("DIFICIL")
@@ -518,11 +537,20 @@ class Interface():
                 raza = None
                 if self.selectedMap == "4":
                     raza = Race.ZERG
+                    self.resources.pop(2)
+                    self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unitZerg.png"), (25, 25)))
+                    self.resources[2].set_colorkey(BLACK)
                 else:
                     if self.selectedRaza['raza'] == Race.TERRAN:
                         raza = Race.ZERG
+                        self.resources.pop(2)
+                        self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unit.png"), (25, 25)))
+                        self.resources[2].set_colorkey(BLACK)
                     else:
                         raza = Race.TERRAN
+                        self.resources.pop(2)
+                        self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unitZerg.png"), (25, 25)))
+                        self.resources[2].set_colorkey(BLACK)
                 if Utils.DEBBUG == False:
                     aI = AI(escena.p2, raza, self.selectedDif['dif'])
                 else:
@@ -659,7 +687,7 @@ class Interface():
             screen.blit(self.mainMenu, [Utils.ScreenWidth/2 - self.mainMenu.get_width()/2, 0])
 
             #Boton single player
-            if self.mouse.isCollide(self.singleRect):
+            if self.mouse.isCollide(self.singleRect) and getGameState2() == System_State.PLAYING:
                 screen.blit(self.singleSelected[self.idSingleSelected], [Utils.ScreenWidth/2 - SINGLE_PLAYER_FB_POS[0], Utils.ScreenHeight/2 - SINGLE_PLAYER_FB_POS[1]])
                 screen.blit(self.single[self.idSingle], [Utils.ScreenWidth/2 - SINGLE_PLAYER_POS[0], Utils.ScreenHeight/2 - SINGLE_PLAYER_POS[1]])
                 muestra_texto(screen, 'monotypecorsiva', "Un jugador", GREEN2, MAIN_MENU_TEXT_SIZE, [Utils.ScreenWidth/2 - SINGLE_TEXT_POS[0], Utils.ScreenHeight/2 - SINGLE_TEXT_POS[1]])
@@ -670,25 +698,32 @@ class Interface():
 
             #Boton Exit
             screen.blit(self.exit[self.idExit], [Utils.ScreenWidth/2 - EXIT_POS[0], Utils.ScreenHeight/2 - EXIT_POS[1]])
-            if self.mouse.isCollide(self.exitRect):
+            if self.mouse.isCollide(self.exitRect) and getGameState2() == System_State.PLAYING:
                 screen.blit(self.exitSelected[self.idExitSelected], [Utils.ScreenWidth/2 - EXIT_FB_POS[0], Utils.ScreenHeight/2 - EXIT_FB_POS[1]])
                 muestra_texto(screen, str('monotypecorsiva'), "Salir", GREEN2, MAIN_MENU_TEXT_SIZE, [Utils.ScreenWidth/2 - EXIT_TEXT_POS[0], Utils.ScreenHeight/2 - EXIT_TEXT_POS[1]])
             else:
                 muestra_texto(screen, str('monotypecorsiva'), "Salir", GREEN3, MAIN_MENU_TEXT_SIZE, [Utils.ScreenWidth/2 - EXIT_TEXT_POS[0], Utils.ScreenHeight/2 - EXIT_TEXT_POS[1]])
 
             #Boton ajustes
-            if self.mouse.isCollide(self.ajustesSonidoRect):
+            if self.mouse.isCollide(self.ajustesSonidoRect) and getGameState2() == System_State.PLAYING:
                 pg.draw.rect(screen, BLUE, (Utils.ScreenWidth/2 - AJUSTES_SONIDO_TEXT_POS[0], Utils.ScreenHeight/2 - AJUSTES_SONIDO_TEXT_POS[1], 220, 40), 3)
                 muestra_texto(screen, str('monotypecorsiva'), "Ajustes de sonido", GREEN2, MAIN_MENU_TEXT_SIZE + 5, [Utils.ScreenWidth/2 - AJUSTES_SONIDO_TEXT_POS[0], Utils.ScreenHeight/2 - AJUSTES_SONIDO_TEXT_POS[1]])
             else:
                 muestra_texto(screen, str('monotypecorsiva'), "Ajustes de sonido", GREEN3, MAIN_MENU_TEXT_SIZE + 5, [Utils.ScreenWidth/2 - AJUSTES_SONIDO_TEXT_POS[0], Utils.ScreenHeight/2 - AJUSTES_SONIDO_TEXT_POS[1]])
 
-            if self.mouse.isCollide(self.ajustesAtajosRect):
+            if self.mouse.isCollide(self.ajustesAtajosRect) and getGameState2() == System_State.PLAYING:
                 pg.draw.rect(screen, BLUE, (Utils.ScreenWidth/2 - AJUSTES_ATAJOS_TEXT_POS[0], Utils.ScreenHeight/2 - AJUSTES_ATAJOS_TEXT_POS[1], 220, 40), 3)
                 muestra_texto(screen, str('monotypecorsiva'), "Atajos de teclado", GREEN2, MAIN_MENU_TEXT_SIZE + 5, [Utils.ScreenWidth/2 - AJUSTES_ATAJOS_TEXT_POS[0], Utils.ScreenHeight/2 - AJUSTES_ATAJOS_TEXT_POS[1]])
             else:
                 muestra_texto(screen, str('monotypecorsiva'), "Atajos de teclado", GREEN3, MAIN_MENU_TEXT_SIZE + 5, [Utils.ScreenWidth/2 - AJUSTES_ATAJOS_TEXT_POS[0], Utils.ScreenHeight/2 - AJUSTES_ATAJOS_TEXT_POS[1]])
 
+            if getGameState2() == System_State.SETTINGS:
+                    
+                self.drawSoundSetting(screen)
+
+            elif getGameState2() == System_State.HELP:
+                
+                self.drawHELP(screen)
 
         elif Utils.state == System_State.GAMESELECT:
             screen.blit(self.gameSelect, [Utils.ScreenWidth/2 - self.gameSelect.get_width()/2, Utils.ScreenHeight/2 - self.gameSelect.get_height()/2])
@@ -744,6 +779,7 @@ class Interface():
                 muestra_texto(screen, str('monotypecorsiva'), str(round(Utils.SYSTEM_CLOCK / CLOCK_PER_SEC)), BLACK, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  20), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 20)))
                 muestra_texto(screen, times, str(self.player.resources), BLUE, 30, (ScreenWidth - 40, 60))
                 muestra_texto(screen, times, str(self.enemy.resources), RED, 30, (ScreenWidth - 40, 100))
+                muestra_texto(screen, times, str(str(self.enemy.units.__len__()) + "/" + str(self.enemy.limitUnits)), RED, 30, (ScreenWidth - 50, 140))
 
             screen.blit(self.resources[0], (Utils.ScreenWidth - RESOURCES_COUNT_X, 3))
             muestra_texto(screen, times, str(self.player.resources), GREEN4, 30, (Utils.ScreenWidth - RESOURCES_COUNT_X + 40, 10))
@@ -758,14 +794,20 @@ class Interface():
             
             pg.draw.rect(screen, BLUE, pg.Rect(Utils.ScreenWidth/2 - MINIMAP_X, Utils.ScreenHeight - MINIMAP_Y, MINIMAP_W, MINIMAP_H), 1)
             #self.player.mapa.drawMinimap(screen)
-            self.player.drawEntity(screen, camera, True)
-            self.enemy.drawEntity(screen, camera, False)
+            self.player.drawEntity(screen, True)
+            self.enemy.drawEntity(screen, False)
             
 
+            
             x = Utils.ScreenWidth/2 - MINIMAP_X + (camera.x/self.player.mapa.w * MINIMAP_W)
             y = Utils.ScreenHeight - MINIMAP_Y + (camera.y/self.player.mapa.h * MINIMAP_H)
             w = camera.w/self.player.mapa.w * MINIMAP_W
             h = camera.h/self.player.mapa.h * MINIMAP_H
+            if x + w > (Utils.ScreenWidth/2 -  MINIMAP_X) + MINIMAP_W:
+                w = Utils.ScreenWidth/2 - MINIMAP_X + MINIMAP_W - x
+            if y + h > (Utils.ScreenHeight - MINIMAP_Y) + MINIMAP_H:
+                h = Utils.ScreenHeight - MINIMAP_Y + MINIMAP_H - y
+                
             pg.draw.rect(screen, WHITE, pg.Rect(x, y, w, h), 2)
 
             #informacion de entidades seleccionadas
@@ -830,6 +872,21 @@ class Interface():
                     #setGameState2(System_State.PLAYING)
                 if self.index >= 10:
                     muestra_texto(screen, str('monotypecorsiva'), "Victoria! tu tu tuu~ tu tu", YELLOW, 40, (ScreenWidth/2, ScreenHeight - 200))
+
+    def drawSoundSetting(self, screen):
+        pg.draw.rect(screen, BLACK, pg.Rect(Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80), 512, 500))
+        pg.draw.rect(screen, BLUE2, pg.Rect(Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80), 512, 500), 4)
+        
+        self.helpPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 245), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
+        self.exitPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 688), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
+        self.saveButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 380), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 -200))
+        self.saveAndExitButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 380), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 -290))
+        self.exitButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 380), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 -380))
+        
+        muestra_texto(screen, str('monotypecorsiva'), "Ajustes de Sonido", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 370), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 120)))
+        muestra_texto(screen, str('monotypecorsiva'), "Guardar", GREEN, 26, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 460), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 210)))
+        muestra_texto(screen, str('monotypecorsiva'), "Guardar y Salir", GREEN, 26, ((Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 460), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 300))))
+        muestra_texto(screen, str('monotypecorsiva'), "Salir sin guardar", GREEN, 26, ((Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 460), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 390))))
 
     def drawHELP(self, screen):
         screen.blit(self.helpPageSprites[self.helpPage], (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80)))
@@ -1079,7 +1136,7 @@ class Interface():
 
     def showInfo(self, screen, unit, color, renderX = 0, renderY = 0, hpX = 0, hpY = 0, upgrades = None):
         image = unit.getRender()
-        hpState = str(unit.getHP()) + "/" + str(unit.getMaxHP())
+        hpState = str(int(unit.getHP())) + "/" + str(int(unit.getMaxHP()))
         x = Utils.ScreenWidth/2 - UPGRADEX
         if upgrades != None: #Dibujar las upgrades
             for upgrade in upgrades:
@@ -1093,20 +1150,13 @@ class Interface():
         x = self.mouse.rel_pos[0]
         y = self.mouse.rel_pos[1]
         yes = False
-        if y > 600:
-            yes = True
-        elif x < 15 and y > 485:
-            yes = True
-        elif x < 30 and y > 490:
-            yes = True
-        elif x < 40 and y > 510:
-            yes = True
-        elif x < 265 and y > 510:
-            yes = True
-        elif x > 735 and y > 585:
-            yes = True
-        elif x > 750 and y > 535:
-            yes = True
+        if x > Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2) and x < Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 1024):
+            if y > Utils.ScreenHeight - (MIN_SCREEN_HEIGHT - 600):
+                yes = True
+            elif x < Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 265) and y > Utils.ScreenHeight - (MIN_SCREEN_HEIGHT - 510):
+                yes = True
+            elif x > Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 750) and y > Utils.ScreenHeight - (MIN_SCREEN_HEIGHT - 535):
+                yes = True
         return yes
 
     def getButton(self, entityOptions):

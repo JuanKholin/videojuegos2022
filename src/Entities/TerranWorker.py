@@ -7,7 +7,7 @@ from ..Lib import *
 from ..Music import *
 
 # Constantes
-HP = 6000
+HP = 60
 ATTACK_INFO = [0, 0, 0]
 ATTACK_INFO[DAMAGE_IND] = 6
 ATTACK_INFO[COOLDOWN_IND] = 5

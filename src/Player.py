@@ -44,6 +44,7 @@ class Player():
                 if event.key in self.keyMap:
                     if self.structureSelected != None:
                         command = self.structureSelected.command(self.keyMap[event.key])
+                        print(command.id)
                         if command.id != CommandId.NULL:
                                 return command
                         else:
@@ -188,6 +189,7 @@ class Player():
             "units": [u.toDictionary(map) for u in self.units],
             "structures": [s.toDictionary(map) for s in self.structures],
             "resources": self.resources,
+            "gas": self.gas,
             "keyMap": self.keyMap,
             "commandMap": self.commandMap,
             "dañoUpgrade": self.dañoUpgrade,

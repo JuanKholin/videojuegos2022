@@ -40,7 +40,6 @@ from src.Entities.Broodling import *
 
 
 
-
 # Auxiliar del bucle principal
 def procesarInput():
     for event in pg.event.get(): #Identificar lo sucedido en la ventana
@@ -64,11 +63,17 @@ def procesarInput():
 
 
 def setEntity(player, ai):
-    scv = TerranSoldier(player, 10, 3)
+    scv = Firebat(player, 10, 3)
+    player.addUnits(scv)
+    scv = TerranSoldier(player, 11, 3)
+    player.addUnits(scv)
+    scv = TerranSoldier(player, 12, 3)
+    player.addUnits(scv)
+    scv = TerranSoldier(player, 11, 4)
     player.addUnits(scv)
     structure1 = Hatchery(3, 3, player, mapa, False, raton)
     player.addStructures(structure1)
-    structure1 = ZergBarracks(7, 7, player, mapa, False)
+    structure1 = TerranBarracks(7, 7, player, mapa, False)
     player.addStructures(structure1)
     player.setBasePlayer(structure1)
     scv = Goliath(ai, 20, 3)
@@ -292,6 +297,8 @@ else:
 escena = Escena(player1, player2, aI, [], camera, raton, p1Interface, [])
 
 raton.setEscena(escena)
+Utils.init()
+
 
 # Bucle principal
 while True:

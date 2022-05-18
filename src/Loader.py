@@ -105,6 +105,7 @@ def loadPlayer(playerDictionary, map, isPlayer):
     p.dañoUpgrade = playerDictionary["dañoUpgrade"]
     p.armorUpgrade = playerDictionary["armorUpgrade"]
     p.mineUpgrade = playerDictionary["mineUpgrade"]
+    p.gas = playerDictionary["gas"]
     #p.limitUnits = playerDictionary["limitUnits"]
     return p
 
