@@ -24,6 +24,7 @@ class Worker(Unit):
         self.returny = 0
         self.oreTransportingFrames = oreTransportingFrames
         self.gasTransportingFrames = gasTransportingFrames
+        
 
     # Indica a la unidad que recolecte mineral del objetivo, si se encuentra
     # un obstaculo de camino lo esquivara. Recolecta desde la tile libre mas cercana
@@ -160,6 +161,7 @@ class Worker(Unit):
         self.returnx = self.x
         self.returny = self.y
         self.mapa.setLibre(self.getTile())
+        self.enable = False
         self.x = - 5000
         self.y = 0
 
@@ -218,6 +220,7 @@ class Worker(Unit):
         self.count += 1
         if getGlobalTime() - self.startTimeMining > (self.timeToMine - self.player.mineUpgrade*1000): #Termina de minar
             self.isMining = False
+            self.enable = True
             #Hay que volver a base transportando un ore
             self.cantidadMinada = self.resource.getMined(self.minePower)
             self.paths = []

@@ -288,7 +288,7 @@ class Escena():
         #print("tiempo en la buildraton: ",(datetime.now() - now).microseconds)
         now = datetime.now()
         self.interfaz.draw(screen, self.camera)
-        print("tiempo en la interfaz: ",(datetime.now() - now).microseconds)
+        #print("tiempo en la interfaz: ",(datetime.now() - now).microseconds)
         
         
 

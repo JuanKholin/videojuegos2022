@@ -62,7 +62,8 @@ class Unit(Entity):
         self.siendoAtacado = False
 
         self.runningAway = False
-    
+
+        self.enable = True
     def spawn(self, x, y):
         self.x = x * TILE_WIDTH + 20
         self.y = y * TILE_HEIGHT
@@ -629,14 +630,17 @@ class Unit(Entity):
         self.mapa.setLibre(self.occupiedTile)
         if self.attackedOne.esEstructura == False:
             #print("Atacamos a una unidad")
-            self.tileAAtacar = self.attackedOne.getTile()
-            if self.tileAAtacar == None:
-                enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
-                if enemy != None:
-                    self.attack(enemy)
-                else:
-                    self.changeToStill()
-            self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
+            if self.attackedOne.enable:
+                self.tileAAtacar = self.attackedOne.getTile()
+                if self.tileAAtacar == None:
+                    enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
+                    if enemy != None:
+                        self.attack(enemy)
+                        self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
+                    else:
+                        self.changeToStill()
+            else:
+                self.changeToStill()
         else:
             #print("Atacamos a una estructura")
             tilesAAtacar = self.mapa.getAttackRoundTiles(self.attackedOne.getRect())
