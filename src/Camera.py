@@ -58,7 +58,7 @@ class Camera():
 
     def moverAbajo(self, mapHeight):
         global CAMERA_Y
-        if (self.y + self.h) + CAMERA_SPEED <= mapHeight + 400:
+        if (self.y + self.h) + CAMERA_SPEED <= mapHeight + 300:
             self.y = self.y + CAMERA_SPEED
             CAMERA_Y = self.y
 
