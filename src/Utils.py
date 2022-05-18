@@ -349,6 +349,12 @@ DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
 def init():
     loadTerranWorker()
     loadDrone()
+    loadTerranSoldier()
+    loadZergling()
+    loadFirebat()
+    loadBroodling()
+    loadGoliath()
+    loadHydralisk()
 
 # TerranWorker
 TERRAN_WORKER_SCALE = 1.5
@@ -362,7 +368,7 @@ TERRAN_WORKER_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 
           [225] * 16, [226] * 16, [227] * 16, [228] * 16, [229] * 16, [230] * 16]
 TERRAN_WORKER_STILL_FRAMES = [0]
 TERRAN_WORKER_ORE_TRANSPORTING_FRAMES = [3]
-TERRAN_WORKER_BARREL_TRANSPORTING_FRAMES = [2]
+TERRAN_WORKER_GAS_TRANSPORTING_FRAMES = [2]
 TERRAN_WORKER_ATTACK_FRAMES = [1, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 TERRAN_WORKER_MOVE_FRAMES = [0]
 TERRAN_WORKER_DIE_FRAMES = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
@@ -419,13 +425,234 @@ def loadDrone():
             sprites[DRONE_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[DRONE_FRAMES[i][DIR_OFFSET[j]]], True, False)
     
     shadows = []
-    for i in range(len(sprites) - len(DRONE_DIE_FRAMES)):
+    for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
         mask = aux.to_surface(setcolor = (1, 0, 0))
         mask.set_colorkey(BLACK)
         mask.set_alpha(150)
         shadows.append(mask)
     DRONE_SPRITES = [sprites, shadows]
+    
+# TerranSoldier
+TERRAN_SOLDIER_SCALE = 1.5
+TERRAN_SOLDIER_SPRITE_ROWS = 64
+TERRAN_SOLDIER_TOTAL_FRAMES = 221
+TERRAN_SOLDIER_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
+          list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
+          list(range(205, 221)), [221] * 16, [222] * 16, [223] * 16, [224] * 16,
+          [225] * 16, [226] * 16, [227] * 16, [228] * 16]
+TERRAN_SOLDIER_STILL_FRAMES = [0]
+TERRAN_SOLDIER_GUARD_FRAMES = [1]
+TERRAN_SOLDIER_ATTACK_FRAMES = [2, 3]
+TERRAN_SOLDIER_MOVE_FRAMES = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+TERRAN_SOLDIER_DIE_FRAMES = [13, 14, 15, 16, 17, 18, 19, 20]
+
+TERRAN_SOLDIER_INVERSIBLE_FRAMES = len(TERRAN_SOLDIER_FRAMES) - len(TERRAN_SOLDIER_DIE_FRAMES)
+TERRAN_SOLDIER_SPRITES = [None, None]
+
+def loadTerranSoldier():
+    global TERRAN_SOLDIER_SPRITES
+    spritesheet = pg.image.load("./sprites/terran_soldier_sheet.bmp").convert()
+    spritesheet.set_colorkey(WHITE)
+    sprites = divideSpritesheetByRows(spritesheet, TERRAN_SOLDIER_SPRITE_ROWS, TERRAN_SOLDIER_SCALE)
+  
+    for i in range(TERRAN_SOLDIER_INVERSIBLE_FRAMES):
+        for j in range(9, 16):
+            sprites[TERRAN_SOLDIER_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[TERRAN_SOLDIER_FRAMES[i][DIR_OFFSET[j]]], True, False)
+    
+    shadows = []
+    for i in range(len(sprites) - len(TERRAN_SOLDIER_DIE_FRAMES)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+    TERRAN_SOLDIER_SPRITES = [sprites, shadows]
+
+# Zergling
+ZERGLING_SCALE = 1.5
+ZERGLING_SPRITE_ROWS = 128
+ZERGLING_TOTAL_FRAMES = 296
+ZERGLING_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
+          list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
+          [289] * 16, [290] * 16, [291] * 16, [292] * 16, [293] * 16, [294] * 16,
+          [295] * 16]
+ZERGLING_STILL_FRAMES = [0]
+ZERGLING_ATTACK_FRAMES = [1, 2, 3]
+ZERGLING_MOVE_FRAMES = [4, 5, 6, 7, 8, 9, 10, 11]
+ZERGLING_DIE_FRAMES = [12, 13, 14, 15, 16, 17, 18]
+
+ZERGLING_INVERSIBLE_FRAMES = len(ZERGLING_FRAMES) - len(ZERGLING_DIE_FRAMES)
+ZERGLING_SPRITES = [None, None]
+
+def loadZergling():
+    global ZERGLING_SPRITES
+    spritesheet = pg.image.load("./sprites/zergling.bmp").convert()
+    spritesheet.set_colorkey(BLACK)
+    sprites = divideSpritesheetByRows(spritesheet, ZERGLING_SPRITE_ROWS, ZERGLING_SCALE)
+  
+    for i in range(ZERGLING_INVERSIBLE_FRAMES):
+        for j in range(9, 16):
+            sprites[ZERGLING_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[ZERGLING_FRAMES[i][DIR_OFFSET[j]]], True, False)
+    
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+    ZERGLING_SPRITES = [sprites, shadows]
+
+# Firebat
+FIREBAT_SCALE = 1.5
+FIREBAT_SPRITE_ROWS = 32
+FIREBAT_TOTAL_FRAMES = 179
+
+FIREBAT_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
+          list(range(154, 170)), [170] * 16, [171] * 16, [172] * 16, [173] * 16,
+          [174] * 16, [175] * 16, [176] * 16, [177] * 16, [178] * 16]
+FIREBAT_STILL_FRAMES = [3]
+FIREBAT_ATTACK_FRAMES = [0, 1]
+FIREBAT_MOVE_FRAMES = [2, 4, 5, 6, 7, 8, 9]
+FIREBAT_DIE_FRAMES = [10, 11, 12, 13, 14, 15, 16, 17, 18]
+FIREBAT_INVERSIBLE_FRAMES = len(FIREBAT_FRAMES) - len(FIREBAT_DIE_FRAMES)
+FIREBAT_SPRITES = [None, None]
+
+def loadFirebat():
+    global FIREBAT_SPRITES
+    spritesheet = pg.image.load("./sprites/firebat.bmp").convert()
+    spritesheet.set_colorkey(BLACK)
+    deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
+    deadSpritesheet.set_colorkey(BLACK)
+    sprites = divideSpritesheetByRows(spritesheet, FIREBAT_SPRITE_ROWS, FIREBAT_SCALE) + divideSpritesheetByRowsNoScale(deadSpritesheet, 200, (80, 80))
+  
+    for i in range(FIREBAT_INVERSIBLE_FRAMES):
+        for j in range(9, 16):
+            sprites[FIREBAT_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[FIREBAT_FRAMES[i][DIR_OFFSET[j]]], True, False)
+    
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+    FIREBAT_SPRITES = [sprites, shadows]
+
+# Broodling
+BROODLING_SCALE = 2
+BROODLING_SPRITE_ROWS = 48
+BROODLING_TOTAL_FRAMES = 209
+BROODLING_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
+          list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
+          [204] * 16, [205] * 16, [206] * 16, [207] * 16, [208] * 16]
+BROODLING_STILL_FRAMES = [11]
+BROODLING_ATTACK_FRAMES = [8, 9, 10]
+BROODLING_MOVE_FRAMES = [0, 1, 2, 3, 4, 5, 6, 7]
+BROODLING_DIE_FRAMES = [12, 13, 14, 15, 16]
+BROODLING_INVERSIBLE_FRAMES = len(BROODLING_FRAMES) - len(BROODLING_DIE_FRAMES)
+BROODLING_SPRITES = [None, None]
+def loadBroodling():
+    global BROODLING_SPRITES
+    spritesheet = pg.image.load("./sprites/broodling.bmp").convert()
+    spritesheet.set_colorkey(BLACK)
+    sprites = divideSpritesheetByRows(spritesheet, BROODLING_SPRITE_ROWS, BROODLING_SCALE)
+  
+    for i in range(BROODLING_INVERSIBLE_FRAMES):
+        for j in range(9, 16):
+            sprites[BROODLING_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[BROODLING_FRAMES[i][DIR_OFFSET[j]]], True, False)
+    
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+    BROODLING_SPRITES = [sprites, shadows]
+
+# Goliath
+GOLIATH_SCALE = 2
+GOLIATH_SPRITE_ROWS = 76
+GOLIATH_TOTAL_FRAMES = 179
+GOLIATH_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
+          list(range(154, 170)), [170] * 16, [171] * 16, [172] * 16, [173] * 16,
+          [174] * 16, [175] * 16, [176] * 16, [177] * 16, [178] * 16]
+GOLIATH_STILL_FRAMES = [0]
+GOLIATH_ATTACK_FRAMES = [5, 6, 8, 9]
+GOLIATH_MOVE_FRAMES = [0, 1, 2, 4, 5, 6, 7]
+GOLIATH_DIE_FRAMES = [10, 11, 12, 13, 14, 15, 16, 17, 18]
+GOLIATH_INVERSIBLE_FRAMES = len(GOLIATH_FRAMES) - len(GOLIATH_DIE_FRAMES)
+GOLIATH_SPRITES = [None, None]
+
+def loadGoliath():
+    global GOLIATH_SPRITES
+    spritesheet = pg.image.load("./sprites/goliath.bmp").convert()
+    spritesheet.set_colorkey(BLACK)
+    deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
+    deadSpritesheet.set_colorkey(BLACK)
+    sprites = divideSpritesheetByRows(spritesheet, GOLIATH_SPRITE_ROWS, GOLIATH_SCALE) + divideSpritesheetByRowsNoScale(deadSpritesheet, 200, (80, 80))
+  
+    for i in range(GOLIATH_INVERSIBLE_FRAMES):
+        for j in range(9, 16):
+            sprites[GOLIATH_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[GOLIATH_FRAMES[i][DIR_OFFSET[j]]], True, False)
+    
+    shadows = []
+    for i in range(len(sprites) - len(GOLIATH_DIE_FRAMES)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+    GOLIATH_SPRITES = [sprites, shadows]
+
+# Hydralisk
+HYDRALISK_SCALE = 2
+HYDRALISK_SPRITE_ROWS = 128
+HYDRALISK_TOTAL_FRAMES = 212
+HYDRALISK_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
+          list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
+          [204] * 16, [205] * 16, [206] * 16, [207] * 16, [208] * 16, [209] * 16,
+          [210] * 16, [211] * 16]
+HYDRALISK_STILL_FRAMES = [0]
+HYDRALISK_ATTACK_FRAMES = [1, 2, 3, 4, 1]
+HYDRALISK_MOVE_FRAMES = [5, 6, 7, 8, 9, 10, 11]
+HYDRALISK_DIE_FRAMES = [12, 13, 14, 15, 16, 17, 18, 19]
+
+HYDRALISK_INVERSIBLE_FRAMES = len(HYDRALISK_FRAMES) - len(HYDRALISK_DIE_FRAMES)
+HYDRALISK_SPRITES = [None, None]
+
+def loadHydralisk():
+    global HYDRALISK_SPRITES
+    spritesheet = pg.image.load("./sprites/hydralisk.bmp").convert()
+    spritesheet.set_colorkey(BLACK)
+    sprites = divideSpritesheetByRows(spritesheet, HYDRALISK_SPRITE_ROWS, HYDRALISK_SCALE)
+  
+    for i in range(HYDRALISK_INVERSIBLE_FRAMES):
+        for j in range(9, 16):
+            sprites[HYDRALISK_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[HYDRALISK_FRAMES[i][DIR_OFFSET[j]]], True, False)
+    
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+    HYDRALISK_SPRITES = [sprites, shadows]
 
 #-------------------------------------------------------------------------
 #-------------------------------------------------------------------------
