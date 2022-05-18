@@ -44,8 +44,10 @@ class Player():
                 if event.key in self.keyMap:
                     if self.structureSelected != None:
                         command = self.structureSelected.command(self.keyMap[event.key])
-                        if command != Command(CommandId.NULL):
+                        if command.id != CommandId.NULL:
                                 return command
+                        else:
+                            return Command(self.keyMap[event.key])
                     return Command(self.keyMap[event.key])
         return Command(CommandId.NULL)
 
@@ -97,6 +99,8 @@ class Player():
             #print("BUSCAR")
             for unit in self.unitsSelected:
                 enemy = self.mapa.getNearbyRival(unit.occupiedTile, self)
+                unit.mapa.setVecina(unit.occupiedTile, unit.id)
+                unit.occupiedTile.setOcupante(unit)
                 #print(type(enemy))
                 if enemy != None:
                     if unit.state == UnitState.STILL:

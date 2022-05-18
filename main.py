@@ -195,7 +195,7 @@ keyMap ={
   pg.K_r: CommandId.ROTATE,
   pg.K_v: CommandId.GENERATE_UNIT,
   pg.K_c: CommandId.BUILD_BARRACKS,
-  pg.K_x: CommandId.BUILD_REFINERY,
+  pg.K_x: CommandId.DESELECT,
   pg.K_d: CommandId.UPGRADE_SOLDIER_DAMAGE,
   pg.K_a: CommandId.UPGRADE_SOLDIER_ARMOR,
   pg.K_m: CommandId.UPGRADE_WORKER_MINING,

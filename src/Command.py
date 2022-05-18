@@ -36,6 +36,7 @@ class CommandId(IntEnum):
     HELP = auto()
     SAVE_EXIT_GAME = auto()
     EXIT_GAME = auto()
+    DESELECT = auto()
 
 class Command:
     def __init__(self, id):

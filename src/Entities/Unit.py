@@ -117,6 +117,7 @@ class Unit(Entity):
                         self.tileAAtacar = tile
                 self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
             #print("CAMINOS:" ,len(self.paths))
+            self.updateOwnSpace()
             self.changeToAttacking(objective)
             if len(self.paths) == 1:
                 #LO MEJOR ES MOVERSE AL CENTRO DE LA TILE, SINO NO ATOMICO
@@ -126,8 +127,6 @@ class Unit(Entity):
                 self.paths = [path]
             elif len(self.paths) == 0:
                 self.updateOwnSpace()
-            else:
-                self.changeObjectiveTile()
 
     # Indica a la unidad que se acerque lo mas posible a un recurso mineral
     def mine(self, resource):
@@ -350,6 +349,7 @@ class Unit(Entity):
                 ownTile = self.getTile()
                 #print(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery), self.range)
                 if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
+                    self.updateOwnSpace()
                     #print(type(self), "estoy en rango")
                     self.updateAttackInRange()
                 else:
@@ -431,7 +431,6 @@ class Unit(Entity):
     # Pasa al ataque HYAAAA!! >:c
     def changeToAttacking(self, attackedOne):
         #print("Pasa al ataque HYAAAA!! >:c")
-        self.state = UnitState.ATTACKING
         self.runningAway = False
 
         if(len(self.paths) > 1):
@@ -440,14 +439,16 @@ class Unit(Entity):
         if self.attackedOne != None:
             if self.attackedOne.esEstructura:
                 self.attackedOne.lastAttacker = None
-        if self.state == UnitState.STILL:
-            ownTile = self.getTile()
-            #print(int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)), self.range, "estoy en rango")
-            if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
-            #print(type(self), "estoy en rango")
-                self.updateAttackInRange()
         self.attackedOne = attackedOne
         self.attackCD = self.cooldown
+        if self.state == UnitState.STILL:
+            ownTile = self.getTile()
+            print(int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)), self.range, "estoy en rango")
+            if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
+                #print(type(self), "estoy en rango")
+                self.updateOwnSpace()
+                self.updateAttackInRange()
+        self.state = UnitState.ATTACKING
         self.frame = 0
         self.count = 0
 
@@ -671,7 +672,7 @@ class Unit(Entity):
     def changeObjectiveTile(self):
         actualPath = self.paths[0]
         objectiveTile = self.mapa.getTile(actualPath.posFin[0], actualPath.posFin[1])
-        #print(objectiveTile.id, self.id)
+        #print(objectiveTile.tileid, self.getTile().tileid)
         if objectiveTile.type == EMPTY or (objectiveTile.type == UNIT and objectiveTile.id == self.id):
             self.mapa.setVecina(objectiveTile, self.id)
             objectiveTile.setOcupante(self)

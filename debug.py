@@ -64,9 +64,9 @@ def procesarInput():
 
 
 def setEntity(player, ai):
-    scv = TerranWorker(player, 10, 3)
+    scv = TerranSoldier(player, 10, 3)
     player.addUnits(scv)
-    structure1 = Hatchery(3, 3, player, mapa, False, raton)
+    structure1 = TerranBuilder(3, 3, player, mapa, False, raton)
     player.addStructures(structure1)
     structure1 = ZergBarracks(7, 7, player, mapa, False)
     player.addStructures(structure1)
@@ -225,7 +225,7 @@ keyMap ={
   pg.K_r: CommandId.ROTATE,
   pg.K_v: CommandId.GENERATE_UNIT,
   pg.K_c: CommandId.BUILD_BARRACKS,
-  pg.K_x: CommandId.BUILD_REFINERY,
+  pg.K_x: CommandId.DESELECT,
   pg.K_d: CommandId.UPGRADE_SOLDIER_DAMAGE,
   pg.K_s: CommandId.UPGRADE_SOLDIER_ARMOR,
   pg.K_a: CommandId.SEARCH_NEARBY_RIVAL,
@@ -288,7 +288,7 @@ if Utils.DEBBUG == False:
     aI = AI(player2, Race.TERRAN, HARD)
 
 else:
-    aI = AI(player2, Race.TERRAN, HARD)
+    aI = AI(player2, Race.TERRAN, NULL)
 escena = Escena(player1, player2, aI, [], camera, raton, p1Interface, [])
 
 raton.setEscena(escena)

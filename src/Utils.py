@@ -552,6 +552,7 @@ def calcPath(posini, tileIni, tileObj, mapa):
             posFin = (tile.centerx, tile.centery)
             path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
             path.append(path1)
+            #print(mapa.getTile(posFin[0], posFin[1]).tileid)
             posIni = posFin
         return path
 

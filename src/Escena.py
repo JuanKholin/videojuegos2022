@@ -58,6 +58,13 @@ class Escena():
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.GENERATE_WORKER:
                     self.p1.execute(command.id, [], None)
+                elif command.id == CommandId.DESELECT:
+                    for unit in self.p1.unitsSelected:
+                        unit.setClicked(False)
+                    self.p1.unitsSelected = []
+                    if self.p1.structureSelected != None:
+                        self.p1.structureSelected.setClicked(False)
+                        self.p1.structureSelected = None
                 elif command.id == CommandId.GENERATE_T1:
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.GENERATE_T2:
@@ -124,9 +131,9 @@ class Escena():
         tileIni = self.mapa.getTile(param[0], param[1])
         if tileObj.type != 0: #Esta ocupada
             tileObj = self.mapa.getTileCercana(tileIni, tileObj)
-        path = calcPath(param, tileIni, tileObj, self.mapa)
+        #path = calcPath(param, tileIni, tileObj, self.mapa)
         # COMPROBAR SI HA CLICKADO UN ORE
-        order = {'order': CommandId.MOVE, 'angle': 0, 'path': path}
+        order = {'order': CommandId.MOVE, 'angle': 0}
         if tileClicked.type == RESOURCE:
             #print("CLICKO UN RECURSO")
             resource = tileClicked.getOcupante()
