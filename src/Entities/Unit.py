@@ -764,7 +764,9 @@ class Unit(Entity):
         self.clicked = click
 
     def toDictionary(self, map):
-        x, y = map.getTileIndex(self.x, self.y)
+        pos = self.getPosition()
+        x, y = map.getTileIndex(pos[0], pos[1])
+        print(x, y)
         return {
             "x": x,
             "y": y,

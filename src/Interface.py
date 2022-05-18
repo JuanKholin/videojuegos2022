@@ -6,7 +6,7 @@ import pygame as pg
 from os import listdir
 from os.path import isfile, join
 
-from . import Player, Command, Utils, Raton, Button, Upgrade, UpgradeButton
+from . import Player, Command, Utils, Raton, Button, Upgrade, UpgradeButton, Button0
 from src.Music import *
 from src.Lib import *
 from src.Utils import *
@@ -164,11 +164,11 @@ class Interface():
         allButton[Options.GENERATE_T3_TERRAN] = aux
         
         #Terran estructuras
-        aux = Button.Button(BUTTON_PATH + "barracks" + ".bmp", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineral.png", "Construir Cuartel", 5, TERRAN_BARRACKS_MINERAL_COST)
+        aux = Button0.Button(BUTTON_PATH + "barracks" + ".bmp", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineral.png", "Construir Cuartel", 5, TERRAN_BARRACKS_MINERAL_COST)
         allButton[Options.BUILD_BARRACKS_TERRAN] = aux
-        aux = Button.Button(BUTTON_PATH + "depot" + ".bmp", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineral.png", "Construir Deposito", 5, TERRAN_DEPOT_MINERAL_COST, 0, 45)
+        aux = Button0.Button(BUTTON_PATH + "depot" + ".bmp", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineral.png", "Construir Deposito", 5, TERRAN_DEPOT_MINERAL_COST, 0, 45)
         allButton[Options.BUILD_DEPOT_TERRAN] = aux
-        aux = Button.Button(BUTTON_PATH + "refinery" + ".bmp", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineral.png", "Construir Refineria", 5, TERRAN_REFINERY_MINERAL_COST, 0, 45)
+        aux = Button0.Button(BUTTON_PATH + "refinery" + ".bmp", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineral.png", "Construir Refineria", 5, TERRAN_REFINERY_MINERAL_COST, 0, 45)
         allButton[Options.BUILD_REFINERY_TERRAN] = aux
         
         #Zerg unidades
@@ -182,11 +182,11 @@ class Interface():
         allButton[Options.GENERATE_T3_ZERG] = aux
         
         #Zerg estructuras
-        aux = Button.Button(BUTTON_PATH + "zerg_barracks" + ".bmp", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineralZerg.png", "Construir Colmena", 5, ZERG_BARRACKS_MINERAL_COST)
+        aux = Button0.Button(BUTTON_PATH + "zerg_barracks" + ".bmp", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineralZerg.png", "Construir Colmena", 5, ZERG_BARRACKS_MINERAL_COST)
         allButton[Options.BUILD_BARRACKS_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "zerg_supply" + ".bmp", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineralZerg.png", "Construir Guarida", 5, ZERG_DEPOT_MINERAL_COST, 0, 45)
+        aux = Button0.Button(BUTTON_PATH + "zerg_supply" + ".bmp", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineralZerg.png", "Construir Guarida", 5, ZERG_DEPOT_MINERAL_COST, 0, 45)
         allButton[Options.BUILD_DEPOT_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "zerg_refinery" + ".bmp", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineralZerg.png", "Construir Extractor", 5, ZERG_REFINERY_MINERAL_COST, 0, 45)
+        aux = Button0.Button(BUTTON_PATH + "zerg_refinery" + ".bmp", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineralZerg.png", "Construir Extractor", 5, ZERG_REFINERY_MINERAL_COST, 0, 45)
         allButton[Options.BUILD_REFINERY_ZERG] = aux
         #aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.BUILD_HATCHERY)
         #allButton[Options.BUILD_HATCHERY] = aux

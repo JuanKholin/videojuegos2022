@@ -18,7 +18,7 @@ from src.Entities.TerranSoldier import *
 from src.Utils import *
 from src.Command import *
 from src import Player, Raton, Map
-from src.InterfaceNOSELECT import *
+from src.Interface import *
 from src.AI import *
 from src.Camera import *
 from src.Entities.Crystal import *
