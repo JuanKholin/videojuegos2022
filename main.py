@@ -181,7 +181,9 @@ pg.init()
 
 flags = pg.FULLSCREEN | pg.DOUBLEBUF
 size = (MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT)
-screen =  pg.display.set_mode(size, pygame.RESIZABLE) #, pygame.RESIZABLE)
+screen =  pg.display.set_mode(size, pg.RESIZABLE) #, pg.RESIZABLE)
+
+Utils.init()
 
 #Controlar frames por segundo
 clock = pg.time.Clock()

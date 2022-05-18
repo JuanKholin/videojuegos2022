@@ -60,7 +60,7 @@ class Broodling(Soldier):
         if xIni != -1:
             self.updateOwnSpace()
 
-        self.render = pygame.transform.scale(pygame.image.load(ZERG_T2_RENDER), UNIT_RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(ZERG_T2_RENDER), UNIT_RENDER_SIZE)
 
         self.type = SOLDIER
     

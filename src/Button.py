@@ -48,11 +48,11 @@ class Button():
                     muestra_texto(screen, 'monotypecorsiva', str(self.costeGas), GREEN2, 20, (self.x + 85 - self.cartelPad , self.y - 22))
             else:
                 pass
-                #pygame.draw.rect(screen, BLUE, pygame.Rect(self.x, self.y-15, 50, 20))
+                #pg.draw.rect(screen, BLUE, pg.Rect(self.x, self.y-15, 50, 20))
             #text = Utils.text[self.option] 
             #muestra_texto(screen, times, text, BLACK, 30, (self.x, self.y-20))
         if Utils.DEBBUG:
-            pygame.draw.rect(screen, PINK, pygame.Rect(self.x, self.y, Utils.BUTTON_W, Utils.BUTTON_H), 1)
+            pg.draw.rect(screen, PINK, pg.Rect(self.x, self.y, Utils.BUTTON_W, Utils.BUTTON_H), 1)
             
     def getRect(self):
         return pg.Rect(self.x, self.y, Utils.BUTTON_W, Utils.BUTTON_H)

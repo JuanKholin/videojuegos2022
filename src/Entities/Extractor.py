@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 
 from .TerranSoldier import *
 from .TerranWorker import *
@@ -43,7 +43,7 @@ class Extractor(Structure):
         self.spawningIndex = [0, 1, 2, 3]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
 
-        self.render = pygame.transform.scale(pygame.image.load(ZERG_REFINERY_RENDER), RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(ZERG_REFINERY_RENDER), RENDER_SIZE)
 
         self.building = building
         if building:
@@ -70,9 +70,9 @@ class Extractor(Structure):
         for tile in tiles:
             r = tile.getRect()
             if tile.type == GEYSER and tile.visible:
-                pygame.draw.rect(screen, GREEN, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
+                pg.draw.rect(screen, GREEN, pg.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
             else:
-                pygame.draw.rect(screen, RED, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
+                pg.draw.rect(screen, RED, pg.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
 
     def draw(self, screen, camera):
         Structure.draw(self, screen, camera)

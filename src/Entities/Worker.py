@@ -5,14 +5,14 @@ from ..Command import *
 import math
 
 class Worker(Unit):
-    def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, 
+    def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, 
                     faces, frame, padding, id,player, minePower, timeToMine, inersibleFrames, frames,
                         dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, xPadding, yPadding, wPadding, hPadding,
-                            oreTransportingFrames, gasTransportingFrames, attackInfo):
-        Unit.__init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, 
+                            oreTransportingFrames, gasTransportingFrames, attackInfo, isExplosive):
+        Unit.__init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, 
                                 faces, frame, padding, id, player, inersibleFrames, frames,
                                     dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, xPadding, yPadding, wPadding, hPadding, 
-                                    attackInfo)
+                                    attackInfo, isExplosive)
         # Info minado
         self.startTimeMining = 0
         self.minePower = minePower

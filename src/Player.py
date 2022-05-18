@@ -156,21 +156,24 @@ class Player():
         if isMe:
             for structure in self.structures:
                 pos = structure.getPosition()
-                pygame.draw.rect(screen, BLUE, pygame.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
+                pygame.draw.rect(screen, BLUE, pg.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
             for unit in self.units:
                 if unit.state != UnitState.DEAD:
-                    pos = unit.getPosition()
-                    pygame.draw.rect(screen, GREEN, pygame.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
+                    r = structure.getRect()
+                    if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
+                        r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
+                        pos = unit.getPosition()
+                        pg.draw.rect(screen, GREEN, pygame.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
         else:
             for structure in self.structures:
                 pos = structure.getPosition()
-                if not self.mapa.getTile(pos[0], pos[1]).oscura:
+                if self.mapa.getTile(pos[0], pos[1]).visible:
                     pygame.draw.rect(screen, ORANGE, pygame.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
             for unit in self.units:
                 if unit.state != UnitState.DEAD:
                     pos = unit.getPosition()
                     if (self.mapa.getTile(pos[0], pos[1]) != None) and self.mapa.getTile(pos[0], pos[1]).visible:
-                        pygame.draw.rect(screen, RED, pygame.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
+                        pg.draw.rect(screen, RED, pg.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
 
 
     def removeUnit(self, unit):

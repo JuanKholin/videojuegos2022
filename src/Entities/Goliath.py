@@ -69,7 +69,7 @@ class Goliath(Soldier):
         
         self.shadow = []
         for i in range(INVERSIBLE_FRAMES):
-            aux = pygame.mask.from_surface(self.sprites[i], 0)
+            aux = pg.mask.from_surface(self.sprites[i], 0)
             mask = aux.to_surface(setcolor=(1, 0, 0))
             mask.set_colorkey(BLACK)
             mask.set_alpha(150)
@@ -84,7 +84,7 @@ class Goliath(Soldier):
                 #self.image.get_height() - HEIGHT_PADDING)
         #self.imageRect = rect(self.x - self.image.get_width()/2, self.y -self.image.get_height() , self.image.get_width(), self.image.get_height())
         #self.imageRect = rect(self.x, self.y, self.image.get_width(), self.image.get_height())
-        self.render = pygame.transform.scale(pygame.image.load(TERRAN_T3_RENDER), UNIT_RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(TERRAN_T3_RENDER), UNIT_RENDER_SIZE)
         self.type = SOLDIER
     
 
