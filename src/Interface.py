@@ -753,14 +753,20 @@ class Interface():
             
             pygame.draw.rect(screen, BLUE, pygame.Rect(Utils.ScreenWidth/2 - MINIMAP_X, Utils.ScreenHeight - MINIMAP_Y, MINIMAP_W, MINIMAP_H), 1)
             #self.player.mapa.drawMinimap(screen)
-            self.player.drawEntity(screen, camera, True)
-            self.enemy.drawEntity(screen, camera, False)
+            self.player.drawEntity(screen, True)
+            self.enemy.drawEntity(screen, False)
             
 
+            
             x = Utils.ScreenWidth/2 - MINIMAP_X + (camera.x/self.player.mapa.w * MINIMAP_W)
             y = Utils.ScreenHeight - MINIMAP_Y + (camera.y/self.player.mapa.h * MINIMAP_H)
             w = camera.w/self.player.mapa.w * MINIMAP_W
             h = camera.h/self.player.mapa.h * MINIMAP_H
+            if x + w > (Utils.ScreenWidth/2 -  MINIMAP_X) + MINIMAP_W:
+                w = Utils.ScreenWidth/2 - MINIMAP_X + MINIMAP_W - x
+            if y + h > (Utils.ScreenHeight - MINIMAP_Y) + MINIMAP_H:
+                h = Utils.ScreenHeight - MINIMAP_Y + MINIMAP_H - y
+                
             pygame.draw.rect(screen, WHITE, pygame.Rect(x, y, w, h), 2)
 
             #informacion de entidades seleccionadas
@@ -1088,19 +1094,11 @@ class Interface():
         x = self.mouse.rel_pos[0]
         y = self.mouse.rel_pos[1]
         yes = False
-        if y > 600:
+        if y > Utils.ScreenHeight - (MIN_SCREEN_HEIGHT - 600):
             yes = True
-        elif x < 15 and y > 485:
+        elif x < Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 265) and y > Utils.ScreenHeight - (MIN_SCREEN_HEIGHT - 510):
             yes = True
-        elif x < 30 and y > 490:
-            yes = True
-        elif x < 40 and y > 510:
-            yes = True
-        elif x < 265 and y > 510:
-            yes = True
-        elif x > 735 and y > 585:
-            yes = True
-        elif x > 750 and y > 535:
+        elif x > Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 750) and y > Utils.ScreenHeight - (MIN_SCREEN_HEIGHT - 535):
             yes = True
         return yes
 
