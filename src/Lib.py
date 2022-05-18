@@ -16,10 +16,9 @@ def updateScreen(screen):
     screen = pg.display.set_mode((x, y), pg.RESIZABLE)
 
 def playSound(sound, n = 1):
-    if not Utils.haveBGM:
-        n = n - 1
-        sound.set_volume(Utils.SOUND_VOLUME)
-        pg.mixer.Sound.play(sound, n)
+    n = n - 1
+    sound.set_volume(Utils.SOUND_VOLUME)
+    pg.mixer.Sound.play(sound, n)
     
 def playMusic(music, n = -1, pos = 0):
     if not Utils.haveBGM:
@@ -31,6 +30,24 @@ def playMusic(music, n = -1, pos = 0):
 
 def pauseMusic():
     pg.mixer.music.pause()
+    
+def minusMusic():
+    if Utils.BGM_VOLUME > 0.0:
+        Utils.BGM_VOLUME -= 0.1
+        pg.mixer.music.set_volume(Utils.BGM_VOLUME)
+        
+def plusMusic():
+    if Utils.BGM_VOLUME < 1.0:
+        Utils.BGM_VOLUME += 0.1
+        pg.mixer.music.set_volume(Utils.BGM_VOLUME)
+        
+def minusSound():
+    if Utils.SOUND_VOLUME > 0.0:
+        Utils.SOUND_VOLUME -= 0.1
+        
+def plusSound():
+    if Utils.SOUND_VOLUME < 1.0:
+        Utils.SOUND_VOLUME += 0.1
 
 def stopMusic():
     pg.mixer.music.stop()

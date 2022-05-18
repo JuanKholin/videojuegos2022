@@ -37,6 +37,10 @@ class CommandId(IntEnum):
     SAVE_EXIT_GAME = auto()
     EXIT_GAME = auto()
     DESELECT = auto()
+    PLUS_BGM = auto()
+    MINUS_BGM = auto()
+    PLUS_SOUND = auto()
+    MINUS_SOUND = auto()
 
 class Command:
     def __init__(self, id):

@@ -2,11 +2,12 @@ from enum import Enum, auto, IntEnum
 from pickle import GLOBAL
 import math
 from re import T
+from token import MINUS
 from turtle import Screen
 import pygame as pg
 from .Lib import *
 
-DEBBUG = True
+DEBBUG = False
 
 BGM_VOLUME = 0.2
 SOUND_VOLUME = 0.5
@@ -165,11 +166,11 @@ GREEN3  = (110, 255, 90)
 GREEN4  = (140, 255, 150)
 PINK    = (255, 95, 185)
 ORANGE  = (255, 200, 95)
+ORANGE2 = (255, 145, 0)
 
 HP = pg.image.load("SPRITE/EXTRA/vida3.png")
-HP.set_colorkey(WHITE)
 HP2 = pg.image.load("SPRITE/EXTRA/vida2.png")
-HP.set_colorkey(WHITE)
+BARRA_SOUND = pg.image.load("SPRITE/EXTRA/sound.png")
 
 
 #CAMERA
@@ -681,7 +682,10 @@ class Options(Enum):
     NEXT_PAGE = auto()
     PREVIOUS_PAGE = auto()
     CLOSE = auto()
-
+    PLUS_SOUND = auto()
+    MINUS_SOUND = auto()
+    PLUS_BGM = auto()
+    MINUS_BGM = auto()
 
 class Upgrades(Enum):
     DANYO = auto()
