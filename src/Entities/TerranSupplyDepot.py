@@ -72,7 +72,7 @@ class TerranSupplyDepot(Structure):
             "clase": "terranSupplyDepot",
             "building": self.building,
             "nombre": "Deposito de suministros",
-            "funcion": "aumenta la capacidad de suministros"
+            "funcion": "Aumenta la capacidad de tu ejercito"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

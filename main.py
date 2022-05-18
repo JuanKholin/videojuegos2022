@@ -242,15 +242,16 @@ raton.setEscena(escena)
 
 # Bucle principal
 while True:
-    #now = datetime.now()
+    
     #Procesar inputs
     procesarInput()
 
     #Actualizar entidades del juego
     update()
-    #print((datetime.now() - now).microseconds)
+    
 
     #Dibujar
+    #now = datetime.datetime.now()
     draw()
-
+    #print((datetime.datetime.now() - now).microseconds)
     updateGlobalTime(clock)

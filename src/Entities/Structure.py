@@ -206,38 +206,40 @@ class Structure(Entity.Entity):
 
     def draw(self, screen, camera):
         r = self.getRect()
-        image = self.getImage()
-        if self.clicked:
-            if self.player.isPlayer:
-                pygame.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
-            else:
-                pygame.draw.ellipse(screen, RED, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
-        if self.hp < self.maxHp:
-            if self.player.isPlayer:
-                hp = pygame.transform.chop(pygame.transform.scale(HP, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
-            else:
-                hp = pygame.transform.chop(pygame.transform.scale(HP2, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
-            screen.blit(hp, [r.x + r.w/2 - camera.x - hp.get_rect().w/2, r.y + r.h - camera.y])
+        if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
+            r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
+            image = self.getImage()
+            if self.clicked:
+                if self.player.isPlayer:
+                    pygame.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
+                else:
+                    pygame.draw.ellipse(screen, RED, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
+            if self.hp < self.maxHp:
+                if self.player.isPlayer:
+                    hp = pygame.transform.chop(pygame.transform.scale(HP, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
+                else:
+                    hp = pygame.transform.chop(pygame.transform.scale(HP2, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
+                screen.blit(hp, [r.x + r.w/2 - camera.x - hp.get_rect().w/2, r.y + r.h - camera.y])
 
 
-        #sombra
-        aux = pygame.mask.from_surface(self.image, 0)
-        mask = aux.to_surface(setcolor=(1, 0, 0))
-        mask.set_colorkey(BLACK)
-        mask.set_alpha(150)
-        screen.blit(mask, [image.x - camera.x - 8, image.y - camera.y - 5])
+            #sombra
+            aux = pygame.mask.from_surface(self.image, 0)
+            mask = aux.to_surface(setcolor=(1, 0, 0))
+            mask.set_colorkey(BLACK)
+            mask.set_alpha(150)
+            screen.blit(mask, [image.x - camera.x - 8, image.y - camera.y - 5])
 
-        #self.image.blit(dark, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
-        screen.blit(self.image, [image.x - camera.x, image.y - camera.y])
-        if DEBBUG:
-            pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
-            #pygame.draw.rect(screen, BLACK, pygame.Rect(image.x - camera.x, image.y - camera.y, image.w, image.h),1)
+            #self.image.blit(dark, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
+            screen.blit(self.image, [image.x - camera.x, image.y - camera.y])
+            if DEBBUG:
+                pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
+                #pygame.draw.rect(screen, BLACK, pygame.Rect(image.x - camera.x, image.y - camera.y, image.w, image.h),1)
 
-            tile = self.mapa.getTile(r.x + self.CENTER_TILE[0] * TILE_WIDTH, r.y + self.CENTER_TILE[1] * TILE_HEIGHT)
-            libres = self.mapa.getEntityTilesVecinas(tile, tile)
-            pygame.draw.rect(screen, BLACK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, 40, 40), 5)
-            for tile in libres:
-               pygame.draw.rect(screen, PINK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, tile.w, tile.h),1)
+                tile = self.mapa.getTile(r.x + self.CENTER_TILE[0] * TILE_WIDTH, r.y + self.CENTER_TILE[1] * TILE_HEIGHT)
+                libres = self.mapa.getEntityTilesVecinas(tile, tile)
+                pygame.draw.rect(screen, BLACK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, 40, 40), 5)
+                for tile in libres:
+                    pygame.draw.rect(screen, PINK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, tile.w, tile.h),1)
 
     def drawBuildStructure(self, screen, camera):
         r = self.getRect()

@@ -118,7 +118,7 @@ class TerranRefinery(Structure):
             "clase": "terranRefinery",
             "building": self.building,
             "nombre": "Refineria",
-            "funcion": "extrae gas geyser"
+            "funcion": "Extrae gas de un geyser"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

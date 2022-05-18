@@ -104,8 +104,8 @@ class TerranBarracks(Structure):
         sonDictionary = {
             "clase": "terranBarracks",
             "building": self.building,
-            "nombre": "Terran cuartel",
-            "funcion": "entrena tropas de infanteria"
+            "nombre": "Cuartel Terran",
+            "funcion": "Entrenar unidades ofensivas"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

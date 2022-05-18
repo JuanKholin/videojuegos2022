@@ -75,8 +75,8 @@ class Zergling(Soldier):
         fatherDictionary = super().toDictionary(map)
         sonDictionary = {
             "clase": "zergling",
-            "nombre": "Zerling",
-            "funcion": "unidad Zerg basica"
+            "nombre": "Zergling",
+            "funcion": "Unidad ofensiva rapida"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary
