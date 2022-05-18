@@ -12,10 +12,10 @@
       },
       {
         "clase": "goliath",
-        "nombre": "Terran Marine",
-        "funcion": "Unidad ofensiva a rango",
+        "nombre": "Goliath",
+        "funcion": "Unidad Colosal Terran",
         "x": 25,
-        "y": 11,
+        "y": 12,
         "hp": 40
       },
       {
@@ -60,15 +60,6 @@
         "hp": 1500
       },
       {
-        "clase": "terranSupplyDepot",
-        "building": true,
-        "nombre": "Deposito de suministros",
-        "funcion": "Aumenta la capacidad de tu ejercito",
-        "x": 0,
-        "y": 0,
-        "hp": 200
-      },
-      {
         "clase": "terranBarracks",
         "building": true,
         "nombre": "Cuartel Terran",
@@ -87,16 +78,61 @@
         "hp": 200
       },
       {
+        "clase": "terranSupplyDepot",
+        "building": true,
+        "nombre": "Deposito de suministros",
+        "funcion": "Aumenta la capacidad de tu ejercito",
+        "x": 22,
+        "y": 11,
+        "hp": 200
+      },
+      {
         "clase": "terranBarracks",
         "building": true,
         "nombre": "Cuartel Terran",
         "funcion": "Entrenar unidades ofensivas",
-        "x": 0,
-        "y": 0,
+        "x": 21,
+        "y": 14,
+        "hp": 1000
+      },
+      {
+        "clase": "terranSupplyDepot",
+        "building": true,
+        "nombre": "Deposito de suministros",
+        "funcion": "Aumenta la capacidad de tu ejercito",
+        "x": 28,
+        "y": 15,
+        "hp": 200
+      },
+      {
+        "clase": "terranSupplyDepot",
+        "building": true,
+        "nombre": "Deposito de suministros",
+        "funcion": "Aumenta la capacidad de tu ejercito",
+        "x": 29,
+        "y": 8,
+        "hp": 200
+      },
+      {
+        "clase": "terranRefinery",
+        "building": true,
+        "nombre": "Refineria",
+        "funcion": "Extrae gas de un geyser",
+        "x": 29,
+        "y": 6,
+        "hp": 200
+      },
+      {
+        "clase": "terranBarracks",
+        "building": true,
+        "nombre": "Cuartel Terran",
+        "funcion": "Entrenar unidades ofensivas",
+        "x": 29,
+        "y": 11,
         "hp": 1000
       }
     ],
-    "resources": 267,
+    "resources": 1147,
     "gas": 400,
     "keyMap": {
       "1073741906": 3,
@@ -123,7 +159,7 @@
     "da\u00f1oUpgrade": 1,
     "armorUpgrade": 1,
     "mineUpgrade": 2,
-    "limitUnits": 28
+    "limitUnits": 43
   },
   "p2": {
     "units": [
@@ -131,16 +167,16 @@
         "clase": "drone",
         "nombre": "Drone",
         "funcion": "Unidad obrera",
-        "x": 16,
-        "y": 20,
+        "x": 15,
+        "y": 22,
         "hp": 400
       },
       {
         "clase": "drone",
         "nombre": "Drone",
         "funcion": "Unidad obrera",
-        "x": 14,
-        "y": 20,
+        "x": 19,
+        "y": 27,
         "hp": 400
       }
     ],
@@ -245,7 +281,7 @@
         "hp": 200
       }
     ],
-    "resources": 18,
+    "resources": 10,
     "gas": 0,
     "keyMap": {},
     "commandMap": {},
@@ -3631,7 +3667,7 @@
   "resources": [
     {
       "clase": "cristal",
-      "capacidad": 136,
+      "capacidad": 128,
       "x": 33,
       "y": 32,
       "nombre": "Cristal",
@@ -3639,7 +3675,7 @@
     },
     {
       "clase": "cristal",
-      "capacidad": 800,
+      "capacidad": 784,
       "x": 29,
       "y": 30,
       "nombre": "Cristal",
@@ -3687,7 +3723,7 @@
     },
     {
       "clase": "cristal",
-      "capacidad": 800,
+      "capacidad": 792,
       "x": 22,
       "y": 23,
       "nombre": "Cristal",
@@ -3703,7 +3739,7 @@
     },
     {
       "clase": "cristal",
-      "capacidad": 704,
+      "capacidad": 696,
       "x": 18,
       "y": 16,
       "nombre": "Cristal",
@@ -3711,7 +3747,7 @@
     },
     {
       "clase": "cristal",
-      "capacidad": 800,
+      "capacidad": 792,
       "x": 12,
       "y": 19,
       "nombre": "Cristal",

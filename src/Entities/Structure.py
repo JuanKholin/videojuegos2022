@@ -28,6 +28,7 @@ class Structure(Entity.Entity):
         self.player = player
         self.xIni = xini
         self.yIni = yini
+        print(self.x, self.y, self.mapa.getTileIndex(self.x, self.y))
         originX = (xini - self.CENTER_TILE[0])*self.mapa.tw
         originY = (yini - self.CENTER_TILE[1])*self.mapa.th
         self.rectn = pg.Rect(originX, originY + self.HEIGHT_PAD/2, self.TILES_WIDTH*self.mapa.tw - 1, self.TILES_HEIGHT*self.mapa.th - self.HEIGHT_PAD/2 - 1)
@@ -35,6 +36,7 @@ class Structure(Entity.Entity):
         self.state = BuildingState.BUILDING
         self.lastAttacker = None
         self.capacity = capacity
+        self.shadows = []
         #print("TENGO CAPACIDAD ", self.capacity, "Y SOY ", self.player, " Y ESTOY EN ", self.xIni, self.yIni)
 
 
@@ -147,6 +149,12 @@ class Structure(Entity.Entity):
 
     def setPosition(self, x, y):
         xTile, yTile = self.mapa.getTileIndex(x, y)
+        self.xIni = xTile - round(self.TILES_WIDTH/2) + 1
+        if round(self.TILES_HEIGHT/2) == 1:
+            self.yIni = yTile
+        else:
+            self.yIni = yTile  - int(self.TILES_HEIGHT/2)
+        print(self.xIni, self.yIni, int(self.TILES_HEIGHT/2))
         originX = (xTile - round(self.TILES_WIDTH/2))*self.mapa.tw
         originY = (yTile - round(self.TILES_HEIGHT/2))*self.mapa.th
         self.x = xTile * self.mapa.tw
@@ -376,6 +384,7 @@ class Structure(Entity.Entity):
         return self.x / TILE_WIDTH, self.y / TILE_HEIGHT
 
     def toDictionary(self, map):
+        #print(self.xIni, self.yIni)
         return {
             "x": self.xIni,
             "y": self.yIni,

@@ -766,7 +766,7 @@ class Unit(Entity):
     def toDictionary(self, map):
         pos = self.getPosition()
         x, y = map.getTileIndex(pos[0], pos[1])
-        print(x, y)
+        print(x,y)
         return {
             "x": x,
             "y": y,

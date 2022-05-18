@@ -23,6 +23,7 @@
       }
     ],
     "resources": 100,
+    "gas":0,
     "keyMap": {
       "1073741906": 3,
       "1073741905": 4,
@@ -76,18 +77,10 @@
         "x": 20,
         "y": 5,
         "hp": 1500
-      },
-      {
-        "clase": "terranBarracks",
-        "building": false,
-        "nombre": "Terran cuartel",
-        "funcion": "entrena tropas de infanteria",
-        "x": 25.0,
-        "y": 5.0,
-        "hp": 1000
       }
     ],
-    "resources": 50,
+    "resources": 100,
+    "gas":0,
     "keyMap": {},
     "commandMap": {},
     "da\u00f1oUpgrade": 0,
