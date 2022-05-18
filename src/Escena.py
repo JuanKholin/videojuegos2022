@@ -78,8 +78,8 @@ class Escena():
                 if command.id == CommandId.GENERATE_UNIT:
                     self.p1.execute(command.id, [], None)
                 if command.id == CommandId.SEARCH_NEARBY_RIVAL:
-                    for unit in self.p1.unitsSelected:
-                        self.mapa.setLibre(unit.getTile())
+                    #for unit in self.p1.unitsSelected:
+                        #self.mapa.setLibre(unit.getTile())
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.GENERATE_WORKER:
                     self.p1.execute(command.id, [], None)
@@ -326,9 +326,6 @@ class Escena():
 
     def getTerranBarrack(self):
         return TerranBarracks(0, 0, None, self.mapa, True)
-
-    def getHatchery(self):
-        return Hatchery(0, 0, None, self.mapa, False)
 
     def getTerranRefinery(self):
         return TerranRefinery(0, 0, None, self.mapa, True)

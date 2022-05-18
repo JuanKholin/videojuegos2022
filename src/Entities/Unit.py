@@ -445,8 +445,9 @@ class Unit(Entity):
         self.runningAway = False
 
         if(len(self.paths) > 1):
-            #print("changeToAttacking objetiveTile")
+            print("changeToAttacking objetiveTile")
             self.changeObjectiveTile()
+            #input()
         if self.attackedOne != None:
             if self.attackedOne.esEstructura:
                 self.attackedOne.lastAttacker = None
@@ -629,8 +630,10 @@ class Unit(Entity):
 
             self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
             if (self.siendoAtacado == True) and not self.runningAway:
+                print("me atacan")
                 self.attack(self.atacante)
-                self.changeObjectiveTile()
+                self.siendoAtacado = False
+                #self.changeObjectiveTile()
             else:
                 self.changeObjectiveTile()
             
@@ -685,7 +688,7 @@ class Unit(Entity):
     def changeObjectiveTile(self):
         actualPath = self.paths[0]
         objectiveTile = self.mapa.getTile(actualPath.posFin[0], actualPath.posFin[1])
-        #print(objectiveTile.tileid, self.getTile().tileid)
+        print(objectiveTile.tileid, self.getTile().tileid)
         if objectiveTile.type == EMPTY or (objectiveTile.type == UNIT and objectiveTile.id == self.id):
             self.mapa.setVecina(objectiveTile, self.id)
             objectiveTile.setOcupante(self)
