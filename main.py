@@ -258,5 +258,5 @@ while True:
     #Dibujar
     now = datetime.now()
     draw()
-    print((datetime.now() - now).microseconds)
+    #print((datetime.now() - now).microseconds)
     updateGlobalTime(clock)

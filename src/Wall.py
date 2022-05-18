@@ -30,7 +30,7 @@ FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
           [225] * 16, [226] * 16, [227] * 16, [228] * 16, [229] * 16, [230] * 16]
 STILL_FRAMES = [0]
 ORE_TRANSPORTING_FRAMES = [3]
-BARREL_TRANSPORTING_FRAMES = [2]
+GAS_TRANSPORTING_FRAMES = [2]
 ATTACK_FRAMES = [1, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 MOVE_FRAMES = [0]
 DIE_FRAMES = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22]

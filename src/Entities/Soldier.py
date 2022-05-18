@@ -1,14 +1,14 @@
 from .Unit import *
 
 class Soldier(Unit):
-    def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, 
-                    faces, frame, padding, id,player, inersibleFrames, frames,
+    def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh,
+                    faces, frame, padding, id,player, inversibleFrames, frames,
                         dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, xPadding, yPadding, wPadding, 
-                        hPadding, attackInfo):
-        Unit.__init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, 
-                        faces, frame, padding, id, player, inersibleFrames, frames,
+                        hPadding, attackInfo, isExplosive):
+        Unit.__init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, 
+                        faces, frame, padding, id, player, inversibleFrames, frames,
                             dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, xPadding, yPadding, wPadding, 
-                            hPadding, attackInfo)
+                            hPadding, attackInfo, isExplosive)
 
 
     #def update():
