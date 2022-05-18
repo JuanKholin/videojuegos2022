@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 
 from .TerranSoldier import *
 from .TerranWorker import *
@@ -52,7 +52,7 @@ class TerranBuilder(Structure):
         self.spawningIndex = [4, 5]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
 
-        self.render = pygame.transform.scale(pygame.image.load(BUILDER_RENDER), RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(BUILDER_RENDER), RENDER_SIZE)
 
         self.building = building
         if building:

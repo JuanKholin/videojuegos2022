@@ -242,7 +242,7 @@ icon = pg.image.load('icon.png')
 pg.display.set_icon(icon)
 flags = pg.FULLSCREEN | pg.DOUBLEBUF
 size = (MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT)
-screen =  pg.display.set_mode(size, pygame.RESIZABLE) #, pygame.RESIZABLE)
+screen =  pg.display.set_mode(size, pg.RESIZABLE) #, pg.RESIZABLE)
 
 
 #Controlar frames por segundo

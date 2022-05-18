@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 from . import Entity
 from .. import Player, Map
 from ..Command import *
@@ -30,7 +30,7 @@ class Structure(Entity.Entity):
         self.yIni = yini
         originX = (xini - self.CENTER_TILE[0])*self.mapa.tw
         originY = (yini - self.CENTER_TILE[1])*self.mapa.th
-        self.rectn = pygame.Rect(originX, originY + self.HEIGHT_PAD/2, self.TILES_WIDTH*self.mapa.tw - 1, self.TILES_HEIGHT*self.mapa.th - self.HEIGHT_PAD/2 - 1)
+        self.rectn = pg.Rect(originX, originY + self.HEIGHT_PAD/2, self.TILES_WIDTH*self.mapa.tw - 1, self.TILES_HEIGHT*self.mapa.th - self.HEIGHT_PAD/2 - 1)
         self.esEstructura = True
         self.state = BuildingState.BUILDING
         self.lastAttacker = None
@@ -127,13 +127,13 @@ class Structure(Entity.Entity):
     def getImage(self):
         image = self.image.get_rect()
         r = self.getRect()
-        rectAux = pygame.Rect(r.x + r.w/2 - image.w/2 - self.widthPad, r.y - self.HEIGHT_PAD - self.rectOffY, image.w, image.h)
+        rectAux = pg.Rect(r.x + r.w/2 - image.w/2 - self.widthPad, r.y - self.HEIGHT_PAD - self.rectOffY, image.w, image.h)
         return rectAux
 
     def getFinalImage(self):
         image = self.finalImage.get_rect()
         r = self.getRect()
-        rectAux = pygame.Rect(r.x + r.w/2 - image.w/2 - self.widthPad, r.y - self.HEIGHT_PAD - self.rectOffY, image.w, image.h)
+        rectAux = pg.Rect(r.x + r.w/2 - image.w/2 - self.widthPad, r.y - self.HEIGHT_PAD - self.rectOffY, image.w, image.h)
         return rectAux
 
     def setClicked(self, click):
@@ -211,34 +211,34 @@ class Structure(Entity.Entity):
             image = self.getImage()
             if self.clicked:
                 if self.player.isPlayer:
-                    pygame.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
+                    pg.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
                 else:
-                    pygame.draw.ellipse(screen, RED, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
+                    pg.draw.ellipse(screen, RED, [r.x - camera.x, r.y - camera.y, r.w, r.h], 2)
             if self.hp < self.maxHp:
                 if self.player.isPlayer:
-                    hp = pygame.transform.chop(pygame.transform.scale(HP, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
+                    hp = pg.transform.chop(pg.transform.scale(HP, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
                 else:
-                    hp = pygame.transform.chop(pygame.transform.scale(HP2, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
+                    hp = pg.transform.chop(pg.transform.scale(HP2, (50, 8)), ((self.hp/self.maxHp) * 50, 0, 50, 0))
                 screen.blit(hp, [r.x + r.w/2 - camera.x - hp.get_rect().w/2, r.y + r.h - camera.y])
 
 
         #sombra
 
-            #self.image.blit(dark, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
+            #self.image.blit(dark, (0, 0), special_flags=pg.BLEND_RGBA_SUB)
             screen.blit(self.image, [image.x - camera.x, image.y - camera.y])
             if DEBBUG:
-                pygame.draw.rect(screen, BLACK, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
-                #pygame.draw.rect(screen, BLACK, pygame.Rect(image.x - camera.x, image.y - camera.y, image.w, image.h),1)
+                pg.draw.rect(screen, BLACK, pg.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
+                #pg.draw.rect(screen, BLACK, pg.Rect(image.x - camera.x, image.y - camera.y, image.w, image.h),1)
 
                 tile = self.mapa.getTile(r.x + self.CENTER_TILE[0] * TILE_WIDTH, r.y + self.CENTER_TILE[1] * TILE_HEIGHT)
                 libres = self.mapa.getEntityTilesVecinas(tile, tile)
-                pygame.draw.rect(screen, BLACK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, 40, 40), 5)
+                pg.draw.rect(screen, BLACK, pg.Rect(tile.x - camera.x, tile.y - camera.y, 40, 40), 5)
                 for tile in libres:
-                    pygame.draw.rect(screen, PINK, pygame.Rect(tile.x - camera.x, tile.y - camera.y, tile.w, tile.h),1)
+                    pg.draw.rect(screen, PINK, pg.Rect(tile.x - camera.x, tile.y - camera.y, tile.w, tile.h),1)
 
     def drawBuildStructure(self, screen, camera):
         r = self.getRect()
-        #pygame.draw.rect(screen, GREEN, pygame.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h), 5)
+        #pg.draw.rect(screen, GREEN, pg.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h), 5)
         tiles = self.mapa.getRectTiles(r)
         self.drawBuildTiles(screen, camera, tiles)
 
@@ -250,9 +250,9 @@ class Structure(Entity.Entity):
         for tile in tiles:
             r = tile.getRect()
             if tile.type == EMPTY and tile.visible:
-                pygame.draw.rect(screen, GREEN, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
+                pg.draw.rect(screen, GREEN, pg.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
             else:
-                pygame.draw.rect(screen, RED, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
+                pg.draw.rect(screen, RED, pg.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
 
     def drawInfo(self, screen, color):
         dic = self.toDictionary(self.mapa)
@@ -280,24 +280,24 @@ class Structure(Entity.Entity):
     def drawInfoSpawning(self, screen, color):
         #render de la tropa
         image = self.training[0].getRender()
-        image = pygame.transform.scale(image, SPAW_UNIT_RENDER_SIZE)
+        image = pg.transform.scale(image, SPAW_UNIT_RENDER_SIZE)
         screen.blit(image, (Utils.ScreenWidth/2 - GUI_INFO_X2 - 20, Utils.ScreenHeight - GUI_INFO_Y2 + 30))
-        pygame.draw.rect(screen, GREEN, pygame.Rect(Utils.ScreenWidth/2 - GUI_INFO_X2 - 15, Utils.ScreenHeight - GUI_INFO_Y2 + 35, 55, 60), 2)
+        pg.draw.rect(screen, GREEN, pg.Rect(Utils.ScreenWidth/2 - GUI_INFO_X2 - 15, Utils.ScreenHeight - GUI_INFO_Y2 + 35, 55, 60), 2)
 
         #progreso
         progreso = self.generationCount / (CLOCK_PER_SEC * self.training[0].generationTime)
         if progreso > 1:
             progreso = 1
-        pygame.draw.rect(screen, BLUE2, pygame.Rect(Utils.ScreenWidth/2 - GUI_INFO_X2 + 50, Utils.ScreenHeight - GUI_INFO_Y2 + 55, 130*(progreso), 10))
-        pygame.draw.rect(screen, BLUE, pygame.Rect(Utils.ScreenWidth/2 - GUI_INFO_X2 + 50, Utils.ScreenHeight - GUI_INFO_Y2 + 55, 130, 10), 2)
+        pg.draw.rect(screen, BLUE2, pg.Rect(Utils.ScreenWidth/2 - GUI_INFO_X2 + 50, Utils.ScreenHeight - GUI_INFO_Y2 + 55, 130*(progreso), 10))
+        pg.draw.rect(screen, BLUE, pg.Rect(Utils.ScreenWidth/2 - GUI_INFO_X2 + 50, Utils.ScreenHeight - GUI_INFO_Y2 + 55, 130, 10), 2)
 
         #tropas pendientes
-        pygame.draw.rect(screen, BLUE, pygame.Rect(Utils.ScreenWidth/2 - GUI_INFO_X2 + 50, Utils.ScreenHeight - GUI_INFO_Y2 +80, 145, 55), 2)
+        pg.draw.rect(screen, BLUE, pg.Rect(Utils.ScreenWidth/2 - GUI_INFO_X2 + 50, Utils.ScreenHeight - GUI_INFO_Y2 +80, 145, 55), 2)
         xPad = 0
         n = 0
         for unit in self.training[1:]:
             image = unit.getRender()
-            image = pygame.transform.scale(image, WAIT_UNIT_RENDER_SIZE)
+            image = pg.transform.scale(image, WAIT_UNIT_RENDER_SIZE)
             screen.blit(image, (Utils.ScreenWidth/2 - GUI_INFO_X2 + 50 + xPad, Utils.ScreenHeight - GUI_INFO_Y2 + 78))
             n += 1
             xPad += 45

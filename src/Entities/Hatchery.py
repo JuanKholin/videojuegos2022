@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 
 
 from .Zergling import *
@@ -49,7 +49,7 @@ class Hatchery(Structure):
         self.spawningIndex = [0, 1, 2, 3]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
         self.raton = raton
-        self.render = pygame.transform.scale(pygame.image.load(HATCHERY_RENDER), RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(HATCHERY_RENDER), RENDER_SIZE)
 
         self.building = building
         if building:

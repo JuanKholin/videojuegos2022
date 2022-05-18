@@ -657,7 +657,7 @@ class Map():
             self.minimap.insert(i,[])#Es una matriz que representa el mapa(0 es suelo, 1 es obstaculo, 2 vecino)
             for j in range(len(self.mapa[0])):
                 image = (self.mapa[i][j]).image
-                tile_sprite = pygame.transform.scale(image, [round(200/len(self.mapa[0])), round(200/len(self.mapa))])
+                tile_sprite = pg.transform.scale(image, [round(200/len(self.mapa[0])), round(200/len(self.mapa))])
                 #print(tile_sprite.get_rect())
                 self.minimap[i].insert(j, tile_sprite)
 

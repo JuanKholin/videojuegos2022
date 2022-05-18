@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 from .Zergling import *
 from .Broodling import *
 from .Hydralisk import *
@@ -43,7 +43,7 @@ class ZergBarracks(Structure):
         self.spawningIndex = [0, 1, 2]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
         #self.raton = raton
-        self.render = pygame.transform.scale(pygame.image.load(ZERG_BARRACKS_RENDER), RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(ZERG_BARRACKS_RENDER), RENDER_SIZE)
 
         self.building = building
         if building:

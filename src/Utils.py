@@ -3,7 +3,8 @@ from pickle import GLOBAL
 import math
 from re import T
 from turtle import Screen
-import pygame
+import pygame as pg
+from .Lib import *
 
 DEBBUG = True
 
@@ -138,7 +139,7 @@ RANGE_UNIT = TILE_WIDTH
 RANGE_BASIC = 27
 ARMOR_EXTRA = 1.1
 
-#CLOCK = pygame.time.Clock()
+#CLOCK = pg.time.Clock()
 
 #contador del sistema
 SYSTEM_CLOCK = 0
@@ -165,9 +166,9 @@ GREEN4  = (140, 255, 150)
 PINK    = (255, 95, 185)
 ORANGE  = (255, 200, 95)
 
-HP = pygame.image.load("SPRITE/EXTRA/vida3.png")
+HP = pg.image.load("SPRITE/EXTRA/vida3.png")
 HP.set_colorkey(WHITE)
-HP2 = pygame.image.load("SPRITE/EXTRA/vida2.png")
+HP2 = pg.image.load("SPRITE/EXTRA/vida2.png")
 HP.set_colorkey(WHITE)
 
 
@@ -340,6 +341,95 @@ HEROE_PATH = "SPRITE/Heroes/Terran/Alexei Stukov/taxfid000"
 HEROE_N = 10
 #----
 
+#-------------------------------------------------------------------------
+# SPRITES-----------------------------------------------------------------
+DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
+#-------------------------------------------------------------------------
+# Para todo
+def init():
+    loadTerranWorker()
+    loadDrone()
+
+# TerranWorker
+TERRAN_WORKER_SCALE = 1.5
+TERRAN_WORKER_SPRITE_ROWS = 72
+TERRAN_WORKER_TOTAL_FRAMES = 296  # [0:15] MOVERSE Y STILL [16:31] MOVER ORE [32:47] MOVER BARRIL [48:217] ATACAR Y MINAR [289:295] MORICION
+TERRAN_WORKER_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
+          list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
+          list(range(205, 221)), [221] * 16, [222] * 16, [223] * 16, [224] * 16,
+          [225] * 16, [226] * 16, [227] * 16, [228] * 16, [229] * 16, [230] * 16]
+TERRAN_WORKER_STILL_FRAMES = [0]
+TERRAN_WORKER_ORE_TRANSPORTING_FRAMES = [3]
+TERRAN_WORKER_BARREL_TRANSPORTING_FRAMES = [2]
+TERRAN_WORKER_ATTACK_FRAMES = [1, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+TERRAN_WORKER_MOVE_FRAMES = [0]
+TERRAN_WORKER_DIE_FRAMES = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+TERRAN_WORKER_INVERSIBLE_FRAMES = len(TERRAN_WORKER_FRAMES) - len(TERRAN_WORKER_DIE_FRAMES) # los die frames no se invierten
+TERRAN_WORKER_SPRITES = [None, None]
+
+def loadTerranWorker():
+    global TERRAN_WORKER_SPRITES
+    spritesheet = pg.image.load("./sprites/scvJusto.bmp").convert()
+    spritesheet.set_colorkey(BLACK)
+    deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
+    deadSpritesheet.set_colorkey(BLACK)
+    sprites = divideSpritesheetByRows(spritesheet, TERRAN_WORKER_SPRITE_ROWS, TERRAN_WORKER_SCALE) + divideSpritesheetByRowsNoScale(deadSpritesheet, 200, (80, 80))
+  
+    for i in range(TERRAN_WORKER_INVERSIBLE_FRAMES):
+        for j in range(9, 16):
+            sprites[TERRAN_WORKER_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[TERRAN_WORKER_FRAMES[i][DIR_OFFSET[j]]], True, False)
+    
+    shadows = []
+    for i in range(len(sprites) - len(TERRAN_WORKER_DIE_FRAMES)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+    TERRAN_WORKER_SPRITES = [sprites, shadows]
+
+# Drone 
+DRONE_SCALE = 1.5
+DRONE_SPRITE_ROWS = 128
+DRONE_TOTAL_FRAMES = 391 # 23 ristas de 17 frames (solo son necesarios 16 de cada una)
+DRONE_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
+          list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
+          list(range(205, 221)), list(range(222, 238)), list(range(239, 255)),
+          list(range(256, 272)), list(range(273, 289)), list(range(290, 306))]
+DRONE_STILL_FRAMES = [0]
+DRONE_ATTACK_FRAMES = [6, 7, 8, 9]
+DRONE_MOVE_FRAMES = [1, 2, 3, 4, 5]
+DRONE_ORE_TRANSPORTING_FRAMES = DRONE_MOVE_FRAMES
+DRONE_DIE_FRAMES = [10, 11, 12, 13, 14, 15, 16, 17]
+
+DRONE_INVERSIBLE_FRAMES = len(DRONE_FRAMES) - 1 # los die frames no se invierten
+DRONE_SPRITES = [None, None]
+def loadDrone():
+    global DRONE_SPRITES
+    spritesheet = pg.image.load("./sprites/drone.bmp").convert()
+    spritesheet.set_colorkey(BLACK)
+    sprites = divideSpritesheetByRows(spritesheet, DRONE_SPRITE_ROWS, DRONE_SCALE)
+  
+    for i in range(DRONE_INVERSIBLE_FRAMES):
+        for j in range(9, 16):
+            sprites[DRONE_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[DRONE_FRAMES[i][DIR_OFFSET[j]]], True, False)
+    
+    shadows = []
+    for i in range(len(sprites) - len(DRONE_DIE_FRAMES)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+    DRONE_SPRITES = [sprites, shadows]
+
+#-------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
 
 class Options(Enum):
     GENERATE_WORKER_TERRAN = auto()
@@ -493,15 +583,15 @@ def cargarSprites(path, n, twoDig, color = None, scale = None, m = 0, size = Non
             nPath = str(i)
         if size == None:
             if scale == None:
-                sprites.insert(i, pygame.image.load(path + nPath + ".png").convert_alpha())
+                sprites.insert(i, pg.image.load(path + nPath + ".png").convert_alpha())
             elif scale == 2:
-                sprites.insert(i, pygame.transform.scale2x(pygame.image.load(path + nPath + ".png").convert_alpha()))
+                sprites.insert(i, pg.transform.scale2x(pg.image.load(path + nPath + ".png").convert_alpha()))
             else:
-                image = pygame.image.load(path + nPath + ".png").convert_alpha()
-                sprites.insert(i, pygame.transform.scale(image, [image.get_rect().w * scale, image.get_rect().h * scale]))
+                image = pg.image.load(path + nPath + ".png").convert_alpha()
+                sprites.insert(i, pg.transform.scale(image, [image.get_rect().w * scale, image.get_rect().h * scale]))
         else:
-            image = pygame.image.load(path + nPath + ".png").convert_alpha()
-            sprites.insert(i, pygame.transform.scale(image, [size[0], size[1]]))
+            image = pg.image.load(path + nPath + ".png").convert_alpha()
+            sprites.insert(i, pg.transform.scale(image, [size[0], size[1]]))
         if color != None:
             sprites[i - m].set_colorkey(color)
     return sprites
@@ -525,13 +615,13 @@ def frame(n):
     else:
         return 0
 
-consolas = pygame.font.match_font('consolas')
-times = pygame.font.match_font('times')
-arial = pygame.font.match_font('arial')
-courier = pygame.font.match_font('courier')
+consolas = pg.font.match_font('consolas')
+times = pg.font.match_font('times')
+arial = pg.font.match_font('arial')
+courier = pg.font.match_font('courier')
 
 def muestra_texto(pantalla,fuente,texto,color, dimensiones, pos, center = False):
-    tipo_letra = pygame.font.Font(pygame.font.match_font(fuente), dimensiones)
+    tipo_letra = pg.font.Font(pg.font.match_font(fuente), dimensiones)
     superficie = tipo_letra.render(texto, True, color)
     rectangulo = superficie.get_rect()
     #print(rectangulo)
@@ -573,9 +663,9 @@ def calcPathNoLimit(posini, tileIni, tileObj, mapa):
             posIni = posFin
         return path
 
-SURF_TILE_NIEBLA = pygame.Surface((40,40), pygame.SRCALPHA)
+SURF_TILE_NIEBLA = pg.Surface((40,40), pg.SRCALPHA)
 SURF_TILE_NIEBLA.fill((0,0,0,128))
-SURF_TILE_OSCURA = pygame.Surface((40,40))
+SURF_TILE_OSCURA = pg.Surface((40,40))
 SURF_TILE_OSCURA.fill((0,0,0))
 
 ELEVACION_PATH = "SPRITE/tile/elevacion/tile0"

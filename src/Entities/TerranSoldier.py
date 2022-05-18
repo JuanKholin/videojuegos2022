@@ -81,7 +81,7 @@ class TerranSoldier(Soldier):
                 #self.image.get_height() - HEIGHT_PADDING)
         #self.imageRect = rect(self.x - self.image.get_width()/2, self.y -self.image.get_height() , self.image.get_width(), self.image.get_height())
         #self.imageRect = rect(self.x, self.y, self.image.get_width(), self.image.get_height())
-        self.render = pygame.transform.scale(pygame.image.load(TERRAN_T1_RENDER), UNIT_RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(TERRAN_T1_RENDER), UNIT_RENDER_SIZE)
         self.type = SOLDIER
     
     
