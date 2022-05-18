@@ -29,6 +29,7 @@ HEIGHT_PADDING = 155
 X_PADDING = 13
 Y_PADDING = 15
 
+IS_EXPLOSIVE = True
 
 class Zergling(Soldier):
     # Pre: xIni e yIni marcan posiciones del mapa, (ej: (3, 2) se refiere a la posicion de
@@ -40,7 +41,7 @@ class Zergling(Soldier):
                 takeID(), player, ZERGLING_INVERSIBLE_FRAMES,
                 ZERGLING_FRAMES, DIR_OFFSET, ZERGLING_ATTACK_FRAMES, ZERGLING_STILL_FRAMES, 
                 ZERGLING_MOVE_FRAMES, ZERGLING_DIE_FRAMES,
-                X_PADDING, Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ATTACK_INFO)
+                X_PADDING, Y_PADDING, WEIGHT_PADDING, HEIGHT_PADDING, ATTACK_INFO, IS_EXPLOSIVE)
 
         sprites = Utils.ZERGLING_SPRITES
         self.sprites = sprites[0]

@@ -57,7 +57,7 @@ class TerranSupplyDepot(Structure):
         else:
             self.state = BuildingState.OPERATIVE
 
-        self.type = TERRAN_DEPOT
+        self.type = DEPOT
 
     def command(self, command):
         return Command(CommandId.NULL)
