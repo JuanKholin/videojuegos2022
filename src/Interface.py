@@ -704,7 +704,6 @@ class Interface():
             if not self.reestablecerPress and press and Raton.collides(iniPos[0], iniPos[1], self.reestablecerRect):
                 self.reestablecerPress = True
             elif self.mouse.getClick() and self.reestablecerPress and Raton.collides(endPos[0], endPos[1], self.reestablecerRect):
-                print("Cancelar")
                 keys = list(self.keyMap.keys()).copy()
                 for k in keys:
                     self.keyMap.pop(k)
@@ -985,8 +984,8 @@ class Interface():
             if self.mouse.isCollide(self.guardarSalirSettingsRect):
                 pygame.draw.rect(screen, GREEN3, self.guardarSalirSettingsRect, 1)
 
-            muestra_texto(screen, str('monotypecorsiva'), "Reestablecer", GREEN, 30, (Utils.ScreenWidth/2 - REESTABLECER_POS[0] + 30, Utils.ScreenHeight/2 - REESTABLECER_POS[1] + 20))
-            muestra_texto(screen, str('monotypecorsiva'), "Guardar y salir", GREEN, 30, (Utils.ScreenWidth/2 - GUARDAR_SALIR_SETTINGS_POS[0] + 70, Utils.ScreenHeight/2 - GUARDAR_SALIR_SETTINGS_POS[1] + 10))
+            muestra_texto(screen, str('monotypecorsiva'), "Reestablecer", GREEN, 30, (Utils.ScreenWidth/2 - REESTABLECER_POS[0] + 40, Utils.ScreenHeight/2 - REESTABLECER_POS[1] + 10))
+            muestra_texto(screen, str('monotypecorsiva'), "Guardar y salir", GREEN, 30, (Utils.ScreenWidth/2 - GUARDAR_SALIR_SETTINGS_POS[0] + 70, Utils.ScreenHeight/2 - GUARDAR_SALIR_SETTINGS_POS[1]))
 
 
 
@@ -1102,7 +1101,7 @@ class Interface():
             yActual = self.keyButtons[j]["rect"].y
             if yActual < Utils.ScreenHeight - Utils.ScreenHeight*0.195 and  yActual > Utils.ScreenHeight*0.195:
                 muestra_texto(screen, str('monotypecorsiva'), COMMAND_TO_TEXT[int(i[1]["command"])], WHITE, ATAJO_TEXT_SIZE, (Utils.ScreenWidth/2 - COMANDO_POS[0], Utils.ScreenHeight/2 - COMANDO_POS[1] + Y_ATAJOS_OFFSET * j))
-                muestra_texto(screen, str('monotypecorsiva'), KEY_TO_TEXT[i[1]["key"]], WHITE, ATAJO_TEXT_SIZE, (Utils.ScreenWidth/2 - TECLA_POS[0], Utils.ScreenHeight/2 - TECLA_POS[1] + Y_ATAJOS_OFFSET * j))
+                muestra_texto(screen, str('monotypecorsiva'), KEY_TO_TEXT[i[1]["key"]], WHITE, ATAJO_TEXT_SIZE, (Utils.ScreenWidth/2 - TECLA_POS[0] + 30, Utils.ScreenHeight/2 - TECLA_POS[1] - 5 + Y_ATAJOS_OFFSET * j))
                 if Utils.getGameState2() == System_State.KEY_BINDING and j == self.buttonWaitingForKey:
                     pygame.draw.rect(screen, RED, self.keyButtons[j]["rect"], 2)
                 elif self.mouse.isCollide(self.keyButtons[j]["rect"]):
@@ -1113,8 +1112,8 @@ class Interface():
 
 
         muestra_texto(screen, str('monotypecorsiva'), "Atajos de teclado", GREEN3, ATAJOS_TITLE_TEXT_SIZE, (Utils.ScreenWidth/2 - ATAJOS_TITLE_POS[0], Utils.ScreenHeight/2 - ATAJOS_TITLE_POS[1]))
-        muestra_texto(screen, str('monotypecorsiva'), "Comando", WHITE, COLUMN_TEXT_SIZE, (Utils.ScreenWidth/2 - COMANDO_COLUMN_POS[0], Utils.ScreenHeight/2 - COMANDO_COLUMN_POS[1]))
-        muestra_texto(screen, str('monotypecorsiva'), "Tecla", WHITE, COLUMN_TEXT_SIZE, (Utils.ScreenWidth/2 - TECLA_COLUMN_POS[0], Utils.ScreenHeight/2 - TECLA_COLUMN_POS[1]))
+        muestra_texto(screen, str('monotypecorsiva'), "Comando", WHITE, COLUMN_TEXT_SIZE, (Utils.ScreenWidth/2 - COMANDO_COLUMN_POS[0], Utils.ScreenHeight/2 - COMANDO_COLUMN_POS[1] - 10))
+        muestra_texto(screen, str('monotypecorsiva'), "Tecla", WHITE, COLUMN_TEXT_SIZE, (Utils.ScreenWidth/2 - TECLA_COLUMN_POS[0], Utils.ScreenHeight/2 - TECLA_COLUMN_POS[1] - 10))
         if self.buttonWaitingForKey != -1:
             muestra_texto(screen, str('monotypecorsiva'), "pulse una tecla (digito o letra) no usada", WHITE, COLUMN_TEXT_SIZE-10, (Utils.ScreenWidth/2 - AVISO_COLUMN_POS[0], Utils.ScreenHeight/2 - AVISO_COLUMN_POS[1]))
         if self.mouse.isCollide(self.scrollBarTopRect):
@@ -1144,10 +1143,14 @@ class Interface():
 
         size = 180
         x = 405
+        if Utils.BGM_VOLUME < 0.05:
+            Utils.BGM_VOLUME = 0 
         bgm = pg.transform.chop(pg.transform.scale(BARRA_SOUND, (size, 20)), ((Utils.BGM_VOLUME / 1.0) * 160, 0, size, 0))
         screen.blit(bgm, [Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - x), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 275)])
         pg.draw.rect(screen, ORANGE2, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - x), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 275), size, 20), 4)
 
+        if Utils.SOUND_VOLUME < 0.05:
+            Utils.SOUND_VOLUME = 0 
         sound = pg.transform.chop(pg.transform.scale(BARRA_SOUND, (size, 20)), ((Utils.SOUND_VOLUME / 1.0) * 200, 0, size, 0))
         screen.blit(sound, [Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - x), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 415)])
         pg.draw.rect(screen, ORANGE2, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - x), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 415), size, 20), 4)
