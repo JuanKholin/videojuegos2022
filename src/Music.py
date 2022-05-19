@@ -22,8 +22,8 @@ zerglingDeadSound = pygame.mixer.Sound("Sonido/Misc/explo1.wav")
 
 workerAttackSound = pygame.mixer.Sound("Sonido/Misc/PPwrDown.wav")
 soldierAttackSound = pygame.mixer.Sound("Sonido/Bullet/blastgn2.wav")
-zerglingAttackSound = pygame.mixer.Sound("Sonido/")
+zerglingAttackSound = pygame.mixer.Sound("Sonido/blastgn2.wav")
 
 workerGenerateSound = pygame.mixer.Sound("Sonido/Misc/TPwrDown.wav")
 soldierGenerateSound = pygame.mixer.Sound("Sonido/Misc/tdrTra01.wav")
-zerglingAttackSound = pygame.mixer.Sound("Sonido/")
+zerglingAttackSound = pygame.mixer.Sound("Sonido/blastgn2.wav")
