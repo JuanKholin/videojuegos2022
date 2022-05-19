@@ -3,6 +3,19 @@ from . import Utils
 
 pg.mixer.init()
 
+def collideRect(rect1, rect2):
+    collideX = False
+    collideY = False
+    if (rect1.x >= rect2.x) and (rect1.x <= (rect2.x+rect2.width)):
+        collideX = True
+    elif (rect2.x >= rect1.x) and (rect2.x <= (rect1.x+rect1.width)):
+        collideX = True
+    if (rect1.y >= rect2.y) and (rect1.y <= (rect2.y+rect2.height)):
+        collideY = True
+    elif (rect2.y >= rect1.y) and (rect2.y <= (rect1.y+rect1.height)):
+        collideY = True
+    return collideX and collideY
+
 def updateScreen(screen):
     x, y = screen.get_size()
     if x < Utils.MIN_SCREEN_WIDTH:

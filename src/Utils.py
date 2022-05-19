@@ -7,7 +7,7 @@ from turtle import Screen
 import pygame as pg
 from .Lib import *
 
-DEBBUG = False
+DEBBUG = True
 
 BGM_VOLUME = 0.2
 SOUND_VOLUME = 0.5
@@ -758,9 +758,6 @@ def loadTerranBuilder():
     deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
     deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
-
-    sprites += deadSprites
-
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -768,7 +765,7 @@ def loadTerranBuilder():
         mask.set_colorkey(BLACK)
         mask.set_alpha(150)
         shadows.append(mask)
-
+    sprites += deadSprites
     TERRAN_BUILDER_SPRITES = [sprites, shadows]
 
 # Hatchery
@@ -781,9 +778,6 @@ def loadHatchery():
     deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
     deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
-
-    sprites += deadSprites
-    
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -791,7 +785,7 @@ def loadHatchery():
         mask.set_colorkey(BLACK)
         mask.set_alpha(150)
         shadows.append(mask)
-
+    sprites += deadSprites
     HATCHERY_SPRITES = [sprites, shadows]
 
 # TerranBarracks
@@ -804,9 +798,6 @@ def loadTerranBarracks():
     deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
     deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 128)
-
-    sprites += deadSprites
-    
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -814,7 +805,7 @@ def loadTerranBarracks():
         mask.set_colorkey(BLACK)
         mask.set_alpha(150)
         shadows.append(mask)
-
+    sprites += deadSprites
     TERRAN_BARRACKS_SPRITES = [sprites, shadows]
 
 # ZergBarracks
@@ -827,9 +818,6 @@ def loadZergBarracks():
     deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
     deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 128)
-
-    sprites += deadSprites
-    
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -837,7 +825,7 @@ def loadZergBarracks():
         mask.set_colorkey(BLACK)
         mask.set_alpha(150)
         shadows.append(mask)
-
+    sprites += deadSprites
     ZERG_BARRACKS_SPRITES = [sprites, shadows]
 
 # TerranSupplyDepot
@@ -850,9 +838,6 @@ def loadTerranSupplyDepot():
     deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
     deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
-
-    sprites += deadSprites
-    
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -860,7 +845,7 @@ def loadTerranSupplyDepot():
         mask.set_colorkey(BLACK)
         mask.set_alpha(150)
         shadows.append(mask)
-
+    sprites += deadSprites
     TERRAN_DEPOT_SPRITES = [sprites, shadows]
 
 # ZergSupply
@@ -873,9 +858,6 @@ def loadZergSupply():
     deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
     deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
-
-    sprites += deadSprites
-    
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -883,7 +865,7 @@ def loadZergSupply():
         mask.set_colorkey(BLACK)
         mask.set_alpha(150)
         shadows.append(mask)
-
+    sprites += deadSprites
     ZERG_DEPOT_SPRITES = [sprites, shadows]
 
 # TerranRefinery
@@ -896,9 +878,6 @@ def loadTerranRefinery():
     deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
     deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 128)
-
-    sprites += deadSprites
-    
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -906,7 +885,7 @@ def loadTerranRefinery():
         mask.set_colorkey(BLACK)
         mask.set_alpha(150)
         shadows.append(mask)
-
+    sprites += deadSprites
     TERRAN_REFINERY_SPRITES = [sprites, shadows]
 
 # Extractor
@@ -919,9 +898,6 @@ def loadExtractor():
     deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
     deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 128)
-
-    sprites += deadSprites
-    
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -929,7 +905,7 @@ def loadExtractor():
         mask.set_colorkey(BLACK)
         mask.set_alpha(150)
         shadows.append(mask)
-
+    sprites += deadSprites
     EXTRACTOR_SPRITES = [sprites, shadows]
 
 # Crystal

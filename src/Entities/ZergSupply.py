@@ -34,6 +34,7 @@ class ZergSupply(Structure):
         sprites = Utils.ZERG_DEPOT_SPRITES
         self.sprites = sprites[0]
         self.shadows = sprites[1]
+        self.nDeadSprite = len(self.sprites) - len(self.shadows)
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2]
         self.spawningIndex = [0, 1, 2]

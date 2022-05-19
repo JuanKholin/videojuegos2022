@@ -72,14 +72,14 @@ def setEntity(player, ai):
     structure2 = ZergBarracks(15, 9, player, mapa, False)
     gas2 = Geyser(13, 20, 50)
     #structure4 = Extractor(12, 27, player, mapa, True)
-    structure5 = TerranRefinery(13, 18, ai, mapa, True, gas2)
+    structure5 = TerranRefinery(7, 12, ai, mapa, True, gas2)
 
     structure6 = ZergBarracks(7, 16, ai, mapa, True)
     #structure8 = Zerg2(2, 14, ai, mapa, True)
     #structure9 = Zerg3(8, 20, ai, mapa, True)
 
     player.addStructures(structure1)
-    player.addStructures(structure6)
+    ai.addStructures(structure6)
     #player.addStructures(structure8)
     #player.addStructures(structure9)
     player.addStructures(structure2)
@@ -135,7 +135,6 @@ def setEntity(player, ai):
 
 def update():
     if Utils.resized:
-        Utils.resized = False
         updateScreen(screen)
         camera.update()
     clock_update()
@@ -144,7 +143,7 @@ def update():
         playMusic(mainMenuBGM, pos = 5)
         #playSound(mainMenuBGM)
         escena.interfaz.update(escena,raton, escena.camera)
-        '''elif getGameState() == System_State.MAP1:
+    elif getGameState() == System_State.MAP1:
         stopMusic()
         playMusic(map1BGM)
         #cargar mapa
@@ -153,7 +152,7 @@ def update():
         escena.mapa.loadMinimap()
         setEntity(player1, player2)
         setGameState(System_State.ONGAME)
-        setGameState2(System_State.LOAD)'''
+        setGameState2(System_State.LOAD)
     elif getGameState() == System_State.ONGAME:
         escena.update()
     elif getGameState() == System_State.GAMESELECT:
@@ -166,6 +165,8 @@ def update():
     else: #STATE == System_State.EXIT:
         pg.quit()
         sys.exit()
+    if Utils.resized:
+        Utils.resized = False
 
 def draw():
     screen.fill(BLACK)

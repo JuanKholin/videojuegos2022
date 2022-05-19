@@ -39,6 +39,7 @@ class Structure(Entity.Entity):
         self.capacity = capacity
         self.shadows = []
         self.shadow = None
+        self.nDeadSprite = 0
         #print("TENGO CAPACIDAD ", self.capacity, "Y SOY ", self.player, " Y ESTOY EN ", self.xIni, self.yIni)
 
 
@@ -112,7 +113,7 @@ class Structure(Entity.Entity):
     def changeToCollapsing(self):
         self.state = BuildingState.COLLAPSING
         self.count = 0
-        self.index = 6
+        self.index = self.nSprites
         #self.image = self.sprites[self.frames[self.collapsingFrames[self.frame]]]
 
     # Pasa a destruido del todo, no quedan ni los restos
@@ -129,7 +130,7 @@ class Structure(Entity.Entity):
             if self.player.isPlayer:
                 setGameState2(System_State.GAMEOVER)
             else:
-                setGameState2(System_State.WIN)
+                setGameState2(System_State.GAMEOVER)
         self.player.structures.remove(self)
         self.__del__()
 
@@ -217,7 +218,7 @@ class Structure(Entity.Entity):
         #print("hola", self.frame)
         if frame(self.frame) == 1:
             self.index += 1
-            if self.index == self.nSprites + 10:
+            if self.index == self.nSprites + self.nDeadSprite:
                 self.changeToDestroyed()
 
 
@@ -377,6 +378,7 @@ class Structure(Entity.Entity):
         self.lastAttacker = unit
         if self.hp <= damage:
             self.hp -= damage
+            self.frame = 6
             #if inCamera(self.getPosition()):
             playSound(self.deadSound)
             self.changeToCollapsing()

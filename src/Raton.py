@@ -8,19 +8,6 @@ from .Music import *
 def collides(x, y, rect2):
     return (x >= rect2.x and x <= rect2.x + rect2.w and y >= rect2.y and y <= rect2.y + rect2.h)
 
-def collideRect(rect1, rect2):
-    collideX = False
-    collideY = False
-    if (rect1.x >= rect2.x) and (rect1.x <= (rect2.x+rect2.width)):
-        collideX = True
-    elif (rect2.x >= rect1.x) and (rect2.x <= (rect1.x+rect1.width)):
-        collideX = True
-    if (rect1.y >= rect2.y) and (rect1.y <= (rect2.y+rect2.height)):
-        collideY = True
-    elif (rect2.y >= rect1.y) and (rect2.y <= (rect1.y+rect1.height)):
-        collideY = True
-    return collideX and collideY
-
 def createRect(initialX, initialY, finalX, finalY):
     if finalX>=initialX and finalY>=initialY:
         area = pygame.Rect(initialX, initialY, finalX-initialX, finalY-initialY)

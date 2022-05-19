@@ -54,7 +54,7 @@ class Geyser(Resource):
     # Devuelve el rectangulo que conforma su imagen, creo, esto lo hizo otro
     def getRect(self):
         rectAux = pg.Rect(self.x - X_PADDING + 10,
-                self.y - Y_PADDING + 5, self.image.get_width() - WEIGHT_PADDING + 10, self.image.get_height()  - HEIGHT_PADDING + 5)
+                self.y - Y_PADDING + 5, self.image.get_width() - WEIGHT_PADDING + 10, self.image.get_height()  - HEIGHT_PADDING)
         return rectAux
 
     def getDrawPosition(self):

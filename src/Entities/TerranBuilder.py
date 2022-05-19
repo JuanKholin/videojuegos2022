@@ -42,7 +42,7 @@ class TerranBuilder(Structure):
         sprites = Utils.TERRAN_BUILDER_SPRITES
         self.sprites = sprites[0]
         self.shadows = sprites[1]
-
+        self.nDeadSprite = len(self.sprites) - len(self.shadows)
 
         #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
         self.raton = raton

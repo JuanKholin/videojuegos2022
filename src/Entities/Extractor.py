@@ -30,11 +30,15 @@ class Extractor(Structure):
     nSprites = EXTRACTOR_TOTAL_FRAMES
 
     def __init__(self, xini, yini, player, map, building, gas = None):
+        self.resource = gas
+        if self.resource != None:
+            self.resource.disable()
+            xini, yini = self.resource.getTile()
         Structure.__init__(self, HP, EXTRACTOR_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
         sprites = Utils.EXTRACTOR_SPRITES
         self.sprites = sprites[0]
         self.shadows = sprites[1]
-
+        self.nDeadSprite = len(self.sprites) - len(self.shadows)
         self.image = self.sprites[self.index]
         
         self.operativeIndex = [0, 1, 2, 3]
@@ -48,9 +52,9 @@ class Extractor(Structure):
             self.state = BuildingState.BUILDING
         else:
             self.state = BuildingState.OPERATIVE
-        self.resource = gas
-        if self.resource != None:
-            self.resource.disable()
+        
+        
+            
 
         self.count = 0
         self.training = []

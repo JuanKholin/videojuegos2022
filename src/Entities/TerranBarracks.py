@@ -38,6 +38,7 @@ class TerranBarracks(Structure):
         sprites = Utils.TERRAN_BARRACKS_SPRITES
         self.sprites = sprites[0]
         self.shadows = sprites[1]
+        self.nDeadSprite = len(self.sprites) - len(self.shadows)
 
         self.image = self.sprites[self.index]
         

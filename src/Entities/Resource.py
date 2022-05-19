@@ -68,6 +68,9 @@ class Resource():
         rect = self.getRect()
         return rect.x + rect.w/2, rect.y + rect.h/2
 
+    def getTile(self):
+        return self.xTile, self.yTile
+
     def getDrawPosition(self):
         return(self.x - self.image.get_width()/2,  self.y - self.image.get_height()/2)
 

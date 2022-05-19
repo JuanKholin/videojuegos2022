@@ -40,7 +40,7 @@ class Hatchery(Structure):
         sprites = Utils.HATCHERY_SPRITES
         self.sprites = sprites[0]
         self.shadows = sprites[1]
-
+        self.nDeadSprite = len(self.sprites) - len(self.shadows)
         self.image = self.sprites[self.index]
         
         self.operativeIndex = [0, 1, 2, 3]
