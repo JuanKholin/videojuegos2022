@@ -171,7 +171,7 @@ class Unit(Entity):
                 pg.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y + (0.7*r.h)- camera.y,r.w , 0.3*r.h], 2)
 
             if self.shadow != None:
-                screen.blit(self.shadow, [drawPos[0] - camera.x - 10, drawPos[1] - camera.y - 3])
+                screen.blit(self.shadow, [drawPos[0] - camera.x - 7, drawPos[1] - camera.y - 3])
             #screen.blit(unit.image, [r.x - camera.x, r.y - camera.y])
             screen.blit(self.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
             if self.clicked or self.hp < self.maxHp:

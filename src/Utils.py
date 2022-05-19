@@ -7,7 +7,7 @@ from turtle import Screen
 import pygame as pg
 from .Lib import *
 
-DEBBUG = True
+DEBBUG = False
 
 BGM_VOLUME = 0.2
 SOUND_VOLUME = 0.5
