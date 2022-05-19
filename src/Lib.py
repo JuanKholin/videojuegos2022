@@ -32,32 +32,32 @@ def playSound(sound, n = 1):
     n = n - 1
     sound.set_volume(Utils.SOUND_VOLUME)
     pg.mixer.Sound.play(sound, n)
-    
+
 def playMusic(music, n = -1, pos = 0):
     if not Utils.haveBGM:
         pg.mixer.music.load(music)
-        
+
         pg.mixer.music.set_volume(Utils.BGM_VOLUME)
         pg.mixer.music.play(n, pos)
         Utils.haveBGM = True
 
 def pauseMusic():
     pg.mixer.music.pause()
-    
+
 def minusMusic():
     if Utils.BGM_VOLUME > 0.0:
         Utils.BGM_VOLUME -= 0.1
         pg.mixer.music.set_volume(Utils.BGM_VOLUME)
-        
+
 def plusMusic():
     if Utils.BGM_VOLUME < 1.0:
         Utils.BGM_VOLUME += 0.1
         pg.mixer.music.set_volume(Utils.BGM_VOLUME)
-        
+
 def minusSound():
     if Utils.SOUND_VOLUME > 0.0:
         Utils.SOUND_VOLUME -= 0.1
-        
+
 def plusSound():
     if Utils.SOUND_VOLUME < 1.0:
         Utils.SOUND_VOLUME += 0.1
@@ -65,10 +65,10 @@ def plusSound():
 def stopMusic():
     pg.mixer.music.stop()
     Utils.haveBGM = False
-    
+
 def stopAllSound():
     pg.mixer.stop()
-    
+
 def getSprite(path, color, size):
     image = pg.image.load(path)
     image.set_colorkey(color)

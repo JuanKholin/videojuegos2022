@@ -102,10 +102,10 @@ class Interface():
         #self.atajosOSonido = 0 #0=atajos
         self.settings = pg.image.load(SETTINGS + ".png")
         self.settings = pg.transform.scale(self.settings, (ScreenWidth, ScreenHeight))
-        self.settingsTop = pg.image.load(SETTINGS_TOP + ".png")
-        self.settingsTop = pg.transform.scale(self.settingsTop, (ScreenWidth, ScreenHeight*0.195))
-        self.settingsBot = pg.image.load(SETTINGS_BOT + ".png")
-        self.settingsBot = pg.transform.scale(self.settingsBot, (ScreenWidth, ScreenHeight*0.13))
+        #self.settingsTop = pg.image.load(SETTINGS_TOP + ".png")
+        #self.settingsTop = pg.transform.scale(self.settingsTop, (ScreenWidth, ScreenHeight*0.195))
+        #self.settingsBot = pg.image.load(SETTINGS_BOT + ".png")
+        #self.settingsBot = pg.transform.scale(self.settingsBot, (ScreenWidth, ScreenHeight*0.13))
         self.scrollBarTopRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1], 30, 30)
         self.scrollBarTopPress = False
         self.scrollBarRectangle = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_RECT_POS[0], Utils.ScreenHeight/2 - SCROLL_BAR_RECT_POS[1], SCROLL_BAR_RECT_SIZE[0], SCROLL_BAR_RECT_SIZE[1])
@@ -337,7 +337,8 @@ class Interface():
             self.updateNewGame(escena, raton, camera)
         elif Utils.state == System_State.SETTINGS and Utils.state2 != System_State.KEY_BINDING:
             press, iniPos = self.mouse.getPressed()
-            self.updateSettingsAtajosPos()
+            if Utils.resized:
+                self.updateSettingsAtajosPos()
             #if self.atajosOSonido == 0: #atajos
             self.updateSettingsAtajos()
             #elif self.atajosOSonido == 1:
@@ -358,6 +359,7 @@ class Interface():
 
     def updateMainMenu(self):
         self.updateMainMenuPos()
+        self.updateSettingsAtajosPos()
 
         #Boton single player
         if getGameState2() == System_State.SETTINGS:
@@ -594,7 +596,7 @@ class Interface():
             {"nombre": "Zerg","tipo": "raza", "rect": pg.Rect(Utils.ScreenWidth/2 - ZERG_POS[0], Utils.ScreenHeight/2 - ZERG_POS[1], 185, 35), "press": self.botonesNewGame[8]['press'], "raza": Race.ZERG, "enable": True},
         ]
         self.botonesNewGame = aux
-        
+
     def updateNewGame(self, escena, raton, camera):
         self.updateNewGamePos()
         press, iniPos = self.mouse.getPressed()
@@ -796,9 +798,9 @@ class Interface():
             self.cancelarPress = False
 
     def updateSettingsAtajosPos(self):
-        self.settings = pg.transform.scale(self.settings, (ScreenWidth, ScreenHeight))
-        self.settingsTop = pg.transform.scale(self.settingsTop, (ScreenWidth, ScreenHeight*0.195))
-        self.settingsBot = pg.transform.scale(self.settingsBot, (ScreenWidth, ScreenHeight*0.13))
+        #self.settings = pg.transform.scale(self.settings, (Utils.ScreenHeight*SCREEN_SCALE, Utils.ScreenHeight))
+        #self.settingsTop = pg.transform.scale(self.settingsTop, (Utils.ScreenHeight*SCREEN_SCALE, Utils.ScreenHeight*0.195))
+        #self.settingsBot = pg.transform.scale(self.settingsBot, (Utils.ScreenHeight*SCREEN_SCALE, Utils.ScreenHeight*0.13))
         self.scrollBarTopRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1], 30, 30)
         self.scrollBarRectangle = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_RECT_POS[0], Utils.ScreenHeight/2 - SCROLL_BAR_RECT_POS[1], SCROLL_BAR_RECT_SIZE[0], SCROLL_BAR_RECT_SIZE[1])
         self.scrollBarBotRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1], 30, 30)
@@ -811,8 +813,8 @@ class Interface():
             rect = pg.Rect(Utils.ScreenWidth/2 - TECLA_POS[0]-10, Utils.ScreenHeight/2 - TECLA_POS[1]-10 + Y_ATAJOS_OFFSET * i, 100, 35)
             self.keyButtons[i] = {"rect": rect, "press": False, "waitingForKey": False, "key": k[0], "command": k[1]}
             i += 1
-        self.keyFirstOriginalY = self.keyButtons[0]["rect"].y
-        self.keyLastOriginalY = self.keyButtons[len(self.keyButtons)-1]["rect"].y
+        #self.keyFirstOriginalY = self.keyButtons[0]["rect"].y
+        #self.keyLastOriginalY = self.keyButtons[len(self.keyButtons)-1]["rect"].y
 
         self.reestablecerRect =  pg.Rect(Utils.ScreenWidth/2 - REESTABLECER_POS[0], Utils.ScreenHeight/2 - REESTABLECER_POS[1], REESTABLECER_SIZE[0], REESTABLECER_SIZE[1])
         self.guardarSalirSettingsRect =  pg.Rect(Utils.ScreenWidth/2 - GUARDAR_SALIR_SETTINGS_POS[0], Utils.ScreenHeight/2 - GUARDAR_SALIR_SETTINGS_POS[1], GUARDAR_SALIR_SETTINGS_SIZE[0], GUARDAR_SALIR_SETTINGS_SIZE[1])
@@ -963,8 +965,8 @@ class Interface():
                 if b["enable"]:
                     if self.mouse.isCollide(b['rect']):
                         pg.draw.rect(screen, GREEN2, b['rect'], 2)
-                    
-                    if (b['nombre'] == self.selectedMap or b['nombre'] == self.selectedDif['nombre'] 
+
+                    if (b['nombre'] == self.selectedMap or b['nombre'] == self.selectedDif['nombre']
                         or b['nombre'] == self.selectedRaza['nombre']):
                         pg.draw.rect(screen, GREEN, b['rect'], 3)
 
@@ -973,7 +975,7 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), self.selectedDif['nombre'], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-810), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-275)))
             muestra_texto(screen, str('monotypecorsiva'), self.selectedRaza['nombre'], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-745), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-390)))
         elif Utils.state == System_State.SETTINGS:
-            screen.blit(self.settings, [Utils.ScreenWidth/2 - self.settings.get_width()/2, 0])
+            screen.blit(self.settings, [Utils.ScreenWidth/2 - self.settings.get_width()/2, Utils.ScreenHeight/2 - self.settings.get_height()/2])
             #if self.atajosOSonido == 0: #atajos
             self.drawSettingsAtajos(screen)
             #elif self.atajosOSonido == 1:
@@ -1053,7 +1055,7 @@ class Interface():
                 self.drawPause(screen)
 
             elif getGameState2() == System_State.GAMEOVER:
-    
+
                 if self.count2 < 10:
                     image = pg.transform.scale(self.heroeSprites[self.heroeIndex], [self.herow, self.heroh])
                     screen.blit(image, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - (672 - self.heropadx)), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - (667- self.heropady))))
@@ -1078,7 +1080,7 @@ class Interface():
                     if self.index == 30:
                         if self.index == 30:
                             self.index = 10
-                            
+
             elif Utils.state2 == System_State.WIN:
                 image = self.winSprite[self.index]
                 image = pg.transform.scale(image, (Utils.ScreenHeight*SCREEN_SCALE, Utils.ScreenHeight))
@@ -1096,21 +1098,18 @@ class Interface():
         stringKeyItems = self.keyButtons.items()
         ##print(COMMAND_TO_TEXT)
         for i in stringKeyItems:
-            muestra_texto(screen, str('monotypecorsiva'), COMMAND_TO_TEXT[int(i[1]["command"])], WHITE, ATAJO_TEXT_SIZE, (Utils.ScreenWidth/2 - COMANDO_POS[0], Utils.ScreenHeight/2 - COMANDO_POS[1] + Y_ATAJOS_OFFSET * j))
-            muestra_texto(screen, str('monotypecorsiva'), KEY_TO_TEXT[i[1]["key"]], WHITE, ATAJO_TEXT_SIZE, (Utils.ScreenWidth/2 - TECLA_POS[0], Utils.ScreenHeight/2 - TECLA_POS[1] + Y_ATAJOS_OFFSET * j))
-            if Utils.getGameState2() == System_State.KEY_BINDING and j == self.buttonWaitingForKey:
-                pygame.draw.rect(screen, RED, self.keyButtons[j]["rect"], 2)
-            elif self.mouse.isCollide(self.keyButtons[j]["rect"]):
-                pygame.draw.rect(screen, RED, self.keyButtons[j]["rect"], 2)
-            else:
-                pygame.draw.rect(screen, RED, self.keyButtons[j]["rect"], 1)
+            yActual = self.keyButtons[j]["rect"].y
+            if yActual < Utils.ScreenHeight - Utils.ScreenHeight*0.195 and  yActual > Utils.ScreenHeight*0.195:
+                muestra_texto(screen, str('monotypecorsiva'), COMMAND_TO_TEXT[int(i[1]["command"])], WHITE, ATAJO_TEXT_SIZE, (Utils.ScreenWidth/2 - COMANDO_POS[0], Utils.ScreenHeight/2 - COMANDO_POS[1] + Y_ATAJOS_OFFSET * j))
+                muestra_texto(screen, str('monotypecorsiva'), KEY_TO_TEXT[i[1]["key"]], WHITE, ATAJO_TEXT_SIZE, (Utils.ScreenWidth/2 - TECLA_POS[0], Utils.ScreenHeight/2 - TECLA_POS[1] + Y_ATAJOS_OFFSET * j))
+                if Utils.getGameState2() == System_State.KEY_BINDING and j == self.buttonWaitingForKey:
+                    pygame.draw.rect(screen, RED, self.keyButtons[j]["rect"], 2)
+                elif self.mouse.isCollide(self.keyButtons[j]["rect"]):
+                    pygame.draw.rect(screen, RED, self.keyButtons[j]["rect"], 2)
+                else:
+                    pygame.draw.rect(screen, RED, self.keyButtons[j]["rect"], 1)
             j += 1
 
-
-        #screen.blit(self.settingsTop, [0, 0])
-        screen.blit(self.settingsTop, [Utils.ScreenWidth/2 - self.settings.get_width()/2, 0])
-        #screen.blit(self.settingsBot, [0, ScreenHeight - ScreenHeight*0.13])
-        screen.blit(self.settingsBot, [Utils.ScreenWidth/2 - self.settings.get_width()/2, ScreenHeight - ScreenHeight*0.13])
 
         muestra_texto(screen, str('monotypecorsiva'), "Atajos de teclado", GREEN3, ATAJOS_TITLE_TEXT_SIZE, (Utils.ScreenWidth/2 - ATAJOS_TITLE_POS[0], Utils.ScreenHeight/2 - ATAJOS_TITLE_POS[1]))
         muestra_texto(screen, str('monotypecorsiva'), "Comando", WHITE, COLUMN_TEXT_SIZE, (Utils.ScreenWidth/2 - COMANDO_COLUMN_POS[0], Utils.ScreenHeight/2 - COMANDO_COLUMN_POS[1]))
