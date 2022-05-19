@@ -168,10 +168,10 @@ class Raton(pygame.sprite.Sprite):
         if Utils.state == System_State.ONGAME:
             if pygame.mouse.get_pressed()[0]:
                 mouse_pos = pygame.mouse.get_pos()
-                minimapRect = createRect(MINIMAP_X, MINIMAP_Y, MINIMAP_X + MINIMAP_W, MINIMAP_Y + MINIMAP_H)
+                minimapRect = createRect(Utils.ScreenWidth/2 - MINIMAP_X, Utils.ScreenHeight - MINIMAP_Y, Utils.ScreenWidth/2 - MINIMAP_X + MINIMAP_W, Utils.ScreenHeight - MINIMAP_Y + MINIMAP_H)
                 if collides(mouse_pos[0], mouse_pos[1], minimapRect):
-                    camera.setX(((mouse_pos[0]-MINIMAP_X)/MINIMAP_W*self.player.mapa.w) - camera.w/2, self.player.mapa.w)
-                    camera.setY(((mouse_pos[1]-MINIMAP_Y)/MINIMAP_H*self.player.mapa.h) - camera.h/2, self.player.mapa.h)
+                    camera.setX(((mouse_pos[0]-(Utils.ScreenWidth/2 - MINIMAP_X))/MINIMAP_W*self.player.mapa.w) - camera.w/2, self.player.mapa.w)
+                    camera.setY(((mouse_pos[1]-(Utils.ScreenHeight - MINIMAP_Y))/MINIMAP_H*self.player.mapa.h) - camera.h/2, self.player.mapa.h)
 
     def setSelf(self, raton):
         self.player = raton.player
@@ -237,6 +237,8 @@ class Raton(pygame.sprite.Sprite):
                 if not self.pulsado:
                     self.pulsado = True
                     if Utils.state2 == System_State.WIN or Utils.state2 == System_State.GAMEOVER:
+                        camera.x = 0
+                        camera.y = 0
                         setGameState(System_State.MAINMENU)
                         setGameState2(System_State.PLAYING)
                     else:
@@ -268,18 +270,21 @@ class Raton(pygame.sprite.Sprite):
                 if self.pulsado:
                     self.pulsado = False
                     self.clicked = True
-                    print('click izq liberado', real_mouse_pos, event.type)
+                    #print('click izq liberado', real_mouse_pos, event.type)
                     #print(self.enable)
                     if Utils.state == System_State.ONGAME:
                         if getGameState2() == System_State.PLAYING:
                             reClick = False
                             if self.enable:
+                                if collides(self.rel_pos[0], self.rel_pos[1], self.interface.pauseButton.getRect()):
+                                    command = self.interface.pauseButton.getCommand()
+                                    return command
                                 tileClicked = self.mapa.getTile(real_mouse_pos[0],real_mouse_pos[1])
                                 if tileClicked.ocupante == None:
                                     tileClicked = self.mapa.getTile(real_mouse_pos[0],real_mouse_pos[1] + 40)
                                 if tileClicked.ocupante != None:
                                     unidadClickada = tileClicked.ocupante
-                                    if unidadClickada.getType() != -1:
+                                    if unidadClickada.getType() != -1 and unidadClickada.getType() != RESOURCE:
                                         if unidadClickada.clicked: # Seleccionar todos los del mismo tipo
                                             reClick = True
                                             self.player.unitsSelected = []
@@ -396,6 +401,23 @@ class Raton(pygame.sprite.Sprite):
                                 if b != None and collides(self.rel_pos[0], self.rel_pos[1], b.getRect()):
                                     command = b.getCommand()
                                     #print(command.id)
+                                    break
+                        elif getGameState2() == System_State.PAUSED:
+                            for b in self.interface.pauseButtons:
+                                if b != None and collides(self.rel_pos[0], self.rel_pos[1], b.getRect()):
+                                    command = b.getCommand()
+                                    #print(command.id)
+                                    break
+                    elif getGameState() == System_State.MAINMENU:
+                        if getGameState2() == System_State.SETTINGS:
+                            for b in self.interface.settingButtons:
+                                if b != None and collides(self.rel_pos[0], self.rel_pos[1], b.getRect()):
+                                    command = b.getCommand()
+                                    break
+                        elif getGameState2() == System_State.HELP:
+                            for b in self.interface.helpButtons:
+                                if b != None and collides(self.rel_pos[0], self.rel_pos[1], b.getRect()):
+                                    command = b.getCommand()
                                     break
 
                 elif not type[2]:

@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 
 from .TerranSoldier import *
 from .TerranWorker import *
@@ -30,8 +30,8 @@ class Extractor(Structure):
     nSprites = 4
 
     def __init__(self, xini, yini, player, map, building, gas = None):
-        Structure.__init__(self, HP, EXTRACTOR_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
-        self.sprites = cargarSprites(EXTRACTOR_PATH, self.nSprites, False, BLUE2, 1,0)
+        Structure.__init__(self, HP, ZERG_REFINERY_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
+        self.sprites = cargarSprites(ZERG_REFINERY_PATH, self.nSprites, False, BLUE2, 1,0)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
@@ -43,7 +43,7 @@ class Extractor(Structure):
         self.spawningIndex = [0, 1, 2, 3]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
 
-        self.render = pygame.transform.scale(pygame.image.load(EXTRACTOR_RENDER), RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(ZERG_REFINERY_RENDER), RENDER_SIZE)
 
         self.building = building
         if building:
@@ -59,39 +59,47 @@ class Extractor(Structure):
         self.paths = []
 
         self.type = REFINERY
+        
+    def drawInfoOperative(self, screen, color):
+        dic = self.toDictionary(self.mapa)
+        muestra_texto(screen, str('monotypecorsiva'), dic['funcion'], color, 20, [Utils.ScreenWidth/2 - GUI_INFO_X2, Utils.ScreenHeight - GUI_INFO_Y2 + 50])
+        if self.resource.capacity > 0:
+            muestra_texto(screen, str('monotypecorsiva'), str(self.resource.capacity), YELLOW, 20, [Utils.ScreenWidth/2 - GUI_INFO_X2 + 60, Utils.ScreenHeight - GUI_INFO_Y2 + 90], True)
+        else:
+            muestra_texto(screen, str('monotypecorsiva'), "0", YELLOW, 20, [Utils.ScreenWidth/2 - GUI_INFO_X2 + 60, Utils.ScreenHeight - GUI_INFO_Y2 + 90], True)
 
     def command(self, command):
         return Command(CommandId.NULL)
 
     def getBuildSprite(self):
         return self.sprites[0]
+    
     def drawBuildTiles(self, screen, camera, tiles):
         for tile in tiles:
             r = tile.getRect()
-            if tile.type == GEYSER:
-                pygame.draw.rect(screen, GREEN, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
+            if tile.type == GEYSER and tile.visible:
+                pg.draw.rect(screen, GREEN, pg.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
             else:
-                pygame.draw.rect(screen, RED, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
+                pg.draw.rect(screen, RED, pg.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
 
     def draw(self, screen, camera):
         Structure.draw(self, screen, camera)
         if self.resource != None:
             muestra_texto(screen, str('monotypecorsiva'), str(self.resource.capacity), BLUE, 20, [60, 10])
 
-    def checkTiles(self):
+    def checkTiles(self, visible = True):
         r = self.getRect()
         tiles = self.mapa.getRectTiles(r)
         ok = True
         tiles_set = set(tiles)
         if len(tiles_set) == (self.TILES_HEIGHT -1)*self.TILES_WIDTH:
             for tile in tiles_set:
-                print(tile.tileid)
-                if tile.type != GEYSER:
+                if tile.type != GEYSER or (not tile.visible and visible):
                     ok = False
                     break
         else:
             ok = False
-        print(ok)
+        #print(ok)
         return ok
 
     def buildProcess(self):
@@ -112,8 +120,8 @@ class Extractor(Structure):
         sonDictionary = {
             "clase": "extractor",
             "building": self.building,
-            "nombre": "Extractor de Zerg",
-            "funcion": "extrae recursos"
+            "nombre": "Extractor",
+            "funcion": "Extrae gas de un geyser"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

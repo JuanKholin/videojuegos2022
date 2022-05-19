@@ -14,9 +14,10 @@ class Unit(Entity):
     deadSound = soldierDeadSound
     attackSound = soldierAttackSound
     
-    def __init__(self, hp, xIni, yIni, mineral_cost, generation_time, speed, framesToRefresh,
-                    sprites, face, frame, padding, id, player, inversibleFrames,
-                        frames, dirOffset, attackFrames, stillFrames, moveFrames, dieFrames,  xPadding, yPadding, wPadding, hPadding, attackInfo):
+    def __init__(self, hp, xIni, yIni, mineral_cost, generation_time, speed, framesToRefresh, 
+                face, frame, padding, id, player, inversibleFrames,
+                frames, dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, 
+                xPadding, yPadding, wPadding, hPadding, attackInfo, isExplosive):
         Entity.__init__(self, hp, xIni, yIni, mineral_cost, generation_time, id, player)
         # Relativo al movimiento de la unidad
         self.paths = []
@@ -35,7 +36,6 @@ class Unit(Entity):
         # Relativo a los frames
         self.inversibleFrames = inversibleFrames
         self.framesToRefresh = framesToRefresh
-        self.spritesName = sprites
         self.sprites = []
         self.frames = frames
         self.dirOffset = dirOffset
@@ -47,6 +47,7 @@ class Unit(Entity):
         self.yPadding = yPadding
         self.wPadding = wPadding
         self.hPadding = hPadding
+        self.isExplosive = isExplosive
         #self.distanceToPoint = 0
 
         # Info ataque
@@ -62,7 +63,9 @@ class Unit(Entity):
         self.siendoAtacado = False
 
         self.runningAway = False
-    
+
+        self.enable = True
+
     def spawn(self, x, y):
         self.x = x * TILE_WIDTH + 20
         self.y = y * TILE_HEIGHT
@@ -116,6 +119,7 @@ class Unit(Entity):
                         self.tileAAtacar = tile
                 self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
             #print("CAMINOS:" ,len(self.paths))
+            self.updateOwnSpace()
             self.changeToAttacking(objective)
             if len(self.paths) == 1:
                 #LO MEJOR ES MOVERSE AL CENTRO DE LA TILE, SINO NO ATOMICO
@@ -125,8 +129,6 @@ class Unit(Entity):
                 self.paths = [path]
             elif len(self.paths) == 0:
                 self.updateOwnSpace()
-            else:
-                self.changeObjectiveTile()
 
     # Indica a la unidad que se acerque lo mas posible a un recurso mineral
     def mine(self, resource):
@@ -163,30 +165,27 @@ class Unit(Entity):
         if self.state != UnitState.DEAD:
             r = self.getRect()
             if DEBBUG:
-                pg.draw.rect(screen, BLACK, pygame.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h), 1)
+                pg.draw.rect(screen, BLACK, pg.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h), 1)
             drawPos = self.getDrawPosition()
             if self.clicked:
                 pg.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y + (0.7*r.h)- camera.y,r.w , 0.3*r.h], 2)
 
-            aux = pygame.mask.from_surface(self.image, 0)
-            mask = aux.to_surface(setcolor=(1, 0, 0))
-            mask.set_colorkey(BLACK)
-            mask.set_alpha(150)
-            screen.blit(mask, [drawPos[0] - camera.x - 5, drawPos[1] - camera.y - 5])
+            if len(self.shadows) > 0:
+                screen.blit(self.shadow, [drawPos[0] - camera.x - 5, drawPos[1] - camera.y - 5])
             #screen.blit(unit.image, [r.x - camera.x, r.y - camera.y])
             screen.blit(self.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
             if self.clicked or self.hp < self.maxHp:
                 if self.player.isPlayer:
-                    hp = pygame.transform.chop(pg.transform.scale(HP, (50, 8)), ((self.hp / self.maxHp) * 50, 0, 50, 0))
+                    hp = pg.transform.chop(pg.transform.scale(HP, (50, 8)), ((self.hp / self.maxHp) * 50, 0, 50, 0))
                     screen.blit(hp, [self.x - camera.x - hp.get_rect().w / 2, self.y + r.h / 2 - camera.y])
                 else:
-                    hp = pygame.transform.chop(pg.transform.scale(HP2, (50, 8)), ((self.hp / self.maxHp) * 50, 0, 50, 0))
+                    hp = pg.transform.chop(pg.transform.scale(HP2, (50, 8)), ((self.hp / self.maxHp) * 50, 0, 50, 0))
                     screen.blit(hp, [self.x - camera.x - hp.get_rect().w / 2, self.y + r.h / 2 - camera.y])
 
     def drawInfo(self, screen, color):
         dic = self.toDictionary(self.mapa)
-        muestra_texto(screen, str('monotypecorsiva'), dic['nombre'], color, 25, [GUI_INFO_X2, GUI_INFO_Y2])
-        muestra_texto(screen, str('monotypecorsiva'), dic['funcion'], color, 20, [GUI_INFO_X2, GUI_INFO_Y2 + 50])
+        muestra_texto(screen, str('monotypecorsiva'), dic['nombre'], color, 25, [Utils.ScreenWidth/2 - GUI_INFO_X2, Utils.ScreenHeight - GUI_INFO_Y2 + 5])
+        muestra_texto(screen, str('monotypecorsiva'), dic['funcion'], color, 20, [Utils.ScreenWidth/2 - GUI_INFO_X2 + 10, Utils.ScreenHeight - GUI_INFO_Y2 + 30])
 
     ###########
     # UPDATES #
@@ -350,7 +349,9 @@ class Unit(Entity):
                 self.updatePath(actualPath)
             else: # Se acaba este camino
                 ownTile = self.getTile()
+                #print(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery), self.range)
                 if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
+                    self.updateOwnSpace()
                     #print(type(self), "estoy en rango")
                     self.updateAttackInRange()
                 else:
@@ -374,26 +375,32 @@ class Unit(Entity):
     def updateStillImage(self):
         self.frame = (self.frame + 1) % len(self.stillFrames)
         self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
 
     # Pasa de frame en animaciones de movimiento
     def updateMovingImage(self):
         self.frame = (self.frame + 1) % len(self.moveFrames)
         self.image = self.sprites[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
 
     # Pasa de frame en una animacion de ataque
     def updateAttackingImage(self):
         self.frame = (self.frame + 1) % len(self.attackFrames)
         self.image = self.sprites[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
 
     # Pasa de frame en una animacion de ataque
     def updateMiningImage(self):
         self.frame = (self.frame + 1) % len(self.attackFrames)
         self.image = self.sprites[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
+
 
     # Pasa de frame en una animacion de muerte
     def updateDyingImage(self):
         self.frame = (self.frame + 1)
         self.image = self.sprites[self.frames[self.dieFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.dieFrames[self.frame]][self.dirOffset[self.dir]]]
 
     ################
     # TRANSICIONES #
@@ -408,6 +415,8 @@ class Unit(Entity):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.stillFrames[self.frame]][self.dirOffset[self.dir]]]
+
 
     # Pasa a estado moverse
     def changeToMoving(self, paths):
@@ -428,21 +437,30 @@ class Unit(Entity):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
 
     # Pasa al ataque HYAAAA!! >:c
     def changeToAttacking(self, attackedOne):
         #print("Pasa al ataque HYAAAA!! >:c")
-        self.state = UnitState.ATTACKING
         self.runningAway = False
 
         if(len(self.paths) > 1):
-            #print("changeToAttacking objetiveTile")
+            print("changeToAttacking objetiveTile")
             self.changeObjectiveTile()
+            #input()
         if self.attackedOne != None:
             if self.attackedOne.esEstructura:
                 self.attackedOne.lastAttacker = None
         self.attackedOne = attackedOne
         self.attackCD = self.cooldown
+        if self.state == UnitState.STILL:
+            ownTile = self.getTile()
+            print(int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)), self.range, "estoy en rango")
+            if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
+                #print(type(self), "estoy en rango")
+                self.updateOwnSpace()
+                self.updateAttackInRange()
+        self.state = UnitState.ATTACKING
         self.frame = 0
         self.count = 0
 
@@ -460,7 +478,7 @@ class Unit(Entity):
 
     # Pasa a morirse (chof)
     def changeToDying(self):
-        print("DYING", self.x, self.y)
+        #print("DYING", self.x, self.y)
         self.state = UnitState.DYING
         self.attackedOne = None
         self.runningAway = False
@@ -474,6 +492,8 @@ class Unit(Entity):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.dieFrames[self.frame]][self.dirOffset[self.dir]]]
+        if not self.isExplosive:
+            self.shadow = self.shadows[self.frames[self.dieFrames[self.frame]][self.dirOffset[self.dir]]]
         if inCamera(self.getPosition()):
             playSound(self.deadSound)
 
@@ -537,7 +557,7 @@ class Unit(Entity):
                 self.siendoAtacado = True
                 self.atacante = attacker
             elif self.state == UnitState.STILL:
-                print("AL <TAKE")
+                #print("AL <TAKE")
                 self.attack(attacker)
         return self.hp
 
@@ -610,8 +630,10 @@ class Unit(Entity):
 
             self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
             if (self.siendoAtacado == True) and not self.runningAway:
+                print("me atacan")
                 self.attack(self.atacante)
-                self.changeObjectiveTile()
+                self.siendoAtacado = False
+                #self.changeObjectiveTile()
             else:
                 self.changeObjectiveTile()
             
@@ -620,16 +642,25 @@ class Unit(Entity):
 
     def recalcAttackPaths(self):
         self.mapa.setLibre(self.occupiedTile)
+        seguir = True
         if self.attackedOne.esEstructura == False:
-            #print("Atacamos a una unidad")
-            self.tileAAtacar = self.attackedOne.getTile()
-            if self.tileAAtacar == None:
-                enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
-                if enemy != None:
-                    self.attack(enemy)
+            #print("Atacamos a una unidad",self.attackedOne.enable )
+            if self.attackedOne.enable:
+                self.tileAAtacar = self.attackedOne.getTile()
+                if self.tileAAtacar == None:
+                    enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
+                    if enemy != None:
+                        self.attack(enemy)
+                    else:
+                        self.changeToStill()
                 else:
-                    self.changeToStill()
-            self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
+                    self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
+            else:
+                self.pahts = []
+                self.updateOwnSpace()
+                seguir = False
+                self.changeToStill()
+                #input()
         else:
             #print("Atacamos a una estructura")
             tilesAAtacar = self.mapa.getAttackRoundTiles(self.attackedOne.getRect())
@@ -638,16 +669,17 @@ class Unit(Entity):
                 if tile.heur(self.getTile()) < self.tileAAtacar.heur(self.getTile()):
                     self.tileAAtacar = tile
             self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
-        self.mapa.setVecina(self.occupiedTile, self.id)
-        self.occupiedTile.setOcupante(self)
-        if len(self.paths) > 0:
-            self.changeObjectiveTile()
-            ownTile = self.getTile()
-            if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
-                self.updateAttackInRange()
-            else:
-                #self.updatePath(self.paths[len(self.paths) - 1])
-                self.updateMovingImage()
+        if seguir:
+            self.mapa.setVecina(self.occupiedTile, self.id)
+            self.occupiedTile.setOcupante(self)
+            if len(self.paths) > 0:
+                self.changeObjectiveTile()
+                ownTile = self.getTile()
+                if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
+                    self.updateAttackInRange()
+                else:
+                    #self.updatePath(self.paths[len(self.paths) - 1])
+                    self.updateMovingImage()
 
     # Indica a la IA si es soldado o worker
     def isSoldier(self):
@@ -656,7 +688,7 @@ class Unit(Entity):
     def changeObjectiveTile(self):
         actualPath = self.paths[0]
         objectiveTile = self.mapa.getTile(actualPath.posFin[0], actualPath.posFin[1])
-        #print(objectiveTile.id, self.id)
+        print(objectiveTile.tileid, self.getTile().tileid)
         if objectiveTile.type == EMPTY or (objectiveTile.type == UNIT and objectiveTile.id == self.id):
             self.mapa.setVecina(objectiveTile, self.id)
             objectiveTile.setOcupante(self)
@@ -732,7 +764,9 @@ class Unit(Entity):
         self.clicked = click
 
     def toDictionary(self, map):
-        x, y = map.getTileIndex(self.x, self.y)
+        pos = self.getPosition()
+        x, y = map.getTileIndex(pos[0], pos[1])
+        print(x,y)
         return {
             "x": x,
             "y": y,

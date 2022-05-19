@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 
 
 from .Zergling import *
@@ -42,14 +42,14 @@ class Hatchery(Structure):
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
-
+        self.shadows = []
         self.sprites += deadSprites
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2, 3]
         self.spawningIndex = [0, 1, 2, 3]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
         self.raton = raton
-        self.render = pygame.transform.scale(pygame.image.load(HATCHERY_RENDER), RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(HATCHERY_RENDER), RENDER_SIZE)
 
         self.building = building
         if building:
@@ -76,7 +76,7 @@ class Hatchery(Structure):
     def execute(self, command_id):
         #if self.clicked:
         if command_id == CommandId.GENERATE_WORKER and self.player.resources >= ZERG_T1_MINERAL_COST:
-            print("Haciendo un zerg")
+            #print("Haciendo un zerg")
             self.player.resources -= ZERG_T1_MINERAL_COST
             zergling = Drone(self.player)
             self.generateUnit(zergling)
@@ -100,13 +100,13 @@ class Hatchery(Structure):
             self.player.mineUpgrade += 1
             self.mineMineralUpCost += 25
             self.mineGasUpCost += 5
-        elif command_id == CommandId.BUILD_REFINERY and self.player.resources >= EXTRACTOR_MINERAL_COST:
+        elif command_id == CommandId.BUILD_REFINERY and self.player.resources >= ZERG_REFINERY_MINERAL_COST:
             self.raton.building = True
             self.raton.buildStructure = self.getZergRefinery()
-        elif command_id == CommandId.BUILD_SUPPLY_DEPOT and self.player.resources >= SUPPLY_ZERG_MINERAL_COST:
+        elif command_id == CommandId.BUILD_DEPOT and self.player.resources >= ZERG_DEPOT_MINERAL_COST:
             self.raton.building = True
             self.raton.buildStructure = self.getZergSupply()
-        elif command_id == CommandId.BUILD_BARRACKS and self.player.resources >= BARRACKS_ZERG_MINERAL_COST:
+        elif command_id == CommandId.BUILD_BARRACKS and self.player.resources >= ZERG_BARRACKS_MINERAL_COST:
             self.raton.building = True
             #print("mi raton: ", self.raton.id)
             self.raton.buildStructure = self.getZergBarrack()
@@ -142,8 +142,8 @@ class Hatchery(Structure):
         sonDictionary = {
             "clase": "hatchery",
             "building": self.building,
-            "nombre": "Criadera de Zerg",
-            "funcion": "Base enemiga"
+            "nombre": "Criadero de Zerg",
+            "funcion": "Construir y engendrar Drone"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

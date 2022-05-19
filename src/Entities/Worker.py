@@ -5,14 +5,14 @@ from ..Command import *
 import math
 
 class Worker(Unit):
-    def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, 
+    def __init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, 
                     faces, frame, padding, id,player, minePower, timeToMine, inersibleFrames, frames,
                         dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, xPadding, yPadding, wPadding, hPadding,
-                            oreTransportingFrames, gasTransportingFrames, attackInfo):
-        Unit.__init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, sprites, 
+                            oreTransportingFrames, gasTransportingFrames, attackInfo, isExplosive):
+        Unit.__init__(self, hp, xini, yini, mineral_cost, generation_time, speed, framesToRefresh, 
                                 faces, frame, padding, id, player, inersibleFrames, frames,
                                     dirOffset, attackFrames, stillFrames, moveFrames, dieFrames, xPadding, yPadding, wPadding, hPadding, 
-                                    attackInfo)
+                                    attackInfo, isExplosive)
         # Info minado
         self.startTimeMining = 0
         self.minePower = minePower
@@ -24,6 +24,7 @@ class Worker(Unit):
         self.returny = 0
         self.oreTransportingFrames = oreTransportingFrames
         self.gasTransportingFrames = gasTransportingFrames
+        
 
     # Indica a la unidad que recolecte mineral del objetivo, si se encuentra
     # un obstaculo de camino lo esquivara. Recolecta desde la tile libre mas cercana
@@ -42,7 +43,7 @@ class Worker(Unit):
         if self.player.mineUpgrade == 0:
             upgrades.append({'upgrade': Upgrades.NO_MINE, 'cantidad': 0})
         else:
-            upgrades.append({'upgrade': Upgrades.MINE, 'cantidad': int(self.player.mineUpgrade/200)})
+            upgrades.append({'upgrade': Upgrades.MINE, 'cantidad': int(self.player.mineUpgrade)})
         if self.player.armorUpgrade == 0:
             upgrades.append({'upgrade': Upgrades.NO_ARMOR, 'cantidad': 0})
         else:
@@ -78,7 +79,7 @@ class Worker(Unit):
                     self.updateOwnSpace()
                     tilesCasa = self.tilesResource(self.getTile())
                     if self.getTile() in tilesCasa: # PONERSE A MINAR
-                        print("Hay que ponerse a minar")
+                        #print("Hay que ponerse a minar")
                         self.startMining()
                     else:
                         self.changeToStill()
@@ -91,36 +92,39 @@ class Worker(Unit):
     
     def changeToExtracting(self, resource):
         if resource != None:
-            self.state = UnitState.EXTRACTING
-            self.runningAway = False
-            self.attackedOne = None
-            self.isMining = False
-            self.resource = resource
-            pos = self.resource.getPosition()
-            tile = self.mapa.getTile(pos[0], pos[1])
-            tiles = self.mapa.getEntityTilesVecinas(tile, self.getTile())
-            if len(tiles) > 0:
-                ownTile = self.getTile()
-                bestTile = tiles[0]
-                for tile in tiles:
-                    if tile.heur(ownTile) < bestTile.heur(ownTile):
-                        bestTile = tile
-                self.paths = calcPathNoLimit(self.getPosition(), self.getTile(), bestTile, self.mapa)
-                if len(self.paths) > 0:
-                    self.moveToMining()
-                    self.changeObjectiveTile()
-                else:
-                    self.updateOwnSpace()
-                    tilesCasa = self.tilesResource(self.getTile())
-                    if self.getTile() in tilesCasa: # PONERSE A MINAR
-                        print("Hay que ponerse a minar")
-                        self.startExtracting()
+            if self.mapa.getTile(resource.x, resource.y).type != GEYSER:
+                self.state = UnitState.EXTRACTING
+                self.runningAway = False
+                self.attackedOne = None
+                self.isMining = False
+                self.resource = resource
+                pos = self.resource.getPosition()
+                tile = self.mapa.getTile(pos[0], pos[1])
+                tiles = self.mapa.getEntityTilesVecinas(tile, self.getTile())
+                if len(tiles) > 0:
+                    ownTile = self.getTile()
+                    bestTile = tiles[0]
+                    for tile in tiles:
+                        if tile.heur(ownTile) < bestTile.heur(ownTile):
+                            bestTile = tile
+                    self.paths = calcPathNoLimit(self.getPosition(), self.getTile(), bestTile, self.mapa)
+                    if len(self.paths) > 0:
+                        self.moveToMining()
+                        self.changeObjectiveTile()
                     else:
-                        self.changeToStill()
+                        self.updateOwnSpace()
+                        tilesCasa = self.tilesResource(self.getTile())
+                        if self.getTile() in tilesCasa: # PONERSE A MINAR
+                            #print("Hay que ponerse a minar")
+                            self.startExtracting()
+                        else:
+                            self.changeToStill()
+                else:
+                    #print("No hay tiles libres weird")
+                    #exit(1) 
+                    pass
             else:
-                #print("No hay tiles libres weird")
-                #exit(1) 
-                pass
+                self.changeToStill()
 
     # Manda a la unidad hacia el recurso
     def moveToMining(self):
@@ -134,6 +138,7 @@ class Worker(Unit):
         self.frame = 0
         self.count = 0
         self.image = self.sprites[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
         
     # Ya esta al lado del recurso y prepara el minado
     def startMining(self):
@@ -160,6 +165,7 @@ class Worker(Unit):
         self.returnx = self.x
         self.returny = self.y
         self.mapa.setLibre(self.getTile())
+        self.enable = False
         self.x = - 5000
         self.y = 0
 
@@ -218,6 +224,7 @@ class Worker(Unit):
         self.count += 1
         if getGlobalTime() - self.startTimeMining > (self.timeToMine - self.player.mineUpgrade*1000): #Termina de minar
             self.isMining = False
+            self.enable = True
             #Hay que volver a base transportando un ore
             self.cantidadMinada = self.resource.getMined(self.minePower)
             self.paths = []
@@ -272,6 +279,7 @@ class Worker(Unit):
     def updateMiningImage(self):
         self.frame = (self.frame + 1) % len(self.attackFrames)
         self.image = self.sprites[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.attackFrames[self.frame]][self.dirOffset[self.dir]]]
 
     def changeToOreTransporting(self):
         self.state = UnitState.ORE_TRANSPORTING
@@ -280,6 +288,7 @@ class Worker(Unit):
         self.count = 0
         self.frame = 0
         self.image = self.sprites[self.frames[self.oreTransportingFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.oreTransportingFrames[self.frame]][self.dirOffset[self.dir]]]
 
     def changeToGasTransporting(self):
         self.state = UnitState.GAS_TRANSPORTING
@@ -288,6 +297,7 @@ class Worker(Unit):
         self.count = 0
         self.frame = 0
         self.image = self.sprites[self.frames[self.gasTransportingFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.gasTransportingFrames[self.frame]][self.dirOffset[self.dir]]]
 
     def updateOreTransporting(self):
         self.count += 1
@@ -325,10 +335,10 @@ class Worker(Unit):
         else: # PUEDE QUE NO 
             tilesCasa = self.tilesCasa(self.getTile())
             if self.getTile() in tilesCasa: # He entregado sino me quedo en el sitio
-                print(self.resource.capacity)
+                #print(self.resource.capacity)
                 if self.resource.capacity <= 0:
                     self.player.resources += self.cantidadMinada
-                    print("cambiamos a still")
+                    #print("cambiamos a still")
                     self.changeToStill()
                 else:
                     #Tengo que volver, calculo el camino a minar
@@ -345,7 +355,7 @@ class Worker(Unit):
         else: # PUEDE QUE NO
             tilesCasa = self.tilesCasa(self.getTile())
             if self.getTile() in tilesCasa: # He entregado sino me quedo en el sitio
-                print("Tengo que volver siempre, TRABAJO DE POR VIDA :D")
+                #print("Tengo que volver siempre, TRABAJO DE POR VIDA :D")
                 self.player.gas += self.cantidadMinada
                 self.paths = []
 
@@ -357,11 +367,13 @@ class Worker(Unit):
     def updateOreTransportingImage(self):
         self.frame = (self.frame + 1) % len(self.oreTransportingFrames)
         self.image = self.sprites[self.frames[self.oreTransportingFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.oreTransportingFrames[self.frame]][self.dirOffset[self.dir]]]
     
     # Pasa de frame la animacion de transportar gas
     def updateGasTransportingImage(self):
         self.frame = (self.frame + 1) % len(self.oreTransportingFrames)
         self.image = self.sprites[self.frames[self.gasTransportingFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.gasTransportingFrames[self.frame]][self.dirOffset[self.dir]]]
 
     def setCristal(self, cristal):
         self.cristal = cristal
@@ -373,6 +385,7 @@ class Worker(Unit):
         self.count = 0
         self.frame = 0
         self.image = self.sprites[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
+        self.shadow = self.shadows[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
 
     def updateMovingToMining(self):
         self.count += 1
@@ -391,7 +404,7 @@ class Worker(Unit):
         if len(self.paths) == 0: #PUEDE QUE NO
             tilesCasa = self.tilesResource(self.getTile())
             if self.getTile() in tilesCasa: # PONERSE A MINAR
-                print("Hay que ponerse a minar")
+                #print("Hay que ponerse a minar")
                 self.startTimeMining = getGlobalTime()
                 xCristal, yCristal = self.cristal.getCenter()
                 posicionActual = self.getPosition()

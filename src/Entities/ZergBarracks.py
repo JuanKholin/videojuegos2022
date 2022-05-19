@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 from .Zergling import *
 from .Broodling import *
 from .Hydralisk import *
@@ -32,18 +32,19 @@ class ZergBarracks(Structure):
 
     def __init__(self, xini, yini, player, map, building):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
-        self.sprites = cargarSprites(BARRACKS_ZERG_PATH, self.nSprites, False, BLUE2, 1.4, 0)
+        self.sprites = cargarSprites(ZERG_BARRACKS_PATH, self.nSprites, False, BLUE2, 1.4, 0)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.sprites += deadSprites
+        self.shadows = []
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2]
         self.spawningIndex = [0, 1, 2]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
         #self.raton = raton
-        self.render = pygame.transform.scale(pygame.image.load(BARRACKS_ZERG_RENDER), RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(ZERG_BARRACKS_RENDER), RENDER_SIZE)
 
         self.building = building
         if building:
@@ -56,29 +57,27 @@ class ZergBarracks(Structure):
         self.paths = []
         self.building = False
 
-        self.type = ZERG_BARRACKS
-
+        self.type = BARRACKS
+        
     def execute(self, command_id):
-        #if self.clicked:
-        #print("soy clickeado?")
-        print(command_id)
-        if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_T1) and self.player.resources >= TERRAN_T1_MINERAL_COST:
-            self.player.resources -= TERRAN_T1_MINERAL_COST
-            terranSoldier = Zergling(self.player)
-            self.generateUnit(terranSoldier)
-            self.state = BuildingState.SPAWNING
-        elif (command_id == CommandId.GENERATE_T2) and self.player.resources >= ZERG_T2_MINERAL_COST and self.player.gas >= ZERG_T2_GAS_COST:
-            self.player.resources -= ZERG_T2_MINERAL_COST
-            self.player.gas -= ZERG_T2_GAS_COST
-            terranSoldier = Broodling(self.player)
-            self.generateUnit(terranSoldier)
-            self.state = BuildingState.SPAWNING
-        elif (command_id == CommandId.GENERATE_T3) and self.player.resources >= ZERG_T3_MINERAL_COST and self.player.gas >= ZERG_T3_GAS_COST:
-            self.player.resources -= ZERG_T3_MINERAL_COST
-            self.player.gas -= ZERG_T3_GAS_COST
-            terranSoldier = Hydralisk(self.player)
-            self.generateUnit(terranSoldier)
-            self.state = BuildingState.SPAWNING
+        if self.state != BuildingState.BUILDING and self.state != BuildingState.COLLAPSING and self.state != BuildingState.DESTROYED:
+            if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_T1) and self.player.resources >= TERRAN_T1_MINERAL_COST:
+                self.player.resources -= TERRAN_T1_MINERAL_COST
+                terranSoldier = Zergling(self.player)
+                self.generateUnit(terranSoldier)
+                self.state = BuildingState.SPAWNING
+            elif (command_id == CommandId.GENERATE_T2) and self.player.resources >= ZERG_T2_MINERAL_COST and self.player.gas >= ZERG_T2_GAS_COST:
+                self.player.resources -= ZERG_T2_MINERAL_COST
+                self.player.gas -= ZERG_T2_GAS_COST
+                terranSoldier = Broodling(self.player)
+                self.generateUnit(terranSoldier)
+                self.state = BuildingState.SPAWNING
+            elif (command_id == CommandId.GENERATE_T3) and self.player.resources >= ZERG_T3_MINERAL_COST and self.player.gas >= ZERG_T3_GAS_COST:
+                self.player.resources -= ZERG_T3_MINERAL_COST
+                self.player.gas -= ZERG_T3_GAS_COST
+                terranSoldier = Hydralisk(self.player)
+                self.generateUnit(terranSoldier)
+                self.state = BuildingState.SPAWNING
 
     def command(self, command):
         if self.state != BuildingState.BUILDING:
@@ -102,8 +101,8 @@ class ZergBarracks(Structure):
         sonDictionary = {
             "clase": "zergBarracks",
             "building": self.building,
-            "nombre": "Criadera de Zerling",
-            "funcion": "Crear zerling"
+            "nombre": "Colmena",
+            "funcion": "Engendrar unidades ofensivas"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

@@ -8,6 +8,7 @@ from datetime import datetime
 
 from src.Entities.TerranSoldier import *
 
+from src import Utils
 from src.Utils import *
 from src.Command import *
 from src import Player, Raton, Map
@@ -39,11 +40,8 @@ def procesarInput():
             pg.quit()
             sys.exit()
         elif event.type == pg.VIDEORESIZE:
-            SCREEN_HEIGHT = event.h
-            SCREEN_WIDTH = event.w
-            escena.camera.h = SCREEN_HEIGHT - 160
-            escena.camera.w = SCREEN_WIDTH
-            screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pg.RESIZABLE)
+            print("resize")
+            Utils.resized = True
         elif event.type == pg.KEYUP:
             escena.procesarEvent(event)
             escena.checkUnHoldButton(event.key)
@@ -136,6 +134,10 @@ def setEntity(player, ai):
     escena.resources = resources
 
 def update():
+    if Utils.resized:
+        Utils.resized = False
+        updateScreen(screen)
+        camera.update()
     clock_update()
     raton.update(escena.camera)
     if getGameState() == System_State.MAINMENU:
@@ -166,7 +168,7 @@ def update():
         sys.exit()
 
 def draw():
-    screen.fill(WHITE)
+    screen.fill(BLACK)
     if Utils.state == System_State.MAINMENU:
         escena.interfaz.draw(screen, escena.camera)
     elif Utils.state == System_State.ONGAME:
@@ -184,8 +186,10 @@ def draw():
 pg.init()
 
 flags = pg.FULLSCREEN | pg.DOUBLEBUF
-size = (SCREEN_WIDTH, SCREEN_HEIGHT)
-screen =  pg.display.set_mode(size) #, pygame.RESIZABLE)
+size = (MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT)
+screen =  pg.display.set_mode(size, pg.RESIZABLE) #, pg.RESIZABLE)
+
+Utils.init()
 
 #Controlar frames por segundo
 clock = pg.time.Clock()
@@ -208,6 +212,7 @@ keyMap = {
   pg.K_p: CommandId.UPGRADE_WORKER_MINING,
   pg.K_g: CommandId.SAVE_GAME,
   pg.K_m: CommandId.ROTATE,
+  
 }
 commandMap = {
   CommandId.MOVE_CAMERA_UP: pg.K_w,
@@ -249,7 +254,7 @@ aI = AI(player2, Race.TERRAN, HARD)
 
 # Camara
 # pre: mapa tan grande como ventana
-camera = Camera(0, 0, SCREEN_HEIGHT - 160, SCREEN_WIDTH)
+camera = Camera(0, 0, Utils.ScreenWidth, Utils.ScreenHeight)
 
 # Escena
 
@@ -265,23 +270,16 @@ raton.setEscena(escena)
 
 # Bucle principal
 while True:
-    #now = datetime.now()
+
     #Procesar inputs
     procesarInput()
 
     #Actualizar entidades del juego
     update()
-    #print(getGameState())
-    #print(getGameState2())
-    '''if pg.K_w in escena.p1.keyMap.keys():
-        print(escena.p1.keyMap[pg.K_w])
-    if pg.K_UP in escena.p1.keyMap.keys():
-        print(escena.p1.keyMap[pg.K_UP])
-    '''
-    #print(commandMap[keyMap[pg.K_w]])
-    #print((datetime.now() - now).microseconds)
+
 
     #Dibujar
+    now = datetime.now()
     draw()
-
+    #print((datetime.now() - now).microseconds)
     updateGlobalTime(clock)

@@ -31,18 +31,19 @@ class ZergSupply(Structure):
 
     def __init__(self, xini, yini, player, map, building):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
-        self.sprites = cargarSprites(SUPPLY_ZERG_PATH, self.nSprites, False, BLUE2, 1.2, 0)
+        self.sprites = cargarSprites(ZERG_DEPOT_PATH, self.nSprites, False, BLUE2, 1.2, 0)
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.sprites += deadSprites
+        self.shadows = []
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2]
         self.spawningIndex = [0, 1, 2]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
         #self.raton = raton
-        self.render = pygame.transform.scale(pygame.image.load(SUPPLY_ZERG_RENDER), RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(ZERG_DEPOT_RENDER), RENDER_SIZE)
 
         self.building = building
         if building:
@@ -53,7 +54,7 @@ class ZergSupply(Structure):
         self.paths = []
         self.building = False
 
-        self.type = ZERG_S1
+        self.type = DEPOT
 
     def execute(self, command_id):
         if self.clicked:
@@ -72,8 +73,8 @@ class ZergSupply(Structure):
         sonDictionary = {
             "clase": "zergSupply",
             "building": self.building,
-            "nombre": "Refugio de zergs",
-            "funcion": "Aumentar poblacion"
+            "nombre": "Guarida",
+            "funcion": "Aumenta la capacidad de tu ejercito"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

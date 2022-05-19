@@ -20,7 +20,7 @@ class Crystal(Resource):
         self.image = self.sprites[0]
         self.clicked = False
 
-        self.render = pygame.transform.scale(pygame.image.load(CRYSTAL_RENDER), RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(CRYSTAL_RENDER), RENDER_SIZE)
 
     def divideSpritesheetByRows(self,spritesheet, rows):
         totalRows = spritesheet.get_height()

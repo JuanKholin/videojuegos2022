@@ -44,8 +44,11 @@ class Player():
                 if event.key in self.keyMap:
                     if self.structureSelected != None:
                         command = self.structureSelected.command(self.keyMap[event.key])
-                        if command != Command(CommandId.NULL):
+                        print(command.id)
+                        if command.id != CommandId.NULL:
                                 return command
+                        else:
+                            return Command(self.keyMap[event.key])
                     return Command(self.keyMap[event.key])
         return Command(CommandId.NULL)
 
@@ -61,7 +64,7 @@ class Player():
         self.unitsFree.append(unit)
 
     def addStructures(self,structures):
-        print(self.limitUnits)
+        #print(self.limitUnits)
         self.limitUnits += structures.getUnitCapacity()
 
         self.structures.append(structures)
@@ -94,22 +97,24 @@ class Player():
                     else:
                         self.unitsSelected[i].updateOwnSpace()
         elif id == CommandId.SEARCH_NEARBY_RIVAL:
-            print("BUSCAR")
+            #print("BUSCAR")
             for unit in self.unitsSelected:
                 enemy = self.mapa.getNearbyRival(unit.occupiedTile, self)
+                unit.mapa.setVecina(unit.occupiedTile, unit.id)
+                unit.occupiedTile.setOcupante(unit)
                 #print(type(enemy))
                 if enemy != None:
                     if unit.state == UnitState.STILL:
                         unit.attack(enemy)
                     else:
-                        print("ataco a otro")
+                        #print("ataco a otro")
                         unit.siendoAtacado = True
                         unit.atacante = enemy
-                        print(unit.atacante)
+                        #print(unit.atacante)
                 else:
                     if unit.state == UnitState.STILL:
                         unit.updateOwnSpace()
-                    print("no hay naide")
+                    #print("no hay naide")
         elif self.structureSelected != None:
             if id == CommandId.GENERATE_UNIT or id == CommandId.GENERATE_WORKER or id == CommandId.GENERATE_T1:
                 self.structureSelected.execute(id)
@@ -122,7 +127,7 @@ class Player():
                 self.structureSelected.execute(id)
             elif id == CommandId.GENERATE_T3:
                 self.structureSelected.execute(id)
-            elif id == CommandId.BUILD_SUPPLY_DEPOT:
+            elif id == CommandId.BUILD_DEPOT:
                 self.structureSelected.execute(id)
             elif id == CommandId.BUILD_HATCHERY:
                 self.structureSelected.execute(id)
@@ -152,21 +157,21 @@ class Player():
         if isMe:
             for structure in self.structures:
                 pos = structure.getPosition()
-                pygame.draw.rect(screen, BLUE, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
+                pg.draw.rect(screen, BLUE, pg.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
             for unit in self.units:
                 if unit.state != UnitState.DEAD:
                     pos = unit.getPosition()
-                    pygame.draw.rect(screen, GREEN, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
+                    pg.draw.rect(screen, GREEN, pg.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
         else:
             for structure in self.structures:
                 pos = structure.getPosition()
                 if self.mapa.getTile(pos[0], pos[1]).visible:
-                    pygame.draw.rect(screen, ORANGE, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
+                    pg.draw.rect(screen, ORANGE, pg.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 8, 5))
             for unit in self.units:
                 if unit.state != UnitState.DEAD:
                     pos = unit.getPosition()
                     if (self.mapa.getTile(pos[0], pos[1]) != None) and self.mapa.getTile(pos[0], pos[1]).visible:
-                        pygame.draw.rect(screen, RED, pygame.Rect(MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
+                        pg.draw.rect(screen, RED, pg.Rect(Utils.ScreenWidth/2 - MINIMAP_X + (pos[0]/self.mapa.w * MINIMAP_W), Utils.ScreenHeight - MINIMAP_Y + (pos[1]/self.mapa.h * MINIMAP_H), 3, 3))
 
 
     def removeUnit(self, unit):
@@ -184,6 +189,7 @@ class Player():
             "units": [u.toDictionary(map) for u in self.units],
             "structures": [s.toDictionary(map) for s in self.structures],
             "resources": self.resources,
+            "gas": self.gas,
             #"keyMap": self.keyMap,
             #"commandMap": self.commandMap,
             "dañoUpgrade": self.dañoUpgrade,

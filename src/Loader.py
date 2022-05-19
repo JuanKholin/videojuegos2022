@@ -48,7 +48,7 @@ def loadFromSave(nombre):
 
     escena.p1.setBasePlayer(escena.p1.structures[0])
     escena.p2.setBasePlayer(escena.p2.structures[0])
-    print(escena.p2.limitUnits)
+    #print(escena.p2.limitUnits)
     return escena, raton, camera
 
 def loadkeyShortcuts():
@@ -91,7 +91,7 @@ def loadHardcodedMap(nombre):
 
     escena.p1.setBasePlayer(escena.p1.structures[0])
     escena.p2.setBasePlayer(escena.p2.structures[0])
-    print(escena.p2.limitUnits)
+    #print(escena.p2.limitUnits)
     return escena, raton, camera
 
 
@@ -116,6 +116,7 @@ def loadPlayer(playerDictionary, map, isPlayer):
     p.dañoUpgrade = playerDictionary["dañoUpgrade"]
     p.armorUpgrade = playerDictionary["armorUpgrade"]
     p.mineUpgrade = playerDictionary["mineUpgrade"]
+    p.gas = playerDictionary["gas"]
     #p.limitUnits = playerDictionary["limitUnits"]
     return p
 
@@ -138,6 +139,22 @@ def loadUnits(unitDictionaries, player):
             player.addUnits(unit)
         elif u["clase"] == "drone":
             unit = Drone(player, u["x"], u["y"])
+            unit.load(u["hp"])
+            player.addUnits(unit)
+        elif u["clase"] == "hydralisk":
+            unit = Hydralisk(player, u["x"], u["y"])
+            unit.load(u["hp"])
+            player.addUnits(unit)
+        elif u["clase"] == "broodling":
+            unit = Broodling(player, u["x"], u["y"])
+            unit.load(u["hp"])
+            player.addUnits(unit)
+        elif u["clase"] == "firebat":
+            unit = Firebat(player, u["x"], u["y"])
+            unit.load(u["hp"])
+            player.addUnits(unit)
+        elif u["clase"] == "goliath":
+            unit = Goliath(player, u["x"], u["y"])
             unit.load(u["hp"])
             player.addUnits(unit)
 

@@ -6,6 +6,11 @@ import sys
 import math
 import json
 from datetime import datetime
+'''
+import win32gui, win32con
+
+hide = win32gui.GetForegroundWindow()
+win32gui.ShowWindow(hide , win32con.SW_HIDE)'''
 
 
 from src.Entities.TerranSoldier import *
@@ -13,7 +18,7 @@ from src.Entities.TerranSoldier import *
 from src.Utils import *
 from src.Command import *
 from src import Player, Raton, Map
-from src.InterfaceNOSELECT import *
+from src.Interface import *
 from src.AI import *
 from src.Camera import *
 from src.Entities.Crystal import *
@@ -32,7 +37,6 @@ from src.Entities.Firebat import *
 from src.Entities.Goliath import *
 from src.Entities.Hydralisk import *
 from src.Entities.Broodling import *
-
 
 
 
@@ -61,10 +65,18 @@ def procesarInput():
 def setEntity(player, ai):
     scv = Firebat(player, 10, 3)
     player.addUnits(scv)
-    structure1 = TerranBuilder(3, 3, player, mapa, False, raton)
+    scv = TerranSoldier(player, 11, 3)
+    player.addUnits(scv)
+    scv = TerranSoldier(player, 12, 3)
+    player.addUnits(scv)
+    scv = TerranSoldier(player, 11, 4)
+    player.addUnits(scv)
+    structure1 = Hatchery(3, 3, player, mapa, False, raton)
+    player.addStructures(structure1)
+    structure1 = TerranBarracks(7, 7, player, mapa, False)
     player.addStructures(structure1)
     player.setBasePlayer(structure1)
-    scv = Goliath(ai, 30, 3)
+    scv = Goliath(ai, 20, 3)
     ai.addUnits(scv)
     structure1 = TerranBuilder(37, 3, ai, mapa, False, raton)
     ai.addStructures(structure1)
@@ -153,61 +165,47 @@ def setEntity(player, ai):
    '''
 
 def update():
+    if Utils.resized:
+        Utils.resized = False
+        updateScreen(screen)
+        camera.update()
     clock_update()
-    raton.update(camera)
-
+    raton.update(escena.camera)
     if getGameState() == System_State.MAINMENU:
         playMusic(mainMenuBGM, pos = 5)
         #playSound(mainMenuBGM)
-        escena.interfaz.update(escena,raton, camera)
+        escena.interfaz.update(escena,raton, escena.camera)
     elif getGameState() == System_State.MAP1:
-        #playMusic(map1BGM)
+        stopMusic()
+        playMusic(map1BGM)
         #cargar mapa
         escena.mapa = mapa
-        
-       
         escena.mapa.load()
         escena.mapa.loadMinimap()
-        '''
-        x, y = escena.addWall(0,20,1400,1,1,30)
-        x, y = escena.addWall(0,x,y,1,-1,40)
-        #print(x,y)
-        x, y = escena.addWall(0,x,y,-1,-1, 40)
-        #print(x,y)
-        x, y = escena.addWall(0,x,y,-1,-1, 70, 10)
-        #x, y = escena.addWall(x,y,-1,1,30)
-
-        x, y = escena.addWall(1,1540,200,-1,-1,30)
-        x, y = escena.addWall(1,x,y,-1,1,40)
-        #print(x,y)
-        x, y = escena.addWall(1,x,y,1,1, 40)
-        #print(x,y)
-        x, y = escena.addWall(1,x,y,1,1, 70, 10)'''
-
-        camera.x = 0
-        camera.y = 0
         setEntity(player1, player2)
         setGameState(System_State.ONGAME)
+        setGameState2(System_State.LOAD)
     elif getGameState() == System_State.ONGAME:
         escena.update()
     elif getGameState() == System_State.GAMESELECT:
         #Cargar las partidas
-        escena.interfaz.update(escena,raton, camera)
+        escena.interfaz.update(escena,raton, escena.camera)
     elif getGameState() == System_State.NEWGAME:
-        escena.interfaz.update(escena,raton, camera)
+        escena.interfaz.update(escena,raton, escena.camera)
     else: #STATE == System_State.EXIT:
         pg.quit()
         sys.exit()
-
 def draw():
-    screen.fill(WHITE)
+    screen.fill(BLACK)
     if Utils.state == System_State.MAINMENU:
-        escena.interfaz.draw(screen, camera)
+        escena.interfaz.draw(screen, escena.camera)
     elif Utils.state == System_State.ONGAME:
         escena.draw(screen)
+    elif Utils.state == System_State.PAUSED:
+        escena.draw(screen)
     elif Utils.state == System_State.GAMESELECT or Utils.state == System_State.NEWGAME:
-        escena.interfaz.draw(screen, camera)
-    raton.draw(screen, camera)
+        escena.interfaz.draw(screen, escena.camera)
+    raton.draw(screen, escena.camera)
     #aux(screen)
     pg.display.flip()
 
@@ -217,7 +215,7 @@ pg.display.set_caption('Starcraft')
 icon = pg.image.load('icon.png')
 pg.display.set_icon(icon)
 flags = pg.FULLSCREEN | pg.DOUBLEBUF
-size = (SCREEN_WIDTH, SCREEN_HEIGHT)
+size = (Utils.ScreenWidth, Utils.ScreenHeight)
 screen =  pg.display.set_mode(size)
 
 #Controlar frames por segundo
@@ -232,7 +230,7 @@ keyMap ={
   pg.K_r: CommandId.ROTATE,
   pg.K_v: CommandId.GENERATE_UNIT,
   pg.K_c: CommandId.BUILD_BARRACKS,
-  pg.K_x: CommandId.BUILD_REFINERY,
+  pg.K_x: CommandId.DESELECT,
   pg.K_d: CommandId.UPGRADE_SOLDIER_DAMAGE,
   pg.K_s: CommandId.UPGRADE_SOLDIER_ARMOR,
   pg.K_a: CommandId.SEARCH_NEARBY_RIVAL,
@@ -282,7 +280,7 @@ player2 = Player.Player([], [], 100, {}, {}, mapa, False)
 
 # Camara
 # pre: mapa tan grande como ventana
-camera = Camera(0, 0, SCREEN_HEIGHT - 160, SCREEN_WIDTH)
+camera = Camera(0, 0, Utils.ScreenHeight - 160, Utils.ScreenWidth)
 
 # Escena
 
@@ -299,6 +297,8 @@ else:
 escena = Escena(player1, player2, aI, [], camera, raton, p1Interface, [])
 
 raton.setEscena(escena)
+Utils.init()
+
 
 # Bucle principal
 while True:

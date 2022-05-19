@@ -18,7 +18,7 @@ class Geyser(Resource):
         self.image = self.sprites[0]
         self.clicked = False
 
-        self.render = pygame.transform.scale(pygame.image.load(GEYSER_RENDER), RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(GEYSER_RENDER), RENDER_SIZE)
 
     def draw(self, screen, camera):
         if self.enable:

@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 
 from .TerranSoldier import *
 from .TerranWorker import *
@@ -39,13 +39,14 @@ class TerranSupplyDepot(Structure):
         deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
         self.sprites += deadSprites
+        self.shadows = []
 
         self.image = self.sprites[self.index]
         self.operativeIndex = [4]
         self.spawningIndex = [4]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
 
-        self.render = pygame.transform.scale(pygame.image.load(SUPPLY_RENDER), RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(TERRAN_DEPOT_RENDER), RENDER_SIZE)
 
         self.training = []
         self.paths = []
@@ -56,7 +57,7 @@ class TerranSupplyDepot(Structure):
         else:
             self.state = BuildingState.OPERATIVE
 
-        self.type = TERRAN_DEPOT
+        self.type = DEPOT
 
     def command(self, command):
         return Command(CommandId.NULL)
@@ -72,7 +73,7 @@ class TerranSupplyDepot(Structure):
             "clase": "terranSupplyDepot",
             "building": self.building,
             "nombre": "Deposito de suministros",
-            "funcion": "aumenta la capacidad de suministros"
+            "funcion": "Aumenta la capacidad de tu ejercito"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

@@ -1,9 +1,10 @@
 from .Utils import *
+from . import Utils
 
 CAMERA_X = 0
 CAMERA_Y = 0
-CAMERA_W = SCREEN_WIDTH
-CAMERA_H = SCREEN_HEIGHT
+CAMERA_W = ScreenWidth
+CAMERA_H = ScreenHeight
 
 def inCamera(pos):
     if (pos[0] >= CAMERA_X and pos[0] <= CAMERA_X + CAMERA_W and
@@ -23,6 +24,13 @@ class Camera():
         CAMERA_Y = y
         CAMERA_W = w
         CAMERA_H = h
+        
+    def update(self):
+        global CAMERA_X, CAMERA_Y, CAMERA_W, CAMERA_H
+        self.h = Utils.ScreenHeight
+        self.w = Utils.ScreenWidth
+        CAMERA_W = self.w
+        CAMERA_H = self.h
 
     def setCamera(self, x, y, h, w):
         global CAMERA_X, CAMERA_Y, CAMERA_W, CAMERA_H
@@ -34,6 +42,13 @@ class Camera():
         CAMERA_Y = y
         CAMERA_W = w
         CAMERA_H = h
+        
+    def setSize(self, w, h):
+        global CAMERA_W, CAMERA_H
+        self.h = h
+        self.w = w
+        CAMERA_W = w
+        CAMERA_H = h
 
     def moverArriba(self):
         global CAMERA_Y
@@ -43,7 +58,7 @@ class Camera():
 
     def moverAbajo(self, mapHeight):
         global CAMERA_Y
-        if (self.y + self.h) + CAMERA_SPEED <= mapHeight + 170:
+        if (self.y + self.h) + CAMERA_SPEED <= mapHeight + 300:
             self.y = self.y + CAMERA_SPEED
             CAMERA_Y = self.y
 

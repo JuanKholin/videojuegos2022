@@ -1,11 +1,11 @@
 {
-  "nombre": "1_Zerg_Dificil_5",
+  "nombre": "1_Zerg_Facil_2",
   "p1": {
     "units": [
       {
         "clase": "drone",
         "nombre": "Drone",
-        "funcion": "muy tanke",
+        "funcion": "Unidad obrera",
         "x": 24,
         "y": 32,
         "hp": 400
@@ -15,8 +15,8 @@
       {
         "clase": "hatchery",
         "building": false,
-        "nombre": "Criadera de Zerg",
-        "funcion": "Base enemiga",
+        "nombre": "Criadero de Zerg",
+        "funcion": "Construir y engendrar Drone",
         "x": 20,
         "y": 35,
         "hp": 200
@@ -53,7 +53,7 @@
   "p2": {
     "units": [
       {
-        "clase": "terranWorker",
+        "clase": "SCV",
         "nombre": "Terran Worker",
         "funcion": "Unidad obrera",
         "x": 12,
@@ -65,8 +65,8 @@
       {
         "clase": "terranBuilder",
         "building": false,
-        "nombre": "Base de comandos",
-        "funcion": "Protege la base de comandos",
+        "nombre": "Centro de comandos",
+        "funcion": "Construir y construir SCV",
         "damageMineralUpCost": 50,
         "damageGasUpCost": 50,
         "armorMineralUpCost": 50,
@@ -80,8 +80,8 @@
       {
         "clase": "terranBarracks",
         "building": false,
-        "nombre": "Terran cuartel",
-        "funcion": "entrena tropas de infanteria",
+        "nombre": "Cuartel Terran",
+        "funcion": "Entrenar unidades ofensivas",
         "x": 25.0,
         "y": 5.0,
         "hp": 1000

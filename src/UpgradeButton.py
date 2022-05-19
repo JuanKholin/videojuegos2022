@@ -37,11 +37,11 @@ class UpgradeButton():
         if self.collide:
             if self.cartel != None:
                 screen.blit(self.cartel, (x - self.cartelPad, y- 80))
-                muestra_texto(screen, 'monotypecorsiva', str(self.linea1), GREEN2, 20, (self.x - self.cartelPad + self.xpad, self.y - 70))
-                muestra_texto(screen, 'monotypecorsiva', str(self.linea2), GREEN2, 20, (self.x - self.cartelPad + self.xpad, self.y - 55))
-                muestra_texto(screen, 'monotypecorsiva', "Nivel siguiente: " + str(self.nextLevel), GREEN2, 20, (self.x - self.cartelPad + self.xpad, self.y - 40))
-                muestra_texto(screen, 'monotypecorsiva', str(self.costeMineral), GREEN2, 20, (self.x + 33 - self.cartelPad , self.y - 15))
-                muestra_texto(screen, 'monotypecorsiva', str(self.costeGas), GREEN2, 20, (self.x + 83 - self.cartelPad , self.y - 15))
+                muestra_texto(screen, 'monotypecorsiva', str(self.linea1), GREEN2, 20, (self.x - self.cartelPad + self.xpad, self.y - 80))
+                muestra_texto(screen, 'monotypecorsiva', str(self.linea2), GREEN2, 20, (self.x - self.cartelPad + self.xpad, self.y - 65))
+                muestra_texto(screen, 'monotypecorsiva', "Nivel siguiente: " + str(self.nextLevel), GREEN2, 20, (self.x - self.cartelPad + self.xpad, self.y - 50))
+                muestra_texto(screen, 'monotypecorsiva', str(self.costeMineral), GREEN2, 20, (self.x + 28 - self.cartelPad , self.y - 27))
+                muestra_texto(screen, 'monotypecorsiva', str(self.costeGas), GREEN2, 20, (self.x + 78 - self.cartelPad , self.y - 27))
             else:
                 pygame.draw.rect(screen, BLUE, pygame.Rect(self.x, self.y-15, 50, 20))
             #text = Utils.text[self.option] 

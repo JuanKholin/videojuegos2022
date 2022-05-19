@@ -44,7 +44,32 @@ class Escena():
             #print(command.id)
         else:
             command = self.p1.processEvent(event)
-        if getGameState() == System_State.ONGAME:
+        if getGameState() == System_State.MAINMENU:
+            if getGameState2() == System_State.HELP:
+                if command.id == CommandId.RETURN_GAME:
+                    self.interfaz.helpPage = 0
+                    setGameState2(System_State.SETTINGS)
+                elif command.id == CommandId.NEXT_PAGE:
+                    self.interfaz.helpPage += 1
+                elif command.id == CommandId.PREVIOUS_PAGE:
+                    self.interfaz.helpPage -= 1       
+            elif getGameState2() == System_State.SETTINGS:
+                if command.id == CommandId.RETURN_GAME:    
+                    setGameState2(System_State.PLAYING)
+                elif command.id == CommandId.HELP:
+                    setGameState2(System_State.HELP)
+                elif command.id == CommandId.MINUS_BGM:
+                    minusMusic()
+                elif command.id == CommandId.PLUS_BGM:
+                    plusMusic()
+                elif command.id == CommandId.MINUS_SOUND:
+                    minusSound()
+                    playSound(soldierAttackSound)
+                elif command.id == CommandId.PLUS_SOUND:
+                    plusSound() 
+                    playSound(soldierAttackSound)
+            
+        elif getGameState() == System_State.ONGAME:
             #ejecutar el comando
             if command.id == CommandId.UPGRADE_WORKER_MINING:
                 #print(command.id)
@@ -53,11 +78,18 @@ class Escena():
                 if command.id == CommandId.GENERATE_UNIT:
                     self.p1.execute(command.id, [], None)
                 if command.id == CommandId.SEARCH_NEARBY_RIVAL:
-                    for unit in self.p1.unitsSelected:
-                        self.mapa.setLibre(unit.getTile())
+                    #for unit in self.p1.unitsSelected:
+                        #self.mapa.setLibre(unit.getTile())
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.GENERATE_WORKER:
                     self.p1.execute(command.id, [], None)
+                elif command.id == CommandId.DESELECT:
+                    for unit in self.p1.unitsSelected:
+                        unit.setClicked(False)
+                    self.p1.unitsSelected = []
+                    if self.p1.structureSelected != None:
+                        self.p1.structureSelected.setClicked(False)
+                        self.p1.structureSelected = None
                 elif command.id == CommandId.GENERATE_T1:
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.GENERATE_T2:
@@ -80,6 +112,22 @@ class Escena():
                     self.p1.execute(command.id, [], None)
                 elif command.id == CommandId.SAVE_GAME:
                     self.saveScene()
+                elif command.id == CommandId.EXIT_GAME:
+                    setGameState(System_State.MAINMENU)
+                    self.interfaz.helpPage = 0
+                    self.camera.x = 0
+                    self.camera.y = 0
+                elif command.id == CommandId.SAVE_EXIT_GAME:
+                    self.saveScene()
+                    setGameState(System_State.MAINMENU)
+                    self.interfaz.helpPage = 0
+                    self.camera.x = 0
+                    self.camera.y = 0
+                elif command.id == CommandId.PAUSE_GAME:
+                    setGameState2(System_State.PAUSED)
+                elif command.id == CommandId.HELP:
+                    setGameState2(System_State.HELP)
+                    self.interfaz.helpPage = 0
                 elif command.id == CommandId.NEXT_PAGE:
                     self.interfaz.helpPage += 1
                 elif command.id == CommandId.PREVIOUS_PAGE:
@@ -108,9 +156,9 @@ class Escena():
         tileIni = self.mapa.getTile(param[0], param[1])
         if tileObj.type != 0: #Esta ocupada
             tileObj = self.mapa.getTileCercana(tileIni, tileObj)
-        path = calcPath(param, tileIni, tileObj, self.mapa)
+        #path = calcPath(param, tileIni, tileObj, self.mapa)
         # COMPROBAR SI HA CLICKADO UN ORE
-        order = {'order': CommandId.MOVE, 'angle': 0, 'path': path}
+        order = {'order': CommandId.MOVE, 'angle': 0}
         if tileClicked.type == RESOURCE:
             #print("CLICKO UN RECURSO")
             resource = tileClicked.getOcupante()
@@ -237,30 +285,47 @@ class Escena():
 
     def draw(self, screen):
         #importa el orden porfavor
+        now = datetime.now()
         self.mapa.drawMap(screen, self.camera)
+        #print("tiempo de dibujar el mapa: ",(datetime.now() - now).microseconds)
+        now = datetime.now()
         #print(self.walls.__len__())
+        
         all = self.resources + self.p1.units +  self.p1.structures + self.p2.units +  self.p2.structures + self.walls
         all.sort(key=lambda x: x.y)
+        now = datetime.now()
         for d in all:
             d.draw(screen, self.camera)
+        #print("tiempo en deibujar las entidades: ",(datetime.now() - now).microseconds)
         '''
+        now = datetime.now()
         for res in self.resources:
             res.draw(screen, self.camera)
-
+        print("tiempo en dib los recursos: ",(datetime.now() - now).microseconds)
+        now = datetime.now()
         self.p1.draw(screen, self.camera)
+        print("tiempo en dib el p1: ",(datetime.now() - now).microseconds)
+        now = datetime.now()
         self.p2.draw(screen, self.camera)
+        print("tiempo en dib el p2: ",(datetime.now() - now).microseconds)
+        now = datetime.now()
         for wall in self.walls:
-            wall.draw(screen, self.camera)'''
+            wall.draw(screen, self.camera)
+        print("tiempo en dib los muros: ",(datetime.now() - now).microseconds)
+        now = datetime.now()'''
         self.mapa.drawNiebla(screen, self.camera)
+        #print("tiempo en la niebla: ",(datetime.now() - now).microseconds)
+        now = datetime.now()
         self.raton.drawBuildStructure(screen, self.camera)
+        #print("tiempo en la buildraton: ",(datetime.now() - now).microseconds)
+        now = datetime.now()
         self.interfaz.draw(screen, self.camera)
+        #print("tiempo en la interfaz: ",(datetime.now() - now).microseconds)
+        
         
 
     def getTerranBarrack(self):
         return TerranBarracks(0, 0, None, self.mapa, True)
-
-    def getHatchery(self):
-        return Hatchery(0, 0, None, self.mapa, False)
 
     def getTerranRefinery(self):
         return TerranRefinery(0, 0, None, self.mapa, True)

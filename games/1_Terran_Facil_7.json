@@ -1,5 +1,5 @@
 {
-  "nombre": "1_Terran_Normal_3",
+  "nombre": "1_Terran_Facil_7",
   "p1": {
     "units": [
       {
@@ -76,24 +76,15 @@
         "x": 20,
         "y": 35,
         "hp": 200
-      },
-      {
-        "clase": "zergBarracks",
-        "building": false,
-        "nombre": "Criadera de Zerling",
-        "funcion": "Crear zerling",
-        "x": 26.0,
-        "y": 35.0,
-        "hp": 200
       }
     ],
-    "resources": 50,
+    "resources": 100,
     "keyMap": {},
     "commandMap": {},
     "da\u00f1oUpgrade": 0,
     "armorUpgrade": 0,
     "mineUpgrade": 0,
-    "limitUnits": 23
+    "limitUnits": 13
   },
   "mapa": {
     "w": 40,
@@ -3466,8 +3457,8 @@
   "camera": {
     "x": 400,
     "y": 0,
-    "h": 610,
-    "w": 1025
+    "h": 793,
+    "w": 1536
   },
   "resources": [
     {

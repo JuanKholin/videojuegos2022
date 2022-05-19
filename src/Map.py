@@ -222,9 +222,7 @@ class Map():
         else:
             #print("HI")
             pass
-        if tile.tileid == 290:
-            print("OCUPADA")
-            print(tile.type)
+
 
     #Pone la tile como recurso
     def setRecurso(self, tile):
@@ -412,6 +410,8 @@ class Map():
             tileCercana = self.getTileOcupadaCercana(tileIni, tileCercana)
         return tileCercana
 
+        
+
 
     def Astar(self, tileIni, tileObj):
         #print("VOY DE ", tileIni.tileid, "A ",  tileObj.tileid)
@@ -437,14 +437,12 @@ class Map():
             currentId = 0
             for id, tile in enumerate(nodosAbiertos):
                 tileF = tile.g + tile.heur(tileObj)
-                #print(currentTile.tileid ,":", currentTile.g,currentTile.heur(tileObj) ,tile.tileid,":", tile.g,tile.heur(tileObj))
                 if float(currentF) > float(tileF):
                     currentTile = Tile.Tile(tile.tileid, tile.centerx, tile.centery, 0, 0, 1, currentTile.type, tile.g, tile.padre)
                     currentF = tileF
                     currentId = id
             #Tenemos la tile con menos f
             #print("estamos en", currentTile.tileid , currentTile.padre.tileid )
-#input()
 
             nodosCerrados.append(currentTile)
             nodosAbiertos.pop(currentId)
@@ -469,7 +467,7 @@ class Map():
                         tile.padre = currentTile
                     else:
                         #print("esta en abiertos", tileEnAbiertos.g,"y he encontrado",currentTile.g + currentTile.heur(tile) )
-                        if tileEnAbiertos.g > (currentTile.g + currentTile.heur(tile)):
+                        if tileEnAbiertos.g + currentTile.heur(tileObj) > (currentTile.g + currentTile.heur(tile)):
                             #print("CHANGE")
                             nodosAbiertos.remove(tileEnAbiertos)
                             self.setTilePadre(tile, currentTile)
@@ -481,8 +479,6 @@ class Map():
 
         path = []
         pathReturn = []
-        for tile in nodosAbiertos:
-            tile.g = 0
         if (nodosAbiertos.__len__() == 0) or broken:
             #print("camino no encontrado", tileObj.tileid)
             
@@ -501,7 +497,7 @@ class Map():
             while i >= 0:
                 pathReturn.append(path[i])
                 i = i - 1
-
+        #print("nodos: ", jaja)
         return pathReturn
 
     def AstarNoLimit(self, tileIni, tileObj):
@@ -661,7 +657,7 @@ class Map():
             self.minimap.insert(i,[])#Es una matriz que representa el mapa(0 es suelo, 1 es obstaculo, 2 vecino)
             for j in range(len(self.mapa[0])):
                 image = (self.mapa[i][j]).image
-                tile_sprite = pygame.transform.scale(image, [round(200/len(self.mapa[0])), round(200/len(self.mapa))])
+                tile_sprite = pg.transform.scale(image, [round(200/len(self.mapa[0])), round(200/len(self.mapa))])
                 #print(tile_sprite.get_rect())
                 self.minimap[i].insert(j, tile_sprite)
 

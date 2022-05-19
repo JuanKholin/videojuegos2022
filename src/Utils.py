@@ -2,7 +2,10 @@ from enum import Enum, auto, IntEnum
 from pickle import GLOBAL
 import math
 from re import T
-import pygame
+from token import MINUS
+from turtle import Screen
+import pygame as pg
+from .Lib import *
 
 DEBBUG = True
 
@@ -70,6 +73,8 @@ SOLDIER = "SOLDIER"
 WORKER = "WORKER"
 REFINERY = "REFINERY"
 BASE = "BASE"
+BARRACKS = "BARRACKS"
+DEPOT = "DEPOT"
 
 # Tiles types:
 EMPTY = 0
@@ -136,7 +141,7 @@ RANGE_UNIT = TILE_WIDTH
 RANGE_BASIC = 27
 ARMOR_EXTRA = 1.1
 
-#CLOCK = pygame.time.Clock()
+#CLOCK = pg.time.Clock()
 
 #contador del sistema
 SYSTEM_CLOCK = 0
@@ -163,15 +168,16 @@ GREEN3  = (110, 255, 90)
 GREEN4  = (140, 255, 150)
 PINK    = (255, 95, 185)
 ORANGE  = (255, 200, 95)
+ORANGE2 = (255, 145, 0)
 
-HP = pygame.image.load("SPRITE/EXTRA/vida3.png")
-HP.set_colorkey(WHITE)
-HP2 = pygame.image.load("SPRITE/EXTRA/vida2.png")
-HP.set_colorkey(WHITE)
+HP = pg.image.load("SPRITE/EXTRA/vida3.png")
+HP2 = pg.image.load("SPRITE/EXTRA/vida2.png")
+BARRA_SOUND = pg.image.load("SPRITE/EXTRA/sound.png")
 
 
-
+#CAMERA
 CAMERA_SPEED = 8
+resized = False
 
 MAX_SELECTED_UNIT = 8
 
@@ -180,8 +186,13 @@ ENTITY_ID = 0
 X_TILES = 20
 Y_TILES = 15
 
-SCREEN_WIDTH = 1025
-SCREEN_HEIGHT = 770
+ScreenWidth = 1024
+ScreenHeight = 770
+MIN_SCREEN_WIDTH = 1024
+MIN_SCREEN_HEIGHT = 770
+SCREEN_SCALE = 1024/770
+ScreenWD = 0
+ScreenHD = 0
 
 # Para los estados de las entidades
 class UnitState(Enum):
@@ -237,38 +248,41 @@ MAIN_MENU = "SPRITE/mainMenu/fondo"
 MAIN_MENU_TEXT_SIZE = 30
 
 
-SINGLE_TEXT_POS = [340, 215]
-EXIT_TEXT_POS = [720, 600]
+SINGLE_TEXT_POS = [MIN_SCREEN_WIDTH/2-300, MIN_SCREEN_HEIGHT/2-210]
+EXIT_TEXT_POS = [MIN_SCREEN_WIDTH/2-720, MIN_SCREEN_HEIGHT/2-580]
 
 SINGLE_SIZE = 1.5 #(360, 180)
 SINGLE_PLAYER = "SPRITE/mainMenu/SinglePlayer/single"
 SINGLE_PLAYER_N = 35
-SINGLE_PLAYER_POS = [20, 40]
+SINGLE_PLAYER_POS = [MIN_SCREEN_WIDTH/2-20, MIN_SCREEN_HEIGHT/2-40]
 
 SINGLE_PLAYER_FB = "SPRITE/mainMenu/SinglePlayer/Spanish/singleones"
 SINGLE_PLAYER_FB_N = 60
-SINGLE_PLAYER_FB_POS = [50, 160]
+SINGLE_PLAYER_FB_POS = [MIN_SCREEN_WIDTH/2-50, MIN_SCREEN_HEIGHT/2-160]
 
 EXIT_SIZE = 1.5 #(300, 200)
 EXIT = "SPRITE/mainMenu/Exit/exit"
 EXIT_N = 50
-EXIT_POS = [650, 420]
+EXIT_POS = [MIN_SCREEN_WIDTH/2-650, MIN_SCREEN_HEIGHT/2-420]
 
 EXIT_FB = "SPRITE/mainMenu/Exit/Spanish/exitones"
 EXIT_FB_N = 30
-EXIT_FB_POS = [680, 420]
+EXIT_FB_POS = [MIN_SCREEN_WIDTH/2-680, MIN_SCREEN_HEIGHT/2-420]
 
-AJUSTES_POS = [60, 680]
+AJUSTES_SONIDO_TEXT_POS = [MIN_SCREEN_WIDTH/2-80, MIN_SCREEN_HEIGHT/2-650]
+AJUSTES_ATAJOS_TEXT_POS = [MIN_SCREEN_WIDTH/2-80, MIN_SCREEN_HEIGHT/2-700]
+AJUSTES_SONIDO_POS = [MIN_SCREEN_WIDTH/2-80, MIN_SCREEN_HEIGHT/2-650]
+AJUSTES_ATAJOS_POS = [MIN_SCREEN_WIDTH/2-80, MIN_SCREEN_HEIGHT/2-700]
 
     #############
     #GAME SELECT#
     #############
 
-ACEPTAR_POS = [705, 590]
+ACEPTAR_POS = [MIN_SCREEN_WIDTH/2-705, MIN_SCREEN_HEIGHT/2-590]
 ACEPTAR_RECT = (250, 40)
-CANCELAR_POS = [705, 695]
-NUEVA_PARTIDA_POS = [88, 652]
-PARTIDA_DEFAULT_POS = [80, 300]
+CANCELAR_POS = [MIN_SCREEN_WIDTH/2-705, MIN_SCREEN_HEIGHT/2-695]
+NUEVA_PARTIDA_POS = [MIN_SCREEN_WIDTH/2-88, MIN_SCREEN_HEIGHT/2-652]
+PARTIDA_DEFAULT_POS = [MIN_SCREEN_WIDTH/2-80, MIN_SCREEN_HEIGHT/2-300]
 
 
 
@@ -278,20 +292,20 @@ GAME_SELECT_TEXT_SIZE = 30
     #############
     #GAME SELECT#
     #############
-PARTIDA_POS = [72, 205]
-YPARTIDA_PAD = 33
+PARTIDA_POS = [MIN_SCREEN_WIDTH/2-72, MIN_SCREEN_HEIGHT/2-205]
+YPARTIDA_PAD = 35
 
-MAPA1_POS = [80, 269]
-MAPA2_POS = [198, 269]
-MAPA3_POS = [311, 269]
-MAPA4_POS = [425, 269]
+MAPA1_POS = [MIN_SCREEN_WIDTH/2-80, MIN_SCREEN_HEIGHT/2-269]
+MAPA2_POS = [MIN_SCREEN_WIDTH/2-198, MIN_SCREEN_HEIGHT/2-269]
+MAPA3_POS = [MIN_SCREEN_WIDTH/2-311, MIN_SCREEN_HEIGHT/2-269]
+MAPA4_POS = [MIN_SCREEN_WIDTH/2-425, MIN_SCREEN_HEIGHT/2-269]
 
-FACIL_POS = [84, 374]
-NORMAL_POS = [236, 374]
-DIFICIL_POS = [392, 374]
+FACIL_POS = [MIN_SCREEN_WIDTH/2-84, MIN_SCREEN_HEIGHT/2-374]
+NORMAL_POS = [MIN_SCREEN_WIDTH/2-236, MIN_SCREEN_HEIGHT/2-374]
+DIFICIL_POS = [MIN_SCREEN_WIDTH/2-392, MIN_SCREEN_HEIGHT/2-374]
 
-TERRAN_POS = [86, 493]
-ZERG_POS = [321, 493]
+TERRAN_POS = [MIN_SCREEN_WIDTH/2-86, MIN_SCREEN_HEIGHT/2-493]
+ZERG_POS = [MIN_SCREEN_WIDTH/2-321, MIN_SCREEN_HEIGHT/2-493]
 
 NEW_GAME = "SPRITE/newGame/"
 NEW_GAME_TEXT_SIZE = 30
@@ -308,46 +322,46 @@ SETTINGS_BOT = "SPRITE/settings/settings_bg_bot"
 
 
 KEY_TO_TEXT = {
-     pygame.K_UP: "UP",
-     pygame.K_DOWN: "DOWN",
-     pygame.K_RIGHT: "RIGHT",
-     pygame.K_LEFT: "LEFT",
-     pygame.K_0: "0",
-     pygame.K_1: "1",
-     pygame.K_2: "2",
-     pygame.K_3: "3",
-     pygame.K_4: "4",
-     pygame.K_5: "5",
-     pygame.K_6: "6",
-     pygame.K_7: "7",
-     pygame.K_8: "8",
-     pygame.K_9: "9",
-     pygame.K_q: "Q",
-     pygame.K_w: "W",
-     pygame.K_e: "E",
-     pygame.K_r: "R",
-     pygame.K_t: "T",
-     pygame.K_y: "Y",
-     pygame.K_u: "U",
-     pygame.K_i: "I",
-     pygame.K_o: "O",
-     pygame.K_p: "P",
-     pygame.K_a: "A",
-     pygame.K_s: "S",
-     pygame.K_d: "D",
-     pygame.K_f: "F",
-     pygame.K_g: "G",
-     pygame.K_h: "H",
-     pygame.K_j: "J",
-     pygame.K_k: "K",
-     pygame.K_l: "L",
-     pygame.K_z: "Z",
-     pygame.K_x: "X",
-     pygame.K_c: "C",
-     pygame.K_v: "V",
-     pygame.K_b: "B",
-     pygame.K_n: "N",
-     pygame.K_m: "M",
+     pg.K_UP: "UP",
+     pg.K_DOWN: "DOWN",
+     pg.K_RIGHT: "RIGHT",
+     pg.K_LEFT: "LEFT",
+     pg.K_0: "0",
+     pg.K_1: "1",
+     pg.K_2: "2",
+     pg.K_3: "3",
+     pg.K_4: "4",
+     pg.K_5: "5",
+     pg.K_6: "6",
+     pg.K_7: "7",
+     pg.K_8: "8",
+     pg.K_9: "9",
+     pg.K_q: "Q",
+     pg.K_w: "W",
+     pg.K_e: "E",
+     pg.K_r: "R",
+     pg.K_t: "T",
+     pg.K_y: "Y",
+     pg.K_u: "U",
+     pg.K_i: "I",
+     pg.K_o: "O",
+     pg.K_p: "P",
+     pg.K_a: "A",
+     pg.K_s: "S",
+     pg.K_d: "D",
+     pg.K_f: "F",
+     pg.K_g: "G",
+     pg.K_h: "H",
+     pg.K_j: "J",
+     pg.K_k: "K",
+     pg.K_l: "L",
+     pg.K_z: "Z",
+     pg.K_x: "X",
+     pg.K_c: "C",
+     pg.K_v: "V",
+     pg.K_b: "B",
+     pg.K_n: "N",
+     pg.K_m: "M",
 }
 
 ATAJOS_TITLE_POS = [115, 25]
@@ -357,47 +371,392 @@ TECLA_COLUMN_POS = [800, 110]
 COLUMN_TEXT_SIZE = 35
 COMANDO_POS = [150, 170]
 TECLA_POS = [800, 170]
-AVISO_COLUMN_POS = [SCREEN_WIDTH*0.4, SCREEN_HEIGHT*0.14]
+AVISO_COLUMN_POS = [MIN_SCREEN_WIDTH*0.4, MIN_SCREEN_HEIGHT*0.14]
 ATAJO_TEXT_SIZE = 30
 Y_ATAJOS_OFFSET = 40
-REESTABLECER_POS = [SCREEN_WIDTH*0.012, SCREEN_HEIGHT*0.91]
+REESTABLECER_POS = [MIN_SCREEN_WIDTH*0.012, MIN_SCREEN_HEIGHT*0.91]
 REESTABLECER_SIZE = [219, 50]
-GUARDAR_SALIR_SETTINGS_POS = [SCREEN_WIDTH*0.665, SCREEN_HEIGHT*0.922]
+GUARDAR_SALIR_SETTINGS_POS = [MIN_SCREEN_WIDTH*0.665, MIN_SCREEN_HEIGHT*0.922]
 GUARDAR_SALIR_SETTINGS_SIZE = [310, 40]
 
-SCROLL_BAR_TOP_TRIANGLE_POS = [(SCREEN_WIDTH-60, SCREEN_HEIGHT*0.19 + 40),(SCREEN_WIDTH-45, SCREEN_HEIGHT*0.19 + 20),(SCREEN_WIDTH-30, SCREEN_HEIGHT*0.19 + 40)]
-SCROLL_BAR_TOP_SMALL_TRI_POS = [(SCREEN_WIDTH-57, SCREEN_HEIGHT*0.19 + 43),(SCREEN_WIDTH-42, SCREEN_HEIGHT*0.19 + 23),(SCREEN_WIDTH-27, SCREEN_HEIGHT*0.19 + 43)]
-SCROLL_BAR_RECT_POS = [SCREEN_WIDTH-60, SCREEN_HEIGHT*0.19 + 50]
-SCROLL_BAR_RECT_SIZE = [30, SCREEN_HEIGHT - SCREEN_HEIGHT*0.19 - SCREEN_HEIGHT*0.13 - 100]
-SCROLL_BAR_BOT_TRIANGLE_POS = [(SCREEN_WIDTH-60, SCREEN_HEIGHT - SCREEN_HEIGHT*0.13 - 40),(SCREEN_WIDTH-45, SCREEN_HEIGHT - SCREEN_HEIGHT*0.13 - 20),(SCREEN_WIDTH-30, SCREEN_HEIGHT - SCREEN_HEIGHT*0.13 - 40)]
+SCROLL_BAR_TOP_TRIANGLE_POS = [(MIN_SCREEN_WIDTH-60, MIN_SCREEN_HEIGHT*0.19 + 40),(MIN_SCREEN_WIDTH-45, MIN_SCREEN_HEIGHT*0.19 + 20),(MIN_SCREEN_WIDTH-30, MIN_SCREEN_HEIGHT*0.19 + 40)]
+SCROLL_BAR_TOP_SMALL_TRI_POS = [(MIN_SCREEN_WIDTH-57, MIN_SCREEN_HEIGHT*0.19 + 43),(MIN_SCREEN_WIDTH-42, MIN_SCREEN_HEIGHT*0.19 + 23),(MIN_SCREEN_WIDTH-27, MIN_SCREEN_HEIGHT*0.19 + 43)]
+SCROLL_BAR_RECT_POS = [MIN_SCREEN_WIDTH-60, MIN_SCREEN_HEIGHT*0.19 + 50]
+SCROLL_BAR_RECT_SIZE = [30, MIN_SCREEN_HEIGHT - MIN_SCREEN_HEIGHT*0.19 - MIN_SCREEN_HEIGHT*0.13 - 100]
+SCROLL_BAR_BOT_TRIANGLE_POS = [(MIN_SCREEN_WIDTH-60, MIN_SCREEN_HEIGHT - MIN_SCREEN_HEIGHT*0.13 - 40),(MIN_SCREEN_WIDTH-45, MIN_SCREEN_HEIGHT - MIN_SCREEN_HEIGHT*0.13 - 20),(MIN_SCREEN_WIDTH-30, MIN_SCREEN_HEIGHT - MIN_SCREEN_HEIGHT*0.13 - 40)]
 #----------------------------------------------------------------
 # GUI
 #----------------------------------------------------------------
-BUTTON_X = 810
-BUTTON_Y = 575
+BUTTON_X = MIN_SCREEN_WIDTH/2 - 810
+BUTTON_Y = MIN_SCREEN_HEIGHT - 575
 BUTTON_W = 60
 BUTTON_H = 55
-BUTTONPADY = 64
-BUTTONPADX = 74
+BUTTONPADY = -64
+BUTTONPADX = -74
+
+UPGRADEX = MIN_SCREEN_WIDTH/2 - 400
+UPGRADEY = MIN_SCREEN_HEIGHT - 705
 
 UPGRADEPADX = 80
 
-MINIMAP_X = 10
-MINIMAP_Y = 560
+MINIMAP_X = MIN_SCREEN_WIDTH/2 - 10
+MINIMAP_Y = MIN_SCREEN_HEIGHT - 560
 MINIMAP_W = 205
 MINIMAP_H = 205
 
-GUI_INFO_X = 280
-GUI_INFO_Y = 610
-GUI_INFO_X2 = 510
-GUI_INFO_Y2 = 645
+GUI_INFO_X = MIN_SCREEN_WIDTH/2 - 270
+GUI_INFO_Y = MIN_SCREEN_HEIGHT - 610
+GUI_INFO_X2 = MIN_SCREEN_WIDTH/2 - 420
+GUI_INFO_Y2 = MIN_SCREEN_HEIGHT - 620
 
-RESOURCES_COUNT_X = SCREEN_WIDTH - 300
+RESOURCES_COUNT_X = 300
 
 #---
 HEROE_PATH = "SPRITE/Heroes/Terran/Alexei Stukov/taxfid000"
 HEROE_N = 10
 #----
+
+#-------------------------------------------------------------------------
+# SPRITES-----------------------------------------------------------------
+DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
+#-------------------------------------------------------------------------
+# Para todo
+def init():
+    loadTerranWorker()
+    loadDrone()
+    loadTerranSoldier()
+    loadZergling()
+    loadFirebat()
+    loadBroodling()
+    loadGoliath()
+    loadHydralisk()
+
+    loadTerranBuilder()
+
+# TerranWorker
+TERRAN_WORKER_SCALE = 1.5
+TERRAN_WORKER_SPRITE_ROWS = 72
+TERRAN_WORKER_TOTAL_FRAMES = 296  # [0:15] MOVERSE Y STILL [16:31] MOVER ORE [32:47] MOVER BARRIL [48:217] ATACAR Y MINAR [289:295] MORICION
+TERRAN_WORKER_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
+          list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
+          list(range(205, 221)), [221] * 16, [222] * 16, [223] * 16, [224] * 16,
+          [225] * 16, [226] * 16, [227] * 16, [228] * 16, [229] * 16, [230] * 16]
+TERRAN_WORKER_STILL_FRAMES = [0]
+TERRAN_WORKER_ORE_TRANSPORTING_FRAMES = [3]
+TERRAN_WORKER_GAS_TRANSPORTING_FRAMES = [2]
+TERRAN_WORKER_ATTACK_FRAMES = [1, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+TERRAN_WORKER_MOVE_FRAMES = [0]
+TERRAN_WORKER_DIE_FRAMES = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+TERRAN_WORKER_INVERSIBLE_FRAMES = len(TERRAN_WORKER_FRAMES) - len(TERRAN_WORKER_DIE_FRAMES) # los die frames no se invierten
+TERRAN_WORKER_SPRITES = [None, None]
+
+def loadTerranWorker():
+    global TERRAN_WORKER_SPRITES
+    spritesheet = pg.image.load("./sprites/scvJusto.bmp").convert()
+    spritesheet.set_colorkey(BLACK)
+    deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
+    deadSpritesheet.set_colorkey(BLACK)
+    sprites = divideSpritesheetByRows(spritesheet, TERRAN_WORKER_SPRITE_ROWS, TERRAN_WORKER_SCALE) + divideSpritesheetByRowsNoScale(deadSpritesheet, 200, (80, 80))
+
+    for i in range(TERRAN_WORKER_INVERSIBLE_FRAMES):
+        for j in range(9, 16):
+            sprites[TERRAN_WORKER_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[TERRAN_WORKER_FRAMES[i][DIR_OFFSET[j]]], True, False)
+
+    shadows = []
+    for i in range(len(sprites) - len(TERRAN_WORKER_DIE_FRAMES)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+    TERRAN_WORKER_SPRITES = [sprites, shadows]
+
+# Drone
+DRONE_SCALE = 1.5
+DRONE_SPRITE_ROWS = 128
+DRONE_TOTAL_FRAMES = 391 # 23 ristas de 17 frames (solo son necesarios 16 de cada una)
+DRONE_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
+          list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
+          list(range(205, 221)), list(range(222, 238)), list(range(239, 255)),
+          list(range(256, 272)), list(range(273, 289)), list(range(290, 306))]
+DRONE_STILL_FRAMES = [0]
+DRONE_ATTACK_FRAMES = [6, 7, 8, 9]
+DRONE_MOVE_FRAMES = [1, 2, 3, 4, 5]
+DRONE_ORE_TRANSPORTING_FRAMES = DRONE_MOVE_FRAMES
+DRONE_DIE_FRAMES = [10, 11, 12, 13, 14, 15, 16, 17]
+
+DRONE_INVERSIBLE_FRAMES = len(DRONE_FRAMES) - 1 # los die frames no se invierten
+DRONE_SPRITES = [None, None]
+def loadDrone():
+    global DRONE_SPRITES
+    spritesheet = pg.image.load("./sprites/drone.bmp").convert()
+    spritesheet.set_colorkey(BLACK)
+    sprites = divideSpritesheetByRows(spritesheet, DRONE_SPRITE_ROWS, DRONE_SCALE)
+
+    for i in range(DRONE_INVERSIBLE_FRAMES):
+        for j in range(9, 16):
+            sprites[DRONE_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[DRONE_FRAMES[i][DIR_OFFSET[j]]], True, False)
+
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+    DRONE_SPRITES = [sprites, shadows]
+
+# TerranSoldier
+TERRAN_SOLDIER_SCALE = 1.5
+TERRAN_SOLDIER_SPRITE_ROWS = 64
+TERRAN_SOLDIER_TOTAL_FRAMES = 221
+TERRAN_SOLDIER_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
+          list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
+          list(range(205, 221)), [221] * 16, [222] * 16, [223] * 16, [224] * 16,
+          [225] * 16, [226] * 16, [227] * 16, [228] * 16]
+TERRAN_SOLDIER_STILL_FRAMES = [0]
+TERRAN_SOLDIER_GUARD_FRAMES = [1]
+TERRAN_SOLDIER_ATTACK_FRAMES = [2, 3]
+TERRAN_SOLDIER_MOVE_FRAMES = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+TERRAN_SOLDIER_DIE_FRAMES = [13, 14, 15, 16, 17, 18, 19, 20]
+
+TERRAN_SOLDIER_INVERSIBLE_FRAMES = len(TERRAN_SOLDIER_FRAMES) - len(TERRAN_SOLDIER_DIE_FRAMES)
+TERRAN_SOLDIER_SPRITES = [None, None]
+
+def loadTerranSoldier():
+    global TERRAN_SOLDIER_SPRITES
+    spritesheet = pg.image.load("./sprites/terran_soldier_sheet.bmp").convert()
+    spritesheet.set_colorkey(WHITE)
+    sprites = divideSpritesheetByRows(spritesheet, TERRAN_SOLDIER_SPRITE_ROWS, TERRAN_SOLDIER_SCALE)
+
+    for i in range(TERRAN_SOLDIER_INVERSIBLE_FRAMES):
+        for j in range(9, 16):
+            sprites[TERRAN_SOLDIER_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[TERRAN_SOLDIER_FRAMES[i][DIR_OFFSET[j]]], True, False)
+
+    shadows = []
+    for i in range(len(sprites) - len(TERRAN_SOLDIER_DIE_FRAMES)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+    TERRAN_SOLDIER_SPRITES = [sprites, shadows]
+
+# Zergling
+ZERGLING_SCALE = 1.5
+ZERGLING_SPRITE_ROWS = 128
+ZERGLING_TOTAL_FRAMES = 296
+ZERGLING_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
+          list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
+          [289] * 16, [290] * 16, [291] * 16, [292] * 16, [293] * 16, [294] * 16,
+          [295] * 16]
+ZERGLING_STILL_FRAMES = [0]
+ZERGLING_ATTACK_FRAMES = [1, 2, 3]
+ZERGLING_MOVE_FRAMES = [4, 5, 6, 7, 8, 9, 10, 11]
+ZERGLING_DIE_FRAMES = [12, 13, 14, 15, 16, 17, 18]
+
+ZERGLING_INVERSIBLE_FRAMES = len(ZERGLING_FRAMES) - len(ZERGLING_DIE_FRAMES)
+ZERGLING_SPRITES = [None, None]
+
+def loadZergling():
+    global ZERGLING_SPRITES
+    spritesheet = pg.image.load("./sprites/zergling.bmp").convert()
+    spritesheet.set_colorkey(BLACK)
+    sprites = divideSpritesheetByRows(spritesheet, ZERGLING_SPRITE_ROWS, ZERGLING_SCALE)
+
+    for i in range(ZERGLING_INVERSIBLE_FRAMES):
+        for j in range(9, 16):
+            sprites[ZERGLING_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[ZERGLING_FRAMES[i][DIR_OFFSET[j]]], True, False)
+
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+    ZERGLING_SPRITES = [sprites, shadows]
+
+# Firebat
+FIREBAT_SCALE = 1.5
+FIREBAT_SPRITE_ROWS = 32
+FIREBAT_TOTAL_FRAMES = 179
+
+FIREBAT_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
+          list(range(154, 170)), [170] * 16, [171] * 16, [172] * 16, [173] * 16,
+          [174] * 16, [175] * 16, [176] * 16, [177] * 16, [178] * 16]
+FIREBAT_STILL_FRAMES = [3]
+FIREBAT_ATTACK_FRAMES = [0, 1]
+FIREBAT_MOVE_FRAMES = [2, 4, 5, 6, 7, 8, 9]
+FIREBAT_DIE_FRAMES = [10, 11, 12, 13, 14, 15, 16, 17, 18]
+FIREBAT_INVERSIBLE_FRAMES = len(FIREBAT_FRAMES) - len(FIREBAT_DIE_FRAMES)
+FIREBAT_SPRITES = [None, None]
+
+def loadFirebat():
+    global FIREBAT_SPRITES
+    spritesheet = pg.image.load("./sprites/firebat.bmp").convert()
+    spritesheet.set_colorkey(BLACK)
+    deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
+    deadSpritesheet.set_colorkey(BLACK)
+    sprites = divideSpritesheetByRows(spritesheet, FIREBAT_SPRITE_ROWS, FIREBAT_SCALE) + divideSpritesheetByRowsNoScale(deadSpritesheet, 128, (80, 80))
+
+    for i in range(FIREBAT_INVERSIBLE_FRAMES):
+        for j in range(9, 16):
+            sprites[FIREBAT_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[FIREBAT_FRAMES[i][DIR_OFFSET[j]]], True, False)
+
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+    FIREBAT_SPRITES = [sprites, shadows]
+
+# Broodling
+BROODLING_SCALE = 2
+BROODLING_SPRITE_ROWS = 48
+BROODLING_TOTAL_FRAMES = 209
+BROODLING_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
+          list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
+          [204] * 16, [205] * 16, [206] * 16, [207] * 16, [208] * 16]
+BROODLING_STILL_FRAMES = [11]
+BROODLING_ATTACK_FRAMES = [8, 9, 10]
+BROODLING_MOVE_FRAMES = [0, 1, 2, 3, 4, 5, 6, 7]
+BROODLING_DIE_FRAMES = [12, 13, 14, 15, 16]
+BROODLING_INVERSIBLE_FRAMES = len(BROODLING_FRAMES) - len(BROODLING_DIE_FRAMES)
+BROODLING_SPRITES = [None, None]
+def loadBroodling():
+    global BROODLING_SPRITES
+    spritesheet = pg.image.load("./sprites/broodling.bmp").convert()
+    spritesheet.set_colorkey(BLACK)
+    sprites = divideSpritesheetByRows(spritesheet, BROODLING_SPRITE_ROWS, BROODLING_SCALE)
+
+    for i in range(BROODLING_INVERSIBLE_FRAMES):
+        for j in range(9, 16):
+            sprites[BROODLING_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[BROODLING_FRAMES[i][DIR_OFFSET[j]]], True, False)
+
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+    BROODLING_SPRITES = [sprites, shadows]
+
+# Goliath
+GOLIATH_SCALE = 2
+GOLIATH_SPRITE_ROWS = 76
+GOLIATH_TOTAL_FRAMES = 179
+GOLIATH_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
+          list(range(154, 170)), [170] * 16, [171] * 16, [172] * 16, [173] * 16,
+          [174] * 16, [175] * 16, [176] * 16, [177] * 16, [178] * 16]
+GOLIATH_STILL_FRAMES = [0]
+GOLIATH_ATTACK_FRAMES = [5, 6, 8, 9]
+GOLIATH_MOVE_FRAMES = [0, 1, 2, 4, 5, 6, 7]
+GOLIATH_DIE_FRAMES = [10, 11, 12, 13, 14, 15, 16, 17, 18]
+GOLIATH_INVERSIBLE_FRAMES = len(GOLIATH_FRAMES) - len(GOLIATH_DIE_FRAMES)
+GOLIATH_SPRITES = [None, None]
+
+def loadGoliath():
+    global GOLIATH_SPRITES
+    spritesheet = pg.image.load("./sprites/goliath.bmp").convert()
+    spritesheet.set_colorkey(BLACK)
+    deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
+    deadSpritesheet.set_colorkey(BLACK)
+    sprites = divideSpritesheetByRows(spritesheet, GOLIATH_SPRITE_ROWS, GOLIATH_SCALE) + divideSpritesheetByRowsNoScale(deadSpritesheet, 128, (80, 80))
+
+    for i in range(len(GOLIATH_FRAMES)):
+        for j in range(9, 16):
+            sprites[GOLIATH_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[GOLIATH_FRAMES[i][DIR_OFFSET[j]]], True, False)
+
+    shadows = []
+    for i in range(len(sprites) - len(GOLIATH_DIE_FRAMES)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+    GOLIATH_SPRITES = [sprites, shadows]
+
+# Hydralisk
+HYDRALISK_SCALE = 2
+HYDRALISK_SPRITE_ROWS = 128
+HYDRALISK_TOTAL_FRAMES = 212
+HYDRALISK_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
+          list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
+          list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
+          list(range(154, 170)), list(range(171, 187)), list(range(188, 204)),
+          [204] * 16, [205] * 16, [206] * 16, [207] * 16, [208] * 16, [209] * 16,
+          [210] * 16, [211] * 16]
+HYDRALISK_STILL_FRAMES = [0]
+HYDRALISK_ATTACK_FRAMES = [1, 2, 3, 4, 1]
+HYDRALISK_MOVE_FRAMES = [5, 6, 7, 8, 9, 10, 11]
+HYDRALISK_DIE_FRAMES = [12, 13, 14, 15, 16, 17, 18, 19]
+
+HYDRALISK_INVERSIBLE_FRAMES = len(HYDRALISK_FRAMES) - len(HYDRALISK_DIE_FRAMES)
+HYDRALISK_SPRITES = [None, None]
+
+def loadHydralisk():
+    global HYDRALISK_SPRITES
+    spritesheet = pg.image.load("./sprites/hydralisk.bmp").convert()
+    spritesheet.set_colorkey(BLACK)
+    sprites = divideSpritesheetByRows(spritesheet, HYDRALISK_SPRITE_ROWS, HYDRALISK_SCALE)
+
+    for i in range(HYDRALISK_INVERSIBLE_FRAMES):
+        for j in range(9, 16):
+            sprites[HYDRALISK_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[HYDRALISK_FRAMES[i][DIR_OFFSET[j]]], True, False)
+
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+    HYDRALISK_SPRITES = [sprites, shadows]
+
+
+# TerranBuilder
+TERRAN_BUILDER_TOTAL_FRAMES = 6
+TERRAN_BUILDER_SPRITES = [None, None]
+def loadTerranBuilder():
+    global TERRAN_BUILDER_SPRITES
+    sprites = cargarSprites(TERRAN_BUILDER_PATH, TERRAN_BUILDER_TOTAL_FRAMES, False, WHITE, 1.5)
+
+    deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
+    deadSpritesheet.set_colorkey(BLACK)
+    deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
+
+    sprites += deadSprites
+
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+
+    TERRAN_BUILDER_SPRITES = [sprites, shadows]
+
+#-------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 
 class Options(Enum):
@@ -423,7 +782,10 @@ class Options(Enum):
     NEXT_PAGE = auto()
     PREVIOUS_PAGE = auto()
     CLOSE = auto()
-
+    PLUS_SOUND = auto()
+    MINUS_SOUND = auto()
+    PLUS_BGM = auto()
+    MINUS_BGM = auto()
 
 class Upgrades(Enum):
     DANYO = auto()
@@ -505,20 +867,26 @@ TERRAN_REFINERY_PATH = "SPRITE/structure/refinery/refinery000"
 TERRAN_REFINERY_MINERAL_COST = 50
 REFINERY_RENDER = "SPRITE/render/terranRefinery.png"
 
+##---------TERRAN_DEPOT------------------
+##---------DEPOT------------------
+TERRAN_DEPOT_PATH = "SPRITE/structure/supply_depot/tile00"
+TERRAN_DEPOT_RENDER = "SPRITE/render/terranSupply.png"
+TERRAN_DEPOT_MINERAL_COST = 50
+
 ##---------HATCHERY------------------
 HATCHERY_PATH = "SPRITE/structure/Hatchery/tile00"
 HATCHERY_RENDER = "SPRITE/render/hatchery.png"
 HATCHERY_MINERAL_COST = 100
 
 #-------------EXTRACTOR---------------
-EXTRACTOR_PATH = "SPRITE/structure/extractor/tile00"
-EXTRACTOR_RENDER = "SPRITE/render/extractor.png"
-EXTRACTOR_MINERAL_COST = 60
+ZERG_REFINERY_PATH = "SPRITE/structure/extractor/tile00"
+ZERG_REFINERY_RENDER = "SPRITE/render/extractor.png"
+ZERG_REFINERY_MINERAL_COST = 60
 
 #-----------BARRACKS_ZERG-------------
-BARRACKS_ZERG_PATH = "SPRITE/structure/Zerg_1/tile00"
-BARRACKS_ZERG_RENDER = "SPRITE/render/zergBarracks.png"
-BARRACKS_ZERG_MINERAL_COST = 60
+ZERG_BARRACKS_PATH = "SPRITE/structure/zergBarracks/tile00"
+ZERG_BARRACKS_RENDER = "SPRITE/render/zergBarracks.png"
+ZERG_BARRACKS_MINERAL_COST = 60
 
 #-----------S2-------------
 S2_PATH = "SPRITE/structure/Zerg_2/tile00"
@@ -526,14 +894,9 @@ S2_RENDER = "SPRITE/render/extractor.png"
 S2_MINERAL_COST = 60
 
 #-----------SUPPLY_ZERG-------------
-SUPPLY_ZERG_PATH = "SPRITE/structure/Zerg_3/tile00"
-SUPPLY_ZERG_RENDER = "SPRITE/render/zergSupply.png"
-SUPPLY_ZERG_MINERAL_COST = 60
-
-##---------DEPOT------------------
-TERRAN_DEPOT_PATH = "SPRITE/structure/supply_depot/tile00"
-SUPPLY_RENDER = "SPRITE/render/terranSupply.png"
-TERRAN_DEPOT_MINERAL_COST = 50
+ZERG_DEPOT_PATH = "SPRITE/structure/zergSupply/tile00"
+ZERG_DEPOT_RENDER = "SPRITE/render/zergSupply.png"
+ZERG_DEPOT_MINERAL_COST = 60
 
 CRYSTAL_RENDER = "SPRITE/render/mineral.png"
 GEYSER_RENDER = "SPRITE/render/geyser.png"
@@ -551,15 +914,15 @@ def cargarSprites(path, n, twoDig, color = None, scale = None, m = 0, size = Non
             nPath = str(i)
         if size == None:
             if scale == None:
-                sprites.insert(i, pygame.image.load(path + nPath + ".png").convert_alpha())
+                sprites.insert(i, pg.image.load(path + nPath + ".png").convert_alpha())
             elif scale == 2:
-                sprites.insert(i, pygame.transform.scale2x(pygame.image.load(path + nPath + ".png").convert_alpha()))
+                sprites.insert(i, pg.transform.scale2x(pg.image.load(path + nPath + ".png").convert_alpha()))
             else:
-                image = pygame.image.load(path + nPath + ".png").convert_alpha()
-                sprites.insert(i, pygame.transform.scale(image, [image.get_rect().w * scale, image.get_rect().h * scale]))
+                image = pg.image.load(path + nPath + ".png").convert_alpha()
+                sprites.insert(i, pg.transform.scale(image, [image.get_rect().w * scale, image.get_rect().h * scale]))
         else:
-            image = pygame.image.load(path + nPath + ".png").convert_alpha()
-            sprites.insert(i, pygame.transform.scale(image, [size[0], size[1]]))
+            image = pg.image.load(path + nPath + ".png").convert_alpha()
+            sprites.insert(i, pg.transform.scale(image, [size[0], size[1]]))
         if color != None:
             sprites[i - m].set_colorkey(color)
     return sprites
@@ -583,16 +946,20 @@ def frame(n):
     else:
         return 0
 
-consolas = pygame.font.match_font('consolas')
-times = pygame.font.match_font('times')
-arial = pygame.font.match_font('arial')
-courier = pygame.font.match_font('courier')
+consolas = pg.font.match_font('consolas')
+times = pg.font.match_font('times')
+arial = pg.font.match_font('arial')
+courier = pg.font.match_font('courier')
 
-def muestra_texto(pantalla,fuente,texto,color, dimensiones, pos):
-    tipo_letra = pygame.font.Font(pygame.font.match_font(fuente), dimensiones)
+def muestra_texto(pantalla,fuente,texto,color, dimensiones, pos, center = False):
+    tipo_letra = pg.font.Font(pg.font.match_font(fuente), dimensiones)
     superficie = tipo_letra.render(texto, True, color)
     rectangulo = superficie.get_rect()
-    rectangulo.x = pos[0]
+    #print(rectangulo)
+    if not center:
+        rectangulo.x = pos[0]
+    else:
+        rectangulo.x = pos[0] - rectangulo.w/2
     rectangulo.y = pos[1]
     pantalla.blit(superficie,rectangulo)
     #print(rectangulo)
@@ -613,11 +980,12 @@ def calcPath(posini, tileIni, tileObj, mapa):
             posFin = (tile.centerx, tile.centery)
             path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
             path.append(path1)
+            #print(mapa.getTile(posFin[0], posFin[1]).tileid)
             posIni = posFin
         return path
 
 def calcPathNoLimit(posini, tileIni, tileObj, mapa):
-        pathA = mapa.AstarNoLimit(tileIni,tileObj)
+        pathA = mapa.Astar(tileIni,tileObj)
         if pathA.__len__() > 0:
             pathA.pop(0)
         posIni = (posini[0], posini[1])
@@ -626,13 +994,13 @@ def calcPathNoLimit(posini, tileIni, tileObj, mapa):
             posFin = (tile.centerx, tile.centery)
             path1 = Path(math.atan2(posFin[1] - posIni[1], posFin[0] - posIni[0]), int(math.hypot(posFin[0] - posIni[0], posFin[1] - posIni[1])),posFin)
             path.append(path1)
-            print(path1.angle)
+            #print(path1.angle)
             posIni = posFin
         return path
 
-SURF_TILE_NIEBLA = pygame.Surface((40,40), pygame.SRCALPHA)
+SURF_TILE_NIEBLA = pg.Surface((40,40), pg.SRCALPHA)
 SURF_TILE_NIEBLA.fill((0,0,0,128))
-SURF_TILE_OSCURA = pygame.Surface((40,40))
+SURF_TILE_OSCURA = pg.Surface((40,40))
 SURF_TILE_OSCURA.fill((0,0,0))
 
 ELEVACION_PATH = "SPRITE/tile/elevacion/tile0"

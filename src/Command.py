@@ -33,6 +33,15 @@ class CommandId(IntEnum):
     NEXT_PAGE = auto()
     PREVIOUS_PAGE = auto()
     RETURN_GAME = auto()
+    PAUSE_GAME = auto()
+    HELP = auto()
+    SAVE_EXIT_GAME = auto()
+    EXIT_GAME = auto()
+    DESELECT = auto()
+    PLUS_BGM = auto()
+    MINUS_BGM = auto()
+    PLUS_SOUND = auto()
+    MINUS_SOUND = auto()
 
 class Command:
     def __init__(self, id):

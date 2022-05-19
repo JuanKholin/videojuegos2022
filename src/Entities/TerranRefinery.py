@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 
 from .Structure import *
 from .. import Player, Map
@@ -40,11 +40,12 @@ class TerranRefinery(Structure):
         self.type = TERRAN_REFINERY
 
         self.image = self.sprites[self.index]
+        self.shadows = []
         self.operativeIndex = [4]
         self.spawningIndex = [4]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
 
-        self.render = pygame.transform.scale(pygame.image.load(REFINERY_RENDER), RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(REFINERY_RENDER), RENDER_SIZE)
 
         self.building = building
         if building:
@@ -58,6 +59,14 @@ class TerranRefinery(Structure):
         self.paths = []
 
         self.type = TERRAN_REFINERY
+        
+    def drawInfoOperative(self, screen, color):
+        dic = self.toDictionary(self.mapa)
+        muestra_texto(screen, str('monotypecorsiva'), dic['funcion'], color, 20, [Utils.ScreenWidth/2 - GUI_INFO_X2, Utils.ScreenHeight - GUI_INFO_Y2 + 50])
+        if self.resource.capacity > 0:
+            muestra_texto(screen, str('monotypecorsiva'), str(self.resource.capacity), YELLOW, 20, [Utils.ScreenWidth/2 - GUI_INFO_X2 + 60, Utils.ScreenHeight - GUI_INFO_Y2 + 90], True)
+        else:
+            muestra_texto(screen, str('monotypecorsiva'), "0", YELLOW, 20, [Utils.ScreenWidth/2 - GUI_INFO_X2 + 60, Utils.ScreenHeight - GUI_INFO_Y2 + 90], True)
 
     def getBuildSprite(self):
         return self.sprites[4]
@@ -80,24 +89,24 @@ class TerranRefinery(Structure):
     def drawBuildTiles(self, screen, camera, tiles):
         for tile in tiles:
             r = tile.getRect()
-            if tile.type == GEYSER:
-                pygame.draw.rect(screen, GREEN, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
+            if tile.type == GEYSER and tile.visible:
+                pg.draw.rect(screen, GREEN, pg.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
             else:
-                pygame.draw.rect(screen, RED, pygame.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
+                pg.draw.rect(screen, RED, pg.Rect(r[0] - camera.x, r[1] - camera.y, r[2], r[3]), 2)
 
     def draw(self, screen, camera):
         Structure.draw(self, screen, camera)
         if self.resource != None:
             muestra_texto(screen, str('monotypecorsiva'), str(self.resource.capacity), BLUE, 20, [60, 10])
 
-    def checkTiles(self):
+    def checkTiles(self, visible = True):
         r = self.getRect()
         tiles = self.mapa.getRectTiles(r)
         ok = True
         tiles_set = set(tiles)
         if len(tiles_set) == self.TILES_HEIGHT * self.TILES_WIDTH:
             for tile in tiles_set:
-                if tile.type != GEYSER:
+                if tile.type != GEYSER or (not tile.visible and visible):
                     ok = False
                     break
         else:
@@ -118,7 +127,7 @@ class TerranRefinery(Structure):
             "clase": "terranRefinery",
             "building": self.building,
             "nombre": "Refineria",
-            "funcion": "extrae gas geyser"
+            "funcion": "Extrae gas de un geyser"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary
