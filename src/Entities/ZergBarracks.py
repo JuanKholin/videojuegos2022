@@ -92,7 +92,7 @@ class ZergBarracks(Structure):
             return Command(CommandId.NULL)
 
     def getBuildSprite(self):
-        return self.sprites[3]
+        return self.sprites[0]
 
     def toDictionary(self, map):
         #print("x e y del zerg builder ", self.x, self.y)

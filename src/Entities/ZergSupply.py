@@ -64,7 +64,7 @@ class ZergSupply(Structure):
         return Command(CommandId.NULL)
 
     def getBuildSprite(self):
-        return self.sprites[3]
+        return self.sprites[0]
 
     def toDictionary(self, map):
         #print("x e y del zerg builder ", self.x, self.y)
@@ -74,7 +74,7 @@ class ZergSupply(Structure):
             "clase": "zergSupply",
             "building": self.building,
             "nombre": "Guarida",
-            "funcion": "Aumenta la capacidad de tu ejercito"
+            "funcion": "Aumenta capacidad del ejercito"
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

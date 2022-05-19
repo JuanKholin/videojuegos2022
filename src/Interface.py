@@ -127,7 +127,7 @@ class Interface():
         self.helpPageSprites = cargarSprites("./SPRITE/EXTRA/help", 6, False, size = (526, 660))
         
         #SETTINGS
-        self.settingButtons = [self.exitPauseButton, self.helpPauseButton, self.allButton[Options.MINUS_BGM], self.allButton[Options.PLUS_BGM], self.allButton[Options.MINUS_SOUND], self.allButton[Options.PLUS_SOUND]]
+        self.settingButtons = [self.exitPauseButton, self.allButton[Options.MINUS_BGM], self.allButton[Options.PLUS_BGM], self.allButton[Options.MINUS_SOUND], self.allButton[Options.PLUS_SOUND]]
 
     def loadGameGUI(self):
         self.gui = pg.image.load(BARRA_COMANDO + ".bmp")
@@ -893,13 +893,13 @@ class Interface():
         pg.draw.rect(screen, BLACK, pg.Rect(Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80), 512, 500))
         pg.draw.rect(screen, BLUE2, pg.Rect(Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80), 512, 500), 4)
         
-        self.helpPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 245), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
+        #self.helpPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 245), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
         self.exitPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 688), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
         
-        self.settingButtons[2].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 330), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 260))
-        self.settingButtons[3].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 600), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 260))
-        self.settingButtons[4].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 330), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 400))
-        self.settingButtons[5].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 600), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 400))
+        self.settingButtons[1].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 330), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 260))
+        self.settingButtons[2].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 600), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 260))
+        self.settingButtons[3].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 330), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 400))
+        self.settingButtons[4].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 600), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 400))
         
         size = 180
         x = 405

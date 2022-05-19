@@ -384,11 +384,14 @@ class Structure(Entity.Entity):
         return self.x / TILE_WIDTH, self.y / TILE_HEIGHT
 
     def toDictionary(self, map):
-        #print(self.xIni, self.yIni)
         return {
             "x": self.xIni,
             "y": self.yIni,
-            "hp": self.hp
+            "hp": self.hp,
+            "training": [unit.toDictionary(self.mapa) for unit in self.training],
+            "state": self.state,
+            "count": self.generationCount
         }
+        
     def load(self, hp):
         self.hp = hp
