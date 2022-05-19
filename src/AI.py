@@ -328,7 +328,7 @@ class AI():
         # Barracks extra
         needExtraBarrack = True
         for structure in structures:
-            if ((structure.type == self.base) or (structure.type == self.barracks)) and ((structure.state == BuildingState.OPERATIVE) or (structure.state == BuildingState.BUILDING)):
+            if ((structure.type == BASE) or (structure.type == BARRACKS)) and ((structure.state == BuildingState.OPERATIVE) or (structure.state == BuildingState.BUILDING)):
                 needExtraBarrack = False
         if needExtraBarrack:
            self.buildBarracks(structures)

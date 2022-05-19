@@ -77,7 +77,6 @@ class Structure(Entity.Entity):
             self.shadow = None
 
 
-
     ################
     # TRANSICIONES #
     ################
