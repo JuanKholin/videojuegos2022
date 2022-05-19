@@ -8,7 +8,7 @@ from .Soldier import *
 HP = 40
 ATTACK_INFO = [0, 0, 0]
 ATTACK_INFO[DAMAGE_IND] = 11
-ATTACK_INFO[COOLDOWN_IND] = 17
+ATTACK_INFO[COOLDOWN_IND] = 8
 ATTACK_INFO[RANGE_IND] = 1 * RANGE_UNIT + RANGE_BASIC
 MINE_POWER = 8
 MINERAL_COST = 20
@@ -19,10 +19,6 @@ SPEED = 3
 FRAMES_TO_REFRESH = 2
 FACES = 8
 FRAME = 0
-STILL_FRAMES = [0]
-ATTACK_FRAMES = [1, 2, 3]
-MOVE_FRAMES = [4, 5, 6, 7, 8, 9, 10, 11]
-DIE_FRAMES = [12, 13, 14, 15, 16, 17, 18]
 PADDING = 110
 WEIGHT_PADDING = 165
 HEIGHT_PADDING = 155
@@ -50,7 +46,6 @@ class Zergling(Soldier):
         sprites = Utils.ZERGLING_SPRITES
         self.sprites = sprites[0]
         self.shadows = sprites[1]
-        self.mirrorTheChosen()
         self.dir = 8
         self.changeToStill()
         if xIni != -1:

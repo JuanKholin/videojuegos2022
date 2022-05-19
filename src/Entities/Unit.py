@@ -447,7 +447,7 @@ class Unit(Entity):
         self.runningAway = False
 
         if(len(self.paths) > 1):
-            print("changeToAttacking objetiveTile")
+            #print("changeToAttacking objetiveTile")
             self.changeObjectiveTile()
             #input()
         if self.attackedOne != None:
@@ -457,7 +457,7 @@ class Unit(Entity):
         self.attackCD = self.cooldown
         if self.state == UnitState.STILL:
             ownTile = self.getTile()
-            print(int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)), self.range, "estoy en rango")
+            #print(int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)), self.range, "estoy en rango")
             if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
                 #print(type(self), "estoy en rango")
                 self.updateOwnSpace()
@@ -632,7 +632,7 @@ class Unit(Entity):
 
             self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
             if (self.siendoAtacado == True) and not self.runningAway:
-                print("me atacan")
+                #print("me atacan")
                 self.attack(self.atacante)
                 self.siendoAtacado = False
                 #self.changeObjectiveTile()
