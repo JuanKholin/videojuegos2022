@@ -174,7 +174,7 @@ class AI():
         workersToCreate = self.minWorkers - nWorkers
         base = self.getBase(structures)
         if base != None:
-            if (workersToCreate > 0) and (nSoldiers > nWorkers):
+            if (workersToCreate > 0) and (nSoldiers + 2 > nWorkers):
                 if base.state == BuildingState.OPERATIVE:
                     base.execute(CommandId.GENERATE_WORKER)
             soldiersToCreate = self.minSoldiers - nSoldiers
