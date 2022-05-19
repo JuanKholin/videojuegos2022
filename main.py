@@ -62,13 +62,13 @@ def setEntity(player, ai):
     scv7 = TerranSoldier(player, 10, 10)
     scv8 = TerranWorker(player, 11, 10)
     structure1 = TerranBuilder(2, 7, player, mapa, False, raton)
-    structure3 = TerranSupplyDepot(4, 4, player, mapa, True)
-    structure7 = Hatchery(10, 23, player, mapa, True, raton)
+    #structure3 = TerranSupplyDepot(4, 4, player, mapa, True)
+    #structure7 = Hatchery(10, 23, player, mapa, True, raton)
 
     player.setBasePlayer(structure1)
     structure2 = ZergBarracks(15, 9, player, mapa, False)
     gas2 = Geyser(13, 20, 50)
-    structure4 = Extractor(12, 27, player, mapa, True)
+    #structure4 = Extractor(12, 27, player, mapa, True)
     structure5 = TerranRefinery(13, 18, ai, mapa, True, gas2)
     
     structure6 = ZergBarracks(7, 16, ai, mapa, True)
@@ -141,7 +141,7 @@ def update():
         playMusic(mainMenuBGM, pos = 5)
         #playSound(mainMenuBGM)
         escena.interfaz.update(escena,raton, escena.camera)
-    elif getGameState() == System_State.MAP1:
+        '''elif getGameState() == System_State.MAP1:
         stopMusic()
         playMusic(map1BGM)
         #cargar mapa
@@ -150,7 +150,7 @@ def update():
         escena.mapa.loadMinimap()
         setEntity(player1, player2)
         setGameState(System_State.ONGAME)
-        setGameState2(System_State.LOAD)
+        setGameState2(System_State.LOAD)'''
     elif getGameState() == System_State.ONGAME:
         escena.update()
     elif getGameState() == System_State.GAMESELECT:

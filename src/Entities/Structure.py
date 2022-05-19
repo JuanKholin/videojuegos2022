@@ -24,6 +24,7 @@ class Structure(Entity.Entity):
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, mapa, player, capacity):
         Entity.Entity.__init__(self, hp, xini*mapa.tw, yini*mapa.th, mineralCost, generationTime, takeID(), player)
+        print("estado", BuildingState.OPERATIVE.value)
         self.mapa = mapa
         self.player = player
         self.xIni = xini
