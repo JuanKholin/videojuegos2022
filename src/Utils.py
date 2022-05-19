@@ -7,7 +7,7 @@ from turtle import Screen
 import pygame as pg
 from .Lib import *
 
-DEBBUG = True
+DEBBUG = False
 
 BGM_VOLUME = 0.2
 SOUND_VOLUME = 0.5
@@ -358,6 +358,13 @@ def init():
     loadHydralisk()
 
     loadTerranBuilder()
+    loadHatchery()
+    loadTerranBarracks()
+    loadZergBarracks()
+    loadTerranSupplyDepot()
+    loadZergSupply()
+    loadTerranRefinery()
+    loadExtractor()
 
 # TerranWorker
 TERRAN_WORKER_SCALE = 1.5
@@ -391,7 +398,7 @@ def loadTerranWorker():
             sprites[TERRAN_WORKER_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[TERRAN_WORKER_FRAMES[i][DIR_OFFSET[j]]], True, False)
     
     shadows = []
-    for i in range(len(sprites) - len(TERRAN_WORKER_DIE_FRAMES)):
+    for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
         mask = aux.to_surface(setcolor = (1, 0, 0))
         mask.set_colorkey(BLACK)
@@ -439,7 +446,7 @@ def loadDrone():
 # TerranSoldier
 TERRAN_SOLDIER_SCALE = 1.5
 TERRAN_SOLDIER_SPRITE_ROWS = 64
-TERRAN_SOLDIER_TOTAL_FRAMES = 221
+TERRAN_SOLDIER_TOTAL_FRAMES = 229
 TERRAN_SOLDIER_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
           list(range(52, 68)), list(range(69, 85)), list(range(86, 102)),
           list(range(103, 119)), list(range(120, 136)), list(range(137, 153)),
@@ -466,7 +473,7 @@ def loadTerranSoldier():
             sprites[TERRAN_SOLDIER_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[TERRAN_SOLDIER_FRAMES[i][DIR_OFFSET[j]]], True, False)
     
     shadows = []
-    for i in range(len(sprites) - len(TERRAN_SOLDIER_DIE_FRAMES)):
+    for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
         mask = aux.to_surface(setcolor = (1, 0, 0))
         mask.set_colorkey(BLACK)
@@ -612,7 +619,7 @@ def loadGoliath():
             sprites[GOLIATH_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[GOLIATH_FRAMES[i][DIR_OFFSET[j]]], True, False)
     
     shadows = []
-    for i in range(len(sprites) - len(GOLIATH_DIE_FRAMES)):
+    for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
         mask = aux.to_surface(setcolor = (1, 0, 0))
         mask.set_colorkey(BLACK)
@@ -680,6 +687,167 @@ def loadTerranBuilder():
         shadows.append(mask)
 
     TERRAN_BUILDER_SPRITES = [sprites, shadows]
+
+# Hatchery
+HATCHERY_TOTAL_FRAMES = 4
+HATCHERY_SPRITES = [None, None]
+def loadHatchery():
+    global HATCHERY_SPRITES
+    sprites = cargarSprites(HATCHERY_PATH, HATCHERY_TOTAL_FRAMES, False, BLUE2, 1.5)
+
+    deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
+    deadSpritesheet.set_colorkey(BLACK)
+    deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
+
+    sprites += deadSprites
+    
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+
+    HATCHERY_SPRITES = [sprites, shadows]
+
+# TerranBarracks
+TERRAN_BARRACKS_TOTAL_FRAMES = 6
+TERRAN_BARRACKS_SPRITES = [None, None]
+def loadTerranBarracks():
+    global TERRAN_BARRACKS_SPRITES
+    sprites = cargarSprites(TERRAN_BARRACKS_PATH, TERRAN_BARRACKS_TOTAL_FRAMES, False, WHITE, 1.1)
+
+    deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
+    deadSpritesheet.set_colorkey(BLACK)
+    deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 128)
+
+    sprites += deadSprites
+    
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+
+    TERRAN_BARRACKS_SPRITES = [sprites, shadows]
+
+# ZergBarracks
+ZERG_BARRACKS_TOTAL_FRAMES = 3
+ZERG_BARRACKS_SPRITES = [None, None]
+def loadZergBarracks():
+    global ZERG_BARRACKS_SPRITES
+    sprites = cargarSprites(ZERG_BARRACKS_PATH, ZERG_BARRACKS_TOTAL_FRAMES, False, BLUE2, 1.4)
+
+    deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
+    deadSpritesheet.set_colorkey(BLACK)
+    deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 128)
+
+    sprites += deadSprites
+    
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+
+    ZERG_BARRACKS_SPRITES = [sprites, shadows]
+
+# TerranSupplyDepot
+TERRAN_DEPOT_TOTAL_FRAMES = 5
+TERRAN_DEPOT_SPRITES = [None, None]
+def loadTerranSupplyDepot():
+    global TERRAN_DEPOT_SPRITES
+    sprites = cargarSprites(TERRAN_DEPOT_PATH, TERRAN_DEPOT_TOTAL_FRAMES, False, WHITE, 1.5)
+
+    deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
+    deadSpritesheet.set_colorkey(BLACK)
+    deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
+
+    sprites += deadSprites
+    
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+
+    TERRAN_DEPOT_SPRITES = [sprites, shadows]
+
+# ZergSupply
+ZERG_DEPOT_TOTAL_FRAMES = 3
+ZERG_DEPOT_SPRITES = [None, None]
+def loadZergSupply():
+    global ZERG_DEPOT_SPRITES
+    sprites = cargarSprites(ZERG_DEPOT_PATH, ZERG_DEPOT_TOTAL_FRAMES, False, BLUE2, 1.2)
+
+    deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
+    deadSpritesheet.set_colorkey(BLACK)
+    deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
+
+    sprites += deadSprites
+    
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+
+    ZERG_DEPOT_SPRITES = [sprites, shadows]
+
+# TerranRefinery
+TERRAN_REFINERY_TOTAL_FRAMES = 5
+TERRAN_REFINERY_SPRITES = [None, None]
+def loadTerranRefinery():
+    global TERRAN_REFINERY_SPRITES
+    sprites = cargarSprites(TERRAN_REFINERY_PATH, TERRAN_REFINERY_TOTAL_FRAMES, False, WHITE, 1.5)
+
+    deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
+    deadSpritesheet.set_colorkey(BLACK)
+    deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 128)
+
+    sprites += deadSprites
+    
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+
+    TERRAN_REFINERY_SPRITES = [sprites, shadows]
+
+# Extractor
+EXTRACTOR_TOTAL_FRAMES = 4
+EXTRACTOR_SPRITES = [None, None]
+def loadExtractor():
+    global EXTRACTOR_SPRITES
+    sprites = cargarSprites(EXTRACTOR_PATH, EXTRACTOR_TOTAL_FRAMES, False, BLUE2, 1)
+
+    deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
+    deadSpritesheet.set_colorkey(BLACK)
+    deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 128)
+
+    sprites += deadSprites
+    
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+
+    EXTRACTOR_SPRITES = [sprites, shadows]
 
 #-------------------------------------------------------------------------
 #-------------------------------------------------------------------------
@@ -805,9 +973,9 @@ HATCHERY_RENDER = "SPRITE/render/hatchery.png"
 HATCHERY_MINERAL_COST = 100
 
 #-------------EXTRACTOR---------------
-ZERG_REFINERY_PATH = "SPRITE/structure/extractor/tile00"
-ZERG_REFINERY_RENDER = "SPRITE/render/extractor.png"
-ZERG_REFINERY_MINERAL_COST = 60
+EXTRACTOR_PATH = "SPRITE/structure/extractor/tile00"
+EXTRACTOR_RENDER = "SPRITE/render/extractor.png"
+EXTRACTOR_MINERAL_COST = 60
 
 #-----------BARRACKS_ZERG-------------
 ZERG_BARRACKS_PATH = "SPRITE/structure/zergBarracks/tile00"

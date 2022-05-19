@@ -26,18 +26,14 @@ class ZergSupply(Structure):
     rectOffY = 30
     clicked = False
     frame = 10
-    nSprites = 3
+    nSprites = ZERG_DEPOT_TOTAL_FRAMES
     options = []
 
     def __init__(self, xini, yini, player, map, building):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
-        self.sprites = cargarSprites(ZERG_DEPOT_PATH, self.nSprites, False, BLUE2, 1.2, 0)
-        deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
-        deadSpritesheet.set_colorkey(BLACK)
-        deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
-
-        self.sprites += deadSprites
-        self.shadows = []
+        sprites = Utils.ZERG_DEPOT_SPRITES
+        self.sprites = sprites[0]
+        self.shadows = sprites[1]
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2]
         self.spawningIndex = [0, 1, 2]

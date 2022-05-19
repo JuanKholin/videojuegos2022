@@ -27,23 +27,20 @@ class Extractor(Structure):
     rectOffY = -10
     clicked = False
     frame = 8
-    nSprites = 4
+    nSprites = EXTRACTOR_TOTAL_FRAMES
 
     def __init__(self, xini, yini, player, map, building, gas = None):
-        Structure.__init__(self, HP, ZERG_REFINERY_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
-        self.sprites = cargarSprites(ZERG_REFINERY_PATH, self.nSprites, False, BLUE2, 1,0)
-        deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
-        deadSpritesheet.set_colorkey(BLACK)
-        deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
-
-        self.sprites += deadSprites
+        Structure.__init__(self, HP, EXTRACTOR_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
+        sprites = EXTRACTOR_SPRITES
+        self.sprites = sprites[0]
+        self.shadows = sprites[1]
 
         self.image = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2, 3]
         self.spawningIndex = [0, 1, 2, 3]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
 
-        self.render = pg.transform.scale(pg.image.load(ZERG_REFINERY_RENDER), RENDER_SIZE)
+        self.render = pg.transform.scale(pg.image.load(EXTRACTOR_RENDER), RENDER_SIZE)
 
         self.building = building
         if building:

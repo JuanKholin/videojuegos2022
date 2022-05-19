@@ -68,8 +68,10 @@ class Structure(Entity.Entity):
         elif self.state == BuildingState.DESTROYED:
             pass
         self.image = self.sprites[self.index]
-        if len(self.shadows) > 0:
+        if self.index < self.nSprites:
             self.shadow = self.shadows[self.index]
+        else:
+            self.shadow = None
 
 
 
@@ -239,7 +241,7 @@ class Structure(Entity.Entity):
             #sombra
 
             #self.image.blit(dark, (0, 0), special_flags=pg.BLEND_RGBA_SUB)
-            if len(self.shadows) > 0:
+            if self.shadow != None:
                 screen.blit(self.shadow, [image.x - camera.x - 10, image.y - camera.y - 10])
             screen.blit(self.image, [image.x - camera.x, image.y - camera.y])
             if DEBBUG:

@@ -186,7 +186,7 @@ class Interface():
         allButton[Options.BUILD_BARRACKS_ZERG] = aux
         aux = Button0.Button(BUTTON_PATH + "zerg_supply" + ".bmp", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineralZerg.png", "Construir Guarida", 5, ZERG_DEPOT_MINERAL_COST, 0, 45)
         allButton[Options.BUILD_DEPOT_ZERG] = aux
-        aux = Button0.Button(BUTTON_PATH + "zerg_refinery" + ".bmp", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineralZerg.png", "Construir Extractor", 5, ZERG_REFINERY_MINERAL_COST, 0, 45)
+        aux = Button0.Button(BUTTON_PATH + "zerg_refinery" + ".bmp", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineralZerg.png", "Construir Extractor", 5, EXTRACTOR_MINERAL_COST, 0, 45)
         allButton[Options.BUILD_REFINERY_ZERG] = aux
         #aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.BUILD_HATCHERY)
         #allButton[Options.BUILD_HATCHERY] = aux
@@ -320,7 +320,7 @@ class Interface():
                     #print("Seleccionado single player")
                     Utils.state = System_State.MAP1
                     self.loadPartidas()
-                    Utils.state = System_State.GAMESELECT
+                    #Utils.state = System_State.GAMESELECT
                     #stopMusic()
                     self.singlePress = False
 

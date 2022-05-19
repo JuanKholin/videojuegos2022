@@ -12,7 +12,6 @@ from ..Command import *
 from ..Utils import *
 from .Entity import *
 
-WHITE   = (255,255,255)
 GENERATION_TIME = 10
 MINERAL_COST = 50
 WIDTH = 6
@@ -33,21 +32,21 @@ class Hatchery(Structure):
     rectOffY = 90
     clicked = False
     frame = 12
-    nSprites = 4
+    nSprites = HATCHERY_TOTAL_FRAMES
     options = [Options.BUILD_DEPOT_ZERG, Options.BUILD_BARRACKS_ZERG, Options.BUILD_REFINERY_ZERG, Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE, Options.GENERATE_WORKER_ZERG]
 
     def __init__(self, xini, yini, player, map, building, raton):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
-        self.sprites = cargarSprites(HATCHERY_PATH, self.nSprites, False, BLUE2, 1.8, 0)
-        deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
-        deadSpritesheet.set_colorkey(BLACK)
-        deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
-        self.shadows = []
-        self.sprites += deadSprites
+        sprites = Utils.HATCHERY_SPRITES
+        self.sprites = sprites[0]
+        self.shadows = sprites[1]
+
         self.image = self.sprites[self.index]
+        self.shadow = self.sprites[self.index]
         self.operativeIndex = [0, 1, 2, 3]
         self.spawningIndex = [0, 1, 2, 3]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
+
         self.raton = raton
         self.render = pg.transform.scale(pg.image.load(HATCHERY_RENDER), RENDER_SIZE)
 
@@ -100,7 +99,7 @@ class Hatchery(Structure):
             self.player.mineUpgrade += 1
             self.mineMineralUpCost += 25
             self.mineGasUpCost += 5
-        elif command_id == CommandId.BUILD_REFINERY and self.player.resources >= ZERG_REFINERY_MINERAL_COST:
+        elif command_id == CommandId.BUILD_REFINERY and self.player.resources >= EXTRACTOR_MINERAL_COST:
             self.raton.building = True
             self.raton.buildStructure = self.getZergRefinery()
         elif command_id == CommandId.BUILD_DEPOT and self.player.resources >= ZERG_DEPOT_MINERAL_COST:

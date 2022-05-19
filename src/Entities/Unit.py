@@ -170,7 +170,7 @@ class Unit(Entity):
             if self.clicked:
                 pg.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y + (0.7*r.h)- camera.y,r.w , 0.3*r.h], 2)
 
-            if len(self.shadows) > 0:
+            if self.shadow != None:
                 screen.blit(self.shadow, [drawPos[0] - camera.x - 5, drawPos[1] - camera.y - 5])
             #screen.blit(unit.image, [r.x - camera.x, r.y - camera.y])
             screen.blit(self.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
@@ -401,6 +401,8 @@ class Unit(Entity):
         self.frame = (self.frame + 1)
         self.image = self.sprites[self.frames[self.dieFrames[self.frame]][self.dirOffset[self.dir]]]
         self.shadow = self.shadows[self.frames[self.dieFrames[self.frame]][self.dirOffset[self.dir]]]
+        if self.isExplosive:
+            self.shadow = None
 
     ################
     # TRANSICIONES #

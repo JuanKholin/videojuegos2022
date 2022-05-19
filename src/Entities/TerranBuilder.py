@@ -31,6 +31,7 @@ class TerranBuilder(Structure):
     nBuildSprites = 4
     clicked = False
     frame = 8
+    nSprites = TERRAN_BUILDER_TOTAL_FRAMES
     options = [Options.BUILD_DEPOT_TERRAN, Options.BUILD_BARRACKS_TERRAN, Options.BUILD_REFINERY_TERRAN, 
             Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE, Options.GENERATE_WORKER_TERRAN]
 

@@ -525,9 +525,9 @@ class AI():
 
     # Construye un edificio de explotacion de geiseres en el geiser geyser
     def buildGeyserBuilding(self, geyser):
-        if (self.geyserBuilding == ZERG_REFINERY) and (self.data.resources >= ZERG_REFINERY_MINERAL_COST):
+        if (self.geyserBuilding == ZERG_REFINERY) and (self.data.resources >= EXTRACTOR_MINERAL_COST):
             #print("Construye zerggeyserstructure")
-            self.data.resources -= ZERG_REFINERY_MINERAL_COST
+            self.data.resources -= EXTRACTOR_MINERAL_COST
             toBuild = Extractor(int(geyser.x / 40) - 1, int(geyser.y / 40), self.data, self.mapa, True, geyser)
             self.data.addStructures(toBuild)
             #toBuild.buildProcess()
