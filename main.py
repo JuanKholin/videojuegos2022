@@ -143,7 +143,7 @@ def update():
         playMusic(mainMenuBGM, pos = 5)
         #playSound(mainMenuBGM)
         escena.interfaz.update(escena,raton, escena.camera)
-    elif getGameState() == System_State.MAP1:
+        '''elif getGameState() == System_State.MAP1:
         stopMusic()
         playMusic(map1BGM)
         #cargar mapa
@@ -152,7 +152,7 @@ def update():
         escena.mapa.loadMinimap()
         setEntity(player1, player2)
         setGameState(System_State.ONGAME)
-        setGameState2(System_State.LOAD)
+        setGameState2(System_State.LOAD)'''
     elif getGameState() == System_State.ONGAME:
         escena.update()
     elif getGameState() == System_State.GAMESELECT:

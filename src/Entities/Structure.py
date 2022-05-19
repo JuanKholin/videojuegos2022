@@ -130,7 +130,7 @@ class Structure(Entity.Entity):
             if self.player.isPlayer:
                 setGameState2(System_State.GAMEOVER)
             else:
-                setGameState2(System_State.GAMEOVER)
+                setGameState2(System_State.WIN)
         self.player.structures.remove(self)
         self.__del__()
 

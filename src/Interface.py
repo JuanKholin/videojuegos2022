@@ -357,8 +357,7 @@ class Interface():
         self.ajustesAtajosRect = pg.Rect(Utils.ScreenWidth/2 - AJUSTES_ATAJOS_POS[0], Utils.ScreenHeight/2 - AJUSTES_ATAJOS_POS[1], 220, 40)
 
     def updateMainMenu(self):
-        if Utils.resized:
-            self.updateMainMenuPos()
+        self.updateMainMenuPos()
 
         #Boton single player
         if getGameState2() == System_State.SETTINGS:
@@ -380,9 +379,9 @@ class Interface():
                     self.singlePress = True
                 elif self.mouse.getClick() and self.singlePress and Raton.collides(endPos[0], endPos[1], self.singleRect):
                     #print("Seleccionado single player")
-                    Utils.state = System_State.MAP1
+                    #Utils.state = System_State.MAP1
                     self.loadPartidas()
-                    #Utils.state = System_State.GAMESELECT
+                    Utils.state = System_State.GAMESELECT
                     #stopMusic()
                     self.singlePress = False
 
@@ -460,8 +459,7 @@ class Interface():
         self.partidas = aux
 
     def updateGameMenu(self, escena, raton, camera):
-        if Utils.resized:
-            self.updateGameMenuPos()
+        self.updateGameMenuPos()
         press, iniPos = self.mouse.getPressed()
         #Boton aceptar
         #print(self.mouse.isCollide(self.nuevaPartidaRect), self.mouse.real_pos, self.aceptarRect.x, self.aceptarRect.y, self.aceptarRect.w, self.aceptarRect.h )
@@ -599,8 +597,7 @@ class Interface():
         self.botonesNewGame = aux
 
     def updateNewGame(self, escena, raton, camera):
-        if Utils.resized:
-            self.updateNewGamePos()
+        self.updateNewGamePos()
         press, iniPos = self.mouse.getPressed()
         #Boton aceptar
         if self.mouse.isCollide(self.aceptarRect):
