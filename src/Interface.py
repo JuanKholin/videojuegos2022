@@ -60,17 +60,17 @@ class Interface():
         #ya estan en game select
         #self.aceptarRect = pg.Rect(ACEPTAR_POS[0], ACEPTAR_POS[1], 260, 40)
         #self.cancelarRect = pg.Rect(CANCELAR_POS[0], CANCELAR_POS[1], 260, 40)
-        self.botonRazaTerran = {"nombre": "Terran", "tipo": "raza", "rect": pg.Rect(TERRAN_POS[0], TERRAN_POS[1], 185, 35), "press": False, "raza": Race.TERRAN}
+        self.botonRazaTerran = {"nombre": "Terran", "tipo": "raza", "rect": pg.Rect(TERRAN_POS[0], TERRAN_POS[1], 185, 35), "press": False, "raza": Race.TERRAN, "enable": True}
         self.botonesNewGame = [
-            {"nombre": "1", "tipo": "mapa", "rect": pg.Rect(MAPA1_POS[0], MAPA1_POS[1], 90, 35), "press": False},
-            {"nombre": "2", "tipo": "mapa", "rect": pg.Rect(MAPA2_POS[0], MAPA2_POS[1], 90, 35), "press": False},
-            {"nombre": "3", "tipo": "mapa", "rect": pg.Rect(MAPA3_POS[0], MAPA3_POS[1], 90, 35), "press": False},
-            {"nombre": "4", "tipo": "mapa", "rect": pg.Rect(MAPA4_POS[0], MAPA4_POS[1], 90, 35), "press": False},
-            {"nombre": "Facil", "tipo": "dificultad", "rect": pg.Rect(FACIL_POS[0], FACIL_POS[1], 125, 35), "press": False, "dif": EASY},
-            {"nombre": "Normal", "tipo": "dificultad", "rect": pg.Rect(NORMAL_POS[0], NORMAL_POS[1], 125, 35), "press": False, "dif": MEDIUM},
-            {"nombre": "Dificil", "tipo": "dificultad", "rect": pg.Rect(DIFICIL_POS[0], DIFICIL_POS[1], 125, 35), "press": False, "dif": HARD},
+            {"nombre": "1", "tipo": "mapa", "rect": pg.Rect(MAPA1_POS[0], MAPA1_POS[1], 90, 35), "press": False, "enable": True},
+            {"nombre": "2", "tipo": "mapa", "rect": pg.Rect(MAPA2_POS[0], MAPA2_POS[1], 90, 35), "press": False, "enable": True},
+            {"nombre": "3", "tipo": "mapa", "rect": pg.Rect(MAPA3_POS[0], MAPA3_POS[1], 90, 35), "press": False, "enable": True},
+            {"nombre": "4", "tipo": "mapa", "rect": pg.Rect(MAPA4_POS[0], MAPA4_POS[1], 90, 35), "press": False, "enable": True},
+            {"nombre": "Facil", "tipo": "dificultad", "rect": pg.Rect(FACIL_POS[0], FACIL_POS[1], 125, 35), "press": False, "dif": EASY, "enable": True},
+            {"nombre": "Normal", "tipo": "dificultad", "rect": pg.Rect(NORMAL_POS[0], NORMAL_POS[1], 125, 35), "press": False, "dif": MEDIUM, "enable": True},
+            {"nombre": "Dificil", "tipo": "dificultad", "rect": pg.Rect(DIFICIL_POS[0], DIFICIL_POS[1], 125, 35), "press": False, "dif": HARD, "enable": True},
             self.botonRazaTerran,
-            {"nombre": "Zerg","tipo": "raza", "rect": pg.Rect(ZERG_POS[0], ZERG_POS[1], 185, 35), "press": False, "raza": Race.ZERG},
+            {"nombre": "Zerg","tipo": "raza", "rect": pg.Rect(ZERG_POS[0], ZERG_POS[1], 185, 35), "press": False, "raza": Race.ZERG, "enable": True},
         ]
 
         self.selectedMap = "1"
@@ -357,13 +357,7 @@ class Interface():
         self.ajustesAtajosRect = pg.Rect(Utils.ScreenWidth/2 - AJUSTES_ATAJOS_POS[0], Utils.ScreenHeight/2 - AJUSTES_ATAJOS_POS[1], 220, 40)
 
     def updateMainMenu(self):
-<<<<<<< Updated upstream
         self.updateMainMenuPos()
-=======
-        self.index = 0
-        if Utils.resized:
-            self.updateMainMenuPos()
->>>>>>> Stashed changes
 
         #Boton single player
         if getGameState2() == System_State.SETTINGS:
@@ -589,19 +583,18 @@ class Interface():
         self.cancelarRect = pg.Rect(Utils.ScreenWidth/2 - CANCELAR_POS[0], Utils.ScreenHeight/2 - CANCELAR_POS[1], 250, 40)
 
         aux = [
-            {"nombre": "1", "tipo": "mapa", "rect": pg.Rect(Utils.ScreenWidth/2 - MAPA1_POS[0], Utils.ScreenHeight/2 - MAPA1_POS[1], 90, 35), "press": self.botonesNewGame[0]['press']},
-            {"nombre": "2", "tipo": "mapa", "rect": pg.Rect(Utils.ScreenWidth/2 - MAPA2_POS[0], Utils.ScreenHeight/2 - MAPA2_POS[1], 90, 35), "press": self.botonesNewGame[1]['press']},
-            {"nombre": "3", "tipo": "mapa", "rect": pg.Rect(Utils.ScreenWidth/2 - MAPA3_POS[0], Utils.ScreenHeight/2 - MAPA3_POS[1], 90, 35), "press": self.botonesNewGame[2]['press']},
-            {"nombre": "4", "tipo": "mapa", "rect": pg.Rect(Utils.ScreenWidth/2 - MAPA4_POS[0], Utils.ScreenHeight/2 - MAPA4_POS[1], 90, 35), "press": self.botonesNewGame[3]['press']},
-            {"nombre": "Facil", "tipo": "dificultad", "rect": pg.Rect(Utils.ScreenWidth/2 - FACIL_POS[0], Utils.ScreenHeight/2 - FACIL_POS[1], 125, 35), "press": self.botonesNewGame[4]['press'], "dif": EASY},
-            {"nombre": "Normal", "tipo": "dificultad", "rect": pg.Rect(Utils.ScreenWidth/2 - NORMAL_POS[0], Utils.ScreenHeight/2 - NORMAL_POS[1], 125, 35), "press": self.botonesNewGame[5]['press'], "dif": MEDIUM},
-            {"nombre": "Dificil", "tipo": "dificultad", "rect": pg.Rect(Utils.ScreenWidth/2 - DIFICIL_POS[0], Utils.ScreenHeight/2 - DIFICIL_POS[1], 125, 35), "press": self.botonesNewGame[6]['press'], "dif": HARD},
-            self.botonRazaTerran,
-            {"nombre": "Zerg","tipo": "raza", "rect": pg.Rect(Utils.ScreenWidth/2 - ZERG_POS[0], Utils.ScreenHeight/2 - ZERG_POS[1], 185, 35), "press": self.botonesNewGame[len(self.botonesNewGame) - 1]['press'], "raza": Race.ZERG},
+            {"nombre": "1", "tipo": "mapa", "rect": pg.Rect(Utils.ScreenWidth/2 - MAPA1_POS[0], Utils.ScreenHeight/2 - MAPA1_POS[1], 90, 35), "press": self.botonesNewGame[0]['press'], "enable": True},
+            {"nombre": "2", "tipo": "mapa", "rect": pg.Rect(Utils.ScreenWidth/2 - MAPA2_POS[0], Utils.ScreenHeight/2 - MAPA2_POS[1], 90, 35), "press": self.botonesNewGame[1]['press'], "enable": True},
+            {"nombre": "3", "tipo": "mapa", "rect": pg.Rect(Utils.ScreenWidth/2 - MAPA3_POS[0], Utils.ScreenHeight/2 - MAPA3_POS[1], 90, 35), "press": self.botonesNewGame[2]['press'], "enable": True},
+            {"nombre": "4", "tipo": "mapa", "rect": pg.Rect(Utils.ScreenWidth/2 - MAPA4_POS[0], Utils.ScreenHeight/2 - MAPA4_POS[1], 90, 35), "press": self.botonesNewGame[3]['press'], "enable": True},
+            {"nombre": "Facil", "tipo": "dificultad", "rect": pg.Rect(Utils.ScreenWidth/2 - FACIL_POS[0], Utils.ScreenHeight/2 - FACIL_POS[1], 125, 35), "press": self.botonesNewGame[4]['press'], "dif": EASY, "enable": True},
+            {"nombre": "Normal", "tipo": "dificultad", "rect": pg.Rect(Utils.ScreenWidth/2 - NORMAL_POS[0], Utils.ScreenHeight/2 - NORMAL_POS[1], 125, 35), "press": self.botonesNewGame[5]['press'], "dif": MEDIUM, "enable": True},
+            {"nombre": "Dificil", "tipo": "dificultad", "rect": pg.Rect(Utils.ScreenWidth/2 - DIFICIL_POS[0], Utils.ScreenHeight/2 - DIFICIL_POS[1], 125, 35), "press": self.botonesNewGame[6]['press'], "dif": HARD, "enable": True},
+            {"nombre": "Terran", "tipo": "raza", "rect": pg.Rect(Utils.ScreenWidth/2 - TERRAN_POS[0], Utils.ScreenHeight/2 - TERRAN_POS[1], 185, 35), "press": self.botonesNewGame[7]['press'], "raza": Race.TERRAN, "enable": True},
+            {"nombre": "Zerg","tipo": "raza", "rect": pg.Rect(Utils.ScreenWidth/2 - ZERG_POS[0], Utils.ScreenHeight/2 - ZERG_POS[1], 185, 35), "press": self.botonesNewGame[8]['press'], "raza": Race.ZERG, "enable": True},
         ]
-
         self.botonesNewGame = aux
-
+        
     def updateNewGame(self, escena, raton, camera):
         self.updateNewGamePos()
         press, iniPos = self.mouse.getPressed()
@@ -670,16 +663,13 @@ class Interface():
                 self.cancelarPress = False
         else:
             self.soundPlayed = False
-
-        print(self.botonRazaTerran not in self.botonesNewGame)
-        if self.botonRazaTerran in self.botonesNewGame and self.selectedMap == "4":
-            self.botonesNewGame.remove(self.botonRazaTerran)
+        #print(self.botonRazaTerran not in self.botonesNewGame)
+        if self.selectedMap == "4":
+            self.botonRazaTerran["enable"] = False
             self.selectedRaza = {"nombre":"Zerg", "raza": Race.ZERG}
-        elif self.botonRazaTerran not in self.botonesNewGame and self.selectedMap != "4":
-            print("aaaaaaaaaaaa")
-            self.botonesNewGame.append(self.botonRazaTerran)
+
         for b in self.botonesNewGame:
-            if self.mouse.isCollide(b['rect']):
+            if self.mouse.isCollide(b['rect']) and b["enable"]:
                 endPos = self.mouse.getPosition()
                 if not b['press'] and press and Raton.collides(iniPos[0], iniPos[1], b['rect']):
                     b['press'] = True
@@ -695,8 +685,6 @@ class Interface():
                     elif b['tipo'] == "raza":
                         self.selectedRaza['nombre'] = b['nombre']
                         self.selectedRaza['raza'] = b['raza']
-
-
 
         if self.mouse.getClick():
             self.aceptarPress = False
@@ -808,26 +796,26 @@ class Interface():
             self.cancelarPress = False
 
     def updateSettingsAtajosPos(self):
-                self.settings = pg.transform.scale(self.settings, (ScreenWidth, ScreenHeight))
-                self.settingsTop = pg.transform.scale(self.settingsTop, (ScreenWidth, ScreenHeight*0.195))
-                self.settingsBot = pg.transform.scale(self.settingsBot, (ScreenWidth, ScreenHeight*0.13))
-                self.scrollBarTopRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1], 30, 30)
-                self.scrollBarRectangle = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_RECT_POS[0], Utils.ScreenHeight/2 - SCROLL_BAR_RECT_POS[1], SCROLL_BAR_RECT_SIZE[0], SCROLL_BAR_RECT_SIZE[1])
-                self.scrollBarBotRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1], 30, 30)
+        self.settings = pg.transform.scale(self.settings, (ScreenWidth, ScreenHeight))
+        self.settingsTop = pg.transform.scale(self.settingsTop, (ScreenWidth, ScreenHeight*0.195))
+        self.settingsBot = pg.transform.scale(self.settingsBot, (ScreenWidth, ScreenHeight*0.13))
+        self.scrollBarTopRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1], 30, 30)
+        self.scrollBarRectangle = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_RECT_POS[0], Utils.ScreenHeight/2 - SCROLL_BAR_RECT_POS[1], SCROLL_BAR_RECT_SIZE[0], SCROLL_BAR_RECT_SIZE[1])
+        self.scrollBarBotRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1], 30, 30)
 
-                self.keyButtons = {}
-                self.buttonWaitingForKey = -1
-                i = 0
-                items = self.keyMap.items()
-                for k in items:
-                    rect = pg.Rect(Utils.ScreenWidth/2 - TECLA_POS[0]-10, Utils.ScreenHeight/2 - TECLA_POS[1]-10 + Y_ATAJOS_OFFSET * i, 100, 35)
-                    self.keyButtons[i] = {"rect": rect, "press": False, "waitingForKey": False, "key": k[0], "command": k[1]}
-                    i += 1
-                #self.keyFirstOriginalY = self.keyButtons[0]["rect"].y
-                #self.keyLastOriginalY = self.keyButtons[len(self.keyButtons)-1]["rect"].y
+        self.keyButtons = {}
+        self.buttonWaitingForKey = -1
+        i = 0
+        items = self.keyMap.items()
+        for k in items:
+            rect = pg.Rect(Utils.ScreenWidth/2 - TECLA_POS[0]-10, Utils.ScreenHeight/2 - TECLA_POS[1]-10 + Y_ATAJOS_OFFSET * i, 100, 35)
+            self.keyButtons[i] = {"rect": rect, "press": False, "waitingForKey": False, "key": k[0], "command": k[1]}
+            i += 1
+        self.keyFirstOriginalY = self.keyButtons[0]["rect"].y
+        self.keyLastOriginalY = self.keyButtons[len(self.keyButtons)-1]["rect"].y
 
-                self.reestablecerRect =  pg.Rect(Utils.ScreenWidth/2 - REESTABLECER_POS[0], Utils.ScreenHeight/2 - REESTABLECER_POS[1], REESTABLECER_SIZE[0], REESTABLECER_SIZE[1])
-                self.guardarSalirSettingsRect =  pg.Rect(Utils.ScreenWidth/2 - GUARDAR_SALIR_SETTINGS_POS[0], Utils.ScreenHeight/2 - GUARDAR_SALIR_SETTINGS_POS[1], GUARDAR_SALIR_SETTINGS_SIZE[0], GUARDAR_SALIR_SETTINGS_SIZE[1])
+        self.reestablecerRect =  pg.Rect(Utils.ScreenWidth/2 - REESTABLECER_POS[0], Utils.ScreenHeight/2 - REESTABLECER_POS[1], REESTABLECER_SIZE[0], REESTABLECER_SIZE[1])
+        self.guardarSalirSettingsRect =  pg.Rect(Utils.ScreenWidth/2 - GUARDAR_SALIR_SETTINGS_POS[0], Utils.ScreenHeight/2 - GUARDAR_SALIR_SETTINGS_POS[1], GUARDAR_SALIR_SETTINGS_SIZE[0], GUARDAR_SALIR_SETTINGS_SIZE[1])
 
     def updateOnGame(self):
         #si esta en GUI desactivar funciones de raton
@@ -875,7 +863,6 @@ class Interface():
         self.upgrades = []
         if self.player.unitsSelected.__len__() == 1:
             self.upgrades = self.getUpgrades(self.player.unitsSelected[0].getUpgrades())
-
 
         #comprobar colision del raton
         for up in self.upgrades:
@@ -955,6 +942,7 @@ class Interface():
                     pg.draw.rect(screen, GREEN, partida['rect'], 2)
                 muestra_texto(screen, str('monotypecorsiva'), partida['nombre'], WHITE, 28, (partida['rect'].x + 100, partida['rect'].y))
             if self.selectedPartida != None:
+                print(self.selectedPartida)
                 info = self.selectedPartida['nombre'].split("_")
                 muestra_texto(screen, str('monotypecorsiva'), info[0], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-740), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-170)))
                 muestra_texto(screen, str('monotypecorsiva'), info[2], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-810), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-275)))
@@ -972,12 +960,13 @@ class Interface():
                 pg.draw.rect(screen, GREEN3, self.cancelarRect, 2)
 
             for b in self.botonesNewGame:
-                if self.mouse.isCollide(b['rect']):
-                    pg.draw.rect(screen, GREEN2, b['rect'], 2)
-
-                if (b['nombre'] == self.selectedMap or b['nombre'] == self.selectedDif['nombre']
-                    or b['nombre'] == self.selectedRaza['nombre']):
-                    pg.draw.rect(screen, GREEN, b['rect'], 3)
+                if b["enable"]:
+                    if self.mouse.isCollide(b['rect']):
+                        pg.draw.rect(screen, GREEN2, b['rect'], 2)
+                    
+                    if (b['nombre'] == self.selectedMap or b['nombre'] == self.selectedDif['nombre'] 
+                        or b['nombre'] == self.selectedRaza['nombre']):
+                        pg.draw.rect(screen, GREEN, b['rect'], 3)
 
 
             muestra_texto(screen, str('monotypecorsiva'), str(self.selectedMap), WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-740), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-170)))
@@ -1064,6 +1053,7 @@ class Interface():
                 self.drawPause(screen)
 
             elif getGameState2() == System_State.GAMEOVER:
+    
                 if self.count2 < 10:
                     image = pg.transform.scale(self.heroeSprites[self.heroeIndex], [self.herow, self.heroh])
                     screen.blit(image, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - (672 - self.heropadx)), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - (667- self.heropady))))

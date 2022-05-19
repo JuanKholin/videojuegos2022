@@ -64,7 +64,6 @@ def setEntity(player, ai):
     scv6 = TerranSoldier(player, 9, 10)
     scv7 = TerranSoldier(player, 10, 10)
     scv8 = TerranWorker(player, 11, 10)
-    zerg = Zergling(player, 12, 10)
     structure1 = TerranBuilder(2, 7, player, mapa, False, raton)
     #structure3 = TerranSupplyDepot(4, 4, player, mapa, True)
     #structure7 = Hatchery(10, 23, player, mapa, True, raton)
@@ -94,7 +93,6 @@ def setEntity(player, ai):
     player.addUnits(scv6)
     player.addUnits(scv7)
     player.addUnits(scv8)
-    player.addUnits(zerg)
 
     aiUnits = []
     #aiUnits.append(Drone(20, 10, ai))
@@ -136,9 +134,8 @@ def setEntity(player, ai):
     escena.resources = resources
 
 def update():
-    if Utils.resized:
-        updateScreen(screen)
-        camera.update()
+    updateScreen(screen)
+    camera.update()
     clock_update()
     raton.update(escena.camera)
     if getGameState() == System_State.MAINMENU:
@@ -167,8 +164,6 @@ def update():
     else: #STATE == System_State.EXIT:
         pg.quit()
         sys.exit()
-    if Utils.resized:
-        Utils.resized = False
 
 def draw():
     screen.fill(BLACK)
