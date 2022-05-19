@@ -331,10 +331,10 @@ class Interface():
 
             self.updateGameMenu(escena, raton, camera)
 
-
         elif Utils.state == System_State.NEWGAME:
 
             self.updateNewGame(escena, raton, camera)
+            
         elif Utils.state == System_State.SETTINGS:
             press, iniPos = self.mouse.getPressed()
 
@@ -650,6 +650,7 @@ class Interface():
                 escena.nombre = self.selectedMap + "_" + self.selectedRaza["nombre"] + "_" + self.selectedDif['nombre'] + "_" + str(id)
                 Utils.state = System_State.ONGAME
                 setGameState2(System_State.LOAD)
+                camera.update()
                 stopMusic()
                 self.singlePress = False
 

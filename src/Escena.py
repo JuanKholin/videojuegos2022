@@ -289,17 +289,21 @@ class Escena():
 
     def draw(self, screen):
         #importa el orden porfavor
-        now = datetime.now()
+        #now = datetime.now()
         self.mapa.drawMap(screen, self.camera)
         #print("tiempo de dibujar el mapa: ",(datetime.now() - now).microseconds)
-        now = datetime.now()
         #print(self.walls.__len__())
         
         all = self.resources + self.p1.units +  self.p1.structures + self.p2.units +  self.p2.structures + self.walls
         all.sort(key=lambda x: x.y)
-        now = datetime.now()
         for d in all:
-            d.draw(screen, self.camera)
+            try:
+                d.draw(screen, self.camera, self.mapa)
+            except:
+                d.draw(screen, self.camera)
+    
+            
+            
         #print("tiempo en deibujar las entidades: ",(datetime.now() - now).microseconds)
         '''
         now = datetime.now()
@@ -319,14 +323,10 @@ class Escena():
         now = datetime.now()'''
         self.mapa.drawNiebla(screen, self.camera)
         #print("tiempo en la niebla: ",(datetime.now() - now).microseconds)
-        now = datetime.now()
         self.raton.drawBuildStructure(screen, self.camera)
         #print("tiempo en la buildraton: ",(datetime.now() - now).microseconds)
-        now = datetime.now()
         self.interfaz.draw(screen, self.camera)
         #print("tiempo en la interfaz: ",(datetime.now() - now).microseconds)
-        
-        
 
     def getTerranBarrack(self):
         return TerranBarracks(0, 0, None, self.mapa, True)
