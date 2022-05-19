@@ -152,6 +152,7 @@ GREY2   = (83, 81, 83)
 BLACK   = (0, 0, 0)
 GREEN   = (0, 255, 0)
 RED     = (255, 0, 0)
+RED2     = (255, 80, 80)
 BLUE    = (0, 0, 255)
 YELLOW  = (255, 255, 0)
 BLUE2   = (35, 35, 255)
@@ -302,20 +303,51 @@ BARRA_COMANDO = "SPRITE/EXTRA/gui_frame"
 ###############
 
 SETTINGS = "SPRITE/settings/settings_bg"
+SETTINGS_TOP = "SPRITE/settings/settings_bg_top"
+SETTINGS_BOT = "SPRITE/settings/settings_bg_bot"
+
 
 KEY_TO_TEXT = {
      pygame.K_UP: "UP",
      pygame.K_DOWN: "DOWN",
      pygame.K_RIGHT: "RIGHT",
      pygame.K_LEFT: "LEFT",
+     pygame.K_0: "0",
+     pygame.K_1: "1",
+     pygame.K_2: "2",
+     pygame.K_3: "3",
+     pygame.K_4: "4",
+     pygame.K_5: "5",
+     pygame.K_6: "6",
+     pygame.K_7: "7",
+     pygame.K_8: "8",
+     pygame.K_9: "9",
+     pygame.K_q: "Q",
+     pygame.K_w: "W",
+     pygame.K_e: "E",
      pygame.K_r: "R",
-     pygame.K_v: "V",
-     pygame.K_c: "C",
-     pygame.K_x: "X",
-     pygame.K_d: "D",
+     pygame.K_t: "T",
+     pygame.K_y: "Y",
+     pygame.K_u: "U",
+     pygame.K_i: "I",
+     pygame.K_o: "O",
+     pygame.K_p: "P",
      pygame.K_a: "A",
-     pygame.K_m: "M",
+     pygame.K_s: "S",
+     pygame.K_d: "D",
+     pygame.K_f: "F",
      pygame.K_g: "G",
+     pygame.K_h: "H",
+     pygame.K_j: "J",
+     pygame.K_k: "K",
+     pygame.K_l: "L",
+     pygame.K_z: "Z",
+     pygame.K_x: "X",
+     pygame.K_c: "C",
+     pygame.K_v: "V",
+     pygame.K_b: "B",
+     pygame.K_n: "N",
+     pygame.K_m: "M",
 }
 
 ATAJOS_TITLE_POS = [115, 25]
@@ -325,10 +357,19 @@ TECLA_COLUMN_POS = [800, 110]
 COLUMN_TEXT_SIZE = 35
 COMANDO_POS = [150, 170]
 TECLA_POS = [800, 170]
+AVISO_COLUMN_POS = [SCREEN_WIDTH*0.4, SCREEN_HEIGHT*0.14]
 ATAJO_TEXT_SIZE = 30
-Y_ATAJOS_OFFSET = 40;
+Y_ATAJOS_OFFSET = 40
+REESTABLECER_POS = [SCREEN_WIDTH*0.012, SCREEN_HEIGHT*0.91]
+REESTABLECER_SIZE = [219, 50]
+GUARDAR_SALIR_SETTINGS_POS = [SCREEN_WIDTH*0.665, SCREEN_HEIGHT*0.922]
+GUARDAR_SALIR_SETTINGS_SIZE = [310, 40]
 
-
+SCROLL_BAR_TOP_TRIANGLE_POS = [(SCREEN_WIDTH-60, SCREEN_HEIGHT*0.19 + 40),(SCREEN_WIDTH-45, SCREEN_HEIGHT*0.19 + 20),(SCREEN_WIDTH-30, SCREEN_HEIGHT*0.19 + 40)]
+SCROLL_BAR_TOP_SMALL_TRI_POS = [(SCREEN_WIDTH-57, SCREEN_HEIGHT*0.19 + 43),(SCREEN_WIDTH-42, SCREEN_HEIGHT*0.19 + 23),(SCREEN_WIDTH-27, SCREEN_HEIGHT*0.19 + 43)]
+SCROLL_BAR_RECT_POS = [SCREEN_WIDTH-60, SCREEN_HEIGHT*0.19 + 50]
+SCROLL_BAR_RECT_SIZE = [30, SCREEN_HEIGHT - SCREEN_HEIGHT*0.19 - SCREEN_HEIGHT*0.13 - 100]
+SCROLL_BAR_BOT_TRIANGLE_POS = [(SCREEN_WIDTH-60, SCREEN_HEIGHT - SCREEN_HEIGHT*0.13 - 40),(SCREEN_WIDTH-45, SCREEN_HEIGHT - SCREEN_HEIGHT*0.13 - 20),(SCREEN_WIDTH-30, SCREEN_HEIGHT - SCREEN_HEIGHT*0.13 - 40)]
 #----------------------------------------------------------------
 # GUI
 #----------------------------------------------------------------
