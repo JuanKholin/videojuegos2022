@@ -740,6 +740,7 @@ class Interface():
                 textFile = open("atajos/atajos.json", "w")
                 textFile.write(string)
                 textFile.close()
+                print("atajos guardados")
 
                 Utils.state = System_State.MAINMENU
                 self.guardarSalirSettingsPress = False
@@ -747,7 +748,7 @@ class Interface():
             i = 0
             for b in self.keyButtons.items():
                 if self.mouse.isCollide(b[1]["rect"]):
-                    
+
                     endPos = self.mouse.getPosition()
                     if not b[1]["press"] and press and Raton.collides(iniPos[0], iniPos[1], b[1]["rect"]):
                         b[1]["press"] = True
@@ -788,7 +789,6 @@ class Interface():
                 self.scrollBarBotPress = False
                 playSound(botonSound2)
             if press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarBotRect):
-                print("holi")
                 if self.keyButtons[len(self.keyButtons)-1]["rect"].y > self.keyFirstOriginalY:
                     for k in self.keyButtons.items():
                         k[1]["rect"].y -= 7

@@ -53,6 +53,7 @@ def loadFromSave(nombre):
 
 def loadkeyShortcuts():
     textFile = open("atajos/atajos.json", "r")
+    print("atajos cargados")
     data = json.load(textFile)
     keyMap = loadKeyMap(data['keyMap'])
     commandMap = loadCommandMap(data['commandMap'])

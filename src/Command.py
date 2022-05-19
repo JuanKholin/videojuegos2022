@@ -74,6 +74,7 @@ COMMAND_TO_TEXT = {
   CommandId.SAVE_GAME: "Guardar partida",
   CommandId.ROTATE: "Rotar unidad",
   CommandId.DESELECT: "Deseleccionar unidades",
+  CommandId.SEARCH_NEARBY_RIVAL: "Atacar al enemigo más cercano",
 }
 
 DEFAULT_KEY_MAP ={
@@ -94,6 +95,7 @@ DEFAULT_KEY_MAP ={
   pygame.K_g: CommandId.SAVE_GAME,
   pygame.K_m: CommandId.ROTATE,
   pygame.K_f: CommandId.DESELECT,
+  pygame.K_v: CommandId.SEARCH_NEARBY_RIVAL,
 }
 
 DEFAULT_COMMAND_MAP = {
@@ -114,4 +116,5 @@ DEFAULT_COMMAND_MAP = {
  CommandId.SAVE_GAME: pygame.K_g,
  CommandId.ROTATE: pygame.K_m,
  CommandId.DESELECT: pygame.K_f,
+ CommandId.SEARCH_NEARBY_RIVAL: pygame.K_v,
 }
