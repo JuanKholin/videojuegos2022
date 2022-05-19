@@ -171,7 +171,7 @@ class Unit(Entity):
                 pg.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y + (0.7*r.h)- camera.y,r.w , 0.3*r.h], 2)
 
             if self.shadow != None:
-                screen.blit(self.shadow, [drawPos[0] - camera.x - 10, drawPos[1] - camera.y - 3])
+                screen.blit(self.shadow, [drawPos[0] - camera.x - 7, drawPos[1] - camera.y - 3])
             #screen.blit(unit.image, [r.x - camera.x, r.y - camera.y])
             screen.blit(self.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
             if self.clicked or self.hp < self.maxHp:
@@ -447,7 +447,7 @@ class Unit(Entity):
         self.runningAway = False
 
         if(len(self.paths) > 1):
-            print("changeToAttacking objetiveTile")
+            #print("changeToAttacking objetiveTile")
             self.changeObjectiveTile()
             #input()
         if self.attackedOne != None:
@@ -457,7 +457,7 @@ class Unit(Entity):
         self.attackCD = self.cooldown
         if self.state == UnitState.STILL:
             ownTile = self.getTile()
-            print(int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)), self.range, "estoy en rango")
+            #print(int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)), self.range, "estoy en rango")
             if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
                 #print(type(self), "estoy en rango")
                 self.updateOwnSpace()
@@ -632,7 +632,7 @@ class Unit(Entity):
 
             self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
             if (self.siendoAtacado == True) and not self.runningAway:
-                print("me atacan")
+                #print("me atacan")
                 self.attack(self.atacante)
                 self.siendoAtacado = False
                 #self.changeObjectiveTile()

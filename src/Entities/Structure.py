@@ -77,7 +77,6 @@ class Structure(Entity.Entity):
             self.shadow = None
 
 
-
     ################
     # TRANSICIONES #
     ################
@@ -245,7 +244,7 @@ class Structure(Entity.Entity):
 
             #self.image.blit(dark, (0, 0), special_flags=pg.BLEND_RGBA_SUB)
             if self.shadow != None:
-                screen.blit(self.shadow, [image.x - camera.x - 10, image.y - camera.y - 3])
+                screen.blit(self.shadow, [image.x - camera.x - 9, image.y - camera.y - 5])
             screen.blit(self.image, [image.x - camera.x, image.y - camera.y])
             if DEBBUG:
                 pg.draw.rect(screen, BLACK, pg.Rect(r.x - camera.x, r.y - camera.y, r.w, r.h),1)
