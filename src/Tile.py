@@ -75,7 +75,7 @@ class Tile():
         return self.ocupante
 
     def getMiniTile(self):
-        pygame.transform.scale(self.image, [self.image.get_rect().w * size, self.image.get_rect().h * size])
+        #pygame.transform.scale(self.image, [self.image.get_rect().w * size, self.image.get_rect().h * size])
         return self.ocupante
     
     def getPosition(self):
