@@ -134,8 +134,10 @@ def setEntity(player, ai):
     escena.resources = resources
 
 def update():
-    updateScreen(screen)
-    camera.update()
+    if Utils.resized:
+        updateScreen(screen)
+        camera.update()
+        Utils.resized = False
     clock_update()
     raton.update(escena.camera)
     if getGameState() == System_State.MAINMENU:

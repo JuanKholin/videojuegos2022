@@ -58,6 +58,7 @@ class Resource():
             return cantidad + self.capacity
         else:
             self.image = self.sprites[3 - int(float(self.capacity)/float(self.interval))]
+            self.shadow = self.shadows[3 - int(float(self.capacity)/float(self.interval))]
             return cantidad
 
     def getPosition(self):

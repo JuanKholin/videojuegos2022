@@ -84,7 +84,7 @@ class Camera():
 
     def moverDerecha(self, mapWidth):
         global CAMERA_X
-        if (self.x + self.w) < mapWidth - CAMERA_SPEED -40:
+        if (self.x + self.w) < mapWidth - CAMERA_SPEED:
             self.x = self.x + CAMERA_SPEED
             CAMERA_X = self.x
         
