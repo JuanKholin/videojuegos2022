@@ -28,11 +28,17 @@ class TerranRefinery(Structure):
     nSprites = TERRAN_REFINERY_TOTAL_FRAMES
 
     def __init__(self, xini, yini, player, map, building, gas = None):
+        self.resource = gas
+        if self.resource != None:
+            self.resource.disable()
+            xini, yini = self.resource.getTile()
+            xini -= 1 
+            yini += 1
         Structure.__init__(self, HP, TERRAN_REFINERY_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
         sprites = Utils.TERRAN_REFINERY_SPRITES
         self.sprites = sprites[0]
         self.shadows = sprites[1]
-        
+        self.nDeadSprite = len(self.sprites) - len(self.shadows)
         self.image = self.sprites[self.index]
     
         self.operativeIndex = [4]
@@ -46,9 +52,7 @@ class TerranRefinery(Structure):
             self.state = BuildingState.BUILDING
         else:
             self.state = BuildingState.OPERATIVE
-        self.resource = gas
-        if self.resource != None:
-            self.resource.disable()
+        
         self.training = []
         self.paths = []
 

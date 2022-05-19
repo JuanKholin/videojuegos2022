@@ -1,10 +1,24 @@
 from .Utils import *
 from . import Utils
+import pygame as pg
 
 CAMERA_X = 0
 CAMERA_Y = 0
 CAMERA_W = ScreenWidth
 CAMERA_H = ScreenHeight
+
+def rectInCamera(r):
+    collideX = False
+    collideY = False
+    if (r.x >= CAMERA_X) and (r.x <= (CAMERA_X+CAMERA_W)):
+        collideX = True
+    elif (CAMERA_X >= r.x) and (CAMERA_X <= (r.x+r.w)):
+        collideX = True
+    if (r.y >= CAMERA_Y) and (r.y <= (CAMERA_Y+CAMERA_H)):
+        collideY = True
+    elif (CAMERA_Y >= r.y) and (CAMERA_Y <= (r.y+r.h)):
+        collideY = True
+    return collideX and collideY
 
 def inCamera(pos):
     if (pos[0] >= CAMERA_X and pos[0] <= CAMERA_X + CAMERA_W and

@@ -2,6 +2,7 @@
 
 import math
 from .Utils import *
+from .Lib import *
 import pygame
 
 
@@ -30,6 +31,9 @@ class Tile():
         self.ocupante = None
         self.oscura = True
         self.visible = False
+        
+    def getRect(self):
+        return pg.Rect(int(self.centerx - self.w/2) ,int(self.centery - self.h/2), self.w, self.h)
 
     def setOcupante(self, ocupante):
         self.ocupante = ocupante
@@ -37,9 +41,6 @@ class Tile():
     def setOcupada(self, id):
         self.type = UNIT
         self.id = id
-
-    def getRect(self):
-        return (int(self.centerx - self.w/2) ,int(self.centery - self.h/2), self.w, self.h)
 
     def heur(self,  tfin):
     #print(math.sqrt(int((tfin.centerx - self.centerx))/40*int((tfin.centerx - self.centerx)/40) + int((tfin.centery - self.centery))/40*int((tfin.centery - self.centery)/40)))

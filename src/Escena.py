@@ -114,12 +114,14 @@ class Escena():
                     self.saveScene()
                 elif command.id == CommandId.EXIT_GAME:
                     setGameState(System_State.MAINMENU)
+                    setGameState2(System_State.PLAYING)
                     self.interfaz.helpPage = 0
                     self.camera.x = 0
                     self.camera.y = 0
                 elif command.id == CommandId.SAVE_EXIT_GAME:
                     self.saveScene()
                     setGameState(System_State.MAINMENU)
+                    setGameState2(System_State.PLAYING)
                     self.interfaz.helpPage = 0
                     self.camera.x = 0
                     self.camera.y = 0

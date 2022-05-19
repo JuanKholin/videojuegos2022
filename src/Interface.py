@@ -357,7 +357,8 @@ class Interface():
         self.ajustesAtajosRect = pg.Rect(Utils.ScreenWidth/2 - AJUSTES_ATAJOS_POS[0], Utils.ScreenHeight/2 - AJUSTES_ATAJOS_POS[1], 220, 40)
 
     def updateMainMenu(self):
-        self.updateMainMenuPos()
+        if Utils.resized:
+            self.updateMainMenuPos()
 
         #Boton single player
         if getGameState2() == System_State.SETTINGS:
@@ -379,9 +380,9 @@ class Interface():
                     self.singlePress = True
                 elif self.mouse.getClick() and self.singlePress and Raton.collides(endPos[0], endPos[1], self.singleRect):
                     #print("Seleccionado single player")
-                    #Utils.state = System_State.MAP1
+                    Utils.state = System_State.MAP1
                     self.loadPartidas()
-                    Utils.state = System_State.GAMESELECT
+                    #Utils.state = System_State.GAMESELECT
                     #stopMusic()
                     self.singlePress = False
 
@@ -459,7 +460,8 @@ class Interface():
         self.partidas = aux
 
     def updateGameMenu(self, escena, raton, camera):
-        self.updateGameMenuPos()
+        if Utils.resized:
+            self.updateGameMenuPos()
         press, iniPos = self.mouse.getPressed()
         #Boton aceptar
         #print(self.mouse.isCollide(self.nuevaPartidaRect), self.mouse.real_pos, self.aceptarRect.x, self.aceptarRect.y, self.aceptarRect.w, self.aceptarRect.h )
@@ -596,7 +598,8 @@ class Interface():
         self.botonesNewGame = aux
         
     def updateNewGame(self, escena, raton, camera):
-        self.updateNewGamePos()
+        if Utils.resized:
+            self.updateNewGamePos()
         press, iniPos = self.mouse.getPressed()
         #Boton aceptar
         if self.mouse.isCollide(self.aceptarRect):
@@ -1055,7 +1058,7 @@ class Interface():
             elif getGameState2() == System_State.GAMEOVER:
                 if self.count2 < 10:
                     image = pg.transform.scale(self.heroeSprites[self.heroeIndex], [self.herow, self.heroh])
-                    screen.blit(image, (672 - self.heropadx, 667- self.heropady))
+                    screen.blit(image, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - (672 - self.heropadx)), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - (667- self.heropady))))
                     self.heroeIndex = (self.heroeIndex+frame(8))%HEROE_N
                     self.count2 += frame(30)
                     if self.heropadx < 670:
@@ -1069,23 +1072,26 @@ class Interface():
                         if self.heroh >= ScreenHeight:
                             playSound(loserSound)
                     else:
-                        muestra_texto(screen, str('monotypecorsiva'), "???", YELLOW, 80, [800, 200])
+                        muestra_texto(screen, str('monotypecorsiva'), "???", YELLOW, 80, [Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 800), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 200)])
                 else:
-                    screen.blit(self.loseSprite[self.index], (0, 0))
+                    image = pg.transform.scale(self.loseSprite[self.index], [Utils.ScreenWidth, Utils.ScreenHeight])
+                    screen.blit(image, (0, 0))
                     self.index += frame(5)
                     if self.index == 30:
                         if self.index == 30:
                             self.index = 10
+                            
             elif Utils.state2 == System_State.WIN:
-
-                screen.blit(self.winSprite[self.index], (0, 0))
+                image = self.winSprite[self.index]
+                image = pg.transform.scale(image, (Utils.ScreenHeight*SCREEN_SCALE, Utils.ScreenHeight))
+                screen.blit(image, (Utils.ScreenWidth/2 - (Utils.ScreenHeight*SCREEN_SCALE/2), 0))
                 self.index += frame(5)
                 if self.index == 30:
                     self.index = 10
                     #setGameState(System_State.MAINMENU)
                     #setGameState2(System_State.PLAYING)
                 if self.index >= 10:
-                    muestra_texto(screen, str('monotypecorsiva'), "Victoria! tu tu tuu~ tu tu", YELLOW, 40, (ScreenWidth/2, ScreenHeight - 200))
+                    muestra_texto(screen, str('monotypecorsiva'), "Victoria! tu tu tuu~ tu tu", YELLOW, 40, (Utils.ScreenWidth/2, Utils.ScreenHeight/2 + 200), True)
 
     def drawSettingsAtajos(self, screen):
         j = 0

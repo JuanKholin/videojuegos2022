@@ -36,6 +36,8 @@ class ZergBarracks(Structure):
         self.sprites = sprites[0]
         self.shadows = sprites[1]
         self.image = self.sprites[self.index]
+        self.nDeadSprite = len(self.sprites) - len(self.shadows)
+        
         self.operativeIndex = [0, 1, 2]
         self.spawningIndex = [0, 1, 2]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]

@@ -6,6 +6,8 @@ import math
 from tokenize import Double
 from .Utils import *
 from . import Tile
+from .Lib import *
+from .Camera import *
 
 class Map():
     def __init__(self, w, h, load, codedMap = None): #load true si quieres que cargue el codedMap
@@ -42,7 +44,10 @@ class Map():
         lastTileX, lastTileY = self.getTileIndex(camera.x + camera.w, camera.y + camera.h)
         for i in range(firstTileY, lastTileY + 1):
             for j in range(firstTileX, lastTileX + 1):
-                self.mapa[i][j].drawNiebla(screen, camera)
+                r = self.mapa[i][j].getRect()
+                if (r.x + r.w >= camera.x and r.x <= camera.x + camera.w and
+                    r.y + r.h >= camera.y and r.y <= camera.y + camera.h):
+                    self.mapa[i][j].drawNiebla(screen, camera)
 
 
     def updateNiebla(self, camera, locationEntitiesOnCamera):
