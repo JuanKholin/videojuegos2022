@@ -337,8 +337,8 @@ class Interface():
             self.updateNewGame(escena, raton, camera)
         elif Utils.state == System_State.SETTINGS and Utils.state2 != System_State.KEY_BINDING:
             press, iniPos = self.mouse.getPressed()
-            if Utils.resized:
-                self.updateSettingsAtajosPos()
+
+            self.updateSettingsAtajosPos()
             #if self.atajosOSonido == 0: #atajos
             self.updateSettingsAtajos()
             #elif self.atajosOSonido == 1:
@@ -746,11 +746,12 @@ class Interface():
             i = 0
             for b in self.keyButtons.items():
                 if self.mouse.isCollide(b[1]["rect"]):
+                    print("colide")
                     endPos = self.mouse.getPosition()
                     if not b[1]["press"] and press and Raton.collides(iniPos[0], iniPos[1], b[1]["rect"]):
                         b[1]["press"] = True
                     elif self.mouse.getClick() and b[1]["press"] and Raton.collides(endPos[0], endPos[1], b[1]["rect"]):
-                        #print("hola")
+                        #print("")
                         playSound(botonSound2)
 
                         b[1]["press"] = False
@@ -805,13 +806,12 @@ class Interface():
         self.scrollBarRectangle = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_RECT_POS[0], Utils.ScreenHeight/2 - SCROLL_BAR_RECT_POS[1], SCROLL_BAR_RECT_SIZE[0], SCROLL_BAR_RECT_SIZE[1])
         self.scrollBarBotRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1], 30, 30)
 
-        self.keyButtons = {}
-        self.buttonWaitingForKey = -1
+
         i = 0
         items = self.keyMap.items()
         for k in items:
             rect = pg.Rect(Utils.ScreenWidth/2 - TECLA_POS[0]-10, Utils.ScreenHeight/2 - TECLA_POS[1]-10 + Y_ATAJOS_OFFSET * i, 100, 35)
-            self.keyButtons[i] = {"rect": rect, "press": False, "waitingForKey": False, "key": k[0], "command": k[1]}
+            self.keyButtons[i]["rect"] = rect
             i += 1
         #self.keyFirstOriginalY = self.keyButtons[0]["rect"].y
         #self.keyLastOriginalY = self.keyButtons[len(self.keyButtons)-1]["rect"].y
