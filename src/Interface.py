@@ -100,17 +100,16 @@ class Interface():
 
         #Settings
         #self.atajosOSonido = 0 #0=atajos
-
         self.settings = pg.image.load(SETTINGS + ".png")
         self.settings = pg.transform.scale(self.settings, (ScreenWidth, ScreenHeight))
         self.settingsTop = pg.image.load(SETTINGS_TOP + ".png")
         self.settingsTop = pg.transform.scale(self.settingsTop, (ScreenWidth, ScreenHeight*0.195))
         self.settingsBot = pg.image.load(SETTINGS_BOT + ".png")
         self.settingsBot = pg.transform.scale(self.settingsBot, (ScreenWidth, ScreenHeight*0.13))
-        self.scrollBarTopRect = pg.Rect(SCROLL_BAR_TOP_TRIANGLE_POS[0][0], SCROLL_BAR_TOP_TRIANGLE_POS[1][1], 30, 30)
+        self.scrollBarTopRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1], 30, 30)
         self.scrollBarTopPress = False
-        self.scrollBarRectangle = pg.Rect(SCROLL_BAR_RECT_POS[0], SCROLL_BAR_RECT_POS[1], SCROLL_BAR_RECT_SIZE[0], SCROLL_BAR_RECT_SIZE[1])
-        self.scrollBarBotRect = pg.Rect(SCROLL_BAR_BOT_TRIANGLE_POS[0][0], SCROLL_BAR_BOT_TRIANGLE_POS[0][1], 30, 30)
+        self.scrollBarRectangle = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_RECT_POS[0], Utils.ScreenHeight/2 - SCROLL_BAR_RECT_POS[1], SCROLL_BAR_RECT_SIZE[0], SCROLL_BAR_RECT_SIZE[1])
+        self.scrollBarBotRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1], 30, 30)
         self.scrollBarBotPress = False
 
         self.keyButtons = {}
@@ -118,7 +117,7 @@ class Interface():
         i = 0
         items = self.keyMap.items()
         for k in items:
-            rect = pg.Rect(TECLA_POS[0]-10, TECLA_POS[1]-10 + Y_ATAJOS_OFFSET * i, 100, 35)
+            rect = pg.Rect(Utils.ScreenWidth/2 - TECLA_POS[0]-10, Utils.ScreenHeight/2 - TECLA_POS[1]-10 + Y_ATAJOS_OFFSET * i, 100, 35)
             self.keyButtons[i] = {"rect": rect, "press": False, "waitingForKey": False, "key": k[0], "command": k[1]}
             i += 1
         #self.guardarRect = pg.Rect(AJUSTES_POS[0], AJUSTES_POS[1], 220, 40)
@@ -126,9 +125,9 @@ class Interface():
         self.keyFirstOriginalY = self.keyButtons[0]["rect"].y
         self.keyLastOriginalY = self.keyButtons[len(self.keyButtons)-1]["rect"].y
 
-        self.reestablecerRect =  pg.Rect(REESTABLECER_POS[0], REESTABLECER_POS[1], REESTABLECER_SIZE[0], REESTABLECER_SIZE[1])
+        self.reestablecerRect =  pg.Rect(Utils.ScreenWidth/2 - REESTABLECER_POS[0], Utils.ScreenHeight/2 - REESTABLECER_POS[1], REESTABLECER_SIZE[0], REESTABLECER_SIZE[1])
         self.reestablecerPress = False
-        self.guardarSalirSettingsRect =  pg.Rect(GUARDAR_SALIR_SETTINGS_POS[0], GUARDAR_SALIR_SETTINGS_POS[1], GUARDAR_SALIR_SETTINGS_SIZE[0], GUARDAR_SALIR_SETTINGS_SIZE[1])
+        self.guardarSalirSettingsRect =  pg.Rect(Utils.ScreenWidth/2 - GUARDAR_SALIR_SETTINGS_POS[0], Utils.ScreenHeight/2 - GUARDAR_SALIR_SETTINGS_POS[1], GUARDAR_SALIR_SETTINGS_SIZE[0], GUARDAR_SALIR_SETTINGS_SIZE[1])
         self.guardarSalirSettingsPress = False
 
 
@@ -177,9 +176,9 @@ class Interface():
                 self.keyButtons[self.buttonWaitingForKey]["key"] = event.key
 
 
-                print("hola")
-            self.buttonWaitingForKey = -1
-            setGameState2(System_State.PLAYING)
+                #print("hola")
+                self.buttonWaitingForKey = -1
+                setGameState2(System_State.PLAYING)
 
     def loadGameGUI(self):
         self.gui = pg.image.load(BARRA_COMANDO + ".bmp")
@@ -338,7 +337,7 @@ class Interface():
             self.updateNewGame(escena, raton, camera)
         elif Utils.state == System_State.SETTINGS and Utils.state2 != System_State.KEY_BINDING:
             press, iniPos = self.mouse.getPressed()
-
+            self.updateSettingsAtajosPos()
             #if self.atajosOSonido == 0: #atajos
             self.updateSettingsAtajos()
             #elif self.atajosOSonido == 1:
@@ -699,53 +698,6 @@ class Interface():
     def updateSettingsAtajos(self):
         press, iniPos = self.mouse.getPressed()
 
-        if self.mouse.isCollide(self.scrollBarTopRect):
-            endPos = self.mouse.getPosition()
-            if not self.scrollBarTopPress and press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarTopRect):
-                self.scrollBarTopPress = True
-            elif self.mouse.getClick() and self.scrollBarTopPress and Raton.collides(endPos[0], endPos[1], self.scrollBarTopRect):
-                self.scrollBarTopPress = False
-                playSound(botonSound2)
-            if press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarTopRect):
-                if self.keyButtons[0]["rect"].y < self.keyFirstOriginalY:
-                    for k in self.keyButtons.items():
-                        k[1]["rect"].y += 7
-                    COMANDO_POS[1] += 7
-                    TECLA_POS[1] += 7
-
-
-        elif self.mouse.isCollide(self.scrollBarBotRect):
-            endPos = self.mouse.getPosition()
-
-            if not self.scrollBarBotPress and press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarBotRect):
-                self.scrollBarBotPress = True
-            elif self.mouse.getClick() and self.scrollBarBotPress and Raton.collides(endPos[0], endPos[1], self.scrollBarBotRect):
-                self.scrollBarBotPress = False
-                playSound(botonSound2)
-            if press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarBotRect):
-                print("holi")
-                if self.keyButtons[len(self.keyButtons)-1]["rect"].y > self.keyFirstOriginalY:
-                    for k in self.keyButtons.items():
-                        k[1]["rect"].y -= 7
-                    COMANDO_POS[1] -= 7
-                    TECLA_POS[1] -= 7
-        i = 0
-        for b in self.keyButtons.items():
-            if self.mouse.isCollide(b[1]["rect"]):
-                endPos = self.mouse.getPosition()
-                if not b[1]["press"] and press and Raton.collides(iniPos[0], iniPos[1], b[1]["rect"]):
-                    b[1]["press"] = True
-                elif self.mouse.getClick() and b[1]["press"] and Raton.collides(endPos[0], endPos[1], b[1]["rect"]):
-                    #print("hola")
-                    playSound(botonSound2)
-
-                    b[1]["press"] = False
-                    b[1]["waitingForKey"] = True
-                    self.buttonWaitingForKey = b[0]
-                    print(b[0])
-                    Utils.state2 = System_State.KEY_BINDING
-            i += 1
-
         if self.mouse.isCollide(self.reestablecerRect):
             if not self.soundPlayed:
                 playSound(botonSound)
@@ -768,7 +720,7 @@ class Interface():
                 buttons = {}
                 i = 0
                 for k in self.keyMap.items():
-                    rect = pg.Rect(TECLA_POS[0]-10, TECLA_POS[1]-10 + Y_ATAJOS_OFFSET * i, 100, 35)
+                    rect = pg.Rect(Utils.ScreenWidth/2 - TECLA_POS[0]-10, Utils.ScreenHeight/2 - TECLA_POS[1]-10 + Y_ATAJOS_OFFSET * i, 100, 35)
                     buttons[i] = {"rect": rect, "press": False, "waitingForKey": False, "key": k[0], "command": k[1]}
                     i += 1
                 self.keyButtons = buttons
@@ -794,43 +746,81 @@ class Interface():
                 Utils.state = System_State.MAINMENU
                 self.guardarSalirSettingsPress = False
         else:
+            i = 0
+            for b in self.keyButtons.items():
+                if self.mouse.isCollide(b[1]["rect"]):
+                    endPos = self.mouse.getPosition()
+                    if not b[1]["press"] and press and Raton.collides(iniPos[0], iniPos[1], b[1]["rect"]):
+                        b[1]["press"] = True
+                    elif self.mouse.getClick() and b[1]["press"] and Raton.collides(endPos[0], endPos[1], b[1]["rect"]):
+                        #print("hola")
+                        playSound(botonSound2)
+
+                        b[1]["press"] = False
+                        b[1]["waitingForKey"] = True
+                        self.buttonWaitingForKey = b[0]
+                        print(b[0])
+                        Utils.state2 = System_State.KEY_BINDING
+                i += 1
+
             self.soundPlayed = False
+
+        if self.mouse.isCollide(self.scrollBarTopRect):
+            endPos = self.mouse.getPosition()
+            if not self.scrollBarTopPress and press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarTopRect):
+                self.scrollBarTopPress = True
+            elif self.mouse.getClick() and self.scrollBarTopPress and Raton.collides(endPos[0], endPos[1], self.scrollBarTopRect):
+                self.scrollBarTopPress = False
+                playSound(botonSound2)
+            if press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarTopRect):
+                if self.keyButtons[0]["rect"].y < self.keyFirstOriginalY:
+                    for k in self.keyButtons.items():
+                        k[1]["rect"].y += 7
+                    COMANDO_POS[1] -= 7
+                    TECLA_POS[1] -= 7
+
+
+        elif self.mouse.isCollide(self.scrollBarBotRect):
+            endPos = self.mouse.getPosition()
+
+            if not self.scrollBarBotPress and press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarBotRect):
+                self.scrollBarBotPress = True
+            elif self.mouse.getClick() and self.scrollBarBotPress and Raton.collides(endPos[0], endPos[1], self.scrollBarBotRect):
+                self.scrollBarBotPress = False
+                playSound(botonSound2)
+            if press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarBotRect):
+                print("holi")
+                if self.keyButtons[len(self.keyButtons)-1]["rect"].y > self.keyFirstOriginalY:
+                    for k in self.keyButtons.items():
+                        k[1]["rect"].y -= 7
+                    COMANDO_POS[1] += 7
+                    TECLA_POS[1] += 7
 
         if self.mouse.getClick():
             self.aceptarPress = False
             self.cancelarPress = False
 
     def updateSettingsAtajosPos(self):
-        self.settings = pg.image.load(SETTINGS + ".png")
-        self.settings = pg.transform.scale(self.settings, (ScreenWidth, ScreenHeight))
-        self.settingsTop = pg.image.load(SETTINGS_TOP + ".png")
-        self.settingsTop = pg.transform.scale(self.settingsTop, (ScreenWidth, ScreenHeight*0.195))
-        self.settingsBot = pg.image.load(SETTINGS_BOT + ".png")
-        self.settingsBot = pg.transform.scale(self.settingsBot, (ScreenWidth, ScreenHeight*0.13))
-        self.scrollBarTopRect = pg.Rect(SCROLL_BAR_TOP_TRIANGLE_POS[0][0], SCROLL_BAR_TOP_TRIANGLE_POS[1][1], 30, 30)
-        self.scrollBarTopPress = False
-        self.scrollBarRectangle = pg.Rect(SCROLL_BAR_RECT_POS[0], SCROLL_BAR_RECT_POS[1], SCROLL_BAR_RECT_SIZE[0], SCROLL_BAR_RECT_SIZE[1])
-        self.scrollBarBotRect = pg.Rect(SCROLL_BAR_BOT_TRIANGLE_POS[0][0], SCROLL_BAR_BOT_TRIANGLE_POS[0][1], 30, 30)
-        self.scrollBarBotPress = False
+                self.settings = pg.transform.scale(self.settings, (ScreenWidth, ScreenHeight))
+                self.settingsTop = pg.transform.scale(self.settingsTop, (ScreenWidth, ScreenHeight*0.195))
+                self.settingsBot = pg.transform.scale(self.settingsBot, (ScreenWidth, ScreenHeight*0.13))
+                self.scrollBarTopRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1], 30, 30)
+                self.scrollBarRectangle = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_RECT_POS[0], Utils.ScreenHeight/2 - SCROLL_BAR_RECT_POS[1], SCROLL_BAR_RECT_SIZE[0], SCROLL_BAR_RECT_SIZE[1])
+                self.scrollBarBotRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1], 30, 30)
 
-        self.keyButtons = {}
-        self.buttonWaitingForKey = -1
-        i = 0
-        items = self.keyMap.items()
-        for k in items:
-            rect = pg.Rect(TECLA_POS[0]-10, TECLA_POS[1]-10 + Y_ATAJOS_OFFSET * i, 100, 35)
-            self.keyButtons[i] = {"rect": rect, "press": False, "waitingForKey": False, "key": k[0], "command": k[1]}
-            i += 1
-        #self.guardarRect = pg.Rect(AJUSTES_POS[0], AJUSTES_POS[1], 220, 40)
-        #self.cancelarRect = pg.Rect(AJUSTES_POS[0], AJUSTES_POS[1], 220, 40)
-        self.keyFirstOriginalY = self.keyButtons[0]["rect"].y
-        self.keyLastOriginalY = self.keyButtons[len(self.keyButtons)-1]["rect"].y
+                self.keyButtons = {}
+                self.buttonWaitingForKey = -1
+                i = 0
+                items = self.keyMap.items()
+                for k in items:
+                    rect = pg.Rect(Utils.ScreenWidth/2 - TECLA_POS[0]-10, Utils.ScreenHeight/2 - TECLA_POS[1]-10 + Y_ATAJOS_OFFSET * i, 100, 35)
+                    self.keyButtons[i] = {"rect": rect, "press": False, "waitingForKey": False, "key": k[0], "command": k[1]}
+                    i += 1
+                self.keyFirstOriginalY = self.keyButtons[0]["rect"].y
+                self.keyLastOriginalY = self.keyButtons[len(self.keyButtons)-1]["rect"].y
 
-        self.reestablecerRect =  pg.Rect(REESTABLECER_POS[0], REESTABLECER_POS[1], REESTABLECER_SIZE[0], REESTABLECER_SIZE[1])
-        self.reestablecerPress = False
-        self.guardarSalirSettingsRect =  pg.Rect(GUARDAR_SALIR_SETTINGS_POS[0], GUARDAR_SALIR_SETTINGS_POS[1], GUARDAR_SALIR_SETTINGS_SIZE[0], GUARDAR_SALIR_SETTINGS_SIZE[1])
-        self.guardarSalirSettingsPress = False
-
+                self.reestablecerRect =  pg.Rect(Utils.ScreenWidth/2 - REESTABLECER_POS[0], Utils.ScreenHeight/2 - REESTABLECER_POS[1], REESTABLECER_SIZE[0], REESTABLECER_SIZE[1])
+                self.guardarSalirSettingsRect =  pg.Rect(Utils.ScreenWidth/2 - GUARDAR_SALIR_SETTINGS_POS[0], Utils.ScreenHeight/2 - GUARDAR_SALIR_SETTINGS_POS[1], GUARDAR_SALIR_SETTINGS_SIZE[0], GUARDAR_SALIR_SETTINGS_SIZE[1])
 
     def updateOnGame(self):
         #si esta en GUI desactivar funciones de raton
@@ -987,7 +977,7 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), self.selectedDif['nombre'], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-810), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-275)))
             muestra_texto(screen, str('monotypecorsiva'), self.selectedRaza['nombre'], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-745), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-390)))
         elif Utils.state == System_State.SETTINGS:
-            screen.blit(self.settings, [0, 0])
+            screen.blit(self.settings, [Utils.ScreenWidth/2 - self.settings.get_width()/2, 0])
             #if self.atajosOSonido == 0: #atajos
             self.drawSettingsAtajos(screen)
             #elif self.atajosOSonido == 1:
@@ -996,8 +986,8 @@ class Interface():
             if self.mouse.isCollide(self.guardarSalirSettingsRect):
                 pygame.draw.rect(screen, GREEN3, self.guardarSalirSettingsRect, 1)
 
-            muestra_texto(screen, str('monotypecorsiva'), "Reestablecer", GREEN, 30, (REESTABLECER_POS[0] + 30, REESTABLECER_POS[1] + 20))
-            muestra_texto(screen, str('monotypecorsiva'), "Guardar y salir", GREEN, 30, (GUARDAR_SALIR_SETTINGS_POS[0] + 70, GUARDAR_SALIR_SETTINGS_POS[1] + 10))
+            muestra_texto(screen, str('monotypecorsiva'), "Reestablecer", GREEN, 30, (Utils.ScreenWidth/2 - REESTABLECER_POS[0] + 30, Utils.ScreenHeight/2 - REESTABLECER_POS[1] + 20))
+            muestra_texto(screen, str('monotypecorsiva'), "Guardar y salir", GREEN, 30, (Utils.ScreenWidth/2 - GUARDAR_SALIR_SETTINGS_POS[0] + 70, Utils.ScreenHeight/2 - GUARDAR_SALIR_SETTINGS_POS[1] + 10))
 
 
 
@@ -1106,8 +1096,8 @@ class Interface():
         stringKeyItems = self.keyButtons.items()
         ##print(COMMAND_TO_TEXT)
         for i in stringKeyItems:
-            muestra_texto(screen, str('monotypecorsiva'), COMMAND_TO_TEXT[int(i[1]["command"])], WHITE, ATAJO_TEXT_SIZE, (COMANDO_POS[0], COMANDO_POS[1] + Y_ATAJOS_OFFSET * j))
-            muestra_texto(screen, str('monotypecorsiva'), KEY_TO_TEXT[i[1]["key"]], WHITE, ATAJO_TEXT_SIZE, (TECLA_POS[0], TECLA_POS[1] + Y_ATAJOS_OFFSET * j))
+            muestra_texto(screen, str('monotypecorsiva'), COMMAND_TO_TEXT[int(i[1]["command"])], WHITE, ATAJO_TEXT_SIZE, (Utils.ScreenWidth/2 - COMANDO_POS[0], Utils.ScreenHeight/2 - COMANDO_POS[1] + Y_ATAJOS_OFFSET * j))
+            muestra_texto(screen, str('monotypecorsiva'), KEY_TO_TEXT[i[1]["key"]], WHITE, ATAJO_TEXT_SIZE, (Utils.ScreenWidth/2 - TECLA_POS[0], Utils.ScreenHeight/2 - TECLA_POS[1] + Y_ATAJOS_OFFSET * j))
             if Utils.getGameState2() == System_State.KEY_BINDING and j == self.buttonWaitingForKey:
                 pygame.draw.rect(screen, RED, self.keyButtons[j]["rect"], 2)
             elif self.mouse.isCollide(self.keyButtons[j]["rect"]):
@@ -1117,23 +1107,27 @@ class Interface():
             j += 1
 
 
-        screen.blit(self.settingsTop, [0, 0])
-        screen.blit(self.settingsBot, [0, ScreenHeight - ScreenHeight*0.13])
+        #screen.blit(self.settingsTop, [0, 0])
+        screen.blit(self.settingsTop, [Utils.ScreenWidth/2 - self.settings.get_width()/2, 0])
+        #screen.blit(self.settingsBot, [0, ScreenHeight - ScreenHeight*0.13])
+        screen.blit(self.settingsBot, [Utils.ScreenWidth/2 - self.settings.get_width()/2, ScreenHeight - ScreenHeight*0.13])
 
-        muestra_texto(screen, str('monotypecorsiva'), "Atajos de teclado", GREEN3, ATAJOS_TITLE_TEXT_SIZE, ATAJOS_TITLE_POS)
-        muestra_texto(screen, str('monotypecorsiva'), "Comando", WHITE, COLUMN_TEXT_SIZE, COMANDO_COLUMN_POS)
-        muestra_texto(screen, str('monotypecorsiva'), "Tecla", WHITE, COLUMN_TEXT_SIZE, TECLA_COLUMN_POS)
+        muestra_texto(screen, str('monotypecorsiva'), "Atajos de teclado", GREEN3, ATAJOS_TITLE_TEXT_SIZE, (Utils.ScreenWidth/2 - ATAJOS_TITLE_POS[0], Utils.ScreenHeight/2 - ATAJOS_TITLE_POS[1]))
+        muestra_texto(screen, str('monotypecorsiva'), "Comando", WHITE, COLUMN_TEXT_SIZE, (Utils.ScreenWidth/2 - COMANDO_COLUMN_POS[0], Utils.ScreenHeight/2 - COMANDO_COLUMN_POS[1]))
+        muestra_texto(screen, str('monotypecorsiva'), "Tecla", WHITE, COLUMN_TEXT_SIZE, (Utils.ScreenWidth/2 - TECLA_COLUMN_POS[0], Utils.ScreenHeight/2 - TECLA_COLUMN_POS[1]))
         if self.buttonWaitingForKey != -1:
-            muestra_texto(screen, str('monotypecorsiva'), "pulse una tecla (digito o letra) no usada", WHITE, COLUMN_TEXT_SIZE-10, AVISO_COLUMN_POS)
+            muestra_texto(screen, str('monotypecorsiva'), "pulse una tecla (digito o letra) no usada", WHITE, COLUMN_TEXT_SIZE-10, (Utils.ScreenWidth/2 - AVISO_COLUMN_POS[0], Utils.ScreenHeight/2 - AVISO_COLUMN_POS[1]))
         if self.mouse.isCollide(self.scrollBarTopRect):
-            pygame.draw.polygon(screen, RED2, SCROLL_BAR_TOP_TRIANGLE_POS)
+            pygame.draw.polygon(screen, RED2, [(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[2][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[2][1])])
         else:
-            pygame.draw.polygon(screen, RED, SCROLL_BAR_TOP_TRIANGLE_POS)
+            pygame.draw.polygon(screen, RED, [(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[2][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[2][1])])
         if self.mouse.isCollide(self.scrollBarBotRect):
-            pygame.draw.polygon(screen, RED2, SCROLL_BAR_BOT_TRIANGLE_POS)
-        else:
-            pygame.draw.polygon(screen, RED, SCROLL_BAR_BOT_TRIANGLE_POS)
 
+            pygame.draw.polygon(screen, RED2, [(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0],Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[1][0],Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[1][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[2][0],Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[2][1])])
+        else:
+            pygame.draw.polygon(screen, RED, [(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0],Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[1][0],Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[1][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[2][0],Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[2][1])])
+
+        #print([(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[2][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[2][1])])
         pygame.draw.rect(screen, RED2, self.scrollBarRectangle, 1)
 
     def drawSoundSetting(self, screen):

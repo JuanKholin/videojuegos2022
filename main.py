@@ -195,6 +195,7 @@ Utils.init()
 clock = pg.time.Clock()
 
 # Player 1
+'''
 keyMap = {
   pg.K_w: CommandId.MOVE_CAMERA_UP,
   pg.K_s: CommandId.MOVE_CAMERA_DOWN,
@@ -212,7 +213,7 @@ keyMap = {
   pg.K_p: CommandId.UPGRADE_WORKER_MINING,
   pg.K_g: CommandId.SAVE_GAME,
   pg.K_m: CommandId.ROTATE,
-  
+  pg.K_f: CommandId.DESELECT,
 }
 commandMap = {
   CommandId.MOVE_CAMERA_UP: pg.K_w,
@@ -231,8 +232,9 @@ commandMap = {
   CommandId.UPGRADE_WORKER_MINING: pg.K_p,
   CommandId.SAVE_GAME: pg.K_g,
   CommandId.ROTATE: pg.K_m,
+  CommandId.DESELECT: pg.K_f,
 }
-
+'''
 mapa = Map.Map(40, 40, True)
 #mapa.setElevacion(16, 3)
 #mapa.setElevacion(20, 14)
@@ -242,7 +244,7 @@ mapa = Map.Map(40, 40, True)
 #mapa.setElevacion(5, 12)
 #mapa.setElevacion(32, 29)
 
-#keyMap, commandMap = loadkeyShortcuts()
+keyMap, commandMap = loadkeyShortcuts()
 player1 = Player.Player([], [], 500, keyMap, commandMap, mapa, True)
 
 # Raton

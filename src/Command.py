@@ -73,6 +73,7 @@ COMMAND_TO_TEXT = {
   CommandId.UPGRADE_WORKER_MINING: "Mejorar tiempo de minado",
   CommandId.SAVE_GAME: "Guardar partida",
   CommandId.ROTATE: "Rotar unidad",
+  CommandId.DESELECT: "Deseleccionar unidades",
 }
 
 DEFAULT_KEY_MAP ={
@@ -92,6 +93,7 @@ DEFAULT_KEY_MAP ={
   pygame.K_p: CommandId.UPGRADE_WORKER_MINING,
   pygame.K_g: CommandId.SAVE_GAME,
   pygame.K_m: CommandId.ROTATE,
+  pygame.K_f: CommandId.DESELECT,
 }
 
 DEFAULT_COMMAND_MAP = {
@@ -111,4 +113,5 @@ DEFAULT_COMMAND_MAP = {
  CommandId.UPGRADE_WORKER_MINING: pygame.K_p,
  CommandId.SAVE_GAME: pygame.K_g,
  CommandId.ROTATE: pygame.K_m,
+ CommandId.DESELECT: pygame.K_f,
 }
