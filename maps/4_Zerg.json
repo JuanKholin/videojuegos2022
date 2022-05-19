@@ -14,6 +14,9 @@
     "structures": [
       {
         "clase": "hatchery",
+        "training": [],
+        "count": 0,
+        "state": 2,
         "building": false,
         "nombre": "Criadera de Zerg",
         "funcion": "Base enemiga",
@@ -66,6 +69,9 @@
       {
         "clase": "hatchery",
         "building": false,
+        "training": [],
+        "count": 0,
+        "state": 2,
         "nombre": "Base de comandos",
         "funcion": "Protege la base de comandos",
         "damageMineralUpCost": 50,

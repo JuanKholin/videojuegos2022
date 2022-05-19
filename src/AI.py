@@ -44,7 +44,7 @@ class AI():
             self.t1Cost = [TERRAN_T1_MINERAL_COST, TERRAN_T1_GAS_COST]
             self.t2Cost = [TERRAN_T2_MINERAL_COST, TERRAN_T2_GAS_COST]
             self.t3Cost = [TERRAN_T3_MINERAL_COST, TERRAN_T3_GAS_COST]
-        elif race == Race.PROTOSS:
+        '''elif race == Race.PROTOSS:
             self.base = PROTOSS_BASE
             self.barracks = PROTOSS_BARRACKS
             self.depot = PROTOSS_DEPOT
@@ -52,7 +52,7 @@ class AI():
             self.worker = PROTOSS_WORKER
             self.soldier = PROTOSS_SOLDIER
             self.workerCost = PROTOSS_WORKER_MINERAL_COST
-            self.soldierCost = PROTOSS_SOLDIER_MINERAL_COST
+            self.soldierCost = PROTOSS_SOLDIER_MINERAL_COST'''
         
         # La vision de la IA: 
         self.crystalsSeen = set()
@@ -208,19 +208,17 @@ class AI():
             if len(gassers) > 0:
                 gassers.pop()
             if len(workers) > 0: # Para el resto de workers
+                geyser = self.getGeyserInUse(structures)
                 if len(self.crystalsSeen) > 0: # si hay cristales conocidos,
-                    crystalToMine = 0
-                    geyser = self.getGeyserInUse(structures)
+                    crystalToMine = self.getBestCrystalSeen(structures)
                     for worker in workers: # todos a la mina
                         #print("A la mina")
                         if (worker.state == UnitState.STILL) or (worker.state == UnitState.EXTRACTING): # si les viene bien xd
                             crystalsSeen = list(self.crystalsSeen)
                             #print("go to work crystal at", crystalsSeen[crystalToMine].getPosition())
-                            if len(crystalsSeen) > 0:
-                                worker.mine(crystalsSeen[crystalToMine]) 
-                                crystalToMine = (crystalToMine + 1) % len(crystalsSeen)
-                            elif (geyser != None) and gassers.count(worker) and (geyser != None) and (geyser.state == BuildingState.OPERATIVE):
-                                worker.extract(geyser.getTile())
+                            worker.mine(crystalToMine)
+                elif (geyser != None) and gassers.count(worker) and (geyser != None) and (geyser.state == BuildingState.OPERATIVE):
+                    worker.extract(geyser.getTile())
 
 
     # Recorre las unidades invasoras para que vayan a la guerra, evitan recorrer caminos opuestos
@@ -525,9 +523,9 @@ class AI():
 
     # Construye un edificio de explotacion de geiseres en el geiser geyser
     def buildGeyserBuilding(self, geyser):
-        if (self.geyserBuilding == ZERG_REFINERY) and (self.data.resources >= ZERG_REFINERY_MINERAL_COST):
+        if (self.geyserBuilding == ZERG_REFINERY) and (self.data.resources >= EXTRACTOR_MINERAL_COST):
             #print("Construye zerggeyserstructure")
-            self.data.resources -= ZERG_REFINERY_MINERAL_COST
+            self.data.resources -= EXTRACTOR_MINERAL_COST
             toBuild = Extractor(int(geyser.x / 40) - 1, int(geyser.y / 40), self.data, self.mapa, True, geyser)
             self.data.addStructures(toBuild)
             #toBuild.buildProcess()
@@ -658,6 +656,23 @@ class AI():
             if structure.type == REFINERY:
                 return structure
         return None
+
+    # Devuelve el cristal mas cercano a la base
+    def getBestCrystalSeen(self, structures):
+        base = self.getBase(structures)
+        crystals = list(self.crystalsSeen)
+        basePos = base.getPosition()
+        bestCrystal = crystals[0]
+        crystalPos = bestCrystal.getPosition()
+        bestDistance = math.hypot(basePos[0] - crystalPos[0], basePos[1] - crystalPos[1])
+        if base != None:
+            for crystal in crystals:
+                crystalPos = crystal.getPosition()
+                distance = math.hypot(basePos[0] - crystalPos[0], basePos[1] - crystalPos[1])
+                if distance < bestDistance:
+                    bestCrystal = crystal
+                    bestDistance = distance
+        return crystal
 
     def findFreeGeyser(self, units, structures):
         for unit in units:

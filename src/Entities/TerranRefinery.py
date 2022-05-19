@@ -25,22 +25,15 @@ class TerranRefinery(Structure):
     rectOffY = 57
     clicked = False
     frame = 8
-    nSprites = 5
+    nSprites = TERRAN_REFINERY_TOTAL_FRAMES
 
     def __init__(self, xini, yini, player, map, building, gas = None):
         Structure.__init__(self, HP, TERRAN_REFINERY_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
-        self.sprites = cargarSprites(TERRAN_REFINERY_PATH, self.nSprites, False, BLACK)
-        deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
-        deadSpritesheet.set_colorkey(BLACK)
-        deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
-
-        self.sprites += deadSprites
-        #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
-
-        self.type = TERRAN_REFINERY
-
+        sprites = TERRAN_REFINERY_SPRITES
+        self.sprites = sprites[0]
+        self.shadows = sprites[1]
+        
         self.image = self.sprites[self.index]
-        self.shadows = []
         self.operativeIndex = [4]
         self.spawningIndex = [4]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
@@ -58,7 +51,7 @@ class TerranRefinery(Structure):
         self.training = []
         self.paths = []
 
-        self.type = TERRAN_REFINERY
+        self.type = REFINERY
         
     def drawInfoOperative(self, screen, color):
         dic = self.toDictionary(self.mapa)

@@ -12,7 +12,7 @@ from ..Utils import *
 
 HP = 1000
 GENERATION_TIME = 5
-CAPACITY = 5
+CAPACITY = 0
 
 class TerranBarracks(Structure):
     TILES_WIDTH = 4
@@ -29,20 +29,18 @@ class TerranBarracks(Structure):
     rectOffY = 8
     clicked = False
     frame = 8
-    nSprites = 6
+    nSprites = TERRAN_BARRACKS_TOTAL_FRAMES
     options = [Options.GENERATE_T1_TERRAN, Options.GENERATE_T2_TERRAN, Options.GENERATE_T3_TERRAN]
 
     def __init__(self, xini, yini, player, map, building):
         Structure.__init__(self, HP, TERRAN_BARRACKS_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
 
-        self.sprites = cargarSprites(TERRAN_BARRACKS_PATH, self.nSprites, False, WHITE, 1.1)
-        deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
-        deadSpritesheet.set_colorkey(BLACK)
-        deadSprites = Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
+        sprites = Utils.TERRAN_BARRACKS_SPRITES
+        self.sprites = sprites[0]
+        self.shadows = sprites[1]
 
-        self.sprites += deadSprites
-        self.shadows = []
         self.image = self.sprites[self.index]
+        self.shadow = self.sprites[self.index]
         self.operativeIndex = [4]
         self.spawningIndex = [4, 5]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]

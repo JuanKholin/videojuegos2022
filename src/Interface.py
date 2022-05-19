@@ -164,7 +164,7 @@ class Interface():
         self.helpPageSprites = cargarSprites("./SPRITE/EXTRA/help", 6, False, size = (526, 660))
 
         #SETTINGS
-        self.settingButtons = [self.exitPauseButton, self.helpPauseButton, self.allButton[Options.MINUS_BGM], self.allButton[Options.PLUS_BGM], self.allButton[Options.MINUS_SOUND], self.allButton[Options.PLUS_SOUND]]
+        self.settingButtons = [self.exitPauseButton, self.allButton[Options.MINUS_BGM], self.allButton[Options.PLUS_BGM], self.allButton[Options.MINUS_SOUND], self.allButton[Options.PLUS_SOUND]]
 
     def processEvent(self, event):
         if event.type == pg.KEYDOWN:
@@ -237,7 +237,7 @@ class Interface():
         allButton[Options.BUILD_BARRACKS_ZERG] = aux
         aux = Button0.Button(BUTTON_PATH + "zerg_supply" + ".bmp", CommandId.BUILD_DEPOT, BUTTON_PATH + "construirConMineralZerg.png", "Construir Guarida", 5, ZERG_DEPOT_MINERAL_COST, 0, 45)
         allButton[Options.BUILD_DEPOT_ZERG] = aux
-        aux = Button0.Button(BUTTON_PATH + "zerg_refinery" + ".bmp", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineralZerg.png", "Construir Extractor", 5, ZERG_REFINERY_MINERAL_COST, 0, 45)
+        aux = Button0.Button(BUTTON_PATH + "zerg_refinery" + ".bmp", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineralZerg.png", "Construir Extractor", 5, EXTRACTOR_MINERAL_COST, 0, 45)
         allButton[Options.BUILD_REFINERY_ZERG] = aux
         #aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.BUILD_HATCHERY)
         #allButton[Options.BUILD_HATCHERY] = aux
@@ -381,7 +381,7 @@ class Interface():
                     #print("Seleccionado single player")
                     Utils.state = System_State.MAP1
                     self.loadPartidas()
-                    Utils.state = System_State.GAMESELECT
+                    #Utils.state = System_State.GAMESELECT
                     #stopMusic()
                     self.singlePress = False
 
@@ -590,8 +590,8 @@ class Interface():
             {"nombre": "Facil", "tipo": "dificultad", "rect": pg.Rect(Utils.ScreenWidth/2 - FACIL_POS[0], Utils.ScreenHeight/2 - FACIL_POS[1], 125, 35), "press": self.botonesNewGame[4]['press'], "dif": EASY},
             {"nombre": "Normal", "tipo": "dificultad", "rect": pg.Rect(Utils.ScreenWidth/2 - NORMAL_POS[0], Utils.ScreenHeight/2 - NORMAL_POS[1], 125, 35), "press": self.botonesNewGame[5]['press'], "dif": MEDIUM},
             {"nombre": "Dificil", "tipo": "dificultad", "rect": pg.Rect(Utils.ScreenWidth/2 - DIFICIL_POS[0], Utils.ScreenHeight/2 - DIFICIL_POS[1], 125, 35), "press": self.botonesNewGame[6]['press'], "dif": HARD},
-            {"nombre": "Terran", "tipo": "raza", "rect": pg.Rect(Utils.ScreenWidth/2 - TERRAN_POS[0], Utils.ScreenHeight/2 - TERRAN_POS[1], 185, 35), "press": self.botonesNewGame[7]['press'], "raza": Race.TERRAN},
-            {"nombre": "Zerg","tipo": "raza", "rect": pg.Rect(Utils.ScreenWidth/2 - ZERG_POS[0], Utils.ScreenHeight/2 - ZERG_POS[1], 185, 35), "press": self.botonesNewGame[8]['press'], "raza": Race.ZERG},
+            self.botonRazaTerran,
+            {"nombre": "Zerg","tipo": "raza", "rect": pg.Rect(Utils.ScreenWidth/2 - ZERG_POS[0], Utils.ScreenHeight/2 - ZERG_POS[1], 185, 35), "press": self.botonesNewGame[len(self.botonesNewGame) - 1]['press'], "raza": Race.ZERG},
         ]
 
         self.botonesNewGame = aux
@@ -665,11 +665,12 @@ class Interface():
         else:
             self.soundPlayed = False
 
-
+        print(self.botonRazaTerran not in self.botonesNewGame)
         if self.botonRazaTerran in self.botonesNewGame and self.selectedMap == "4":
             self.botonesNewGame.remove(self.botonRazaTerran)
             self.selectedRaza = {"nombre":"Zerg", "raza": Race.ZERG}
         elif self.botonRazaTerran not in self.botonesNewGame and self.selectedMap != "4":
+            print("aaaaaaaaaaaa")
             self.botonesNewGame.append(self.botonRazaTerran)
         for b in self.botonesNewGame:
             if self.mouse.isCollide(b['rect']):
@@ -1134,13 +1135,13 @@ class Interface():
         pg.draw.rect(screen, BLACK, pg.Rect(Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80), 512, 500))
         pg.draw.rect(screen, BLUE2, pg.Rect(Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80), 512, 500), 4)
 
-        self.helpPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 245), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
+        #self.helpPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 245), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
         self.exitPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 688), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
 
-        self.settingButtons[2].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 330), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 260))
-        self.settingButtons[3].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 600), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 260))
-        self.settingButtons[4].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 330), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 400))
-        self.settingButtons[5].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 600), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 400))
+        self.settingButtons[1].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 330), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 260))
+        self.settingButtons[2].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 600), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 260))
+        self.settingButtons[3].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 330), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 400))
+        self.settingButtons[4].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 600), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 400))
 
         size = 180
         x = 405
