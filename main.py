@@ -45,10 +45,13 @@ def procesarInput():
         elif event.type == pg.KEYUP:
             escena.procesarEvent(event)
             escena.checkUnHoldButton(event.key)
+        elif getGameState() == System_State.SETTINGS and getGameState2() == System_State.KEY_BINDING:
+            escena.interfaz.processEvent(event)
         else:
             escena.procesarEvent(event)
     if getGameState() == System_State.ONGAME: #si pulsamos en los menus peta por lo que
         escena.checkPressedButtons()
+
 
 
 
@@ -70,11 +73,11 @@ def setEntity(player, ai):
     gas2 = Geyser(13, 20, 50)
     #structure4 = Extractor(12, 27, player, mapa, True)
     structure5 = TerranRefinery(13, 18, ai, mapa, True, gas2)
-    
+
     structure6 = ZergBarracks(7, 16, ai, mapa, True)
     #structure8 = Zerg2(2, 14, ai, mapa, True)
     #structure9 = Zerg3(8, 20, ai, mapa, True)
-    
+
     player.addStructures(structure1)
     player.addStructures(structure6)
     #player.addStructures(structure8)
@@ -109,7 +112,7 @@ def setEntity(player, ai):
 
     for structure in aiStructures:
         ai.addStructures(structure)
-        
+
     ai.setBasePlayer(aiStructures[0])
 
     #Recursos del mapa
@@ -158,6 +161,8 @@ def update():
         escena.interfaz.update(escena,raton, escena.camera)
     elif getGameState() == System_State.NEWGAME:
         escena.interfaz.update(escena,raton, escena.camera)
+    elif  getGameState() == System_State.SETTINGS:
+        escena.interfaz.update(escena,raton, escena.camera)
     else: #STATE == System_State.EXIT:
         pg.quit()
         sys.exit()
@@ -170,7 +175,8 @@ def draw():
         escena.draw(screen)
     elif Utils.state == System_State.PAUSED:
         escena.draw(screen)
-    elif Utils.state == System_State.GAMESELECT or Utils.state == System_State.NEWGAME:
+    elif (Utils.state == System_State.GAMESELECT or Utils.state == System_State.NEWGAME
+    or Utils.state == System_State.SETTINGS):
         escena.interfaz.draw(screen, escena.camera)
     raton.draw(screen, escena.camera)
     #aux(screen)
@@ -189,28 +195,46 @@ Utils.init()
 clock = pg.time.Clock()
 
 # Player 1
-keyMap ={
-  pg.K_UP: CommandId.MOVE_CAMERA_UP,
-  pg.K_DOWN: CommandId.MOVE_CAMERA_DOWN,
-  pg.K_RIGHT: CommandId.MOVE_CAMERA_RIGHT,
-  pg.K_LEFT: CommandId.MOVE_CAMERA_LEFT,
-  pg.K_r: CommandId.ROTATE,
-  pg.K_v: CommandId.GENERATE_UNIT,
-  pg.K_c: CommandId.BUILD_BARRACKS,
-  pg.K_x: CommandId.DESELECT,
-  pg.K_d: CommandId.UPGRADE_SOLDIER_DAMAGE,
-  pg.K_a: CommandId.UPGRADE_SOLDIER_ARMOR,
-  pg.K_m: CommandId.UPGRADE_WORKER_MINING,
+'''
+keyMap = {
+  pg.K_w: CommandId.MOVE_CAMERA_UP,
+  pg.K_s: CommandId.MOVE_CAMERA_DOWN,
+  pg.K_d: CommandId.MOVE_CAMERA_RIGHT,
+  pg.K_a: CommandId.MOVE_CAMERA_LEFT,
+  pg.K_e: CommandId.BUILD_BARRACKS,
+  pg.K_r: CommandId.BUILD_DEPOT,
+  pg.K_t: CommandId.BUILD_REFINERY,
+  pg.K_z: CommandId.GENERATE_T1,
+  pg.K_x: CommandId.GENERATE_T2,
+  pg.K_c: CommandId.GENERATE_T3,
+  pg.K_q: CommandId.GENERATE_WORKER,
+  pg.K_i: CommandId.UPGRADE_SOLDIER_DAMAGE,
+  pg.K_o: CommandId.UPGRADE_SOLDIER_ARMOR,
+  pg.K_p: CommandId.UPGRADE_WORKER_MINING,
   pg.K_g: CommandId.SAVE_GAME,
+  pg.K_m: CommandId.ROTATE,
+  pg.K_f: CommandId.DESELECT,
 }
-commandMap ={
-  CommandId.MOVE_CAMERA_UP: pg.K_UP,
-  CommandId.MOVE_CAMERA_DOWN: pg.K_DOWN,
-  CommandId.MOVE_CAMERA_RIGHT: pg.K_RIGHT,
-  CommandId.MOVE_CAMERA_LEFT: pg.K_LEFT,
-  CommandId.ROTATE: pg.K_r,
+commandMap = {
+  CommandId.MOVE_CAMERA_UP: pg.K_w,
+  CommandId.MOVE_CAMERA_DOWN: pg.K_s,
+  CommandId.MOVE_CAMERA_RIGHT: pg.K_d,
+  CommandId.MOVE_CAMERA_LEFT: pg.K_a,
+  CommandId.BUILD_BARRACKS: pg.K_e,
+  CommandId.BUILD_DEPOT: pg.K_r,
+  CommandId.BUILD_REFINERY: pg.K_t,
+  CommandId.GENERATE_T1: pg.K_z,
+  CommandId.GENERATE_T2: pg.K_x,
+  CommandId.GENERATE_T3: pg.K_c,
+  CommandId.GENERATE_WORKER: pg.K_q,
+  CommandId.UPGRADE_SOLDIER_DAMAGE: pg.K_i,
+  CommandId.UPGRADE_SOLDIER_ARMOR: pg.K_o,
+  CommandId.UPGRADE_WORKER_MINING: pg.K_p,
+  CommandId.SAVE_GAME: pg.K_g,
+  CommandId.ROTATE: pg.K_m,
+  CommandId.DESELECT: pg.K_f,
 }
-
+'''
 mapa = Map.Map(40, 40, True)
 #mapa.setElevacion(16, 3)
 #mapa.setElevacion(20, 14)
@@ -220,6 +244,7 @@ mapa = Map.Map(40, 40, True)
 #mapa.setElevacion(5, 12)
 #mapa.setElevacion(32, 29)
 
+keyMap, commandMap = loadkeyShortcuts()
 player1 = Player.Player([], [], 500, keyMap, commandMap, mapa, True)
 
 # Raton
@@ -238,7 +263,7 @@ camera = Camera(0, 0, Utils.ScreenWidth, Utils.ScreenHeight)
 
 
 raton = Raton.Raton(player1, player2, mapa)
-p1Interface = Interface(player1, player2, raton)
+p1Interface = Interface(player1, player2, raton, keyMap, commandMap)
 raton.addInterface(p1Interface)
 
 escena = Escena(player1, player2, aI, [], camera, raton, p1Interface, [])
@@ -247,13 +272,13 @@ raton.setEscena(escena)
 
 # Bucle principal
 while True:
-    
+
     #Procesar inputs
     procesarInput()
 
     #Actualizar entidades del juego
     update()
-    
+
 
     #Dibujar
     now = datetime.now()

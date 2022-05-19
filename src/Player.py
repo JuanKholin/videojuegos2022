@@ -66,7 +66,7 @@ class Player():
     def addStructures(self,structures):
         #print(self.limitUnits)
         self.limitUnits += structures.getUnitCapacity()
-        
+
         self.structures.append(structures)
 
     def execute(self, id, param, tileClicked):
@@ -190,8 +190,8 @@ class Player():
             "structures": [s.toDictionary(map) for s in self.structures],
             "resources": self.resources,
             "gas": self.gas,
-            "keyMap": self.keyMap,
-            "commandMap": self.commandMap,
+            #"keyMap": self.keyMap,
+            #"commandMap": self.commandMap,
             "dañoUpgrade": self.dañoUpgrade,
             "armorUpgrade": self.armorUpgrade,
             "mineUpgrade": self.mineUpgrade,

@@ -3,6 +3,7 @@ from tkinter import W
 from token import OP
 from turtle import xcor
 import pygame as pg
+
 from os import listdir
 from os.path import isfile, join
 
@@ -18,14 +19,17 @@ class Interface():
     buttonX = 0
     buttonY = 0
     index = 0
-    
+
     heropadx = 0
     heropady = 0
 
-    def __init__(self, player, enemy, mouse):
+    def __init__(self, player, enemy, mouse, keyMap, commandMap):
         self.player = player
         self.enemy = enemy
         self.mouse = mouse
+        self.keyMap = keyMap
+        self.commandMap = commandMap
+
         # GAME SELECT
         self.partidas = []
         self.selectedPartida = None
@@ -94,6 +98,39 @@ class Interface():
         self.ajustesAtajosPress = False
         self.ajustesSonidoPress = False
 
+        #Settings
+        #self.atajosOSonido = 0 #0=atajos
+        self.settings = pg.image.load(SETTINGS + ".png")
+        self.settings = pg.transform.scale(self.settings, (ScreenWidth, ScreenHeight))
+        self.settingsTop = pg.image.load(SETTINGS_TOP + ".png")
+        self.settingsTop = pg.transform.scale(self.settingsTop, (ScreenWidth, ScreenHeight*0.195))
+        self.settingsBot = pg.image.load(SETTINGS_BOT + ".png")
+        self.settingsBot = pg.transform.scale(self.settingsBot, (ScreenWidth, ScreenHeight*0.13))
+        self.scrollBarTopRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1], 30, 30)
+        self.scrollBarTopPress = False
+        self.scrollBarRectangle = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_RECT_POS[0], Utils.ScreenHeight/2 - SCROLL_BAR_RECT_POS[1], SCROLL_BAR_RECT_SIZE[0], SCROLL_BAR_RECT_SIZE[1])
+        self.scrollBarBotRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1], 30, 30)
+        self.scrollBarBotPress = False
+
+        self.keyButtons = {}
+        self.buttonWaitingForKey = -1
+        i = 0
+        items = self.keyMap.items()
+        for k in items:
+            rect = pg.Rect(Utils.ScreenWidth/2 - TECLA_POS[0]-10, Utils.ScreenHeight/2 - TECLA_POS[1]-10 + Y_ATAJOS_OFFSET * i, 100, 35)
+            self.keyButtons[i] = {"rect": rect, "press": False, "waitingForKey": False, "key": k[0], "command": k[1]}
+            i += 1
+        #self.guardarRect = pg.Rect(AJUSTES_POS[0], AJUSTES_POS[1], 220, 40)
+        #self.cancelarRect = pg.Rect(AJUSTES_POS[0], AJUSTES_POS[1], 220, 40)
+        self.keyFirstOriginalY = self.keyButtons[0]["rect"].y
+        self.keyLastOriginalY = self.keyButtons[len(self.keyButtons)-1]["rect"].y
+
+        self.reestablecerRect =  pg.Rect(Utils.ScreenWidth/2 - REESTABLECER_POS[0], Utils.ScreenHeight/2 - REESTABLECER_POS[1], REESTABLECER_SIZE[0], REESTABLECER_SIZE[1])
+        self.reestablecerPress = False
+        self.guardarSalirSettingsRect =  pg.Rect(Utils.ScreenWidth/2 - GUARDAR_SALIR_SETTINGS_POS[0], Utils.ScreenHeight/2 - GUARDAR_SALIR_SETTINGS_POS[1], GUARDAR_SALIR_SETTINGS_SIZE[0], GUARDAR_SALIR_SETTINGS_SIZE[1])
+        self.guardarSalirSettingsPress = False
+
+
         self.heroeSprites = cargarSprites(HEROE_PATH, HEROE_N, False, None, 1.3)
         self.heroeIndex = 0
         self.herow = self.heroeSprites[0].get_width()
@@ -110,7 +147,7 @@ class Interface():
         self.entityOptions = []
         self.button = []
 
-        
+
         #ANIMACION
         deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
         deadSpritesheet.set_colorkey(BLACK)
@@ -118,16 +155,30 @@ class Interface():
         for sprite in deadSprites:
             sprite = pg.transform.scale(sprite, (ScreenWidth, ScreenHeight))
         self.loseSprite = deadSprites + cargarSprites("./SPRITE/animacion/gameOver/tile0", 20, True, size = [ScreenWidth, ScreenHeight])
-    
+
         self.winSprite = deadSprites + cargarSprites("./SPRITE/animacion/win/tile0", 20, True, size = [ScreenWidth, ScreenHeight])
-        
+
         #HELP
         self.helpPage = 0
         self.helpButtons = []
         self.helpPageSprites = cargarSprites("./SPRITE/EXTRA/help", 6, False, size = (526, 660))
-        
+
         #SETTINGS
         self.settingButtons = [self.exitPauseButton, self.allButton[Options.MINUS_BGM], self.allButton[Options.PLUS_BGM], self.allButton[Options.MINUS_SOUND], self.allButton[Options.PLUS_SOUND]]
+
+    def processEvent(self, event):
+        if event.type == pg.KEYDOWN:
+            if event.key not in self.keyMap.keys() and event.key in KEY_TO_TEXT.keys():
+                command = self.keyButtons[self.buttonWaitingForKey]["command"]
+                self.keyMap.pop(self.keyButtons[self.buttonWaitingForKey]["key"])
+                self.commandMap[command] = event.key
+                self.keyMap[event.key] = command
+                self.keyButtons[self.buttonWaitingForKey]["key"] = event.key
+
+
+                #print("hola")
+                self.buttonWaitingForKey = -1
+                setGameState2(System_State.PLAYING)
 
     def loadGameGUI(self):
         self.gui = pg.image.load(BARRA_COMANDO + ".bmp")
@@ -149,7 +200,7 @@ class Interface():
 
         self.allButton = self.loadAllButton()
         self.allUpgrades = self.loadAllUpgrades()
-        #print("LOADEADOS")
+        ##print("LOADEADOS")
 
     def loadAllButton(self):
         allButton = {}
@@ -162,7 +213,7 @@ class Interface():
         allButton[Options.GENERATE_T2_TERRAN] = aux
         aux = Button.Button(BUTTON_PATH + "goliath" + ".bmp", CommandId.GENERATE_T3, BUTTON_PATH + "construirConMineralYGas.png", "Construir Goliath", 5, TERRAN_T3_MINERAL_COST, 25, 95)
         allButton[Options.GENERATE_T3_TERRAN] = aux
-        
+
         #Terran estructuras
         aux = Button0.Button(BUTTON_PATH + "barracks" + ".bmp", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineral.png", "Construir Cuartel", 5, TERRAN_BARRACKS_MINERAL_COST)
         allButton[Options.BUILD_BARRACKS_TERRAN] = aux
@@ -170,7 +221,7 @@ class Interface():
         allButton[Options.BUILD_DEPOT_TERRAN] = aux
         aux = Button0.Button(BUTTON_PATH + "refinery" + ".bmp", CommandId.BUILD_REFINERY, BUTTON_PATH + "construirConMineral.png", "Construir Refineria", 5, TERRAN_REFINERY_MINERAL_COST, 0, 45)
         allButton[Options.BUILD_REFINERY_TERRAN] = aux
-        
+
         #Zerg unidades
         aux = Button.Button(BUTTON_PATH + "drone" + ".bmp", CommandId.GENERATE_WORKER,BUTTON_PATH + "construirConMineralZerg.png", "Engendrar Drone", 5, ZERG_WORKER_MINERAL_COST)
         allButton[Options.GENERATE_WORKER_ZERG] = aux
@@ -180,7 +231,7 @@ class Interface():
         allButton[Options.GENERATE_T2_ZERG] = aux
         aux = Button.Button(BUTTON_PATH + "hydralisk" + ".bmp", CommandId.GENERATE_T3,BUTTON_PATH + "construirConMineralYGasZerg.png", "Engendrar Hydralisk",  5, ZERG_T3_MINERAL_COST, 25, 95)
         allButton[Options.GENERATE_T3_ZERG] = aux
-        
+
         #Zerg estructuras
         aux = Button0.Button(BUTTON_PATH + "zerg_barracks" + ".bmp", CommandId.BUILD_BARRACKS,BUTTON_PATH + "construirConMineralZerg.png", "Construir Colmena", 5, ZERG_BARRACKS_MINERAL_COST)
         allButton[Options.BUILD_BARRACKS_ZERG] = aux
@@ -190,7 +241,7 @@ class Interface():
         allButton[Options.BUILD_REFINERY_ZERG] = aux
         #aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.BUILD_HATCHERY)
         #allButton[Options.BUILD_HATCHERY] = aux
-        
+
         #botones
         aux = Button.Button(BUTTON_PATH + "close" + ".png", CommandId.RETURN_GAME)
         aux.image.set_colorkey(BLACK)
@@ -213,7 +264,7 @@ class Interface():
         aux = Button.Button(BUTTON_PATH + "minus" + ".png", CommandId.MINUS_SOUND)
         aux.image.set_colorkey(BLACK)
         allButton[Options.MINUS_SOUND] = aux
-        
+
         #mejoras
         aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "danyoUpgrade" + ".png", CommandId.UPGRADE_SOLDIER_DAMAGE,BUTTON_PATH + "cartelUpgrade.bmp", "Mejorar daño;de las unidades", 5, 5)
         allButton[Options.DANYO_UPGRADE] = aux
@@ -234,7 +285,7 @@ class Interface():
         self.exitPauseButton.x = self.exitPauseRect.x
         self.exitPauseButton.y = self.exitPauseRect.y
         self.pauseButtons = [self.exitPauseButton, self.helpPauseButton, self.saveButton, self.saveAndExitButton, self.exitButton]
-        
+
         return allButton
 
     def loadAllUpgrades(self):
@@ -262,7 +313,7 @@ class Interface():
                 'rect': pg.Rect(Utils.ScreenWidth/2 - PARTIDA_POS[0], Utils.ScreenHeight/2 - PARTIDA_POS[1] + YPARTIDA_PAD*pad, 455, YPARTIDA_PAD-1),
                 'pressed': False})
             pad += 1
-    
+
     def getNumPartidas(self):
         onlyfiles = [f for f in listdir("./games") if isfile(join("./games", f))]
         pad = 0
@@ -273,41 +324,51 @@ class Interface():
 
     def update(self, escena, raton, camera):
         if Utils.state == System_State.MAINMENU:
-            
+
             self.updateMainMenu()
 
         elif Utils.state == System_State.GAMESELECT:
-            
+
             self.updateGameMenu(escena, raton, camera)
+
 
         elif Utils.state == System_State.NEWGAME:
 
             self.updateNewGame(escena, raton, camera)
+        elif Utils.state == System_State.SETTINGS and Utils.state2 != System_State.KEY_BINDING:
+            press, iniPos = self.mouse.getPressed()
+            self.updateSettingsAtajosPos()
+            #if self.atajosOSonido == 0: #atajos
+            self.updateSettingsAtajos()
+            #elif self.atajosOSonido == 1:
+                #self.updateSettingsSonido()
+            #    pass
+
 
         elif Utils.state == System_State.ONGAME:
-            
+
             self.updateOnGame()
-    
+
     def updateMainMenuPos(self):
         self.mainMenu = pg.transform.scale(self.mainMenu, (Utils.ScreenHeight*SCREEN_SCALE, Utils.ScreenHeight));
         self.singleRect = pg.Rect(Utils.ScreenWidth/2 - SINGLE_PLAYER_POS[0], Utils.ScreenHeight/2 - SINGLE_PLAYER_POS[1], self.single[0].get_width(), self.single[0].get_height())
         self.exitRect = pg.Rect(Utils.ScreenWidth/2 - EXIT_POS[0], Utils.ScreenHeight/2 - EXIT_POS[1], self.exit[0].get_width(), self.exit[0].get_height())
         self.ajustesSonidoRect = pg.Rect(Utils.ScreenWidth/2 - AJUSTES_SONIDO_POS[0], Utils.ScreenHeight/2 - AJUSTES_SONIDO_POS[1], 220, 40)
         self.ajustesAtajosRect = pg.Rect(Utils.ScreenWidth/2 - AJUSTES_ATAJOS_POS[0], Utils.ScreenHeight/2 - AJUSTES_ATAJOS_POS[1], 220, 40)
-            
+
     def updateMainMenu(self):
         self.updateMainMenuPos()
-        
+
         #Boton single player
         if getGameState2() == System_State.SETTINGS:
-            
+
             self.updateMainMenuSetting()
-            
+
         elif getGameState2() == System_State.HELP:
-            
+
             self.updateHELP()
-            
-        else:    
+
+        else:
             press, iniPos = self.mouse.getPressed()
             if self.mouse.isCollide(self.singleRect):
                 if not self.soundPlayed:
@@ -373,10 +434,10 @@ class Interface():
         self.idExit = (self.idExit + frame(5)) % EXIT_N
         self.idSingleSelected = (self.idSingleSelected + frame(5)) % SINGLE_PLAYER_FB_N
         self.idExitSelected = (self.idExitSelected + frame(5)) % EXIT_FB_N
-        
+
     def updateMainMenuSetting(self):
         pass
-        
+
     def updateGameMenuPos(self):
         #self.gameSelect = pg.transform.scale(self.gameSelect, (Utils.ScreenHeight*SCREEN_SCALE, Utils.ScreenHeight))
         self.aceptarRect = pg.Rect(Utils.ScreenWidth/2 - ACEPTAR_POS[0], Utils.ScreenHeight/2 - ACEPTAR_POS[1], ACEPTAR_RECT[0], ACEPTAR_RECT[1])
@@ -384,7 +445,7 @@ class Interface():
         self.aceptarNoPulsabeSurf.fill((0,0,0,128))
         self.cancelarRect = pg.Rect(Utils.ScreenWidth/2 - CANCELAR_POS[0], Utils.ScreenHeight/2 - CANCELAR_POS[1], 250, 40)
         self.nuevaPartidaRect = pg.Rect(Utils.ScreenWidth/2 - NUEVA_PARTIDA_POS[0], Utils.ScreenHeight/2 - NUEVA_PARTIDA_POS[1], 250, 40)
-        
+
         aux = []
         pad = 0
         for partidas in self.partidas:
@@ -396,7 +457,7 @@ class Interface():
             aux.append(auxpartida)
             pad += 1
         self.partidas = aux
-        
+
     def updateGameMenu(self, escena, raton, camera):
         self.updateGameMenuPos()
         press, iniPos = self.mouse.getPressed()
@@ -513,7 +574,7 @@ class Interface():
             self.aceptarPress = False
             self.cancelarPress = False
             self.nuevaPartidaPress = False
-    
+
     def updateNewGamePos(self):
         #self.gameSelect = pg.transform.scale(self.gameSelect, (Utils.ScreenHeight*SCREEN_SCALE, Utils.ScreenHeight))
         self.aceptarRect = pg.Rect(Utils.ScreenWidth/2 - ACEPTAR_POS[0], Utils.ScreenHeight/2 - ACEPTAR_POS[1], ACEPTAR_RECT[0], ACEPTAR_RECT[1])
@@ -628,29 +689,156 @@ class Interface():
         if self.mouse.getClick():
             self.aceptarPress = False
             self.cancelarPress = False
-            
+
+    def updateSettingsAtajos(self):
+        press, iniPos = self.mouse.getPressed()
+
+        if self.mouse.isCollide(self.reestablecerRect):
+            if not self.soundPlayed:
+                playSound(botonSound)
+                self.soundPlayed = True
+            endPos = self.mouse.getPosition()
+            if not self.reestablecerPress and press and Raton.collides(iniPos[0], iniPos[1], self.reestablecerRect):
+                self.reestablecerPress = True
+            elif self.mouse.getClick() and self.reestablecerPress and Raton.collides(endPos[0], endPos[1], self.reestablecerRect):
+                #print("Cancelar")
+                keys = list(self.keyMap.keys()).copy()
+                for k in keys:
+                    self.keyMap.pop(k)
+                keys = list(self.commandMap.keys()).copy()
+                for k in keys:
+                    self.commandMap.pop(k)
+                for i in DEFAULT_KEY_MAP.items():
+                    self.keyMap[i[0]] = i[1]
+                for i in DEFAULT_COMMAND_MAP.items():
+                    self.commandMap[i[0]] = i[1]
+                buttons = {}
+                i = 0
+                for k in self.keyMap.items():
+                    rect = pg.Rect(Utils.ScreenWidth/2 - TECLA_POS[0]-10, Utils.ScreenHeight/2 - TECLA_POS[1]-10 + Y_ATAJOS_OFFSET * i, 100, 35)
+                    buttons[i] = {"rect": rect, "press": False, "waitingForKey": False, "key": k[0], "command": k[1]}
+                    i += 1
+                self.keyButtons = buttons
+                self.reestablecerPress = False
+
+        elif self.mouse.isCollide(self.guardarSalirSettingsRect):
+            if not self.soundPlayed:
+                playSound(botonSound)
+                self.soundPlayed = True
+            endPos = self.mouse.getPosition()
+            if not self.guardarSalirSettingsPress and press and Raton.collides(iniPos[0], iniPos[1], self.guardarSalirSettingsRect):
+                self.guardarSalirSettingsPress = True
+            elif self.mouse.getClick() and self.guardarSalirSettingsPress and Raton.collides(endPos[0], endPos[1], self.guardarSalirSettingsRect):
+                atajos = {
+                    "keyMap": self.keyMap,
+                    "commandMap": self.commandMap
+                }
+                string = json.dumps(atajos, indent = 2)
+                textFile = open("atajos/atajos.json", "w")
+                textFile.write(string)
+                textFile.close()
+
+                Utils.state = System_State.MAINMENU
+                self.guardarSalirSettingsPress = False
+        else:
+            i = 0
+            for b in self.keyButtons.items():
+                if self.mouse.isCollide(b[1]["rect"]):
+                    endPos = self.mouse.getPosition()
+                    if not b[1]["press"] and press and Raton.collides(iniPos[0], iniPos[1], b[1]["rect"]):
+                        b[1]["press"] = True
+                    elif self.mouse.getClick() and b[1]["press"] and Raton.collides(endPos[0], endPos[1], b[1]["rect"]):
+                        #print("hola")
+                        playSound(botonSound2)
+
+                        b[1]["press"] = False
+                        b[1]["waitingForKey"] = True
+                        self.buttonWaitingForKey = b[0]
+                        print(b[0])
+                        Utils.state2 = System_State.KEY_BINDING
+                i += 1
+
+            self.soundPlayed = False
+
+        if self.mouse.isCollide(self.scrollBarTopRect):
+            endPos = self.mouse.getPosition()
+            if not self.scrollBarTopPress and press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarTopRect):
+                self.scrollBarTopPress = True
+            elif self.mouse.getClick() and self.scrollBarTopPress and Raton.collides(endPos[0], endPos[1], self.scrollBarTopRect):
+                self.scrollBarTopPress = False
+                playSound(botonSound2)
+            if press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarTopRect):
+                if self.keyButtons[0]["rect"].y < self.keyFirstOriginalY:
+                    for k in self.keyButtons.items():
+                        k[1]["rect"].y += 7
+                    COMANDO_POS[1] -= 7
+                    TECLA_POS[1] -= 7
+
+
+        elif self.mouse.isCollide(self.scrollBarBotRect):
+            endPos = self.mouse.getPosition()
+
+            if not self.scrollBarBotPress and press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarBotRect):
+                self.scrollBarBotPress = True
+            elif self.mouse.getClick() and self.scrollBarBotPress and Raton.collides(endPos[0], endPos[1], self.scrollBarBotRect):
+                self.scrollBarBotPress = False
+                playSound(botonSound2)
+            if press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarBotRect):
+                print("holi")
+                if self.keyButtons[len(self.keyButtons)-1]["rect"].y > self.keyFirstOriginalY:
+                    for k in self.keyButtons.items():
+                        k[1]["rect"].y -= 7
+                    COMANDO_POS[1] += 7
+                    TECLA_POS[1] += 7
+
+        if self.mouse.getClick():
+            self.aceptarPress = False
+            self.cancelarPress = False
+
+    def updateSettingsAtajosPos(self):
+                self.settings = pg.transform.scale(self.settings, (ScreenWidth, ScreenHeight))
+                self.settingsTop = pg.transform.scale(self.settingsTop, (ScreenWidth, ScreenHeight*0.195))
+                self.settingsBot = pg.transform.scale(self.settingsBot, (ScreenWidth, ScreenHeight*0.13))
+                self.scrollBarTopRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1], 30, 30)
+                self.scrollBarRectangle = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_RECT_POS[0], Utils.ScreenHeight/2 - SCROLL_BAR_RECT_POS[1], SCROLL_BAR_RECT_SIZE[0], SCROLL_BAR_RECT_SIZE[1])
+                self.scrollBarBotRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1], 30, 30)
+
+                self.keyButtons = {}
+                self.buttonWaitingForKey = -1
+                i = 0
+                items = self.keyMap.items()
+                for k in items:
+                    rect = pg.Rect(Utils.ScreenWidth/2 - TECLA_POS[0]-10, Utils.ScreenHeight/2 - TECLA_POS[1]-10 + Y_ATAJOS_OFFSET * i, 100, 35)
+                    self.keyButtons[i] = {"rect": rect, "press": False, "waitingForKey": False, "key": k[0], "command": k[1]}
+                    i += 1
+                self.keyFirstOriginalY = self.keyButtons[0]["rect"].y
+                self.keyLastOriginalY = self.keyButtons[len(self.keyButtons)-1]["rect"].y
+
+                self.reestablecerRect =  pg.Rect(Utils.ScreenWidth/2 - REESTABLECER_POS[0], Utils.ScreenHeight/2 - REESTABLECER_POS[1], REESTABLECER_SIZE[0], REESTABLECER_SIZE[1])
+                self.guardarSalirSettingsRect =  pg.Rect(Utils.ScreenWidth/2 - GUARDAR_SALIR_SETTINGS_POS[0], Utils.ScreenHeight/2 - GUARDAR_SALIR_SETTINGS_POS[1], GUARDAR_SALIR_SETTINGS_SIZE[0], GUARDAR_SALIR_SETTINGS_SIZE[1])
+
     def updateOnGame(self):
         #si esta en GUI desactivar funciones de raton
         if getGameState2() == System_State.PLAYING or getGameState2() == System_State.LOAD:
-            
+
             self.updatePLAY()
-        
+
         elif getGameState2() == System_State.HELP:
-            
+
             self.updateHELP()
-            
+
         elif getGameState2() == System_State.PAUSED:
-        
+
             self.updatePAUSED()
-            
+
         if frame(10):
             self.heroeIndex = (self.heroeIndex+1)%HEROE_N
-    
+
     def updatePAUSED(self):
         pass
-    
+
     def updatePLAY(self):
-        
+
         if self.checkInGUIPosition():
             self.mouse.setEnable(False)
         else:
@@ -683,7 +871,7 @@ class Interface():
                 up.setCollide(True)
             else:
                 up.setCollide(False)
-                
+
     def updateHELP(self):
         self.mouse.setEnable(False)
         self.helpButtons = [None, None, None]
@@ -692,7 +880,7 @@ class Interface():
             self.helpButtons[0] = self.allButton[Options.PREVIOUS_PAGE]
         if self.helpPage < len(self.helpPageSprites)-1:
             self.helpButtons[1] = self.allButton[Options.NEXT_PAGE]
-                
+
     def draw(self, screen, camera):
         if Utils.state == System_State.MAINMENU:
             screen.blit(self.mainMenu, [Utils.ScreenWidth/2 - self.mainMenu.get_width()/2, 0])
@@ -729,11 +917,11 @@ class Interface():
                 muestra_texto(screen, str('monotypecorsiva'), "Atajos de teclado", GREEN3, MAIN_MENU_TEXT_SIZE + 5, [Utils.ScreenWidth/2 - AJUSTES_ATAJOS_TEXT_POS[0], Utils.ScreenHeight/2 - AJUSTES_ATAJOS_TEXT_POS[1]])
 
             if getGameState2() == System_State.SETTINGS:
-                    
+
                 self.drawSoundSetting(screen)
 
             elif getGameState2() == System_State.HELP:
-                
+
                 self.drawHELP(screen)
 
         elif Utils.state == System_State.GAMESELECT:
@@ -784,6 +972,20 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), str(self.selectedMap), WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-740), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-170)))
             muestra_texto(screen, str('monotypecorsiva'), self.selectedDif['nombre'], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-810), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-275)))
             muestra_texto(screen, str('monotypecorsiva'), self.selectedRaza['nombre'], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-745), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-390)))
+        elif Utils.state == System_State.SETTINGS:
+            screen.blit(self.settings, [Utils.ScreenWidth/2 - self.settings.get_width()/2, 0])
+            #if self.atajosOSonido == 0: #atajos
+            self.drawSettingsAtajos(screen)
+            #elif self.atajosOSonido == 1:
+            if self.mouse.isCollide(self.reestablecerRect):
+                pygame.draw.rect(screen, GREEN3, self.reestablecerRect, 1)
+            if self.mouse.isCollide(self.guardarSalirSettingsRect):
+                pygame.draw.rect(screen, GREEN3, self.guardarSalirSettingsRect, 1)
+
+            muestra_texto(screen, str('monotypecorsiva'), "Reestablecer", GREEN, 30, (Utils.ScreenWidth/2 - REESTABLECER_POS[0] + 30, Utils.ScreenHeight/2 - REESTABLECER_POS[1] + 20))
+            muestra_texto(screen, str('monotypecorsiva'), "Guardar y salir", GREEN, 30, (Utils.ScreenWidth/2 - GUARDAR_SALIR_SETTINGS_POS[0] + 70, Utils.ScreenHeight/2 - GUARDAR_SALIR_SETTINGS_POS[1] + 10))
+
+
 
         elif Utils.state == System_State.ONGAME:
             self.pauseButton.draw(screen, 0, 0)
@@ -803,14 +1005,14 @@ class Interface():
             screen.blit(self.gui, (Utils.ScreenWidth/2 - self.gui.get_width()/2, Utils.ScreenHeight - self.gui.get_height()))
 
             #draw minimapa
-            
+
             pg.draw.rect(screen, BLUE, pg.Rect(Utils.ScreenWidth/2 - MINIMAP_X, Utils.ScreenHeight - MINIMAP_Y, MINIMAP_W, MINIMAP_H), 1)
             #self.player.mapa.drawMinimap(screen)
             self.player.drawEntity(screen, True)
             self.enemy.drawEntity(screen, False)
-            
 
-            
+
+
             x = Utils.ScreenWidth/2 - MINIMAP_X + (camera.x/self.player.mapa.w * MINIMAP_W)
             y = Utils.ScreenHeight - MINIMAP_Y + (camera.y/self.player.mapa.h * MINIMAP_H)
             w = camera.w/self.player.mapa.w * MINIMAP_W
@@ -819,7 +1021,7 @@ class Interface():
                 w = Utils.ScreenWidth/2 - MINIMAP_X + MINIMAP_W - x
             if y + h > (Utils.ScreenHeight - MINIMAP_Y) + MINIMAP_H:
                 h = Utils.ScreenHeight - MINIMAP_Y + MINIMAP_H - y
-                
+
             pg.draw.rect(screen, WHITE, pg.Rect(x, y, w, h), 2)
 
             #informacion de entidades seleccionadas
@@ -841,20 +1043,20 @@ class Interface():
                     self.buttonX = BUTTON_X
                 if opcion == 9:
                     break
-                
+
             if getGameState2() == System_State.HELP:
-                
+
                 self.drawHELP(screen)
-                
+
             elif getGameState2() == System_State.PAUSED:
-                
+
                 self.drawPause(screen)
-                
+
             elif getGameState2() == System_State.GAMEOVER:
                 if self.count2 < 10:
                     image = pg.transform.scale(self.heroeSprites[self.heroeIndex], [self.herow, self.heroh])
                     screen.blit(image, (672 - self.heropadx, 667- self.heropady))
-                    self.heroeIndex = (self.heroeIndex+frame(8))%HEROE_N 
+                    self.heroeIndex = (self.heroeIndex+frame(8))%HEROE_N
                     self.count2 += frame(30)
                     if self.heropadx < 670:
                         self.heropadx += 5
@@ -875,7 +1077,7 @@ class Interface():
                         if self.index == 30:
                             self.index = 10
             elif Utils.state2 == System_State.WIN:
-                
+
                 screen.blit(self.winSprite[self.index], (0, 0))
                 self.index += frame(5)
                 if self.index == 30:
@@ -885,32 +1087,71 @@ class Interface():
                 if self.index >= 10:
                     muestra_texto(screen, str('monotypecorsiva'), "Victoria! tu tu tuu~ tu tu", YELLOW, 40, (ScreenWidth/2, ScreenHeight - 200))
 
+    def drawSettingsAtajos(self, screen):
+        j = 0
+        stringKeyItems = self.keyButtons.items()
+        ##print(COMMAND_TO_TEXT)
+        for i in stringKeyItems:
+            muestra_texto(screen, str('monotypecorsiva'), COMMAND_TO_TEXT[int(i[1]["command"])], WHITE, ATAJO_TEXT_SIZE, (Utils.ScreenWidth/2 - COMANDO_POS[0], Utils.ScreenHeight/2 - COMANDO_POS[1] + Y_ATAJOS_OFFSET * j))
+            muestra_texto(screen, str('monotypecorsiva'), KEY_TO_TEXT[i[1]["key"]], WHITE, ATAJO_TEXT_SIZE, (Utils.ScreenWidth/2 - TECLA_POS[0], Utils.ScreenHeight/2 - TECLA_POS[1] + Y_ATAJOS_OFFSET * j))
+            if Utils.getGameState2() == System_State.KEY_BINDING and j == self.buttonWaitingForKey:
+                pygame.draw.rect(screen, RED, self.keyButtons[j]["rect"], 2)
+            elif self.mouse.isCollide(self.keyButtons[j]["rect"]):
+                pygame.draw.rect(screen, RED, self.keyButtons[j]["rect"], 2)
+            else:
+                pygame.draw.rect(screen, RED, self.keyButtons[j]["rect"], 1)
+            j += 1
+
+
+        #screen.blit(self.settingsTop, [0, 0])
+        screen.blit(self.settingsTop, [Utils.ScreenWidth/2 - self.settings.get_width()/2, 0])
+        #screen.blit(self.settingsBot, [0, ScreenHeight - ScreenHeight*0.13])
+        screen.blit(self.settingsBot, [Utils.ScreenWidth/2 - self.settings.get_width()/2, ScreenHeight - ScreenHeight*0.13])
+
+        muestra_texto(screen, str('monotypecorsiva'), "Atajos de teclado", GREEN3, ATAJOS_TITLE_TEXT_SIZE, (Utils.ScreenWidth/2 - ATAJOS_TITLE_POS[0], Utils.ScreenHeight/2 - ATAJOS_TITLE_POS[1]))
+        muestra_texto(screen, str('monotypecorsiva'), "Comando", WHITE, COLUMN_TEXT_SIZE, (Utils.ScreenWidth/2 - COMANDO_COLUMN_POS[0], Utils.ScreenHeight/2 - COMANDO_COLUMN_POS[1]))
+        muestra_texto(screen, str('monotypecorsiva'), "Tecla", WHITE, COLUMN_TEXT_SIZE, (Utils.ScreenWidth/2 - TECLA_COLUMN_POS[0], Utils.ScreenHeight/2 - TECLA_COLUMN_POS[1]))
+        if self.buttonWaitingForKey != -1:
+            muestra_texto(screen, str('monotypecorsiva'), "pulse una tecla (digito o letra) no usada", WHITE, COLUMN_TEXT_SIZE-10, (Utils.ScreenWidth/2 - AVISO_COLUMN_POS[0], Utils.ScreenHeight/2 - AVISO_COLUMN_POS[1]))
+        if self.mouse.isCollide(self.scrollBarTopRect):
+            pygame.draw.polygon(screen, RED2, [(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[2][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[2][1])])
+        else:
+            pygame.draw.polygon(screen, RED, [(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[2][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[2][1])])
+        if self.mouse.isCollide(self.scrollBarBotRect):
+
+            pygame.draw.polygon(screen, RED2, [(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0],Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[1][0],Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[1][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[2][0],Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[2][1])])
+        else:
+            pygame.draw.polygon(screen, RED, [(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0],Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[1][0],Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[1][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[2][0],Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[2][1])])
+
+        #print([(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1]),(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[2][0],Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[2][1])])
+        pygame.draw.rect(screen, RED2, self.scrollBarRectangle, 1)
+
     def drawSoundSetting(self, screen):
         pg.draw.rect(screen, BLACK, pg.Rect(Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80), 512, 500))
         pg.draw.rect(screen, BLUE2, pg.Rect(Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80), 512, 500), 4)
-        
+
         #self.helpPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 245), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
         self.exitPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 688), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
-        
+
         self.settingButtons[1].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 330), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 260))
         self.settingButtons[2].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 600), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 260))
         self.settingButtons[3].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 330), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 400))
         self.settingButtons[4].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 600), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 400))
-        
+
         size = 180
         x = 405
         bgm = pg.transform.chop(pg.transform.scale(BARRA_SOUND, (size, 20)), ((Utils.BGM_VOLUME / 1.0) * 160, 0, size, 0))
         screen.blit(bgm, [Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - x), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 275)])
         pg.draw.rect(screen, ORANGE2, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - x), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 275), size, 20), 4)
-        
+
         sound = pg.transform.chop(pg.transform.scale(BARRA_SOUND, (size, 20)), ((Utils.SOUND_VOLUME / 1.0) * 200, 0, size, 0))
         screen.blit(sound, [Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - x), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 415)])
         pg.draw.rect(screen, ORANGE2, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - x), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 415), size, 20), 4)
-        
+
         muestra_texto(screen, str('monotypecorsiva'), "Ajustes de Sonido", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 390), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 120)))
         muestra_texto(screen, str('monotypecorsiva'), "Musica de fondo", GREEN, 26, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 220)))
         muestra_texto(screen, str('monotypecorsiva'), "Efectos de sonido", GREEN, 26, ((Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 360))))
-        
+
     def drawHELP(self, screen):
         screen.blit(self.helpPageSprites[self.helpPage], (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80)))
 
@@ -918,53 +1159,53 @@ class Interface():
         if self.helpPage > 0:
             self.helpButtons[0].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 304), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 95))
         if self.helpPage < len(self.helpPageSprites)-1:
-            self.helpButtons[1].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 604), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 95))   
+            self.helpButtons[1].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 604), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 95))
         '''
         if self.helpPage == 1:
             muestra_texto(screen, str('monotypecorsiva'), "INSTRUCCIONES", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  370), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 110)))
-            
+
             screen.blit(getSprite(MOUSE_PATH + "tile002.png", WHITE, (70, 70)), (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  310), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 200)))
             muestra_texto(screen, str('monotypecorsiva'), "Click Izquierdo", GREEN, 26, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 200)))
             muestra_texto(screen, str('monotypecorsiva'), "Para seleccionar unidades o realizar acciones", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 220)))
             muestra_texto(screen, str('monotypecorsiva'), "Click Derecho ", GREEN, 26, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 245)))
             muestra_texto(screen, str('monotypecorsiva'), "Para desplazar tropas", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 265)))
-            
+
             screen.blit(getSprite(KEY_PATH , WHITE, (150, 100)), (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  260), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 320)))
             muestra_texto(screen, str('monotypecorsiva'), "Movimiento de camara", GREEN, 26, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 330)))
             muestra_texto(screen, str('monotypecorsiva'), "Utiliza las teclas para controlar la camara", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 360)))
             muestra_texto(screen, str('monotypecorsiva'), "o desde el minimapa usando el ratón", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 375)))
-            
+
         elif self.helpPage == 4:
             muestra_texto(screen, str('monotypecorsiva'), "TERRAN", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  425), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 90)))
             muestra_texto(screen, str('monotypecorsiva'), "ESTRUCUTURAS", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  375), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 120)))
-            
+
             screen.blit(getSprite(TERRAN_BUILDER_PATH + "4.png", WHITE, (100, 100)), (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  300), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 200)))
             muestra_texto(screen, str('monotypecorsiva'), "Centro de comandos", GREEN, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 210)))
             muestra_texto(screen, str('monotypecorsiva'), "Es el edificio mas importante de los Terran,", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 240)))
             muestra_texto(screen, str('monotypecorsiva'), "puede contruir otras estructuras y entrenar", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 255)))
             muestra_texto(screen, str('monotypecorsiva'), "tropas obreras", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 270)))
-            
+
             screen.blit(getSprite(TERRAN_BARRACKS_PATH + "4.png", WHITE, (100, 100)), (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  300), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 330)))
             muestra_texto(screen, str('monotypecorsiva'), "Cuartel Terran", GREEN, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 340)))
             muestra_texto(screen, str('monotypecorsiva'), "En el cuartel se puede entrenar las unidades", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 370)))
             muestra_texto(screen, str('monotypecorsiva'), "ofensivas, construye mas cuarteles para", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 385)))
             muestra_texto(screen, str('monotypecorsiva'), "entrenar varias tropas a la vez!", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 400)))
-            
+
             screen.blit(getSprite(TERRAN_DEPOT_PATH + "4.png", WHITE, (100, 100)), (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  300), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 460)))
             muestra_texto(screen, str('monotypecorsiva'), "Deposito de suministros", GREEN, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 470)))
             muestra_texto(screen, str('monotypecorsiva'), "Donde se guarda los recursos, necesario", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 500)))
             muestra_texto(screen, str('monotypecorsiva'), "para mantener el ejercito, contruye para", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 515)))
             muestra_texto(screen, str('monotypecorsiva'), "aumentar el tamaño del ejercito", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 530)))
-            
+
             screen.blit(getSprite(TERRAN_REFINERY_PATH + "4.png", BLACK, (150, 150)), (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  280), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 570)))
             muestra_texto(screen, str('monotypecorsiva'), "Refineria", GREEN, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 600)))
             muestra_texto(screen, str('monotypecorsiva'), "Solo se puede contruir sobre un geyser,", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 630)))
             muestra_texto(screen, str('monotypecorsiva'), "sirve para la extraccion del geyser", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 645)))
-            
+
         elif self.helpPage == 3:
             muestra_texto(screen, str('monotypecorsiva'), "TERRAN", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  425), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 90)))
             muestra_texto(screen, str('monotypecorsiva'), "UNIDADES", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 120)))
-            
+
             spritesheet = pg.image.load("./sprites/scvJusto.bmp").convert()
             spritesheet.set_colorkey(BLACK)
             sprites = Entity.divideSpritesheetByRows(spritesheet, 72, 1.5)
@@ -973,7 +1214,7 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), "Unidad obrera de los terran, se encargan", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 240)))
             muestra_texto(screen, str('monotypecorsiva'), "de la extracción de recursos, son débiles", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 255)))
             muestra_texto(screen, str('monotypecorsiva'), "poca vida y poco daño", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 270)))
-            
+
             spritesheet = pg.image.load("./sprites/terran_soldier_sheet.bmp").convert()
             spritesheet.set_colorkey(WHITE)
             sprites = Entity.divideSpritesheetByRows(spritesheet, 64, 1.5)
@@ -981,7 +1222,7 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), "Terran Marine", GREEN, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 340)))
             muestra_texto(screen, str('monotypecorsiva'), "Unidad ofensiva basica de los terran, ", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 370)))
             muestra_texto(screen, str('monotypecorsiva'), "tienen bastante daño y atacan a distancia", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 385)))
-            
+
             spritesheet = pg.image.load("./sprites/firebat.bmp").convert()
             spritesheet.set_colorkey(BLACK)
             sprites = Entity.divideSpritesheetByRows(spritesheet, 32, 1.5)
@@ -989,7 +1230,7 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), "FireBat", GREEN, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 470)))
             muestra_texto(screen, str('monotypecorsiva'), "Unidad ofensiva avanzada de los terran,", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 500)))
             muestra_texto(screen, str('monotypecorsiva'), "se caracteriza por el daño en area", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 515)))
-            
+
             spritesheet = pg.image.load("./sprites/goliath.bmp").convert()
             spritesheet.set_colorkey(WHITE)
             sprites = Entity.divideSpritesheetByRows(spritesheet, 76, 1.4)
@@ -998,10 +1239,10 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), "Unidad ofensiva avanzada de los terran,", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 630)))
             muestra_texto(screen, str('monotypecorsiva'), "tienen una gran resistencia, pero es muy", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 645)))
             muestra_texto(screen, str('monotypecorsiva'), "lento, y ataca a melee", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 660)))
-            
+
         elif self.helpPage == 2:
             muestra_texto(screen, str('monotypecorsiva'), "RECURSOS", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 110)))
-            
+
             spritesheet = pg.image.load("./SPRITE/Cristal/min01.bmp").convert()
             spritesheet.set_colorkey((BLACK))
             sprites = divideSpritesheetByRows(spritesheet, 96, 1.3)
@@ -1012,7 +1253,7 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), "Recurso esencial para todo tipo de tareas,", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 240)))
             muestra_texto(screen, str('monotypecorsiva'), "necesario para contruccion, entrenamiento", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 255)))
             muestra_texto(screen, str('monotypecorsiva'), "y mejoras", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 270)))
-            
+
             spritesheet = pg.image.load("./sprites/geyser.bmp").convert()
             spritesheet.set_colorkey((BLACK))
             sprites = divideSpritesheetByRows(spritesheet, 64, 1.3)
@@ -1027,33 +1268,33 @@ class Interface():
         elif self.helpPage == 5:
             muestra_texto(screen, str('monotypecorsiva'), "ZERG", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  430), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 90)))
             muestra_texto(screen, str('monotypecorsiva'), "ESTRUCUTURAS", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  375), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 120)))
-            
+
             screen.blit(getSprite(HATCHERY_PATH + "3.png", BLUE2, (150, 150)), (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  260), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 160)))
             muestra_texto(screen, str('monotypecorsiva'), "Criadero", GREEN, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 210)))
             muestra_texto(screen, str('monotypecorsiva'), "Es la estructura mas importante de los Zerg,", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 240)))
             muestra_texto(screen, str('monotypecorsiva'), "puede contruir otras estructuras y entrenar", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 255)))
             muestra_texto(screen, str('monotypecorsiva'), "tropas obreras", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 270)))
-            
+
             screen.blit(getSprite(ZERG_BARRACKS_PATH + "2.png", BLUE2, (90, 90)), (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  305), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 340)))
             muestra_texto(screen, str('monotypecorsiva'), "Colmena", GREEN, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 340)))
             muestra_texto(screen, str('monotypecorsiva'), "En la Colmena se puede entrenar las unidades", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 370)))
             muestra_texto(screen, str('monotypecorsiva'), "ofensivas, construye mas Colmenas para", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 385)))
             muestra_texto(screen, str('monotypecorsiva'), "entrenar varias unidades a la vez!", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 400)))
-            
+
             screen.blit(getSprite(SUPPLY_ZERG_PATH + "2.png", BLUE2, (100, 100)), (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  310), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 460)))
             muestra_texto(screen, str('monotypecorsiva'), "Guarida", GREEN, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 470)))
             muestra_texto(screen, str('monotypecorsiva'), "Vital para mantener a las crias de Zerg", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 500)))
             muestra_texto(screen, str('monotypecorsiva'), "necesario para aumentar la poblacion", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 515)))
-            
+
             screen.blit(getSprite(EXTRACTOR_PATH + "2.png", BLUE2, (90, 90)), (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  300), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 590)))
             muestra_texto(screen, str('monotypecorsiva'), "Extractor", GREEN, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 600)))
             muestra_texto(screen, str('monotypecorsiva'), "Solo se puede contruir sobre un geyser,", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 630)))
             muestra_texto(screen, str('monotypecorsiva'), "y realiza la extracción del geyser", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 645)))
-        
+
         elif self.helpPage == 6:
             muestra_texto(screen, str('monotypecorsiva'), "ZERG", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  430), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 90)))
             muestra_texto(screen, str('monotypecorsiva'), "UNIDADES", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 120)))
-            
+
             spritesheet = pg.image.load("./sprites/drone.bmp").convert()
             spritesheet.set_colorkey(BLACK)
             sprites = Entity.divideSpritesheetByRows(spritesheet, 128, 1.5)
@@ -1062,7 +1303,7 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), "Unidad obrera de los zerg, se encargan", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 240)))
             muestra_texto(screen, str('monotypecorsiva'), "de la extracción de recursos, son débiles", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 255)))
             muestra_texto(screen, str('monotypecorsiva'), "poca vida y poco daño", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 270)))
-            
+
             spritesheet = pg.image.load("./sprites/zergling.bmp").convert()
             spritesheet.set_colorkey(BLACK)
             sprites = Entity.divideSpritesheetByRows(spritesheet, 128, 1.5)
@@ -1070,7 +1311,7 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), "Zergling", GREEN, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 340)))
             muestra_texto(screen, str('monotypecorsiva'), "Unidad ofensiva basica de los Zerg, son", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 370)))
             muestra_texto(screen, str('monotypecorsiva'), "muy rapidas", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 385)))
-            
+
             spritesheet = pg.image.load("./sprites/broodling.bmp").convert()
             spritesheet.set_colorkey(BLACK)
             sprites = Entity.divideSpritesheetByRows(spritesheet, 48, 1.8)
@@ -1078,7 +1319,7 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), "Broodling", GREEN, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 470)))
             muestra_texto(screen, str('monotypecorsiva'), "Unidad ofensiva avanzada de los Zerg,", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 500)))
             muestra_texto(screen, str('monotypecorsiva'), "es rapida y tiene mucho daño", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 515)))
-            
+
             spritesheet = pg.image.load("./sprites/hydralisk.bmp").convert()
             spritesheet.set_colorkey(BLACK)
             sprites = Entity.divideSpritesheetByRows(spritesheet, 128, 1.8)
@@ -1087,22 +1328,23 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), "Unidad ofensiva avanzada de los Zerg,", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 630)))
             muestra_texto(screen, str('monotypecorsiva'), "tienen alta resistencia, es lento y", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 645)))
             muestra_texto(screen, str('monotypecorsiva'), "ataca a distancia", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 660)))
-        '''    
+        '''
     def drawPause(self, screen):
         pg.draw.rect(screen, BLACK, pg.Rect(Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80), 512, 500))
         pg.draw.rect(screen, BLUE2, pg.Rect(Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80), 512, 500), 4)
-        
+
         self.helpPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 245), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
         self.exitPauseButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 688), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 85))
         self.saveButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 380), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 -200))
         self.saveAndExitButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 380), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 -290))
         self.exitButton.draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 380), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 -380))
-        
+
         muestra_texto(screen, str('monotypecorsiva'), "MENU DE PAUSA", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 385), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 120)))
         muestra_texto(screen, str('monotypecorsiva'), "Guardar", GREEN, 26, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 460), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 210)))
         muestra_texto(screen, str('monotypecorsiva'), "Guardar y Salir", GREEN, 26, ((Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 460), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 300))))
         muestra_texto(screen, str('monotypecorsiva'), "Salir sin guardar", GREEN, 26, ((Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 460), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 390))))
-    
+
+
     def drawEntityInfo(self, screen, camera):
         if len(self.player.unitsSelected) == 1:
             upgrades = self.getUpgrades(self.player.unitsSelected[0].getUpgrades())

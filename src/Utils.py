@@ -19,7 +19,7 @@ class System_State(Enum):
     NEWGAME = auto()
     MAP1 = auto()
     ONGAME = auto()
-    
+
     LOAD = auto()
     PLAYING = auto()
     PAUSED = auto()
@@ -29,6 +29,7 @@ class System_State(Enum):
     EXIT = auto()
     INTRO = auto()
     SETTINGS = auto()
+    KEY_BINDING = auto()
     HELP = auto()
 
 class Race(Enum):
@@ -156,6 +157,7 @@ GREY2   = (83, 81, 83)
 BLACK   = (0, 0, 0)
 GREEN   = (0, 255, 0)
 RED     = (255, 0, 0)
+RED2     = (255, 80, 80)
 BLUE    = (0, 0, 255)
 YELLOW  = (255, 255, 0)
 BLUE2   = (35, 35, 255)
@@ -310,6 +312,77 @@ NEW_GAME_TEXT_SIZE = 30
 
 BARRA_COMANDO = "SPRITE/EXTRA/gui_frame"
 
+###############
+#GAME SETTINGS#
+###############
+
+SETTINGS = "SPRITE/settings/settings_bg"
+SETTINGS_TOP = "SPRITE/settings/settings_bg_top"
+SETTINGS_BOT = "SPRITE/settings/settings_bg_bot"
+
+
+KEY_TO_TEXT = {
+     pg.K_UP: "UP",
+     pg.K_DOWN: "DOWN",
+     pg.K_RIGHT: "RIGHT",
+     pg.K_LEFT: "LEFT",
+     pg.K_0: "0",
+     pg.K_1: "1",
+     pg.K_2: "2",
+     pg.K_3: "3",
+     pg.K_4: "4",
+     pg.K_5: "5",
+     pg.K_6: "6",
+     pg.K_7: "7",
+     pg.K_8: "8",
+     pg.K_9: "9",
+     pg.K_q: "Q",
+     pg.K_w: "W",
+     pg.K_e: "E",
+     pg.K_r: "R",
+     pg.K_t: "T",
+     pg.K_y: "Y",
+     pg.K_u: "U",
+     pg.K_i: "I",
+     pg.K_o: "O",
+     pg.K_p: "P",
+     pg.K_a: "A",
+     pg.K_s: "S",
+     pg.K_d: "D",
+     pg.K_f: "F",
+     pg.K_g: "G",
+     pg.K_h: "H",
+     pg.K_j: "J",
+     pg.K_k: "K",
+     pg.K_l: "L",
+     pg.K_z: "Z",
+     pg.K_x: "X",
+     pg.K_c: "C",
+     pg.K_v: "V",
+     pg.K_b: "B",
+     pg.K_n: "N",
+     pg.K_m: "M",
+}
+
+ATAJOS_TITLE_POS = [MIN_SCREEN_WIDTH/2 - 100, MIN_SCREEN_HEIGHT/2 - 25]
+ATAJOS_TITLE_TEXT_SIZE = 50
+COMANDO_COLUMN_POS = [MIN_SCREEN_WIDTH/2 - 150, MIN_SCREEN_HEIGHT/2 - 110]
+TECLA_COLUMN_POS = [MIN_SCREEN_WIDTH/2 - 800, MIN_SCREEN_HEIGHT/2 - 110]
+COLUMN_TEXT_SIZE = 35
+COMANDO_POS = [MIN_SCREEN_WIDTH/2 - 150, MIN_SCREEN_HEIGHT/2 - 170]
+TECLA_POS = [MIN_SCREEN_WIDTH/2 - 800, MIN_SCREEN_HEIGHT/2 - 170]
+AVISO_COLUMN_POS = [MIN_SCREEN_WIDTH/2 - 400, MIN_SCREEN_HEIGHT/2 - 110]
+ATAJO_TEXT_SIZE = 30
+Y_ATAJOS_OFFSET = 40
+REESTABLECER_POS = [MIN_SCREEN_WIDTH/2 - 10, MIN_SCREEN_HEIGHT/2 - 700]
+REESTABLECER_SIZE = [219, 50]
+GUARDAR_SALIR_SETTINGS_POS = [MIN_SCREEN_WIDTH/2 - 680, MIN_SCREEN_HEIGHT/2 - 710]
+GUARDAR_SALIR_SETTINGS_SIZE = [310, 40]
+
+SCROLL_BAR_TOP_TRIANGLE_POS = [(MIN_SCREEN_WIDTH/2 -970, MIN_SCREEN_HEIGHT/2 -185),(MIN_SCREEN_WIDTH/2-985, MIN_SCREEN_HEIGHT/2 -165),(MIN_SCREEN_WIDTH/2-1000, MIN_SCREEN_HEIGHT/2 -185)]
+SCROLL_BAR_RECT_POS = [MIN_SCREEN_WIDTH/2 -970, MIN_SCREEN_HEIGHT/2 -195]
+SCROLL_BAR_RECT_SIZE = [30, MIN_SCREEN_HEIGHT - MIN_SCREEN_HEIGHT*0.19 - MIN_SCREEN_HEIGHT*0.13 - 100]
+SCROLL_BAR_BOT_TRIANGLE_POS = [(MIN_SCREEN_WIDTH/2 -970, MIN_SCREEN_HEIGHT/2 -630),(MIN_SCREEN_WIDTH/2-985, MIN_SCREEN_HEIGHT/2 -650),(MIN_SCREEN_WIDTH/2-1000, MIN_SCREEN_HEIGHT/2 -630)]
 #----------------------------------------------------------------
 # GUI
 #----------------------------------------------------------------
@@ -395,11 +468,11 @@ def loadTerranWorker():
     deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
     sprites = divideSpritesheetByRows(spritesheet, TERRAN_WORKER_SPRITE_ROWS, TERRAN_WORKER_SCALE) + divideSpritesheetByRowsNoScale(deadSpritesheet, 200, (80, 80))
-  
+
     for i in range(TERRAN_WORKER_INVERSIBLE_FRAMES):
         for j in range(9, 16):
             sprites[TERRAN_WORKER_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[TERRAN_WORKER_FRAMES[i][DIR_OFFSET[j]]], True, False)
-    
+
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -409,7 +482,7 @@ def loadTerranWorker():
         shadows.append(mask)
     TERRAN_WORKER_SPRITES = [sprites, shadows]
 
-# Drone 
+# Drone
 DRONE_SCALE = 1.5
 DRONE_SPRITE_ROWS = 128
 DRONE_TOTAL_FRAMES = 391 # 23 ristas de 17 frames (solo son necesarios 16 de cada una)
@@ -432,11 +505,11 @@ def loadDrone():
     spritesheet = pg.image.load("./sprites/drone.bmp").convert()
     spritesheet.set_colorkey(BLACK)
     sprites = divideSpritesheetByRows(spritesheet, DRONE_SPRITE_ROWS, DRONE_SCALE)
-  
+
     for i in range(DRONE_INVERSIBLE_FRAMES):
         for j in range(9, 16):
             sprites[DRONE_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[DRONE_FRAMES[i][DIR_OFFSET[j]]], True, False)
-    
+
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -445,7 +518,7 @@ def loadDrone():
         mask.set_alpha(150)
         shadows.append(mask)
     DRONE_SPRITES = [sprites, shadows]
-    
+
 # TerranSoldier
 TERRAN_SOLDIER_SCALE = 1.5
 TERRAN_SOLDIER_SPRITE_ROWS = 64
@@ -470,11 +543,11 @@ def loadTerranSoldier():
     spritesheet = pg.image.load("./sprites/terran_soldier_sheet.bmp").convert()
     spritesheet.set_colorkey(WHITE)
     sprites = divideSpritesheetByRows(spritesheet, TERRAN_SOLDIER_SPRITE_ROWS, TERRAN_SOLDIER_SCALE)
-  
+
     for i in range(TERRAN_SOLDIER_INVERSIBLE_FRAMES):
         for j in range(9, 16):
             sprites[TERRAN_SOLDIER_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[TERRAN_SOLDIER_FRAMES[i][DIR_OFFSET[j]]], True, False)
-    
+
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -507,11 +580,11 @@ def loadZergling():
     spritesheet = pg.image.load("./sprites/zergling.bmp").convert()
     spritesheet.set_colorkey(BLACK)
     sprites = divideSpritesheetByRows(spritesheet, ZERGLING_SPRITE_ROWS, ZERGLING_SCALE)
-  
+
     for i in range(ZERGLING_INVERSIBLE_FRAMES):
         for j in range(9, 16):
             sprites[ZERGLING_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[ZERGLING_FRAMES[i][DIR_OFFSET[j]]], True, False)
-    
+
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -545,11 +618,11 @@ def loadFirebat():
     deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
     sprites = divideSpritesheetByRows(spritesheet, FIREBAT_SPRITE_ROWS, FIREBAT_SCALE) + divideSpritesheetByRowsNoScale(deadSpritesheet, 128, (80, 80))
-  
+
     for i in range(FIREBAT_INVERSIBLE_FRAMES):
         for j in range(9, 16):
             sprites[FIREBAT_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[FIREBAT_FRAMES[i][DIR_OFFSET[j]]], True, False)
-    
+
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -579,11 +652,11 @@ def loadBroodling():
     spritesheet = pg.image.load("./sprites/broodling.bmp").convert()
     spritesheet.set_colorkey(BLACK)
     sprites = divideSpritesheetByRows(spritesheet, BROODLING_SPRITE_ROWS, BROODLING_SCALE)
-  
+
     for i in range(BROODLING_INVERSIBLE_FRAMES):
         for j in range(9, 16):
             sprites[BROODLING_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[BROODLING_FRAMES[i][DIR_OFFSET[j]]], True, False)
-    
+
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -616,11 +689,11 @@ def loadGoliath():
     deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
     sprites = divideSpritesheetByRows(spritesheet, GOLIATH_SPRITE_ROWS, GOLIATH_SCALE) + divideSpritesheetByRowsNoScale(deadSpritesheet, 128, (80, 80))
-  
+
     for i in range(len(GOLIATH_FRAMES)):
         for j in range(9, 16):
             sprites[GOLIATH_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[GOLIATH_FRAMES[i][DIR_OFFSET[j]]], True, False)
-    
+
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -653,11 +726,11 @@ def loadHydralisk():
     spritesheet = pg.image.load("./sprites/hydralisk.bmp").convert()
     spritesheet.set_colorkey(BLACK)
     sprites = divideSpritesheetByRows(spritesheet, HYDRALISK_SPRITE_ROWS, HYDRALISK_SCALE)
-  
+
     for i in range(HYDRALISK_INVERSIBLE_FRAMES):
         for j in range(9, 16):
             sprites[HYDRALISK_FRAMES[i][DIR_OFFSET[j]]] = pg.transform.flip(sprites[HYDRALISK_FRAMES[i][DIR_OFFSET[j]]], True, False)
-    
+
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -680,7 +753,7 @@ def loadTerranBuilder():
     deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
 
     sprites += deadSprites
-    
+
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -1099,7 +1172,11 @@ def muestra_texto(pantalla,fuente,texto,color, dimensiones, pos, center = False)
     else:
         rectangulo.x = pos[0] - rectangulo.w/2
     rectangulo.y = pos[1]
-    pantalla.blit(superficie, rectangulo)
+    pantalla.blit(superficie,rectangulo)
+    #print(rectangulo)
+    #rectangulo.x = pos[0]
+    #rectangulo.y = pos[1]
+    #pantalla.blit(superficie, rectangulo)
 
 def aux(screen):
     muestra_texto(screen, str('monotypecorsiva'), "single player", (210, 255, 124), 25, [270, 150])

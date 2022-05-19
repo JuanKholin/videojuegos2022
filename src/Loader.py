@@ -51,6 +51,14 @@ def loadFromSave(nombre):
     #print(escena.p2.limitUnits)
     return escena, raton, camera
 
+def loadkeyShortcuts():
+    textFile = open("atajos/atajos.json", "r")
+    data = json.load(textFile)
+    keyMap = loadKeyMap(data['keyMap'])
+    commandMap = loadCommandMap(data['commandMap'])
+    return keyMap, commandMap
+
+
 def loadHardcodedMap(nombre):
     escena = Escena(None, None, None, None, None, None, None, None)
 
@@ -100,8 +108,11 @@ def loadMap(mapDictionary):
 #post: devuelve un Player
 def loadPlayer(playerDictionary, map, isPlayer):
     p = Player.Player([], [], playerDictionary["resources"], {}, {}, map, isPlayer)
-    loadKeyMap(playerDictionary["keyMap"], p)
-    loadCommandMap(playerDictionary["commandMap"], p)
+    keyMap, commandMap = loadkeyShortcuts();
+    p.keyMap = keyMap
+    p.commandMap = commandMap
+    #loadKeyMap(playerDictionary["keyMap"], p)
+    #loadCommandMap(playerDictionary["commandMap"], p)
     p.dañoUpgrade = playerDictionary["dañoUpgrade"]
     p.armorUpgrade = playerDictionary["armorUpgrade"]
     p.mineUpgrade = playerDictionary["mineUpgrade"]
@@ -227,19 +238,19 @@ def loadStructures(structureDictionaries, player, map, raton):
         player.addStructures(structure)
 
 #en el fichero la clave es una string, hay que hacer uno nuevo con clave numerica
-def loadKeyMap(stringKeyKeyMap, p):
+def loadKeyMap(stringKeyKeyMap):
     stringKeyItems = stringKeyKeyMap.items()
     keyMap = {}
     for i in stringKeyItems:
         keyMap[int(i[0])] = i[1]
-    p.keyMap = keyMap
+    return keyMap
 
-def loadCommandMap(stringKeyCommandMap, p):
+def loadCommandMap(stringKeyCommandMap):
     stringKeyItems = stringKeyCommandMap.items()
     commandMap = {}
     for i in stringKeyItems:
         commandMap[int(i[0])] = i[1]
-    p.commandMap = commandMap
+    return commandMap
 
 # pre: mapa al menos tan grande como ventana (si no undefined behavior)
 def loadCamera(cameraDictionary):
