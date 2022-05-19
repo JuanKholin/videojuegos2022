@@ -529,12 +529,11 @@ class Interface():
             {"nombre": "Facil", "tipo": "dificultad", "rect": pg.Rect(Utils.ScreenWidth/2 - FACIL_POS[0], Utils.ScreenHeight/2 - FACIL_POS[1], 125, 35), "press": self.botonesNewGame[4]['press'], "dif": EASY},
             {"nombre": "Normal", "tipo": "dificultad", "rect": pg.Rect(Utils.ScreenWidth/2 - NORMAL_POS[0], Utils.ScreenHeight/2 - NORMAL_POS[1], 125, 35), "press": self.botonesNewGame[5]['press'], "dif": MEDIUM},
             {"nombre": "Dificil", "tipo": "dificultad", "rect": pg.Rect(Utils.ScreenWidth/2 - DIFICIL_POS[0], Utils.ScreenHeight/2 - DIFICIL_POS[1], 125, 35), "press": self.botonesNewGame[6]['press'], "dif": HARD},
-            {"nombre": "Terran", "tipo": "raza", "rect": pg.Rect(Utils.ScreenWidth/2 - TERRAN_POS[0], Utils.ScreenHeight/2 - TERRAN_POS[1], 185, 35), "press": self.botonesNewGame[7]['press'], "raza": Race.TERRAN},
-            {"nombre": "Zerg","tipo": "raza", "rect": pg.Rect(Utils.ScreenWidth/2 - ZERG_POS[0], Utils.ScreenHeight/2 - ZERG_POS[1], 185, 35), "press": self.botonesNewGame[8]['press'], "raza": Race.ZERG},
+            self.botonRazaTerran,
+            {"nombre": "Zerg","tipo": "raza", "rect": pg.Rect(Utils.ScreenWidth/2 - ZERG_POS[0], Utils.ScreenHeight/2 - ZERG_POS[1], 185, 35), "press": self.botonesNewGame[len(self.botonesNewGame) - 1]['press'], "raza": Race.ZERG},
         ]
         
         self.botonesNewGame = aux
-        
     def updateNewGame(self, escena, raton, camera):
         self.updateNewGamePos()
         press, iniPos = self.mouse.getPressed()
@@ -603,12 +602,12 @@ class Interface():
                 self.cancelarPress = False
         else:
             self.soundPlayed = False
-
-        
+        print(self.botonRazaTerran not in self.botonesNewGame)
         if self.botonRazaTerran in self.botonesNewGame and self.selectedMap == "4":
             self.botonesNewGame.remove(self.botonRazaTerran)
             self.selectedRaza = {"nombre":"Zerg", "raza": Race.ZERG}
         elif self.botonRazaTerran not in self.botonesNewGame and self.selectedMap != "4":
+            print("aaaaaaaaaaaa")
             self.botonesNewGame.append(self.botonRazaTerran)
         for b in self.botonesNewGame:
             if self.mouse.isCollide(b['rect']):

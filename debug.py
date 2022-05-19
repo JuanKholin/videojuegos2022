@@ -63,7 +63,7 @@ def procesarInput():
 
 
 def setEntity(player, ai):
-    scv = Firebat(player, 10, 3)
+    scv = Goliath(player, 10, 3)
     player.addUnits(scv)
     scv = TerranSoldier(player, 11, 3)
     player.addUnits(scv)
@@ -79,8 +79,13 @@ def setEntity(player, ai):
     scv = Goliath(ai, 20, 3)
     ai.addUnits(scv)
     structure1 = TerranBuilder(37, 3, ai, mapa, False, raton)
-    ai.addStructures(structure1)
     ai.setBasePlayer(structure1)
+    ai.addStructures(structure1)
+    structure1 = TerranBarracks(15, 7, ai, mapa, False)
+    ai.addStructures(structure1)
+    structure1 = TerranBarracks(15, 3, ai, mapa, False)
+    ai.addStructures(structure1)
+    
 
     resources = []
     crystal = Crystal(3, 10, 800)

@@ -69,8 +69,8 @@ class TerranWorker(Worker):
     def toDictionary(self, map):
         fatherDictionary = super().toDictionary(map)
         sonDictionary = {
-            "clase": "SCV",
-            "nombre": "Terran Worker",
+            "clase": "terranWorker",
+            "nombre": "SCV",
             "funcion": "Unidad obrera"
         }
         sonDictionary.update(fatherDictionary)

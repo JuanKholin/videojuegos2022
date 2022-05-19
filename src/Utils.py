@@ -204,7 +204,7 @@ class UnitState(Enum):
     DEAD = auto()
     EXTRACTING = auto()
 
-class BuildingState(Enum):
+class BuildingState(IntEnum):
     BUILDING = auto()
     OPERATIVE = auto()
     SPAWNING = auto() # porque lucecitas suena demasiado profesional

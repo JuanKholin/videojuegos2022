@@ -12,7 +12,7 @@ from ..Utils import *
 
 HP = 1000
 GENERATION_TIME = 5
-CAPACITY = 5
+CAPACITY = 0
 
 class TerranBarracks(Structure):
     TILES_WIDTH = 4

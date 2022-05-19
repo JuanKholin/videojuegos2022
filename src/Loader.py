@@ -116,6 +116,7 @@ def loadUnits(unitDictionaries, player):
     for u in unitDictionaries:
         if u["clase"] == "terranWorker":
             unit = TerranWorker(player, u["x"], u["y"])
+            print("cargo worker", u['x'], u['y'])
             unit.load(u["hp"])
             player.addUnits(unit)
         elif u["clase"] == "terranSoldier":
@@ -147,6 +148,41 @@ def loadUnits(unitDictionaries, player):
             unit.load(u["hp"])
             player.addUnits(unit)
 
+#post: ha añadido las unidades a player.units
+def loadUnit(u, player):
+        if u["clase"] == "terranWorker":
+            unit = TerranWorker(player, u["x"], u["y"])
+            unit.load(u["hp"])
+            return unit
+        elif u["clase"] == "terranSoldier":
+            unit = TerranSoldier(player, u["x"], u["y"])
+            unit.load(u["hp"])
+            return unit
+        elif u["clase"] == "zergling":
+            unit = Zergling(player, u["x"], u["y"])
+            unit.load(u["hp"])
+            return unit
+        elif u["clase"] == "drone":
+            unit = Drone(player, u["x"], u["y"])
+            unit.load(u["hp"])
+            return unit
+        elif u["clase"] == "hydralisk":
+            unit = Hydralisk(player, u["x"], u["y"])
+            unit.load(u["hp"])
+            return unit
+        elif u["clase"] == "broodling":
+            unit = Broodling(player, u["x"], u["y"])
+            unit.load(u["hp"])
+            return unit
+        elif u["clase"] == "firebat":
+            unit = Firebat(player, u["x"], u["y"])
+            unit.load(u["hp"])
+            return unit
+        elif u["clase"] == "goliath":
+            unit = Goliath(player, u["x"], u["y"])
+            unit.load(u["hp"])
+            return unit
+
 def loadMuros(wallDict, mapa):
     muros = []
     for u in wallDict:
@@ -169,23 +205,26 @@ def loadStructures(structureDictionaries, player, map, raton):
             structure.armorGasUpCost = s["armorGasUpCost"]
             structure.mineMineralUpCost = s["mineMineralUpCost"]
             structure.mineGasUpCost = s["mineGasUpCost"]
-            player.addStructures(structure)
             player.setBasePlayer(structure)
-
         elif s["clase"] == "terranBarracks":
-            player.addStructures(TerranBarracks(s["x"], s["y"], player, map, s["building"]))
+            structure = TerranBarracks(s["x"], s["y"], player, map, s["building"])
         elif s["clase"] == "hatchery":
-            player.addStructures(Hatchery(s["x"], s["y"], player, map, s["building"], raton))
+            structure = Hatchery(s["x"], s["y"], player, map, s["building"], raton)
         elif s["clase"] == "terranSupplyDepot":
-            player.addStructures(TerranSupplyDepot(s["x"], s["y"], player, map, s["building"]))
+            structure = TerranSupplyDepot(s["x"], s["y"], player, map, s["building"])
         elif s["clase"] == "terranRefinery":
-            player.addStructures(TerranRefinery(s["x"], s["y"], player, map, s["building"]))
+            structure = TerranRefinery(s["x"], s["y"], player, map, s["building"])
         elif s["clase"] == "extractor":
-            player.addStructures(Extractor(s["x"], s["y"], player, map, s["building"]))
+            structure = Extractor(s["x"], s["y"], player, map, s["building"])
         elif s["clase"] == "zergBarracks":
-            player.addStructures(ZergBarracks(s["x"], s["y"], player, map, s["building"]))
+            structure = ZergBarracks(s["x"], s["y"], player, map, s["building"])
         elif s["clase"] == "zergSupply":
-            player.addStructures(ZergSupply(s["x"], s["y"], player, map, s["building"]))
+            structure = ZergSupply(s["x"], s["y"], player, map, s["building"])
+        for unit in s["training"]:
+            structure.training.append(loadUnit(unit, player))
+        structure.state = s['state']
+        structure.generationCount = s['count']
+        player.addStructures(structure)
 
 #en el fichero la clave es una string, hay que hacer uno nuevo con clave numerica
 def loadKeyMap(stringKeyKeyMap, p):
