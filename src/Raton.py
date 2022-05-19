@@ -284,7 +284,7 @@ class Raton(pygame.sprite.Sprite):
                                     tileClicked = self.mapa.getTile(real_mouse_pos[0],real_mouse_pos[1] + 40)
                                 if tileClicked.ocupante != None:
                                     unidadClickada = tileClicked.ocupante
-                                    if unidadClickada.getType() != -1 and unidadClickada.getType() != RESOURCE:
+                                    if unidadClickada.getType() != -1 and unidadClickada.getType() != RESOURCE and unidadClickada.getType() != GEYSER:
                                         if unidadClickada.clicked: # Seleccionar todos los del mismo tipo
                                             reClick = True
                                             self.player.unitsSelected = []

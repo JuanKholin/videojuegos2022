@@ -40,7 +40,7 @@ class TerranBarracks(Structure):
         self.shadows = sprites[1]
 
         self.image = self.sprites[self.index]
-        self.shadow = self.sprites[self.index]
+        
         self.operativeIndex = [4]
         self.spawningIndex = [4, 5]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]

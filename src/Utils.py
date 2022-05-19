@@ -421,24 +421,31 @@ DIR_OFFSET = [0, 2, 4, 6, 8, 10, 12, 14, 15, 13, 11, 9, 7, 5, 3, 1]
 #-------------------------------------------------------------------------
 # Para todo
 def init():
+    #terran unit
     loadTerranWorker()
-    loadDrone()
     loadTerranSoldier()
-    loadZergling()
     loadFirebat()
-    loadBroodling()
     loadGoliath()
+    
+    #terran structure
+    loadTerranBuilder()
+    loadTerranBarracks()
+    loadTerranSupplyDepot()
+    loadTerranRefinery()
+    
+    #zerg unit
+    loadDrone()
+    loadZergling()
+    loadBroodling()
     loadHydralisk()
 
-    loadTerranBuilder()
+    #zerg structure
     loadHatchery()
-    loadTerranBarracks()
     loadZergBarracks()
-    loadTerranSupplyDepot()
     loadZergSupply()
-    loadTerranRefinery()
     loadExtractor()
 
+    #resource
     loadCrystal()
     loadGeyser()
 
@@ -769,7 +776,7 @@ HATCHERY_TOTAL_FRAMES = 4
 HATCHERY_SPRITES = [None, None]
 def loadHatchery():
     global HATCHERY_SPRITES
-    sprites = cargarSprites(HATCHERY_PATH, HATCHERY_TOTAL_FRAMES, False, BLUE2, 1.5)
+    sprites = cargarSprites(HATCHERY_PATH, HATCHERY_TOTAL_FRAMES, False, BLUE2, 1.8)
 
     deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
@@ -884,7 +891,7 @@ TERRAN_REFINERY_TOTAL_FRAMES = 5
 TERRAN_REFINERY_SPRITES = [None, None]
 def loadTerranRefinery():
     global TERRAN_REFINERY_SPRITES
-    sprites = cargarSprites(TERRAN_REFINERY_PATH, TERRAN_REFINERY_TOTAL_FRAMES, False, WHITE, 1.5)
+    sprites = cargarSprites(TERRAN_REFINERY_PATH, TERRAN_REFINERY_TOTAL_FRAMES, False, BLACK)
 
     deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
@@ -934,7 +941,7 @@ def loadCrystal():
     for crystalType in range(1, 4):
         spritesheet = pg.image.load("./SPRITE/Cristal/min0" + str(crystalType) + ".bmp").convert()
         spritesheet.set_colorkey((BLACK))
-        sprites[crystalType - 1] = divideSpritesheetByRows(spritesheet, CRYSTAL_SPRITE_ROWS)
+        sprites[crystalType - 1] = divideSpritesheetByRows(spritesheet, CRYSTAL_SPRITE_ROWS, 2.2, 2.0)
 
     shadows = [[], [], []]
     for j in range(0, 3):

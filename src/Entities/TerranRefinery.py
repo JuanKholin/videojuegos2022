@@ -29,11 +29,12 @@ class TerranRefinery(Structure):
 
     def __init__(self, xini, yini, player, map, building, gas = None):
         Structure.__init__(self, HP, TERRAN_REFINERY_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
-        sprites = TERRAN_REFINERY_SPRITES
+        sprites = Utils.TERRAN_REFINERY_SPRITES
         self.sprites = sprites[0]
         self.shadows = sprites[1]
         
         self.image = self.sprites[self.index]
+    
         self.operativeIndex = [4]
         self.spawningIndex = [4]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]

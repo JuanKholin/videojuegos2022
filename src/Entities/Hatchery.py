@@ -42,7 +42,7 @@ class Hatchery(Structure):
         self.shadows = sprites[1]
 
         self.image = self.sprites[self.index]
-        self.shadow = self.sprites[self.index]
+        
         self.operativeIndex = [0, 1, 2, 3]
         self.spawningIndex = [0, 1, 2, 3]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]

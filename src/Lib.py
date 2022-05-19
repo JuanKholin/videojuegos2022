@@ -62,13 +62,13 @@ def getSprite(path, color, size):
     image = pg.transform.scale(image, size)
     return image
 
-def divideSpritesheetByRows(spritesheet, rows, scale = 1.5):
+def divideSpritesheetByRows(spritesheet, rows, scalew = 1.5, scaleh = 1.5):
     totalRows = spritesheet.get_height()
     maxCol = spritesheet.get_width()
     sprites = []
     for i in range(int(totalRows / rows)):
         aux = pg.Surface.subsurface(spritesheet, (0, rows * i, maxCol, rows))
-        aux = pg.transform.scale(aux, [aux.get_rect().w * scale, aux.get_rect().h * scale])
+        aux = pg.transform.scale(aux, [aux.get_rect().w * scalew, aux.get_rect().h * scaleh])
 
         sprites.append(aux)
     return sprites

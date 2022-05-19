@@ -37,7 +37,7 @@ class TerranSupplyDepot(Structure):
         self.sprites = sprites[0]
         self.shadows = sprites[1]
         self.image = self.sprites[self.index]
-        self.shadow = self.shadows[self.index]
+        
         self.operativeIndex = [4]
         self.spawningIndex = [4]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]

@@ -796,26 +796,26 @@ class Interface():
             self.cancelarPress = False
 
     def updateSettingsAtajosPos(self):
-                self.settings = pg.transform.scale(self.settings, (ScreenWidth, ScreenHeight))
-                self.settingsTop = pg.transform.scale(self.settingsTop, (ScreenWidth, ScreenHeight*0.195))
-                self.settingsBot = pg.transform.scale(self.settingsBot, (ScreenWidth, ScreenHeight*0.13))
-                self.scrollBarTopRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1], 30, 30)
-                self.scrollBarRectangle = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_RECT_POS[0], Utils.ScreenHeight/2 - SCROLL_BAR_RECT_POS[1], SCROLL_BAR_RECT_SIZE[0], SCROLL_BAR_RECT_SIZE[1])
-                self.scrollBarBotRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1], 30, 30)
+        self.settings = pg.transform.scale(self.settings, (ScreenWidth, ScreenHeight))
+        self.settingsTop = pg.transform.scale(self.settingsTop, (ScreenWidth, ScreenHeight*0.195))
+        self.settingsBot = pg.transform.scale(self.settingsBot, (ScreenWidth, ScreenHeight*0.13))
+        self.scrollBarTopRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1], 30, 30)
+        self.scrollBarRectangle = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_RECT_POS[0], Utils.ScreenHeight/2 - SCROLL_BAR_RECT_POS[1], SCROLL_BAR_RECT_SIZE[0], SCROLL_BAR_RECT_SIZE[1])
+        self.scrollBarBotRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0], Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1], 30, 30)
 
-                self.keyButtons = {}
-                self.buttonWaitingForKey = -1
-                i = 0
-                items = self.keyMap.items()
-                for k in items:
-                    rect = pg.Rect(Utils.ScreenWidth/2 - TECLA_POS[0]-10, Utils.ScreenHeight/2 - TECLA_POS[1]-10 + Y_ATAJOS_OFFSET * i, 100, 35)
-                    self.keyButtons[i] = {"rect": rect, "press": False, "waitingForKey": False, "key": k[0], "command": k[1]}
-                    i += 1
-                self.keyFirstOriginalY = self.keyButtons[0]["rect"].y
-                self.keyLastOriginalY = self.keyButtons[len(self.keyButtons)-1]["rect"].y
+        self.keyButtons = {}
+        self.buttonWaitingForKey = -1
+        i = 0
+        items = self.keyMap.items()
+        for k in items:
+            rect = pg.Rect(Utils.ScreenWidth/2 - TECLA_POS[0]-10, Utils.ScreenHeight/2 - TECLA_POS[1]-10 + Y_ATAJOS_OFFSET * i, 100, 35)
+            self.keyButtons[i] = {"rect": rect, "press": False, "waitingForKey": False, "key": k[0], "command": k[1]}
+            i += 1
+        self.keyFirstOriginalY = self.keyButtons[0]["rect"].y
+        self.keyLastOriginalY = self.keyButtons[len(self.keyButtons)-1]["rect"].y
 
-                self.reestablecerRect =  pg.Rect(Utils.ScreenWidth/2 - REESTABLECER_POS[0], Utils.ScreenHeight/2 - REESTABLECER_POS[1], REESTABLECER_SIZE[0], REESTABLECER_SIZE[1])
-                self.guardarSalirSettingsRect =  pg.Rect(Utils.ScreenWidth/2 - GUARDAR_SALIR_SETTINGS_POS[0], Utils.ScreenHeight/2 - GUARDAR_SALIR_SETTINGS_POS[1], GUARDAR_SALIR_SETTINGS_SIZE[0], GUARDAR_SALIR_SETTINGS_SIZE[1])
+        self.reestablecerRect =  pg.Rect(Utils.ScreenWidth/2 - REESTABLECER_POS[0], Utils.ScreenHeight/2 - REESTABLECER_POS[1], REESTABLECER_SIZE[0], REESTABLECER_SIZE[1])
+        self.guardarSalirSettingsRect =  pg.Rect(Utils.ScreenWidth/2 - GUARDAR_SALIR_SETTINGS_POS[0], Utils.ScreenHeight/2 - GUARDAR_SALIR_SETTINGS_POS[1], GUARDAR_SALIR_SETTINGS_SIZE[0], GUARDAR_SALIR_SETTINGS_SIZE[1])
 
     def updateOnGame(self):
         #si esta en GUI desactivar funciones de raton
@@ -863,7 +863,6 @@ class Interface():
         self.upgrades = []
         if self.player.unitsSelected.__len__() == 1:
             self.upgrades = self.getUpgrades(self.player.unitsSelected[0].getUpgrades())
-
 
         #comprobar colision del raton
         for up in self.upgrades:
@@ -943,6 +942,7 @@ class Interface():
                     pg.draw.rect(screen, GREEN, partida['rect'], 2)
                 muestra_texto(screen, str('monotypecorsiva'), partida['nombre'], WHITE, 28, (partida['rect'].x + 100, partida['rect'].y))
             if self.selectedPartida != None:
+                print(self.selectedPartida)
                 info = self.selectedPartida['nombre'].split("_")
                 muestra_texto(screen, str('monotypecorsiva'), info[0], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-740), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-170)))
                 muestra_texto(screen, str('monotypecorsiva'), info[2], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-810), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-275)))

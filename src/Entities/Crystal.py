@@ -23,17 +23,6 @@ class Crystal(Resource):
 
         self.render = pg.transform.scale(pg.image.load(CRYSTAL_RENDER), RENDER_SIZE)
 
-    def divideSpritesheetByRows(self,spritesheet, rows):
-        totalRows = spritesheet.get_height()
-        maxCol = spritesheet.get_width()
-        sprites = []
-        for i in range(int(totalRows / rows)):
-            aux = pg.Surface.subsurface(spritesheet, (0, rows * i, maxCol, rows))
-            #aux = pg.transform.scale2x(aux)
-            aux = pg.transform.scale(aux, [aux.get_rect().w * 2.2, aux.get_rect().h * 2])
-            sprites.append(aux)
-        return sprites
-
     def __del__(self):
         #print("destruction")
         pass

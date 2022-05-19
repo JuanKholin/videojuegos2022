@@ -31,11 +31,12 @@ class Extractor(Structure):
 
     def __init__(self, xini, yini, player, map, building, gas = None):
         Structure.__init__(self, HP, EXTRACTOR_MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
-        sprites = EXTRACTOR_SPRITES
+        sprites = Utils.EXTRACTOR_SPRITES
         self.sprites = sprites[0]
         self.shadows = sprites[1]
 
         self.image = self.sprites[self.index]
+        
         self.operativeIndex = [0, 1, 2, 3]
         self.spawningIndex = [0, 1, 2, 3]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
