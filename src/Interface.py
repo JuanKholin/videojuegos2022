@@ -357,7 +357,13 @@ class Interface():
         self.ajustesAtajosRect = pg.Rect(Utils.ScreenWidth/2 - AJUSTES_ATAJOS_POS[0], Utils.ScreenHeight/2 - AJUSTES_ATAJOS_POS[1], 220, 40)
 
     def updateMainMenu(self):
+<<<<<<< Updated upstream
         self.updateMainMenuPos()
+=======
+        self.index = 0
+        if Utils.resized:
+            self.updateMainMenuPos()
+>>>>>>> Stashed changes
 
         #Boton single player
         if getGameState2() == System_State.SETTINGS:
@@ -707,7 +713,7 @@ class Interface():
             if not self.reestablecerPress and press and Raton.collides(iniPos[0], iniPos[1], self.reestablecerRect):
                 self.reestablecerPress = True
             elif self.mouse.getClick() and self.reestablecerPress and Raton.collides(endPos[0], endPos[1], self.reestablecerRect):
-                #print("Cancelar")
+                print("Cancelar")
                 keys = list(self.keyMap.keys()).copy()
                 for k in keys:
                     self.keyMap.pop(k)

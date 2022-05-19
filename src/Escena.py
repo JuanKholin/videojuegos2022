@@ -115,6 +115,8 @@ class Escena():
                 elif command.id == CommandId.EXIT_GAME:
                     setGameState(System_State.MAINMENU)
                     setGameState2(System_State.PLAYING)
+                    stopMusic()
+                    playMusic(mainMenuBGM, pos = 5)
                     self.interfaz.helpPage = 0
                     self.camera.x = 0
                     self.camera.y = 0
