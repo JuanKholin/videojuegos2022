@@ -2,7 +2,6 @@ import pygame as pg
 from ..Utils import *
 from .Resource import *
 
-SPRITE_PIXEL_ROWS = 64
 WEIGHT_PADDING =    40
 HEIGHT_PADDING =    20
 X_PADDING =         80
@@ -11,11 +10,13 @@ Y_PADDING =         20
 class Geyser(Resource):
     def __init__(self, x, y, capacidad):
         Resource.__init__(self, x, y, CRYSTAL, capacidad)
-        spritesheet = pg.image.load("./sprites/geyser.bmp").convert()
-        spritesheet.set_colorkey((BLACK))
-        self.sprites = self.divideSpritesheetByRows(spritesheet, SPRITE_PIXEL_ROWS, 1.3)
-        #self.image = self.sprites[4 - int(float(capacidad)/float(self.interval) + 0.5)]
+
+        sprites = Utils.GEYSER_SPRITES
+        self.sprites = sprites[0]
+        self.shadows = sprites[1]
+
         self.image = self.sprites[0]
+        self.shadow = self.shadows[0]
         self.clicked = False
 
         self.render = pg.transform.scale(pg.image.load(GEYSER_RENDER), RENDER_SIZE)

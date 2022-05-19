@@ -366,6 +366,9 @@ def init():
     loadTerranRefinery()
     loadExtractor()
 
+    loadCrystal()
+    loadGeyser()
+
 # TerranWorker
 TERRAN_WORKER_SCALE = 1.5
 TERRAN_WORKER_SPRITE_ROWS = 72
@@ -848,6 +851,47 @@ def loadExtractor():
         shadows.append(mask)
 
     EXTRACTOR_SPRITES = [sprites, shadows]
+
+# Crystal
+CRYSTAL_SPRITE_ROWS = 96
+CRYSTAL_SPRITES = [None, None, None, None, None, None]
+def loadCrystal():
+    global CRYSTAL_SPRITES
+    sprites = [None, None, None]
+    for crystalType in range(1, 4):
+        spritesheet = pg.image.load("./SPRITE/Cristal/min0" + str(crystalType) + ".bmp").convert()
+        spritesheet.set_colorkey((BLACK))
+        sprites[crystalType - 1] = divideSpritesheetByRows(spritesheet, CRYSTAL_SPRITE_ROWS)
+
+    shadows = [[], [], []]
+    for j in range(0, 3):
+        for i in range(len(sprites[j])):
+            aux = pg.mask.from_surface(sprites[j][i], 0)
+            mask = aux.to_surface(setcolor = (1, 0, 0))
+            mask.set_colorkey(BLACK)
+            mask.set_alpha(150)
+            shadows[j].append(mask)
+    CRYSTAL_SPRITES = [sprites[0], sprites[1], sprites[2], shadows[0], shadows[1], shadows[2]]
+
+
+# Geyser
+GEYSER_SPRITE_ROWS = 64
+GEYSER_SPRITES = [None, None]
+def loadGeyser():
+    global GEYSER_SPRITES
+    spritesheet = pg.image.load("./sprites/geyser.bmp").convert()
+    spritesheet.set_colorkey((BLACK))
+    sprites = divideSpritesheetByRows(spritesheet, GEYSER_SPRITE_ROWS, 1.3)
+
+    shadows = []
+    for i in range(len(sprites)):
+        aux = pg.mask.from_surface(sprites[i], 0)
+        mask = aux.to_surface(setcolor = (1, 0, 0))
+        mask.set_colorkey(BLACK)
+        mask.set_alpha(150)
+        shadows.append(mask)
+    GEYSER_SPRITES = [sprites, shadows]
+    
 
 #-------------------------------------------------------------------------
 #-------------------------------------------------------------------------

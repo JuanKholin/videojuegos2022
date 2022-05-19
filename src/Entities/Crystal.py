@@ -3,7 +3,6 @@ from ..Utils import *
 from .Resource import *
 from random import randint
 
-SPRITE_PIXEL_ROWS = 96
 WEIGHT_PADDING =    0
 HEIGHT_PADDING =    85
 X_PADDING =         65
@@ -12,12 +11,14 @@ Y_PADDING =         55
 class Crystal(Resource):
     def __init__(self, x, y, capacidad):
         Resource.__init__(self, x, y, CRYSTAL, capacidad)
-        crystalType = randint(1,3) # Mete un cristal aleatorio de los 3 que tenemos
-        spritesheet = pg.image.load("./SPRITE/Cristal/min0" + str(crystalType) + ".bmp").convert()
-        spritesheet.set_colorkey((BLACK))
-        self.sprites = self.divideSpritesheetByRows(spritesheet, SPRITE_PIXEL_ROWS)
-        #self.image = self.sprites[4 - int(float(capacidad)/float(self.interval) + 0.5)]
+        
+        crystalType = randint(0,2) # Mete un cristal aleatorio de los 3 que tenemos
+        sprites = Utils.CRYSTAL_SPRITES
+        self.sprites = sprites[crystalType]
+        self.shadows = sprites[crystalType + 3]
         self.image = self.sprites[0]
+        self.shadow = self.shadows[0]
+
         self.clicked = False
 
         self.render = pg.transform.scale(pg.image.load(CRYSTAL_RENDER), RENDER_SIZE)
