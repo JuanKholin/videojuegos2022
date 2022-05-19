@@ -335,12 +335,13 @@ class Interface():
         elif Utils.state == System_State.NEWGAME:
 
             self.updateNewGame(escena, raton, camera)
-        elif Utils.state == System_State.SETTINGS and Utils.state2 != System_State.KEY_BINDING:
+        elif Utils.state == System_State.SETTINGS:
             press, iniPos = self.mouse.getPressed()
 
             self.updateSettingsAtajosPos()
             #if self.atajosOSonido == 0: #atajos
-            self.updateSettingsAtajos()
+            if Utils.state2 != System_State.KEY_BINDING:
+                self.updateSettingsAtajos()
             #elif self.atajosOSonido == 1:
                 #self.updateSettingsSonido()
             #    pass
@@ -746,7 +747,7 @@ class Interface():
             i = 0
             for b in self.keyButtons.items():
                 if self.mouse.isCollide(b[1]["rect"]):
-                    print("colide")
+                    
                     endPos = self.mouse.getPosition()
                     if not b[1]["press"] and press and Raton.collides(iniPos[0], iniPos[1], b[1]["rect"]):
                         b[1]["press"] = True
