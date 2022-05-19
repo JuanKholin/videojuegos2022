@@ -22,7 +22,7 @@ class AI():
         self.mapa = self.data.getMapa()
         self.miniCount = 0
 
-        self.minWorkers = 2
+        self.minWorkers = 3
         self.minSoldiers = 2
         if race == Race.ZERG:
             self.base = ZERG_BASE
@@ -174,7 +174,7 @@ class AI():
         workersToCreate = self.minWorkers - nWorkers
         base = self.getBase(structures)
         if base != None:
-            if (workersToCreate > 0) and (nSoldiers > nWorkers):
+            if (workersToCreate > 0) and (nSoldiers + 2 > nWorkers):
                 if base.state == BuildingState.OPERATIVE:
                     base.execute(CommandId.GENERATE_WORKER)
             soldiersToCreate = self.minSoldiers - nSoldiers
@@ -680,11 +680,11 @@ class AI():
             if geyser != None:
                 return geyser
         for structure in structures:
-            geyser = self.mapa.findNearbyGeyser(structure.getTile(), 6)
+            geyser = self.mapa.findNearbyGeyser(structure.getTile(), 7)
             if geyser != None:
                 return geyser
         for invader in self.invaders:
-            geyser = self.mapa.findNearbyGeyser(invader.getTile(), 5)
+            geyser = self.mapa.findNearbyGeyser(invader.getTile(), 6)
             if geyser != None:
                 return geyser
         return None
