@@ -45,7 +45,7 @@ class Interface():
         self.nuevaPartidaRect = pg.Rect(NUEVA_PARTIDA_POS[0], NUEVA_PARTIDA_POS[1], 250, 40)
         self.borrarPartidaRect = pg.Rect(BORRAR_PARTIDA_POS[0], BORRAR_PARTIDA_POS[1], 250, 40)
         self.partidaFirstOriginalY = Utils.ScreenHeight/2 - PARTIDA_POS[1]
-        
+
 
         self.aceptarPress = False
         self.cancelarPress = False
@@ -120,10 +120,10 @@ class Interface():
         self.keyButtons = {}
         self.buttonWaitingForKey = -1
         i = 0
-        items = self.keyMap.items()
+        items = self.commandMap.items()
         for k in items:
             rect = pg.Rect(Utils.ScreenWidth/2 - TECLA_POS[0]-10, Utils.ScreenHeight/2 - TECLA_POS[1]-10 + Y_ATAJOS_OFFSET * i, 100, 35)
-            self.keyButtons[i] = {"rect": rect, "press": False, "waitingForKey": False, "key": k[0], "command": k[1]}
+            self.keyButtons[i] = {"rect": rect, "press": False, "waitingForKey": False, "key": k[1], "command": k[0]}
             i += 1
         #self.guardarRect = pg.Rect(AJUSTES_POS[0], AJUSTES_POS[1], 220, 40)
         #self.cancelarRect = pg.Rect(AJUSTES_POS[0], AJUSTES_POS[1], 220, 40)
@@ -448,7 +448,7 @@ class Interface():
         pass
 
     def updateGameMenuPos(self):
-        
+
         #self.gameSelect = pg.transform.scale(self.gameSelect, (Utils.ScreenHeight*SCREEN_SCALE, Utils.ScreenHeight))
         self.aceptarRect = pg.Rect(Utils.ScreenWidth/2 - ACEPTAR_POS[0], Utils.ScreenHeight/2 - ACEPTAR_POS[1], ACEPTAR_RECT[0], ACEPTAR_RECT[1])
         self.aceptarNoPulsabeSurf = pg.Surface((self.aceptarRect.w, self.aceptarRect.h), pg.SRCALPHA)
@@ -773,9 +773,9 @@ class Interface():
                     self.commandMap[i[0]] = i[1]
                 buttons = {}
                 i = 0
-                for k in self.keyMap.items():
+                for k in self.commandMap.items():
                     rect = pg.Rect(Utils.ScreenWidth/2 - TECLA_POS[0]-10, Utils.ScreenHeight/2 - TECLA_POS[1]-10 + Y_ATAJOS_OFFSET * i, 100, 35)
-                    buttons[i] = {"rect": rect, "press": False, "waitingForKey": False, "key": k[0], "command": k[1]}
+                    buttons[i] = {"rect": rect, "press": False, "waitingForKey": False, "key": k[1], "command": k[0]}
                     i += 1
                 self.keyButtons = buttons
                 self.reestablecerPress = False
@@ -1024,7 +1024,7 @@ class Interface():
                         pg.draw.rect(screen, GREEN, i['rect'], 2)
                     muestra_texto(screen, str('monotypecorsiva'), i['nombre'], WHITE, 28, (i['rect'].x + 100, i['rect'].y))
                 j += 1
-                
+
             '''for partida in self.partidas:
                 if self.mouse.isCollide(partida['rect']):
                     pg.draw.rect(screen, GREEN2, partida['rect'], 1)
@@ -1252,13 +1252,13 @@ class Interface():
 
     def drawHELP(self, screen):
         screen.blit(self.helpPageSprites[self.helpPage], (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80)))
-        
+
         self.helpButtons[2].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 703), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 84))
         if self.helpPage > 0:
             self.helpButtons[0].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 304), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 95))
         if self.helpPage < len(self.helpPageSprites)-1:
             self.helpButtons[1].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 604), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 95))
-        
+
         '''if self.helpPage == 0:
             muestra_texto(screen, str('monotypecorsiva'), "INSTRUCCIONES", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  370), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 110)))
 
@@ -1278,7 +1278,7 @@ class Interface():
             screen.blit(getSprite(MOUSE_PATH + "tile002.png", BLACK, (70, 70)), (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  310), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 430)))
             muestra_texto(screen, str('monotypecorsiva'), "Doble click", GREEN, 26, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 440)))
             muestra_texto(screen, str('monotypecorsiva'), "Para seleccionar unidades del mismo tipo", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 470)))
-            
+
             screen.blit(getSprite(KEY2_PATH , WHITE, (100, 50)), (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  290), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 570)))
             muestra_texto(screen, str('monotypecorsiva'), "Teclas de atajo", GREEN, 26, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 540)))
             muestra_texto(screen, str('monotypecorsiva'), "Utiliza las teclas de atajo para facilitar", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 570)))
@@ -1286,8 +1286,8 @@ class Interface():
             muestra_texto(screen, str('monotypecorsiva'), "'X' para deseleccionar las unidades.", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 600)))
             muestra_texto(screen, str('monotypecorsiva'), "En configuración de atajos del menu principal", ORANGE2, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 620)))
             muestra_texto(screen, str('monotypecorsiva'), "encontraras mas!", ORANGE2, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 635)))
-            
-            
+
+
         elif self.helpPage == 4:
             muestra_texto(screen, str('monotypecorsiva'), "TERRAN", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  425), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 90)))
             muestra_texto(screen, str('monotypecorsiva'), "ESTRUCUTURAS", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  375), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 120)))
