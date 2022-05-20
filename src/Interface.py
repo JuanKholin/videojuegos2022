@@ -526,6 +526,7 @@ class Interface():
                     self.resources.pop(2)
                     self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unitZerg.png"), (25, 25)))
                     self.resources[2].set_colorkey(BLACK)
+                    
                 else:
                     if options[1] == "Zerg":
                         #print("Contra terran")
@@ -533,12 +534,14 @@ class Interface():
                         self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unitZerg.png"), (25, 25)))
                         self.resources[2].set_colorkey(BLACK)
                         raza = Race.TERRAN
+                        self.heroeSprites = cargarSprites(HEROE2_PATH, HEROE_N, False, None, 1.3)
                     else:
                         #print("Contra zerg")
                         self.resources.pop(2)
                         self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unit.png"), (25, 25)))
                         self.resources[2].set_colorkey(BLACK)
                         raza = Race.ZERG
+                        self.heroeSprites = cargarSprites(HEROE_PATH, HEROE_N, False, None, 1.3)
                 if options[2] == "Dificil":
                     #print("DIFICIL")
                     dif = HARD
@@ -674,17 +677,20 @@ class Interface():
                     self.resources.pop(2)
                     self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unitZerg.png"), (25, 25)))
                     self.resources[2].set_colorkey(BLACK)
+                    self.heroeSprites = cargarSprites(HEROE2_PATH, HEROE_N, False, None, 1.3)
                 else:
                     if self.selectedRaza['raza'] == Race.TERRAN:
                         raza = Race.ZERG
                         self.resources.pop(2)
                         self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unit.png"), (25, 25)))
                         self.resources[2].set_colorkey(BLACK)
+                        self.heroeSprites = cargarSprites(HEROE_PATH, HEROE_N, False, None, 1.3)
                     else:
                         raza = Race.TERRAN
                         self.resources.pop(2)
                         self.resources.append(pg.transform.scale(pg.image.load("SPRITE/EXTRA/unitZerg.png"), (25, 25)))
                         self.resources[2].set_colorkey(BLACK)
+                        self.heroeSprites = cargarSprites(HEROE2_PATH, HEROE_N, False, None, 1.3)
                 if Utils.DEBBUG == False:
                     aI = AI(escena.p2, raza, self.selectedDif['dif'])
                 else:
@@ -897,7 +903,7 @@ class Interface():
 
             self.updatePAUSED()
 
-        if frame(10):
+        if frame(10 * (CLOCK_PER_SEC / 60)):
             self.heroeIndex = (self.heroeIndex+1)%HEROE_N
 
     def updatePAUSED(self):
@@ -1150,7 +1156,7 @@ class Interface():
                 if self.count2 < 10:
                     image = pg.transform.scale(self.heroeSprites[self.heroeIndex], [self.herow, self.heroh])
                     screen.blit(image, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - (672 - self.heropadx)), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - (667- self.heropady))))
-                    self.heroeIndex = (self.heroeIndex+frame(8))%HEROE_N
+                    self.heroeIndex = (self.heroeIndex+frame(8 * (CLOCK_PER_SEC / 60)))%HEROE_N
                     self.count2 += frame(30)
                     if self.heropadx < 670:
                         self.heropadx += 5

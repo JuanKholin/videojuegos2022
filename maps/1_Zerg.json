@@ -18,11 +18,17 @@
         "count": 0,
         "state": 2,
         "building": false,
-        "nombre": "Criadera de Zerg",
+        "nombre": "Criadero de Zerg",
         "funcion": "Base enemiga",
         "x": 20,
         "y": 35,
-        "hp": 2000
+        "hp": 2000,
+        "damageMineralUpCost": 50,
+        "damageGasUpCost": 50,
+        "armorMineralUpCost": 50,
+        "armorGasUpCost": 50,
+        "mineMineralUpCost": 50,
+        "mineGasUpCost": 50
       }
     ],
     "resources": 100,

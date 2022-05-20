@@ -22,7 +22,13 @@
         "funcion": "Base enemiga",
         "x": 20,
         "y": 35,
-        "hp": 200
+        "hp": 200,
+        "damageMineralUpCost": 50,
+        "damageGasUpCost": 50,
+        "armorMineralUpCost": 50,
+        "armorGasUpCost": 50,
+        "mineMineralUpCost": 50,
+        "mineGasUpCost": 50
       }
     ],
     "resources": 100,

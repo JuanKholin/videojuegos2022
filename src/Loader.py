@@ -53,7 +53,7 @@ def loadFromSave(nombre):
 
 def loadkeyShortcuts():
     textFile = open("atajos/atajos.json", "r")
-    print("atajos cargados")
+    #print("atajos cargados")
     data = json.load(textFile)
     keyMap = loadKeyMap(data['keyMap'])
     commandMap = loadCommandMap(data['commandMap'])
@@ -131,7 +131,7 @@ def loadUnits(unitDictionaries, player):
     for u in unitDictionaries:
         if u["clase"] == "terranWorker":
             unit = TerranWorker(player, u["x"], u["y"])
-            print("cargo worker", u['x'], u['y'])
+            #print("cargo worker", u['x'], u['y'])
             unit.load(u["hp"])
             player.addUnits(unit)
         elif u["clase"] == "terranSoldier":
@@ -225,6 +225,13 @@ def loadStructures(structureDictionaries, player, map, raton):
             structure = TerranBarracks(s["x"], s["y"], player, map, s["building"])
         elif s["clase"] == "hatchery":
             structure = Hatchery(s["x"], s["y"], player, map, s["building"], raton)
+            structure.damageMineralUpCost = s["damageMineralUpCost"]
+            structure.damageGasUpCost = s["damageGasUpCost"]
+            structure.armorMineralUpCost = s["armorMineralUpCost"]
+            structure.armorGasUpCost = s["armorGasUpCost"]
+            structure.mineMineralUpCost = s["mineMineralUpCost"]
+            structure.mineGasUpCost = s["mineGasUpCost"]
+            player.setBasePlayer(structure)
         elif s["clase"] == "terranSupplyDepot":
             structure = TerranSupplyDepot(s["x"], s["y"], player, map, s["building"])
         elif s["clase"] == "terranRefinery":
