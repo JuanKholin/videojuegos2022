@@ -6,12 +6,12 @@ from ..Utils import *
 from .Entity import *
 
 WHITE   = (255,255,255)
-GENERATION_TIME = 10
+GENERATION_TIME = 20
 MINERAL_COST = 50
 WIDTH = 6
 HEIGHT = 4
-HP = 200
-CAPACITY = 10
+HP = 500
+CAPACITY = 3
 
 class ZergSupply(Structure):
     TILES_WIDTH = 3

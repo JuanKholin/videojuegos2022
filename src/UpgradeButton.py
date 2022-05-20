@@ -27,9 +27,10 @@ class UpgradeButton():
         self.cartelPad = cartelpad
         self.nextLevel = 1
         
-    def update(self):
-        pass
-        
+    def update(self, mineral, gas):
+        self.costeMineral = mineral
+        self.costeGas = gas
+    
     def draw(self, screen, x, y):
         self.x = x
         self.y = y

@@ -6,8 +6,8 @@ from ..Command import *
 from .Entity import *
 from ..Utils import *
 
-HP = 200
-GENERATION_TIME = 5
+HP = 300
+GENERATION_TIME = 30
 CAPACITY = 0
 
 class TerranRefinery(Structure):

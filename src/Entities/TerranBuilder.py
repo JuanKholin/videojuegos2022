@@ -12,12 +12,19 @@ from ..Command import *
 from .Entity import *
 from ..Utils import *
 
-HP = 1500
+HP = 2000
 GENERATION_TIME = 120
 MINERAL_COST = 400
 LIMIT_MEJORA = 10
 CAPACITY = 10
 VISION_RADIUS = 9
+
+DAMAGE_MINERAL_UP_COST = [30, 60, 100, 150, 200, 250, 250, 250, 250, 300]
+DAMAGE_GAS_UP_COST = [10, 20, 50, 100, 150, 200, 200, 200, 200, 200, 200]
+ARMOR_MINERAL_UP_COST = [30, 60, 100, 150, 200, 250, 250, 250, 250, 300]
+ARMOR_GAS_UP_COST = [10, 20, 50, 100, 150, 200, 200, 200, 200, 200, 200]
+MINE_MINERAL_UP_COST = [30, 60, 100, 150, 200, 250, 250, 250, 250, 300]
+MINE_GAS_UP_COST = [10, 20, 50, 100, 150, 200, 200, 200, 200, 200, 200]
 
 class TerranBuilder(Structure):
     TILES_HEIGHT = 4
@@ -66,12 +73,12 @@ class TerranBuilder(Structure):
         self.paths = []
 
         #MEJORAR LAS UNIDADES
-        self.damageMineralUpCost = 25
-        self.damageGasUpCost = 5
-        self.armorMineralUpCost = 25
-        self.armorGasUpCost = 5
-        self.mineMineralUpCost = 25
-        self.mineGasUpCost = 5
+        self.damageMineralUpCost = DAMAGE_MINERAL_UP_COST[0]
+        self.damageGasUpCost = DAMAGE_GAS_UP_COST[0]
+        self.armorMineralUpCost = ARMOR_MINERAL_UP_COST[0]
+        self.armorGasUpCost = ARMOR_GAS_UP_COST[0]
+        self.mineMineralUpCost = MINE_MINERAL_UP_COST[0]
+        self.mineGasUpCost = MINE_GAS_UP_COST[0]
 
         self.type = BASE
 
@@ -80,8 +87,13 @@ class TerranBuilder(Structure):
         ("ESTOY SIENDO CREADO ", self.toDictionary(self.mapa)['clase'])
 
 
-    #def generateUnit(self, unit):
-    #    pass
+    def updateUpgrade(self):
+        self.damageMineralUpCost = DAMAGE_MINERAL_UP_COST[self.player.dañoUpgrade]
+        self.damageGasUpCost = DAMAGE_GAS_UP_COST[self.player.dañoUpgrade]
+        self.armorMineralUpCost = ARMOR_MINERAL_UP_COST[self.player.armorUpgrade]
+        self.armorGasUpCost = ARMOR_GAS_UP_COST[self.player.armorUpgrade]
+        self.mineMineralUpCost = MINE_MINERAL_UP_COST[self.player.mineUpgrade]
+        self.mineGasUpCost = MINE_GAS_UP_COST[self.player.mineUpgrade]
 
     def getOrder(self):
         if self.state != BuildingState.BUILDING and self.state != BuildingState.COLLAPSING and self.state!= BuildingState.DESTROYED:
@@ -104,20 +116,20 @@ class TerranBuilder(Structure):
                 self.player.resources -= self.damageMineralUpCost
                 self.player.gas -= self.damageGasUpCost
                 self.player.dañoUpgrade += 1
-                self.damageMineralUpCost += 25
-                self.damageGasUpCost += 5
+                self.damageMineralUpCost = DAMAGE_MINERAL_UP_COST[self.player.dañoUpgrade]
+                self.damageGasUpCost = DAMAGE_GAS_UP_COST[self.player.dañoUpgrade]
             elif command_id == CommandId.UPGRADE_SOLDIER_ARMOR and self.player.resources and self.player.gas >= self.armorGasUpCost and self.player.resources >= self.armorMineralUpCost and self.player.armorUpgrade <= LIMIT_MEJORA:
                 self.player.resources -= self.armorMineralUpCost
                 self.player.gas -= self.armorGasUpCost
                 self.player.armorUpgrade += 1
-                self.armorMineralUpCost += 25
-                self.armorGasUpCost += 5
+                self.armorMineralUpCost = ARMOR_MINERAL_UP_COST[self.player.armorUpgrade]
+                self.armorGasUpCost = ARMOR_GAS_UP_COST[self.player.armorUpgrade]
             elif command_id == CommandId.UPGRADE_WORKER_MINING and self.player.resources and self.player.resources >= self.mineMineralUpCost and self.player.gas >= self.mineGasUpCost and self.player.mineUpgrade <= LIMIT_MEJORA:
                 self.player.resources -= self.mineMineralUpCost
                 self.player.gas -= self.mineGasUpCost
                 self.player.mineUpgrade += 1
-                self.mineMineralUpCost += 25
-                self.mineGasUpCost += 5
+                self.mineMineralUpCost = MINE_MINERAL_UP_COST[self.player.mineUpgrade]
+                self.mineGasUpCost = MINE_GAS_UP_COST[self.player.mineUpgrade]
             elif command_id == CommandId.BUILD_BARRACKS and self.player.resources >= TERRAN_BARRACKS_MINERAL_COST:
                 self.raton.building = True
                 #print("mi raton: ", self.raton.id)

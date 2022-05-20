@@ -9,7 +9,7 @@ from .Soldier import *
 from ..Music import *
 
 # Constantes
-HP = 100
+HP = 175
 ATTACK_INFO = [0, 0, 0]
 ATTACK_INFO[DAMAGE_IND] = 12
 ATTACK_INFO[COOLDOWN_IND] = 10

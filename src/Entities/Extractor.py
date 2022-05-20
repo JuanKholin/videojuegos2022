@@ -8,8 +8,8 @@ from ..Command import *
 from ..Utils import *
 from .Entity import *
 
-HP = 200
-GENERATION_TIME = 5
+HP = 300
+GENERATION_TIME = 30
 CAPACITY = 0
 
 class Extractor(Structure):

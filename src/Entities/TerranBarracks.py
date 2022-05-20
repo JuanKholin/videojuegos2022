@@ -10,8 +10,8 @@ from ..Command import *
 from .Entity import *
 from ..Utils import *
 
-HP = 1000
-GENERATION_TIME = 5
+HP = 600
+GENERATION_TIME = 25
 CAPACITY = 0
 
 class TerranBarracks(Structure):

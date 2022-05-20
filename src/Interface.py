@@ -1542,17 +1542,17 @@ class Interface():
             if e == Options.ARMOR_UPGRADE:
                 self.allButton[e].costeMineral = self.player.structureSelected.armorMineralUpCost
                 self.allButton[e].costeGas = self.player.structureSelected.armorGasUpCost
-                self.allButton[e].nextLevel = int(self.player.structureSelected.armorMineralUpCost / 25 - 1)
+                self.allButton[e].nextLevel = self.player.armorUpgrade + 1
                 buttons.append(self.allButton[e])
             elif e == Options.DANYO_UPGRADE:
                 self.allButton[e].costeMineral = self.player.structureSelected.damageMineralUpCost
                 self.allButton[e].costeGas = self.player.structureSelected.damageGasUpCost
-                self.allButton[e].nextLevel = int(self.player.structureSelected.damageMineralUpCost / 25 - 1)
+                self.allButton[e].nextLevel = self.player.dañoUpgrade + 1
                 buttons.append(self.allButton[e])
             elif e == Options.MINE_UPGRADE:
                 self.allButton[e].costeMineral = self.player.structureSelected.mineMineralUpCost
                 self.allButton[e].costeGas = self.player.structureSelected.mineGasUpCost
-                self.allButton[e].nextLevel = int(self.player.structureSelected.mineMineralUpCost / 25 - 1)
+                self.allButton[e].nextLevel = self.player.mineUpgrade + 1
                 buttons.append(self.allButton[e])
             elif e != Options.NULO:
                 buttons.append(self.allButton[e])

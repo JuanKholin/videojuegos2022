@@ -8,10 +8,9 @@ from ..Command import *
 from .Entity import *
 from ..Utils import *
 
-HP = 200
-GENERATION_TIME = 5
-CAPACITY = 400
-CAPACITY = 5
+HP = 500
+GENERATION_TIME = 20
+CAPACITY = 3
 
 
 class TerranSupplyDepot(Structure):

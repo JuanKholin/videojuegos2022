@@ -75,6 +75,9 @@ class Structure(Entity.Entity):
             self.shadow = self.shadows[self.index]
         else:
             self.shadow = None
+            
+    def updateUpgrade(self):
+        pass
 
 
     ################

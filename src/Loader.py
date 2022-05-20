@@ -237,6 +237,7 @@ def loadStructures(structureDictionaries, player, map, raton):
         structure.state = s['state']
         structure.generationCount = s['count']
         player.addStructures(structure)
+        structure.updateUpgrade()
 
 #en el fichero la clave es una string, hay que hacer uno nuevo con clave numerica
 def loadKeyMap(stringKeyKeyMap):
