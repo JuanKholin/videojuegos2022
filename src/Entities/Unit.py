@@ -632,8 +632,6 @@ class Unit(Entity):
         if self.siguienteObjetivo != None:
             self.paths = calcPath(self.getPosition(), self.getTile(), self.siguienteObjetivo, self.mapa)
             self.siguienteObjetivo = None
-            if len(self.paths) > 0:
-                self.changeObjectiveTile()
         if len(self.paths) == 0:
             if (self.siendoAtacado == True) and not self.runningAway:
                 self.attack(self.atacante)
