@@ -67,6 +67,8 @@ class Unit(Entity):
 
         self.enable = True
 
+        self.siguienteObjetivo = None
+
         self.returnx = 0
         self.returny = 0
 
@@ -88,22 +90,19 @@ class Unit(Entity):
             self.siendoAtacado = False
             if objectiveTile.type == OBSTACLE:
                 objectiveTile = self.mapa.getTileCercana(self.getTile(), objectiveTile)
-            elif objectiveTile.type != EMPTY and objectiveTile.type != UNIT:
+            elif (objectiveTile.type != EMPTY) and (objectiveTile.type != UNIT):
                 #print("AAAAAAAAAAAAAAAAAAAAAAAAA")
                 tilesRound = self.mapa.getEntityTilesVecinas(objectiveTile, self.getTile())
                 objectiveTile = tilesRound[0]
                 for tile in tilesRound:
                     if tile.heur(self.getTile()) < objectiveTile.heur(self.getTile()):
                         objectiveTile = tile
-            self.mapa.setLibre(self.occupiedTile)
-            self.paths = calcPath(self.getPosition(), self.getTile(), objectiveTile, self.mapa)
-            self.mapa.setVecina(self.occupiedTile, self.id)
-            self.occupiedTile.setOcupante(self)
-            if len(self.paths) > 0 and (self.state != UnitState.ORE_TRANSPORTING and self.state != UnitState.GAS_TRANSPORTING) :
-                self.changeToMoving(self.paths)
+            if len(self.paths) == 0:
+                self.paths = calcPath(self.getPosition(), self.getTile(), objectiveTile, self.mapa)
+                self.changeToMoving()
             else:
-                self.updateOwnSpace()
-                self.changeToStill()
+                self.siguienteObjetivo = objectiveTile
+
 
     # Indica a la unidad que ataque al objetivo seleccionado, si se encuentra un
     # obstaculo de camino lo esquivara y si el objetivo se desplaza este le seguira
@@ -433,7 +432,7 @@ class Unit(Entity):
 
 
     # Pasa a estado moverse
-    def changeToMoving(self, paths):
+    def changeToMoving(self):
         #print("MOVING", self.x, self.y, paths.__len__())
         if self.state == UnitState.ATTACKING:
             self.runningAway = True
@@ -441,7 +440,7 @@ class Unit(Entity):
         self.attackedOne = None
         self.changeObjectiveTile()
 
-        actualPath = paths[0]
+        actualPath = self.paths[0]
 
         if actualPath.angle < 0:
             self.angle = -actualPath.angle
@@ -630,6 +629,11 @@ class Unit(Entity):
 
     def finishPath(self):
         self.paths.pop(0)
+        if self.siguienteObjetivo != None:
+            self.paths = calcPath(self.getPosition(), self.getTile(), self.siguienteObjetivo, self.mapa)
+            self.siguienteObjetivo = None
+            if len(self.paths) > 0:
+                self.changeObjectiveTile()
         if len(self.paths) == 0:
             if (self.siendoAtacado == True) and not self.runningAway:
                 self.attack(self.atacante)
@@ -702,7 +706,7 @@ class Unit(Entity):
     def changeObjectiveTile(self):
         actualPath = self.paths[0]
         objectiveTile = self.mapa.getTile(actualPath.posFin[0], actualPath.posFin[1])
-        #print(objectiveTile.tileid, self.getTile().tileid)
+        print(objectiveTile.tileid, self.getTile().tileid)
         if objectiveTile.type == EMPTY or (objectiveTile.type == UNIT and objectiveTile.id == self.id):
             self.mapa.setVecina(objectiveTile, self.id)
             objectiveTile.setOcupante(self)
@@ -719,7 +723,6 @@ class Unit(Entity):
                 self.changeObjectiveTile()
             else:
                 self.resolverObjetivoOcupado()
-
     def isReadyToFight(self):
         return (self.state != UnitState.ATTACKING) and (self.hp > 0)
 

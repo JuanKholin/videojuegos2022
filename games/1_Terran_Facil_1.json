@@ -20,8 +20,8 @@
         "x": 0,
         "y": 0,
         "disabled": true,
-        "returnx": 1188.6362041388445,
-        "returny": 283.10117306346956,
+        "returnx": 1191.0501002837889,
+        "returny": 282.24299707653836,
         "hp": 60
       }
     ],
@@ -58,7 +58,7 @@
       }
     ],
     "resources": 20,
-    "gas": 60,
+    "gas": 80,
     "da\u00f1oUpgrade": 0,
     "armorUpgrade": 0,
     "mineUpgrade": 0,
@@ -70,8 +70,8 @@
         "clase": "drone",
         "nombre": "Drone",
         "funcion": "Unidad obrera",
-        "x": 24,
-        "y": 25,
+        "x": 17,
+        "y": 23,
         "disabled": false,
         "returnx": 0,
         "returny": 0,
@@ -81,8 +81,8 @@
         "clase": "drone",
         "nombre": "Drone",
         "funcion": "Unidad obrera",
-        "x": 23,
-        "y": 33,
+        "x": 26,
+        "y": 32,
         "disabled": false,
         "returnx": 0,
         "returny": 0,
@@ -189,7 +189,7 @@
         "count": 0
       }
     ],
-    "resources": 10,
+    "resources": 60,
     "gas": 0,
     "da\u00f1oUpgrade": 0,
     "armorUpgrade": 0,
@@ -3597,7 +3597,7 @@
     },
     {
       "clase": "geyser",
-      "capacidad": 740,
+      "capacidad": 720,
       "x": 30,
       "y": 5,
       "nombre": "Geyser",
