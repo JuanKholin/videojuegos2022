@@ -1462,3 +1462,10 @@ MAPA2 = [[300, 301, 302, 303, 304, 305, 306, 307, 300, 301,300, 301, 302, 303, 3
 
 VISION_RADIUS = 7
 VISION_RADIUS_PIXELS = VISION_RADIUS * TILE_WIDTH
+
+def infoPartida(info, x, y, pady, screen, size):
+    info = info.split(";")
+    pad = 0
+    for linea in info:
+        muestra_texto(screen, 'monotypecorsiva', linea, WHITE, size, [x , y + pad*pady])
+        pad += 1

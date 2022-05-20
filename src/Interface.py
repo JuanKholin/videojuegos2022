@@ -1051,11 +1051,14 @@ class Interface():
                     if (b['nombre'] == self.selectedMap or b['nombre'] == self.selectedDif['nombre']
                         or b['nombre'] == self.selectedRaza['nombre']):
                         pg.draw.rect(screen, GREEN, b['rect'], 3)
-
-
-            muestra_texto(screen, str('monotypecorsiva'), str(self.selectedMap), WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-740), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-170)))
-            muestra_texto(screen, str('monotypecorsiva'), self.selectedDif['nombre'], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-810), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-275)))
-            muestra_texto(screen, str('monotypecorsiva'), self.selectedRaza['nombre'], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-745), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-390)))
+            if self.selectedMap == "1":
+                infoPartida("-ENTRE MURALLAS-;;Mapa basico con dos bases;separadas por muros.;Cada base cuenta con;los recursos necesarios para;desarrollarse, pero entre;las bases ¡Se;encuentran mas recursos!;Tendras que pelear con tu rival;para ver quien se hace con ellos.", Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-740) - 130, Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-170) - 30, 30, screen, 30)
+            elif self.selectedMap == "2":
+                infoPartida("-DISPUTA SIN FRONTERAS-;;Mapa mas estrecho y pequeño;con una base arriba y otra abajo.;Esta vez no hay muros por lo;que tendras que ser mas agresivo.;", Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-740) - 130, Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-170) - 30, 30, screen, 30)
+            elif self.selectedMap == "3":
+                infoPartida("-DISPUTA POR EL GAS-;;Identico al primer mapa,;con la diferencia de que;en este mapa solo;hay un geyser en el medio del mapa.;¡Tendras que pelearte con tu rival;por este valioso recurso;si quieres derrotatle!", Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-740) - 130, Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-170) - 30, 30, screen, 30)
+            elif self.selectedMap == "4":
+                infoPartida("-GUERRA CIVIL-;;Identico al segundo mapa,;pero en este caso solo hay Zergs.;En este mapa no hay diferencias;raciales, solo el mas inteligente;sobrevivira.", Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-740) - 130, Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-170) - 30, 30, screen, 30)
         elif Utils.state == System_State.SETTINGS:
             screen.blit(self.settings, [Utils.ScreenWidth/2 - self.settings.get_width()/2, Utils.ScreenHeight/2 - self.settings.get_height()/2])
             #if self.atajosOSonido == 0: #atajos
