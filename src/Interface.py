@@ -409,7 +409,7 @@ class Interface():
                 if not self.ajustesSonidoPress and press and Raton.collides(iniPos[0], iniPos[1], self.ajustesSonidoRect):
                     self.ajustesSonidoPress = True
                 elif self.mouse.getClick() and self.ajustesSonidoPress and Raton.collides(endPos[0], endPos[1], self.ajustesSonidoRect):
-                    #print("Seleccionado exit")
+                    print("Seleccionado SETTINGS")
                     Utils.state2 = System_State.SETTINGS
                     #stopMusic()
                     self.ajustesSonidoPress = False
@@ -422,7 +422,7 @@ class Interface():
                 if not self.ajustesAtajosPress and press and Raton.collides(iniPos[0], iniPos[1], self.ajustesAtajosRect):
                     self.ajustesAtajosPress = True
                 elif self.mouse.getClick() and self.ajustesAtajosPress and Raton.collides(endPos[0], endPos[1], self.ajustesAtajosRect):
-                    #print("Seleccionado exit")
+                    print("Seleccionado Seleccionado SETTINGS")
                     Utils.state = System_State.SETTINGS
                     stopMusic()
                     self.ajustesAtajosPress = False
@@ -1097,7 +1097,7 @@ class Interface():
     def drawSettingsAtajos(self, screen):
         j = 0
         stringKeyItems = self.keyButtons.items()
-        ##print(COMMAND_TO_TEXT)
+        print(COMMAND_TO_TEXT)
         for i in stringKeyItems:
             yActual = self.keyButtons[j]["rect"].y
             if yActual < Utils.ScreenHeight - Utils.ScreenHeight*0.195 and  yActual > Utils.ScreenHeight*0.195:

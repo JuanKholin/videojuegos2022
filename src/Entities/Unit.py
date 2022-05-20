@@ -242,16 +242,16 @@ class Unit(Entity):
             if(self.id == 2):
                 #print("ATACANDO")
                 pass
-            if self.attackedOne.getHP() > 0:
+            #if self.attackedOne.getHP() > 0:
                 '''tileActual = self.getTile()
                 enemyTile = self.attackedOne.getTile()'''
                 #print("Estoy en: ", tileActual.tileid, "y el enemigo en: ", enemyTile.tileid)
                 #print(int(math.hypot(self.x - self.attackedOne.x, self.y - self.attackedOne.y)) )
-                if len(self.paths) > 0:
-                    self.updateAttackingRoute()
-                else:
-                    self.updateAttackInRange()
-            else: # Se murio el objetivo, pasa a estar quieto
+            if len(self.paths) > 0:
+                self.updateAttackingRoute()
+            else:
+                self.updateAttackInRange()
+            '''else: # Se murio el objetivo, pasa a estar quieto
                 self.attackedOne = None
                 enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
                 #print(type(enemy))
@@ -260,7 +260,7 @@ class Unit(Entity):
                     self.attack(enemy)
                 else:
                     #print("no hay naide")
-                    self.changeToStill()
+                    self.changeToStill()'''
 
     # Aplica un frame a la unidad que esta minando
     # El minado es especifico de worker por lo que lo implementa worker
@@ -348,19 +348,30 @@ class Unit(Entity):
             if actualPath.dist > 0: # Aun queda trecho
                 self.updatePath(actualPath)
             else: # Se acaba este camino
-                ownTile = self.getTile()
-                #print(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery), self.range)
-                if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
-                    self.updateOwnSpace()
-                    #print(type(self), "estoy en rango")
-                    self.updateAttackInRange()
-                else:
-                    lastPath = self.paths[len(self.paths) - 1]
-                    lastTile = self.mapa.getTile(lastPath.posFin[0], lastPath.posFin[1])
-                    if lastTile != self.attackedOne.getTile():
-                        self.recalcAttackPaths()
+                if self.attackedOne.getHP() > 0:
+                    ownTile = self.getTile()
+                    #print(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery), self.range)
+                    if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
+                        self.updateOwnSpace()
+                        #print(type(self), "estoy en rango")
+                        self.updateAttackInRange()
                     else:
-                        self.finishPath()
+                        lastPath = self.paths[len(self.paths) - 1]
+                        lastTile = self.mapa.getTile(lastPath.posFin[0], lastPath.posFin[1])
+                        if lastTile != self.attackedOne.getTile():
+                            self.recalcAttackPaths()
+                        else:
+                            self.finishPath()
+                else: # Se murio el objetivo, pasa a estar quieto
+                    self.attackedOne = None
+                    enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
+                    #print(type(enemy))
+                    if enemy != None:
+                        #print("ataco a otro")
+                        self.attack(enemy)
+                    else:
+                        #print("no hay naide")
+                        self.changeToStill()
 
 
             self.count += 1

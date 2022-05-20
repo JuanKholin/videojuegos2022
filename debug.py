@@ -63,7 +63,7 @@ def procesarInput():
 
 
 def setEntity(player, ai):
-    scv = Broodling(player, 10, 3)
+    scv = Firebat(player, 10, 3)
     player.addUnits(scv)
     scv = TerranSoldier(player, 11, 3)
     player.addUnits(scv)
@@ -200,6 +200,8 @@ def update():
         escena.interfaz.update(escena,raton, escena.camera)
     elif getGameState() == System_State.NEWGAME:
         escena.interfaz.update(escena,raton, escena.camera)
+    elif  getGameState() == System_State.SETTINGS:
+        escena.interfaz.update(escena,raton, escena.camera)
     else: #STATE == System_State.EXIT:
         pg.quit()
         sys.exit()
@@ -211,7 +213,8 @@ def draw():
         escena.draw(screen)
     elif Utils.state == System_State.PAUSED:
         escena.draw(screen)
-    elif Utils.state == System_State.GAMESELECT or Utils.state == System_State.NEWGAME:
+    elif (Utils.state == System_State.GAMESELECT or Utils.state == System_State.NEWGAME
+    or Utils.state == System_State.SETTINGS):
         escena.interfaz.draw(screen, escena.camera)
     raton.draw(screen, escena.camera)
     #aux(screen)

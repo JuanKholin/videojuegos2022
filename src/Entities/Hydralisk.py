@@ -21,9 +21,9 @@ FACES = 8
 FRAME = 0
 PADDING = 110
 WEIGHT_PADDING = 195
-HEIGHT_PADDING = 170
+HEIGHT_PADDING = 130
 X_PADDING = 20 * HYDRALISK_SCALE - 10
-Y_PADDING = 20 * HYDRALISK_SCALE + 15
+Y_PADDING = 20 * HYDRALISK_SCALE + 0
 
 class Hydralisk(Soldier):
     # Pre: xIni e yIni marcan posiciones del mapa, (ej: (3, 2) se refiere a la posicion de
