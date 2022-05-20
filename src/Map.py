@@ -66,7 +66,7 @@ class Map():
         for c in centers:
             for i in range(c[1] - VISION_RADIUS, c[1] + VISION_RADIUS):
                 for j in range(c[0] - VISION_RADIUS, c[0] + VISION_RADIUS):
-                    if ((i >= 0 and j >= 0) and (i < maxI and j < maxJ)
+                    if ((i >= 0 and j >= 0) and (i < maxI+1 and j < maxJ+1)
                             and ((i - (c[1]))**2 + ((j - (c[0]))**2)) < VISION_RADIUS**2):
                         self.mapa[i][j].visible = True
                         self.mapa[i][j].oscura = False
@@ -76,8 +76,8 @@ class Map():
         for i in range(h): #Recorro el mapa  por las filas
             for j in range(w): #En la fila i recorro las columnas
                 self.mapa[i + int(y / self.th)][j + int(x / self.tw)].type = 1
-    
-    def setObstacle(self, tile):    
+
+    def setObstacle(self, tile):
         tile.type = 1
 
     def addOre(self, x, y):
@@ -221,7 +221,7 @@ class Map():
 
     #Pone la tile como vecina
     def setVecina(self, tile, id):
-        
+
         if tile.type == EMPTY:
             tile.setOcupada(id)
         else:
@@ -245,7 +245,7 @@ class Map():
         else:
             self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type = EMPTY
             self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].ocupante = None
-    
+
     #Pone las tiles como libre dada la esquina inferior derecha de un rectangulo y su altura y su anchura
     def setLibres(self, structure, tile, width, height):
         #print("CAGO EN DIOS")
@@ -415,7 +415,7 @@ class Map():
             tileCercana = self.getTileOcupadaCercana(tileIni, tileCercana)
         return tileCercana
 
-        
+
 
 
     def Astar(self, tileIni, tileObj):
@@ -486,7 +486,7 @@ class Map():
         pathReturn = []
         if (nodosAbiertos.__len__() == 0) or broken:
             #print("camino no encontrado", tileObj.tileid)
-            
+
             #input()
             pass
         else:
@@ -772,7 +772,7 @@ class Map():
     # alrededor de la tile tile
     def findNearbyGeyser(self, tile, distance):
         x = tile.x / 40
-        y = tile.y / 40 
+        y = tile.y / 40
         for i in range(2 * distance + 1):
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
@@ -788,7 +788,7 @@ class Map():
     def findCrystals(self, tile, distance):
         crystalsFound = set()
         x = tile.x / 40
-        y = tile.y / 40 
+        y = tile.y / 40
         for i in range(2 * distance + 1):
             col = int(i - distance + x)
             for j in range(2 * distance + 1):
