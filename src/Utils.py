@@ -415,6 +415,7 @@ RESOURCES_COUNT_X = 300
 
 #---
 HEROE_PATH = "SPRITE/Heroes/Terran/Alexei Stukov/taxfid000"
+HEROE2_PATH = "SPRITE/Heroes/Zerg/Hunter Killer/uhufid000"
 HEROE_N = 10
 #----
 
