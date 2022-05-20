@@ -139,6 +139,7 @@ class Escena():
                 elif command.id == CommandId.RETURN_GAME:
                     self.interfaz.helpPage = 0
                     setGameState2(System_State.PLAYING)
+                    self.camera.update()
                 elif command.id == CommandId.MOVE:
                     #for unit in self.p1.unitsSelected:
                      #   self.mapa.setLibre(unit.getTile())

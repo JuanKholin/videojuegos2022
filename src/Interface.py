@@ -458,7 +458,7 @@ class Interface():
         self.borrarPartidaRect = pg.Rect(Utils.ScreenWidth/2 - BORRAR_PARTIDA_POS[0], Utils.ScreenHeight/2 - BORRAR_PARTIDA_POS[1], 250, 40)
         self.scrollBarTopRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0] - 420, Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1] + 20, 30, 30)
         self.scrollBarRectangle = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_RECT_POS[0]- 420, Utils.ScreenHeight/2 + 13 - SCROLL_BAR_RECT_POS[1], SCROLL_BAR_RECT_SIZE[0], SCROLL_BAR_RECT_SIZE[1] - 57)
-        self.scrollBarBotRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0] - 420, Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1] -55, 30, 30)
+        self.scrollBarBotRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0] - 420, Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1] - 55, 30, 30)
 
         aux = []
         pad = 0
@@ -1023,7 +1023,7 @@ class Interface():
             j = 0
             for i in self.partidas:
                 yActual = self.partidas[j]["rect"].y
-                if yActual < Utils.ScreenHeight - Utils.ScreenHeight*0.3 and  yActual > Utils.ScreenHeight*0.265:
+                if yActual < Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 580) and  yActual > Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 200):
                     if self.mouse.isCollide(i['rect']):
                         pg.draw.rect(screen, GREEN2, i['rect'], 1)
                     if i == self.selectedPartida:
