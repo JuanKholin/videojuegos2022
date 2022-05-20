@@ -12,6 +12,7 @@ DEBBUG = True
 BGM_VOLUME = 0.2
 SOUND_VOLUME = 0.2
 haveBGM = False
+sonido = False
 
 class System_State(Enum):
     MAINMENU = auto()
