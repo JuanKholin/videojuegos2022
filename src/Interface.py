@@ -209,9 +209,9 @@ class Interface():
         allButton[Options.GENERATE_WORKER_TERRAN] = aux
         aux = Button.Button(BUTTON_PATH + "soldier" + ".bmp", CommandId.GENERATE_T1, BUTTON_PATH + "construirConMineral.png", "Entrenar Marine", 5, TERRAN_T1_MINERAL_COST)
         allButton[Options.GENERATE_T1_TERRAN] = aux
-        aux = Button.Button(BUTTON_PATH + "firebat" + ".bmp", CommandId.GENERATE_T2, BUTTON_PATH + "construirConMineralYGas.png", "Entrenar Firebat", 5, TERRAN_T2_MINERAL_COST, 5, 25)
+        aux = Button.Button(BUTTON_PATH + "firebat" + ".bmp", CommandId.GENERATE_T2, BUTTON_PATH + "construirConMineralYGas.png", "Entrenar Firebat", 5, TERRAN_T2_MINERAL_COST, TERRAN_T2_GAS_COST, 25)
         allButton[Options.GENERATE_T2_TERRAN] = aux
-        aux = Button.Button(BUTTON_PATH + "goliath" + ".bmp", CommandId.GENERATE_T3, BUTTON_PATH + "construirConMineralYGas.png", "Construir Goliath", 5, TERRAN_T3_MINERAL_COST, 25, 95)
+        aux = Button.Button(BUTTON_PATH + "goliath" + ".bmp", CommandId.GENERATE_T3, BUTTON_PATH + "construirConMineralYGas.png", "Construir Goliath", 5, TERRAN_T3_MINERAL_COST, TERRAN_T3_GAS_COST, 95)
         allButton[Options.GENERATE_T3_TERRAN] = aux
 
         #Terran estructuras
@@ -227,9 +227,9 @@ class Interface():
         allButton[Options.GENERATE_WORKER_ZERG] = aux
         aux = Button.Button(BUTTON_PATH + "zergling" + ".bmp", CommandId.GENERATE_T1,BUTTON_PATH + "construirConMineralZerg.png", "Engendrar Zergling", 5, ZERG_T1_MINERAL_COST)
         allButton[Options.GENERATE_T1_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "broodling" + ".bmp", CommandId.GENERATE_T2,BUTTON_PATH + "construirConMineralYGasZerg.png", "Engendrar Broodling", 5, ZERG_T2_MINERAL_COST, 5, 25)
+        aux = Button.Button(BUTTON_PATH + "broodling" + ".bmp", CommandId.GENERATE_T2,BUTTON_PATH + "construirConMineralYGasZerg.png", "Engendrar Broodling", 5, ZERG_T2_MINERAL_COST, ZERG_T2_GAS_COST, 25)
         allButton[Options.GENERATE_T2_ZERG] = aux
-        aux = Button.Button(BUTTON_PATH + "hydralisk" + ".bmp", CommandId.GENERATE_T3,BUTTON_PATH + "construirConMineralYGasZerg.png", "Engendrar Hydralisk",  5, ZERG_T3_MINERAL_COST, 25, 95)
+        aux = Button.Button(BUTTON_PATH + "hydralisk" + ".bmp", CommandId.GENERATE_T3,BUTTON_PATH + "construirConMineralYGasZerg.png", "Engendrar Hydralisk",  5, ZERG_T3_MINERAL_COST, ZERG_T3_GAS_COST, 95)
         allButton[Options.GENERATE_T3_ZERG] = aux
 
         #Zerg estructuras
@@ -268,7 +268,7 @@ class Interface():
         #mejoras
         aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "danyoUpgrade" + ".png", CommandId.UPGRADE_SOLDIER_DAMAGE,BUTTON_PATH + "cartelUpgrade.bmp", "Mejorar daño;de las unidades", 5, 5)
         allButton[Options.DANYO_UPGRADE] = aux
-        aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "mineUpgrade" + ".png", CommandId.UPGRADE_WORKER_MINING,BUTTON_PATH + "cartelUpgrade.bmp", "Reducir tiempo de;minado de los VCE", 5, 50)
+        aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "mineUpgrade" + ".png", CommandId.UPGRADE_WORKER_MINING,BUTTON_PATH + "cartelUpgrade.bmp", "Reducir tiempo de;minado de los trabajadores", 5, 50)
         allButton[Options.MINE_UPGRADE] = aux
         aux = UpgradeButton.UpgradeButton(BUTTON_PATH + "armorUpgrade" + ".png", CommandId.UPGRADE_SOLDIER_ARMOR,BUTTON_PATH + "cartelUpgrade.bmp", "Mejorar blindaje;de las unidades", 5, 120)
         allButton[Options.ARMOR_UPGRADE] = aux
@@ -382,9 +382,9 @@ class Interface():
                     self.singlePress = True
                 elif self.mouse.getClick() and self.singlePress and Raton.collides(endPos[0], endPos[1], self.singleRect):
                     #print("Seleccionado single player")
-                    #Utils.state = System_State.MAP1
+                    Utils.state = System_State.MAP1
                     self.loadPartidas()
-                    Utils.state = System_State.GAMESELECT
+                    #Utils.state = System_State.GAMESELECT
                     #stopMusic()
                     self.singlePress = False
 

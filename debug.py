@@ -63,7 +63,7 @@ def procesarInput():
 
 
 def setEntity(player, ai):
-    scv = Goliath(player, 10, 3)
+    scv = Broodling(player, 10, 3)
     player.addUnits(scv)
     scv = TerranSoldier(player, 11, 3)
     player.addUnits(scv)
@@ -295,7 +295,7 @@ camera = Camera(0, 0, Utils.ScreenHeight - 160, Utils.ScreenWidth)
 
 
 raton = Raton.Raton(player1, player2, mapa)
-p1Interface = Interface(player1, player2, raton)
+p1Interface = Interface(player1, player2, raton, keyMap, commandMap)
 raton.addInterface(p1Interface)
 if Utils.DEBBUG == False:
     aI = AI(player2, Race.TERRAN, HARD)

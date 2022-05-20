@@ -13,7 +13,7 @@ MINERAL_COST = 50
 WIDTH = 6
 HEIGHT = 4
 HP = 200
-CAPACITY = 10
+CAPACITY = 0
 
 class ZergBarracks(Structure):
     TILES_HEIGHT = 3

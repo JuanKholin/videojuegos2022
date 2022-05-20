@@ -22,9 +22,9 @@ FACES = 8
 FRAME = 0
 PADDING = 10
 WEIGHT_PADDING = 50
-HEIGHT_PADDING = 50
+HEIGHT_PADDING = 30
 X_PADDING = 20 * BROODLING_SCALE - 20
-Y_PADDING = 20 * BROODLING_SCALE - 10
+Y_PADDING = 20 * BROODLING_SCALE - 20
 
 class Broodling(Soldier):
     # Pre: xIni e yIni marcan posiciones del mapa, ej: 3 y 2

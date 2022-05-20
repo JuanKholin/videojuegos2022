@@ -165,7 +165,7 @@ class Unit(Entity):
         if self.state != UnitState.DEAD:
             r = self.getRect()
             if DEBBUG:
-                pg.draw.rect(screen, BLACK, pg.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h), 1)
+                pg.draw.rect(screen, WHITE, pg.Rect(r.x - camera.x, r.y  - camera.y, r.w, r.h), 1)
             drawPos = self.getDrawPosition()
             if self.clicked:
                 pg.draw.ellipse(screen, GREEN, [r.x - camera.x, r.y + (0.7*r.h)- camera.y,r.w , 0.3*r.h], 2)
@@ -768,7 +768,6 @@ class Unit(Entity):
     def toDictionary(self, map):
         pos = self.getPosition()
         x, y = map.getTileIndex(pos[0], pos[1])
-        print(x,y)
         return {
             "x": x,
             "y": y,

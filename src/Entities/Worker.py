@@ -201,8 +201,11 @@ class Worker(Unit):
                     self.updateMovingImage()
             else: # Se acaba este camino
                 self.paths.pop(0)
-                if len(self.paths) != 0:
-                    self.changeObjectiveTile()
+                if (self.siendoAtacado == True) and not self.runningAway:
+                    self.attack(self.atacante)
+                else:              
+                    if len(self.paths) != 0:
+                        self.changeObjectiveTile()
     
     def updateExtractingRoute(self):
         if len(self.paths) > 0:
@@ -330,36 +333,58 @@ class Worker(Unit):
     def finishOrePath(self):
         if len(self.paths) > 0:
             self.paths.pop(0)
-        if len(self.paths) > 0:
+        if len(self.paths) == 0:
+            if (self.siendoAtacado == True) and not self.runningAway:
+                self.attack(self.atacante)
+            else:
+                self.changeToStill()
+        elif len(self.paths) > 0:
             self.changeObjectiveTile() 
         else: # PUEDE QUE NO 
-            tilesCasa = self.tilesCasa(self.getTile())
-            if self.getTile() in tilesCasa: # He entregado sino me quedo en el sitio
-                #print(self.resource.capacity)
-                if self.resource.capacity <= 0:
-                    self.player.resources += self.cantidadMinada
-                    #print("cambiamos a still")
-                    self.changeToStill()
-                else:
-                    #Tengo que volver, calculo el camino a minar
-                    self.player.resources += self.cantidadMinada
-                    self.changeToMining(self.resource)
+            if (self.siendoAtacado == True) and not self.runningAway:
+                #print("me atacan")
+                self.attack(self.atacante)
+                self.siendoAtacado = False
+                #self.changeObjectiveTile()
+            else:
+                tilesCasa = self.tilesCasa(self.getTile())
+                if self.getTile() in tilesCasa: # He entregado sino me quedo en el sitio
+                    #print(self.resource.capacity)
+                    if self.resource.capacity <= 0:
+                        self.player.resources += self.cantidadMinada
+                        #print("cambiamos a still")
+                        self.changeToStill()
+                    else:
+                        #Tengo que volver, calculo el camino a minar
+                        self.player.resources += self.cantidadMinada
+                        self.changeToMining(self.resource)
                         
                                    
 
     def finishGasPath(self):
         if len(self.paths) > 0:
             self.paths.pop(0)
-        if len(self.paths) > 0:
+        if len(self.paths) == 0:
+            if (self.siendoAtacado == True) and not self.runningAway:
+                self.attack(self.atacante)
+            else:
+                self.changeToStill()
+        elif len(self.paths) > 0:
             self.changeObjectiveTile() 
         else: # PUEDE QUE NO
-            tilesCasa = self.tilesCasa(self.getTile())
-            if self.getTile() in tilesCasa: # He entregado sino me quedo en el sitio
-                #print("Tengo que volver siempre, TRABAJO DE POR VIDA :D")
-                self.player.gas += self.cantidadMinada
-                self.paths = []
+            if (self.siendoAtacado == True) and not self.runningAway:
+                #print("me atacan")
+                self.attack(self.atacante)
+                self.siendoAtacado = False
+                #self.changeObjectiveTile()
+            else:
+                tilesCasa = self.tilesCasa(self.getTile())
+                if self.getTile() in tilesCasa: # He entregado sino me quedo en el sitio
+                    #print("Tengo que volver siempre, TRABAJO DE POR VIDA :D")
+                    self.player.gas += self.cantidadMinada
+                    self.paths = []
 
-                self.changeToExtracting(self.resource)
+                    self.changeToExtracting(self.resource)
                        
             
     
@@ -402,25 +427,31 @@ class Worker(Unit):
     def finishMiningPath(self):
         self.paths.pop(0)
         if len(self.paths) == 0: #PUEDE QUE NO
-            tilesCasa = self.tilesResource(self.getTile())
-            if self.getTile() in tilesCasa: # PONERSE A MINAR
-                #print("Hay que ponerse a minar")
-                self.startTimeMining = getGlobalTime()
-                xCristal, yCristal = self.cristal.getCenter()
-                posicionActual = self.getPosition()
-                self.angle = math.atan2(yCristal - posicionActual[1], xCristal - posicionActual[0])
-                if self.angle < 0:
-                    self.angle = -self.angle
-                else:
-                    self.angle = 2 * math.pi - self.angle
-                self.miningAngle = self.angle
-                self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
-                self.changeToMining()
+            if (self.siendoAtacado == True) and not self.runningAway:
+                self.attack(self.atacante)
             else:
-                self.changeToStill()
-                
+                tilesCasa = self.tilesResource(self.getTile())
+                if self.getTile() in tilesCasa: # PONERSE A MINAR
+                    #print("Hay que ponerse a minar")
+                    self.startTimeMining = getGlobalTime()
+                    xCristal, yCristal = self.cristal.getCenter()
+                    posicionActual = self.getPosition()
+                    self.angle = math.atan2(yCristal - posicionActual[1], xCristal - posicionActual[0])
+                    if self.angle < 0:
+                        self.angle = -self.angle
+                    else:
+                        self.angle = 2 * math.pi - self.angle
+                    self.miningAngle = self.angle
+                    self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
+                    self.changeToMining()
+                else:
+                    self.changeToStill()
+                    
         else:
-            self.changeObjectiveTile()
+            if (self.siendoAtacado == True) and not self.runningAway:
+                self.attack(self.atacante)
+            else:
+                self.changeObjectiveTile()
 
     def tilesResource(self, tileActual):
         rect = self.resource.getRect()

@@ -103,6 +103,15 @@ class Extractor(Structure):
             ok = False
         #print(ok)
         return ok
+    
+    def changeToDestroyed(self):
+        #print("DESTROYED ", self.x, " ", self.y)
+        self.state = BuildingState.DESTROYED
+        self.index = 0
+        self.mapa.setLibre(self.getTile())
+        self.resource.setEnable()
+        self.clicked = False
+        self.player.structures.remove(self)
 
     def buildProcess(self):
         gas = (self.mapa.getTile(self.x, self.y)).ocupante

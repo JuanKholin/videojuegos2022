@@ -91,7 +91,10 @@ class Player():
                     elif param[i]['order'] == CommandId.ATTACK:
                         if self.unitsSelected[i].state == UnitState.STILL or self.unitsSelected[i].state == UnitState.ATTACKING:
                             self.unitsSelected[i].attack(param[i]['attackedOne'])
+                        elif (self.unitsSelected[i].state == UnitState.MINING or self.unitsSelected[i].state == UnitState.EXTRACTING) and self.unitsSelected[i].paths.__len__() == 0:
+                            self.unitsSelected[i].attack(param[i]['attackedOne'])
                         else:
+                            print("aaaaaa")
                             self.unitsSelected[i].siendoAtacado = True
                             self.unitsSelected[i].atacante = param[i]['attackedOne']
                     else:
