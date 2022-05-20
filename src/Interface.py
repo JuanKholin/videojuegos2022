@@ -3,8 +3,7 @@ from tkinter import W
 from token import OP
 from turtle import xcor
 import pygame as pg
-
-from os import listdir
+from os import listdir, remove
 from os.path import isfile, join
 
 from . import Player, Command, Utils, Raton, Button, Upgrade, UpgradeButton, Button0
@@ -40,12 +39,16 @@ class Interface():
         self.aceptarRect = pg.Rect(ACEPTAR_POS[0], ACEPTAR_POS[1], ACEPTAR_RECT[0], ACEPTAR_RECT[1])
         self.aceptarNoPulsabeSurf = pg.Surface(ACEPTAR_RECT, pg.SRCALPHA)
         self.aceptarNoPulsabeSurf.fill((0,0,0,128))
+        self.borrarNoPulsabeSurf = pg.Surface(ACEPTAR_RECT, pg.SRCALPHA)
+        self.borrarNoPulsabeSurf.fill((0,0,0,128))
         self.cancelarRect = pg.Rect(CANCELAR_POS[0], CANCELAR_POS[1], 250, 40)
         self.nuevaPartidaRect = pg.Rect(NUEVA_PARTIDA_POS[0], NUEVA_PARTIDA_POS[1], 250, 40)
+        self.borrarPartidaRect = pg.Rect(BORRAR_PARTIDA_POS[0], BORRAR_PARTIDA_POS[1], 250, 40)
 
         self.aceptarPress = False
         self.cancelarPress = False
         self.nuevaPartidaPress = False
+        self.borrarPartidaPress = False
 
         #PAUSE
         self.pauseRect = pg.Rect(0, 0, 50, 50)
@@ -384,7 +387,7 @@ class Interface():
                     #print("Seleccionado single player")
                     Utils.state = System_State.MAP1
                     self.loadPartidas()
-                    #Utils.state = System_State.GAMESELECT
+                    Utils.state = System_State.GAMESELECT
                     #stopMusic()
                     self.singlePress = False
 
@@ -448,6 +451,7 @@ class Interface():
         self.aceptarNoPulsabeSurf.fill((0,0,0,128))
         self.cancelarRect = pg.Rect(Utils.ScreenWidth/2 - CANCELAR_POS[0], Utils.ScreenHeight/2 - CANCELAR_POS[1], 250, 40)
         self.nuevaPartidaRect = pg.Rect(Utils.ScreenWidth/2 - NUEVA_PARTIDA_POS[0], Utils.ScreenHeight/2 - NUEVA_PARTIDA_POS[1], 250, 40)
+        self.borrarPartidaRect = pg.Rect(Utils.ScreenWidth/2 - BORRAR_PARTIDA_POS[0], Utils.ScreenHeight/2 - BORRAR_PARTIDA_POS[1], 250, 40)
 
         aux = []
         pad = 0
@@ -559,6 +563,19 @@ class Interface():
                 Utils.state = System_State.NEWGAME
                 stopMusic()
                 self.nuevaPartidaPress = False
+        elif self.mouse.isCollide(self.borrarPartidaRect):
+            #print("newgame")
+            if not self.soundPlayed:
+                playSound(botonSound)
+                self.soundPlayed = True
+            endPos = self.mouse.getPosition()
+            if not self.borrarPartidaPress and press and Raton.collides(iniPos[0], iniPos[1], self.borrarPartidaRect):
+                self.borrarPartidaPress = True
+            elif self.mouse.getClick() and self.borrarPartidaPress and Raton.collides(endPos[0], endPos[1], self.borrarPartidaRect):
+                remove("games/" + self.selectedPartida["nombre"] + ".json")
+                self.loadPartidas()
+                self.selectedPartida = None
+                self.borrarPartidaPress= False
         else:
             self.soundPlayed = False
 
@@ -935,8 +952,12 @@ class Interface():
                 screen.blit(self.aceptarNoPulsabeSurf, [self.aceptarRect.x, self.aceptarRect.y])
             if self.mouse.isCollide(self.cancelarRect):
                 pg.draw.rect(screen, GREEN3, self.cancelarRect, 2)
-            if self.mouse.isCollide(self.nuevaPartidaRect):
+            elif self.mouse.isCollide(self.nuevaPartidaRect):
                 pg.draw.rect(screen, GREEN3, self.nuevaPartidaRect, 2)
+            if self.mouse.isCollide(self.borrarPartidaRect) and self.selectedPartida != None:
+                pg.draw.rect(screen, GREEN3, self.borrarPartidaRect, 2)
+            elif self.selectedPartida == None:
+                screen.blit(self.borrarNoPulsabeSurf, [self.borrarPartidaRect.x, self.borrarPartidaRect.y])
 
             for partida in self.partidas:
                 if self.mouse.isCollide(partida['rect']):
@@ -945,7 +966,7 @@ class Interface():
                     pg.draw.rect(screen, GREEN, partida['rect'], 2)
                 muestra_texto(screen, str('monotypecorsiva'), partida['nombre'], WHITE, 28, (partida['rect'].x + 100, partida['rect'].y))
             if self.selectedPartida != None:
-                print(self.selectedPartida)
+                #print(self.selectedPartida)
                 info = self.selectedPartida['nombre'].split("_")
                 muestra_texto(screen, str('monotypecorsiva'), info[0], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-740), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-170)))
                 muestra_texto(screen, str('monotypecorsiva'), info[2], WHITE, 40, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-810), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-275)))
