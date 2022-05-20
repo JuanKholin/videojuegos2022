@@ -7,11 +7,12 @@ from turtle import Screen
 import pygame as pg
 from .Lib import *
 
-DEBBUG = False
+DEBBUG = True
 
 BGM_VOLUME = 0.2
-SOUND_VOLUME = 0.5
-haveBGM = True
+SOUND_VOLUME = 0.2
+haveBGM = False
+sonido = False
 
 class System_State(Enum):
     MAINMENU = auto()
@@ -243,6 +244,7 @@ def takeID():
 #----------------------------------------------------------------
 MOUSE_PATH = "./SPRITE/raton/"
 KEY_PATH = "./SPRITE/EXTRA/key.png"
+KEY2_PATH = "./SPRITE/EXTRA/key2.png"
 
 MAIN_MENU = "SPRITE/mainMenu/fondo"
 MAIN_MENU_TEXT_SIZE = 30
@@ -1460,5 +1462,12 @@ MAPA2 = [[300, 301, 302, 303, 304, 305, 306, 307, 300, 301,300, 301, 302, 303, 3
         [100, 101, 102, 103, 104, 105, 106, 107, 100, 101,100, 101, 102, 103, 104, 105, 106, 107, 100, 101,100, 101, 102, 103, 104, 105, 106, 107, 100, 101],
         ]
 
-VISION_RADIUS = 7
+VISION_RADIUS = 8
 VISION_RADIUS_PIXELS = VISION_RADIUS * TILE_WIDTH
+
+def infoPartida(info, x, y, pady, screen, size):
+    info = info.split(";")
+    pad = 0
+    for linea in info:
+        muestra_texto(screen, 'monotypecorsiva', linea, WHITE, size, [x , y + pad*pady])
+        pad += 1

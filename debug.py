@@ -63,30 +63,21 @@ def procesarInput():
 
 
 def setEntity(player, ai):
-    scv = Firebat(player, 10, 3)
-    player.addUnits(scv)
-    scv = TerranWorker(player, 11, 3)
-    player.addUnits(scv)
-    scv = TerranWorker(player, 12, 3)
-    player.addUnits(scv)
-    scv = TerranWorker(player, 11, 4)
-    player.addUnits(Goliath(player, 13, 5))
-    player.addUnits(Goliath(player, 13, 7))
-    player.addUnits(Goliath(player, 13, 6))
-    player.addUnits(scv)
+    player.addUnits(TerranWorker(player, 13, 5))
+    player.addUnits(TerranWorker(player, 13, 7))
+    player.addUnits(TerranWorker(player, 13, 6))
     structure1 = Hatchery(3, 3, player, mapa, False, raton)
     player.addStructures(structure1)
     structure1 = TerranBarracks(7, 7, player, mapa, False)
     player.addStructures(structure1)
     player.setBasePlayer(structure1)
-    scv = Goliath(ai, 20, 3)
+    scv = Zergling(ai, 15, 10)
     ai.addUnits(scv)
     structure1 = TerranBuilder(37, 3, ai, mapa, False, raton)
     ai.setBasePlayer(structure1)
     ai.addStructures(structure1)
     structure1 = TerranBarracks(15, 7, ai, mapa, False)
-    ai.addStructures(structure1)
-    structure1 = TerranBarracks(15, 3, ai, mapa, False)
+    structure1.hp = 5
     ai.addStructures(structure1)
     
 
