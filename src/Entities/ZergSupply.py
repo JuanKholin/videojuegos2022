@@ -20,7 +20,7 @@ class ZergSupply(Structure):
     sprites = []
     training = []
     HEIGHT_PAD = 10
-    generationTime = 0
+    generationTime = GENERATION_TIME
     generationCount = 0
     widthPad = -15
     rectOffY = 30
@@ -46,12 +46,11 @@ class ZergSupply(Structure):
 
         self.building = building
         if building:
-            self.state = BuildingState.OPERATIVE
+            self.state = BuildingState.BUILDING
         self.count = 0
         
         self.training = []
         self.paths = []
-        self.building = False
 
         self.type = DEPOT
 

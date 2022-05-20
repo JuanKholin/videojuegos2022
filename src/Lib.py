@@ -90,7 +90,7 @@ def divideSpritesheetByRows(spritesheet, rows, scalew = 1.5, scaleh = 1.5):
         sprites.append(aux)
     return sprites
 
-def divideSpritesheetByRowsNoScale(spritesheet, rows, size = None):
+def divideSpritesheetByRowsNoScale(spritesheet, rows, size = None, scale = 1):
     totalRows = spritesheet.get_height()
     maxCol = spritesheet.get_width()
     sprites = []
@@ -98,6 +98,7 @@ def divideSpritesheetByRowsNoScale(spritesheet, rows, size = None):
         aux = pg.Surface.subsurface(spritesheet, (0, rows * i, maxCol, rows))
         if size != None:
             aux = pg.transform.scale(aux, [size[0], size[1]])
-
+        elif scale != 1:
+            aux = pg.transform.scale(aux, [aux.get_width() * scale, aux.get_height() * scale])
         sprites.append(aux)
     return sprites

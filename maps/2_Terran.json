@@ -28,7 +28,7 @@
         "mineGasUpCost": 50,
         "x": 12,
         "y": 33,
-        "hp": 1500
+        "hp": 2000
       }
     ],
     "resources": 100,
@@ -58,7 +58,7 @@
     "da\u00f1oUpgrade": 0,
     "armorUpgrade": 0,
     "mineUpgrade": 0,
-    "limitUnits": 13
+    "limitUnits": 10
   },
   "p2": {
     "units": [
@@ -82,7 +82,7 @@
         "funcion": "Base enemiga",
         "x": 12,
         "y": 7,
-        "hp": 200
+        "hp": 2000
       }
     ],
     "resources": 100,
@@ -92,7 +92,7 @@
     "da\u00f1oUpgrade": 0,
     "armorUpgrade": 0,
     "mineUpgrade": 0,
-    "limitUnits": 13
+    "limitUnits": 10
   },
   "mapa": {
     "w": 30,

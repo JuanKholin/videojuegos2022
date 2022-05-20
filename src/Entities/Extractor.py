@@ -88,7 +88,7 @@ class Extractor(Structure):
 
     def draw(self, screen, camera):
         Structure.draw(self, screen, camera)
-        if self.resource != None:
+        if self.resource != None and DEBBUG:
             muestra_texto(screen, str('monotypecorsiva'), str(self.resource.capacity), BLUE, 20, [60, 10])
 
     def checkTiles(self, visible = True):

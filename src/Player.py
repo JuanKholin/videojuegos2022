@@ -178,7 +178,8 @@ class Player():
 
 
     def removeUnit(self, unit):
-        self.unitsSelected.remove(unit)
+        if unit in self.unitsSelected:
+            self.unitsSelected.remove(unit)
 
     def removeUnitFromFree(self, unit):
         self.unitsFree.remove(unit)
