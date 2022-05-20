@@ -29,6 +29,8 @@ class ZergBarracks(Structure):
     frame = 20
     nSprites = ZERG_BARRACKS_TOTAL_FRAMES
     options = [Options.GENERATE_T1_ZERG, Options.GENERATE_T2_ZERG, Options.GENERATE_T3_ZERG]
+    selectedSound = zergStructureSelectedSound
+    deadSound = zergStructureDead
 
     def __init__(self, xini, yini, player, map, building):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)

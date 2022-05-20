@@ -44,7 +44,7 @@ class Player():
                 if event.key in self.keyMap:
                     if self.structureSelected != None:
                         command = self.structureSelected.command(self.keyMap[event.key])
-                        print(command.id)
+                        #print(command.id)
                         if command.id != CommandId.NULL:
                                 return command
                         else:
@@ -94,7 +94,7 @@ class Player():
                         elif (self.unitsSelected[i].state == UnitState.MINING or self.unitsSelected[i].state == UnitState.EXTRACTING) and self.unitsSelected[i].paths.__len__() == 0:
                             self.unitsSelected[i].attack(param[i]['attackedOne'])
                         else:
-                            print("aaaaaa")
+                            #print("aaaaaa")
                             self.unitsSelected[i].siendoAtacado = True
                             self.unitsSelected[i].atacante = param[i]['attackedOne']
                     else:

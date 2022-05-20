@@ -314,6 +314,7 @@ class Raton(pygame.sprite.Sprite):
 
                                         for unit in self.player.units:
                                             if len(self.player.unitsSelected) < MAX_SELECTED_UNIT and collideRect(mouseRect, unit.getRect()):
+                                                playSound(unit.selectedSound)
                                                 unit.setClicked(True)
                                                 self.player.unitsSelected.append(unit)
                                                 unitSel = True
@@ -326,6 +327,7 @@ class Raton(pygame.sprite.Sprite):
                                                 pos = unit.getPosition()
                                                 if (collideRect(mouseRect, unit.getRect()) and 
                                                         self.mapa.getTile(pos[0] - camera.x, pos[1] - camera.y).visible):
+                                                    playSound(unit.selectedSound)
                                                     unit.setClicked(True)
                                                     self.player.enemySelected.append(unit)
                                                     unitSel = True
@@ -349,6 +351,7 @@ class Raton(pygame.sprite.Sprite):
                                                 pos = structure.getPosition()
                                                 if (collideRect(mouseRect, structure.getRect())
                                                         and self.mapa.getTile(pos[0], pos[1]).visible):
+                                                    playSound(structure.selectedSound)
                                                     structure.setClicked(True)
                                                     unitSel = True
                                                     self.player.enemyStructureSelected = structure

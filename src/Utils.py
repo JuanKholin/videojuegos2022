@@ -7,12 +7,12 @@ from turtle import Screen
 import pygame as pg
 from .Lib import *
 
-DEBBUG = True
+DEBBUG = False
 
 BGM_VOLUME = 0.2
 SOUND_VOLUME = 0.2
 haveBGM = False
-sonido = False
+sonido = True
 
 class System_State(Enum):
     MAINMENU = auto()
@@ -149,7 +149,7 @@ SYSTEM_CLOCK = 0
 
 global_time = 0
 
-CLOCK_PER_SEC = 60
+CLOCK_PER_SEC = 30
 
 # Constantes para los colores
 WHITE   = (255, 255, 255)

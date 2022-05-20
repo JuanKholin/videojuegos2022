@@ -28,6 +28,8 @@ class Extractor(Structure):
     clicked = False
     frame = 8
     nSprites = EXTRACTOR_TOTAL_FRAMES
+    selectedSound = zergStructureSelectedSound
+    deadSound = zergStructureDead
 
     def __init__(self, xini, yini, player, map, building, gas = None):
         self.resource = gas

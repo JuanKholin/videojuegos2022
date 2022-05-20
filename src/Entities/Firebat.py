@@ -36,7 +36,7 @@ IS_EXPLOSIVE = True
 class Firebat(Soldier):
     generateSound = soldierGenerateSound
     deadSound = soldierDeadSound
-    attackSound = soldierAttackSound 
+    attackSound = firebatAttackSound 
     
     def __init__(self, player, xIni = -1, yIni = -1):
         Soldier.__init__(self, HP, xIni * TILE_WIDTH + 20, yIni * TILE_HEIGHT, MINERAL_COST,

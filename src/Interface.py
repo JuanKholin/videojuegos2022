@@ -483,7 +483,7 @@ class Interface():
                 self.scrollBarTopPress = False
                 playSound(botonSound2)
             if press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarTopRect):
-                print(self.partidas[0]["rect"].y, self.partidaFirstOriginalY)
+                #print(self.partidas[0]["rect"].y, self.partidaFirstOriginalY)
                 if self.partidas[0]["rect"].y < self.partidaFirstOriginalY:
                     for k in self.partidas:
                         k["rect"].y += 7
@@ -599,7 +599,7 @@ class Interface():
                 #print("Nueva partida")
                 #Pasar a menu de nueva partida
                 Utils.state = System_State.NEWGAME
-                stopMusic()
+                #stopMusic()
                 self.nuevaPartidaPress = False
         elif self.mouse.isCollide(self.borrarPartidaRect) and self.selectedPartida != None:
             #print("newgame")
@@ -820,7 +820,7 @@ class Interface():
                             b[1]["press"] = False
                             b[1]["waitingForKey"] = True
                             self.buttonWaitingForKey = b[0]
-                            print(b[0])
+                            #print(b[0])
                             Utils.state2 = System_State.KEY_BINDING
                 i += 1
 
@@ -1169,8 +1169,7 @@ class Interface():
                     screen.blit(image, (0, 0))
                     self.index += frame(5)
                     if self.index == 30:
-                        if self.index == 30:
-                            self.index = 10
+                        self.index = 10
 
             elif Utils.state2 == System_State.WIN:
                 image = self.winSprite[self.index]

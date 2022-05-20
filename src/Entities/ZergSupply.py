@@ -28,6 +28,8 @@ class ZergSupply(Structure):
     frame = 10
     nSprites = ZERG_DEPOT_TOTAL_FRAMES
     options = []
+    selectedSound = zergStructureSelectedSound
+    deadSound = zergStructureDead
 
     def __init__(self, xini, yini, player, map, building):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)

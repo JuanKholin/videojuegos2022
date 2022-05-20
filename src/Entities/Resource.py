@@ -4,6 +4,7 @@ from ..Utils import *
 from .. import Utils
 
 class Resource():
+    
     def __init__(self, x, y, resourceType, capacity):
         self.x = x * TILE_WIDTH
         self.y = y * TILE_HEIGHT + 20

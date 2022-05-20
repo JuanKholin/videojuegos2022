@@ -59,12 +59,12 @@ def plusMusic():
 def minusSound():
     if Utils.SOUND_VOLUME > 0.01:
         Utils.SOUND_VOLUME -= 0.1
-    print(Utils.SOUND_VOLUME)
+    #print(Utils.SOUND_VOLUME)
 
 def plusSound():
     if Utils.SOUND_VOLUME < 1.0:
         Utils.SOUND_VOLUME += 0.1
-    print(Utils.SOUND_VOLUME)
+    #print(Utils.SOUND_VOLUME)
 
 def stopMusic():
     pg.mixer.music.stop()

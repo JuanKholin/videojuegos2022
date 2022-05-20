@@ -24,12 +24,12 @@ class Structure(Entity.Entity):
 
     def __init__(self, hp, mineralCost, generationTime, xini, yini, mapa, player, capacity):
         Entity.Entity.__init__(self, hp, xini*mapa.tw, yini*mapa.th, mineralCost, generationTime, takeID(), player)
-        print("estado", BuildingState.OPERATIVE.value)
+        #print("estado", BuildingState.OPERATIVE.value)
         self.mapa = mapa
         self.player = player
         self.xIni = xini
         self.yIni = yini
-        print(self.x, self.y, self.mapa.getTileIndex(self.x, self.y))
+        #print(self.x, self.y, self.mapa.getTileIndex(self.x, self.y))
         originX = (xini - self.CENTER_TILE[0])*self.mapa.tw
         originY = (yini - self.CENTER_TILE[1])*self.mapa.th
         self.rectn = pg.Rect(originX, originY + self.HEIGHT_PAD/2, self.TILES_WIDTH*self.mapa.tw - 1, self.TILES_HEIGHT*self.mapa.th - self.HEIGHT_PAD/2 - 1)
@@ -127,8 +127,10 @@ class Structure(Entity.Entity):
         self.player.limitUnits -= self.capacity
         if self.player.base == self:
             if self.player.isPlayer:
+                playSound(luuserSound)
                 setGameState2(System_State.GAMEOVER)
             else:
+                playSound(winSound)
                 setGameState2(System_State.WIN)
         self.player.structures.remove(self)
         self.__del__()

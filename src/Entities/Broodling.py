@@ -27,6 +27,8 @@ X_PADDING = 20 * BROODLING_SCALE - 20
 Y_PADDING = 20 * BROODLING_SCALE - 20
 
 class Broodling(Soldier):
+    selectedSound = zergSelectedSound
+    generateSound = zerglingGenerateSound
     # Pre: xIni e yIni marcan posiciones del mapa, ej: 3 y 2
     def __init__(self, player, xIni = -1, yIni = -1):
         Soldier.__init__(self, HP, xIni * TILE_WIDTH + 20, yIni * TILE_HEIGHT, MINERAL_COST,

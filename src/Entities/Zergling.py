@@ -32,6 +32,7 @@ class Zergling(Soldier):
     generateSound = zerglingGenerateSound
     deadSound = zerglingDeadSound
     attackSound = zerglingAttackSound
+    selectedSound = zergSelectedSound
     # Pre: xIni e yIni marcan posiciones del mapa, (ej: (3, 2) se refiere a la posicion de
     # la cuarta columna y tercera fila del mapa)
     # Post: Crea un bichito mono que no hace practicamente nada pero tu dale tiempo

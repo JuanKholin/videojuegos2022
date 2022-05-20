@@ -146,7 +146,7 @@ class Escena():
                     relative_mouse_pos = pg.mouse.get_pos()
                     real_mouse_pos = (relative_mouse_pos[0] + self.camera.x, relative_mouse_pos[1] + self.camera.y)
                     tileClicked = self.mapa.getTile(real_mouse_pos[0], real_mouse_pos[1])
-                    print("TILE CLICKED: ", tileClicked.tileid, tileClicked.type, tileClicked.ocupante)
+                    #print("TILE CLICKED: ", tileClicked.tileid, tileClicked.type, tileClicked.ocupante)
                     orderForPlayer = []
                     for param in command.params:
                         self.processParam(param, tileClicked, tileClicked, orderForPlayer)

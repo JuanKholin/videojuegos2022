@@ -35,6 +35,8 @@ class Hatchery(Structure):
     frame = 12
     nSprites = HATCHERY_TOTAL_FRAMES
     options = [Options.BUILD_DEPOT_ZERG, Options.BUILD_BARRACKS_ZERG, Options.BUILD_REFINERY_ZERG, Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE, Options.GENERATE_WORKER_ZERG]
+    selectedSound = zergStructureSelectedSound
+    deadSound = zergStructureDead
 
     def __init__(self, xini, yini, player, map, building, raton):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)

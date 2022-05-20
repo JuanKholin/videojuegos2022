@@ -13,6 +13,7 @@ class Unit(Entity):
     generateSound = soldierGenerateSound
     deadSound = soldierDeadSound
     attackSound = soldierAttackSound
+    selectedSound = terranSelectedSound
     
     def __init__(self, hp, xIni, yIni, mineral_cost, generation_time, speed, framesToRefresh, 
                 face, frame, padding, id, player, inversibleFrames,
@@ -701,7 +702,7 @@ class Unit(Entity):
     def changeObjectiveTile(self):
         actualPath = self.paths[0]
         objectiveTile = self.mapa.getTile(actualPath.posFin[0], actualPath.posFin[1])
-        print(objectiveTile.tileid, self.getTile().tileid)
+        #print(objectiveTile.tileid, self.getTile().tileid)
         if objectiveTile.type == EMPTY or (objectiveTile.type == UNIT and objectiveTile.id == self.id):
             self.mapa.setVecina(objectiveTile, self.id)
             objectiveTile.setOcupante(self)
