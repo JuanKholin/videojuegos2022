@@ -134,53 +134,61 @@ def setEntity(player, ai):
     escena.resources = resources
 
 def update():
+    
     if Utils.resized:
         updateScreen(screen)
         camera.update()
         Utils.resized = False
     clock_update()
     raton.update(escena.camera)
-    if getGameState() == System_State.MAINMENU:
-        playMusic(mainMenuBGM, pos = 5)
-        #playSound(mainMenuBGM)
-        escena.interfaz.update(escena,raton, escena.camera)
-        '''elif getGameState() == System_State.MAP1:
-        stopMusic()
-        playMusic(map1BGM)
-        #cargar mapa
-        escena.mapa = mapa
-        escena.mapa.load()
-        escena.mapa.loadMinimap()
-        setEntity(player1, player2)
-        setGameState(System_State.ONGAME)
-        setGameState2(System_State.LOAD)'''
-    elif getGameState() == System_State.ONGAME:
-        escena.update()
-    elif getGameState() == System_State.GAMESELECT:
-        #Cargar las partidas
-        escena.interfaz.update(escena,raton, escena.camera)
-    elif getGameState() == System_State.NEWGAME:
-        escena.interfaz.update(escena,raton, escena.camera)
-    elif  getGameState() == System_State.SETTINGS:
-        escena.interfaz.update(escena,raton, escena.camera)
-    else: #STATE == System_State.EXIT:
-        pg.quit()
-        sys.exit()
+    try:
+        if getGameState() == System_State.MAINMENU:
+            playMusic(mainMenuBGM, pos = 5)
+            #playSound(mainMenuBGM)
+            escena.interfaz.update(escena,raton, escena.camera)
+            '''elif getGameState() == System_State.MAP1:
+            stopMusic()
+            playMusic(map1BGM)
+            #cargar mapa
+            escena.mapa = mapa
+            escena.mapa.load()
+            escena.mapa.loadMinimap()
+            setEntity(player1, player2)
+            setGameState(System_State.ONGAME)
+            setGameState2(System_State.LOAD)'''
+        elif getGameState() == System_State.ONGAME:
+            escena.update()
+        elif getGameState() == System_State.GAMESELECT:
+            #Cargar las partidas
+            escena.interfaz.update(escena,raton, escena.camera)
+        elif getGameState() == System_State.NEWGAME:
+            escena.interfaz.update(escena,raton, escena.camera)
+        elif  getGameState() == System_State.SETTINGS:
+            escena.interfaz.update(escena,raton, escena.camera)
+        else: #STATE == System_State.EXIT:
+            pg.quit()
+            sys.exit()
+    except:
+        pass
 
 def draw():
     screen.fill(BLACK)
-    if Utils.state == System_State.MAINMENU:
-        escena.interfaz.draw(screen, escena.camera)
-    elif Utils.state == System_State.ONGAME:
-        escena.draw(screen)
-    elif Utils.state == System_State.PAUSED:
-        escena.draw(screen)
-    elif (Utils.state == System_State.GAMESELECT or Utils.state == System_State.NEWGAME
-    or Utils.state == System_State.SETTINGS):
-        escena.interfaz.draw(screen, escena.camera)
+    try:
+        if Utils.state == System_State.MAINMENU:
+            escena.interfaz.draw(screen, escena.camera)
+        elif Utils.state == System_State.ONGAME:
+            escena.draw(screen)
+        elif Utils.state == System_State.PAUSED:
+            escena.draw(screen)
+        elif (Utils.state == System_State.GAMESELECT or Utils.state == System_State.NEWGAME
+        or Utils.state == System_State.SETTINGS):
+            escena.interfaz.draw(screen, escena.camera)
+    except:
+        pass
     raton.draw(screen, escena.camera)
-    #aux(screen)
+        #aux(screen)
     pg.display.flip()
+    
 
 # Programa principal
 pg.init()

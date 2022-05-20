@@ -53,7 +53,7 @@ def loadFromSave(nombre):
 
 def loadkeyShortcuts():
     textFile = open("atajos/atajos.json", "r")
-    print("atajos cargados")
+    #print("atajos cargados")
     data = json.load(textFile)
     keyMap = loadKeyMap(data['keyMap'])
     commandMap = loadCommandMap(data['commandMap'])
@@ -128,7 +128,7 @@ def loadUnits(unitDictionaries, player):
     for u in unitDictionaries:
         if u["clase"] == "terranWorker":
             unit = TerranWorker(player, u["x"], u["y"])
-            print("cargo worker", u['x'], u['y'])
+            #print("cargo worker", u['x'], u['y'])
             unit.load(u["hp"])
             player.addUnits(unit)
         elif u["clase"] == "terranSoldier":
