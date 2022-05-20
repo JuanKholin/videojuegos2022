@@ -598,7 +598,7 @@ class Interface():
                 Utils.state = System_State.NEWGAME
                 stopMusic()
                 self.nuevaPartidaPress = False
-        elif self.mouse.isCollide(self.borrarPartidaRect):
+        elif self.mouse.isCollide(self.borrarPartidaRect) and self.selectedPartida != None:
             #print("newgame")
             if not self.soundPlayed:
                 playSound(botonSound)
