@@ -312,10 +312,6 @@ class Unit(Entity):
         if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
            #print(len(self.paths), type(self))
             if len(self.paths) != 0:
-                objectivePath = self.paths[0]
-                nextTile = self.mapa.getTile(objectivePath.posFin[0], objectivePath.posFin[1])
-                self.mapa.setLibre(nextTile)
-                self.updateOwnSpace()
                 self.paths = [] #Me quedo quieto y ataco
                #print("ME QUEDO QUIETO Y ATACO")
             if self.attackCD > 1: # Si hay CD
