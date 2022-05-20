@@ -44,6 +44,8 @@ class Interface():
         self.cancelarRect = pg.Rect(CANCELAR_POS[0], CANCELAR_POS[1], 250, 40)
         self.nuevaPartidaRect = pg.Rect(NUEVA_PARTIDA_POS[0], NUEVA_PARTIDA_POS[1], 250, 40)
         self.borrarPartidaRect = pg.Rect(BORRAR_PARTIDA_POS[0], BORRAR_PARTIDA_POS[1], 250, 40)
+        self.partidaFirstOriginalY = Utils.ScreenHeight/2 - PARTIDA_POS[1]
+        
 
         self.aceptarPress = False
         self.cancelarPress = False
@@ -316,6 +318,7 @@ class Interface():
                 'rect': pg.Rect(Utils.ScreenWidth/2 - PARTIDA_POS[0], Utils.ScreenHeight/2 - PARTIDA_POS[1] + YPARTIDA_PAD*pad, 455, YPARTIDA_PAD-1),
                 'pressed': False})
             pad += 1
+        self.partidaLastOriginalY = Utils.ScreenHeight/2 - PARTIDA_POS[1] + YPARTIDA_PAD*(pad - 1)
 
     def getNumPartidas(self):
         onlyfiles = [f for f in listdir("./games") if isfile(join("./games", f))]
@@ -445,6 +448,7 @@ class Interface():
         pass
 
     def updateGameMenuPos(self):
+        
         #self.gameSelect = pg.transform.scale(self.gameSelect, (Utils.ScreenHeight*SCREEN_SCALE, Utils.ScreenHeight))
         self.aceptarRect = pg.Rect(Utils.ScreenWidth/2 - ACEPTAR_POS[0], Utils.ScreenHeight/2 - ACEPTAR_POS[1], ACEPTAR_RECT[0], ACEPTAR_RECT[1])
         self.aceptarNoPulsabeSurf = pg.Surface((self.aceptarRect.w, self.aceptarRect.h), pg.SRCALPHA)
@@ -452,6 +456,9 @@ class Interface():
         self.cancelarRect = pg.Rect(Utils.ScreenWidth/2 - CANCELAR_POS[0], Utils.ScreenHeight/2 - CANCELAR_POS[1], 250, 40)
         self.nuevaPartidaRect = pg.Rect(Utils.ScreenWidth/2 - NUEVA_PARTIDA_POS[0], Utils.ScreenHeight/2 - NUEVA_PARTIDA_POS[1], 250, 40)
         self.borrarPartidaRect = pg.Rect(Utils.ScreenWidth/2 - BORRAR_PARTIDA_POS[0], Utils.ScreenHeight/2 - BORRAR_PARTIDA_POS[1], 250, 40)
+        self.scrollBarTopRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0] - 420, Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1] + 20, 30, 30)
+        self.scrollBarRectangle = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_RECT_POS[0]- 420, Utils.ScreenHeight/2 + 13 - SCROLL_BAR_RECT_POS[1], SCROLL_BAR_RECT_SIZE[0], SCROLL_BAR_RECT_SIZE[1] - 57)
+        self.scrollBarBotRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0] - 420, Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1] -55, 30, 30)
 
         aux = []
         pad = 0
@@ -468,6 +475,34 @@ class Interface():
     def updateGameMenu(self, escena, raton, camera):
         self.updateGameMenuPos()
         press, iniPos = self.mouse.getPressed()
+        if self.mouse.isCollide(self.scrollBarTopRect):
+            endPos = self.mouse.getPosition()
+            if not self.scrollBarTopPress and press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarTopRect):
+                self.scrollBarTopPress = True
+            elif self.mouse.getClick() and self.scrollBarTopPress and Raton.collides(endPos[0], endPos[1], self.scrollBarTopRect):
+                self.scrollBarTopPress = False
+                playSound(botonSound2)
+            if press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarTopRect):
+                print(self.partidas[0]["rect"].y, self.partidaFirstOriginalY)
+                if self.partidas[0]["rect"].y < self.partidaFirstOriginalY:
+                    for k in self.partidas:
+                        k["rect"].y += 7
+                    PARTIDA_POS[1] -= 7
+
+
+        elif self.mouse.isCollide(self.scrollBarBotRect):
+            endPos = self.mouse.getPosition()
+
+            if not self.scrollBarBotPress and press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarBotRect):
+                self.scrollBarBotPress = True
+            elif self.mouse.getClick() and self.scrollBarBotPress and Raton.collides(endPos[0], endPos[1], self.scrollBarBotRect):
+                self.scrollBarBotPress = False
+                playSound(botonSound2)
+            if press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarBotRect):
+                if self.partidas[len(self.partidas) - 1]["rect"].y > self.partidaFirstOriginalY:
+                    for k in self.partidas:
+                        k["rect"].y -= 7
+                    PARTIDA_POS[1] += 7
         #Boton aceptar
         #print(self.mouse.isCollide(self.nuevaPartidaRect), self.mouse.real_pos, self.aceptarRect.x, self.aceptarRect.y, self.aceptarRect.w, self.aceptarRect.h )
         if self.mouse.isCollide(self.aceptarRect) and self.selectedPartida != None:
@@ -950,6 +985,16 @@ class Interface():
 
         elif Utils.state == System_State.GAMESELECT:
             screen.blit(self.gameSelect, [Utils.ScreenWidth/2 - self.gameSelect.get_width()/2, Utils.ScreenHeight/2 - self.gameSelect.get_height()/2])
+            pygame.draw.rect(screen, RED2, self.scrollBarRectangle, 1)
+            if self.mouse.isCollide(self.scrollBarTopRect):
+                pygame.draw.polygon(screen, RED2, [(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0] - 420,Utils.ScreenHeight/2 + 20 - SCROLL_BAR_TOP_TRIANGLE_POS[0][1]),(Utils.ScreenWidth/2- 420 - SCROLL_BAR_TOP_TRIANGLE_POS[1][0],Utils.ScreenHeight/2 + 20 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1]),(Utils.ScreenWidth/2- 420 - SCROLL_BAR_TOP_TRIANGLE_POS[2][0],Utils.ScreenHeight/2 + 20 - SCROLL_BAR_TOP_TRIANGLE_POS[2][1])])
+            else:
+                pygame.draw.polygon(screen, RED, [(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0] - 420,Utils.ScreenHeight/2 + 20 - SCROLL_BAR_TOP_TRIANGLE_POS[0][1]),(Utils.ScreenWidth/2- 420 - SCROLL_BAR_TOP_TRIANGLE_POS[1][0],Utils.ScreenHeight/2 + 20 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1]),(Utils.ScreenWidth/2- 420 - SCROLL_BAR_TOP_TRIANGLE_POS[2][0],Utils.ScreenHeight/2 + 20 - SCROLL_BAR_TOP_TRIANGLE_POS[2][1])])
+            if self.mouse.isCollide(self.scrollBarBotRect):
+
+                pygame.draw.polygon(screen, RED2, [(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0]- 420,Utils.ScreenHeight/2 - 55 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1]),(Utils.ScreenWidth/2- 420 - SCROLL_BAR_BOT_TRIANGLE_POS[1][0],Utils.ScreenHeight/2 - 55 - SCROLL_BAR_BOT_TRIANGLE_POS[1][1]),(Utils.ScreenWidth/2- 420 - SCROLL_BAR_BOT_TRIANGLE_POS[2][0],Utils.ScreenHeight/2 - 55 - SCROLL_BAR_BOT_TRIANGLE_POS[2][1])])
+            else:
+                pygame.draw.polygon(screen, RED, [(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0]- 420,Utils.ScreenHeight/2 - 55 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1]),(Utils.ScreenWidth/2- 420 - SCROLL_BAR_BOT_TRIANGLE_POS[1][0],Utils.ScreenHeight/2 - 55 - SCROLL_BAR_BOT_TRIANGLE_POS[1][1]),(Utils.ScreenWidth/2- 420 - SCROLL_BAR_BOT_TRIANGLE_POS[2][0],Utils.ScreenHeight/2 - 55 - SCROLL_BAR_BOT_TRIANGLE_POS[2][1])])
 
             if self.mouse.isCollide(self.aceptarRect) and self.selectedPartida != None:
                 pg.draw.rect(screen, GREEN3, self.aceptarRect, 2)
@@ -963,13 +1008,23 @@ class Interface():
                 pg.draw.rect(screen, GREEN3, self.borrarPartidaRect, 2)
             elif self.selectedPartida == None:
                 screen.blit(self.borrarNoPulsabeSurf, [self.borrarPartidaRect.x, self.borrarPartidaRect.y])
-
-            for partida in self.partidas:
+            j = 0
+            for i in self.partidas:
+                yActual = self.partidas[j]["rect"].y
+                if yActual < Utils.ScreenHeight - Utils.ScreenHeight*0.3 and  yActual > Utils.ScreenHeight*0.265:
+                    if self.mouse.isCollide(i['rect']):
+                        pg.draw.rect(screen, GREEN2, i['rect'], 1)
+                    if i == self.selectedPartida:
+                        pg.draw.rect(screen, GREEN, i['rect'], 2)
+                    muestra_texto(screen, str('monotypecorsiva'), i['nombre'], WHITE, 28, (i['rect'].x + 100, i['rect'].y))
+                j += 1
+                
+            '''for partida in self.partidas:
                 if self.mouse.isCollide(partida['rect']):
                     pg.draw.rect(screen, GREEN2, partida['rect'], 1)
                 if partida == self.selectedPartida:
                     pg.draw.rect(screen, GREEN, partida['rect'], 2)
-                muestra_texto(screen, str('monotypecorsiva'), partida['nombre'], WHITE, 28, (partida['rect'].x + 100, partida['rect'].y))
+                muestra_texto(screen, str('monotypecorsiva'), partida['nombre'], WHITE, 28, (partida['rect'].x + 100, partida['rect'].y))'''
             if self.selectedPartida != None:
                 #print(self.selectedPartida)
                 info = self.selectedPartida['nombre'].split("_")

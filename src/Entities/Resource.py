@@ -41,7 +41,7 @@ class Resource():
                 #screen.blit(unit.image, [r.x - self.camera.x, r.y - self.camera.y])
                 
                 if self.shadow != None:
-                    screen.blit(self.shadow, [drawPos[0] - camera.x - 10, drawPos[1] - camera.y - 10])
+                    screen.blit(self.shadow, [drawPos[0] - camera.x - 5, drawPos[1] - camera.y - 3])
                 screen.blit(self.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
 
     def drawInfo(self, screen, color):

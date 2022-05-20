@@ -7,7 +7,7 @@ from turtle import Screen
 import pygame as pg
 from .Lib import *
 
-DEBBUG = True
+DEBBUG = False
 
 BGM_VOLUME = 0.2
 SOUND_VOLUME = 0.5
@@ -449,6 +449,9 @@ def init():
     #resource
     loadCrystal()
     loadGeyser()
+
+    #walls
+    loadWall()
 
 # TerranWorker
 TERRAN_WORKER_SCALE = 1.5
@@ -949,6 +952,31 @@ def loadGeyser():
         shadows.append(mask)
     GEYSER_SPRITES = [sprites, shadows]
     
+
+# Wall
+WALL_SPRITES = [None, None, None, None]
+def loadWall():
+    global WALL_SPRITES
+    spritesheet = [None, None, None, None]
+    spritesheet[2] = pg.image.load("./sprites/Muro/wallTerran.png").convert()
+    spritesheet[2].set_colorkey(BLACK)
+    spritesheet[2] = pg.transform.scale(spritesheet[2], [spritesheet[2].get_rect().w * 1.4, spritesheet[2].get_rect().h * 1.1])
+    spritesheet[0] = pg.image.load("./sprites/Muro/wallZerg.png").convert()
+    spritesheet[0].set_colorkey(BLACK)
+    spritesheet[0] = pg.transform.scale(spritesheet[0], [spritesheet[0].get_rect().w * 1.4, spritesheet[0].get_rect().h * 1.1])
+
+    aux = pg.mask.from_surface(spritesheet[0], 0)
+    mask = aux.to_surface(setcolor = (1, 0, 0))
+    mask.set_colorkey(BLACK)
+    mask.set_alpha(150)
+    spritesheet[1] = mask
+    aux = pg.mask.from_surface(spritesheet[2], 0)
+    mask = aux.to_surface(setcolor = (1, 0, 0))
+    mask.set_colorkey(BLACK)
+    mask.set_alpha(150)
+    spritesheet[3] = mask
+
+    WALL_SPRITES = spritesheet
 
 #-------------------------------------------------------------------------
 #-------------------------------------------------------------------------
