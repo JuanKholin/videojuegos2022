@@ -1062,7 +1062,7 @@ class Interface():
             elif self.selectedMap == "2":
                 infoPartida("-DISPUTA SIN FRONTERAS-;;Mapa mas estrecho y pequeño;con una base arriba y otra abajo.;Esta vez no hay muros por lo;que tendras que ser mas agresivo.;", Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-740) - 130, Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-170) - 30, 30, screen, 30)
             elif self.selectedMap == "3":
-                infoPartida("-DISPUTA POR EL GAS-;;Identico al primer mapa,;con la diferencia de que;en este mapa solo;hay un geyser en el medio del mapa.;¡Tendras que pelearte con tu rival;por este valioso recurso;si quieres derrotatle!", Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-740) - 130, Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-170) - 30, 30, screen, 30)
+                infoPartida("-DISPUTA POR EL GAS-;;Identico al primer mapa,;con la diferencia de que;en este mapa solo;hay un geyser en el medio del mapa.;¡Tendras que pelearte con tu rival;por este valioso recurso;si quieres derrotarle!", Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-740) - 130, Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-170) - 30, 30, screen, 30)
             elif self.selectedMap == "4":
                 infoPartida("-GUERRA CIVIL-;;Identico al segundo mapa,;pero en este caso solo hay Zergs.;En este mapa no hay diferencias;raciales, solo el mas inteligente;sobrevivira.", Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2-740) - 130, Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2-170) - 30, 30, screen, 30)
         elif Utils.state == System_State.SETTINGS:

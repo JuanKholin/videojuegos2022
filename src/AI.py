@@ -196,7 +196,7 @@ class AI():
                     skipGasNeed = True 
                     gassers.append(worker)
                     #print(self.data.gas, "GASS")
-            if not skipGasNeed and self.data.gas >= TERRAN_REFINERY_MINERAL_COST: # Si hay al menos un worker extrayendo gas no es necesario hacer nada de gas
+            if not skipGasNeed: # Si hay al menos un worker extrayendo gas no es necesario hacer nada de gas
                 gasMan = workers.pop()
                 geyser = self.getGeyserInUse(structures)
                 if (geyser != None) and (geyser.state == BuildingState.OPERATIVE):

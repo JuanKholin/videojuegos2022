@@ -7,7 +7,7 @@ pygame.mixer.init()
 mainMenuBGM = "Sonido/BGM/mainMenuBGM.mp3"
 map1BGM = "Sonido/BGM/map1BGM.mp3"
 
-#--------Efecto de sonido
+'''#--------Efecto de sonido
 botonSound = pygame.mixer.Sound("Sonido/Misc/BUTTON.WAV")
 botonSound2 = pygame.mixer.Sound("Sonido/Misc/boton.mp3")
 loserSound = pygame.mixer.Sound("Sonido/Misc/ReallyNigga.mp3")
@@ -36,24 +36,34 @@ zerglingAttackSound = pygame.mixer.Sound("Sonido/Misc/Critters/JCrDth00.wav")
 
 workerGenerateSound = pygame.mixer.Sound("Sonido/Misc/TPwrDown.wav")
 soldierGenerateSound = pygame.mixer.Sound("Sonido/Misc/tdrTra01.wav")
-zerglingGenerateSound = pygame.mixer.Sound("Sonido/Bullet/ZDrHit00.WAV")
-#COMENTAME PARA SONIDOS
-'''botonSound = None
+zerglingGenerateSound = pygame.mixer.Sound("Sonido/Bullet/ZDrHit00.WAV")'''
+
+botonSound = None
 botonSound2 = None
 loserSound = None
+luuserSound = None
+winSound = None
 
 construirSound = None
 structureSelectedSound = None
+zergStructureSelectedSound = None
+terranSelectedSound = None
+zergSelectedSound = None
 
 terranStructureDead = None
+zergStructureDead = None
+
 soldierDeadSound = None
 workerDeadSound = None
 zerglingDeadSound = None
 
 workerAttackSound = None
 soldierAttackSound = None
+firebatAttackSound = None
+goliathAttackSound = None
+
 zerglingAttackSound = None
 
 workerGenerateSound = None
 soldierGenerateSound = None
-zerglingGenerateSound = None'''
+zerglingGenerateSound = None
