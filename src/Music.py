@@ -7,7 +7,7 @@ pygame.mixer.init()
 mainMenuBGM = "Sonido/BGM/mainMenuBGM.mp3"
 map1BGM = "Sonido/BGM/map1BGM.mp3"
 
-'''#--------Efecto de sonido
+#--------Efecto de sonido
 botonSound = pygame.mixer.Sound("Sonido/Misc/BUTTON.WAV")
 botonSound2 = pygame.mixer.Sound("Sonido/Misc/boton.mp3")
 loserSound = pygame.mixer.Sound("Sonido/Misc/ReallyNigga.mp3")
@@ -26,9 +26,9 @@ zerglingAttackSound = pygame.mixer.Sound("Sonido/Misc/ZBldgPlc.wav")
 
 workerGenerateSound = pygame.mixer.Sound("Sonido/Misc/TPwrDown.wav")
 soldierGenerateSound = pygame.mixer.Sound("Sonido/Misc/tdrTra01.wav")
-zerglingGenerateSound = pygame.mixer.Sound("Sonido/Bullet/ZDrHit00.WAV")'''
+zerglingGenerateSound = pygame.mixer.Sound("Sonido/Bullet/ZDrHit00.WAV")
 #COMENTAME PARA SONIDOS
-botonSound = None
+'''botonSound = None
 botonSound2 = None
 loserSound = None
 
@@ -46,4 +46,4 @@ zerglingAttackSound = None
 
 workerGenerateSound = None
 soldierGenerateSound = None
-zerglingGenerateSound = None
+zerglingGenerateSound = None'''

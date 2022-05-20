@@ -569,6 +569,7 @@ class Interface():
                 self.selectedPartida = None
                 self.escena = escena
                 stopMusic()
+                playMusic(map1BGM)
                 self.singlePress = False
 
         elif self.mouse.isCollide(self.cancelarRect):
@@ -582,6 +583,8 @@ class Interface():
             elif self.mouse.getClick() and self.cancelarPress and Raton.collides(endPos[0], endPos[1], self.cancelarRect):
                 #print("Cancelar")
                 Utils.state = System_State.MAINMENU
+                stopMusic()
+                playMusic(mainMenuBGM, pos = 5)
                 self.cancelarPress = False
                 self.selectedPartida = None
         elif self.mouse.isCollide(self.nuevaPartidaRect):
@@ -704,6 +707,7 @@ class Interface():
                 setGameState2(System_State.LOAD)
                 camera.update()
                 stopMusic()
+                playMusic(map1BGM)
                 self.singlePress = False
 
         elif self.mouse.isCollide(self.cancelarRect):
@@ -795,6 +799,8 @@ class Interface():
                 print("atajos guardados")
 
                 Utils.state = System_State.MAINMENU
+                stopMusic()
+                playMusic(mainMenuBGM, pos = 5)
                 self.guardarSalirSettingsPress = False
 
         else:

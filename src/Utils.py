@@ -10,8 +10,8 @@ from .Lib import *
 DEBBUG = True
 
 BGM_VOLUME = 0.2
-SOUND_VOLUME = 0.5
-haveBGM = True
+SOUND_VOLUME = 0.2
+haveBGM = False
 
 class System_State(Enum):
     MAINMENU = auto()
@@ -1460,7 +1460,7 @@ MAPA2 = [[300, 301, 302, 303, 304, 305, 306, 307, 300, 301,300, 301, 302, 303, 3
         [100, 101, 102, 103, 104, 105, 106, 107, 100, 101,100, 101, 102, 103, 104, 105, 106, 107, 100, 101,100, 101, 102, 103, 104, 105, 106, 107, 100, 101],
         ]
 
-VISION_RADIUS = 7
+VISION_RADIUS = 8
 VISION_RADIUS_PIXELS = VISION_RADIUS * TILE_WIDTH
 
 def infoPartida(info, x, y, pady, screen, size):
