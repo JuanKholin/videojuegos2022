@@ -20,8 +20,6 @@ class Worker(Unit):
         self.resource = None
         self.isMining = False
         self.isExtracting = False
-        self.returnx = 0
-        self.returny = 0
         self.oreTransportingFrames = oreTransportingFrames
         self.gasTransportingFrames = gasTransportingFrames
         
@@ -115,7 +113,7 @@ class Worker(Unit):
                         self.updateOwnSpace()
                         tilesCasa = self.tilesResource(self.getTile())
                         if self.getTile() in tilesCasa: # PONERSE A MINAR
-                            #print("Hay que ponerse a minar")
+                            print("Hay que ponerse a minar")
                             self.startExtracting()
                         else:
                             self.changeToStill()
@@ -253,7 +251,9 @@ class Worker(Unit):
             self.updateMiningImage()
 
     def updateExtractingAct(self):
+        print("aun", getGlobalTime() - self.startTimeMining, self.timeToMine - self.player.mineUpgrade*1000)
         if getGlobalTime() - self.startTimeMining > (self.timeToMine - self.player.mineUpgrade*1000): #Termina de minar
+            print("termino")
             self.isExtracting = False
             self.x = self.returnx
             self.y = self.returny

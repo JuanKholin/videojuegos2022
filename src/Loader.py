@@ -15,6 +15,7 @@ from .Entities.Hatchery import *
 from .Entities.Extractor import *
 from .Entities.Drone import *
 from .Entities.Zergling import *
+from .Utils import *
 
 def loadFromSave(nombre):
     escena = Escena(None, None, None, None, None, None, None, None)
@@ -35,17 +36,31 @@ def loadFromSave(nombre):
     raton.setEscena(escena)
     escena.raton = raton
 
-
-    loadUnits(data["p1"]["units"], escena.p1)
     loadStructures(data["p1"]["structures"], escena.p1, escena.mapa, escena.raton)
-    loadUnits(data["p2"]["units"], escena.p2)
     loadStructures(data["p2"]["structures"], escena.p2, escena.mapa, escena.raton)
+    
+    
 
     camera = loadCamera(data["camera"])
     escena.camera = camera
 
     escena.resources = loadResources(data["resources"])
-
+    print("estructuras: ", len(escena.p1.structures))
+    for structure in escena.p1.structures + escena.p2.structures:
+        print(type(structure))
+        structure.setTilesOcupados()
+    for resource in escena.resources:
+        coords = resource.getTile()
+        tile = escena.mapa.mapa[coords[1]][coords[0]]
+        print(tile.tileid, type(resource))
+        if tile.ocupante != None:
+            print(tile.ocupante)
+            if tile.ocupante.type == REFINERY:
+                print("aaaaaaaaaaaaaa")
+                tile.ocupante.resource = resource
+                resource.disable()
+    loadUnits(data["p2"]["units"], escena.p2, escena.mapa)
+    loadUnits(data["p1"]["units"], escena.p1, escena.mapa)
     escena.p1.setBasePlayer(escena.p1.structures[0])
     escena.p2.setBasePlayer(escena.p2.structures[0])
     #print(escena.p2.limitUnits)
@@ -79,20 +94,31 @@ def loadHardcodedMap(nombre):
     raton.setEscena(escena)
     escena.raton = raton
 
-
-    loadUnits(data["p1"]["units"], escena.p1)
     loadStructures(data["p1"]["structures"], escena.p1, escena.mapa, escena.raton)
-    loadUnits(data["p2"]["units"], escena.p2)
     loadStructures(data["p2"]["structures"], escena.p2, escena.mapa, escena.raton)
+    
+    
 
     camera = loadCamera(data["camera"])
     escena.camera = camera
 
     escena.resources = loadResources(data["resources"])
+    print("estructuras: ", len(escena.p1.structures))
+    for structure in escena.p1.structures + escena.p2.structures:
+        print(type(structure))
+        structure.setTilesOcupados()
     for resource in escena.resources:
-        if resource.ocupante.getType() == REFINERY:
-            resource.ocupante.resource = resource
-            resource.disable()
+        coords = resource.getTile()
+        tile = escena.mapa.mapa[coords[1]][coords[0]]
+        print(tile.tileid, type(resource))
+        if tile.ocupante != None:
+            print(tile.ocupante)
+            if tile.ocupante.type == REFINERY:
+                print("aaaaaaaaaaaaaa")
+                tile.ocupante.resource = resource
+                resource.disable()
+    loadUnits(data["p2"]["units"], escena.p2, escena.mapa)
+    loadUnits(data["p1"]["units"], escena.p1, escena.mapa)
     escena.p1.setBasePlayer(escena.p1.structures[0])
     escena.p2.setBasePlayer(escena.p2.structures[0])
     #print(escena.p2.limitUnits)
@@ -127,7 +153,7 @@ def loadPlayer(playerDictionary, map, isPlayer):
 #pre: unitDictionaries: es una lista de diccionarios con la info de las unidades
 #   player: es el jugador al que pertenecen
 #post: ha añadido las unidades a player.units
-def loadUnits(unitDictionaries, player):
+def loadUnits(unitDictionaries, player, mapa):
     for u in unitDictionaries:
         if u["clase"] == "terranWorker":
             unit = TerranWorker(player, u["x"], u["y"])
@@ -162,6 +188,27 @@ def loadUnits(unitDictionaries, player):
             unit = Goliath(player, u["x"], u["y"])
             unit.load(u["hp"])
             player.addUnits(unit)
+        
+        try:
+            print("aaaaaaaaaaaa")
+            unit.returnx = u['returnx']
+            unit.returny = u['returny']
+            print("aaaaaaaaaaaa", u['disabled'])
+            if u['disabled']:
+                print(mapa)
+                print(unit.returnx, unit.returny - 40)
+                tile = mapa.getTile(unit.returnx, unit.returny - 40)
+                print("a extraer", tile.tileid)
+                resource = tile.ocupante.resource
+                print(type(resource))
+                unit.state = UnitState.EXTRACTING
+                unit.resource = resource
+                unit.isExtracting = True
+                unit.enable = False
+                unit.startTimeMining = 0
+                unit.x = -5000
+        except:
+            pass
 
 #post: ha añadido las unidades a player.units
 def loadUnit(u, player):

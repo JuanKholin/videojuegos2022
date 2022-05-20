@@ -67,6 +67,9 @@ class Unit(Entity):
 
         self.enable = True
 
+        self.returnx = 0
+        self.returny = 0
+
     def spawn(self, x, y):
         self.x = x * TILE_WIDTH + 20
         self.y = y * TILE_HEIGHT
@@ -780,6 +783,9 @@ class Unit(Entity):
         return {
             "x": x,
             "y": y,
+            "disabled": self.x == -5000,
+            "returnx": self.returnx,
+            "returny": self.returny,
             "hp": self.hp
         }
     def load(self, hp):

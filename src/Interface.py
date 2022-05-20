@@ -669,6 +669,7 @@ class Interface():
                 self.aceptarPress = True
             elif self.mouse.getClick() and self.aceptarPress and Raton.collides(endPos[0], endPos[1], self.aceptarRect):
                 #Con self.selectedMap selectedDif selectedRaza se crea la partida
+                print("crear partida")
                 _escena, _raton, _camera = loadHardcodedMap(self.selectedMap + "_" + self.selectedRaza["nombre"])
                 escena.setSelf(_escena)
                 raza = None
@@ -698,7 +699,6 @@ class Interface():
                 escena.aI = aI
                 raton.setSelf(_raton)
                 self.player = escena.p1
-                #print(self.player.limitUnits)
                 self.enemy = escena.p2
                 escena.raton = raton
                 escena.p1.base.raton = escena.raton
@@ -712,8 +712,8 @@ class Interface():
                 Utils.state = System_State.ONGAME
                 setGameState2(System_State.LOAD)
                 camera.update()
-                stopMusic()
-                playMusic(map1BGM)
+                #stopMusic()
+                #playMusic(map1BGM)
                 self.singlePress = False
 
         elif self.mouse.isCollide(self.cancelarRect):
