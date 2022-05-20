@@ -429,13 +429,13 @@ def init():
     loadTerranSoldier()
     loadFirebat()
     loadGoliath()
-    
+
     #terran structure
     loadTerranBuilder()
     loadTerranBarracks()
     loadTerranSupplyDepot()
     loadTerranRefinery()
-    
+
     #zerg unit
     loadDrone()
     loadZergling()
@@ -953,7 +953,7 @@ def loadGeyser():
         mask.set_alpha(150)
         shadows.append(mask)
     GEYSER_SPRITES = [sprites, shadows]
-    
+
 
 # Wall
 WALL_SPRITES = [None, None, None, None]

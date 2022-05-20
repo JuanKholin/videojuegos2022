@@ -44,7 +44,7 @@ class Hatchery(Structure):
     options = [Options.BUILD_DEPOT_ZERG, Options.BUILD_BARRACKS_ZERG, Options.BUILD_REFINERY_ZERG, Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE, Options.GENERATE_WORKER_ZERG]
     selectedSound = zergStructureSelectedSound
     deadSound = zergStructureDead
-    
+
 
     def __init__(self, xini, yini, player, map, building, raton):
         Structure.__init__(self, HP, MINERAL_COST, GENERATION_TIME, xini, yini, map, player, CAPACITY)
@@ -84,7 +84,7 @@ class Hatchery(Structure):
 
 
         self.type = BASE
-        
+
     def updateUpgrade(self):
         self.damageMineralUpCost = DAMAGE_MINERAL_UP_COST[self.player.dañoUpgrade]
         self.damageGasUpCost = DAMAGE_GAS_UP_COST[self.player.dañoUpgrade]
@@ -96,7 +96,7 @@ class Hatchery(Structure):
     def execute(self, command_id):
         #if self.clicked:
         if self.state != BuildingState.BUILDING and self.state != BuildingState.COLLAPSING and self.state != BuildingState.DESTROYED:
-    
+
             if command_id == CommandId.GENERATE_WORKER and self.player.resources >= ZERG_T1_MINERAL_COST:
                 #print("Haciendo un zerg")
                 self.player.resources -= ZERG_T1_MINERAL_COST
@@ -165,7 +165,13 @@ class Hatchery(Structure):
             "clase": "hatchery",
             "building": self.building,
             "nombre": "Criadero de Zerg",
-            "funcion": "Construir y engendrar Drone"
+            "funcion": "Construir y engendrar Drone",
+            "damageMineralUpCost": self.damageMineralUpCost,
+            "damageGasUpCost": self.damageGasUpCost,
+            "armorMineralUpCost": self.armorMineralUpCost,
+            "armorGasUpCost": self.armorGasUpCost,
+            "mineMineralUpCost": self.mineMineralUpCost,
+            "mineGasUpCost": self.mineGasUpCost,
         }
         sonDictionary.update(fatherDictionary)
         return sonDictionary

@@ -222,6 +222,13 @@ def loadStructures(structureDictionaries, player, map, raton):
             structure = TerranBarracks(s["x"], s["y"], player, map, s["building"])
         elif s["clase"] == "hatchery":
             structure = Hatchery(s["x"], s["y"], player, map, s["building"], raton)
+            structure.damageMineralUpCost = s["damageMineralUpCost"]
+            structure.damageGasUpCost = s["damageGasUpCost"]
+            structure.armorMineralUpCost = s["armorMineralUpCost"]
+            structure.armorGasUpCost = s["armorGasUpCost"]
+            structure.mineMineralUpCost = s["mineMineralUpCost"]
+            structure.mineGasUpCost = s["mineGasUpCost"]
+            player.setBasePlayer(structure)
         elif s["clase"] == "terranSupplyDepot":
             structure = TerranSupplyDepot(s["x"], s["y"], player, map, s["building"])
         elif s["clase"] == "terranRefinery":
