@@ -333,11 +333,8 @@ class Worker(Unit):
     def finishOrePath(self):
         if len(self.paths) > 0:
             self.paths.pop(0)
-        if len(self.paths) == 0:
-            if (self.siendoAtacado == True) and not self.runningAway:
-                self.attack(self.atacante)
-            else:
-                self.changeToStill()
+        if (self.siendoAtacado == True) and not self.runningAway:
+            self.attack(self.atacante)
         elif len(self.paths) > 0:
             self.changeObjectiveTile() 
         else: # PUEDE QUE NO 
@@ -364,11 +361,8 @@ class Worker(Unit):
     def finishGasPath(self):
         if len(self.paths) > 0:
             self.paths.pop(0)
-        if len(self.paths) == 0:
-            if (self.siendoAtacado == True) and not self.runningAway:
-                self.attack(self.atacante)
-            else:
-                self.changeToStill()
+        if (self.siendoAtacado == True) and not self.runningAway:
+            self.attack(self.atacante)
         elif len(self.paths) > 0:
             self.changeObjectiveTile() 
         else: # PUEDE QUE NO

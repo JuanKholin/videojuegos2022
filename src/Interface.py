@@ -388,7 +388,7 @@ class Interface():
                     self.singlePress = True
                 elif self.mouse.getClick() and self.singlePress and Raton.collides(endPos[0], endPos[1], self.singleRect):
                     #print("Seleccionado single player")
-                    #Utils.state = System_State.MAP1
+                    Utils.state = System_State.MAP1
                     self.loadPartidas()
                     Utils.state = System_State.GAMESELECT
                     #stopMusic()
