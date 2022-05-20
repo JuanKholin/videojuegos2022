@@ -49,14 +49,17 @@ class Wall():
     
     
     def __init__(self, type , xIni, yIni, mapa):
-        #print(self.speed)
+        
+        sprites = Utils.WALL_SPRITES
+
         if type == 1:
-            spritesheet = pg.image.load("./sprites/Muro/wallTerran.png").convert()
+            self.image = sprites[2]
+            self.shadow = sprites[3]
         else:
-            spritesheet = pg.image.load("./sprites/Muro/wallZerg.png").convert()
+            self.image = sprites[0]
+            self.shadow = sprites[1]
+
         self.type = type
-        spritesheet.set_colorkey(BLACK)
-        self.image = pg.transform.scale(spritesheet, [spritesheet.get_rect().w * 1.4, spritesheet.get_rect().h * 1.1])
         self.x = xIni 
         self.y = yIni
         self.mapa = mapa
@@ -74,6 +77,11 @@ class Wall():
         self.mapa.setObstacle(self.tile)
 
         
+    def draw2(self, screen, camera, mapa):
+        drawPos = self.getDrawPosition()
+
+        if self.shadow != None:
+            screen.blit(self.shadow, [drawPos[0] - camera.x - 5, drawPos[1] - camera.y - 10])
 
     def draw(self, screen, camera, mapa):
         r = self.getRect()
@@ -87,6 +95,8 @@ class Wall():
             drawPos = self.getDrawPosition()
             #screen.blit(unit.image, [r.x - camera.x, r.y - camera.y])
             screen.blit(self.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
+
+
     
     def getRect(self):
         rectAux = pg.Rect(self.x - self.xPadding, self.y - self.yPadding,

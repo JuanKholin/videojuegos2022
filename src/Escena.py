@@ -293,7 +293,9 @@ class Escena():
         self.mapa.drawMap(screen, self.camera)
         #print("tiempo de dibujar el mapa: ",(datetime.now() - now).microseconds)
         #print(self.walls.__len__())
-        
+ 
+        for wall in self.walls:
+            wall.draw2(screen, self.camera, self.mapa)
         all = self.resources + self.p1.units +  self.p1.structures + self.p2.units +  self.p2.structures + self.walls
         all.sort(key=lambda x: x.y)
         for d in all:
@@ -301,6 +303,7 @@ class Escena():
                 d.draw(screen, self.camera, self.mapa)
             except:
                 d.draw(screen, self.camera)
+
     
             
             
