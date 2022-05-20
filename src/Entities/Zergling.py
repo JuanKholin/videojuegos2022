@@ -25,7 +25,7 @@ HEIGHT_PADDING = 155
 X_PADDING = 13
 Y_PADDING = 15
 
-IS_EXPLOSIVE = True
+IS_EXPLOSIVE = False
 
 class Zergling(Soldier):
     

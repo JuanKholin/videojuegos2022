@@ -565,12 +565,12 @@ class Unit(Entity):
             self.attackedOne = None
             self.changeToDying()
         else:
-            self.hp -= (damage - self.player.armorUpgrade)
+            self.hp = self.hp - (damage * self.player.armorUpgrade*ARMOR_MEJORA))
             #if self.state != UnitState.ATTACKING and self.state != UnitState.STILL: # Cambiar a atacar si no esta haciendo nada ASI GUAY
             if self.state != UnitState.ATTACKING and self.state != UnitState.STILL:
                 self.siendoAtacado = True
                 self.atacante = attacker
-            elif self.state == UnitState.STILL:
+            elif (self.state == UnitState.STILL) or (self.state == UnitState.EXTRACTING) or (self.state == UnitState.MINING) or (self.state == UnitState.GAS_TRANSPORTING) or (self.state == UnitState.ORE_TRANSPORTING):
                 #print("AL <TAKE")
                 self.attack(attacker)
         return self.hp
