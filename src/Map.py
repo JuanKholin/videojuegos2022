@@ -739,12 +739,12 @@ class Map():
         y = tile.y / 40
         for i in range(distance): # Capas
             tilesEstaCapa = [[],[]]
-            for aux in range(x - distance, x + distance + 1):
-                tilesEstaCapa.append(aux, y - distance)
-                tilesEstaCapa.append(aux, y + distance)
-            for aux in range(y - distance + 1, y + distance):
-                tilesEstaCapa.append(x - distance, aux)
-                tilesEstaCapa.append(x + distance, aux)
+            for aux in range(int(x - distance), int(x + distance + 1)):
+                tilesEstaCapa.append([aux, y - distance])
+                tilesEstaCapa.append([aux, y + distance])
+            for aux in range(int(y - distance + 1), int(y + distance)):
+                tilesEstaCapa.append([x - distance, aux])
+                tilesEstaCapa.append([x + distance, aux])
             for tileAux in tilesEstaCapa:
                 row = tileAux[0]
                 col = tileAux[1]
