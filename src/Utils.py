@@ -231,11 +231,11 @@ class Rect():
         self.h = h
 
 # Para los ID de las entidades
-id = 1
+ID = 1
 def takeID():
-    global id
-    result = id
-    id += 1
+    global ID
+    result = ID
+    ID += 1
     return result
 
 #----------------------------------------------------------------
@@ -282,6 +282,7 @@ ACEPTAR_POS = [MIN_SCREEN_WIDTH/2-705, MIN_SCREEN_HEIGHT/2-590]
 ACEPTAR_RECT = (250, 40)
 CANCELAR_POS = [MIN_SCREEN_WIDTH/2-705, MIN_SCREEN_HEIGHT/2-695]
 NUEVA_PARTIDA_POS = [MIN_SCREEN_WIDTH/2-88, MIN_SCREEN_HEIGHT/2-652]
+BORRAR_PARTIDA_POS = [MIN_SCREEN_WIDTH/2-88, MIN_SCREEN_HEIGHT/2-725]
 PARTIDA_DEFAULT_POS = [MIN_SCREEN_WIDTH/2-80, MIN_SCREEN_HEIGHT/2-300]
 
 
