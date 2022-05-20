@@ -337,7 +337,7 @@ class Interface():
         elif Utils.state == System_State.NEWGAME:
 
             self.updateNewGame(escena, raton, camera)
-            
+
         elif Utils.state == System_State.SETTINGS:
             press, iniPos = self.mouse.getPressed()
 
@@ -385,7 +385,7 @@ class Interface():
                     self.singlePress = True
                 elif self.mouse.getClick() and self.singlePress and Raton.collides(endPos[0], endPos[1], self.singleRect):
                     #print("Seleccionado single player")
-                    Utils.state = System_State.MAP1
+                    #Utils.state = System_State.MAP1
                     self.loadPartidas()
                     Utils.state = System_State.GAMESELECT
                     #stopMusic()
@@ -1166,13 +1166,13 @@ class Interface():
         size = 180
         x = 405
         if Utils.BGM_VOLUME < 0.05:
-            Utils.BGM_VOLUME = 0 
+            Utils.BGM_VOLUME = 0
         bgm = pg.transform.chop(pg.transform.scale(BARRA_SOUND, (size, 20)), ((Utils.BGM_VOLUME / 1.0) * 160, 0, size, 0))
         screen.blit(bgm, [Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - x), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 275)])
         pg.draw.rect(screen, ORANGE2, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - x), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 275), size, 20), 4)
 
         if Utils.SOUND_VOLUME < 0.05:
-            Utils.SOUND_VOLUME = 0 
+            Utils.SOUND_VOLUME = 0
         sound = pg.transform.chop(pg.transform.scale(BARRA_SOUND, (size, 20)), ((Utils.SOUND_VOLUME / 1.0) * 200, 0, size, 0))
         screen.blit(sound, [Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - x), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 415)])
         pg.draw.rect(screen, ORANGE2, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - x), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 415), size, 20), 4)
