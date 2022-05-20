@@ -1020,8 +1020,6 @@ class Interface():
                 pg.draw.rect(screen, GREEN3, self.borrarPartidaRect, 2)
             elif self.selectedPartida == None:
                 screen.blit(self.borrarNoPulsabeSurf, [self.borrarPartidaRect.x, self.borrarPartidaRect.y])
-            pg.draw.rect(screen, GREEN, self.scrollBarTopRect, 2)
-            pg.draw.rect(screen, GREEN, self.scrollBarBotRect, 2)
             j = 0
             for i in self.partidas:
                 yActual = self.partidas[j]["rect"].y
