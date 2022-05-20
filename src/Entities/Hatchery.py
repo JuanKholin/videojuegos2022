@@ -19,6 +19,7 @@ HEIGHT = 4
 HP = 200
 CAPACITY = 10
 LIMIT_MEJORA = 10
+VISION_RADIUS = 9
 
 class Hatchery(Structure):
     TILES_HEIGHT = 4
@@ -42,13 +43,15 @@ class Hatchery(Structure):
         self.shadows = sprites[1]
         self.nDeadSprite = len(self.sprites) - len(self.shadows)
         self.image = self.sprites[self.index]
-        
+
         self.operativeIndex = [0, 1, 2, 3]
         self.spawningIndex = [0, 1, 2, 3]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
 
         self.raton = raton
         self.render = pg.transform.scale(pg.image.load(HATCHERY_RENDER), RENDER_SIZE)
+
+        self.visionRadius = VISION_RADIUS
 
         self.building = building
         if building:
@@ -119,7 +122,7 @@ class Hatchery(Structure):
             return Command(CommandId.NULL)
 
     def getOrder(self):
-        if self.state != BuildingState.BUILDING and self.state != BuildingState.COLLAPSING and self.state!= BuildingState.DESTROYED: 
+        if self.state != BuildingState.BUILDING and self.state != BuildingState.COLLAPSING and self.state!= BuildingState.DESTROYED:
             return CommandId.TRANSPORTAR_ORE_STILL
         else:
             return CommandId.NULL

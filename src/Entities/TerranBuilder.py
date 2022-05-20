@@ -17,6 +17,7 @@ GENERATION_TIME = 120
 MINERAL_COST = 400
 LIMIT_MEJORA = 10
 CAPACITY = 10
+VISION_RADIUS = 9
 
 class TerranBuilder(Structure):
     TILES_HEIGHT = 4
@@ -32,7 +33,7 @@ class TerranBuilder(Structure):
     clicked = False
     frame = 8
     nSprites = TERRAN_BUILDER_TOTAL_FRAMES
-    options = [Options.BUILD_DEPOT_TERRAN, Options.BUILD_BARRACKS_TERRAN, Options.BUILD_REFINERY_TERRAN, 
+    options = [Options.BUILD_DEPOT_TERRAN, Options.BUILD_BARRACKS_TERRAN, Options.BUILD_REFINERY_TERRAN,
             Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE, Options.GENERATE_WORKER_TERRAN]
 
     def __init__(self, xini, yini, player, map, building, raton):
@@ -47,7 +48,7 @@ class TerranBuilder(Structure):
         #+ Entity.divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
         self.raton = raton
         self.image = self.sprites[self.index]
-        
+
         self.operativeIndex = [4]
         self.spawningIndex = [4, 5]
         self.finalImage = self.sprites[self.operativeIndex[self.indexCount]]
@@ -73,7 +74,9 @@ class TerranBuilder(Structure):
         self.mineGasUpCost = 5
 
         self.type = BASE
-       
+
+        self.visionRadius = VISION_RADIUS
+
         ("ESTOY SIENDO CREADO ", self.toDictionary(self.mapa)['clase'])
 
 
@@ -81,7 +84,7 @@ class TerranBuilder(Structure):
     #    pass
 
     def getOrder(self):
-        if self.state != BuildingState.BUILDING and self.state != BuildingState.COLLAPSING and self.state!= BuildingState.DESTROYED: 
+        if self.state != BuildingState.BUILDING and self.state != BuildingState.COLLAPSING and self.state!= BuildingState.DESTROYED:
             return CommandId.TRANSPORTAR_ORE_STILL
         else:
             return CommandId.NULL
@@ -89,7 +92,7 @@ class TerranBuilder(Structure):
     def execute(self, command_id):
         #if self.clicked:
         if self.state != BuildingState.BUILDING and self.state != BuildingState.COLLAPSING and self.state != BuildingState.DESTROYED:
-            
+
             if (command_id == CommandId.GENERATE_UNIT or command_id == CommandId.GENERATE_WORKER) and self.player.resources >= TERRAN_WORKER_MINERAL_COST:
                 if len(self.player.units) + 1 <= (self.player.limitUnits):
                     self.player.resources -= TERRAN_WORKER_MINERAL_COST
@@ -149,7 +152,7 @@ class TerranBuilder(Structure):
 
     def getTerranRefinery(self):
         return TerranRefinery(0, 0, None, self.mapa, True)
-    
+
     def getTerranSupply(self):
         return TerranSupplyDepot(0, 0, None, self.mapa, True)
 

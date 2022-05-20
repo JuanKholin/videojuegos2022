@@ -50,24 +50,24 @@ class Map():
                     self.mapa[i][j].drawNiebla(screen, camera)
 
 
-    def updateNiebla(self, camera, locationEntitiesOnCamera):
+    def updateNiebla(self, camera, locationAndRadiusEntitiesOnCamera):
         firstTileX, firstTileY = self.getTileIndex(camera.x, camera.y)
         lastTileX, lastTileY = self.getTileIndex(camera.x + camera.w, camera.y + camera.h)
         for i in range(firstTileY, lastTileY + 1):
             for j in range(firstTileX, lastTileX + 1):
                 self.mapa[i][j].visible = False
 
-        centers = []
-        for l in locationEntitiesOnCamera:
-            i, j = self.getTileIndex(l[0], l[1])
-            centers.append((i, j))
+        centersAndRadius = []
+        for l in locationAndRadiusEntitiesOnCamera:
+            i, j = self.getTileIndex(l[0][0], l[0][1])
+            centersAndRadius.append(((i, j),l[1]))
 
         maxJ, maxI = self.getTileIndex(self.w, self.h)
-        for c in centers:
-            for i in range(c[1] - VISION_RADIUS, c[1] + VISION_RADIUS):
-                for j in range(c[0] - VISION_RADIUS, c[0] + VISION_RADIUS):
+        for c in centersAndRadius:
+            for i in range(c[0][1] - c[1], c[0][1] + c[1]):
+                for j in range(c[0][0] - c[1], c[0][0] + c[1]):
                     if ((i >= 0 and j >= 0) and (i < maxI+1 and j < maxJ+1)
-                            and ((i - (c[1]))**2 + ((j - (c[0]))**2)) < VISION_RADIUS**2):
+                            and ((i - (c[0][1]))**2 + ((j - (c[0][0]))**2)) < c[1]**2):
                         self.mapa[i][j].visible = True
                         self.mapa[i][j].oscura = False
 

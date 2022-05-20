@@ -206,15 +206,17 @@ class Player():
 
     #devuelve las coordenadas de las entidades que ve la camara
     def getEntitesLocation(self, camera):
-        locations = []
+        locationsAndRadius = []
         for u in self.units:
-            if (u.x > (camera.x - VISION_RADIUS_PIXELS) and u.x < (camera.x + camera.w + VISION_RADIUS_PIXELS)
-                    and u.y > (camera.y - VISION_RADIUS_PIXELS) and u.y < (camera.y + camera.h + VISION_RADIUS_PIXELS)):
+            visionRadiusPixels = u.visionRadius * Utils.TILE_WIDTH
+            if (u.x > (camera.x - visionRadiusPixels) and u.x < (camera.x + camera.w + visionRadiusPixels)
+                    and u.y > (camera.y - visionRadiusPixels) and u.y < (camera.y + camera.h + visionRadiusPixels)):
                 location = (u.x, u.y)
-                locations.append(location)
+                locationsAndRadius.append((location, u.visionRadius))
         for s in self.structures:
-            if (s.x > (camera.x - VISION_RADIUS_PIXELS) and s.x < (camera.x + camera.w + VISION_RADIUS_PIXELS)
-                    and s.y > (camera.y - VISION_RADIUS_PIXELS) and s.y < (camera.y + camera.h + VISION_RADIUS_PIXELS)):
+            visionRadiusPixels = s.visionRadius * Utils.TILE_WIDTH
+            if (s.x > (camera.x - visionRadiusPixels) and s.x < (camera.x + camera.w + visionRadiusPixels)
+                    and s.y > (camera.y - visionRadiusPixels) and s.y < (camera.y + camera.h + visionRadiusPixels)):
                 location = (s.x, s.y)
-                locations.append(location)
-        return locations
+                locationsAndRadius.append((location, s.visionRadius))
+        return locationsAndRadius

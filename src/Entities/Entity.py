@@ -1,5 +1,7 @@
 import pygame as pg
 
+DEFAULT_VISION_RADIO = 7
+
 class Entity():
     def __init__(self, hp, xIni, yIni, mineralCost, generationTime, id, player):
         self.maxHp = hp
@@ -12,25 +14,26 @@ class Entity():
         self.player = player
         if player != None:
             self.mapa = player.getMapa()
-            
+
         self.shadow = []
+        self.visionRadius = DEFAULT_VISION_RADIO
 
     def update():
         pass
-    
+
     def getHP(self):
         return self.hp
-    
+
     def getInfo(self):
         return "None"
-    
+
     def getMaxHP(self):
         return self.maxHp
-    
+
     def getTile(self):
         pos = self.getPosition()
         return self.mapa.getTile(pos[0], pos[1])
-    
+
     def getRender(self):
         return self.render
 
@@ -48,7 +51,7 @@ class Entity():
 
             sprites.append(aux)
         return sprites
-    
+
     # Pre: Altura del spritesheet % rows == 0
     # Post: Devuelve el spritesheet dividido en una lista de sprites sin escalado
     @staticmethod
@@ -71,6 +74,6 @@ class Entity():
     def setTilePosition(self, tile):
         self.x = tile.centerx
         self.y = tile.centery
-        
+
     def drawInfo(self):
         pass
