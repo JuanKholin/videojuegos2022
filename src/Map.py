@@ -238,7 +238,7 @@ class Map():
 
     #Pone la tile como libre
     def setLibre(self, tile):
-        print("CAGO EN DIOS", tile.tileid)
+        #print("CAGO EN DIOS", tile.tileid)
         if self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type == EMPTY:
             #print("hi")
             pass

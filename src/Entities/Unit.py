@@ -120,7 +120,7 @@ class Unit(Entity):
                         self.tileAAtacar = tile
             if int(math.hypot(self.occupiedTile.centerx - self.tileAAtacar.centerx, self.occupiedTile.centery- self.tileAAtacar.centery)) > self.range: 
                 self.paths = calcPath(self.getPosition(), self.getTile(), self.tileAAtacar, self.mapa)
-                print("CAMINOS:" ,len(self.paths))
+               #print("CAMINOS:" ,len(self.paths))
                 self.updateOwnSpace()
             self.changeToAttacking(objective)
 
@@ -492,7 +492,7 @@ class Unit(Entity):
 
     # Pasa a morirse (chof)
     def changeToDying(self):
-        print("DYING", self.x, self.y)
+       #print("DYING", self.x, self.y)
         self.state = UnitState.DYING
         self.attackedOne = None
         self.runningAway = False
@@ -554,7 +554,7 @@ class Unit(Entity):
         if hpLeft <= 0:
             enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
             if enemy != None:
-                print("ataco a tero")
+               #print("ataco a tero")
                 self.attack(enemy)
             else:
                 self.changeToStill()
@@ -707,13 +707,13 @@ class Unit(Entity):
     def changeObjectiveTile(self):
         actualPath = self.paths[0]
         objectiveTile = self.mapa.getTile(actualPath.posFin[0], actualPath.posFin[1])
-        print(objectiveTile.tileid, objectiveTile.type, self.getTile().tileid, objectiveTile.type)
+       #print(objectiveTile.tileid, objectiveTile.type, self.getTile().tileid, objectiveTile.type)
         if objectiveTile.type == EMPTY or (objectiveTile.type == UNIT and objectiveTile.id == self.id):
             self.mapa.setVecina(objectiveTile, self.id)
             objectiveTile.setOcupante(self)
             self.mapa.setLibre(self.occupiedTile)
             self.occupiedTile = objectiveTile
-            print(objectiveTile.tileid, objectiveTile.type)
+           #print(objectiveTile.tileid, objectiveTile.type)
         else:
             lastPath = self.paths[len(self.paths) - 1]
             lastTile = self.mapa.getTile(lastPath.posFin[0], lastPath.posFin[1])

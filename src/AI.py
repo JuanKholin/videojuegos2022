@@ -213,7 +213,7 @@ class AI():
                     crystalToMine = self.getBestCrystalSeen(structures)
                     for worker in workers: # todos a la mina
                         #print("A la mina")
-                        if (worker.state == UnitState.STILL) or (worker.state == UnitState.EXTRACTING): # si les viene bien xd
+                        if (worker.state == UnitState.STILL): # si les viene bien xd
                             crystalsSeen = list(self.crystalsSeen)
                             #print("go to work crystal at", crystalsSeen[crystalToMine].getPosition())
                             worker.mine(crystalToMine)
@@ -662,17 +662,21 @@ class AI():
         base = self.getBase(structures)
         crystals = list(self.crystalsSeen)
         basePos = base.getPosition()
+        print(basePos)
         bestCrystal = crystals[0]
         crystalPos = bestCrystal.getPosition()
         bestDistance = math.hypot(basePos[0] - crystalPos[0], basePos[1] - crystalPos[1])
         if base != None:
             for crystal in crystals:
+                print(crystal.getTile())
                 crystalPos = crystal.getPosition()
                 distance = math.hypot(basePos[0] - crystalPos[0], basePos[1] - crystalPos[1])
+                print(distance, bestDistance)
                 if distance < bestDistance:
+                    print("Mejor cristal: ", crystal.getTile())
                     bestCrystal = crystal
                     bestDistance = distance
-        return crystal
+        return bestCrystal
 
     def findFreeGeyser(self, units, structures):
         for unit in units:

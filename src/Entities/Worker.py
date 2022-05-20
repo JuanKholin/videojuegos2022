@@ -255,7 +255,7 @@ class Worker(Unit):
             self.updateMiningImage()
 
     def updateExtractingAct(self):
-        print("aun", getGlobalTime() - self.startTimeMining, self.timeToMine - self.player.mineUpgrade*1000)
+        #print("aun", getGlobalTime() - self.startTimeMining, self.timeToMine - self.player.mineUpgrade*1000)
         if getGlobalTime() - self.startTimeMining > (self.timeToMine - self.player.mineUpgrade*1000): #Termina de minar
             print("termino")
             self.isExtracting = False
