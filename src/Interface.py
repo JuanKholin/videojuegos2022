@@ -459,7 +459,6 @@ class Interface():
         self.scrollBarTopRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_TOP_TRIANGLE_POS[0][0] - 420, Utils.ScreenHeight/2 - SCROLL_BAR_TOP_TRIANGLE_POS[1][1] + 20, 30, 30)
         self.scrollBarRectangle = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_RECT_POS[0]- 420, Utils.ScreenHeight/2 + 13 - SCROLL_BAR_RECT_POS[1], SCROLL_BAR_RECT_SIZE[0], SCROLL_BAR_RECT_SIZE[1] - 57)
         self.scrollBarBotRect = pg.Rect(Utils.ScreenWidth/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][0] - 420, Utils.ScreenHeight/2 - SCROLL_BAR_BOT_TRIANGLE_POS[0][1] - 55, 30, 30)
-
         aux = []
         pad = 0
         for partidas in self.partidas:
@@ -499,6 +498,7 @@ class Interface():
                 self.scrollBarBotPress = False
                 playSound(botonSound2)
             if press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarBotRect):
+                print(self.partidas[len(self.partidas) - 1]["rect"].y, self.partidas[0]["rect"].y, self.partidaFirstOriginalY)
                 if self.partidas[len(self.partidas) - 1]["rect"].y > self.partidaFirstOriginalY:
                     for k in self.partidas:
                         k["rect"].y -= 7
@@ -1020,6 +1020,8 @@ class Interface():
                 pg.draw.rect(screen, GREEN3, self.borrarPartidaRect, 2)
             elif self.selectedPartida == None:
                 screen.blit(self.borrarNoPulsabeSurf, [self.borrarPartidaRect.x, self.borrarPartidaRect.y])
+            pg.draw.rect(screen, GREEN, self.scrollBarTopRect, 2)
+            pg.draw.rect(screen, GREEN, self.scrollBarBotRect, 2)
             j = 0
             for i in self.partidas:
                 yActual = self.partidas[j]["rect"].y
@@ -1194,7 +1196,7 @@ class Interface():
         stringKeyItems = self.keyButtons.items()
         for i in stringKeyItems:
             yActual = self.keyButtons[j]["rect"].y
-            if yActual < Utils.ScreenHeight - Utils.ScreenHeight*0.195 and  yActual > Utils.ScreenHeight*0.195:
+            if yActual < Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 610) and  yActual > Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 145):
                 muestra_texto(screen, str('monotypecorsiva'), COMMAND_TO_TEXT[int(i[1]["command"])], WHITE, ATAJO_TEXT_SIZE, (Utils.ScreenWidth/2 - COMANDO_POS[0], Utils.ScreenHeight/2 - COMANDO_POS[1] + Y_ATAJOS_OFFSET * j))
                 muestra_texto(screen, str('monotypecorsiva'), KEY_TO_TEXT[i[1]["key"]], WHITE, ATAJO_TEXT_SIZE, (Utils.ScreenWidth/2 - TECLA_POS[0] + 30, Utils.ScreenHeight/2 - TECLA_POS[1] - 5 + Y_ATAJOS_OFFSET * j))
                 if Utils.getGameState2() == System_State.KEY_BINDING and j == self.buttonWaitingForKey:

@@ -137,6 +137,8 @@ def update():
     
     if Utils.resized:
         updateScreen(screen)
+        escena.interfaz.partidaFirstOriginalY = Utils.ScreenHeight/2 - PARTIDA_POS[1]
+        escena.interfaz.keyFirstOriginalY = Utils.ScreenHeight/2 - TECLA_POS[1]
         camera.update()
         Utils.resized = False
     clock_update()
