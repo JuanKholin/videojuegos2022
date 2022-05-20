@@ -390,7 +390,7 @@ class Interface():
                     #print("Seleccionado single player")
                     Utils.state = System_State.MAP1
                     self.loadPartidas()
-                    Utils.state = System_State.GAMESELECT
+                    #Utils.state = System_State.GAMESELECT
                     #stopMusic()
                     self.singlePress = False
 

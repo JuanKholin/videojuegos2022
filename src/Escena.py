@@ -140,8 +140,8 @@ class Escena():
                     self.interfaz.helpPage = 0
                     setGameState2(System_State.PLAYING)
                 elif command.id == CommandId.MOVE:
-                    for unit in self.p1.unitsSelected:
-                        self.mapa.setLibre(unit.getTile())
+                    #for unit in self.p1.unitsSelected:
+                     #   self.mapa.setLibre(unit.getTile())
                     #path = [] ## !!!!
                     relative_mouse_pos = pg.mouse.get_pos()
                     real_mouse_pos = (relative_mouse_pos[0] + self.camera.x, relative_mouse_pos[1] + self.camera.y)
