@@ -101,7 +101,7 @@ EASY = 0
 MEDIUM = 1
 HARD = 2
 NULL = 3
-DECISSION_RATE = [450, 300, 150, 10000]
+DECISSION_RATE = [400, 250, 150, 10000]
 
 # espera de la IA para tomar decisiones ligeras:
 AI_LAPSE = [25, 20, 15, 10000]
