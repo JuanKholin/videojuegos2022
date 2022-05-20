@@ -382,7 +382,7 @@ class Structure(Entity.Entity):
         self.lastAttacker = unit
         if self.hp <= damage:
             self.hp -= damage
-            self.frame = 6
+            self.frame = 6 * (CLOCK_PER_SEC / 60)
             #if inCamera(self.getPosition()):
             playSound(self.deadSound)
             self.changeToCollapsing()

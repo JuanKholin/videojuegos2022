@@ -26,7 +26,7 @@ class ZergBarracks(Structure):
     generationCount = 0
     rectOffY = 20
     clicked = False
-    frame = 20
+    frame = 20 * (CLOCK_PER_SEC / 60)
     nSprites = ZERG_BARRACKS_TOTAL_FRAMES
     options = [Options.GENERATE_T1_ZERG, Options.GENERATE_T2_ZERG, Options.GENERATE_T3_ZERG]
     selectedSound = zergStructureSelectedSound

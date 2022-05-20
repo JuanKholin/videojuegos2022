@@ -24,7 +24,7 @@ class TerranRefinery(Structure):
     HEIGHT_PAD = 5
     rectOffY = 57
     clicked = False
-    frame = 8
+    frame = 8 * (CLOCK_PER_SEC / 60)
     nSprites = TERRAN_REFINERY_TOTAL_FRAMES
 
     def __init__(self, xini, yini, player, map, building, gas = None):

@@ -27,7 +27,7 @@ class TerranSupplyDepot(Structure):
     HEIGHT_PAD = 15
     rectOffY = 8
     clicked = False
-    frame = 8
+    frame = 8 * (CLOCK_PER_SEC / 60)
     nSprites = TERRAN_DEPOT_TOTAL_FRAMES
 
     def __init__(self, xini, yini, player, map, building):

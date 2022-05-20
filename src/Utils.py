@@ -177,7 +177,7 @@ BARRA_SOUND = pg.image.load("SPRITE/EXTRA/sound.png")
 
 
 #CAMERA
-CAMERA_SPEED = 8
+CAMERA_SPEED = 16
 resized = False
 
 MAX_SELECTED_UNIT = 8

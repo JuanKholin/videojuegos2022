@@ -38,7 +38,7 @@ class TerranBuilder(Structure):
     HEIGHT_PAD = 25
     nBuildSprites = 4
     clicked = False
-    frame = 8
+    frame = 8 * (CLOCK_PER_SEC / 60)
     nSprites = TERRAN_BUILDER_TOTAL_FRAMES
     options = [Options.BUILD_DEPOT_TERRAN, Options.BUILD_BARRACKS_TERRAN, Options.BUILD_REFINERY_TERRAN,
             Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE, Options.GENERATE_WORKER_TERRAN]

@@ -135,7 +135,7 @@ class Raton(pygame.sprite.Sprite):
             if type[0]:
                 self.image = self.clickSprite
             else:
-                if frame(6) == 1:
+                if frame(6 * (CLOCK_PER_SEC / 60)) == 1:
                     self.index = (self.index+1)%5
                     self.index2 = (self.index2+1)%14
                 if self.collideAlly:
@@ -439,7 +439,7 @@ class point(pygame.sprite.Sprite):
 
     def update(self):
         if self.clicked:
-            if frame(6) == 1:
+            if frame(6 * (CLOCK_PER_SEC / 60)) == 1:
                 self.index = self.index+1
                 self.image = self.sprite[self.index]
                 self.rect = self.image.get_rect()

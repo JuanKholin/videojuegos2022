@@ -39,7 +39,7 @@ class Hatchery(Structure):
     generationCount = 0
     rectOffY = 90
     clicked = False
-    frame = 12
+    frame = 12 * (CLOCK_PER_SEC / 60)
     nSprites = HATCHERY_TOTAL_FRAMES
     options = [Options.BUILD_DEPOT_ZERG, Options.BUILD_BARRACKS_ZERG, Options.BUILD_REFINERY_ZERG, Options.DANYO_UPGRADE, Options.MINE_UPGRADE, Options.ARMOR_UPGRADE, Options.GENERATE_WORKER_ZERG]
     selectedSound = zergStructureSelectedSound
@@ -102,7 +102,7 @@ class Hatchery(Structure):
                 self.player.resources -= ZERG_T1_MINERAL_COST
                 zergling = Drone(self.player)
                 self.generateUnit(zergling)
-                self.frame = 4
+                self.frame = 4 * (CLOCK_PER_SEC / 60)
                 self.state = BuildingState.SPAWNING
             elif command_id == CommandId.UPGRADE_SOLDIER_DAMAGE and self.player.resources and self.player.resources >= self.damageMineralUpCost and self.player.gas >= self.damageGasUpCost and self.player.dañoUpgrade <= LIMIT_MEJORA:
                 self.player.resources -= self.damageMineralUpCost

@@ -28,7 +28,7 @@ class TerranBarracks(Structure):
     HEIGHT_PAD = 15
     rectOffY = 8
     clicked = False
-    frame = 8
+    frame = 8 * (CLOCK_PER_SEC / 60)
     nSprites = TERRAN_BARRACKS_TOTAL_FRAMES
     options = [Options.GENERATE_T1_TERRAN, Options.GENERATE_T2_TERRAN, Options.GENERATE_T3_TERRAN]
 

@@ -26,7 +26,7 @@ class Extractor(Structure):
     HEIGHT_PAD = 80
     rectOffY = -10
     clicked = False
-    frame = 8
+    frame = 8 * (CLOCK_PER_SEC / 60)
     nSprites = EXTRACTOR_TOTAL_FRAMES
     selectedSound = zergStructureSelectedSound
     deadSound = zergStructureDead

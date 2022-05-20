@@ -25,7 +25,7 @@ class ZergSupply(Structure):
     widthPad = -15
     rectOffY = 30
     clicked = False
-    frame = 10
+    frame = 10 * (CLOCK_PER_SEC / 60)
     nSprites = ZERG_DEPOT_TOTAL_FRAMES
     options = []
     selectedSound = zergStructureSelectedSound

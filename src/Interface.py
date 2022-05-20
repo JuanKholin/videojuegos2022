@@ -439,10 +439,10 @@ class Interface():
                 self.exitPress = False
                 self.singlePress = False
 
-        self.idSingle = (self.idSingle + frame(5)) % SINGLE_PLAYER_N
-        self.idExit = (self.idExit + frame(5)) % EXIT_N
-        self.idSingleSelected = (self.idSingleSelected + frame(5)) % SINGLE_PLAYER_FB_N
-        self.idExitSelected = (self.idExitSelected + frame(5)) % EXIT_FB_N
+        self.idSingle = (self.idSingle + frame(2)) % SINGLE_PLAYER_N
+        self.idExit = (self.idExit + frame(2)) % EXIT_N
+        self.idSingleSelected = (self.idSingleSelected + frame(2)) % SINGLE_PLAYER_FB_N
+        self.idExitSelected = (self.idExitSelected + frame(2)) % EXIT_FB_N
 
     def updateMainMenuSetting(self):
         pass
