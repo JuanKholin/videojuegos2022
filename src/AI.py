@@ -373,9 +373,9 @@ class AI():
     ##############
 
     def genSoldier(self, structure):
-        if (self.data.resources >= 3 * self.t3Cost[0]) and (self.data.gas >= 3 * self.t3Cost[1]):
+        if (self.data.resources >= self.t3Cost[0]) and (self.data.gas >= self.t3Cost[1]):
             structure.execute(CommandId.GENERATE_T3)
-        elif (self.data.resources >= 2 * self.t2Cost[0]) and (self.data.gas >= 2 * self.t2Cost[1]):
+        elif (self.data.resources >= self.t2Cost[0]) and (self.data.gas >= self.t2Cost[1]):
             structure.execute(CommandId.GENERATE_T2)
         elif (self.data.resources >= self.t1Cost[0]) and (self.data.gas >= self.t1Cost[1]):
             structure.execute(CommandId.GENERATE_T1)
