@@ -761,23 +761,26 @@ class Interface():
 
                 Utils.state = System_State.MAINMENU
                 self.guardarSalirSettingsPress = False
+
         else:
             i = 0
             for b in self.keyButtons.items():
-                if self.mouse.isCollide(b[1]["rect"]):
+                yActual = b[1]["rect"].y
+                if yActual < Utils.ScreenHeight - Utils.ScreenHeight*0.195 and  yActual > Utils.ScreenHeight*0.195:
+                    if self.mouse.isCollide(b[1]["rect"]):
 
-                    endPos = self.mouse.getPosition()
-                    if not b[1]["press"] and press and Raton.collides(iniPos[0], iniPos[1], b[1]["rect"]):
-                        b[1]["press"] = True
-                    elif self.mouse.getClick() and b[1]["press"] and Raton.collides(endPos[0], endPos[1], b[1]["rect"]):
-                        #print("")
-                        playSound(botonSound2)
+                        endPos = self.mouse.getPosition()
+                        if not b[1]["press"] and press and Raton.collides(iniPos[0], iniPos[1], b[1]["rect"]):
+                            b[1]["press"] = True
+                        elif self.mouse.getClick() and b[1]["press"] and Raton.collides(endPos[0], endPos[1], b[1]["rect"]):
+                            #print("")
+                            playSound(botonSound2)
 
-                        b[1]["press"] = False
-                        b[1]["waitingForKey"] = True
-                        self.buttonWaitingForKey = b[0]
-                        print(b[0])
-                        Utils.state2 = System_State.KEY_BINDING
+                            b[1]["press"] = False
+                            b[1]["waitingForKey"] = True
+                            self.buttonWaitingForKey = b[0]
+                            print(b[0])
+                            Utils.state2 = System_State.KEY_BINDING
                 i += 1
 
             self.soundPlayed = False
@@ -815,6 +818,8 @@ class Interface():
         if self.mouse.getClick():
             self.aceptarPress = False
             self.cancelarPress = False
+
+
 
     def updateSettingsAtajosPos(self):
         #self.settings = pg.transform.scale(self.settings, (Utils.ScreenHeight*SCREEN_SCALE, Utils.ScreenHeight))
@@ -1118,7 +1123,6 @@ class Interface():
     def drawSettingsAtajos(self, screen):
         j = 0
         stringKeyItems = self.keyButtons.items()
-        print(COMMAND_TO_TEXT)
         for i in stringKeyItems:
             yActual = self.keyButtons[j]["rect"].y
             if yActual < Utils.ScreenHeight - Utils.ScreenHeight*0.195 and  yActual > Utils.ScreenHeight*0.195:
@@ -1136,6 +1140,7 @@ class Interface():
         muestra_texto(screen, str('monotypecorsiva'), "Atajos de teclado", GREEN3, ATAJOS_TITLE_TEXT_SIZE, (Utils.ScreenWidth/2 - ATAJOS_TITLE_POS[0], Utils.ScreenHeight/2 - ATAJOS_TITLE_POS[1]))
         muestra_texto(screen, str('monotypecorsiva'), "Comando", WHITE, COLUMN_TEXT_SIZE, (Utils.ScreenWidth/2 - COMANDO_COLUMN_POS[0], Utils.ScreenHeight/2 - COMANDO_COLUMN_POS[1] - 10))
         muestra_texto(screen, str('monotypecorsiva'), "Tecla", WHITE, COLUMN_TEXT_SIZE, (Utils.ScreenWidth/2 - TECLA_COLUMN_POS[0], Utils.ScreenHeight/2 - TECLA_COLUMN_POS[1] - 10))
+
         if self.buttonWaitingForKey != -1:
             muestra_texto(screen, str('monotypecorsiva'), "pulse una tecla (digito o letra) no usada", WHITE, COLUMN_TEXT_SIZE-10, (Utils.ScreenWidth/2 - AVISO_COLUMN_POS[0], Utils.ScreenHeight/2 - AVISO_COLUMN_POS[1]))
         if self.mouse.isCollide(self.scrollBarTopRect):
