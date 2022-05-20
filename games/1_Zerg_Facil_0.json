@@ -10,6 +10,33 @@
         "x": 0,
         "y": 0,
         "hp": 60
+      },
+      {
+        "clase": "zergling",
+        "nombre": "Drone",
+        "funcion": "Unidad obrera",
+        "disabled": false,
+        "x": 30,
+        "y": 10,
+        "hp": 60
+      },
+      {
+        "clase": "zergling",
+        "nombre": "Drone",
+        "funcion": "Unidad obrera",
+        "disabled": false,
+        "x": 31,
+        "y": 10,
+        "hp": 60
+      },
+      {
+        "clase": "zergling",
+        "nombre": "Drone",
+        "funcion": "Unidad obrera",
+        "disabled": false,
+        "x": 32,
+        "y": 10,
+        "hp": 60
       }
     ],
     "structures": [

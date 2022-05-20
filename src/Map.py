@@ -238,7 +238,7 @@ class Map():
 
     #Pone la tile como libre
     def setLibre(self, tile):
-        #print("CAGO EN DIOS")
+        print("CAGO EN DIOS", tile.tileid)
         if self.mapa[int(tile.centery / self.th)][int(tile.centerx / self.tw)].type == EMPTY:
             #print("hi")
             pass
@@ -734,12 +734,12 @@ class Map():
     # Devuelve la primera entidad enemiga (estructura o unidad) encontrada en un cuadrado de NEARBY_RANGE
     # que no sea del player player alrededor de la tile tile
     def getNearbyRival(self, tile, player, distance = NEARBY_RANGE):
-        print("distance",distance)
+        #print("distance",distance)
         player1 = player
         x = tile.x / 40
         y = tile.y / 40
         for i in range(distance + 1): # Capas
-            print(i)
+            #print(i)
             tilesEstaCapa = []
             for aux in range(int(x - i), int(x + i + 1)):
                 tilesEstaCapa.append([aux, y - i])
@@ -752,9 +752,9 @@ class Map():
                 col = int(tileAux[0])
                 if (col >= 0) and (col < self.TILES_WIDTH) and (row >= 0) and (row < self.TILES_HEIGHT):
                     aux = self.mapa[row][col]
-                    print(aux.tileid)
+                    #print(aux.tileid)
                     if ((aux.type == UNIT) or (aux.type == STRUCTURE)) and (aux.ocupante.hp > 0):
-                        print("PLAYER2? ", aux.ocupante.player)
+                        #print("PLAYER2? ", aux.ocupante.player)
                         if aux.ocupante.player != player1:
                             return aux.ocupante
         return None

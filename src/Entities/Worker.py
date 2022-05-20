@@ -189,6 +189,10 @@ class Worker(Unit):
     
     
     def updateMiningRoute(self):
+        if self.siguienteObjetivo != None:
+            self.paths = calcPath(self.getPosition(), self.getTile(), self.siguienteObjetivo, self.mapa)
+            self.siguienteObjetivo = None
+            self.changeToMoving()
         if len(self.paths) > 0:
             actualPath = self.paths[0]
             if actualPath.dist > 0: # Aun queda trecho
@@ -331,6 +335,10 @@ class Worker(Unit):
             self.updateGasTransportingImage()
     
     def finishOrePath(self):
+        if self.siguienteObjetivo != None:
+            self.paths = calcPath(self.getPosition(), self.getTile(), self.siguienteObjetivo, self.mapa)
+            self.siguienteObjetivo = None
+            self.changeToMoving()
         if len(self.paths) > 0:
             self.paths.pop(0)
         if (self.siendoAtacado == True) and not self.runningAway:
@@ -359,6 +367,10 @@ class Worker(Unit):
                                    
 
     def finishGasPath(self):
+        if self.siguienteObjetivo != None:
+            self.paths = calcPath(self.getPosition(), self.getTile(), self.siguienteObjetivo, self.mapa)
+            self.siguienteObjetivo = None
+            self.changeToMoving()
         if len(self.paths) > 0:
             self.paths.pop(0)
         if (self.siendoAtacado == True) and not self.runningAway:

@@ -300,7 +300,7 @@ class Unit(Entity):
 
     def updateAttackInRange(self):
         ownTile = self.getTile()
-        print("aaaa")
+       #print("aaaa")
         if self.attackedOne.esEstructura == False:
             self.tileAAtacar = self.attackedOne.getTile()
             if self.tileAAtacar == None:
@@ -310,25 +310,25 @@ class Unit(Entity):
                 else:
                     self.changeToStill()
         if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
-            print(len(self.paths), type(self))
+           #print(len(self.paths), type(self))
             if len(self.paths) != 0:
                 objectivePath = self.paths[0]
                 nextTile = self.mapa.getTile(objectivePath.posFin[0], objectivePath.posFin[1])
                 self.mapa.setLibre(nextTile)
                 self.updateOwnSpace()
                 self.paths = [] #Me quedo quieto y ataco
-                print("ME QUEDO QUIETO Y ATACO")
+               #print("ME QUEDO QUIETO Y ATACO")
             if self.attackCD > 1: # Si hay CD
                 self.attackCD -= 1 # Disminuye CD
             elif self.attackCD == 1: # Si acaba el CD empieza la animacion
-                print("APUNTO")
+               #print("APUNTO")
                 self.takeAim()
                 self.attackCD -= 1
                 self.frame = -1
                 self.counter = 0
                 self.updateAttackingImage()
             elif self.attackCD == 0:
-                print("ATAKO")
+               #print("ATAKO")
                 self.counter += 1
                 if self.counter >= self.framesToRefresh:
                     self.counter = 0
@@ -339,7 +339,7 @@ class Unit(Entity):
                         self.makeAnAttack()
                         self.attackCD = self.cooldown
         else:
-            print("NONO")
+           #print("NONO")
             self.recalcAttackPaths()
 
     def updateAttackingRoute(self):
@@ -348,30 +348,35 @@ class Unit(Entity):
             if actualPath.dist > 0: # Aun queda trecho
                 self.updatePath(actualPath)
             else: # Se acaba este camino
-                if self.attackedOne.getHP() > 0:
-                    ownTile = self.getTile()
-                    #print(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery), self.range)
-                    if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
-                        self.updateOwnSpace()
-                        #print(type(self), "estoy en rango")
-                        self.updateAttackInRange()
-                    else:
-                        lastPath = self.paths[len(self.paths) - 1]
-                        lastTile = self.mapa.getTile(lastPath.posFin[0], lastPath.posFin[1])
-                        if lastTile != self.attackedOne.getTile():
-                            self.recalcAttackPaths()
+                if self.siguienteObjetivo != None:
+                    self.paths = calcPath(self.getPosition(), self.getTile(), self.siguienteObjetivo, self.mapa)
+                    self.siguienteObjetivo = None
+                    self.changeToMoving()
+                else:
+                    if self.attackedOne.getHP() > 0:
+                        ownTile = self.getTile()
+                        #print(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery), self.range)
+                        if int(math.hypot(ownTile.centerx - self.tileAAtacar.centerx, ownTile.centery- self.tileAAtacar.centery)) <= self.range:
+                            self.updateOwnSpace()
+                            #print(type(self), "estoy en rango")
+                            self.updateAttackInRange()
                         else:
-                            self.finishPath()
-                else: # Se murio el objetivo, pasa a estar quieto
-                    self.attackedOne = None
-                    enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
-                    #print(type(enemy))
-                    if enemy != None:
-                        #print("ataco a otro")
-                        self.attack(enemy)
-                    else:
-                        #print("no hay naide")
-                        self.changeToStill()
+                            lastPath = self.paths[len(self.paths) - 1]
+                            lastTile = self.mapa.getTile(lastPath.posFin[0], lastPath.posFin[1])
+                            if lastTile != self.attackedOne.getTile():
+                                self.recalcAttackPaths()
+                            else:
+                                self.finishPath()
+                    else: # Se murio el objetivo, pasa a estar quieto
+                        self.attackedOne = None
+                        enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
+                        #print(type(enemy))
+                        if enemy != None:
+                            #print("ataco a otro")
+                            self.attack(enemy)
+                        else:
+                            #print("no hay naide")
+                            self.changeToStill()
 
 
             self.count += 1
@@ -457,7 +462,7 @@ class Unit(Entity):
         #print("Pasa al ataque HYAAAA!! >:c")
         self.runningAway = False
 
-        if(len(self.paths) > 1):
+        if(len(self.paths) > 0):
             #print("changeToAttacking objetiveTile")
             self.changeObjectiveTile()
             #input()
@@ -491,7 +496,7 @@ class Unit(Entity):
 
     # Pasa a morirse (chof)
     def changeToDying(self):
-        #print("DYING", self.x, self.y)
+        print("DYING", self.x, self.y)
         self.state = UnitState.DYING
         self.attackedOne = None
         self.runningAway = False
@@ -553,25 +558,27 @@ class Unit(Entity):
         if hpLeft <= 0:
             enemy = self.mapa.getNearbyRival(self.occupiedTile, self.player)
             if enemy != None:
+                print("ataco a tero")
                 self.attack(enemy)
             else:
                 self.changeToStill()
 
     # Para reflejar sobre una unidad que recibe un ataque
     def beingAttacked(self, damage, attacker):
-        if self.hp <= (damage - (damage * self.player.armorUpgrade*ARMOR_MEJORA)):
-            self.attackedOne = None
-            self.changeToDying()
-        else:
-            print(self.hp, damage * self.player.armorUpgrade*ARMOR_MEJORA)
-            self.hp = self.hp - (damage - (damage * self.player.armorUpgrade*ARMOR_MEJORA))
-            print(self.hp )
-            #if self.state != UnitState.ATTACKING and self.state != UnitState.STILL: # Cambiar a atacar si no esta haciendo nada ASI GUAY
-            if self.state != UnitState.ATTACKING:
-                self.attack(attacker)
+        if self.state != UnitState.DEAD and self.state != UnitState.DYING:
+            if self.hp <= (damage - (damage * self.player.armorUpgrade*ARMOR_MEJORA)):
+                self.attackedOne = None
+                self.changeToDying()
             else:
-                self.siendoAtacado = True
-                self.atacante = attacker
+            #print(self.hp, damage * self.player.armorUpgrade*ARMOR_MEJORA)
+                self.hp = self.hp - (damage - (damage * self.player.armorUpgrade*ARMOR_MEJORA))
+            #print(self.hp )
+                #if self.state != UnitState.ATTACKING and self.state != UnitState.STILL: # Cambiar a atacar si no esta haciendo nada ASI GUAY
+                if self.state != UnitState.ATTACKING:
+                    self.attack(attacker)
+                else:
+                    self.siendoAtacado = True
+                    self.atacante = attacker
         return self.hp
 
     # Para crear los sprites invertidos, los guarda en el mismo sitio que se indica
@@ -582,7 +589,7 @@ class Unit(Entity):
                         self.sprites[self.frames[i][self.dirOffset[j]]], True, False)
 
     def resolverObjetivoOcupado(self):
-        print("RESOLVER OCUAPDO: ", self.state)
+       #print("RESOLVER OCUAPDO: ", self.state)
         if self.state == UnitState.MOVING:
             self.paths = []
         elif self.state == UnitState.MINING or self.state == UnitState.EXTRACTING:
@@ -632,8 +639,6 @@ class Unit(Entity):
         if self.siguienteObjetivo != None:
             self.paths = calcPath(self.getPosition(), self.getTile(), self.siguienteObjetivo, self.mapa)
             self.siguienteObjetivo = None
-            if len(self.paths) > 0:
-                self.changeObjectiveTile()
         if len(self.paths) == 0:
             if (self.siendoAtacado == True) and not self.runningAway:
                 self.attack(self.atacante)
@@ -706,12 +711,13 @@ class Unit(Entity):
     def changeObjectiveTile(self):
         actualPath = self.paths[0]
         objectiveTile = self.mapa.getTile(actualPath.posFin[0], actualPath.posFin[1])
-        print(objectiveTile.tileid, self.getTile().tileid)
+        print(objectiveTile.tileid, objectiveTile.type, self.getTile().tileid, objectiveTile.type)
         if objectiveTile.type == EMPTY or (objectiveTile.type == UNIT and objectiveTile.id == self.id):
             self.mapa.setVecina(objectiveTile, self.id)
             objectiveTile.setOcupante(self)
             self.mapa.setLibre(self.occupiedTile)
             self.occupiedTile = objectiveTile
+            print(objectiveTile.tileid, objectiveTile.type)
         else:
             lastPath = self.paths[len(self.paths) - 1]
             lastTile = self.mapa.getTile(lastPath.posFin[0], lastPath.posFin[1])
