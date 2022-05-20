@@ -565,7 +565,9 @@ class Unit(Entity):
             self.attackedOne = None
             self.changeToDying()
         else:
-            self.hp = self.hp - (damage * self.player.armorUpgrade*ARMOR_MEJORA)
+            print(self.hp, damage * self.player.armorUpgrade*ARMOR_MEJORA)
+            self.hp = self.hp - (damage - (damage * self.player.armorUpgrade*ARMOR_MEJORA))
+            print(self.hp )
             #if self.state != UnitState.ATTACKING and self.state != UnitState.STILL: # Cambiar a atacar si no esta haciendo nada ASI GUAY
             if self.state != UnitState.ATTACKING and self.state != UnitState.STILL:
                 self.siendoAtacado = True

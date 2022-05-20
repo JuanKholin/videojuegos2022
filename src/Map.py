@@ -737,10 +737,17 @@ class Map():
         player1 = player
         x = tile.x / 40
         y = tile.y / 40
-        for i in range(2 * distance + 1):
-            col = int(i - distance + x)
-            for j in range(2 * distance + 1):
-                row = int(j - distance + y)
+        for i in range(distance): # Capas
+            tilesEstaCapa = [[],[]]
+            for aux in range(int(x - distance), int(x + distance + 1)):
+                tilesEstaCapa.append([aux, y - distance])
+                tilesEstaCapa.append([aux, y + distance])
+            for aux in range(int(y - distance + 1), int(y + distance)):
+                tilesEstaCapa.append([x - distance, aux])
+                tilesEstaCapa.append([x + distance, aux])
+            for tileAux in tilesEstaCapa:
+                row = tileAux[0]
+                col = tileAux[1]
                 if (col >= 0) and (col < self.TILES_WIDTH) and (row >= 0) and (row < self.TILES_HEIGHT):
                     aux = self.mapa[row][col]
                     if ((aux.type == UNIT) or (aux.type == STRUCTURE)) and (aux.ocupante.hp > 0):
