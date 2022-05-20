@@ -712,8 +712,8 @@ class Interface():
                 Utils.state = System_State.ONGAME
                 setGameState2(System_State.LOAD)
                 camera.update()
-                #stopMusic()
-                #playMusic(map1BGM)
+                stopMusic()
+                playMusic(map1BGM)
                 self.singlePress = False
 
         elif self.mouse.isCollide(self.cancelarRect):
