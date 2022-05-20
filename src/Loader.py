@@ -89,7 +89,10 @@ def loadHardcodedMap(nombre):
     escena.camera = camera
 
     escena.resources = loadResources(data["resources"])
-
+    for resource in escena.resources:
+        if resource.ocupante.getType() == REFINERY:
+            resource.ocupante.resource = resource
+            resource.disable()
     escena.p1.setBasePlayer(escena.p1.structures[0])
     escena.p2.setBasePlayer(escena.p2.structures[0])
     #print(escena.p2.limitUnits)

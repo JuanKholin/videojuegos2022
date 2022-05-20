@@ -734,24 +734,27 @@ class Map():
     # Devuelve la primera entidad enemiga (estructura o unidad) encontrada en un cuadrado de NEARBY_RANGE
     # que no sea del player player alrededor de la tile tile
     def getNearbyRival(self, tile, player, distance = NEARBY_RANGE):
+        print("distance",distance)
         player1 = player
         x = tile.x / 40
         y = tile.y / 40
-        for i in range(distance): # Capas
-            tilesEstaCapa = [[],[]]
-            for aux in range(int(x - distance), int(x + distance + 1)):
-                tilesEstaCapa.append([aux, y - distance])
-                tilesEstaCapa.append([aux, y + distance])
-            for aux in range(int(y - distance + 1), int(y + distance)):
-                tilesEstaCapa.append([x - distance, aux])
-                tilesEstaCapa.append([x + distance, aux])
+        for i in range(distance + 1): # Capas
+            print(i)
+            tilesEstaCapa = []
+            for aux in range(int(x - i), int(x + i + 1)):
+                tilesEstaCapa.append([aux, y - i])
+                tilesEstaCapa.append([aux, y + i])
+            for aux in range(int(y - i + 1), int(y + i)):
+                tilesEstaCapa.append([x - i, aux])
+                tilesEstaCapa.append([x + i, aux])
             for tileAux in tilesEstaCapa:
-                row = tileAux[0]
-                col = tileAux[1]
+                row = int(tileAux[1])
+                col = int(tileAux[0])
                 if (col >= 0) and (col < self.TILES_WIDTH) and (row >= 0) and (row < self.TILES_HEIGHT):
                     aux = self.mapa[row][col]
+                    print(aux.tileid)
                     if ((aux.type == UNIT) or (aux.type == STRUCTURE)) and (aux.ocupante.hp > 0):
-                        #print("PLAYER2? ", aux.ocupante.player)
+                        print("PLAYER2? ", aux.ocupante.player)
                         if aux.ocupante.player != player1:
                             return aux.ocupante
         return None
