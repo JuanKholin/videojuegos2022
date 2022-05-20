@@ -163,7 +163,7 @@ class Structure(Entity.Entity):
             self.yIni = yTile
         else:
             self.yIni = yTile  - int(self.TILES_HEIGHT/2)
-        print(self.xIni, self.yIni, int(self.TILES_HEIGHT/2))
+        #print(self.xIni, self.yIni, int(self.TILES_HEIGHT/2))
         originX = (xTile - round(self.TILES_WIDTH/2))*self.mapa.tw
         originY = (yTile - round(self.TILES_HEIGHT/2))*self.mapa.th
         self.x = xTile * self.mapa.tw
@@ -187,7 +187,8 @@ class Structure(Entity.Entity):
     def updateBuilding(self):
         if self.nBuildSprites != 0:
             self.count += 1
-            if self.count % (self.generationTime * CLOCK_PER_SEC / self.nBuildSprites) == 0:
+            #print(self.nBuildSprites)
+            if self.count % int(self.generationTime * CLOCK_PER_SEC / self.nBuildSprites) == 0:
                 self.index += 1
             if self.index >= self.nBuildSprites:
                 self.indexCount = 0

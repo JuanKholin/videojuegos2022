@@ -235,6 +235,7 @@ def loadStructures(structureDictionaries, player, map, raton):
         for unit in s["training"]:
             structure.training.append(loadUnit(unit, player))
         structure.state = s['state']
+        structure.hp = s['hp']
         structure.generationCount = s['count']
         player.addStructures(structure)
         structure.updateUpgrade()

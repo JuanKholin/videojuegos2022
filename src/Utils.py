@@ -763,7 +763,7 @@ def loadTerranBuilder():
 
     deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
-    deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
+    deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 200, scale = 1.1)
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -783,7 +783,7 @@ def loadHatchery():
 
     deadSpritesheet = pg.image.load("./sprites/explosion1.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
-    deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 200)
+    deadSprites = divideSpritesheetByRowsNoScale(deadSpritesheet, 200, scale = 1.4)
     shadows = []
     for i in range(len(sprites)):
         aux = pg.mask.from_surface(sprites[i], 0)
@@ -1052,22 +1052,22 @@ ZERG_T1_RENDER = "SPRITE/render/zergling.png"
 
 ##---------Firebat-----------------------
 TERRAN_T2_MINERAL_COST = 50
-TERRAN_T2_GAS_COST = 25
+TERRAN_T2_GAS_COST = 20
 TERRAN_T2_RENDER = "SPRITE/render/firebat.png"
 
 ##---------Broodling-----------------------
 ZERG_T2_MINERAL_COST = 50
-ZERG_T2_GAS_COST = 25
+ZERG_T2_GAS_COST = 20
 ZERG_T2_RENDER = "SPRITE/render/broodling.png"
 
 ##---------Goliath-----------------------
 TERRAN_T3_MINERAL_COST = 100
-TERRAN_T3_GAS_COST = 100
+TERRAN_T3_GAS_COST = 40
 TERRAN_T3_RENDER = "SPRITE/render/goliath.png"
 
 ##---------Hydralisk-----------------------
 ZERG_T3_MINERAL_COST = 100
-ZERG_T3_GAS_COST = 100
+ZERG_T3_GAS_COST = 40
 ZERG_T3_RENDER = "SPRITE/render/hydralisk.png"
 
 
@@ -1089,7 +1089,7 @@ BARRACKS_RENDER = "SPRITE/render/terranBarracks.png"
 ##---------TERRAN_REFINERY------------------
 
 TERRAN_REFINERY_PATH = "SPRITE/structure/refinery/refinery000"
-TERRAN_REFINERY_MINERAL_COST = 50
+TERRAN_REFINERY_MINERAL_COST = 60
 REFINERY_RENDER = "SPRITE/render/terranRefinery.png"
 
 ##---------TERRAN_DEPOT------------------
@@ -1111,7 +1111,7 @@ EXTRACTOR_MINERAL_COST = 60
 #-----------BARRACKS_ZERG-------------
 ZERG_BARRACKS_PATH = "SPRITE/structure/zergBarracks/tile00"
 ZERG_BARRACKS_RENDER = "SPRITE/render/zergBarracks.png"
-ZERG_BARRACKS_MINERAL_COST = 60
+ZERG_BARRACKS_MINERAL_COST = 50
 
 #-----------S2-------------
 S2_PATH = "SPRITE/structure/Zerg_2/tile00"
@@ -1121,7 +1121,7 @@ S2_MINERAL_COST = 60
 #-----------SUPPLY_ZERG-------------
 ZERG_DEPOT_PATH = "SPRITE/structure/zergSupply/tile00"
 ZERG_DEPOT_RENDER = "SPRITE/render/zergSupply.png"
-ZERG_DEPOT_MINERAL_COST = 60
+ZERG_DEPOT_MINERAL_COST = 50
 
 CRYSTAL_RENDER = "SPRITE/render/mineral.png"
 GEYSER_RENDER = "SPRITE/render/geyser.png"
