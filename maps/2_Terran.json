@@ -3996,6 +3996,22 @@
       "funcion": "Esencial para todo"
     },
     {
+      "clase": "cristal",
+      "capacidad": 1200,
+      "x": 16,
+      "y": 22,
+      "nombre": "Cristal",
+      "funcion": "Esencial para todo"
+    },
+    {
+      "clase": "cristal",
+      "capacidad": 1200,
+      "x": 18,
+      "y": 18,
+      "nombre": "Cristal",
+      "funcion": "Esencial para todo"
+    },
+    {
       "clase": "geyser",
       "capacidad": 800,
       "x": 2,

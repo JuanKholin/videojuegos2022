@@ -1062,13 +1062,13 @@ ZERG_T2_GAS_COST = 20
 ZERG_T2_RENDER = "SPRITE/render/broodling.png"
 
 ##---------Goliath-----------------------
-TERRAN_T3_MINERAL_COST = 100
-TERRAN_T3_GAS_COST = 40
+TERRAN_T3_MINERAL_COST = 0
+TERRAN_T3_GAS_COST = 100
 TERRAN_T3_RENDER = "SPRITE/render/goliath.png"
 
 ##---------Hydralisk-----------------------
-ZERG_T3_MINERAL_COST = 100
-ZERG_T3_GAS_COST = 40
+ZERG_T3_MINERAL_COST = 0
+ZERG_T3_GAS_COST = 100
 ZERG_T3_RENDER = "SPRITE/render/hydralisk.png"
 
 
