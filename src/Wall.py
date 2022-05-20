@@ -95,8 +95,6 @@ class Wall():
             drawPos = self.getDrawPosition()
             #screen.blit(unit.image, [r.x - camera.x, r.y - camera.y])
             screen.blit(self.image, [drawPos[0] - camera.x, drawPos[1] - camera.y])
-
-
     
     def getRect(self):
         rectAux = pg.Rect(self.x - self.xPadding, self.y - self.yPadding,
