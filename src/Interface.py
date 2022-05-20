@@ -1252,27 +1252,42 @@ class Interface():
 
     def drawHELP(self, screen):
         screen.blit(self.helpPageSprites[self.helpPage], (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  240), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 80)))
-
+        
         self.helpButtons[2].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 703), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 84))
         if self.helpPage > 0:
             self.helpButtons[0].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 304), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 95))
         if self.helpPage < len(self.helpPageSprites)-1:
             self.helpButtons[1].draw(screen, Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 - 604), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 95))
-        '''
-        if self.helpPage == 1:
+        
+        '''if self.helpPage == 0:
             muestra_texto(screen, str('monotypecorsiva'), "INSTRUCCIONES", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  370), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 110)))
 
             screen.blit(getSprite(MOUSE_PATH + "tile002.png", WHITE, (70, 70)), (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  310), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 200)))
             muestra_texto(screen, str('monotypecorsiva'), "Click Izquierdo", GREEN, 26, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 200)))
             muestra_texto(screen, str('monotypecorsiva'), "Para seleccionar unidades o realizar acciones", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 220)))
             muestra_texto(screen, str('monotypecorsiva'), "Click Derecho ", GREEN, 26, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 245)))
-            muestra_texto(screen, str('monotypecorsiva'), "Para desplazar tropas", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 265)))
+            muestra_texto(screen, str('monotypecorsiva'), "Para desplazar y ordenar tropas / cancelar la", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 265)))
+            muestra_texto(screen, str('monotypecorsiva'), "construccion de estructuras", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 280)))
 
             screen.blit(getSprite(KEY_PATH , WHITE, (150, 100)), (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  260), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 320)))
             muestra_texto(screen, str('monotypecorsiva'), "Movimiento de camara", GREEN, 26, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 330)))
             muestra_texto(screen, str('monotypecorsiva'), "Utiliza las teclas para controlar la camara", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 360)))
             muestra_texto(screen, str('monotypecorsiva'), "o desde el minimapa usando el ratón", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 375)))
 
+            screen.blit(getSprite(MOUSE_PATH + "tile002.png", WHITE, (70, 70)), (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  295), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 430)))
+            screen.blit(getSprite(MOUSE_PATH + "tile002.png", BLACK, (70, 70)), (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  310), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 430)))
+            muestra_texto(screen, str('monotypecorsiva'), "Doble click", GREEN, 26, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 440)))
+            muestra_texto(screen, str('monotypecorsiva'), "Para seleccionar unidades del mismo tipo", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 470)))
+            
+            screen.blit(getSprite(KEY2_PATH , WHITE, (100, 50)), (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  290), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 570)))
+            muestra_texto(screen, str('monotypecorsiva'), "Teclas de atajo", GREEN, 26, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  410), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 540)))
+            muestra_texto(screen, str('monotypecorsiva'), "Utiliza las teclas de atajo para facilitar", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 570)))
+            muestra_texto(screen, str('monotypecorsiva'), "el juego, 'Q' para atacar enemigos cercanos y", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 585)))
+            muestra_texto(screen, str('monotypecorsiva'), "'X' para deseleccionar las unidades.", ORANGE, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 600)))
+            muestra_texto(screen, str('monotypecorsiva'), "En configuración de atajos del menu principal", ORANGE2, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 620)))
+            muestra_texto(screen, str('monotypecorsiva'), "encontraras mas!", ORANGE2, 20, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  420), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 635)))
+            
+            
         elif self.helpPage == 4:
             muestra_texto(screen, str('monotypecorsiva'), "TERRAN", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  425), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 90)))
             muestra_texto(screen, str('monotypecorsiva'), "ESTRUCUTURAS", WHITE, 30, (Utils.ScreenWidth/2 - (MIN_SCREEN_WIDTH/2 -  375), Utils.ScreenHeight/2 - (MIN_SCREEN_HEIGHT/2 - 120)))

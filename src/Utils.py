@@ -244,6 +244,7 @@ def takeID():
 #----------------------------------------------------------------
 MOUSE_PATH = "./SPRITE/raton/"
 KEY_PATH = "./SPRITE/EXTRA/key.png"
+KEY2_PATH = "./SPRITE/EXTRA/key2.png"
 
 MAIN_MENU = "SPRITE/mainMenu/fondo"
 MAIN_MENU_TEXT_SIZE = 30
