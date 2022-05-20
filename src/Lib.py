@@ -46,7 +46,7 @@ def pauseMusic():
     pg.mixer.music.pause()
 
 def minusMusic():
-    if Utils.BGM_VOLUME > 0.0:
+    if Utils.BGM_VOLUME > 0.01:
         Utils.BGM_VOLUME -= 0.1
         pg.mixer.music.set_volume(Utils.BGM_VOLUME)
 
@@ -56,12 +56,14 @@ def plusMusic():
         pg.mixer.music.set_volume(Utils.BGM_VOLUME)
 
 def minusSound():
-    if Utils.SOUND_VOLUME > 0.0:
+    if Utils.SOUND_VOLUME > 0.01:
         Utils.SOUND_VOLUME -= 0.1
+    print(Utils.SOUND_VOLUME)
 
 def plusSound():
     if Utils.SOUND_VOLUME < 1.0:
         Utils.SOUND_VOLUME += 0.1
+    print(Utils.SOUND_VOLUME)
 
 def stopMusic():
     if not Utils.haveBGM:

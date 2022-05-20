@@ -223,6 +223,7 @@ class Map():
             #print("HI")
             pass
         if tile.tileid == 290:
+            pass
             #print("OCUPADA")
             #print(tile.type)
 

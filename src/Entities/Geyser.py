@@ -49,6 +49,7 @@ class Geyser(Resource):
             return cantidad + self.capacity
         else:
             self.image = self.sprites[3 - int(float(self.capacity)/float(self.interval))]
+            self.shadow = self.shadows[3 - int(float(self.capacity)/float(self.interval))]
             return cantidad
 
     # Devuelve el rectangulo que conforma su imagen, creo, esto lo hizo otro
