@@ -157,7 +157,7 @@ class Worker(Unit):
     def startExtracting(self):
         self.startTimeMining = Utils.getGlobalTime()
         if self.clicked:
-            if self in self.unitsSelected:
+            if self in self.player.unitsSelected:
                 self.player.unitsSelected.remove(self)
                 self.clicked = False
         self.isExtracting = True
