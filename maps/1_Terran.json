@@ -91,8 +91,8 @@
         "mineGasUpCost": 50
       }
     ],
-    "resources": 100,
-    "gas":0,
+    "resources": 300,
+    "gas":50,
     "keyMap": {},
     "commandMap": {},
     "da\u00f1oUpgrade": 0,
