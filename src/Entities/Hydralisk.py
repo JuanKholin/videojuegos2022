@@ -28,6 +28,7 @@ Y_PADDING = 20 * HYDRALISK_SCALE + 0
 class Hydralisk(Soldier):
     selectedSound = zergSelectedSound
     generateSound = zerglingGenerateSound
+    attackSound = zerglingAttackSound
     # Pre: xIni e yIni marcan posiciones del mapa, (ej: (3, 2) se refiere a la posicion de
     # la cuarta columna y tercera fila del mapa)
     def __init__(self, player, xIni = -1, yIni = -1):

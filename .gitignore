@@ -6,3 +6,4 @@
 src/__pycache__/*
 src/Entities/__pycache__/*
 .vs/*
+./games

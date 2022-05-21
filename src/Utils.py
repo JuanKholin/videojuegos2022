@@ -681,7 +681,7 @@ def loadBroodling():
     BROODLING_SPRITES = [sprites, shadows]
 
 # Goliath
-GOLIATH_SCALE = 2
+GOLIATH_SCALE = 1.8
 GOLIATH_SPRITE_ROWS = 76
 GOLIATH_TOTAL_FRAMES = 179
 GOLIATH_FRAMES = [list(range(1, 17)), list(range(18, 34)), list(range(35, 51)),
@@ -702,7 +702,7 @@ def loadGoliath():
     spritesheet.set_colorkey(BLACK)
     deadSpritesheet = pg.image.load("./sprites/explosion2.bmp").convert()
     deadSpritesheet.set_colorkey(BLACK)
-    sprites = divideSpritesheetByRows(spritesheet, GOLIATH_SPRITE_ROWS, GOLIATH_SCALE, GOLIATH_SCALE) + divideSpritesheetByRowsNoScale(deadSpritesheet, 128, (80, 80))
+    sprites = divideSpritesheetByRows(spritesheet, GOLIATH_SPRITE_ROWS, GOLIATH_SCALE) + divideSpritesheetByRowsNoScale(deadSpritesheet, 128, (80, 80))
 
     for i in range(len(GOLIATH_FRAMES)):
         for j in range(9, 16):

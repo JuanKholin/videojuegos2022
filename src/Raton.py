@@ -241,6 +241,8 @@ class Raton(pygame.sprite.Sprite):
                         camera.y = 0
                         setGameState(System_State.MAINMENU)
                         setGameState2(System_State.PLAYING)
+                        stopMusic()
+                        playMusic(mainMenuBGM, pos = 5)
                     else:
                         if not self.building and self.enable:
                             command.setId(Command.CommandId.MOVE)
@@ -278,7 +280,7 @@ class Raton(pygame.sprite.Sprite):
                                             reClick = True
                                             self.player.unitsSelected = []
                                             self.player.unitsSelected.append(unidadClickada) 
-                                            left = 7
+                                            left = MAX_SELECTED_UNIT - 1
                                             for unit in self.player.units:
                                                 if left == 0:
                                                     break
@@ -286,7 +288,7 @@ class Raton(pygame.sprite.Sprite):
                                                     if unidadClickada.getType() == unit.getType() :
                                                         unit.setClicked(True)
                                                         self.player.unitsSelected.append(unit)
-                                            left -= 1
+                                                left -= 1
                                 if reClick == False:
                                     if self.building:
                                         if self.buildStructure.checkTiles() and self.player.resources >= self.buildStructure.mineralCost:

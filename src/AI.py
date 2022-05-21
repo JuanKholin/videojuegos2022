@@ -22,7 +22,7 @@ class AI():
         self.mapa = self.data.getMapa()
         self.miniCount = 0
         self.data.resources = self.data.resources + 100 - self.reactionTime
-        self.minWorkers = 5
+        self.minWorkers = 8
         self.minSoldiers = 1
         if race == Race.ZERG:
             self.base = ZERG_BASE
@@ -334,19 +334,19 @@ class AI():
            self.buildBarracks(structures)
 
         # Minimos aumentados
-        soldiersCost = self.minSoldiers * self.t2Cost[0]
+        soldiersCost = (self.minSoldiers * self.t2Cost[0]) / 2
         if self.data.resources > soldiersCost:
             self.minSoldiers = self.minSoldiers + 1
         else:
             if self.minSoldiers > self.minWorkers * 2:
                 self.minSoldiers -= 1
-            elif self.minWorkers > 3:
+            elif self.minWorkers > 8:
                 self.minWorkers -= 1
 
         workersCost = self.minWorkers * self.workerCost[0]
         if self.data.resources > workersCost + (soldiersCost / 2):
             self.minWorkers = self.minWorkers + 1
-        if (self.minWorkers >= self.minSoldiers) and (self.minWorkers > 3):
+        if (self.minWorkers >= self.minSoldiers) and (self.minWorkers > 8):
             self.minSoldiers = self.minSoldiers + 1
             self.minWorkers = self.minWorkers - 1
 
