@@ -442,7 +442,7 @@ class Unit(Entity):
         self.attackedOne = None
         self.changeObjectiveTile()
 
-        if len(self.paths > 0):
+        if len(self.paths) > 0:
             actualPath = self.paths[0]
 
             if actualPath.angle < 0:
