@@ -415,7 +415,7 @@ class Interface():
                 if not self.ajustesSonidoPress and press and Raton.collides(iniPos[0], iniPos[1], self.ajustesSonidoRect):
                     self.ajustesSonidoPress = True
                 elif self.mouse.getClick() and self.ajustesSonidoPress and Raton.collides(endPos[0], endPos[1], self.ajustesSonidoRect):
-                    print("Seleccionado SETTINGS")
+                    #print("Seleccionado SETTINGS")
                     Utils.state2 = System_State.SETTINGS
                     #stopMusic()
                     self.ajustesSonidoPress = False
@@ -428,7 +428,7 @@ class Interface():
                 if not self.ajustesAtajosPress and press and Raton.collides(iniPos[0], iniPos[1], self.ajustesAtajosRect):
                     self.ajustesAtajosPress = True
                 elif self.mouse.getClick() and self.ajustesAtajosPress and Raton.collides(endPos[0], endPos[1], self.ajustesAtajosRect):
-                    print("Seleccionado Seleccionado SETTINGS")
+                    #print("Seleccionado Seleccionado SETTINGS")
                     Utils.state = System_State.SETTINGS
                     stopMusic()
                     self.ajustesAtajosPress = False
@@ -498,7 +498,7 @@ class Interface():
                 self.scrollBarBotPress = False
                 playSound(botonSound2)
             if press and Raton.collides(iniPos[0], iniPos[1], self.scrollBarBotRect):
-                print(self.partidas[len(self.partidas) - 1]["rect"].y, self.partidas[0]["rect"].y, self.partidaFirstOriginalY)
+                #print(self.partidas[len(self.partidas) - 1]["rect"].y, self.partidas[0]["rect"].y, self.partidaFirstOriginalY)
                 if self.partidas[len(self.partidas) - 1]["rect"].y > self.partidaFirstOriginalY:
                     for k in self.partidas:
                         k["rect"].y -= 7
@@ -669,7 +669,7 @@ class Interface():
                 self.aceptarPress = True
             elif self.mouse.getClick() and self.aceptarPress and Raton.collides(endPos[0], endPos[1], self.aceptarRect):
                 #Con self.selectedMap selectedDif selectedRaza se crea la partida
-                print("crear partida")
+                #print("crear partida")
                 _escena, _raton, _camera = loadHardcodedMap(self.selectedMap + "_" + self.selectedRaza["nombre"])
                 escena.setSelf(_escena)
                 raza = None
@@ -802,7 +802,7 @@ class Interface():
                 textFile = open("atajos/atajos.json", "w")
                 textFile.write(string)
                 textFile.close()
-                print("atajos guardados")
+                #print("atajos guardados")
 
                 Utils.state = System_State.MAINMENU
                 stopMusic()

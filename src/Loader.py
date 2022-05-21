@@ -45,18 +45,18 @@ def loadFromSave(nombre):
     escena.camera = camera
 
     escena.resources = loadResources(data["resources"])
-    print("estructuras: ", len(escena.p1.structures))
+    #print("estructuras: ", len(escena.p1.structures))
     for structure in escena.p1.structures + escena.p2.structures:
-        print(type(structure))
+        #print(type(structure))
         structure.setTilesOcupados()
     for resource in escena.resources:
         coords = resource.getTile()
         tile = escena.mapa.mapa[coords[1]][coords[0]]
-        print(tile.tileid, type(resource))
+        #print(tile.tileid, type(resource))
         if tile.ocupante != None:
-            print(tile.ocupante)
+            #print(tile.ocupante)
             if tile.ocupante.type == REFINERY:
-                print("aaaaaaaaaaaaaa")
+                #print("aaaaaaaaaaaaaa")
                 tile.ocupante.resource = resource
                 resource.disable()
     loadUnits(data["p2"]["units"], escena.p2, escena.mapa)
@@ -103,18 +103,18 @@ def loadHardcodedMap(nombre):
     escena.camera = camera
 
     escena.resources = loadResources(data["resources"])
-    print("estructuras: ", len(escena.p1.structures))
+    #print("estructuras: ", len(escena.p1.structures))
     for structure in escena.p1.structures + escena.p2.structures:
-        print(type(structure))
+        #print(type(structure))
         structure.setTilesOcupados()
     for resource in escena.resources:
         coords = resource.getTile()
         tile = escena.mapa.mapa[coords[1]][coords[0]]
-        print(tile.tileid, type(resource))
+        #print(tile.tileid, type(resource))
         if tile.ocupante != None:
-            print(tile.ocupante)
+            #print(tile.ocupante)
             if tile.ocupante.type == REFINERY:
-                print("aaaaaaaaaaaaaa")
+                #print("aaaaaaaaaaaaaa")
                 tile.ocupante.resource = resource
                 resource.disable()
     loadUnits(data["p2"]["units"], escena.p2, escena.mapa)
@@ -190,17 +190,17 @@ def loadUnits(unitDictionaries, player, mapa):
             player.addUnits(unit)
         
         try:
-            print("aaaaaaaaaaaa")
+            #print("aaaaaaaaaaaa")
             unit.returnx = u['returnx']
             unit.returny = u['returny']
-            print("aaaaaaaaaaaa", u['disabled'])
+            #print("aaaaaaaaaaaa", u['disabled'])
             if u['disabled']:
-                print(mapa)
-                print(unit.returnx, unit.returny - 40)
+                #print(mapa)
+                #print(unit.returnx, unit.returny - 40)
                 tile = mapa.getTile(unit.returnx, unit.returny - 40)
-                print("a extraer", tile.tileid)
+                #print("a extraer", tile.tileid)
                 resource = tile.ocupante.resource
-                print(type(resource))
+                #print(type(resource))
                 unit.state = UnitState.EXTRACTING
                 unit.resource = resource
                 unit.isExtracting = True

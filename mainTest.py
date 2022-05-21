@@ -40,7 +40,7 @@ def procesarInput():
             pg.quit()
             sys.exit()
         elif event.type == pg.VIDEORESIZE:
-            print("resize")
+            #print("resize")
             Utils.resized = True
         elif event.type == pg.KEYUP:
             escena.procesarEvent(event)
@@ -256,5 +256,5 @@ while True:
     #Dibujar
     now = datetime.now()
     draw()
-    print((datetime.now() - now).microseconds)
+    #print((datetime.now() - now).microseconds)
     updateGlobalTime(clock)

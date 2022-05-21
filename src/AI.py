@@ -159,7 +159,7 @@ class AI():
         if self.haveBase(structures):
             if not self.haveBarracks(structures):
                 self.buildBarracks(structures)
-            elif (not self.haveDepot(structures)) or (self.data.limitUnits <= len(self.data.units) + 1):
+            elif (self.getDepots(structures) * 3 + 10 <= len(self.data.units) + 2):
                 self.buildDepot(structures)
 
     # Si faltan workers o soldados los genera, si tiene recursos y hay edificios libres para ello
@@ -657,23 +657,30 @@ class AI():
                 return structure
         return None
 
+    def getDepots(self, structures):
+        aux = 0
+        for structure in structures:
+            if structure.type == DEPOT:
+                aux = aux + 1
+        return aux
+
     # Devuelve el cristal mas cercano a la base
     def getBestCrystalSeen(self, structures):
         base = self.getBase(structures)
         crystals = list(self.crystalsSeen)
         basePos = base.getPosition()
-        print(basePos)
+       #print(basePos)
         bestCrystal = crystals[0]
         crystalPos = bestCrystal.getPosition()
         bestDistance = math.hypot(basePos[0] - crystalPos[0], basePos[1] - crystalPos[1])
         if base != None:
             for crystal in crystals:
-                print(crystal.getTile())
+               #print(crystal.getTile())
                 crystalPos = crystal.getPosition()
                 distance = math.hypot(basePos[0] - crystalPos[0], basePos[1] - crystalPos[1])
-                print(distance, bestDistance)
+               #print(distance, bestDistance)
                 if distance < bestDistance:
-                    print("Mejor cristal: ", crystal.getTile())
+                   #print("Mejor cristal: ", crystal.getTile())
                     bestCrystal = crystal
                     bestDistance = distance
         return bestCrystal

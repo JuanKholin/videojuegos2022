@@ -147,7 +147,7 @@ class Escena():
                     relative_mouse_pos = pg.mouse.get_pos()
                     real_mouse_pos = (relative_mouse_pos[0] + self.camera.x, relative_mouse_pos[1] + self.camera.y)
                     tileClicked = self.mapa.getTile(real_mouse_pos[0], real_mouse_pos[1])
-                    print("TILE CLICKED: ", tileClicked.tileid, tileClicked.type, tileClicked.ocupante)
+                    #print("TILE CLICKED: ", tileClicked.tileid, tileClicked.type, tileClicked.ocupante)
                     orderForPlayer = []
                     for param in command.params:
                         self.processParam(param, tileClicked, tileClicked, orderForPlayer)
@@ -313,17 +313,17 @@ class Escena():
         now = datetime.now()
         for res in self.resources:
             res.draw(screen, self.camera)
-        print("tiempo en dib los recursos: ",(datetime.now() - now).microseconds)
+        #print("tiempo en dib los recursos: ",(datetime.now() - now).microseconds)
         now = datetime.now()
         self.p1.draw(screen, self.camera)
-        print("tiempo en dib el p1: ",(datetime.now() - now).microseconds)
+        #print("tiempo en dib el p1: ",(datetime.now() - now).microseconds)
         now = datetime.now()
         self.p2.draw(screen, self.camera)
-        print("tiempo en dib el p2: ",(datetime.now() - now).microseconds)
+        #print("tiempo en dib el p2: ",(datetime.now() - now).microseconds)
         now = datetime.now()
         for wall in self.walls:
             wall.draw(screen, self.camera)
-        print("tiempo en dib los muros: ",(datetime.now() - now).microseconds)
+        #print("tiempo en dib los muros: ",(datetime.now() - now).microseconds)
         now = datetime.now()'''
         self.mapa.drawNiebla(screen, self.camera)
         #print("tiempo en la niebla: ",(datetime.now() - now).microseconds)

@@ -31,6 +31,12 @@ from src.Entities.ZergBarracks import *
 #from src.Entities.Zerg2 import *
 from src.Entities.ZergSupply import *
 
+# pip install pywin32 -> This will install the libs that are required
+import win32gui, win32con
+
+hide = win32gui.GetForegroundWindow()
+win32gui.ShowWindow(hide , win32con.SW_HIDE)
+
 
 # Auxiliar del bucle principal
 def procesarInput():
@@ -40,7 +46,7 @@ def procesarInput():
             pg.quit()
             sys.exit()
         elif event.type == pg.VIDEORESIZE:
-            print("resize")
+            #print("resize")
             Utils.resized = True
         elif event.type == pg.KEYUP:
             escena.procesarEvent(event)
