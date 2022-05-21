@@ -22,7 +22,7 @@ class AI():
         self.mapa = self.data.getMapa()
         self.miniCount = 0
         self.data.resources = self.data.resources + 100 - self.reactionTime
-        self.minWorkers = 8
+        self.minWorkers = 5
         self.minSoldiers = 1
         if race == Race.ZERG:
             self.base = ZERG_BASE
