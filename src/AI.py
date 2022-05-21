@@ -21,8 +21,8 @@ class AI():
         self.minimalDecissionChance = 1
         self.mapa = self.data.getMapa()
         self.miniCount = 0
-        self.data.resources = self.data.resources + self.reactionTime * 3
-        self.minWorkers = 4
+        self.data.resources = self.data.resources + 100 - self.reactionTime
+        self.minWorkers = 5
         self.minSoldiers = 2
         if race == Race.ZERG:
             self.base = ZERG_BASE

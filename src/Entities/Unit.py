@@ -347,7 +347,8 @@ class Unit(Entity):
                 if self.siguienteObjetivo != None:
                     self.paths = calcPath(self.getPosition(), self.getTile(), self.siguienteObjetivo, self.mapa)
                     self.siguienteObjetivo = None
-                    self.changeToMoving()
+                    if len(self.paths) > 0:
+                        self.changeToMoving()
                 else:
                     if self.attackedOne.getHP() > 0:
                         ownTile = self.getTile()
