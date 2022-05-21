@@ -295,6 +295,7 @@ def loadStructures(structureDictionaries, player, map, raton):
         structure.hp = s['hp']
         structure.generationCount = s['count']
         player.addStructures(structure)
+        player.limitUnits += structure.getUnitCapacity()
         structure.updateUpgrade()
 
 #en el fichero la clave es una string, hay que hacer uno nuevo con clave numerica

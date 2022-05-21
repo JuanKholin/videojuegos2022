@@ -193,9 +193,11 @@ class Structure(Entity.Entity):
             if self.index >= self.nBuildSprites:
                 self.indexCount = 0
                 self.count = 0
+                self.player.limitUnits += self.getUnitCapacity()
                 self.state = BuildingState.OPERATIVE
         else:
             self.indexCount = 0
+            self.player.limitUnits += self.getUnitCapacity()
             self.state = BuildingState.OPERATIVE
 
     def updateSpawning(self):
