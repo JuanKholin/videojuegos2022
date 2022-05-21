@@ -442,17 +442,18 @@ class Unit(Entity):
         self.attackedOne = None
         self.changeObjectiveTile()
 
-        actualPath = self.paths[0]
+        if len(self.paths > 0):
+            actualPath = self.paths[0]
 
-        if actualPath.angle < 0:
-            self.angle = -actualPath.angle
-        else:
-            self.angle = 2 * math.pi - actualPath.angle
-        self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
-        self.frame = 0
-        self.count = 0
-        self.image = self.sprites[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
-        self.shadow = self.shadows[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
+            if actualPath.angle < 0:
+                self.angle = -actualPath.angle
+            else:
+                self.angle = 2 * math.pi - actualPath.angle
+            self.dir = int(4 - (self.angle * 8 / math.pi)) % 16
+            self.frame = 0
+            self.count = 0
+            self.image = self.sprites[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
+            self.shadow = self.shadows[self.frames[self.moveFrames[self.frame]][self.dirOffset[self.dir]]]
 
     # Pasa al ataque HYAAAA!! >:c
     def changeToAttacking(self, attackedOne):

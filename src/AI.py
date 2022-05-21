@@ -23,7 +23,7 @@ class AI():
         self.miniCount = 0
         self.data.resources = self.data.resources + 100 - self.reactionTime
         self.minWorkers = 5
-        self.minSoldiers = 2
+        self.minSoldiers = 1
         if race == Race.ZERG:
             self.base = ZERG_BASE
             self.barracks = ZERG_BARRACKS
@@ -285,10 +285,10 @@ class AI():
             pos = structure.getPosition()
             tile = self.mapa.getTile(pos[0], pos[1])
             targets = targets.union(self.mapa.getNearbyRivals(tile, self.data, 6))
-        for unit in units:
+        '''for unit in units:
             tile = unit.getTile()
             if tile != None:
-                targets = targets.union(self.mapa.getNearbyRivals(tile, self.data, 4))
+                targets = targets.union(self.mapa.getNearbyRivals(tile, self.data, 4))'''
         soldiers = self.getSoldiers(units)
         targets = list(targets)
         if len(targets) > 0:
